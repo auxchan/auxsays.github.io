@@ -1506,6 +1506,105 @@ def check_avoid_recommendations() -> None:
           and "{%- for rec in rec_list -%}" in layout, f"{printed} {stored}")
 
 
+def check_lifecycle_provenance() -> None:
+    """G66-L*: the KB5079391 entry records WHICH copy of the official statement it was verified from
+    (file sha256, statement sha256, UTC retrieval time, from the G65 K3 manifest), as hashes -- never
+    text -- and the fields are optional, so adding them changes no decision."""
+    entry = LIFECYCLE["entries"][0]
+    check("G66-L1 the shipped entry carries the K3 provenance: file sha256, withdrawal-statement sha256 and "
+          "the UTC retrieval time, and still passes the schema",
+          entry.get("source_sha256") == "da2b2d1e078eeb755e7e4c081e4488b03b71bd7b51eb0bad426153630ce4dd5a"
+          and entry.get("statement_sha256") == "2cf0bd05a1d64af8cf3cd42162cffab860a2cecc10dad819d5dd72067bc6bc50"
+          and entry.get("source_retrieved_at") == "2026-11-06T16:18:26Z"
+          and entry.get("official_url", "").endswith("march-26-2026-kb5079391-os-builds-26200-8116-and-26100-8116-preview")
+          and not vr.lifecycle_errors([entry]), str({k: entry.get(k) for k in vr.LIFECYCLE_PROVENANCE_KEYS}))
+    bad = {
+        "uppercase hex": dict(entry, statement_sha256=entry["statement_sha256"].upper()),
+        "short hash": dict(entry, source_sha256=entry["source_sha256"][:40]),
+        "a number, not a string": dict(entry, source_sha256=12345),
+        "a timestamp without Z": dict(entry, source_retrieved_at="2026-11-06T16:18:26"),
+        "a date for a timestamp": dict(entry, source_retrieved_at="2026-11-06"),
+    }
+    refused = {k: bool(vr.lifecycle_errors([v])) for k, v in bad.items()}
+    check("G66-L2 a malformed provenance value is refused like every other lifecycle value",
+          all(refused.values()), str(refused))
+    bare = {k: v for k, v in entry.items() if k not in vr.LIFECYCLE_PROVENANCE_KEYS}
+    rec = win_record(update_type="2026-03 D", kb="KB5079391", build="26200.8116")
+    check("G66-L3 the provenance fields are optional: without them the entry is valid and decides the same AVOID",
+          not vr.lifecycle_errors([bare]) and decide(rec, (), [bare]).verdict == decide(rec, (), [entry]).verdict == "AVOID")
+    text_values = [str(v) for k, v in entry.items() if k not in ("id", "official_url") and isinstance(v, str)]
+    check("G66-L4 every stored value is an identifier, a date, a URL or a hash: no sentence of vendor text",
+          all(" " not in v for v in text_values), str(text_values))
+
+
+SOURCE_PROBE = "$${{ gate_source_url }}|{{ gate_source_label }}|{{ gate_source_checked }}$$"
+
+
+def _source_line_block() -> str:
+    """The patch page's source line, sliced VERBATIM from aux-update.html (the shipped template)."""
+    layout = (_AUX / "_layouts" / "aux-update.html").read_text(encoding="utf-8")
+    start = layout.index("{%- if decision_source_url != '' %}")
+    end = layout.index("{%- endif %}", start) + len("{%- endif %}")
+    return layout[start:end]
+
+
+def check_avoid_source_link() -> None:
+    """G66-S*: the two KB5079391 AVOID pages link the official statement (a plain deep link with the date
+    it was verified), from the projection through the gate to the page -- and nothing else does."""
+    c = corpus()
+    fresh = vp.project(c["recs"], c["groups"], REASONS["entries"], LIFECYCLE["entries"])[0]
+    entry = LIFECYCLE["entries"][0]
+    avoid = [r for r in c["recs"] if pd.lifecycle_for(r, LIFECYCLE["entries"])]
+    others = [k for k, row in fresh["pages"].items() if row.get("verdict") != "AVOID"]
+    rows = [fresh["pages"].get(vp.page_key(r)) or {} for r in avoid]
+    check("G66-S1 the projection row of each AVOID page carries the article URL, an AUXSAYS label and the "
+          "verified date; every other row carries none",
+          len(avoid) == 2
+          and all(r.get("source_url") == entry["official_url"]
+                  and r.get("source_label") == "Microsoft support article for KB5079391"
+                  and r.get("source_checked") == entry["verified_at"] for r in rows)
+          and len(others) > 0
+          and all(not (fresh["pages"][k].get("source_url") or fresh["pages"][k].get("source_label")
+                       or fresh["pages"][k].get("source_checked")) for k in others),
+          f"{[(r.get('source_url'), r.get('source_label')) for r in rows]} others={len(others)}")
+    sample_others = [r for r in c["recs"] if vp.page_key(r) in set(others[:6])]
+    cases = {f"a{i}": {"rec": slim(r), "cnt": int(r.get("update_report_count") or 0)} for i, r in enumerate(avoid)}
+    cases.update({f"o{i}": {"rec": slim(r), "cnt": int(r.get("update_report_count") or 0)}
+                  for i, r in enumerate(sample_others)})
+    out = render_gate(cases, {"verdict_projection": fresh, "patch_lifecycle": LIFECYCLE}, TEMPLATE_OVERRIDE,
+                      suffix=SOURCE_PROBE) or {}
+    probe = {k: (re.search(r"\$\$(.*?)\$\$", v or "", re.S) or [None, None])[1] for k, v in out.items()}
+    want = f"{entry['official_url']}|Microsoft support article for KB5079391|{entry['verified_at']}"
+    check("G66-S2 the gate hands both AVOID pages the link, and hands every other verdict an empty one",
+          "__error__" not in out and len(avoid) == 2
+          and all(probe.get(f"a{i}") == want for i in range(len(avoid)))
+          and len(sample_others) > 0 and all(probe.get(f"o{i}") == "||" for i in range(len(sample_others))),
+          str(probe)[:400])
+    block = _source_line_block()
+    cases = {"avoid": {"rec": {}, "cnt": 0}, "none": {"rec": {}, "cnt": 0}}
+    vars_avoid = ("{% assign decision_source_url = '" + entry["official_url"] + "' %}"
+                  "{% assign decision_source_label = 'Microsoft support article for KB5079391' %}"
+                  "{% assign decision_source_checked = '" + entry["verified_at"] + "' %}")
+    vars_none = ("{% assign decision_source_url = '' %}{% assign decision_source_label = '' %}"
+                 "{% assign decision_source_checked = '' %}")
+    rendered = {}
+    for name, prefix in (("avoid", vars_avoid), ("none", vars_none)):
+        got = render_gate({name: cases[name]}, {}, prefix + block + "@@", suffix="") or {}
+        rendered[name] = got.get(name, "")
+    expect = (f'<p class="update-decision-source">Source: <a href="{entry["official_url"]}">'
+              f'Microsoft support article for KB5079391</a>, checked Nov 6, 2026.</p>')
+    avoid_html = rendered["avoid"].split("@@")[0].strip()
+    none_html = rendered["none"].split("@@")[0].strip()
+    check("G66-S3 the shipped page template prints exactly one plain link line -- the article URL, the AUXSAYS "
+          "label and the verified date -- and prints nothing when the page has no source",
+          avoid_html == expect and none_html == "" and "<script" not in avoid_html,
+          f"{avoid_html!r} / {none_html!r}")
+    decision = (_AUX / "_includes" / "patch-decision.html").read_text(encoding="utf-8")
+    check("G66-S4 the page reads the link from the gate (the projection), not from the lifecycle file or a record",
+          "{% assign decision_source_url = gate_source_url %}" in decision
+          and "patch_lifecycle" not in _source_line_block() and "page." not in _source_line_block())
+
+
 # ------------------------------------------------------------------------ [X] mutants
 
 # ------------------------------------------------------------------------ AUX-097: official verdicts in the feed
@@ -2082,6 +2181,7 @@ def run() -> int:
         check_reason_audits()
         print("\n[L] the single lifecycle exception")
         check_lifecycle()
+        check_lifecycle_provenance()
         print("\n[W] wording")
         check_wording()
         check_wording_writer()
@@ -2101,6 +2201,7 @@ def run() -> int:
         check_surfaces()
         check_feed_wording()
         check_avoid_recommendations()
+        check_avoid_source_link()
         check_feed_official()
         print("\n[X] mutants, each caught by a named check")
         check_mutations(tmp)

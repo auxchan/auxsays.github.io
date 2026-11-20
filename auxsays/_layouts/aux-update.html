@@ -684,6 +684,15 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
           <span class="update-decision-eyebrow">AUXSAYS verdict</span>
           <strong>{{ decision_label }}</strong>{% if decision_scope != '' %} <span class="update-decision-scope">{{ decision_scope }}</span>{% endif %}
           <p class="update-decision-recommendation">{{ decision_body }}</p>
+          {%- comment -%}
+            PROVENANCE (G66). An AVOID rests on an official statement; the line above restates it in
+            AUXSAYS words, and this links the statement itself so a reader can check it: a plain deep
+            link to the article's own URL with the date it was verified, from the verdict projection.
+            Only the link -- never the article's text. Empty on every other verdict.
+          {%- endcomment %}
+          {%- if decision_source_url != '' %}
+          <p class="update-decision-source">Source: <a href="{{ decision_source_url | escape }}">{{ decision_source_label | escape }}</a>{% if decision_source_checked != '' %}, checked {{ decision_source_checked | date: "%b %-d, %Y" }}{% endif %}.</p>
+          {%- endif %}
           {%- if decision_panel_text != '' %}
           <div class="update-decision-panel update-decision-panel--warning" role="note"><span class="update-decision-panel__heading">{{ decision_panel_heading }}</span> {{ decision_panel_text }}</div>
           {%- endif %}

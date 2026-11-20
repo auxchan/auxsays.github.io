@@ -13,7 +13,18 @@
 #
 # Stored: KB ids, the exact OS builds, dates, the official article URL and the relationship type.
 # No Microsoft text. Verified 2026-11-06 from the article's own withdrawal note (GROWTH-3 spec v1
-# KB read, measure/kbdata/kb5079391.html, template `withdrawn_replaced_by`).
+# KB read, template `withdrawn_replaced_by`).
+#
+# PROVENANCE (G66), so the record of what supported this decision lives here and not only in a
+# local copy of the page outside the repository. official_url is the article's own rel=canonical URL. source_retrieved_at is when that
+# copy was fetched (UTC), source_sha256 the sha256 of the retrieved HTML file, and statement_sha256 the
+# sha256 of the withdrawal statement matched in it: the visible article text (script and style blocks
+# removed, tags replaced by spaces, HTML entities unescaped, whitespace, zero-width spaces and en/em
+# dashes collapsed to one space), from "This update is no longer being offered" through the sentence
+# naming the replacement KB, whitespace-collapsed and stripped, UTF-8. Recorded in the G65 K3 manifest
+# and re-computed from the same local file for G66; the page itself is not stored anywhere in the
+# repository. A hash shows WHICH text supported this decision; it does not by itself show the decision
+# is right. Re-reading the article needs the K1 terms decision first: no support.microsoft.com fetch.
 schema_version: 1
 entries:
   - id: microsoft-windows-11:KB5079391:withdrawn-for-new-installs
@@ -27,3 +38,6 @@ entries:
     replacement_released: "2026-03-31"
     official_url: https://support.microsoft.com/en-us/servicing/os/windows-11/2026/03/march-26-2026-kb5079391-os-builds-26200-8116-and-26100-8116-preview
     verified_at: "2026-11-06"
+    source_retrieved_at: "2026-11-06T16:18:26Z"
+    source_sha256: "da2b2d1e078eeb755e7e4c081e4488b03b71bd7b51eb0bad426153630ce4dd5a"
+    statement_sha256: "2cf0bd05a1d64af8cf3cd42162cffab860a2cecc10dad819d5dd72067bc6bc50"

@@ -36,6 +36,9 @@
            gate_panel_heading, gate_panel_text  the security page's warning box, else ''
            gate_recommendations  the Recommendations list an official verdict carries (AVOID), else
                            an empty list
+           gate_source_url, gate_source_label, gate_source_checked  the official statement an AVOID
+                           rests on, as a plain deep link with an AUXSAYS label and the date it was
+                           verified (G66); '' for every other verdict. A link only, never its text
   The INSUFFICIENT DATA lines below are lib/patch_decision.public_body's, character for character;
   test_growth3_verdict_policy renders this file against Python over every page.
 
@@ -53,6 +56,9 @@
 {%- assign gate_panel_heading = '' -%}
 {%- assign gate_panel_text = '' -%}
 {%- assign gate_recommendations = '' | split: '' -%}
+{%- assign gate_source_url = '' -%}
+{%- assign gate_source_label = '' -%}
+{%- assign gate_source_checked = '' -%}
 {%- comment -%} The projected decision for this exact page (lib/verdict_projection), or nothing. {%- endcomment -%}
 {%- assign pvg_key = pvg_pid | append: '|' | append: pvg_version | append: '|' | append: pvg_build -%}
 {%- assign pvg_row = site.data.verdict_projection.pages[pvg_key] -%}
@@ -77,6 +83,15 @@
     {%- if gate_panel_text != '' -%}{%- assign gate_panel_heading = pvg_row.panel_heading | default: '' | strip -%}{%- endif -%}
   {%- endif -%}
   {%- if pvg_row.recommendations and pvg_row.recommendations.size > 0 -%}{%- assign gate_recommendations = pvg_row.recommendations -%}{%- endif -%}
+  {%- if pvg_row_verdict == 'AVOID' -%}
+    {%- assign pvg_source_url = pvg_row.source_url | default: '' | strip -%}
+    {%- assign pvg_source_label = pvg_row.source_label | default: '' | strip -%}
+    {%- if pvg_source_url != '' and pvg_source_label != '' -%}
+      {%- assign gate_source_url = pvg_source_url -%}
+      {%- assign gate_source_label = pvg_source_label -%}
+      {%- assign gate_source_checked = pvg_row.source_checked | default: '' | strip -%}
+    {%- endif -%}
+  {%- endif -%}
 {%- elsif pvg_count == 1 -%}
   {%- assign gate_body = 'No verdict yet: one user report is matched to this exact update, and one report does not show a pattern. If it matches your setup, test before relying on this update.' -%}
 {%- elsif pvg_count > 1 -%}
