@@ -59,6 +59,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-037 | Deferred | Canonical patch identity | Medium | Elgato platform identity crashes the write path — the platform segment reads as a build segment |
 | AUX-045 | Resolved | Evidence integrity | Medium | A counted row could not show the evidence for its own version match |
 | AUX-106 | Resolved | Community evidence | High | NVIDIA drivers had no community evidence; their reports live on NVIDIA's own forum |
+| AUX-115 | Resolved | Community evidence | High | The NVIDIA forum collector could forget threads it had to defer, and its prune dropped exactly the ones never read |
 | AUX-046 | Resolved | Official ingestion | High | Four Elgato products had no records because the HTML pages challenge the runner |
 | AUX-105 | Resolved | Official ingestion | High | NVIDIA drivers had no official lane, and one catalog product stood for three products |
 | AUX-039 | Resolved | Published claims | High | The site claimed to monitor 29 products it was not monitoring, and 27 companies with zero healthy products |
@@ -3974,6 +3975,138 @@ signal for unassigned reports (G44 s5).
 sent, a request is made after a recorded refusal without a later, already-passed clearing time, any
 redirect is followed, a health note claims comprehensive monitoring, or the
 first scheduled run after merge is refused (then record what the runner was told, and stop).
+
+### AUX-115 — The NVIDIA forum collector could forget threads it had to defer, and its prune dropped exactly the ones never read
+
+- **Status** Resolved · **Area** Community evidence · **Severity** High
+- **First seen** 2026-11-19 (G61 natural-run check: residual 3 and R3-T4; GPT G61 Q5) · **Resolved** 2026-11-20 (fix
+  pending its first scheduled collection run)
+
+**Symptom** None observed yet: the first production cycle (2026-11-19 21:42Z) deferred nothing. But it used 16 of 16
+requests and 5 of 5 threads, and the tracked driver versions then rose from 2 to 5, so later cycles are expected to
+defer. GPT ruled it a Priority 1 evidence-loss defect to fix before it happens: the threads most at risk are new
+releases' early reports.
+
+**Cause** Deferred work was lost or left without a trace in three ways, and a fourth defect could bring a read seed
+back unread:
+1. `prune_threads` kept an entry when `int(last_activity or horizon) >= horizon`. The horizon is a fractional
+   timestamp, so for an entry with no last activity `int()` truncated it below itself and the test was False. A
+   thread deferred before it was ever read has no last activity, so it was added and then pruned in the same step,
+   before the state file was written.
+2. A deferred seed (a feedback thread named in code, whose title is not known until it is read) left no entry at
+   all, and its deferral marked no version partial. It was offered again each cycle, but nothing showed it
+   waiting.
+3. A user topic was re-read only while the listing showed it. A deferred topic that dropped out was never read. The
+   order also put the same threads first every cycle, so a thread the cap never reached could wait forever.
+4. A seed read through the listing was not recorded as read (R3-T4), so it could come back later as a title-less
+   seed.
+
+**Repair** (`patch_collectors/nvidia_forum.py`, `patch_collectors/nvidia_forum_source.py`):
+- A deferred thread's state entry carries `deferred`: the reason (`thread_cap`, `request_budget` or
+  `runtime_budget`; after a failed read `thread_read_failed`, after a release `quarantine_released`), when it was
+  first deferred, its place in the queue and how many cycles it has waited. A seed is queued too, with its title
+  still unknown.
+- The prune never removes an owed entry: not for its age, a missing last activity, the listing, or the 40-window
+  cap. It no longer drops a never-read entry for lacking a last activity.
+- Owed threads are selected from the state file even when the listing no longer shows them. They are read first,
+  longest-waiting first, then everything else in the old order. A failed read keeps the thread owed
+  (`thread_read_failed`) and sends it to the end of the queue, unless the stall correction below quarantines it.
+  The request ceiling and the thread cap are unchanged: the queue only orders the work.
+- An owed thread leaves the queue in one of three ways:
+  - it is read, or found unchanged;
+  - it is invalidated, and the reason is kept in `deferred_invalidated` (the last 20). The reasons are: its title
+    names no tracked version, or no record is left for the versions it names;
+  - it is quarantined (below).
+- Telemetry, with no new evidence state:
+  - every health note a cycle writes after reading its state file gives the forum-wide queue depth and the oldest
+    deferral, the number of quarantined threads and their reasons, plus any invalidations that cycle and their
+    reasons;
+  - the `nvidia_forum_cycle` runtime event carries the same numbers;
+  - a deferred seed whose title is unknown reports partial for every version;
+  - a seed read by any path is recorded as read.
+
+**Stall correction** (GPT G62 R1, before merge). Owed work is read first and in a stable order, so as first built,
+one queued thread whose own view raised a stop stopped every cycle that reached it, discarded that cycle's other
+reads, and came first again the next cycle: one unreadable thread could stop all forum collection for good. A
+refusal from it suspended the whole method again after every clearing. Now a queued thread's own failure is its
+own:
+- A queued thread whose topic view answers 404 or 410 is quarantined as `thread_unreadable`. Its identity and
+  reason stay in the state file, and it is never retried automatically. It is no longer deleted.
+- A queued thread the listing does not show this cycle (other than a seed never read, whose title is not known
+  yet) is handled thread by thread:
+  - success:false (a JSON answer with no refusal in it): when another thread was read in full in the same cycle,
+    which confirms the failure is the thread's own, it is quarantined as `thread_invalid_response` and the cycle
+    goes on, keeping and counting the other threads' rows. Unconfirmed, it stays queued.
+  - HTTP 401/403/451, and the other refusals the access rules name except a rate limit (a challenge, an HTML page,
+    a refusing body): the method is suspended exactly as before and that cycle's reads are discarded as before.
+    The refused thread is also quarantined (`access_refused`), so it is not asked again once a reviewed change
+    clears the refusal.
+  - HTTP 429: the method is suspended as before, and the thread stays queued in its place.
+  - A timeout, a 5xx, another response shape (such as another topic's id, as after a merge) or a redirect
+    (refused before the hop, nothing sent there): it stays queued (`thread_read_failed`) and goes to the end of
+    the queue. It is never classified as invalid. It takes at most one thread slot and two requests a cycle, so it
+    cannot stop the others. (Before this correction a timeout or a 5xx already did this; another shape or a
+    redirect stopped the cycle.)
+- A listed thread and a seed never read keep the stops every thread had before the queue existed.
+- A quarantined entry keeps its window, the reason, the time and its first deferral. It is never selected by any
+  path (not even while listed), never pruned, and never invalidated. Only a reviewed change releases it: an entry
+  in `nvidia_forum_source.QUARANTINE_RELEASES` naming the topic id, the quarantine's recorded time and a reason.
+  The next cycle puts the thread back at the end of the queue and logs the release in `quarantine_released` (the
+  last 20). One entry releases one quarantine, once.
+
+`evaluate_comment` is unchanged, and so are every acceptance rule, threshold, schedule and ceiling; the health-status
+vocabulary gains no status. Replayed on the captured windows, the decisions are identical (9 counted). Pinned by
+`test_nvidia_forum_evidence.py` sections Q and QS (175 to 229 governed checks). Each of 22 single-fix mutants of the
+queue fails a named check, and so does each of 2 telemetry mutants (the oldest age taken from the requeue time, and
+a depth that drops owed threads read before). Each of the stall correction's 31 single-fix mutants fails a named
+check too. Review 3 added four checks (a quarantine keeps the thread's entry; a refusal of a listed thread or an
+unread seed keeps its old stop; no timer releases a quarantine); each fails for reviewer mutants that the other 225
+checks let through. The suite covers:
+- three exhausted cycles (request ceiling, thread cap, time budget), with the threads unlisted and never read;
+- then reads in queue order;
+- the store ends with exactly one unconstrained cycle's rows and decisions: 9 counted, none twice, none credited
+  twice;
+- a poisoned queued thread (success:false): quarantined while the same cycle reads and counts the other threads;
+  never asked again, even while listed; kept when its version loses its record; released; then the store equals
+  one unconstrained cycle's;
+- 401, 403 and 451 one by one, an HTML page and a 429;
+- a 503, a timeout and a 502, then another topic's id, a redirect and a body that is not JSON, three cycles each
+  without a stop;
+- an unconfirmed and then a confirmed success:false;
+- a listed thread and a seed never read keeping their stops;
+- a 410; the prune; the release path.
+
+**Residual**
+- A listed queued thread and a seed never read keep their stops. Success:false, another shape or a redirect from
+  their own view stops each cycle that reaches it (broken, that cycle's other reads discarded), and a refusal
+  suspends the method with the thread still queued in its place. For a listed thread this lasts while the listing
+  shows it. A seed never read is offered every cycle until it is read, as before this change. Neither production
+  seed is in that state: both were read in the first production cycle.
+- A queued thread that keeps failing with a timeout, a 5xx, another shape, a redirect or an unconfirmed
+  success:false is never quarantined automatically. It stays queued and is retried at most once a cycle, at the end
+  of the queue, for as long as it fails. Each retry uses one thread slot and up to two requests.
+- A robots rule that disallows one queued thread's page stops each cycle that reaches it (`robots_policy`), as for
+  any thread. A2 covers response classes only. No current rule names a topic page: the forum's rules are page-number
+  queries.
+- A quarantined thread stays out of selection until a reviewed change releases it, even if the listing shows it
+  with new activity. Its versions report partial (blocked, for a refusal) only in the cycle that quarantined it.
+  After that, the forum-wide count and reasons are in every health note a cycle writes after reading its state
+  file. A deleted topic that is released answers 404 again and is quarantined again: there is no disposal path
+  other than a release, so its small entry stays in the state file.
+- A 404 or 410 quarantines any queued thread, listed or not. A forum-wide change that made every topic view answer
+  404 would quarantine each queued thread it reaches, and each would need a release.
+- The forum's answer for a deleted topic is still unmeasured.
+- A thread whose first read fails is still not queued, as before. It reports partial / `thread_read_failed`.
+- An unchanged listed thread still takes a thread slot.
+
+**Reopen only if** any of these happens:
+- a thread deferred in a finished cycle is missing from the next saved state with neither a read, a
+  `deferred_invalidated` record nor a quarantine;
+- an owed thread is overtaken by a thread deferred after it, other than after its own failed read;
+- a queued thread the listing does not show, other than a seed never read, stops a cycle with a schema or
+  source-authority stop;
+- a thread quarantined for a refusal is asked again, or suspends the method again, without a release;
+- a quarantined thread is requested, or leaves the state file, without a `quarantine_released` record.
 
 ### AUX-045 — a counted row could not show the evidence for its own version match
 
