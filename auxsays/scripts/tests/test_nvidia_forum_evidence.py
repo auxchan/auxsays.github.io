@@ -1455,6 +1455,9 @@ def section_deferred_queue() -> None:
               and set(owed6) == {"592433"} and owed6["592433"]["first_deferred_at"] == t5
               and owed6["592433"]["times_deferred"] == 2 and not final.get("deferred_invalidated"),
               f"{read5} {read6} {outcomes6} {owed6}")
+        check("QP2 an owed thread read before (592433, with a window) counts in the queue depth",
+              all(f"Deferred-thread queue (whole forum): 1 waiting, oldest deferred {t5}" in h["notes"]
+                  for h in _health(_r6)), _health(_r6)[0]["notes"][-160:])
         rows = lane.rows()
         ids = [r["id"] for r in rows]
         added = sum(h.get("evidence_rows_added", 0) for res in lane.results for rr in res.values() for r in rr
@@ -1509,7 +1512,10 @@ def section_deferred_queue() -> None:
               all("2 deferred thread(s) invalidated this cycle: thread_gone, title_names_no_tracked_version." in h["notes"]
                   and "Deferred-thread queue (whole forum): 1 waiting" in h["notes"] for h in _health(resb)),
               _health(resb)[0]["notes"][-200:])
-        only_1414 = {pid: [r for r in recs if r.update_version == "621.14"] for pid, recs in RECORDS.items()}
+        check("QP1 the oldest deferral in the note is the FIRST deferral, not the requeue after a failed read",
+              all(f"1 waiting, oldest deferred {ta} (12 h ago)." in h["notes"] for h in _health(resb)),
+              _health(resb)[0]["notes"][-160:])
+        only_1414 = {pid:[r for r in recs if r.update_version == "621.14"] for pid, recs in RECORDS.items()}
         _rc, _cc, _readc, seenc = lane.cycle(None, records=only_1414)
         state_c = lane.state()
         last = (state_c.get("deferred_invalidated") or [{}])[-1]

@@ -3938,7 +3938,7 @@ requests and 5 of 5 threads, and the tracked driver versions then rose from 2 to
 defer. GPT ruled it a Priority 1 evidence-loss defect to fix before it happens: the threads most at risk are new
 releases' early reports.
 
-**Cause** Deferred work was lost silently in three ways.
+**Cause** Deferred work was lost silently in three ways, and a fourth defect could bring a read seed back unread:
 1. `prune_threads` kept an entry when `int(last_activity or horizon) >= horizon`. The horizon is a fractional
    timestamp, so for an entry with no last activity `int()` truncated it below itself and the test was False. A
    thread deferred before it was ever read has no last activity, so it was written and pruned in the same step.
@@ -3965,30 +3965,38 @@ releases' early reports.
     topic view answers 404 or 410 (`thread_gone`); its title names no tracked version; or no record is left for
     the versions it names.
 - Telemetry, with no new evidence state:
-  - every health note gives the forum-wide queue depth and the oldest deferral, plus any invalidations that cycle
-    and their reasons;
+  - every health note a cycle writes after reading its state file gives the forum-wide queue depth and the oldest
+    deferral, plus any invalidations that cycle and their reasons;
   - the `nvidia_forum_cycle` runtime event carries the same numbers;
   - a deferred seed whose title is unknown reports partial for every version;
   - a seed read by any path is recorded as read.
 
-`evaluate_comment` is unchanged, and so are every acceptance rule, threshold, status, schedule and ceiling. Replayed
-on the captured windows, the decisions are identical (9 counted). Pinned by `test_nvidia_forum_evidence.py` section
-Q (175 to 201 governed checks; each of 22 single-fix mutants fails a named check):
+`evaluate_comment` is unchanged, and so are every acceptance rule, threshold, schedule and ceiling; the health-status
+vocabulary gains no status. Replayed on the captured windows, the decisions are identical (9 counted). Pinned by
+`test_nvidia_forum_evidence.py` section Q (175 to 203 governed checks; each of 22 single-fix mutants fails a named
+check, and so does each of 2 telemetry mutants: the oldest age taken from the requeue time, and a depth that drops
+owed threads read before):
 - three exhausted cycles (request ceiling, thread cap, time budget), with the threads unlisted and never read;
 - then reads in queue order;
 - the store ends with exactly one unconstrained cycle's rows and decisions: 9 counted, none twice, none credited
   twice.
 
 **Residual**
-- A queued thread whose own topic view raises a stop (a redirect or a schema change) stops each cycle that reaches
-  it. A remembered feedback thread does the same today. It is reported as broken, never silently.
+- A queued thread whose own topic view raises a stop stops each cycle that reaches it, and that cycle's other reads
+  are discarded with it; owed work is reached first and in a stable order, so this repeats every cycle. A redirect
+  or a schema change (including a topic answering with another id, as after a merge) reports broken. An access
+  refusal (401/403/429/451, an HTML page, a challenge) suspends the whole lane (blocked) until a reviewed change
+  clears it, and the same thread is first again afterwards. Before this change only listed, remembered or seed
+  threads were read; a queued user topic is now read after it may have been hidden, moved or merged. The forum's
+  answer for a deleted topic is unmeasured: only 404/410 invalidates.
 - A thread whose first read fails is still not queued, as before. It reports partial / `thread_read_failed`.
 - An unchanged listed thread still takes a thread slot.
 
-**Reopen only if** either of these happens:
+**Reopen only if** any of these happens:
 - a thread deferred in a finished cycle is missing from the next saved state with neither a read nor a
   `deferred_invalidated` record;
-- an owed thread is overtaken by a thread deferred after it.
+- an owed thread is overtaken by a thread deferred after it, other than after its own failed read;
+- a cycle stops or is suspended while reading a queued thread.
 
 ### AUX-045 — a counted row could not show the evidence for its own version match
 
