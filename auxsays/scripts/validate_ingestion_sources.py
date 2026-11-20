@@ -25,10 +25,14 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
+from lib.refused_hosts import refused_host
 from lib.state import SEEN_RETENTION
 
 DEFAULT_CONFIG = Path("auxsays/_data/patch_ingestion_sources.yml")
 URL_FIELDS = ("official_url", "secondary_official_url", "feed_url", "api_url")
+# Every ingestion field an adapter turns into a request, for the refused-host rule (G66). The
+# template is filled in per version and then fetched, so its host is a request host too.
+REQUEST_URL_FIELDS = URL_FIELDS + ("status_url_template",)
 TRAILING_URL_PUNCTUATION = (":", ";", ",")
 
 
@@ -196,6 +200,18 @@ def _validate_entry(errors: list[str], warnings: list[str], source: dict[str, An
         if isinstance(value, str) and "adobe.com" in _host(value) and company_id != "adobe":
             errors.append(
                 f"{label}: ingestion.{field} points to Adobe domain on non-Adobe source: {value}"
+            )
+
+    # Refused hosts (G66, lib.refused_hosts). An ingestion lane may not request
+    # support.microsoft.com while its collection terms are unresolved (K1). The Office adapter
+    # refuses it at fetch time as well; failing here keeps the mistake out of a config that would
+    # otherwise only show it the day the primary page fails.
+    for field in REQUEST_URL_FIELDS:
+        value = ingestion.get(field)
+        if isinstance(value, str) and refused_host(value):
+            errors.append(
+                f"{label}: ingestion.{field} names {refused_host(value)}, a host no ingestion lane "
+                f"may request (collection terms unresolved): {value}"
             )
 
     # High-signal warning: duplicated official/secondary URL is not always wrong,

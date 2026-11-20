@@ -337,7 +337,10 @@ auxsays/scripts/tests/test_patch_decision_authority.py = 213
 # 146 -> 148 (AUX-099 round 3, G38 WS2 review 2 LOW-2): every Default_Ignorable_Code_Point, the Hangul fillers and
 # the braille blank are errors too, in product_id and target_build without exception; in update_version U+FE0F
 # and U+200D pass only inside an emoji sequence (G3-Q14). 61 mutants, X56/X57 one fix half each.
-auxsays/scripts/tests/test_growth3_verdict_policy.py = 148
+# 148 -> 156 (G66): the KB5079391 entry carries the K3 provenance (file and statement sha256, UTC retrieval
+# time) as optional, validated, text-free fields (G66-L1..L4); both AVOID pages link the official statement
+# from the projection through the gate to the shipped page template, and no other verdict does (G66-S1..S4).
+auxsays/scripts/tests/test_growth3_verdict_policy.py = 156
 # G35-04, the deterministic verdict-reason producer (lib/verdict_reason_producer): the vendor-
 # confirmed-serious class on frozen copies of the stored statements, the six named pages (VRP-V1..V7);
 # the user-corroborated install-failure class and its mandatory independence gate (VRP-I1..I6); the
@@ -549,7 +552,12 @@ auxsays/scripts/tests/test_validate_evidence_method_health.py = 13
 # that row shape may leave last_run empty; the suite drives the real writer and the validator as a
 # bare script over the failed run's own rows, and checks that no monitoring or H0-H7 decision moves.
 auxsays/scripts/tests/test_policy_row_last_run.py = 31
-auxsays/scripts/tests/test_validate_ingestion_sources.py = 40
+auxsays/scripts/tests/test_validate_ingestion_sources.py = 45
+# G66: the writers that print into public workflow logs never print a report's stored title or excerpt.
+# A canary in every stored text field, driven through the promotion writer's own main() (dry run,
+# --write-all, --write, --output) over a temp tree, the collection runner's payload, reconciliation's
+# lines and QA's messages; the closed key list covers every text field the live data carries.
+auxsays/scripts/tests/test_log_title_hygiene.py = 17
 # A green patch-ingestion run must not hide an enabled source that failed. Covers the nine
 # required counterfactuals (healthy / quiet / 403 / transport failure / parser rot / mixed /
 # all-failed / disabled / aged-out), the failure-MODE-change case Elgato actually exhibited,
@@ -741,7 +749,9 @@ auxsays/scripts/tests/test_comfyui_github_issues.py = 131
 # frozen, and the builder's severity_summary no longer reads a missing severity as 'low'. Source-pins the three
 # counting predicates (acceptance) as untouched.
 auxsays/scripts/tests/test_teams_classification.py = 46
-auxsays/scripts/tests/test_microsoft_office_updates_adapter.py = 78
+# G66: H19 now proves a failed primary never falls through to support.microsoft.com (refused by
+# name, even when configured), that the source fails visibly, and that health records it end to end.
+auxsays/scripts/tests/test_microsoft_office_updates_adapter.py = 88
 auxsays/scripts/tests/test_microsoft_powerpoint_collector.py = 101
 auxsays/scripts/tests/test_microsoft_release_health_adapter.py = 80
 auxsays/scripts/tests/test_microsoft_windows_collector.py = 78

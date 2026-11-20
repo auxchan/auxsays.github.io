@@ -3373,7 +3373,10 @@
     type: html_release_notes
     adapter: microsoft_office_updates
     official_url: https://learn.microsoft.com/en-us/officeupdates/teams-app-versioning
-    secondary_official_url: https://support.microsoft.com/en-us/office/what-s-new-in-microsoft-teams-d7092a6d-c896-424c-b362-a472d5f105de
+    # NO FALLBACK URL (G66). This used to name a support.microsoft.com page, and the adapter fetches
+    # configured URLs in order, so a failed primary would have requested a host whose collection
+    # terms are unresolved (K1). The adapter now requests learn.microsoft.com only and refuses
+    # support.microsoft.com by name; validate_ingestion_sources.py rejects it here as well.
     feed_url: null
     api_url: null
     parser_profile: microsoft_teams_version_history

@@ -24,6 +24,7 @@ from patch_collectors.base import (  # noqa: E402
 )
 from lib.collector_txn import CollectorTransaction, UnexpectedMutation, GitUnavailable  # noqa: E402
 from lib import collector_ownership as ownership  # noqa: E402
+from lib.log_redaction import log_safe  # noqa: E402
 from patch_collectors import runtime_budget as rb  # noqa: E402
 from patch_collectors.adobe_premiere import AdobePremiereCollector  # noqa: E402
 from patch_collectors.davinci import DavinciCollector  # noqa: E402
@@ -563,7 +564,10 @@ def main(argv: list[str] | None = None) -> int:
         "method_health_rows_changed": method_health_changed,
         "method_health_rows_total": method_health_total,
     }
-    print(json.dumps(payload, indent=2, ensure_ascii=False))
+    # Printed into the public run log. Each collector returns its own free-form result dicts, so a
+    # stored report title or excerpt riding along in one is removed here, at the one place they are
+    # all printed (G66, lib.log_redaction). None carries one today; this keeps it that way.
+    print(json.dumps(log_safe(payload), indent=2, ensure_ascii=False))
     # Exit 0 for success AND partial (so healthy collectors publish); non-zero ONLY for a total
     # failure (nothing succeeded -> nothing safe to write). This is NOT "merely forcing exit 0":
     # a partial is emitted as outcome=partial + ::warning:: annotations + a job-summary table.

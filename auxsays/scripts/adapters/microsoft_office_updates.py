@@ -29,8 +29,9 @@ import re
 from datetime import date
 from typing import Any
 
-from lib.http import fetch_text
+from lib.http import fetch_text, redirect_allowed
 from lib.normalize import strip_tags, first_nonempty
+from lib.refused_hosts import hostname, refused_host
 from lib.write_update_record import (
     ATTRIBUTION_APP_NAMED, ATTRIBUTION_APP_NAMED_AND_SUITE_WIDE, ATTRIBUTION_NOT_DOCUMENTED,
     ATTRIBUTION_SUITE_WIDE, attribution_label,
@@ -171,6 +172,30 @@ def _source_candidates(source: dict[str, Any]) -> list[str]:
         if isinstance(url, str) and url.strip() and url.strip() not in clean:
             clean.append(url.strip())
     return clean
+
+
+# --- Fetch host restriction (G66) ---------------------------------------------
+# The ONLY host this adapter requests, as a positive allow-list: every Office lane (Microsoft 365
+# Apps, PowerPoint, Teams) reads learn.microsoft.com/officeupdates. Before G66 the adapter fetched
+# whatever URL a source config named, in order, and the Teams lane named a support.microsoft.com page
+# as its fallback, so a failed or reshaped primary page would have sent a production request to a
+# host whose collection terms are unresolved (K1). Now a configured URL is requested only when it is
+# https on an approved host (default port, no userinfo), every redirect is bounded to the same hosts
+# BEFORE it is followed (lib.http redirect_hosts), and a response whose final URL is off the list is
+# not parsed. support.microsoft.com is refused BY NAME (lib.refused_hosts), any path, even if
+# configured, so the reason names it. A refusal is a recorded failure, never a quiet skip: when no
+# approved URL yields a record, fetch raises and the source's health says why.
+APPROVED_FETCH_HOSTS = frozenset({"learn.microsoft.com"})
+
+
+def fetch_refusal(url: str) -> str:
+    """Why this adapter will not request `url`, or "" when it may."""
+    refused = refused_host(url)
+    if refused:
+        return f"refused_host:{refused}"
+    if not redirect_allowed(url, APPROVED_FETCH_HOSTS):
+        return f"unapproved_host:{hostname(url) or '-'}"
+    return ""
 
 
 def _iso_date(year: int, month: int, day: int) -> str:
@@ -954,23 +979,42 @@ def fetch(source: dict[str, Any], limit: int = 3) -> list[dict[str, Any]]:
     options = _request_options(source)
     candidates = _source_candidates(source)
     fetch_errors: list[str] = []
+    refusals: list[str] = []
 
     for url in candidates:
+        # Host restriction BEFORE any request: a refused or unapproved URL is never asked, whatever
+        # its position in the config. It is recorded, so it cannot read as "nothing new today".
+        refusal = fetch_refusal(url)
+        if refusal:
+            refusals.append(f"{url}: not requested ({refusal})")
+            continue
         try:
-            result = fetch_text(url, **options)
+            result = fetch_text(url, **options, redirect_hosts=APPROVED_FETCH_HOSTS)
         except Exception as exc:  # noqa: BLE001 - surface transport failures below
             fetch_errors.append(f"{url}: {exc}")
+            continue
+        final_url = result.final_url or url
+        final_refusal = fetch_refusal(final_url)
+        if final_refusal:
+            # Defence in depth: the redirect bound already refuses an off-list hop before it is made.
+            refusals.append(f"{url}: response not read ({final_refusal})")
             continue
         html = result.text or ""
         if not html.strip():
             fetch_errors.append(f"{url}: empty response")
             continue
-        records = parser(source, result.final_url or url, html, limit)
+        records = parser(source, final_url, html, limit)
         if records:
             return records
         # Fetched OK but no version row matched: try the next official URL rather than
         # emitting a snapshot/bad record.
 
+    # No approved URL produced a record. A refused URL in the config is a configuration defect, and
+    # the run has nothing to show for the approved ones either: raise, naming both, so the source's
+    # health records a failure instead of a quiet empty run (G66: a failed primary must not fall
+    # through to an unapproved source, and must not hide behind it either).
+    if refusals:
+        raise RuntimeError("; ".join(fetch_errors[-1:] + refusals[-2:]))
     # Every candidate URL failed to fetch -> surface as a transport error so source
     # health reflects it. Fetched-but-unparseable pages return [] (graceful).
     if candidates and len(fetch_errors) == len(candidates):

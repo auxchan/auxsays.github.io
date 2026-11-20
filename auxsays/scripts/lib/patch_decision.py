@@ -545,6 +545,24 @@ def recommendations(decision: Decision) -> list[str]:
     return []
 
 
+def official_source(decision: Decision) -> dict[str, str]:
+    """The official statement an AVOID rests on, for the patch page to link (G66), else empty strings.
+
+    A plain deep link to the article's own URL -- the one use of a Microsoft support article the
+    2026-11-10 source assessment rated PERMITTED (the link lands on the originating page) -- with an
+    AUXSAYS label and the date the statement was verified. Never the article's text. It decides
+    nothing: the verdict is chosen above and is the same with or without it."""
+    empty = {"url": "", "label": "", "checked": ""}
+    if decision.verdict != AVOID or not decision.lifecycle:
+        return empty
+    url = _text(decision.lifecycle.get("official_url"))
+    kb = _text(decision.lifecycle.get("kb"))
+    if not url.startswith("https://") or not kb:
+        return empty
+    return {"url": url, "label": f"Microsoft support article for {kb}",
+            "checked": _text(decision.lifecycle.get("verified_at"))}
+
+
 def feed_body(body: str) -> str:
     """The page's line as the /updates/ feed card prints it: no pointer to reports "listed below",
     because nothing is listed below a card (review 2, LOW-4)."""

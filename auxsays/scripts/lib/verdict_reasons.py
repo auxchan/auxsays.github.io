@@ -73,7 +73,17 @@ ALLOWED_REASON_KEYS = frozenset(REQUIRED_REASON_KEYS + (
     "target_build", "official_confirmation", "fixed_in", "transition", "material"))
 REQUIRED_LIFECYCLE_KEYS = ("id", "product_id", "kb", "builds", "relationship", "replacement_kb",
                            "released", "replacement_released", "official_url", "verified_at")
-ALLOWED_LIFECYCLE_KEYS = frozenset(REQUIRED_LIFECYCLE_KEYS + ("replacement_builds",))
+# PROVENANCE (G66). Which copy of the official statement the entry was verified from, so a later
+# permitted re-read can prove the statement is unchanged without the repository keeping the page:
+# the sha256 of the retrieved file, the sha256 of the matched statement (normalisation stated in
+# _data/patch_lifecycle.yml) and the UTC retrieval time. Hashes and a timestamp, never vendor text.
+# OPTIONAL, so adding them changes no decision; when present they must be well formed, like every
+# other value here, and test_growth3_verdict_policy pins that the shipped entry carries all three.
+# A hash records WHICH text supported the decision; it does not by itself show the decision is right.
+LIFECYCLE_PROVENANCE_KEYS = ("source_sha256", "statement_sha256", "source_retrieved_at")
+ALLOWED_LIFECYCLE_KEYS = frozenset(REQUIRED_LIFECYCLE_KEYS + ("replacement_builds",) + LIFECYCLE_PROVENANCE_KEYS)
+SHA256_RE = re.compile(r"^[0-9a-f]{64}$", re.ASCII)
+UTC_TIMESTAMP_RE = re.compile(r"^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$", re.ASCII)
 
 
 class FactFileError(ValueError):
@@ -402,6 +412,12 @@ def lifecycle_errors(entries: list[Mapping[str, Any]]) -> list[str]:
                 errors.append(f"{label}: {field} must be YYYY-MM-DD")
         if not _s(entry.get("official_url")).startswith("https://support.microsoft.com/"):
             errors.append(f"{label}: official_url must be the support.microsoft.com article")
+        for field in ("source_sha256", "statement_sha256"):
+            if field in entry and not (isinstance(entry.get(field), str) and SHA256_RE.fullmatch(entry[field])):
+                errors.append(f"{label}: {field} must be a lowercase 64-character hex sha256")
+        if "source_retrieved_at" in entry and not (isinstance(entry.get("source_retrieved_at"), str)
+                                                   and UTC_TIMESTAMP_RE.fullmatch(entry["source_retrieved_at"])):
+            errors.append(f"{label}: source_retrieved_at must be a UTC timestamp like 2026-11-06T16:18:26Z")
         builds = entry.get("builds")
         if not isinstance(builds, list) or not builds or not all(_s(b) for b in builds):
             errors.append(f"{label}: builds must list the exact OS builds of the withdrawn update")

@@ -212,6 +212,51 @@ def run() -> int:
           disabled is not None and patch_ingest.should_run(disabled, scheduled) is False,
           str(disabled and disabled.get("product_id")))
 
+    # --- H. refused hosts (G66): no ingestion lane may request support.microsoft.com ----------
+    # The Teams lane named a support.microsoft.com page as its fallback URL, and the Office adapter
+    # fetches configured URLs in order. The adapter now refuses the host itself; this rule keeps a
+    # config that names it from passing CI at all, in any field an adapter turns into a request.
+    def _refused(errors: list[str]) -> list[str]:
+        return [e for e in errors if "a host no ingestion lane may request" in e]
+
+    live_refused = []
+    for entry in entries:
+        errs: list[str] = []
+        vis._validate_entry(errs, [], entry)
+        live_refused += _refused(errs)
+    check("H1. the live config names no refused host in any request field",
+          live_refused == [], str(live_refused)[:300])
+    check("H2. microsoft-teams carries no secondary_official_url any more (the support.microsoft.com fallback is gone)",
+          teams is not None and "secondary_official_url" not in (teams.get("ingestion") or {}),
+          str((teams or {}).get("ingestion", {}).get("secondary_official_url")))
+    old_teams_errs: list[str] = []
+    vis._validate_entry(old_teams_errs, [], {
+        "company_id": "microsoft", "product_id": "microsoft-teams", "enabled": True,
+        "ingestion": {**(teams or {}).get("ingestion", {}),
+                      "secondary_official_url": "https://support.microsoft.com/en-us/office/what-s-new-in-microsoft-teams-d7092a6d-c896-424c-b362-a472d5f105de"}})
+    old_teams = _refused(old_teams_errs)
+    check("H3. the pre-G66 Teams shape (support.microsoft.com fallback) is rejected",
+          len(old_teams) == 1 and "secondary_official_url" in old_teams[0], str(old_teams_errs)[:300])
+    refused_variants = {
+        "official_url": "https://support.microsoft.com/en-us/topic/anything",
+        "feed_url": "http://SUPPORT.Microsoft.com/rss",
+        "api_url": "https://eu.support.microsoft.com/api",
+        "status_url_template": "https://support.microsoft.com/status/{version_slug}",
+        "secondary_official_url": "https://learn.microsoft.com@support.microsoft.com:8443/x",
+    }
+    missed = [field for field, url in refused_variants.items()
+              if len(_refused(entry_errors(base(**{field: url})))) != 1]
+    check("H4. any path, scheme, case, subdomain, port or userinfo prefix of the host is rejected, in every request field",
+          missed == [], str(missed))
+    allowed_variants = [
+        "https://learn.microsoft.com/en-us/officeupdates/teams-app-versioning",
+        "https://learn.microsoft.com/support.microsoft.com/page",           # the name in a PATH only
+        "https://notsupport.microsoft.com.example.invalid/x",              # not a dot-boundary match
+    ]
+    wrong = [url for url in allowed_variants if _refused(entry_errors(base(secondary_official_url=url)))]
+    check("H5. the rule matches the host, not a substring: learn.microsoft.com and lookalike paths pass it",
+          wrong == [], str(wrong))
+
     print()
     print("=" * 60)
     total = _PASS + _FAIL

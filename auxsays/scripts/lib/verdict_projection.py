@@ -65,7 +65,7 @@ HEADER = (
     "# (_includes/patch-verdict-gate.html) prints these rows and decides no verdict itself.\n"
 )
 ROW_KEYS = ("url", "verdict", "scope", "rule", "reasons", "body", "panel_heading", "panel_text",
-            "recommendations")
+            "recommendations", "source_url", "source_label", "source_checked")
 REASONED = (patch_decision.WAIT, patch_decision.TEST_FIRST)
 OFFICIAL = (patch_decision.AVOID, patch_decision.SECURITY_UPDATE)
 # What the gate will print from a row, and nothing else (it must carry a line; a scoped verdict a
@@ -85,6 +85,7 @@ def page_key(record: Mapping[str, Any]) -> str:
 def row_for(decision: patch_decision.Decision, record: Mapping[str, Any]) -> dict[str, Any]:
     """One page's row: what the page renders for a reasoned decision, character for character."""
     count = int(record.get("update_report_count") or 0)
+    source = patch_decision.official_source(decision)
     return {
         "url": str(record.get("permalink") or record.get("url") or "").strip(),
         "verdict": decision.verdict,
@@ -95,6 +96,11 @@ def row_for(decision: patch_decision.Decision, record: Mapping[str, Any]) -> dic
         "panel_heading": patch_decision.PANEL_HEADING.get(decision.panel_kind, ""),
         "panel_text": patch_decision.panel_text(decision),
         "recommendations": patch_decision.recommendations(decision),
+        # The official statement an AVOID rests on, as a plain deep link the patch page prints under
+        # the verdict line (G66). Only the link and the date it was checked: never the article's text.
+        "source_url": source["url"],
+        "source_label": source["label"],
+        "source_checked": source["checked"],
     }
 
 

@@ -95,6 +95,7 @@ LANDING_ONLY_HTML = """
 
 
 def teams_source() -> dict[str, object]:
+    """The Teams source as configured since G66: one official URL, no fallback."""
     return {
         "company_id": "microsoft",
         "product_id": "microsoft-teams",
@@ -103,10 +104,20 @@ def teams_source() -> dict[str, object]:
         "public_category": "Workplace Critical",
         "ingestion": {
             "official_url": "https://learn.microsoft.com/en-us/officeupdates/teams-app-versioning",
-            "secondary_official_url": "https://support.microsoft.com/en-us/office/what-s-new-in-microsoft-teams-d7092a6d-c896-424c-b362-a472d5f105de",
             "parser_profile": "microsoft_teams_version_history",
         },
     }
+
+
+# The Teams fallback page configured until G66: a support.microsoft.com URL the adapter would have
+# requested whenever the primary failed. Kept HERE (never in the live config) so H19 can prove the
+# adapter refuses it even when a config names it.
+REFUSED_TEAMS_FALLBACK = "https://support.microsoft.com/en-us/office/what-s-new-in-microsoft-teams-d7092a6d-c896-424c-b362-a472d5f105de"
+
+
+def teams_source_pre_g66() -> dict[str, object]:
+    src = teams_source()
+    return {**src, "ingestion": {**src["ingestion"], "secondary_official_url": REFUSED_TEAMS_FALLBACK}}
 
 
 TEAMS_URL = "https://learn.microsoft.com/en-us/officeupdates/teams-app-versioning"
@@ -276,30 +287,137 @@ def run() -> int:
           T("<h2>Public cloud offerings</h2><h3>New Teams app version</h3><h4>Windows</h4>"
             "<p>Page updated October 2026.</p><table><tr><td>2026</td><td>July 01</td><td>26190.100.4900.0001</td></tr></table>")[0]["published_at"] == "2026-07-01T00:00:00Z")
 
-    # H19: alternate official URLs -> one identity; transport failure fail-closed (fetch level).
+    # H19 (G66): a failed primary fetch never falls through to an unapproved source, and the lane
+    # reports the failure honestly. Until G66 the Teams config named a support.microsoft.com page as
+    # its fallback and the adapter fetched it whenever the primary failed or matched no row; the old
+    # H19 swapped in a second Learn URL instead, so it never exercised that request and passed with
+    # or without a fall-through. Every fake below records the URLs the adapter asked for, so
+    # "never requested" is observed, not inferred from the result.
     URL_A = TEAMS_URL
     URL_B = "https://learn.microsoft.com/en-us/officeupdates/teams-archive"
-    def with_fetch(mapping, fn):
+    REFUSED = REFUSED_TEAMS_FALLBACK
+    asked_everywhere: list[tuple[str, object]] = []
+
+    def with_fetch(mapping, fn, final=None):
+        """Run fn() against a fake transport. Returns (result, exception, URLs asked, in order)."""
         orig = mso.fetch_text
-        def fake(url, **_kw):
+        asked: list[tuple[str, object]] = []
+
+        def fake(url, **kw):
+            asked.append((url, kw.get("redirect_hosts")))
             if url not in mapping:
                 raise RuntimeError("timeout")
-            return SimpleNamespace(text=mapping[url], final_url=url)
+            return SimpleNamespace(text=mapping[url], final_url=(final or {}).get(url, url))
         mso.fetch_text = fake
         try:
-            return fn()
+            try:
+                return fn(), None, [u for u, _ in asked]
+            except Exception as exc:  # noqa: BLE001 - the exception IS the observation
+                return None, exc, [u for u, _ in asked]
         finally:
             mso.fetch_text = orig
+            asked_everywhere.extend(asked)
+
+    pre = teams_source_pre_g66()
+    out, exc, asked = with_fetch({}, lambda: mso.fetch(pre, 50))
+    check("H19. a failed primary fetch does NOT fall through to the configured support.microsoft.com fallback (never requested)",
+          asked == [URL_A], str(asked))
+    check("H19b. ...and the lane fails visibly: fetch raises, naming the primary failure AND the refusal",
+          out is None and isinstance(exc, RuntimeError) and "timeout" in str(exc)
+          and "refused_host:support.microsoft.com" in str(exc), repr(exc))
+    out, exc, asked = with_fetch({URL_A: TEAMS_LANDING_HTML, REFUSED: TEAMS_HTML}, lambda: mso.fetch(pre, 50))
+    check("H19c. a primary that answers with no matching row does not fall through either, and raises "
+          "instead of reading as a quiet empty run",
+          asked == [URL_A] and out is None and isinstance(exc, RuntimeError)
+          and "refused_host:support.microsoft.com" in str(exc), f"{asked} {exc!r}")
+    out, exc, asked = with_fetch({URL_A: TEAMS_HTML, REFUSED: TEAMS_HTML}, lambda: mso.fetch(pre, 50))
+    check("H19d. a healthy primary still yields its records, and the refused URL is never asked",
+          exc is None and [r["version"] for r in out or []] == TEAMS_ACCEPTED and asked == [URL_A], f"{asked} {exc!r}")
+    out, exc, asked = with_fetch({}, lambda: mso.fetch(teams_source(), 50))
+    check("H19e. as configured now (no fallback), a failed primary raises and nothing else is asked",
+          out is None and isinstance(exc, RuntimeError) and asked == [URL_A], f"{asked} {exc!r}")
+    only_refused = {**teams_source(), "ingestion": {**teams_source()["ingestion"], "official_url": REFUSED}}
+    out, exc, asked = with_fetch({REFUSED: TEAMS_HTML}, lambda: mso.fetch(only_refused, 50))
+    check("H19f. support.microsoft.com is refused even as the PRIMARY url: no request at all, fetch raises",
+          asked == [] and out is None and isinstance(exc, RuntimeError)
+          and "refused_host:support.microsoft.com" in str(exc), f"{asked} {exc!r}")
     two_url_src = {**teams_source(), "ingestion": {**teams_source()["ingestion"], "secondary_official_url": URL_B}}
-    both = with_fetch({URL_A: TEAMS_HTML, URL_B: TEAMS_HTML}, lambda: mso.fetch(two_url_src, 50))
-    check("H19. same version on two official URLs -> one identity (from the primary URL)",
-          [r["version"] for r in both] == TEAMS_ACCEPTED and all(r["source_url"] == URL_A for r in both), str([(r["version"], r["source_url"]) for r in both]))
-    raised = False
-    try:
-        with_fetch({}, lambda: mso.fetch(two_url_src, 50))
-    except RuntimeError:
-        raised = True
-    check("H19b. all official URLs failing transport -> fetch raises (fail-closed)", raised)
+    both, exc, asked = with_fetch({URL_A: TEAMS_HTML, URL_B: TEAMS_HTML}, lambda: mso.fetch(two_url_src, 50))
+    check("H19g. same version on two APPROVED official URLs -> one identity (from the primary URL)",
+          exc is None and [r["version"] for r in both] == TEAMS_ACCEPTED and all(r["source_url"] == URL_A for r in both),
+          str([(r["version"], r["source_url"]) for r in both or []]))
+    out, exc, asked = with_fetch({}, lambda: mso.fetch(two_url_src, 50))
+    check("H19h. all approved official URLs failing transport -> fetch raises (fail-closed), each asked once",
+          isinstance(exc, RuntimeError) and asked == [URL_A, URL_B], f"{asked} {exc!r}")
+    out, exc, asked = with_fetch({URL_A: TEAMS_HTML}, lambda: mso.fetch(teams_source(), 50), final={URL_A: REFUSED})
+    check("H19i. a response whose final URL left the approved hosts is not parsed (no records; fetch raises)",
+          out is None and isinstance(exc, RuntimeError) and "refused_host:support.microsoft.com" in str(exc), repr(exc))
+    check("H19j. every request carries the redirect bound, so a redirect off learn.microsoft.com is refused before it is followed",
+          bool(asked_everywhere) and all(h == mso.APPROVED_FETCH_HOSTS == frozenset({"learn.microsoft.com"})
+                                         for _, h in asked_everywhere), str(asked_everywhere[:3]))
+    refused_urls = [
+        REFUSED, "http://support.microsoft.com/x", "https://SUPPORT.MICROSOFT.COM/en-us/topic/y",
+        "https://eu.support.microsoft.com/z", "https://support.microsoft.com./trailing-dot",
+        "https://learn.microsoft.com@support.microsoft.com/userinfo-trick", "https://support.microsoft.com:443/p",
+    ]
+    unapproved_urls = [
+        "http://learn.microsoft.com/en-us/officeupdates/current-channel",       # downgrade
+        "https://learn.microsoft.com.example.invalid/officeupdates",            # lookalike
+        "https://x.learn.microsoft.com/officeupdates",                          # subdomain
+        "https://learn.microsoft.com:8443/officeupdates",                       # other port
+        "https://user@learn.microsoft.com/officeupdates",                       # userinfo
+        "https://answers.microsoft.com/en-us/windows/forum",                    # another Microsoft host
+    ]
+    check("H19k. the host restriction is exact: support.microsoft.com is refused BY NAME on any path, case, "
+          "subdomain, port or userinfo prefix; everything off learn.microsoft.com https is unapproved",
+          all(mso.fetch_refusal(u) == "refused_host:support.microsoft.com" for u in refused_urls)
+          and all(mso.fetch_refusal(u).startswith("unapproved_host:") for u in unapproved_urls)
+          and mso.fetch_refusal(TEAMS_URL) == "" and mso.fetch_refusal(URL) == "",
+          str([(u, mso.fetch_refusal(u)) for u in refused_urls + unapproved_urls if
+               not mso.fetch_refusal(u)]))
+
+    # H19l: the lane's HEALTH reports it -- end to end through patch_ingest.main, the entry point the
+    # scheduled workflow runs, with the pre-G66 config. The source must come out failed with the
+    # refusal named, the run must not read healthy, and support.microsoft.com must never be asked.
+    import json as _json
+    import os as _os
+    import tempfile as _tf
+    import contextlib as _cl
+    import io as _io
+    import patch_ingest as _pi
+    with _tf.TemporaryDirectory() as td:
+        tdp = Path(td)
+        cfg = tdp / "sources.yml"
+        state_path = tdp / "state.json"
+        out_dir = tdp / "updates" / "generated"
+        out_dir.mkdir(parents=True)
+        import yaml as _yaml
+        live_cfg = {**pre, "enabled": True,
+                    "ingestion": {**pre["ingestion"], "adapter": "microsoft_office_updates",
+                                  "type": "html_release_notes", "record_floor_date": "2026-01-01"}}
+        cfg.write_text(_yaml.safe_dump([live_cfg], sort_keys=False), encoding="utf-8")
+        saved_argv = sys.argv
+        saved_env = {k: _os.environ.pop(k) for k in ("GITHUB_STEP_SUMMARY", "GITHUB_OUTPUT") if k in _os.environ}
+        sys.argv = ["patch_ingest.py", "--config", str(cfg), "--state", str(state_path), "--output", str(out_dir),
+                    "--source", "microsoft-teams", "--no-refresh-linked-bodies"]
+        stdout, stderr = _io.StringIO(), _io.StringIO()
+        try:
+            with _cl.redirect_stdout(stdout), _cl.redirect_stderr(stderr):
+                rc, exc, asked = with_fetch({}, _pi.main)
+        finally:
+            sys.argv = saved_argv
+            _os.environ.update(saved_env)
+        state = _json.loads(state_path.read_text(encoding="utf-8")) if state_path.exists() else {}
+        bucket = (state.get("sources") or {}).get("microsoft-teams") or {}
+        check("H19l. end to end (patch_ingest.main): the source is recorded as failing with the refusal named, "
+              "the run is not healthy, nothing was written, and only the primary was asked",
+              exc is None and rc == 1 and asked == [URL_A]
+              and bucket.get("status") in ("degraded", "failing")
+              and "refused_host:support.microsoft.com" in str(bucket.get("last_error"))
+              and state.get("last_run_health") not in (None, "healthy")
+              and not list(out_dir.glob("*.md")),
+              f"rc={rc!r} exc={exc!r} asked={asked} status={bucket.get('status')!r} "
+              f"health={state.get('last_run_health')!r} err={str(bucket.get('last_error'))[:160]!r}")
 
     # H20: same version with conflicting dates -> fail visibly (dropped, not first-wins).
     conflict = T("<h2>Public cloud offerings</h2><h3>New Teams app version</h3><h4>Windows</h4>"
