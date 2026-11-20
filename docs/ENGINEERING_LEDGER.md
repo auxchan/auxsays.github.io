@@ -5519,9 +5519,9 @@ tool's grant does not name.
 - **First seen** 2026-11-19 (AUX-108's control finding) · **Resolved** 2026-11-19
 
 **Symptom** One counted DaVinci Resolve 21.0.4 report is a question. The author asks whether HDR can be enabled in
-the previews on Linux and names 21.0.4 as the version they run. It reports no problem with 21.0.4, so the page
-counted one report more than it has. AUX-108's blind review found it as a control and recorded it for its own
-review.
+the previews on Linux and names 21.0.4 as the version they run. Its stored text reports no problem with 21.0.4, and
+both blind reviews judged it a question rather than an issue report, so the page counted one report more than it
+should. AUX-108's blind review found it as a control and recorded it for its own review.
 
 **Scope** Only this row, and only because two fresh blind adjudicators each labelled it incorrect for the credited
 version, as not an issue report. Each read only the stored text, in a shuffled packet of four candidates and eight
