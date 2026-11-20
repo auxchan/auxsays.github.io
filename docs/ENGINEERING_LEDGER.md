@@ -370,7 +370,7 @@ check" (`evidence_source_limitations`, which no page renders) leaves 7 archived 
 DaVinci promotion and 20 current ones after the first pass. 21.1.1 keeps it while its Creative COW row is partial.
 
 Tests: `test_davinci_refused_methods_disabled.py` (46), `test_powerpoint_hydration_cap_telemetry.py` (20).
-`test_reddit_access_policy.py` D.7 now checks the watchlist adapter itself for the Reddit skip.
+`test_reddit_access_policy.py` D.7 and D.7b now check the watchlist adapter itself for the Reddit skip (D.7b reads the adapter's own error list; the collector's disabled row can no longer carry an adapter error).
 
 **Not changed** No acceptance rule, threshold, verdict, ladder rule, budget, walk order, archive filter, schedule,
 hydration cap or status mapping changed, and no evidence row, count or generated record. The 100 archived records stay
