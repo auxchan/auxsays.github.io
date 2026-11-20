@@ -24,6 +24,21 @@ at most ``MAX_REQUESTS_PER_CYCLE`` requests spaced ``REQUEST_SPACING_SECONDS`` a
 client name, no login, no cookies, no retries. A thread whose last activity has not moved is not
 re-read.
 
+DEFERRED WORK (GPT G61 Q5). A thread the cycle could not reach -- the thread cap, the request ceiling
+or the run's time budget -- is owed, not forgotten: it stays in the state file with the reason and
+the time it was deferred until a later cycle reads it or invalidates it with a recorded reason, and
+owed work is read before new work (nvidia_forum._select_threads). Neither ceiling is raised: the
+queue only decides who uses them first.
+
+A QUEUED THREAD'S OWN FAILURE IS ITS OWN (GPT G62 R1). A queued thread whose topic view answers
+404/410 is QUARANTINED: kept in the state file with its reason and time, never selected, never
+pruned. A queued thread the listing does not show (not a seed never read) cannot stop the cycle for
+everyone (nvidia_forum._read_thread): a confirmed success:false quarantines it and the cycle goes
+on; an access refusal still suspends the method but quarantines the refused thread, so it cannot
+suspend the method again once the refusal is cleared (except a 429, which is a rate limit: that
+thread stays queued); any other failure of its views keeps it queued, at the end. Only a reviewed
+change releases a quarantined thread (QUARANTINE_RELEASES, release_quarantined): never a timer.
+
 STOP RULES. HTTP 401/403/429/451, a bot challenge, an HTML page where JSON was expected or a body
 refusing automated access raises ``AccessRefused``: the refusal is persisted in the state file and
 the method stays suspended -- zero requests -- until a reviewed change sets
@@ -83,6 +98,12 @@ TIMEOUT_SECONDS = 30
 MAX_BYTES = 2_000_000
 THREAD_RETENTION_DAYS = 45
 MAX_STATE_THREADS = 40
+# How many deferred-thread invalidations the state file keeps for audit (topic id, reason, times;
+# newest last). The queue itself is never capped: see prune_threads.
+MAX_DEFERRED_INVALIDATIONS_KEPT = 20
+# How many quarantine releases the state file keeps for audit (newest last). Quarantined threads
+# themselves are never capped or pruned.
+MAX_QUARANTINE_RELEASES_KEPT = 20
 
 USER_AGENT = "AUXSAYS-Patch-Evidence/1.0 (+https://auxsays.com; read-only, low rate)"
 REQUEST_HEADERS = {"User-Agent": USER_AGENT, "Accept": "application/json"}
@@ -93,6 +114,11 @@ NO_REDIRECTS: frozenset[str] = frozenset()
 # Set ONLY by a reviewed change, to a time after a recorded refusal (ISO 8601, UTC). A future time
 # clears nothing until it arrives, then clears that one refusal once.
 ACCESS_REFUSAL_CLEARED_AT = ""
+# Quarantine releases (GPT G62 R1). Set ONLY by a reviewed change: (topic id, the quarantine's `at`
+# exactly as the state file records it, why it is released). The next cycle that loads the state file
+# puts that thread back on the deferred-thread queue and logs the release (release_quarantined). A
+# later quarantine of the same thread has another `at`, so one entry releases one quarantine, once.
+QUARANTINE_RELEASES: tuple[tuple[int, str, str], ...] = ()
 
 STATE_PATH = base.ROOT / "_data" / "nvidia_forum_state.json"
 STATE_SCHEMA_VERSION = 1
@@ -111,11 +137,25 @@ _REJECTION_RE = re.compile(
 
 
 class AccessRefused(RuntimeError):
-    """The forum refused automated access. Persisted; the method stays suspended."""
+    """The forum refused automated access. Persisted; the method stays suspended. `code` is the HTTP
+    status when the refusal was one (401/403/429/451), else None (a challenge, an HTML page, a
+    refusing body); `detail` is the short form the state file records. `queued_topic_id` names the
+    queued thread whose own view was refused (nvidia_forum._read_thread), when it is to be held."""
+
+    def __init__(self, message: str, code: int | None = None, detail: str = "") -> None:
+        super().__init__(message)
+        self.code = code
+        self.detail = detail
+        self.queued_topic_id: int | None = None
 
 
 class SchemaIntegrityStop(RuntimeError):
     """A response is not the shape this collector was built and tested against."""
+
+
+class ResponseNotSuccessful(SchemaIntegrityStop):
+    """A JSON object answering success:false, with no refusal in it. A schema stop like any other,
+    except for a queued thread's own views (nvidia_forum._read_thread)."""
 
 
 class SourceAuthorityStop(RuntimeError):
@@ -325,12 +365,12 @@ class Transport:
     def remaining(self) -> int:
         return self.max_requests - len(self.requests)
 
-    def _refusal(self, detail: str) -> AccessRefused:
+    def _refusal(self, detail: str, code: int | None = None) -> AccessRefused:
         at = base.utc_now()
         if isinstance(self.state, dict):
             self.state["access_refused"] = {"at": at, "detail": detail}
         return AccessRefused(f"access refused by the NVIDIA forum ({detail}); collection is suspended "
-                             "until a reviewed change clears it")
+                             "until a reviewed change clears it", code=code, detail=detail)
 
     def get(self, url: str) -> str:
         ok, reason = permitted_request(url, self.anchors)
@@ -358,7 +398,7 @@ class Transport:
             message = str(exc)
             code = re.search(r"\bHTTP (\d{3})\b", message)
             if code and int(code.group(1)) in ACCESS_REFUSAL_CODES:
-                raise self._refusal(f"HTTP {code.group(1)}") from None
+                raise self._refusal(f"HTTP {code.group(1)}", int(code.group(1))) from None
             if "Browser challenge" in message:
                 raise self._refusal("bot challenge") from None
             raise TransportError(message[:200], int(code.group(1)) if code else None) from None
@@ -383,7 +423,7 @@ class Transport:
         if payload.get("success") is not True:
             if _REJECTION_RE.search(json.dumps(payload)[:4000]):
                 raise self._refusal("the response refused automated access")
-            raise SchemaIntegrityStop("a forum response reports success=false")
+            raise ResponseNotSuccessful("a forum response reports success=false")
         return payload
 
 
@@ -604,12 +644,69 @@ def cycle_due(state: dict[str, Any], now: datetime | None = None) -> bool:
     return last is None or current - last >= MIN_CYCLE_INTERVAL
 
 
+def is_owed(entry: Any) -> bool:
+    """Does this thread entry carry a pending deferral: a read a cycle still owes (GPT G61 Q5)?"""
+    return isinstance(entry, dict) and isinstance(entry.get("deferred"), dict)
+
+
+def is_quarantined(entry: Any) -> bool:
+    """Is this thread held out of selection until a reviewed change releases it (GPT G62 R1)?"""
+    return isinstance(entry, dict) and isinstance(entry.get("quarantined"), dict)
+
+
+def release_quarantined(state: dict[str, Any], topic_id: int, quarantined_at: str, reason: str,
+                        at: str) -> bool:
+    """The one way out of quarantine (GPT G62 R1): put that thread back on the deferred-thread queue,
+    at its end (queued `at`), with its first deferral kept, and log the release with its reason in
+    `quarantine_released` (the last MAX_QUARANTINE_RELEASES_KEPT). Only the quarantine recorded at
+    `quarantined_at` is released: another time, or a thread not quarantined, changes nothing and
+    returns False. A release without a reason is refused (ValueError)."""
+    why = str(reason or "").strip()
+    if not why:
+        raise ValueError("a quarantine release needs a reason")
+    entry = (state.get("threads") or {}).get(str(int(topic_id)))
+    if not is_quarantined(entry) or str(entry["quarantined"].get("at") or "") != str(quarantined_at or ""):
+        return False
+    held = entry.pop("quarantined")
+    entry["deferred"] = {"reason": "quarantine_released",
+                         "first_deferred_at": str(held.get("first_deferred_at") or at),
+                         "queued_at": at, "times_deferred": int(held.get("times_deferred") or 0)}
+    log = list(state.get("quarantine_released") or []) + [{
+        "topic_id": int(topic_id), "quarantine_reason": str(held.get("reason") or ""),
+        "quarantined_at": str(held.get("at") or ""), "released_at": at, "reason": why}]
+    state["quarantine_released"] = log[-MAX_QUARANTINE_RELEASES_KEPT:]
+    return True
+
+
+def apply_quarantine_releases(state: dict[str, Any], at: str,
+                              releases: tuple[tuple[int, str, str], ...] | None = None) -> list[int]:
+    """Apply QUARANTINE_RELEASES (or `releases`) to a loaded state; returns the topic ids released."""
+    out: list[int] = []
+    for topic_id, quarantined_at, reason in (QUARANTINE_RELEASES if releases is None else releases):
+        if release_quarantined(state, topic_id, quarantined_at, reason, at):
+            out.append(int(topic_id))
+    return out
+
+
 def prune_threads(state: dict[str, Any], keep_versions: set[str], now: datetime | None = None) -> None:
+    """Retention for the windows already READ: an entry stays while its title names a tracked
+    version and its last activity is inside THREAD_RETENTION_DAYS, the MAX_STATE_THREADS most
+    recently active kept.
+
+    Deferred work is never pruned here. An entry carrying a pending deferral (is_owed) is kept
+    whatever its last activity (a thread never read has none), its age, the listing or the cap, and
+    it does not take a window's place under the cap. It leaves only through the cycle
+    (nvidia_forum.run_cycle): read, found unchanged, invalidated with its reason recorded, or
+    quarantined. A quarantined entry (is_quarantined) is kept the same way, whatever its versions:
+    it leaves quarantine only through release_quarantined. An entry with no last activity is a
+    thread never read, never an expired one: the old test `int(None or horizon) >= horizon`
+    truncated the fractional horizon and dropped exactly those."""
     current = now or datetime.now(timezone.utc)
     horizon = (current - timedelta(days=THREAD_RETENTION_DAYS)).timestamp()
     threads = state.get("threads") or {}
+    held = {tid: entry for tid, entry in threads.items() if is_owed(entry) or is_quarantined(entry)}
     kept = {tid: entry for tid, entry in threads.items()
-            if set(entry.get("title_versions") or []) & keep_versions
-            and int(entry.get("last_activity") or horizon) >= horizon}
+            if tid not in held and set(entry.get("title_versions") or []) & keep_versions
+            and (entry.get("last_activity") is None or int(entry["last_activity"]) >= horizon)}
     ordered = sorted(kept.items(), key=lambda kv: -int(kv[1].get("last_activity") or 0))
-    state["threads"] = dict(ordered[:MAX_STATE_THREADS])
+    state["threads"] = {**dict(ordered[:MAX_STATE_THREADS]), **held}

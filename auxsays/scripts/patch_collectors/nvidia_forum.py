@@ -638,10 +638,27 @@ def _select_threads(listings: list[tuple[int, str, dict[str, Any]]], state: dict
 
     1. Staff patch-specific threads: listed now, remembered from an earlier listing (a feedback
        thread stays relevant after it is unpinned), or a seed not read yet. Newest first.
-    2. User topics whose title names a tracked version, ONLY while the community's default listing
-       shows them (newest activity first). A user topic that dropped out of the listing is not
-       re-read; it stays remembered, and its window is compared again when it reappears.
-    A thread is tracked only if its title names a version a record exists for."""
+    2. User topics whose title names a tracked version, while the community's default listing
+       shows them (newest activity first). A user topic READ before that dropped out of the listing
+       is not re-read; it stays remembered, and its window is compared again when it reappears.
+    3. Owed work (GPT G61 Q5): a thread an earlier cycle deferred -- the thread cap, the request
+       ceiling or the time budget reached it first -- is selected again from the state file with
+       its pending deferral, even when the listing no longer shows it and even when it was never
+       read (a seed whose title is not known yet), until it is read or invalidated (run_cycle).
+    A thread is tracked only if its title names a version a record exists for.
+
+    PRIORITY, deterministic: owed work first, longest waiting first (its `queued_at`: when it was
+    first deferred, or when a failed read of it sent it back to the end); then everything else in
+    the order of 1 and 2; ties by that order, then by topic id. So a deferred thread is never
+    overtaken by a thread that was deferred after it, or by a thread that arrived after it, and a
+    thread the cap never reaches rotates to the front instead of starving. This orders the work
+    only: MAX_THREADS_PER_CYCLE and MAX_REQUESTS_PER_CYCLE are unchanged.
+
+    A QUARANTINED thread (GPT G62 R1) is never selected, by any path, until a reviewed change
+    releases it. A queued thread the listing does not show this cycle, other than a seed never read
+    (its title not known yet), is marked `per_thread_failures`: a failure of its own views is handled as that thread's
+    (_read_thread), so it cannot stop the cycle for every other thread. A listed thread and a seed
+    never read keep the stops every thread had before the queue existed."""
     known: dict[int, dict[str, Any]] = {}
     for community_id, community_slug, topic in listings:
         title = str(topic.get("title") or "")
@@ -663,6 +680,18 @@ def _select_threads(listings: list[tuple[int, str, dict[str, Any]]], state: dict
                       "community_slug": str(entry.get("community_slug") or ""),
                       "title": str(entry.get("title") or ""), "listed_activity": None,
                       "created": int(entry.get("created") or 0), **profile}
+    for tid_text, entry in (state.get("threads") or {}).items():
+        tid = int(tid_text)
+        if tid in known or not src.is_owed(entry):
+            continue
+        title = str(entry.get("title") or "")
+        profile = thread_profile(title, bool(entry.get("staff")))
+        if title and not set(profile["title_versions"]) & versions:
+            continue                        # owed for a record outside this (targeted) run: kept
+        known[tid] = {"topic_id": tid, "community_id": int(entry.get("community_id") or 0),
+                      "community_slug": str(entry.get("community_slug") or ""), "title": title,
+                      "listed_activity": None, "created": int(entry.get("created") or 0), **profile,
+                      "seed": not title}
     slugs = dict(src.COMMUNITIES)
     seeds_read = {int(t) for t in state.get("seeds_read") or []}
     for community_id, tid in src.SEED_THREADS:
@@ -671,7 +700,18 @@ def _select_threads(listings: list[tuple[int, str, dict[str, Any]]], state: dict
                           "community_slug": slugs.get(community_id, ""), "title": "", "listed_activity": None,
                           "created": 0, "title_versions": [], "staff": False, "patch_family": None,
                           "title_version": None, "seed": True}
+    threads = state.get("threads") or {}
+    known = {tid: thread for tid, thread in known.items() if not src.is_quarantined(threads.get(str(tid)))}
+    listed = {int(topic["id"]) for _community_id, _community_slug, topic in listings}
+    for tid, thread in known.items():
+        entry = threads.get(str(tid))
+        if src.is_owed(entry):
+            marker = entry["deferred"]
+            thread["owed_since"] = str(marker.get("queued_at") or marker.get("first_deferred_at") or "")
+            # Not a seed never read: one known only by its id, its title not learnt yet.
+            thread["per_thread_failures"] = tid not in listed and not thread.get("seed")
     return sorted(known.values(), key=lambda t: (
+        0 if t.get("owed_since") is not None else 1, str(t.get("owed_since") or ""),
         0 if (t.get("patch_family") or t.get("seed")) else 1,
         -int(t.get("created") or 0) if (t.get("patch_family") or t.get("seed")) else -int(t.get("listed_activity") or 0),
         -int(t["topic_id"])))
@@ -688,8 +728,9 @@ def run_cycle(context: base.CollectorContext, versions: set[str], *, keep_versio
         return _CYCLE
     current = now or datetime.now(timezone.utc)
     cycle: dict[str, Any] = {"stop": "", "stop_status": "", "detail": "", "skipped": "", "threads": [],
-                             "deferred": [], "requests": 0, "state": None, "saved": False,
-                             "ran": False, "at": current.replace(microsecond=0).isoformat().replace("+00:00", "Z")}
+                             "deferred": [], "invalidated": [], "quarantined": [], "released": [],
+                             "queue": None, "requests": 0, "state": None, "saved": False, "ran": False,
+                             "at": current.replace(microsecond=0).isoformat().replace("+00:00", "Z")}
     _CYCLE = cycle
     try:
         state = src.load_state()
@@ -697,6 +738,10 @@ def run_cycle(context: base.CollectorContext, versions: set[str], *, keep_versio
         cycle.update(stop="schema_changed", stop_status="broken", detail=str(exc))
         return cycle
     cycle["state"] = state
+    # A reviewed change's quarantine releases (GPT G62 R1), applied whenever the state is loaded; a
+    # cycle that saves the state file keeps them (and their log).
+    cycle["released"] = src.apply_quarantine_releases(state, cycle["at"])
+    cycle["queue"] = queue_status(state, current)
     suspended = src.suspension(state, current)
     if suspended:
         cycle.update(stop="access_refused", stop_status="blocked", detail=suspended)
@@ -711,6 +756,7 @@ def run_cycle(context: base.CollectorContext, versions: set[str], *, keep_versio
     transport = src.Transport(state)
     cycle["ran"] = True
     read: list[dict[str, Any]] = []
+    refused: src.AccessRefused | None = None
     try:
         policies = src.read_robots(transport)
         listings: list[tuple[int, str, dict[str, Any]]] = []
@@ -722,8 +768,9 @@ def run_cycle(context: base.CollectorContext, versions: set[str], *, keep_versio
                                 for topic in src.listing_topics(payload, "a community listing"))
         candidates = _select_threads(listings, state, versions)
         for thread in candidates:
-            if len(read) >= src.MAX_THREADS_PER_CYCLE or transport.remaining() < 2 or _budget_expired():
-                cycle["deferred"].append(thread)
+            reason = _deferral_reason(len(read), transport)
+            if reason:
+                cycle["deferred"].append(dict(thread, deferral_reason=reason))
                 continue
             stored = (state.get("threads") or {}).get(str(thread["topic_id"])) or {}
             # Read before (an empty window is still a read window) and no activity since: no request.
@@ -734,6 +781,7 @@ def run_cycle(context: base.CollectorContext, versions: set[str], *, keep_versio
             read.append(_read_thread(transport, policies, thread, stored, versions))
     except src.AccessRefused as exc:
         cycle.update(stop="access_refused", stop_status="blocked", detail=str(exc))
+        refused = exc
     except src.RobotsStop as exc:
         cycle.update(stop="robots_policy", stop_status="blocked", detail=str(exc))
     except src.SourceAuthorityStop as exc:
@@ -748,26 +796,159 @@ def run_cycle(context: base.CollectorContext, versions: set[str], *, keep_versio
     cycle["request_urls"] = list(transport.requests)
     state["last_cycle"] = {"at": cycle["at"], "requests": len(transport.requests),
                            "outcome": cycle["stop"] or "ok"}
+    if refused is not None and refused.queued_topic_id is not None:
+        # GPT G62 R1: the method is suspended exactly as before (Transport persisted the refusal), and
+        # the queued thread whose own view was refused is held for human disposition, so it cannot
+        # suspend the method again once a reviewed change clears the refusal. Nothing else changes.
+        _quarantine(state, cycle, str(refused.queued_topic_id), "access_refused", refused.detail)
     if not cycle["stop"]:
-        # Windows are remembered only from a cycle that finished: a stop keeps the last good ones.
+        # Windows are remembered only from a cycle that finished: a stop keeps the last good ones,
+        # and the deferred-thread queue exactly as it was.
         cycle["threads"] = read
+        keep = set(keep_versions or versions)
+        seed_ids = {tid for _community_id, tid in src.SEED_THREADS}
+        # A queued thread's success:false is confirmed as its own when another thread was read in
+        # full in this cycle: both default views then answered validly for that thread.
+        confirmed = any(thread.get("outcome") == "read" for thread in read)
         for thread in read:
             if thread.get("outcome") == "read":
+                # The new entry carries no deferral: an owed thread read is processed.
                 state.setdefault("threads", {})[str(thread["topic_id"])] = thread["state_entry"]
-            if thread.get("seed") and thread.get("outcome") in ("read", "unchanged", "not_tracked"):
+            elif src.is_owed((state.get("threads") or {}).get(str(thread["topic_id"]))):
+                _settle_owed(state, cycle, thread, keep, confirmed)
+            # A seed read by ANY path -- as a seed, through the listing, remembered or owed -- is
+            # recorded, so it never comes back as a title-less seed (G61 R3-T4).
+            if int(thread["topic_id"]) in seed_ids and thread.get("outcome") in ("read", "unchanged", "not_tracked"):
                 state["seeds_read"] = sorted({int(t) for t in state.get("seeds_read") or []}
                                              | {int(thread["topic_id"])})
         for thread in cycle["deferred"]:
-            entry = (state.get("threads") or {}).get(str(thread["topic_id"]))
-            if entry is None and thread.get("title"):
-                state.setdefault("threads", {})[str(thread["topic_id"])] = {
-                    "community_id": thread["community_id"], "community_slug": thread["community_slug"],
-                    "title": state_title(thread["title"], thread["staff"], thread.get("listing_names") or ()),
-                    "staff": thread["staff"],
-                    "title_versions": thread["title_versions"], "created": thread.get("created") or 0,
-                    "last_activity": None, "window": []}
-        src.prune_threads(state, set(keep_versions or versions), current)
+            _defer(state, thread, cycle["at"])
+        for tid_text, entry in list((state.get("threads") or {}).items()):
+            versions_named = set(entry.get("title_versions") or [])
+            if src.is_owed(entry) and versions_named and not versions_named & keep:
+                _invalidate(state, cycle, tid_text, "no_tracked_record")
+        src.prune_threads(state, keep, current)
+    cycle["queue"] = queue_status(state, current)
     return cycle
+
+
+# --- the deferred-thread queue (GPT G61 Q5) ---------------------------------------------------------
+#
+# Work a cycle could not reach is kept in the state file, on the thread's own entry, as
+#   "deferred": {"reason": thread_cap | request_budget | runtime_budget | thread_read_failed,
+#                "first_deferred_at": ..., "queued_at": ..., "times_deferred": n}
+# until a finished cycle reads the thread (a new entry replaces it), finds it unchanged, or
+# invalidates it: its title names no version a record exists for (title_names_no_tracked_version), or
+# no record is left for any version its title names (no_tracked_record). An invalidated thread leaves
+# the state file and its reason is kept in `deferred_invalidated` (the last
+# MAX_DEFERRED_INVALIDATIONS_KEPT). Nothing else removes it: not the window-retention prune, not the
+# listing, not a missing last activity, not a stop.
+#
+# QUARANTINE (GPT G62 R1). A queued thread can instead be held, on its own entry, as
+#   "quarantined": {"reason": thread_unreadable | thread_invalid_response | access_refused,
+#                   "detail": ..., "at": ..., "first_deferred_at": ..., "times_deferred": n}
+# when its own topic view answers 404/410 (thread_unreadable), when a queued thread the listing does
+# not show answers success:false and another thread was read in full in the same cycle
+# (thread_invalid_response), or when such a thread's own view is refused (access_refused; the method
+# is suspended as before; a 429 is a rate limit and holds nothing). A quarantined thread keeps its
+# identity, window and reason in the state file, is never selected, never pruned and never retried
+# automatically; only a reviewed change releases it (nvidia_forum_source.QUARANTINE_RELEASES).
+
+def _deferral_reason(threads_read: int, transport: src.Transport) -> str:
+    """Why this thread cannot be read now, or ''. The same three ceilings, tested in the same order,
+    as before the queue existed; none is raised."""
+    if threads_read >= src.MAX_THREADS_PER_CYCLE:
+        return "thread_cap"
+    if transport.remaining() < 2:
+        return "request_budget"
+    if _budget_expired():
+        return "runtime_budget"
+    return ""
+
+
+def _defer(state: dict[str, Any], thread: dict[str, Any], at: str) -> None:
+    """Put a thread the cycle could not reach on the queue (or keep it there, in its place)."""
+    threads = state.setdefault("threads", {})
+    tid = str(thread["topic_id"])
+    entry = threads.get(tid)
+    if entry is None:
+        # Never read. A user topic's title goes through the same name removal as its stored
+        # evidence title; a seed's title is not known yet ("") and is learnt when it is read.
+        entry = threads[tid] = {
+            "community_id": thread["community_id"], "community_slug": thread["community_slug"],
+            "title": state_title(thread["title"], thread["staff"], thread.get("listing_names") or ()),
+            "staff": thread["staff"],
+            "title_versions": thread["title_versions"], "created": thread.get("created") or 0,
+            "last_activity": None, "window": []}
+    reason = str(thread.get("deferral_reason") or "thread_cap")
+    marker = entry.get("deferred")
+    if isinstance(marker, dict):
+        marker.update(reason=reason, times_deferred=int(marker.get("times_deferred") or 0) + 1)
+    else:
+        entry["deferred"] = {"reason": reason, "first_deferred_at": at, "queued_at": at, "times_deferred": 1}
+
+
+def _settle_owed(state: dict[str, Any], cycle: dict[str, Any], thread: dict[str, Any], keep: set[str],
+                 confirmed: bool) -> None:
+    """An owed thread this cycle reached without a new window: unchanged (processed), not tracked
+    any more (invalidated), unreadable (404/410: quarantined), a confirmed success:false
+    (quarantined), or any other failed read -- a timeout, a 5xx, an unconfirmed success:false,
+    another shape, a redirect -- which keeps it owed and sends it to the end (GPT G62 R1: never
+    classified as permanently invalid; it uses at most one slot of a cycle, so it cannot wedge it)."""
+    tid = str(thread["topic_id"])
+    entry = state["threads"][tid]
+    outcome = thread.get("outcome")
+    if outcome == "unchanged":
+        entry.pop("deferred", None)         # read before, no activity since: nothing is owed
+    elif outcome == "not_tracked":
+        if not set(thread.get("title_versions") or []) & keep:
+            _invalidate(state, cycle, tid, "title_names_no_tracked_version")
+        # Otherwise its title names a record outside this targeted run: still owed.
+    elif outcome == "failed":
+        if thread.get("gone"):
+            _quarantine(state, cycle, tid, "thread_unreadable", f"HTTP {thread.get('http_status')}")
+        elif thread.get("invalid_response") and confirmed:
+            _quarantine(state, cycle, tid, "thread_invalid_response", "success=false")
+        else:
+            marker = entry["deferred"]
+            marker.update(reason="thread_read_failed", queued_at=cycle["at"],
+                          times_deferred=int(marker.get("times_deferred") or 0) + 1)
+
+
+def _quarantine(state: dict[str, Any], cycle: dict[str, Any], tid: str, reason: str, detail: str) -> None:
+    """Hold a queued thread out of selection until a reviewed change releases it (GPT G62 R1). Its
+    entry -- identity, title, window -- stays in the state file with the reason, the time and its
+    first deferral; the prune never removes it; nothing retries it automatically."""
+    entry = state["threads"][str(tid)]
+    marker = entry.pop("deferred", None) or {}
+    entry["quarantined"] = {"reason": reason, "detail": str(detail or ""), "at": cycle["at"],
+                            "first_deferred_at": str(marker.get("first_deferred_at") or ""),
+                            "times_deferred": int(marker.get("times_deferred") or 0)}
+    cycle["quarantined"].append({"topic_id": int(tid), "reason": reason})
+
+
+def _invalidate(state: dict[str, Any], cycle: dict[str, Any], tid: str, reason: str) -> None:
+    entry = (state.get("threads") or {}).pop(str(tid), None) or {}
+    marker = entry.get("deferred") if isinstance(entry.get("deferred"), dict) else {}
+    record = {"topic_id": int(tid), "reason": reason, "at": cycle["at"],
+              "first_deferred_at": str(marker.get("first_deferred_at") or "")}
+    cycle["invalidated"].append(record)
+    kept = list(state.get("deferred_invalidated") or []) + [record]
+    state["deferred_invalidated"] = kept[-src.MAX_DEFERRED_INVALIDATIONS_KEPT:]
+
+
+def queue_status(state: dict[str, Any] | None, now: datetime) -> dict[str, Any]:
+    """The queue's depth and its oldest deferral, and the quarantined threads (how many, and why),
+    for the health notes and the runtime event."""
+    entries = list(((state or {}).get("threads") or {}).values())
+    owed = [entry["deferred"] for entry in entries if src.is_owed(entry)]
+    firsts = sorted(str(m.get("first_deferred_at") or "") for m in owed if m.get("first_deferred_at"))
+    oldest = firsts[0] if firsts else ""
+    since = src.parse_instant(oldest)
+    age = max(0, int((now - since).total_seconds() // 3600)) if since is not None else None
+    held = [str(entry["quarantined"].get("reason") or "") for entry in entries if src.is_quarantined(entry)]
+    return {"depth": len(owed), "oldest_deferred_at": oldest, "oldest_age_hours": age,
+            "quarantined": len(held), "quarantine_reasons": sorted(set(held))}
 
 
 def _budget_expired() -> bool:
@@ -777,6 +958,39 @@ def _budget_expired() -> bool:
 
 def _read_thread(transport: src.Transport, policies: dict[str, Any], thread: dict[str, Any],
                  stored: dict[str, Any], versions: set[str]) -> dict[str, Any]:
+    """One thread's two default views (_read_views). For a queued thread the listing does not show
+    this cycle, other than a seed never read (`per_thread_failures`, _select_threads), a failure of
+    its own views is that thread's, not the cycle's (GPT G62 R1):
+      * a JSON answer with success:false and no refusal in it: outcome failed, `invalid_response`;
+        run_cycle quarantines it when another thread was read in full in the same cycle, which
+        confirms the failure is the thread's own, and otherwise keeps it owed;
+      * any other shape its views do not have, or a redirect (refused before the hop, nothing sent
+        there): outcome failed, kept owed and sent to the end of the queue, as a timeout or a 5xx;
+      * an access refusal still stops the cycle and suspends the method (unchanged). Unless it is an
+        HTTP 429 (a rate limit: the thread stays owed), the refused thread is named on the exception,
+        and run_cycle quarantines it for human disposition.
+    Every other thread keeps the stops it had before the queue existed. A 404/410 from the topic
+    view is `gone` for any thread (_read_views)."""
+    per_thread = bool(thread.get("per_thread_failures"))
+    try:
+        return _read_views(transport, policies, thread, stored, versions)
+    except src.AccessRefused as exc:
+        if per_thread and exc.code != 429:
+            exc.queued_topic_id = int(thread["topic_id"])
+        raise
+    except src.ResponseNotSuccessful as exc:
+        if not per_thread:
+            raise
+        return dict(thread, outcome="failed", invalid_response=True, detail=str(exc),
+                    items=[], gap=[], coverage=[])
+    except (src.SchemaIntegrityStop, src.SourceAuthorityStop) as exc:
+        if not per_thread:
+            raise
+        return dict(thread, outcome="failed", detail=str(exc), items=[], gap=[], coverage=[])
+
+
+def _read_views(transport: src.Transport, policies: dict[str, Any], thread: dict[str, Any],
+                stored: dict[str, Any], versions: set[str]) -> dict[str, Any]:
     tid = int(thread["topic_id"])
     path = src.www_topic_path(thread["community_id"], thread["community_slug"], tid,
                               src.forum_slug(thread["title"]) if thread.get("title") else "")
@@ -785,7 +999,11 @@ def _read_thread(transport: src.Transport, policies: dict[str, Any], thread: dic
     try:
         topic = src.topic_view(transport.get_json(url), tid)
     except src.TransportError as exc:
-        return dict(thread, outcome="failed", detail=str(exc), items=[], gap=[], coverage=[])
+        # The topic's own default view answering 404/410 is the forum saying the thread cannot be
+        # read: owed work is quarantined as thread_unreadable, never retried automatically
+        # (run_cycle). Any other failure keeps it owed.
+        return dict(thread, outcome="failed", detail=str(exc), gone=exc.code in (404, 410),
+                    http_status=exc.code, items=[], gap=[], coverage=[])
     community = topic["communities"][0]
     community_id = int(community["id"])
     community_slug = src.forum_slug(community.get("title"))
@@ -843,7 +1061,10 @@ def _version_status(cycle: dict[str, Any], version: str, accepted: int) -> tuple
     if cycle.get("stop"):
         return cycle["stop_status"], cycle["stop"], []
     relevant = [t for t in cycle.get("threads", []) if version in (t.get("title_versions") or [])]
-    deferred = [t for t in cycle.get("deferred", []) if version in (t.get("title_versions") or [])]
+    # A deferred thread whose title is not known yet (a seed never read) may hold any version's
+    # reports, so its deferral is partial coverage for every version (G61 R3-T4), not for none.
+    deferred = [t for t in cycle.get("deferred", [])
+                if version in (t.get("title_versions") or []) or not t.get("title_versions")]
     gaps = sorted({reason for t in relevant for reason in (t.get("gap") or [])})
     if gaps:
         return "partial", "possible_missed_comments", gaps
@@ -860,7 +1081,7 @@ def _notes(cycle: dict[str, Any], version: str, candidates: int, accepted: int, 
            gaps: list[str]) -> str:
     if cycle.get("stop"):
         return (f"NVIDIA GeForce forum default views: no comment read this cycle ({cycle['stop']}). "
-                f"Nothing already stored was removed.")
+                f"Nothing already stored was removed.{_queue_note(cycle)}")
     relevant = [t for t in cycle.get("threads", []) if version in (t.get("title_versions") or [])]
     read = sum(1 for t in relevant if t.get("outcome") == "read")
     unchanged = sum(1 for t in relevant if t.get("outcome") == "unchanged")
@@ -873,6 +1094,26 @@ def _notes(cycle: dict[str, Any], version: str, candidates: int, accepted: int, 
         text += " Older comments in these threads are outside the visible window and were not read."
     if gaps:
         text += f" Possible missed comments since the last read: {', '.join(gaps)}."
+    return text + _queue_note(cycle)
+
+
+def _queue_note(cycle: dict[str, Any]) -> str:
+    """The forum-wide deferred-thread queue (GPT G61 Q5): its depth and oldest deferral after this
+    cycle, and any deferred thread this cycle invalidated, with the reasons. Telemetry only."""
+    queue = cycle.get("queue")
+    if not isinstance(queue, dict):
+        return ""
+    text = f" Deferred-thread queue (whole forum): {int(queue.get('depth') or 0)} waiting"
+    if queue.get("depth") and queue.get("oldest_deferred_at"):
+        text += f", oldest deferred {queue['oldest_deferred_at']} ({queue.get('oldest_age_hours')} h ago)"
+    text += "."
+    if queue.get("quarantined"):
+        text += (f" Quarantined, not read until a reviewed change releases them: {int(queue['quarantined'])} "
+                 f"({', '.join(queue.get('quarantine_reasons') or [])}).")
+    dropped = cycle.get("invalidated") or []
+    if dropped:
+        text += (f" {len(dropped)} deferred thread(s) invalidated this cycle: "
+                 f"{', '.join(sorted({str(d.get('reason')) for d in dropped}))}.")
     return text
 
 
@@ -947,10 +1188,14 @@ class NvidiaForumCollector(base.ProductCollector):
         if context.write and cycle.get("state") is not None and cycle.get("ran") and not cycle.get("saved"):
             src.save_state(cycle["state"])
             cycle["saved"] = True
+        queue = cycle.get("queue") or {}
         rb.emit("nvidia_forum_cycle", product_id=self.product_id, ran=bool(cycle.get("ran")),
                 skipped=cycle.get("skipped") or "", stop=cycle.get("stop") or "",
                 requests=int(cycle.get("requests") or 0),
-                threads=sum(1 for t in cycle.get("threads", []) if t.get("outcome") == "read"))
+                threads=sum(1 for t in cycle.get("threads", []) if t.get("outcome") == "read"),
+                deferred=len(cycle.get("deferred") or []), invalidated=len(cycle.get("invalidated") or []),
+                queue_depth=int(queue.get("depth") or 0), queue_oldest_age_hours=queue.get("oldest_age_hours"),
+                quarantined=int(queue.get("quarantined") or 0), released=len(cycle.get("released") or []))
         if cycle.get("skipped"):
             # Between cycles nothing is read and nothing is claimed: the last rows stand as written,
             # with their own timestamps (the keyed upsert retains what it is not given).

@@ -17,8 +17,8 @@ update_version: Test experimental AI models in Figma Make, starting with Gemini 
 update_logo_text: FIG
 update_published_at: '2025-11-18T00:00:00.000Z'
 update_last_checked: '2026-08-03T23:56:32Z'
-source_last_checked: '2026-10-12T08:11:53Z'
-official_body_last_checked: '2026-10-12T08:11:53Z'
+source_last_checked: '2026-11-20T10:02:19Z'
+official_body_last_checked: '2026-11-20T10:02:19Z'
 record_last_updated: '2026-08-03T23:56:32Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -80,6 +80,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-10-12T08:11:53Z'
+  url: https://www.figma.com/release-notes/?title=test-experimentail-ai-models
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-20T10:02:19Z'
   url: https://www.figma.com/release-notes/?title=test-experimentail-ai-models
   status: captured-from-rss-feed
   body_captured: true
