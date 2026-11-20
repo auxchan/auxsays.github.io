@@ -69,8 +69,17 @@ widening how we look never widens what counts. The validator refuses any entry t
 | `sitemap_walk` | 2 | candidate_discovery, recheck | html, rss_xml |
 | `transport_failover` | 2 | candidate_discovery, official_ingestion | subprocess_curl |
 
-**23** methods carry `official_ingestion`; **36** do community or candidate discovery; **19** are not
-running today — 13 blocked, 3 disabled, 3 staged — and all of them are kept.
+**23** methods carry `official_ingestion`; **40** do community or candidate discovery; **24** are not
+running today — 16 blocked, 4 disabled, 3 staged, 1 historical — and all of them are kept.
+
+**Reachable is not complete, and neither is permitted.** A method's `status` says whether its source
+answers. It says nothing about whether the method finds every release, and nothing about the right to
+collect from the source. Premiere's official lane is the measured case (AUX-087): its pinned fallback
+kept answering on schedule while no release after 26.2.2 could ever be discovered from it, and the
+HelpX path it falls back from is `blocked`. Source rights are recorded in a separate optional field,
+`rights_status`, with the basis in `rights_note`. The methods that read Adobe Community carry
+`unresolved` (AUX-113). An entry without the field records nothing about rights, which is not a
+clearance.
 
 ### Enumeration and search are different shapes
 

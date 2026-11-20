@@ -85,8 +85,10 @@
     creation.
   watch_reason: Gemini changes affect search behavior, Workspace AI features, mobile
     creator workflows, and AI video/image pipelines.
-  source_url: https://gemini.google/updates/
-  source_label: Gemini updates
+  # The old /updates/ address answers 404. Google's own Gemini Apps release notes page replaced
+  # it on 2026-11-19 (AUX-112). Its entries are dated; they carry no app version numbers.
+  source_url: https://gemini.google/release-notes/
+  source_label: Gemini Apps release notes
   signal_notes: Watch consumer Gemini, Workspace Gemini, and Veo/Nano Banana-style
     creative updates separately.
   source_id: google-gemini
@@ -789,8 +791,13 @@
   impact: Live streaming alternatives, monetization, platform risk, and audience diversification.
   watch_reason: Kick matters for creators evaluating live-stream revenue, discoverability,
     and platform redundancy.
-  source_url: https://kick.com/blog
-  source_label: Kick blog
+  # No official update source is mapped (AUX-112). The old kick.com/blog address answers 404,
+  # and on 2026-11-19 no changelog or release-notes page for Kick's streaming platform was
+  # found to replace it. Kick's developer-API changelog (docs.kick.com) records API changes,
+  # not product releases, so it is not linked. Nor is a generic homepage, because it would
+  # look like a release feed.
+  source_url: null
+  source_label: null
   signal_notes: Track monetization, content policy, streaming tools, mobile app changes,
     and creator dashboard changes.
   source_id: kick
