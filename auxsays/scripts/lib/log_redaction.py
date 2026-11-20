@@ -2,12 +2,13 @@
 
 WHY. The Actions run logs of this public repository can be read by any signed-in GitHub user and
 are kept for 90 days. `apply_consensus_to_records.py` printed its whole JSON report on stdout, and
-that report carries every counted report's stored title (`source_title`) three times over: once per
-included row and twice more inside the record fields it proposes. Collection run 44609489525 printed
-3,888 such lines, and on 2026-11-20 609 of the 683 retained runs of the two lanes that run it held
-1,153,112 of them. Those titles are other people's words -- GitHub issue titles, forum and Q&A thread
-titles -- and a log is not a place to republish them. What a reader of the log actually uses is the
-row id, the source URL, the counts and the diagnostic categories, and those stay.
+that report carries every counted report's stored title (`source_title`) two or three times: once per
+included row, once in the proposed accepted_report_sources, and once more when the report is one of the
+proposed evidence_samples. Collection run 44609489525 printed 3,888 such lines, and on 2026-11-20 609
+of the 683 retained runs of the two lanes that run it held 1,153,112 of them. Those titles are other
+people's words -- GitHub issue titles, forum and Q&A thread titles -- and a log is not a place to
+republish them. What a reader of the log actually uses is the row id, the source URL, the counts and
+the diagnostic categories, and those stay.
 
 WHAT. `log_safe(value)` returns a copy of `value` with every key in THIRD_PARTY_TEXT_KEYS removed, at
 any depth of mappings and lists. The input is never modified: the writer still writes the titles into

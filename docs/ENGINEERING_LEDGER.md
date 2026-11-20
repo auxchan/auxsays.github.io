@@ -293,7 +293,7 @@ target or is on another train.
    configured URL in order (test H19 pinned the fall-through). A failed or reshaped Learn page would have sent a
    production request to a host whose collection terms are unresolved (K1). No tracked file shows it fired.
 2. `apply_consensus_to_records.py` printed its whole JSON report into the public run log, with every counted report's
-   stored title three times: 3,888 lines in run 44609489525, and 1,153,112 lines in 609 of the 683 runs retained on
+   stored title two or three times: 3,888 lines in run 44609489525, and 1,153,112 lines in 609 of the 683 runs retained on
    2026-11-20 (collection 334 of 377, ingestion 275 of 306). A scan for the stored titles' text in the latest run of
    every printing lane (collection, the orchestrated PowerPoint job, ingestion, CI, Pages, the queue reaper) found
    them in that writer's steps only.

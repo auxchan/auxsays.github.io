@@ -4,8 +4,8 @@
 THE DEFECT (G66). Actions run logs of this public repository are readable by any signed-in GitHub
 user and kept 90 days. `apply_consensus_to_records.py` -- run without --output by thirteen workflow
 steps -- printed its whole JSON report on stdout, and that report carries every counted report's
-stored title three times (`included_rows[].source_title`, and `source_title` inside the proposed
-`accepted_report_sources` and `evidence_samples`). Collection run 44609489525 printed 3,888 such
+stored title two or three times (`included_rows[].source_title`, and `source_title` inside the
+proposed `accepted_report_sources` and `evidence_samples`). Collection run 44609489525 printed 3,888 such
 lines; on 2026-11-20, 609 of the 683 retained runs of the two lanes that run it held 1,153,112.
 A content scan of the stored titles against the latest run of every printing lane (collection,
 the orchestrated PowerPoint job, ingestion, CI, Pages, the queue reaper) found them in that one
