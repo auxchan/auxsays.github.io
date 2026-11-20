@@ -36,6 +36,16 @@ WHAT THIS PROVES, IN ORDER.
   T  A user topic whose title carries a member's @handle and display names: the stored titles (which
      the promotion copies into the record) go through the same name removal as the comment text, and
      no decision moves.
+  Q  Deferred work persists (GPT G61 Q5). Threads the request ceiling, the thread cap and the time
+     budget defer -- a title-less seed and never-read user topics among them -- stay queued in the
+     state file with their reason through three exhausted cycles, while no longer listed and with
+     no last activity; later cycles read them longest-waiting first under the unchanged ceilings,
+     and the store ends with exactly the rows and decisions of one unconstrained cycle (9 counted,
+     none twice, none credited twice). A read or unchanged thread leaves the queue; a thread gone
+     (404), one whose title names no tracked version and one with no record left leave with their
+     reason recorded; a failed read stays owed at the end of the queue; a targeted run and a stop
+     keep the queue; the prune keeps owed and never-read entries; queue depth and oldest age are
+     in every health note and the runtime event; a seed read through the listing is recorded.
 
 Offline and deterministic: every socket is refused for the whole run. Run:
     PYTHONDONTWRITEBYTECODE=1 python auxsays/scripts/tests/test_nvidia_forum_evidence.py
@@ -1255,6 +1265,315 @@ def section_title_names() -> None:
           f"{entry.get('title')!r} leaks={leaks}/{saved_leaks} staff={staff}")
 
 
+# ------------------------------------------------------------------------------------------------
+class _Clock:
+    """The cycle's notion of now (nvidia_forum.datetime), advanced by the test between cycles."""
+
+    def __init__(self, start: datetime) -> None:
+        self.now = start
+
+    def iso(self) -> str:
+        return self.now.strftime("%Y-%m-%dT%H:%M:%SZ")
+
+    def datetime_class(self):
+        clock = self
+
+        class _DT(datetime):
+            @classmethod
+            def now(cls, tz=None):  # noqa: D102
+                return clock.now if tz is None else clock.now.astimezone(tz)
+        return _DT
+
+
+def _listing(name: str, drop: set[int]):
+    payload = copy.deepcopy(fixture(name))
+    payload["data"]["topics"] = [t for t in payload["data"]["topics"] if t["id"] not in drop]
+    return lambda url: _respond(200, payload)
+
+
+class _Lane:
+    """One state file and one temporary evidence store, driven cycle by cycle through the shipped
+    collectors (write mode, real append and dedupe), 12.5 hours apart."""
+
+    def __init__(self, tmp: str, start: datetime) -> None:
+        self.store = Path(tmp) / "consensus_evidence.yml"
+        self.store.write_text(yaml.safe_dump({"schema_version": 1, "evidence": []}), encoding="utf-8")
+        self.state_path = Path(tmp) / "state.json"
+        self.clock = _Clock(start)
+        self.events: list[tuple[str, dict]] = []
+        self.results: list[dict] = []
+
+    def cycle(self, overrides=None, extra=(), records=None, target=None):
+        self.clock.now += timedelta(hours=12, minutes=30)
+        real_append = base.append_evidence_rows
+        store = self.store
+
+        def append(rows, path=None, **kw):
+            return real_append(rows, store, **kw)
+        with wire(overrides, records=records, state_path=self.state_path) as (fake, _p, _s):
+            with patched([(base, "append_evidence_rows", append),
+                          (nf, "apply_consensus_writebacks", lambda pid, vs: {}),
+                          (nf, "datetime", self.clock.datetime_class()),
+                          (nf.rb, "emit", lambda event, **f: self.events.append((event, f)))] + list(extra)):
+                res = run_both(write=True, target=target)
+            cyc = nf._CYCLE or {}
+            read = [t["topic_id"] for t in cyc.get("threads", []) if t.get("outcome") == "read"]
+            seen = list(fake.seen)
+        self.results.append(res)
+        return res, cyc, read, seen
+
+    def state(self) -> dict:
+        return json.loads(self.state_path.read_text(encoding="utf-8"))
+
+    def owed(self) -> dict[str, dict]:
+        return {tid: e["deferred"] for tid, e in self.state()["threads"].items() if isinstance(e.get("deferred"), dict)}
+
+    def rows(self) -> list[dict]:
+        return base.load_evidence(self.store)
+
+
+def _health(res) -> list[dict]:
+    return [r["method_health"][0] for rr in res.values() for r in rr]
+
+
+def _decision_map(rows) -> dict[str, tuple]:
+    return {r["id"]: (bool(r["counted"]), r.get("exclusion_reason") or "") for r in rows}
+
+
+def section_deferred_queue() -> None:
+    print("\n[Q] deferred threads persist until read or invalidated (GPT G61 Q5)")
+    check("Q0 the ceilings are unchanged: 16 requests and 5 threads per cycle",
+          src.MAX_REQUESTS_PER_CYCLE == 16 and src.MAX_THREADS_PER_CYCLE == 5,
+          f"{src.MAX_REQUESTS_PER_CYCLE} {src.MAX_THREADS_PER_CYCLE}")
+    users = {592907, 593067, 592933}
+    without_592933 = {(API, "/forums-api/1.0/communities/topics", "13"): _listing("community13_topics.json", {592933})}
+    none_listed = {(API, "/forums-api/1.0/communities/topics", "13"): _listing("community13_topics.json", users),
+                   (API, "/forums-api/1.0/communities/pinned", "13"): _listing("community13_pinned.json", {592767})}
+    real_transport = src.Transport
+    real_run_cycle = nf.run_cycle
+
+    def robots_and_listings_only(state, **kw):
+        return real_transport(state, max_requests=6)
+
+    def time_budget_spent(*args, **kwargs):
+        # The run's time budget is spent while the cycle selects threads (not afterwards, when the
+        # collectors would stop before writing their health rows).
+        with patched([(nf, "_budget_expired", lambda: True)]):
+            return real_run_cycle(*args, **kwargs)
+    start = datetime.now(timezone.utc).replace(microsecond=0)
+
+    # The reference: one unconstrained cycle over the same captured windows.
+    with tempfile.TemporaryDirectory() as tmp:
+        lane = _Lane(tmp, start)
+        _res, _cyc, ref_read, _seen = lane.cycle()
+        reference = _decision_map(lane.rows())
+        ref_state = lane.state()
+    check("Q1 R3-T4: a seed read through the LISTING is recorded too (592767), not only one read as a seed",
+          ref_state.get("seeds_read") == [592433, 592767] and sorted(ref_read) == [592433, 592767, 592907, 592933, 593067],
+          f"{ref_state.get('seeds_read')} {ref_read}")
+
+    with tempfile.TemporaryDirectory() as tmp:
+        lane = _Lane(tmp, start)
+        # Cycle 1: the request ceiling leaves nothing for any thread (592933 is not listed yet).
+        res1, _c1, read1, seen1 = lane.cycle(without_592933, [(src, "Transport", robots_and_listings_only)])
+        t1 = lane.clock.iso()
+        owed1 = lane.owed()
+        threads1 = lane.state()["threads"]
+        check("Q2 cycle 1 (request ceiling): the 4 deferred threads are queued with their reason, the title-less "
+              "seed and the never-read user topics included, and nothing was requested beyond the ceiling",
+              set(owed1) == {"592767", "592433", "592907", "593067"} and not read1 and len(seen1) == 6
+              and all(m["reason"] == "request_budget" and m["first_deferred_at"] == m["queued_at"] == t1
+                      and m["times_deferred"] == 1 for m in owed1.values())
+              and threads1["592433"]["title"] == "" and all(threads1[t]["last_activity"] is None for t in owed1),
+              f"{owed1} {read1} {len(seen1)}")
+        check("Q3 ...no row stored, and every version reads partial: a deferred seed whose title is not known "
+              "yet counts for every version, 621.14 included",
+              not lane.rows() and {(h["status"], h["blocked_reason"]) for h in _health(res1)}
+              == {("partial", "threads_deferred_by_request_budget")}, str({h["status"] for h in _health(res1)}))
+        # Cycle 2: the thread cap (0 here) defers all five; 592933 is listed now.
+        _res2, _c2, read2, _s2 = lane.cycle(None, [(src, "MAX_THREADS_PER_CYCLE", 0)])
+        t2 = lane.clock.iso()
+        owed2 = lane.owed()
+        check("Q4 cycle 2 (thread cap): the newcomer joins at the END (queued now); the four keep their place "
+              "(queued in cycle 1), deferred twice, reason now thread_cap",
+              set(owed2) == {"592767", "592433", "592907", "593067", "592933"} and not read2
+              and owed2["592933"]["queued_at"] == owed2["592933"]["first_deferred_at"] == t2
+              and all(owed2[t]["queued_at"] == owed2[t]["first_deferred_at"] == t1 and owed2[t]["times_deferred"] == 2
+                      for t in ("592767", "592433", "592907", "593067"))
+              and {m["reason"] for m in owed2.values()} == {"thread_cap"}, str(owed2))
+        # Cycle 3: the time budget; and the listing shows none of them any more.
+        lane.events.clear()
+        res3, _c3, read3, _s3 = lane.cycle(none_listed, [(nf, "run_cycle", time_budget_spent)])
+        owed3 = lane.owed()
+        threads3 = lane.state()["threads"]
+        check("Q5 cycle 3 (time budget, none of them listed any more): all five still queued, never read, "
+              "no last activity, through the real retention prune",
+              set(owed3) == set(owed2) and not read3 and {m["reason"] for m in owed3.values()} == {"runtime_budget"}
+              and [owed3[t]["times_deferred"] for t in ("592767", "592433", "592907", "593067", "592933")]
+              == [3, 3, 3, 3, 2] and all(threads3[t]["last_activity"] is None for t in owed3),
+              str({t: (m["reason"], m["times_deferred"]) for t, m in owed3.items()}))
+        note = f"Deferred-thread queue (whole forum): 5 waiting, oldest deferred {t1} (25 h ago)."
+        event = [f for e, f in lane.events if e == "nvidia_forum_cycle"]
+        check("Q6 queue depth and oldest deferred age are in EVERY health row's notes and in the runtime event",
+              len(_health(res3)) == 4 and all(note in h["notes"] for h in _health(res3))
+              and event and all(f.get("queue_depth") == 5 and f.get("queue_oldest_age_hours") == 25
+                                and f.get("deferred") == 5 for f in event),
+              f"{[h['notes'][-120:] for h in _health(res3)][:1]} {event[:1]}")
+        # Cycles 4-6: a cap of 2, nothing listed: owed work is read longest-waiting first.
+        cap2 = [(src, "MAX_THREADS_PER_CYCLE", 2)]
+        res4, _c4, read4, _s4 = lane.cycle(none_listed, cap2)
+        rows4 = lane.rows()
+        state4 = lane.state()
+        check("Q7 cycle 4 reads the two longest-waiting first (queued in cycle 1, staff thread then seed): "
+              "592767, 592433; the other three stay queued in their place",
+              read4 == [592767, 592433] and set(lane.owed()) == {"592907", "593067", "592933"}
+              and all("deferred" not in state4["threads"][t] and state4["threads"][t]["window"]
+                      for t in ("592767", "592433")), f"{read4} {sorted(lane.owed())}")
+        check("Q8 ...the 9 reports are counted once they are read: 7 for 621.14, 2 for 621.24; both seeds recorded",
+              sorted((r["update_version"], r["id"].rsplit("-", 1)[1]) for r in rows4 if r["counted"])
+              == sorted([("621.14", str(c)) for c in (3633489, 3633451, 3633448, 3633356, 3633066, 3633062, 3633052)]
+                        + [("621.24", "3634576"), ("621.24", "3634403")])
+              and state4.get("seeds_read") == [592433, 592767],
+              f"{len([r for r in rows4 if r['counted']])} {state4.get('seeds_read')}")
+        h4 = {(h["product_id"], h["update_version"]): h for h in _health(res4)}
+        check("Q9 ...621.14 (nothing of it deferred now) reads success; 621.24 (three of its threads still "
+              "deferred) reads partial",
+              h4[(GRD, "621.14")]["status"] == "success" and h4[(GRD, "621.24")]["status"] == "partial"
+              and h4[(GRD, "621.24")]["blocked_reason"] == "threads_deferred_by_request_budget", str(h4)[:300])
+        _r5, _c5, read5, _s5 = lane.cycle(none_listed, cap2)
+        t5 = lane.clock.iso()
+        _r6, c6, read6, _s6 = lane.cycle(none_listed, cap2)
+        final = lane.state()
+        owed6 = lane.owed()
+        outcomes6 = {t["topic_id"]: t.get("outcome") for t in c6.get("threads", [])}
+        check("Q10 cycles 5 and 6 read the rest in queue order (593067, 592907, then the later 592933); the two "
+              "remembered feedback threads the cap of 2 pushed back in cycle 5 are owed in turn (592767 reached "
+              "in cycle 6 and found unchanged, 592433 still waiting); nothing was invalidated",
+              read5 == [593067, 592907] and read6 == [592933] and outcomes6.get(592767) == "unchanged"
+              and set(owed6) == {"592433"} and owed6["592433"]["first_deferred_at"] == t5
+              and owed6["592433"]["times_deferred"] == 2 and not final.get("deferred_invalidated"),
+              f"{read5} {read6} {outcomes6} {owed6}")
+        rows = lane.rows()
+        ids = [r["id"] for r in rows]
+        added = sum(h.get("evidence_rows_added", 0) for res in lane.results for rr in res.values() for r in rr
+                    for h in r["method_health"])
+        dupes = sum(h.get("duplicate_existing_evidence", 0) for res in lane.results for rr in res.values()
+                    for r in rr for h in r["method_health"])
+        check("Q11 six cycles later the store holds exactly the rows and decisions of ONE unconstrained cycle: "
+              "same ids, same counted/excluded and reasons, 9 counted, no id twice",
+              _decision_map(rows) == reference and len(ids) == len(set(ids)) == len(reference)
+              and sum(1 for c, _r in reference.values() if c) == 9,
+              f"{len(rows)} vs {len(reference)}; diff={sorted(set(_decision_map(rows).items()) ^ set(reference.items()))[:3]}")
+        check("Q12 ...and health credited each counted report once across the six cycles (9 added, 0 re-held)",
+              added == 9 and dupes == 0, f"added={added} dupes={dupes}")
+        _r7, _c7, _read7, _s7 = lane.cycle()
+        check("Q13 a later cycle under the shipped cap empties the queue and stores nothing more (everything "
+              "already held)", len(lane.rows()) == len(rows) and not lane.owed(),
+              f"{len(lane.rows())} {sorted(lane.owed())}")
+
+    # Invalidation: a thread gone, a title that names no tracked version, a failed read, no record left.
+    with tempfile.TemporaryDirectory() as tmp:
+        lane = _Lane(tmp, start)
+        lane.cycle(None, [(src, "MAX_THREADS_PER_CYCLE", 0)])
+        ta = lane.clock.iso()
+        renamed = copy.deepcopy(fixture("topic_592907.json"))
+        renamed["data"]["topic"]["title"] = "Continuous writing to SSD, driver 999.99"
+        broken = {(API, "/forums-api/1.0/topics", "593067"): lambda url: _respond(404, {"success": False}),
+                  (API, "/forums-api/1.0/topics", "592933"): lambda url: _respond(503, b"busy", "text/plain"),
+                  (API, "/forums-api/1.0/topics", "592907"): lambda url: _respond(200, renamed)}
+        resb, _cb, readb, _sb = lane.cycle(broken)
+        tb = lane.clock.iso()
+        state_b = lane.state()
+        log = {d["topic_id"]: d for d in state_b.get("deferred_invalidated") or []}
+        check("Q14 a thread whose own topic view answers 404 leaves the queue as thread_gone, recorded with "
+              "when it was first deferred",
+              "593067" not in state_b["threads"]
+              and log.get(593067) == {"topic_id": 593067, "reason": "thread_gone", "at": tb, "first_deferred_at": ta},
+              str(log.get(593067)))
+        check("Q15 a thread whose title now names no tracked version leaves as title_names_no_tracked_version",
+              "592907" not in state_b["threads"] and (log.get(592907) or {}).get("reason") == "title_names_no_tracked_version",
+              str(log.get(592907)))
+        owed_b = lane.owed()
+        check("Q16 a failed read (HTTP 503) is not an invalidation: still owed, reason thread_read_failed, sent to "
+              "the end of the queue (queued now), its first deferral kept",
+              set(owed_b) == {"592933"} and owed_b["592933"]["reason"] == "thread_read_failed"
+              and owed_b["592933"]["queued_at"] == tb and owed_b["592933"]["first_deferred_at"] == ta
+              and owed_b["592933"]["times_deferred"] == 2 and 592933 not in log, str(owed_b))
+        check("Q17 the threads read left the queue as processed (window stored, no deferral, nothing logged)",
+              sorted(readb) == [592433, 592767] and all("deferred" not in state_b["threads"][t]
+                                                         and int(t) not in log for t in ("592433", "592767")),
+              str(readb))
+        check("Q18 the invalidations and the queue are in every health note of that cycle",
+              all("2 deferred thread(s) invalidated this cycle: thread_gone, title_names_no_tracked_version." in h["notes"]
+                  and "Deferred-thread queue (whole forum): 1 waiting" in h["notes"] for h in _health(resb)),
+              _health(resb)[0]["notes"][-200:])
+        only_1414 = {pid: [r for r in recs if r.update_version == "621.14"] for pid, recs in RECORDS.items()}
+        _rc, _cc, _readc, seenc = lane.cycle(None, records=only_1414)
+        state_c = lane.state()
+        last = (state_c.get("deferred_invalidated") or [{}])[-1]
+        check("Q19 no record left for the only version a queued thread names: it leaves as no_tracked_record, "
+              "with no request for it",
+              "592933" not in state_c["threads"] and last.get("topic_id") == 592933
+              and last.get("reason") == "no_tracked_record" and not [u for u in seenc if "id=592933" in u],
+              f"{last} {[u for u in seenc if '592933' in u]}")
+
+    # A targeted run and a stop keep the queue.
+    with tempfile.TemporaryDirectory() as tmp:
+        lane = _Lane(tmp, start)
+        lane.cycle(None, [(src, "MAX_THREADS_PER_CYCLE", 0)])
+        before = lane.owed()
+        _rt, _ct, readt, seent = lane.cycle(None, target={"621.14"})
+        after = lane.owed()
+        check("Q20 a run targeted at 621.14 reads only its own owed thread (the seed); the 621.24 threads stay "
+              "queued untouched (no request, no invalidation)",
+              readt == [592433] and set(after) == {"592767", "592907", "593067", "592933"}
+              and all(after[t] == before[t] for t in after)
+              and not [u for u in seent if any(f"id={t}" in u for t in after)], f"{readt} {sorted(after)}")
+        threads_before = json.dumps(lane.state()["threads"], sort_keys=True)
+        ress, _cs, _reads, _ss = lane.cycle({(API, "/robots.txt", None): lambda url: _respond(503, b"busy", "text/plain")})
+        check("Q21 a cycle that stops keeps the queue exactly as it was, and its notes still report it",
+              json.dumps(lane.state()["threads"], sort_keys=True) == threads_before
+              and {h["status"] for h in _health(ress)} == {"blocked"}
+              and all("Deferred-thread queue (whole forum): 4 waiting" in h["notes"] for h in _health(ress)),
+              _health(ress)[0]["notes"][-160:])
+
+    # The retention prune, directly.
+    now = datetime(2027, 3, 1, tzinfo=timezone.utc)
+    fresh = int((now - timedelta(days=1)).timestamp())
+    stale = int((now - timedelta(days=60)).timestamp())
+    marker = {"reason": "thread_cap", "first_deferred_at": "2027-01-01T00:00:00Z",
+              "queued_at": "2027-01-01T00:00:00Z", "times_deferred": 9}
+    windows = {str(1000 + i): {"title_versions": ["621.24"], "last_activity": fresh - i, "window": [[1, 1]]}
+               for i in range(src.MAX_STATE_THREADS + 5)}
+    owed_entries = {
+        "1": {"title": "x 621.24", "title_versions": ["621.24"], "last_activity": None, "window": [],
+              "deferred": dict(marker)},
+        "2": {"title": "", "title_versions": [], "last_activity": None, "window": [], "deferred": dict(marker)},
+        "3": {"title": "y 621.24", "title_versions": ["621.24"], "last_activity": stale, "window": [[5, 5]],
+              "deferred": dict(marker)}}
+    st = {"threads": {**windows, **owed_entries,
+                      "4": {"title_versions": ["621.24"], "last_activity": stale, "window": [[6, 6]]}}}
+    src.prune_threads(st, {"621.24"}, now)
+    kept = st["threads"]
+    check("Q22 the prune keeps every owed entry -- never read (no last activity), a title-less seed, one past "
+          "the 45-day retention -- outside the 40-window cap, and still prunes a stale read window",
+          {"1", "2", "3"} <= set(kept) and "4" not in kept and all(kept[t]["deferred"] == marker for t in "123")
+          and len([t for t in kept if t not in owed_entries]) == src.MAX_STATE_THREADS,
+          str(sorted(set(owed_entries) - set(kept))))
+    small = {"threads": {"5": {"title_versions": ["621.24"], "last_activity": None, "window": []},
+                         "6": {"title_versions": ["621.24"], "last_activity": fresh, "window": [[7, 7]]}}}
+    src.prune_threads(small, {"621.24"}, now)
+    check("Q23 ...and an entry never read is not dropped for lacking a last activity (the old "
+          "int(None or horizon) >= horizon was False for every such entry)",
+          set(small["threads"]) == {"5", "6"}, str(sorted(small["threads"])))
+    st_log = {"threads": {str(t): {"deferred": dict(marker)} for t in range(30)}}
+    for t in range(30):
+        nf._invalidate(st_log, {"at": "2027-03-01T00:00:00Z", "invalidated": []}, str(t), "thread_gone")
+    check("Q24 the invalidation log keeps the last 20 (newest last); the queue itself has no cap",
+          [d["topic_id"] for d in st_log["deferred_invalidated"]] == list(range(10, 30)) and not st_log["threads"],
+          str(len(st_log.get("deferred_invalidated") or [])))
+
+
 def run() -> int:
     print("=" * 74)
     print("NVIDIA GeForce forum evidence (default views, both driver families)")
@@ -1266,6 +1585,7 @@ def run() -> int:
     section_wiring(results)
     section_moved_comment()
     section_title_names()
+    section_deferred_queue()
     check("Z no socket was opened by the whole suite", _REFUSED[0] == 0, str(_REFUSED[0]))
     print()
     print("=" * 74)

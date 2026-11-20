@@ -24,6 +24,12 @@ at most ``MAX_REQUESTS_PER_CYCLE`` requests spaced ``REQUEST_SPACING_SECONDS`` a
 client name, no login, no cookies, no retries. A thread whose last activity has not moved is not
 re-read.
 
+DEFERRED WORK (GPT G61 Q5). A thread the cycle could not reach -- the thread cap, the request ceiling
+or the run's time budget -- is owed, not forgotten: it stays in the state file with the reason and
+the time it was deferred until a later cycle reads it or invalidates it with a recorded reason, and
+owed work is read before new work (nvidia_forum._select_threads). Neither ceiling is raised: the
+queue only decides who uses them first.
+
 STOP RULES. HTTP 401/403/429/451, a bot challenge, an HTML page where JSON was expected or a body
 refusing automated access raises ``AccessRefused``: the refusal is persisted in the state file and
 the method stays suspended -- zero requests -- until a reviewed change sets
@@ -83,6 +89,9 @@ TIMEOUT_SECONDS = 30
 MAX_BYTES = 2_000_000
 THREAD_RETENTION_DAYS = 45
 MAX_STATE_THREADS = 40
+# How many deferred-thread invalidations the state file keeps for audit (topic id, reason, times;
+# newest last). The queue itself is never capped: see prune_threads.
+MAX_DEFERRED_INVALIDATIONS_KEPT = 20
 
 USER_AGENT = "AUXSAYS-Patch-Evidence/1.0 (+https://auxsays.com; read-only, low rate)"
 REQUEST_HEADERS = {"User-Agent": USER_AGENT, "Accept": "application/json"}
@@ -604,12 +613,28 @@ def cycle_due(state: dict[str, Any], now: datetime | None = None) -> bool:
     return last is None or current - last >= MIN_CYCLE_INTERVAL
 
 
+def is_owed(entry: Any) -> bool:
+    """Does this thread entry carry a pending deferral: a read a cycle still owes (GPT G61 Q5)?"""
+    return isinstance(entry, dict) and isinstance(entry.get("deferred"), dict)
+
+
 def prune_threads(state: dict[str, Any], keep_versions: set[str], now: datetime | None = None) -> None:
+    """Retention for the windows already READ: an entry stays while its title names a tracked
+    version and its last activity is inside THREAD_RETENTION_DAYS, the MAX_STATE_THREADS most
+    recently active kept.
+
+    Deferred work is never pruned here. An entry carrying a pending deferral (is_owed) is kept
+    whatever its last activity (a thread never read has none), its age, the listing or the cap, and
+    it does not take a window's place under the cap. It leaves only through the cycle
+    (nvidia_forum.run_cycle): read, found unchanged, or invalidated with its reason recorded. An
+    entry with no last activity is a thread never read, never an expired one: the old test
+    `int(None or horizon) >= horizon` truncated the fractional horizon and dropped exactly those."""
     current = now or datetime.now(timezone.utc)
     horizon = (current - timedelta(days=THREAD_RETENTION_DAYS)).timestamp()
     threads = state.get("threads") or {}
+    owed = {tid: entry for tid, entry in threads.items() if is_owed(entry)}
     kept = {tid: entry for tid, entry in threads.items()
-            if set(entry.get("title_versions") or []) & keep_versions
-            and int(entry.get("last_activity") or horizon) >= horizon}
+            if tid not in owed and set(entry.get("title_versions") or []) & keep_versions
+            and (entry.get("last_activity") is None or int(entry["last_activity"]) >= horizon)}
     ordered = sorted(kept.items(), key=lambda kv: -int(kv[1].get("last_activity") or 0))
-    state["threads"] = dict(ordered[:MAX_STATE_THREADS])
+    state["threads"] = {**dict(ordered[:MAX_STATE_THREADS]), **owed}

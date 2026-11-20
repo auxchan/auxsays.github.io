@@ -482,7 +482,11 @@ auxsays/scripts/tests/test_nvidia_driver_lookup.py = 137
 # forbidden request shape refused before it is sent, refusal/schema/robots stops, ANY redirect refused before
 # the hop (same host included), the 12-hour cadence, the write-mode gates against a temporary store, one
 # comment served under two threads stored once, and no member's name in fixtures, stored text or stored titles.
-auxsays/scripts/tests/test_nvidia_forum_evidence.py = 175
+# AUX-115 (GPT G61 Q5): threads deferred by the request ceiling, the thread cap or the time budget persist in the
+# state file with their reason through repeated exhausted cycles (unlisted, never read, title-less seed included),
+# are read longest-waiting first under the unchanged ceilings, and end with exactly one unconstrained cycle's rows
+# and decisions (9 counted, none twice); invalidation reasons, the prune, queue telemetry, seeds read by any path.
+auxsays/scripts/tests/test_nvidia_forum_evidence.py = 200
 auxsays/scripts/tests/test_powerpoint_multibuild_ingestion.py = 167
 auxsays/scripts/tests/test_powerpoint_realpath_identity.py = 40
 auxsays/scripts/tests/test_powerpoint_write_path_safety.py = 68

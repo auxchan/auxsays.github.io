@@ -59,6 +59,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-037 | Deferred | Canonical patch identity | Medium | Elgato platform identity crashes the write path — the platform segment reads as a build segment |
 | AUX-045 | Resolved | Evidence integrity | Medium | A counted row could not show the evidence for its own version match |
 | AUX-106 | Resolved | Community evidence | High | NVIDIA drivers had no community evidence; their reports live on NVIDIA's own forum |
+| AUX-115 | Resolved | Community evidence | High | The NVIDIA forum collector could forget threads it had to defer, and its prune dropped exactly the ones never read |
 | AUX-046 | Resolved | Official ingestion | High | Four Elgato products had no records because the HTML pages challenge the runner |
 | AUX-105 | Resolved | Official ingestion | High | NVIDIA drivers had no official lane, and one catalog product stood for three products |
 | AUX-039 | Resolved | Published claims | High | The site claimed to monitor 29 products it was not monitoring, and 27 companies with zero healthy products |
@@ -3925,6 +3926,69 @@ signal for unassigned reports (G44 s5).
 sent, a request is made after a recorded refusal without a later, already-passed clearing time, any
 redirect is followed, a health note claims comprehensive monitoring, or the
 first scheduled run after merge is refused (then record what the runner was told, and stop).
+
+### AUX-115 — The NVIDIA forum collector could forget threads it had to defer, and its prune dropped exactly the ones never read
+
+- **Status** Resolved · **Area** Community evidence · **Severity** High
+- **First seen** 2026-11-19 (G61 natural-run check: residual 3 and R3-T4; GPT G61 Q5) · **Resolved** 2026-11-20 (fix
+  pending its first scheduled collection run)
+
+**Symptom** None observed yet: the first production cycle (2026-11-19 21:42Z) deferred nothing. But it used 16 of 16
+requests and 5 of 5 threads, and the tracked driver versions then rose from 2 to 5, so later cycles are expected to
+defer. GPT ruled it a Priority 1 evidence-loss defect to fix before it happens: the threads most at risk are new
+releases' early reports.
+
+**Cause** Deferred work was lost silently in three ways.
+1. `prune_threads` kept an entry when `int(last_activity or horizon) >= horizon`. The horizon is a fractional
+   timestamp, so for an entry with no last activity `int()` truncated it below itself and the test was False. A
+   thread deferred before it was ever read has no last activity, so it was written and pruned in the same step.
+2. A deferred seed (a feedback thread named in code, whose title is not known until it is read) left no entry at
+   all, and its deferral marked no version partial.
+3. A user topic was re-read only while the listing showed it. A deferred topic that dropped out was never read. The
+   order also put the same threads first every cycle, so a thread the cap never reached could wait forever.
+4. A seed read through the listing was not recorded as read (R3-T4), so it could come back later as a title-less
+   seed.
+
+**Repair** (`patch_collectors/nvidia_forum.py`, `patch_collectors/nvidia_forum_source.py`):
+- A deferred thread's state entry carries `deferred`: the reason (`thread_cap`, `request_budget` or
+  `runtime_budget`), when it was first deferred, its place in the queue and how many cycles it has waited. A seed is
+  queued too, with its title still unknown.
+- The prune never removes an owed entry: not for its age, a missing last activity, the listing, or the 40-window
+  cap. It no longer drops a never-read entry for lacking a last activity.
+- Owed threads are selected from the state file even when the listing no longer shows them. They are read first,
+  longest-waiting first, then everything else in the old order. A failed read keeps the thread owed
+  (`thread_read_failed`) and sends it to the end of the queue. The request ceiling and the thread cap are unchanged:
+  the queue only orders the work.
+- An owed thread leaves the queue in one of two ways:
+  - it is read, or found unchanged;
+  - it is invalidated, and the reason is kept in `deferred_invalidated` (the last 20). The reasons are: its own
+    topic view answers 404 or 410 (`thread_gone`); its title names no tracked version; or no record is left for
+    the versions it names.
+- Telemetry, with no new evidence state:
+  - every health note gives the forum-wide queue depth and the oldest deferral, plus any invalidations that cycle
+    and their reasons;
+  - the `nvidia_forum_cycle` runtime event carries the same numbers;
+  - a deferred seed whose title is unknown reports partial for every version;
+  - a seed read by any path is recorded as read.
+
+`evaluate_comment` is unchanged, and so are every acceptance rule, threshold, status, schedule and ceiling. Replayed
+on the captured windows, the decisions are identical (9 counted). Pinned by `test_nvidia_forum_evidence.py` section
+Q (175 to 200 governed checks):
+- three exhausted cycles (request ceiling, thread cap, time budget), with the threads unlisted and never read;
+- then reads in queue order;
+- the store ends with exactly one unconstrained cycle's rows and decisions: 9 counted, none twice, none credited
+  twice.
+
+**Residual**
+- A queued thread whose own topic view raises a stop (a redirect or a schema change) stops each cycle that reaches
+  it. A remembered feedback thread does the same today. It is reported as broken, never silently.
+- A thread whose first read fails is still not queued, as before. It reports partial / `thread_read_failed`.
+- An unchanged listed thread still takes a thread slot.
+
+**Reopen only if** either of these happens:
+- a thread deferred in a finished cycle is missing from the next saved state with neither a read nor a
+  `deferred_invalidated` record;
+- an owed thread is overtaken by a thread deferred after it.
 
 ### AUX-045 — a counted row could not show the evidence for its own version match
 
