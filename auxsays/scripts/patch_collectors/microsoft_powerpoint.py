@@ -1250,10 +1250,11 @@ def qna_tag_hydration_note(enumerated: list[dict[str, Any]], since: str) -> str:
     per-run cap cut that list short.
 
     Without this, the overflow fact `hydration_cap_reached_<cap>_of_<admitted>` existed only in a
-    run's in-memory error list: it changed neither the status nor the notes, so a run that left
-    admitted questions unread looked exactly like one that read them all, and a catch-up loss after a
-    missed run would be invisible. It changes nothing but the notes: the cap, the enumeration, the
-    error list the status is computed from, and the status itself are as they were."""
+    run's in-memory error list. It never reached the notes, and on a run with nothing accepted it did
+    not move the status either, so a run that left admitted questions unread looked exactly like one
+    that read them all, and a catch-up loss after a missed run would be invisible. This changes
+    nothing but the notes: the cap, the enumeration, the error list the status is computed from, and
+    the status itself are as they were."""
     admitted = len(qna_tag_admitted(enumerated, since))
     note = f"Admitted for hydration {admitted} (cap {QNA_TAG_MAX_HYDRATIONS} a run). "
     overflow = admitted - QNA_TAG_MAX_HYDRATIONS
