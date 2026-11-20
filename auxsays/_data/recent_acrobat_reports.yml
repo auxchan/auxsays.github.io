@@ -44,7 +44,7 @@ reports:
   window_start: '2026-11-02'
   window_version: 26.003.22075
 - attribution_state: not_established
-  captured_at: '2026-11-19T20:31:33Z'
+  captured_at: '2026-11-20T20:11:08Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -63,7 +63,7 @@ reports:
   window_start: '2026-09-08'
   window_version: 26.002.21901
 - attribution_state: not_established
-  captured_at: '2026-11-19T20:31:33Z'
+  captured_at: '2026-11-20T20:11:08Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -83,7 +83,7 @@ reports:
   window_start: '2026-09-08'
   window_version: 26.002.21901
 - attribution_state: not_established
-  captured_at: '2026-11-19T20:31:33Z'
+  captured_at: '2026-11-20T20:11:08Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -624,7 +624,26 @@ reports:
   window_start: '2017-02-21'
   window_version: 15.023.20070
 - attribution_state: not_established
-  captured_at: '2026-11-19T20:53:06Z'
+  captured_at: '2026-11-20T20:31:56Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|26.003.22110|26.003.22110
+  report_date: '2026-11-19'
+  report_excerpt: Unable to open .pdf attachments in Outlook emails Hi all, Two users today have reported
+    that they're unable to open a .pdf attachment within an Outlook email. For starters, these are on
+    Windows 11 machines, and they're using Classic Outlook. They are able to open the file in...
+  report_id: adobe-acrobat-reader:1aa8ea20d1ef5484
+  report_title: Unable to open .pdf attachments in Outlook emails
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/unable-to-open-pdf-attachments-in-outlook-emails-1657062
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 26.003.22110
+  window_start: '2026-11-16'
+  window_version: 26.003.22110
+- attribution_state: not_established
+  captured_at: '2026-11-20T20:31:56Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
@@ -664,7 +683,7 @@ reports:
   window_start: '2026-11-02'
   window_version: 26.003.22075
 - attribution_state: not_established
-  captured_at: '2026-11-19T20:53:06Z'
+  captured_at: '2026-11-20T20:31:56Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
@@ -684,7 +703,7 @@ reports:
   window_start: '2026-10-14'
   window_version: 26.002.22031
 - attribution_state: not_established
-  captured_at: '2026-11-19T20:53:06Z'
+  captured_at: '2026-11-20T20:31:56Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true

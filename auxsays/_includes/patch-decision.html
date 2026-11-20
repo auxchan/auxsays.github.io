@@ -89,10 +89,12 @@
   official-only rule above.
   Extra outputs: decision_scope (the 'if ...' qualifier), decision_official, the security page's
   panel (decision_panel_heading, decision_panel_text), and decision_recommendations, the list an
-  official verdict carries on every page it decides (AVOID), else empty.
+  official verdict carries on every page it decides (AVOID), else empty. decision_source_url,
+  decision_source_label and decision_source_checked: the official statement an AVOID rests on, as a
+  plain deep link (G66), else empty.
 {%- endcomment -%}
 {%- include patch-verdict-gate.html record=pd_record count=report_count -%}
-{% assign decision_label = gate_label %}{% assign decision_scope = gate_scope %}{% assign decision_official = gate_official %}{% assign decision_panel_heading = gate_panel_heading %}{% assign decision_panel_text = gate_panel_text %}{% assign decision_recommendations = gate_recommendations %}
+{% assign decision_label = gate_label %}{% assign decision_scope = gate_scope %}{% assign decision_official = gate_official %}{% assign decision_panel_heading = gate_panel_heading %}{% assign decision_panel_text = gate_panel_text %}{% assign decision_recommendations = gate_recommendations %}{% assign decision_source_url = gate_source_url %}{% assign decision_source_label = gate_source_label %}{% assign decision_source_checked = gate_source_checked %}
 {% if gate_body != '' %}{% assign decision_body = gate_body %}{% endif %}
 {% assign verdict_action = decision_label %}{% assign verdict_known = true %}{% assign decision_label_key = decision_label | downcase %}
 {% assign show_test_first_context = false %}

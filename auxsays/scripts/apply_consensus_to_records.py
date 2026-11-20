@@ -32,6 +32,7 @@ from patch_collectors.base import (
     atomic_write_text,
 )
 from lib import live_eligibility, maturity, monitoring_health, verdict_projection, verdict_reasons
+from lib.log_redaction import log_safe
 from lib.report_counts import EvidenceStoreError, load_evidence_store
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -1291,7 +1292,11 @@ def _payload(results: list[dict[str, Any]], *, evidence_path: Path, is_candidate
 
 
 def _write_json(payload: dict[str, Any], output: str | None) -> None:
-    json_text = json.dumps(payload, indent=2, ensure_ascii=False) + "\n"
+    # The report is printed into public workflow logs (every workflow step runs this without
+    # --output), so it carries row ids, URLs, counts and gate results but never a report's stored
+    # title or excerpt (G66, lib.log_redaction). The in-memory payload keeps them: the record write
+    # path reads `proposed_fields_if_written` from it, not from this text.
+    json_text = json.dumps(log_safe(payload), indent=2, ensure_ascii=False) + "\n"
     if output:
         out_path = Path(output)
         if not out_path.is_absolute():
