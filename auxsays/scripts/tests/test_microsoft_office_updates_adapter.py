@@ -288,9 +288,10 @@ def run() -> int:
             "<p>Page updated October 2026.</p><table><tr><td>2026</td><td>July 01</td><td>26190.100.4900.0001</td></tr></table>")[0]["published_at"] == "2026-07-01T00:00:00Z")
 
     # H19 (G66): a failed primary fetch never falls through to an unapproved source, and the lane
-    # reports the failure honestly. Until G66 this test PINNED the fall-through: the Teams config
-    # named a support.microsoft.com page as its fallback and the adapter fetched it whenever the
-    # primary failed or matched no row. Every fake below records the URLs the adapter asked for, so
+    # reports the failure honestly. Until G66 the Teams config named a support.microsoft.com page as
+    # its fallback and the adapter fetched it whenever the primary failed or matched no row; the old
+    # H19 swapped in a second Learn URL instead, so it never exercised that request and passed with
+    # or without a fall-through. Every fake below records the URLs the adapter asked for, so
     # "never requested" is observed, not inferred from the result.
     URL_A = TEAMS_URL
     URL_B = "https://learn.microsoft.com/en-us/officeupdates/teams-archive"
