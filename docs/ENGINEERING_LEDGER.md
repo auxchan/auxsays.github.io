@@ -3938,12 +3938,15 @@ requests and 5 of 5 threads, and the tracked driver versions then rose from 2 to
 defer. GPT ruled it a Priority 1 evidence-loss defect to fix before it happens: the threads most at risk are new
 releases' early reports.
 
-**Cause** Deferred work was lost silently in three ways, and a fourth defect could bring a read seed back unread:
+**Cause** Deferred work was lost or left without a trace in three ways, and a fourth defect could bring a read seed
+back unread:
 1. `prune_threads` kept an entry when `int(last_activity or horizon) >= horizon`. The horizon is a fractional
    timestamp, so for an entry with no last activity `int()` truncated it below itself and the test was False. A
-   thread deferred before it was ever read has no last activity, so it was written and pruned in the same step.
+   thread deferred before it was ever read has no last activity, so it was added and then pruned in the same step,
+   before the state file was written.
 2. A deferred seed (a feedback thread named in code, whose title is not known until it is read) left no entry at
-   all, and its deferral marked no version partial.
+   all, and its deferral marked no version partial. It was offered again each cycle, but nothing showed it
+   waiting.
 3. A user topic was re-read only while the listing showed it. A deferred topic that dropped out was never read. The
    order also put the same threads first every cycle, so a thread the cap never reached could wait forever.
 4. A seed read through the listing was not recorded as read (R3-T4), so it could come back later as a title-less
@@ -3973,7 +3976,7 @@ releases' early reports.
 
 `evaluate_comment` is unchanged, and so are every acceptance rule, threshold, schedule and ceiling; the health-status
 vocabulary gains no status. Replayed on the captured windows, the decisions are identical (9 counted). Pinned by
-`test_nvidia_forum_evidence.py` section Q (175 to 203 governed checks; each of 22 single-fix mutants fails a named
+`test_nvidia_forum_evidence.py` section Q (175 to 204 governed checks; each of 22 single-fix mutants fails a named
 check, and so does each of 2 telemetry mutants: the oldest age taken from the requeue time, and a depth that drops
 owed threads read before):
 - three exhausted cycles (request ceiling, thread cap, time budget), with the threads unlisted and never read;

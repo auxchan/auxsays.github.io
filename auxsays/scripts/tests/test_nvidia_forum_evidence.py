@@ -1554,6 +1554,16 @@ def section_deferred_queue() -> None:
               and all("Deferred-thread queue (whole forum): 4 waiting" in h["notes"] for h in _health(resr)),
               _health(resr)[0]["notes"][-160:])
 
+    # A seed whose FIRST read fails is not recorded as read (G61 R3-T4): the next cycle offers it again.
+    with tempfile.TemporaryDirectory() as tmp:
+        lane = _Lane(tmp, start)
+        lane.cycle({(API, "/forums-api/1.0/topics", "592433"): lambda url: _respond(503, b"busy", "text/plain")})
+        failed = lane.state()
+        _rf, _cf, readf, _sf = lane.cycle()
+        check("QP3 a seed whose first read fails is not recorded as read, and the next cycle reads it",
+              592433 not in (failed.get("seeds_read") or []) and "592433" not in failed["threads"]
+              and 592433 in readf, f"{failed.get('seeds_read')} {readf}")
+
     # The retention prune, directly, at a fractional second (production's clock always has one).
     now = datetime(2027, 3, 1, 0, 0, 0, 500000, tzinfo=timezone.utc)
     fresh = int((now - timedelta(days=1)).timestamp())
