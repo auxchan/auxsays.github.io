@@ -1,0 +1,355 @@
+import json
+import tempfile
+import unittest
+from pathlib import Path
+
+from _support import CONFIG
+from systems_monitor_data.layoffs_history import (
+    append_history,
+    bound_candidate_batch_to_series,
+    comparable_change,
+    deterministic_interpretation,
+    history_artifact,
+    load_acceptance_ledger,
+    migrate_existing_dol_seed,
+    observations_as_of,
+    promote_candidate_batch,
+)
+
+
+ACCEPTANCE = CONFIG / "layoffs" / "history_acceptance.json"
+RIGHTS = CONFIG / "rights" / "rights.json"
+
+
+def candidate(period: str, value: str, release: str, public: str, retrieved: str) -> dict:
+    return {
+        "observation_id": f"candidate-{release}-{period}",
+        "canonical_factor": "factor:canonical:layoffs-and-discharges",
+        "source_id": "bls-jolts",
+        "source_series_id": "JTS000000000000000LDL",
+        "release_id": release,
+        "artifact_sha256": "a" * 64,
+        "value": value,
+        "unit": "thousands of persons",
+        "frequency": "monthly",
+        "geography": "US",
+        "seasonal_adjustment": "seasonally adjusted",
+        "observation_period": period,
+        "public_time": public,
+        "retrieved_time": retrieved,
+        "accepted_time": None,
+        "publication_eligible": False,
+        "publication_time_kind": "official",
+        "revision_status": "as_published",
+        "provenance_url": "https://api.bls.gov/publicAPI/v2/timeseries/data/",
+        "evidence_url": "https://data.bls.gov/timeseries/JTS000000000000000LDL",
+        "methodology_url": "https://www.bls.gov/opub/hom/jlt/home.htm",
+    }
+
+
+def batch(*rows: dict) -> dict:
+    return {
+        "schemaVersion": "layoffs-source-candidate-batch-1.0.0",
+        "activationStatus": "NOT_ACCEPTED_NOT_PUBLISHABLE",
+        "rawArtifacts": [{"sha256": "a" * 64, "source_id": "bls-layoffs-combined", "parser_version": "layoffs-bls-json-v1"}],
+        "sourceDiagnostics": {},
+        "candidates": list(rows),
+    }
+
+
+def authorized_ledger() -> dict:
+    return {
+        "schemaVersion": "layoffs-history-acceptance-1.0.0",
+        "authority": "TEST_AUTHORITY",
+        "defaultDecision": "REJECT_UNLESS_EXPLICITLY_LISTED",
+        "automaticRoutinePromotionEnabled": True,
+        "rules": [{
+            "ruleId": "TEST_JOLTS_LDL_V1",
+            "authority": "TEST_AUTHORITY",
+            "acceptedAt": "2026-01-01T00:00:00Z",
+            "canonicalFactorId": "factor:canonical:layoffs-and-discharges",
+            "sourceId": "bls-jolts",
+            "sourceSeriesId": "JTS000000000000000LDL",
+            "unit": "thousands of persons",
+            "frequency": "monthly",
+            "geography": "US",
+            "seasonalAdjustment": "seasonally adjusted",
+            "rightsState": "ALLOW",
+            "effectiveFrom": "2026-01-01T00:00:00Z",
+            "parserVersion": "layoffs-bls-json-v1",
+            "validatorProfileId": "BLS_JOLTS_EXACT_SERIES_V1",
+            "rightsPolicyId": "bls-jolts",
+            "rawArtifactSourceId": "bls-layoffs-combined",
+            "methodologyUrl": "https://www.bls.gov/opub/hom/jlt/home.htm",
+            "allowedPublicationTimeKinds": ["official", "conservative_retrieval_bound"],
+            "allowedRevisionStatuses": ["preliminary", "as_published"],
+            "descriptiveBackfillAuthority": "TEST_AUTHORITY",
+            "descriptiveBackfillStart": "2026-01",
+            "descriptiveBackfillEnd": "2026-12",
+            "historyUseClass": "CURRENT_REVISED_HISTORY",
+            "forecastVintageEligible": False,
+            "requiresCurrentSourceFreshness": False,
+        }],
+        "validatorProfiles": [{
+            "validatorProfileId": "BLS_JOLTS_EXACT_SERIES_V1",
+            "parserVersion": "layoffs-bls-json-v1",
+            "methodologyUrl": "https://www.bls.gov/opub/hom/jlt/home.htm",
+        }],
+    }
+
+
+class LayoffsHistoryTests(unittest.TestCase):
+    def test_production_ledger_is_exact_and_unknown_series_cannot_promote(self):
+        rights = json.loads(RIGHTS.read_text(encoding="utf-8"))
+        ledger = load_acceptance_ledger(ACCEPTANCE, rights_registry=rights)
+        unknown = candidate("2026-07", "1700", "R1", "2026-09-12T12:00:00Z", "2026-09-12T12:01:00Z")
+        unknown["source_series_id"] = "JTS-NOT-AUTHORIZED"
+        rows = promote_candidate_batch(
+            batch(unknown),
+            ledger,
+            accepted_at="2026-09-12T12:02:00Z",
+        )
+        self.assertEqual("TAYLOR_LAYOFFS_LEVEL4_ACCEPTANCE_2026_09_14", ledger["authority"])
+        self.assertEqual(18, len(ledger["rules"]))
+        self.assertEqual([], rows)
+
+    def test_exact_series_scope_excludes_unrelated_rows_before_promotion(self):
+        authorized = candidate("2026-07", "1760", "R2", "2026-08-01T12:00:00Z", "2026-08-01T12:01:00Z")
+        unrelated = dict(authorized, observation_id="unrelated", source_series_id="JTS-NOT-AUTHORIZED")
+        bounded = bound_candidate_batch_to_series(batch(authorized, unrelated), ["JTS000000000000000LDL"])
+        self.assertEqual(["JTS000000000000000LDL"], [row["source_series_id"] for row in bounded["candidates"]])
+        promoted = promote_candidate_batch(
+            bounded,
+            authorized_ledger(),
+            accepted_at="2026-08-01T12:02:00Z",
+        )
+        self.assertEqual(1, len(promoted))
+
+    def test_authorized_series_with_metadata_mismatch_requires_manual_review(self):
+        mismatched = candidate("2026-07", "1760", "R2", "2026-08-01T12:00:00Z", "2026-08-01T12:01:00Z")
+        mismatched["geography"] = "CA"
+        with self.assertRaisesRegex(ValueError, "manual_review_needed"):
+            promote_candidate_batch(
+                batch(mismatched),
+                authorized_ledger(),
+                accepted_at="2026-08-01T12:02:00Z",
+            )
+
+    def test_explicit_rule_builds_native_cadence_change_without_materiality_or_impact(self):
+        rows = promote_candidate_batch(
+            batch(
+                candidate("2026-06", "1700", "R1", "2026-07-01T12:00:00Z", "2026-07-01T12:01:00Z"),
+                candidate("2026-07", "1760", "R2", "2026-08-01T12:00:00Z", "2026-08-01T12:01:00Z"),
+            ),
+            authorized_ledger(),
+            accepted_at="2026-08-01T12:02:00Z",
+        )
+        change = comparable_change(
+            rows,
+            canonical_factor_id="factor:canonical:layoffs-and-discharges",
+            source_series_id="JTS000000000000000LDL",
+        )
+        self.assertEqual("60", change["absoluteDelta"])
+        self.assertEqual("UP", change["direction"])
+        self.assertEqual("↑", change["directionGlyph"])
+        self.assertEqual("UNKNOWN", change["materiality"]["status"])
+        self.assertFalse(change["economicSignalEligible"])
+        self.assertEqual("UNKNOWN", change["destinationImpact"]["status"])
+        self.assertFalse(change["forecastVintageEligible"])
+        interpretation = deterministic_interpretation(
+            change,
+            source_measure="BLS JOLTS layoffs and discharges, seasonally adjusted.",
+            relevance="This is a direct measure of separations initiated by employers.",
+        )
+        self.assertIn("does not establish causality", interpretation["WHAT_AUXSAYS_CANNOT_CLAIM"])
+
+    def test_source_registry_alias_is_normalized_before_acceptance(self):
+        row = candidate("2026-07", "1760", "R2", "2026-08-01T12:00:00Z", "2026-08-01T12:01:00Z")
+        row["canonical_factor"] = "factor:layoffs-discharges-level"
+        promoted = promote_candidate_batch(
+            batch(row),
+            authorized_ledger(),
+            accepted_at="2026-08-01T12:02:00Z",
+        )
+        self.assertEqual("factor:canonical:layoffs-and-discharges", promoted[0]["canonicalFactorId"])
+
+    def test_revision_replay_separates_public_operational_and_latest_truth(self):
+        ledger = authorized_ledger()
+        original = promote_candidate_batch(
+            batch(candidate("2026-06", "1700", "R1", "2026-07-01T12:00:00Z", "2026-07-01T12:01:00Z")),
+            ledger,
+            accepted_at="2026-07-01T12:02:00Z",
+        )
+        revised = promote_candidate_batch(
+            batch(candidate("2026-06", "1680", "R2", "2026-08-01T12:00:00Z", "2026-08-01T12:01:00Z")),
+            ledger,
+            accepted_at="2026-08-01T12:02:00Z",
+            existing_history=original,
+        )
+        history = append_history(original, revised)
+        public_then = observations_as_of(history, mode="PUBLICLY_AVAILABLE_AS_OF", cutoff="2026-07-15T00:00:00Z")
+        known_then = observations_as_of(history, mode="OPERATIONALLY_KNOWN_AS_OF", cutoff="2026-07-15T00:00:00Z")
+        latest = observations_as_of(history, mode="LATEST_REVISED_TRUTH", cutoff=None)
+        self.assertEqual("1700", public_then[0]["value"])
+        self.assertEqual("1700", known_then[0]["value"])
+        self.assertEqual("1680", latest[0]["value"])
+        self.assertEqual(1, latest[0]["revisionNumber"])
+        self.assertEqual(original[0]["observationId"], latest[0]["supersedesObservationId"])
+
+    def test_forecast_replay_excludes_current_revised_history(self):
+        rows = promote_candidate_batch(
+            batch(candidate("2026-06", "1700", "R1", "2026-07-01T12:00:00Z", "2026-07-01T12:01:00Z")),
+            authorized_ledger(),
+            accepted_at="2026-07-01T12:02:00Z",
+        )
+        self.assertEqual("CURRENT_REVISED_HISTORY", rows[0]["historyUseClass"])
+        self.assertEqual([], observations_as_of(rows, mode="FORECAST_AS_OF", cutoff="2026-08-01T00:00:00Z"))
+
+    def test_forecast_replay_requires_explicit_authorized_vintage_class(self):
+        ledger = authorized_ledger()
+        ledger["rules"][0].update({
+            "historyUseClass": "VINTAGE_RECONSTRUCTED",
+            "forecastVintageEligible": True,
+            "vintageEvidenceId": "archive-artifact:test-jolts-r1",
+        })
+        rows = promote_candidate_batch(
+            batch(candidate("2026-06", "1700", "R1", "2026-07-01T12:00:00Z", "2026-07-01T12:01:00Z")),
+            ledger,
+            accepted_at="2026-07-01T12:02:00Z",
+        )
+        replay = observations_as_of(rows, mode="FORECAST_AS_OF", cutoff="2026-08-01T00:00:00Z")
+        self.assertEqual(1, len(replay))
+        self.assertTrue(replay[0]["forecastVintageEligible"])
+
+    def test_materiality_registry_without_accepted_governance_stays_unknown(self):
+        rows = promote_candidate_batch(
+            batch(
+                candidate("2026-06", "1700", "R1", "2026-07-01T12:00:00Z", "2026-07-01T12:01:00Z"),
+                candidate("2026-07", "1760", "R2", "2026-08-01T12:00:00Z", "2026-08-01T12:01:00Z"),
+            ),
+            authorized_ledger(),
+            accepted_at="2026-08-01T12:02:00Z",
+        )
+        registry = {
+            "authority": "ARBITRARY",
+            "profiles": [{
+                "sourceSeriesId": "JTS000000000000000LDL",
+                "frequency": "monthly",
+                "absoluteDeltaThreshold": "1",
+            }],
+        }
+        change = comparable_change(
+            rows,
+            canonical_factor_id="factor:canonical:layoffs-and-discharges",
+            source_series_id="JTS000000000000000LDL",
+            materiality_profiles=registry,
+        )
+        self.assertEqual("UNKNOWN", change["materiality"]["status"])
+
+    def test_immutable_identity_and_artifact_hash_are_enforced(self):
+        rows = promote_candidate_batch(
+            batch(candidate("2026-06", "1700", "R1", "2026-07-01T12:00:00Z", "2026-07-01T12:01:00Z")),
+            authorized_ledger(),
+            accepted_at="2026-07-01T12:02:00Z",
+        )
+        artifact = history_artifact(rows, generated_at="2026-07-01T12:03:00Z")
+        self.assertEqual(1, len(artifact["observations"]))
+        self.assertEqual(64, len(artifact["payloadSha256"]))
+        mutated = dict(rows[0], value="999")
+        with self.assertRaisesRegex(ValueError, "object hash"):
+            append_history([], [mutated])
+
+    def test_acceptance_ledger_rejects_authority_free_rules(self):
+        invalid = authorized_ledger()
+        invalid["authority"] = "NONE"
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "ledger.json"
+            path.write_text(json.dumps(invalid), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "authority-free"):
+                load_acceptance_ledger(path, rights_registry=json.loads(RIGHTS.read_text(encoding="utf-8")))
+
+    def test_exact_retry_is_idempotent_after_acceptance(self):
+        ledger = authorized_ledger()
+        source = batch(candidate("2026-07", "1760", "R2", "2026-08-01T12:00:00Z", "2026-08-01T12:01:00Z"))
+        first = promote_candidate_batch(source, ledger, accepted_at="2026-08-01T12:02:00Z")
+        retry = promote_candidate_batch(source, ledger, accepted_at="2026-08-01T12:03:00Z", existing_history=first)
+        self.assertEqual([], retry)
+
+    def test_descriptive_history_ignores_fresh_transport_of_unchanged_bls_value(self):
+        ledger = authorized_ledger()
+        first_batch = batch(candidate("2026-07", "1760", "retrieval-one", "2026-08-01T12:00:00Z", "2026-08-01T12:01:00Z"))
+        first = promote_candidate_batch(first_batch, ledger, accepted_at="2026-08-01T12:02:00Z")
+        replayed = candidate("2026-07", "1760", "retrieval-two", "2026-08-02T12:00:00Z", "2026-08-02T12:01:00Z")
+        replay_batch = batch(replayed)
+        replay_batch["rawArtifacts"][0]["sha256"] = "b" * 64
+        replayed["artifact_sha256"] = "b" * 64
+        retry = promote_candidate_batch(
+            replay_batch,
+            ledger,
+            accepted_at="2026-08-02T12:02:00Z",
+            existing_history=first,
+        )
+        self.assertEqual([], retry)
+
+    def test_dol_semantic_retry_ignores_report_execution_transport_changes(self):
+        rights = json.loads(RIGHTS.read_text(encoding="utf-8"))
+        ledger = load_acceptance_ledger(ACCEPTANCE, rights_registry=rights)
+        release_id = "DOL-UI-r539cyNational-observation-2026-09-05-0123456789abcdef"
+
+        def dol_batch(artifact: str, public_time: str, retrieved_time: str) -> dict:
+            return {
+                "schemaVersion": "layoffs-source-candidate-batch-1.0.0",
+                "activationStatus": "NOT_ACCEPTED_NOT_PUBLISHABLE",
+                "rawArtifacts": [{"sha256": artifact, "source_id": "dol-ui-claims", "parser_version": "layoffs-dol-national-xml-v1"}],
+                "sourceDiagnostics": {"dolFreshness": {"status": "CURRENT"}},
+                "candidates": [{
+                    "observation_id": "transport-owned-candidate-id",
+                    "canonical_factor": "factor:canonical:initial-claims",
+                    "source_id": "dol-ui-claims",
+                    "source_series_id": "DOL-UI-SA-INITIAL",
+                    "release_id": release_id,
+                    "artifact_sha256": artifact,
+                    "value": "206000",
+                    "unit": "claims",
+                    "frequency": "weekly",
+                    "geography": "US",
+                    "seasonal_adjustment": "seasonally adjusted",
+                    "observation_period": "2026-09-05",
+                    "public_time": public_time,
+                    "retrieved_time": retrieved_time,
+                    "accepted_time": None,
+                    "publication_eligible": False,
+                    "publication_time_kind": "conservative_retrieval_bound",
+                    "revision_status": "current_revised_snapshot",
+                    "provenance_url": "https://oui.doleta.gov/unemploy/wkclaims/report.asp",
+                    "evidence_url": "https://www.dol.gov/ui/data.pdf",
+                    "methodology_url": "https://oui.doleta.gov/unemploy/claims.asp",
+                }],
+            }
+
+        first = promote_candidate_batch(
+            dol_batch("a" * 64, "2026-09-12T12:00:00Z", "2026-09-12T12:00:00Z"),
+            ledger,
+            accepted_at="2026-09-12T12:01:00Z",
+        )
+        retry = promote_candidate_batch(
+            dol_batch("b" * 64, "2026-09-13T12:00:00Z", "2026-09-13T12:00:00Z"),
+            ledger,
+            accepted_at="2026-09-13T12:01:00Z",
+            existing_history=first,
+        )
+        self.assertEqual(1, len(first))
+        self.assertEqual([], retry)
+
+    def test_existing_dol_seed_migration_preserves_the_accepted_identity(self):
+        snapshot = json.loads((CONFIG.parent / "review" / "factual-snapshot-candidate.json").read_text(encoding="utf-8"))
+        seed = migrate_existing_dol_seed(snapshot)
+        self.assertEqual("209000", seed["value"])
+        self.assertEqual("2026-08-08", seed["validTime"])
+        self.assertEqual("DOL-UI-2026-08-13-advance", seed["releaseId"])
+        self.assertEqual(0, seed["revisionNumber"])
+        self.assertFalse(seed["forecastVintageEligible"])
+
+
+if __name__ == "__main__":
+    unittest.main()

@@ -1,5 +1,6 @@
 import copy
 import json
+import socket
 import unittest
 import urllib.error
 from email.message import Message
@@ -16,6 +17,7 @@ from systems_monitor_data.structural import (
     promote_structural_candidates, validate_product_roles,
 )
 from systems_monitor_data.retrieval import BoundedRetriever
+from systems_monitor_data.security import validate_url
 
 
 class BeaInputOutputTests(unittest.TestCase):
@@ -64,7 +66,8 @@ class BeaInputOutputTests(unittest.TestCase):
         error = urllib.error.HTTPError("https://apps.bea.gov/api/data", 429, "rate", headers, None)
         sleeps = []
         retriever = BoundedRetriever(max_attempts=2, sleeper=sleeps.append)
-        with patch.object(retriever, "_request", side_effect=error), self.assertRaises(RuntimeError):
+        resolver = lambda *args, **kwargs: [(socket.AF_INET, socket.SOCK_STREAM, 6, "", ("23.1.1.1", 443))]
+        with patch("systems_monitor_data.retrieval.validate_url", side_effect=lambda url: validate_url(url, resolver=resolver)), patch.object(retriever, "_request", side_effect=error), self.assertRaises(RuntimeError):
             retriever.fetch("https://apps.bea.gov/api/data", expected_types=("application/json",))
         self.assertEqual([7], sleeps)
 

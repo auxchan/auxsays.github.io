@@ -45,6 +45,7 @@ const profiles = {
   "eia-open": { readiness: "CANDIDATE_DATASET", authority: "U.S. Energy Information Administration", dataset: "EIA Open Data", cadence: "Hourly to annual, series dependent", summary: "Official electricity, petroleum, natural-gas, coal, and energy-outlook data.", evidenceUrl: "https://www.eia.gov/opendata/", methodologyUrl: "https://www.eia.gov/opendata/documentation.php", registrationState: "CANDIDATE_NOT_REGISTERED" },
   "usda-wasde": { readiness: "CANDIDATE_DATASET", authority: "U.S. Department of Agriculture", dataset: "World Agricultural Supply and Demand Estimates", cadence: "Monthly", summary: "Official crop, livestock, and food-commodity supply-and-use estimates.", evidenceUrl: "https://www.usda.gov/about-usda/general-information/staff-offices/office-chief-economist/commodity-markets/wasde-report", registrationState: "CANDIDATE_NOT_REGISTERED" },
   "noaa-events": { readiness: "CANDIDATE_DATASET", authority: "National Oceanic and Atmospheric Administration", dataset: "Storm Events Database / climate hazard records", cadence: "Event driven", summary: "Official severe-weather event and impact records.", evidenceUrl: "https://www.ncei.noaa.gov/stormevents/", registrationState: "CANDIDATE_NOT_REGISTERED" },
+  "fema-openfema": { readiness: "CANDIDATE_DATASET", authority: "Federal Emergency Management Agency", dataset: "OpenFEMA Disaster Declarations Summaries v2", cadence: "Event driven", summary: "Official disaster declaration events with source-native identity, declaration dates, incident type, and designated geography; not a scalar economic-impact measure.", evidenceUrl: "https://www.fema.gov/about/openfema/data-sets#disaster-declarations-summaries-v2", methodologyUrl: "https://www.fema.gov/about/openfema/api", registrationState: "CANDIDATE_NOT_REGISTERED" },
   "cdc-surveillance": { readiness: "CANDIDATE_DATASET", authority: "Centers for Disease Control and Prevention", dataset: "CDC Data and Surveillance", cadence: "Varies by surveillance system", summary: "Official public-health surveillance and burden indicators.", evidenceUrl: "https://data.cdc.gov/", registrationState: "CANDIDATE_NOT_REGISTERED" },
   "bts-tsi": { readiness: "CANDIDATE_DATASET", authority: "Bureau of Transportation Statistics", dataset: "Freight Transportation Services Index", cadence: "Monthly", summary: "Official for-hire freight-volume index across major transportation modes.", evidenceUrl: "https://www.bts.gov/topics/transportation-and-economy/transportation-measures-economic-activity", registrationState: "CANDIDATE_NOT_REGISTERED" },
   "federal-register": { readiness: "CANDIDATE_DATASET", authority: "Office of the Federal Register / GPO", dataset: "Federal Register API", cadence: "Daily", summary: "Official rules, proposed rules, notices, and presidential-document metadata.", evidenceUrl: "https://www.federalregister.gov/developers/documentation/api/v1", registrationState: "CANDIDATE_NOT_REGISTERED" },
@@ -89,19 +90,20 @@ assign("cdc-surveillance", ["Public Health Disruption"]);
 assign("bts-tsi", ["Transportation Bottlenecks"]);
 assign("federal-register", ["Regulatory Change"]);
 assign("bls-jolts", ["Layoffs & Discharges", "Job Openings Rate", "Hires Rate", "Industry Layoffs & Discharges"]);
-assign("bls-ces", ["Payroll Growth", "Industry Payroll Contraction", "Regional Employment Growth"]);
-assign("bls-bed", ["Closing Establishment Losses", "Establishment Closures", "Establishment Contractions", "Establishment Deaths", "Establishment Death / Closure Losses", "Industry Gross Job Losses"]);
-assign("census-bfs", ["Business Formations"]);
+assign("bls-ces", ["Total Nonfarm Payroll Change", "Industry Payroll Contraction", "Payroll Contraction Breadth", "State-Level Payroll Growth Breadth"]);
+assign("bls-bed", ["Closing Establishment Losses", "Establishment Closures", "Establishment Contractions", "Establishment Deaths", "Jobs Lost at Establishment Deaths", "Establishment Death / Closure Losses", "Industry Gross Job Losses"]);
+assign("census-bfs", ["Business Formations Within 4 Quarters"]);
 assign("census-bds", ["Business Formation / Dynamism", "Firm Age / Size", "Firm Age / Size Vulnerability", "Firm Deaths", "Firm Death / Shutdown Stress"]);
 assign("fed-h15", ["Interest Rates", "Borrowing Costs"]);
 assign("fed-sloos", ["C&I Credit Conditions", "C&I Lending Standards", "C&I Loan Demand", "Industry Credit Conditions"]);
 assign("bls-productivity", ["Productivity / Automation", "Industry Unit Labor Costs"]);
 assign("bls-ppi", ["Input Costs", "Producer Input Costs", "Producer Input Prices", "Industry Input Prices"]);
 assign("census-trade", ["Import / Trade Pressure", "Trade / Import Pressure", "Import Exposure", "Trade / External Shock"]);
-assign("uscourts-f2", ["Business Bankruptcy Filings", "Business Bankruptcy Stress", "Business Failure / Bankruptcy Stress", "Business Failure Stress"]);
+assign("uscourts-f2", ["Business Bankruptcy Filings", "Business Bankruptcy Stress", "Business Bankruptcy Filings, 12-Month Total", "Business Failure / Bankruptcy Stress", "Business Failure Stress"]);
 assign("bea-industry", ["Industry Output"]);
 assign("census-economic", ["New Orders", "Inventory / Sales Balance", "Inventory / Sales Imbalance", "Inventory / Sales Ratio", "Sales / Revenue", "Sales / Revenue Growth", "Industry Sales / Shipments", "Industry New Orders"]);
-assign("bea-nipa", ["Real Output Growth", "Consumer Demand", "Consumer Spending", "Corporate Profits", "Corporate Profitability"]);
+assign("bea-nipa", ["Real GDP Growth", "Consumer Demand", "Real Personal Consumption Expenditures Growth", "Consumer Spending", "Corporate Profits", "Corporate Profitability"]);
+assign("fema-openfema", ["FEMA Disaster Declaration"]);
 assign("fed-g17", ["Industry Capacity Utilization"]);
 assign("eia-open", ["Energy / Input Shock"]);
 assign("design-required", ["Consumer Sentiment", "Hiring Plans", "Vacancy Duration", "Recruiting Intensity", "Labor Demand Breadth", "Mass Layoff Signals", "Investment Intentions", "Corporate Bond Spreads", "Mortgage Rates", "Skills Availability", "Geopolitical Risk"]);

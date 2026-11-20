@@ -8,6 +8,8 @@
   },
   "scripts": {
     "dev": "vite --host 0.0.0.0",
+    "dev:layoffs-qa": "vite --host 127.0.0.1 --port 4173 --strictPort",
+    "dev:orientation-qa": "vite --host 127.0.0.1 --port 4173 --strictPort",
     "dev:phase4b": "vite --host 127.0.0.1 --port 4174 --strictPort",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",

@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "layoffs-fema-source-1.0.0",
+  "publicationStatus": "EVENT_SOURCE_IDENTIFIED_PENDING_ACCEPTANCE",
+  "sources": [
+    {
+      "sourceId": "fema-openfema",
+      "publisher": "Federal Emergency Management Agency",
+      "product": "OpenFEMA Disaster Declarations Summaries v2",
+      "endpoint": "https://www.fema.gov/api/open/v2/DisasterDeclarationsSummaries",
+      "evidenceUrl": "https://www.fema.gov/about/openfema/data-sets#disaster-declarations-summaries-v2",
+      "methodologyUrl": "https://www.fema.gov/about/openfema/api",
+      "rightsUrl": "https://www.fema.gov/about/openfema/terms-conditions",
+      "rightsPolicy": "PENDING_REPOSITORY_RIGHTS_ACCEPTANCE",
+      "cadence": "event driven with source updates",
+      "expectedReleasePolicy": "evaluate every four hours; persist only content-addressed changed records",
+      "revisionBehavior": "same OpenFEMA record id may update; retain every artifact hash and lastRefresh value",
+      "selectorStatus": "VERIFIED_DATASET_AND_FIELDS",
+      "datasetSelector": "DisasterDeclarationsSummaries-v2",
+      "canonicalFactorId": "factor:canonical:fema-disaster-declaration",
+      "eventIdentity": "femaDeclarationString with source-native record id for designated-geography rows",
+      "requiredFields": [
+        "femaDeclarationString",
+        "disasterNumber",
+        "state",
+        "declarationType",
+        "declarationDate",
+        "incidentType",
+        "declarationTitle",
+        "incidentBeginDate",
+        "designatedArea",
+        "lastRefresh",
+        "hash",
+        "id"
+      ],
+      "optionalFields": ["incidentEndDate", "disasterCloseoutDate", "fipsStateCode", "fipsCountyCode", "placeCode", "incidentId", "region"],
+      "relationshipBoundary": "EVENT_ONLY_NOT_ECONOMIC_LOSS_NOT_CLAIMS_IMPACT_NOT_EMPLOYMENT_IMPACT_NOT_CAUSAL",
+      "blockedReason": "Parser and exact event schema are implemented; repository rights acceptance and immutable event-history activation remain pending."
+    }
+  ]
+}

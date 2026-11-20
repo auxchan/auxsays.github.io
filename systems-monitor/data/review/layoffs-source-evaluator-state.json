@@ -15,10 +15,10 @@
       "reasonCode": "MISSING_AUXSAYS_BEA_USER_ID"
     },
     "bls-bed": {
-      "activationState": "SOURCE_IDENTIFIED",
+      "activationState": "ACCEPTED",
       "health": "disabled",
       "lastAttemptAt": null,
-      "reasonCode": "NETWORK_DISABLED_REVIEW_BUILD"
+      "reasonCode": "ACCEPTED_HISTORY_AVAILABLE_NETWORK_DISABLED_REVIEW_BUILD"
     },
     "bls-ces": {
       "activationState": "SOURCE_IDENTIFIED",
@@ -27,16 +27,16 @@
       "reasonCode": "NETWORK_DISABLED_REVIEW_BUILD"
     },
     "bls-cps": {
-      "activationState": "SOURCE_IDENTIFIED",
+      "activationState": "ACCEPTED",
       "health": "disabled",
       "lastAttemptAt": null,
-      "reasonCode": "NETWORK_DISABLED_REVIEW_BUILD"
+      "reasonCode": "ACCEPTED_HISTORY_AVAILABLE_NETWORK_DISABLED_REVIEW_BUILD"
     },
     "bls-jolts": {
-      "activationState": "SOURCE_IDENTIFIED",
+      "activationState": "ACCEPTED",
       "health": "disabled",
       "lastAttemptAt": null,
-      "reasonCode": "NETWORK_DISABLED_REVIEW_BUILD"
+      "reasonCode": "ACCEPTED_HISTORY_AVAILABLE_NETWORK_DISABLED_REVIEW_BUILD"
     },
     "census-bds": {
       "activationState": "BLOCKED",
@@ -97,6 +97,12 @@
       "health": "disabled",
       "lastAttemptAt": null,
       "reasonCode": "NETWORK_DISABLED_REVIEW_BUILD"
+    },
+    "fema-openfema": {
+      "activationState": "SOURCE_IDENTIFIED",
+      "health": "disabled",
+      "lastAttemptAt": "2026-09-29T17:02:31Z",
+      "reasonCode": "EVENT_SCHEMA_VERIFIED_ACCEPTANCE_PENDING"
     },
     "uscourts-f2": {
       "activationState": "SOURCE_IDENTIFIED",

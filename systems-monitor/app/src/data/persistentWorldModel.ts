@@ -168,7 +168,7 @@ export function createPersistentWorld(): PersistentWorldReadModel {
         const layoffsCandidate = layoffsGroup?.placements[level3Index];
         const l3FactorId = layoffsCandidate?.canonicalFactorId ?? `fixture-factor:${driver.id}:${String(level2Index + 1).padStart(2, "0")}:${String(level3Index + 1).padStart(2, "0")}`;
         const l3PlacementId = layoffsCandidate
-          ? `placement:${driver.id}:${layoffsGroup.id}:${slug(layoffsCandidate.label)}`
+          ? `placement:${driver.id}:${layoffsGroup.id}:${layoffsCandidate.placementSlug}`
           : `fixture-placement:${driver.id}:${String(level2Index + 1).padStart(2, "0")}:${String(level3Index + 1).padStart(2, "0")}`;
         if (layoffsCandidate) {
           factors[l3FactorId] ??= { id: l3FactorId, label: layoffsCanonicalLabel(layoffsCandidate.label), definition: `${layoffsCandidate.label} is a reviewed candidate placement within the Layoffs & Job Destruction branch. Hierarchy placement alone does not assert causality or factual acceptance.`, sourceFamily: layoffsGroup.sourceFamily, evidencePosture: "CANDIDATE" };

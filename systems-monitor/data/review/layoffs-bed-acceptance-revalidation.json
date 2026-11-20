@@ -1,0 +1,352 @@
+{
+  "activationEffect": "NONE",
+  "authority": "NONE",
+  "bySeries": [
+    {
+      "blockReasons": [],
+      "blocked": 0,
+      "candidateRows": 19,
+      "canonicalFactorId": "factor:canonical:layoffs-and-discharges",
+      "contingent": 0,
+      "currentVintageCapability": "LEVEL_0",
+      "decisionReadyIfTaylorApproves": 19,
+      "descriptiveHistoryCandidates": 19,
+      "descriptiveHistoryCandidatesAfterPreconditions": 19,
+      "forecastVintageEligible": 0,
+      "officialVintageCeiling": "LEVEL_2",
+      "rejected": 0,
+      "ruleId": "PROPOSED_JOLTS_LDL_V1",
+      "sourceId": "bls-jolts",
+      "sourceSeriesId": "JTS000000000000000LDL"
+    },
+    {
+      "blockReasons": [],
+      "blocked": 0,
+      "candidateRows": 19,
+      "canonicalFactorId": "factor:canonical:layoffs-and-discharges",
+      "contingent": 0,
+      "currentVintageCapability": "LEVEL_0",
+      "decisionReadyIfTaylorApproves": 19,
+      "descriptiveHistoryCandidates": 19,
+      "descriptiveHistoryCandidatesAfterPreconditions": 19,
+      "forecastVintageEligible": 0,
+      "officialVintageCeiling": "LEVEL_2",
+      "rejected": 0,
+      "ruleId": "PROPOSED_JOLTS_LDR_V1",
+      "sourceId": "bls-jolts",
+      "sourceSeriesId": "JTS000000000000000LDR"
+    },
+    {
+      "blockReasons": [],
+      "blocked": 0,
+      "candidateRows": 19,
+      "canonicalFactorId": "factor:canonical:job-openings-rate",
+      "contingent": 0,
+      "currentVintageCapability": "LEVEL_0",
+      "decisionReadyIfTaylorApproves": 19,
+      "descriptiveHistoryCandidates": 19,
+      "descriptiveHistoryCandidatesAfterPreconditions": 19,
+      "forecastVintageEligible": 0,
+      "officialVintageCeiling": "LEVEL_2",
+      "rejected": 0,
+      "ruleId": "PROPOSED_JOLTS_JOR_V1",
+      "sourceId": "bls-jolts",
+      "sourceSeriesId": "JTS000000000000000JOR"
+    },
+    {
+      "blockReasons": [],
+      "blocked": 0,
+      "candidateRows": 19,
+      "canonicalFactorId": "factor:canonical:hires-rate",
+      "contingent": 0,
+      "currentVintageCapability": "LEVEL_0",
+      "decisionReadyIfTaylorApproves": 19,
+      "descriptiveHistoryCandidates": 19,
+      "descriptiveHistoryCandidatesAfterPreconditions": 19,
+      "forecastVintageEligible": 0,
+      "officialVintageCeiling": "LEVEL_2",
+      "rejected": 0,
+      "ruleId": "PROPOSED_JOLTS_HIR_V1",
+      "sourceId": "bls-jolts",
+      "sourceSeriesId": "JTS000000000000000HIR"
+    },
+    {
+      "blockReasons": [],
+      "blocked": 0,
+      "candidateRows": 19,
+      "canonicalFactorId": "factor:canonical:permanent-job-losers",
+      "contingent": 0,
+      "currentVintageCapability": "LEVEL_0",
+      "decisionReadyIfTaylorApproves": 19,
+      "descriptiveHistoryCandidates": 19,
+      "descriptiveHistoryCandidatesAfterPreconditions": 19,
+      "forecastVintageEligible": 0,
+      "officialVintageCeiling": "LEVEL_2",
+      "rejected": 0,
+      "ruleId": "PROPOSED_CPS_PERMANENT_LOSERS_V1",
+      "sourceId": "bls-cps",
+      "sourceSeriesId": "LNS13026638"
+    },
+    {
+      "blockReasons": [],
+      "blocked": 0,
+      "candidateRows": 19,
+      "canonicalFactorId": "factor:canonical:temporary-layoffs",
+      "contingent": 0,
+      "currentVintageCapability": "LEVEL_0",
+      "decisionReadyIfTaylorApproves": 19,
+      "descriptiveHistoryCandidates": 19,
+      "descriptiveHistoryCandidatesAfterPreconditions": 19,
+      "forecastVintageEligible": 0,
+      "officialVintageCeiling": "LEVEL_2",
+      "rejected": 0,
+      "ruleId": "PROPOSED_CPS_TEMPORARY_LAYOFFS_V1",
+      "sourceId": "bls-cps",
+      "sourceSeriesId": "LNS13023653"
+    },
+    {
+      "blockReasons": [],
+      "blocked": 0,
+      "candidateRows": 20,
+      "canonicalFactorId": "factor:canonical:average-weekly-hours",
+      "contingent": 0,
+      "currentVintageCapability": "LEVEL_0",
+      "decisionReadyIfTaylorApproves": 20,
+      "descriptiveHistoryCandidates": 20,
+      "descriptiveHistoryCandidatesAfterPreconditions": 20,
+      "forecastVintageEligible": 0,
+      "officialVintageCeiling": "LEVEL_2",
+      "rejected": 0,
+      "ruleId": "PROPOSED_CES_AVERAGE_WEEKLY_HOURS_V1",
+      "sourceId": "bls-ces",
+      "sourceSeriesId": "CES0500000002"
+    },
+    {
+      "blockReasons": [],
+      "blocked": 0,
+      "candidateRows": 20,
+      "canonicalFactorId": "factor:canonical:temporary-help-employment",
+      "contingent": 0,
+      "currentVintageCapability": "LEVEL_0",
+      "decisionReadyIfTaylorApproves": 20,
+      "descriptiveHistoryCandidates": 20,
+      "descriptiveHistoryCandidatesAfterPreconditions": 20,
+      "forecastVintageEligible": 0,
+      "officialVintageCeiling": "LEVEL_2",
+      "rejected": 0,
+      "ruleId": "PROPOSED_CES_TEMP_HELP_V1",
+      "sourceId": "bls-ces",
+      "sourceSeriesId": "CES6056132001"
+    },
+    {
+      "blockReasons": [],
+      "blocked": 0,
+      "candidateRows": 4,
+      "canonicalFactorId": "factor:canonical:gross-job-losses",
+      "contingent": 0,
+      "currentVintageCapability": "LEVEL_0",
+      "decisionReadyIfTaylorApproves": 4,
+      "descriptiveHistoryCandidates": 4,
+      "descriptiveHistoryCandidatesAfterPreconditions": 4,
+      "forecastVintageEligible": 0,
+      "officialVintageCeiling": "LEVEL_2",
+      "rejected": 0,
+      "ruleId": "PROPOSED_BED_GROSS_JOB_LOSSES_V1",
+      "sourceId": "bls-bed",
+      "sourceSeriesId": "BDS0000000000000000110004LQ5"
+    },
+    {
+      "blockReasons": [],
+      "blocked": 0,
+      "candidateRows": 4,
+      "canonicalFactorId": "factor:canonical:establishment-contractions",
+      "contingent": 0,
+      "currentVintageCapability": "LEVEL_0",
+      "decisionReadyIfTaylorApproves": 4,
+      "descriptiveHistoryCandidates": 4,
+      "descriptiveHistoryCandidatesAfterPreconditions": 4,
+      "forecastVintageEligible": 0,
+      "officialVintageCeiling": "LEVEL_2",
+      "rejected": 0,
+      "ruleId": "PROPOSED_BED_CONTRACTIONS_V1",
+      "sourceId": "bls-bed",
+      "sourceSeriesId": "BDS0000000000000000110005LQ5"
+    },
+    {
+      "blockReasons": [],
+      "blocked": 0,
+      "candidateRows": 4,
+      "canonicalFactorId": "factor:canonical:establishment-closures",
+      "contingent": 0,
+      "currentVintageCapability": "LEVEL_0",
+      "decisionReadyIfTaylorApproves": 4,
+      "descriptiveHistoryCandidates": 4,
+      "descriptiveHistoryCandidatesAfterPreconditions": 4,
+      "forecastVintageEligible": 0,
+      "officialVintageCeiling": "LEVEL_2",
+      "rejected": 0,
+      "ruleId": "PROPOSED_BED_CLOSURES_V1",
+      "sourceId": "bls-bed",
+      "sourceSeriesId": "BDS0000000000000000110006LQ5"
+    },
+    {
+      "blockReasons": [],
+      "blocked": 0,
+      "candidateRows": 1,
+      "canonicalFactorId": "factor:canonical:establishment-deaths",
+      "contingent": 0,
+      "currentVintageCapability": "LEVEL_0",
+      "decisionReadyIfTaylorApproves": 1,
+      "descriptiveHistoryCandidates": 1,
+      "descriptiveHistoryCandidatesAfterPreconditions": 1,
+      "forecastVintageEligible": 0,
+      "officialVintageCeiling": "LEVEL_2_PARTIAL",
+      "rejected": 0,
+      "ruleId": "PROPOSED_BED_DEATHS_V1",
+      "sourceId": "bls-bed",
+      "sourceSeriesId": "BDS0000000000000000110008LQ5"
+    },
+    {
+      "blockReasons": [
+        "PARSER_VERSION_MISMATCH"
+      ],
+      "blocked": 2,
+      "candidateRows": 2,
+      "canonicalFactorId": "factor:canonical:initial-claims",
+      "contingent": 0,
+      "currentVintageCapability": "LEVEL_0",
+      "decisionReadyIfTaylorApproves": 0,
+      "descriptiveHistoryCandidates": 0,
+      "descriptiveHistoryCandidatesAfterPreconditions": 0,
+      "forecastVintageEligible": 0,
+      "officialVintageCeiling": "LEVEL_2",
+      "rejected": 0,
+      "ruleId": "PROPOSED_DOL_INITIAL_CLAIMS_V1",
+      "sourceId": "dol-ui-claims",
+      "sourceSeriesId": "DOL-UI-SA-INITIAL"
+    }
+  ],
+  "counts": {
+    "acceptedObservationsWritten": 0,
+    "ambiguousMatches": 0,
+    "blockedWithinProposedScope": 2,
+    "comparableHistoryReadySeries": 11,
+    "comparableHistoryReadySeriesAfterPreconditions": 11,
+    "constraintRejectedWithinProposedScope": 0,
+    "contingentWithinProposedScope": 0,
+    "decisionReadyIfTaylorApproves": 167,
+    "decisionReadySeries": 12,
+    "descriptiveHistoryCandidates": 167,
+    "descriptiveHistoryCandidatesAfterPreconditions": 167,
+    "descriptiveSeriesAfterPreconditions": 12,
+    "forecastVintageEligible": 0,
+    "forecastVintageIneligible": 167,
+    "invalidCandidates": 0,
+    "outsideProposedScope": 82,
+    "rejectedOrHeldByCurrentPreconditions": 2,
+    "structuralMatches": 169,
+    "structurallyComparableSeriesIfAllBlockersResolve": 12
+  },
+  "decisionBoundary": "This simulation is calibration evidence only. It does not modify history_acceptance.json, add acceptedTime, publish history, or authorize routine promotion.",
+  "forecastLeakageBoundary": {
+    "currentBatchClass": "CURRENT_REVISED_HISTORY",
+    "forecastUse": "FORBIDDEN",
+    "note": "Official archive capability is not row-level vintage evidence. Every forecast-as-of observation must independently satisfy the archived-artifact contract.",
+    "requiredEligibleClasses": [
+      "ORIGINAL_RELEASE_VALUE",
+      "VINTAGE_RECONSTRUCTED"
+    ]
+  },
+  "input": {
+    "batchCandidates": 251,
+    "batchPayloadSha256": "e55ab8778f29ae71f51b2fb81d521d225d570328b6d0ec8398c7d4bcd0b8f9c8",
+    "batchRunId": "e20ed439-829d-460b-930f-33891511a504",
+    "batchSchemaVersion": "layoffs-source-candidate-batch-1.0.0",
+    "proposalRules": 13,
+    "sourceDiagnostics": {
+      "blsSkippedMissingValues": 5,
+      "dolAcquisitionMethods": {
+        "officialArchive": {
+          "status": "NOT_NEEDED"
+        },
+        "officialReleaseFallback": {
+          "newestObservationPeriod": "2026-09-05",
+          "parserVersion": "layoffs-dol-official-release-html-v1",
+          "publicationTime": "2026-09-10T12:00:00Z",
+          "rawSha256": "102cc80787e6414234050575a419796c4274c0da02f032588d7cc4a409d64c72",
+          "releaseIdentity": "DOL-UI-official-release-2026-09-10-7314993617bd531c",
+          "retrievedTime": "2026-09-15T00:23:21.974814Z",
+          "status": "CURRENT",
+          "url": "https://content.govdelivery.com/accounts/USDOL/bulletins/4299777"
+        },
+        "primaryXml": {
+          "newestObservationPeriod": "2026-08-15",
+          "parserVersion": "layoffs-dol-national-xml-v1",
+          "rawSha256": "1b625041f0d0fd8397a231e50dd67827f579965a4015d5ada362412f82aaf178",
+          "releaseIdentity": "DOL-UI-r539cyNational-data-through-2026-08-15-570af63c965d17a2",
+          "retrievedTime": "2026-09-15T00:23:21.831622Z",
+          "status": "STALE",
+          "url": "https://oui.doleta.gov/unemploy/wkclaims/report.asp"
+        }
+      },
+      "dolAcquisitionOverallStatus": "SUCCESS_WITH_PRIMARY_STALE",
+      "dolFreshness": {
+        "newestObservationPeriod": "2026-09-05",
+        "observationAgeHours": 240.389,
+        "retrievedTime": "2026-09-15T00:23:21.974814Z",
+        "staleAfterHours": 336,
+        "status": "CURRENT"
+      },
+      "dolPrimaryFreshness": {
+        "newestObservationPeriod": "2026-08-15",
+        "observationAgeHours": 744.389,
+        "retrievedTime": "2026-09-15T00:23:21.831622Z",
+        "staleAfterHours": 336,
+        "status": "STALE"
+      },
+      "dolReportRunDate": "2026-09-15",
+      "dolSkippedMissingValues": 57,
+      "dolSourceReleaseMarker": "DOL-UI-official-release-2026-09-10-7314993617bd531c"
+    }
+  },
+  "outsideProposedScope": [
+    {
+      "candidateRows": 4,
+      "sourceId": "bls-bed",
+      "sourceSeriesId": "BDS0000000000000000110001LQ5"
+    },
+    {
+      "candidateRows": 4,
+      "sourceId": "bls-bed",
+      "sourceSeriesId": "BDS0000000000000000110002LQ5"
+    },
+    {
+      "candidateRows": 4,
+      "sourceId": "bls-bed",
+      "sourceSeriesId": "BDS0000000000000000110003LQ5"
+    },
+    {
+      "candidateRows": 4,
+      "sourceId": "bls-bed",
+      "sourceSeriesId": "BDS0000000000000000110007LQ5"
+    },
+    {
+      "candidateRows": 33,
+      "sourceId": "dol-ui-claims",
+      "sourceSeriesId": "DOL-UI-SA-CONTINUED"
+    },
+    {
+      "candidateRows": 33,
+      "sourceId": "dol-ui-claims",
+      "sourceSeriesId": "DOL-UI-SA-IUR"
+    }
+  ],
+  "reasonCounts": {
+    "EXACT_ARCHIVE_VINTAGE_EVIDENCE_ABSENT": 167,
+    "PARSER_VERSION_MISMATCH": 2
+  },
+  "reportSha256": "9d4caf172f1266dc2622e9ddaf8d366843f30d1d599d1a31d69d697ba603817d",
+  "schemaVersion": "layoffs-acceptance-simulation-1.0.0",
+  "simulatedAt": "2026-09-15T00:23:22.008152Z",
+  "validationFailures": []
+}

@@ -22,6 +22,7 @@
     {"sourceId": "fed-g17", "cadence": "monthly", "minimumIntervalHours": 120, "graceHours": 24, "credentialEnv": null},
     {"sourceId": "fed-h15", "cadence": "daily", "minimumIntervalHours": 20, "graceHours": 8, "credentialEnv": null},
     {"sourceId": "fed-sloos", "cadence": "quarterly", "minimumIntervalHours": 672, "graceHours": 72, "credentialEnv": null},
-    {"sourceId": "uscourts-f2", "cadence": "quarterly", "minimumIntervalHours": 672, "graceHours": 72, "credentialEnv": null}
+    {"sourceId": "uscourts-f2", "cadence": "quarterly", "minimumIntervalHours": 672, "graceHours": 72, "credentialEnv": null},
+    {"sourceId": "fema-openfema", "cadence": "event_driven", "minimumIntervalHours": 4, "graceHours": 4, "credentialEnv": null}
   ]
 }

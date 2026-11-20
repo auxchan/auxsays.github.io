@@ -1,0 +1,81 @@
+{
+  "schemaVersion": "payroll-contraction-breadth-methodology-1.0.0",
+  "authority": "TAYLOR_PAYROLL_CONTRACTION_BREADTH_METHOD_APPROVAL_2026_10_01",
+  "status": "METHOD_APPROVED_INPUT_HISTORY_PENDING",
+  "canonicalFactorId": "factor:canonical:payroll-contraction-breadth",
+  "claimClass": "B_GOVERNED_CALC",
+  "methodologyVersion": "PAYROLL_CONTRACTION_BREADTH_V1",
+  "universeVersion": "CES_PRIVATE_SUPERSECTORS_V1",
+  "effectiveDecisionDate": "2026-10-01",
+  "interpretation": "Percentage of the governed ten-supersector private-industry universe whose payroll employment declined from the previous compatible month.",
+  "formula": "100 * count(i in U_v where E_i,t < E_i,t-1) / 10",
+  "contractionDefinition": "STRICTLY_LOWER_THAN_PREVIOUS_COMPATIBLE_MONTH",
+  "flatValueTreatment": "NOT_CONTRACTION",
+  "inputContract": {
+    "publisher": "U.S. Bureau of Labor Statistics",
+    "program": "Current Employment Statistics",
+    "geography": "US_NATIONAL",
+    "industryScope": "PRIVATE_INDUSTRY",
+    "measure": "ALL_EMPLOYEES_THOUSANDS",
+    "seasonalAdjustment": "SEASONALLY_ADJUSTED",
+    "frequency": "MONTHLY",
+    "historyClass": "CURRENT_REVISED_HISTORY",
+    "forecastVintageEligible": false,
+    "comparison": "PREVIOUS_COMPATIBLE_MONTH"
+  },
+  "coveragePolicy": {
+    "requiredPercent": 100,
+    "requiredMemberCount": 10,
+    "denominator": 10,
+    "onMissingInvalidIncompatibleOrUnavailableInput": "SUPPRESS_CALCULATION_EXPLICIT_INCOMPLETE_INPUT_STATE",
+    "denominatorMayShrink": false,
+    "interpolationAllowed": false,
+    "carryForwardAllowed": false
+  },
+  "universe": {
+    "option": "OPTION_A",
+    "memberCount": 10,
+    "mutuallyExclusive": true,
+    "nonOverlapping": true,
+    "mixedParentChildAggregates": false,
+    "members": [
+      {"seriesId": "CES1000000001", "label": "Mining and logging", "exclusivePartition": "10", "geography": "US_NATIONAL", "industryScope": "PRIVATE_INDUSTRY", "measure": "ALL_EMPLOYEES_THOUSANDS", "seasonalAdjustment": "SEASONALLY_ADJUSTED"},
+      {"seriesId": "CES2000000001", "label": "Construction", "exclusivePartition": "20", "geography": "US_NATIONAL", "industryScope": "PRIVATE_INDUSTRY", "measure": "ALL_EMPLOYEES_THOUSANDS", "seasonalAdjustment": "SEASONALLY_ADJUSTED"},
+      {"seriesId": "CES3000000001", "label": "Manufacturing", "exclusivePartition": "30", "geography": "US_NATIONAL", "industryScope": "PRIVATE_INDUSTRY", "measure": "ALL_EMPLOYEES_THOUSANDS", "seasonalAdjustment": "SEASONALLY_ADJUSTED"},
+      {"seriesId": "CES4000000001", "label": "Trade, transportation, and utilities", "exclusivePartition": "40", "geography": "US_NATIONAL", "industryScope": "PRIVATE_INDUSTRY", "measure": "ALL_EMPLOYEES_THOUSANDS", "seasonalAdjustment": "SEASONALLY_ADJUSTED"},
+      {"seriesId": "CES5000000001", "label": "Information", "exclusivePartition": "50", "geography": "US_NATIONAL", "industryScope": "PRIVATE_INDUSTRY", "measure": "ALL_EMPLOYEES_THOUSANDS", "seasonalAdjustment": "SEASONALLY_ADJUSTED"},
+      {"seriesId": "CES5500000001", "label": "Financial activities", "exclusivePartition": "55", "geography": "US_NATIONAL", "industryScope": "PRIVATE_INDUSTRY", "measure": "ALL_EMPLOYEES_THOUSANDS", "seasonalAdjustment": "SEASONALLY_ADJUSTED"},
+      {"seriesId": "CES6000000001", "label": "Professional and business services", "exclusivePartition": "60", "geography": "US_NATIONAL", "industryScope": "PRIVATE_INDUSTRY", "measure": "ALL_EMPLOYEES_THOUSANDS", "seasonalAdjustment": "SEASONALLY_ADJUSTED"},
+      {"seriesId": "CES6500000001", "label": "Private education and health services", "exclusivePartition": "65", "geography": "US_NATIONAL", "industryScope": "PRIVATE_INDUSTRY", "measure": "ALL_EMPLOYEES_THOUSANDS", "seasonalAdjustment": "SEASONALLY_ADJUSTED"},
+      {"seriesId": "CES7000000001", "label": "Leisure and hospitality", "exclusivePartition": "70", "geography": "US_NATIONAL", "industryScope": "PRIVATE_INDUSTRY", "measure": "ALL_EMPLOYEES_THOUSANDS", "seasonalAdjustment": "SEASONALLY_ADJUSTED"},
+      {"seriesId": "CES8000000001", "label": "Other services", "exclusivePartition": "80", "geography": "US_NATIONAL", "industryScope": "PRIVATE_INDUSTRY", "measure": "ALL_EMPLOYEES_THOUSANDS", "seasonalAdjustment": "SEASONALLY_ADJUSTED"}
+    ]
+  },
+  "versioningPolicy": {
+    "requiresNewMethodologyVersion": ["universe membership", "CES selector", "contraction definition", "seasonal-adjustment policy", "denominator policy", "missing-input policy", "formula"],
+    "silentHistoricalRewriteAllowed": false
+  },
+  "calibrationEvidence": {
+    "artifact": "payroll_contraction_breadth_calibration.json",
+    "window": "2016-01 through 2025-12",
+    "productionHistoryStatus": "CALIBRATION_ONLY_NOT_ACCEPTED_NOT_PUBLISHABLE"
+  },
+  "productionState": {
+    "acceptedCesInputSeries": 0,
+    "acceptedCesInputHistoryDepth": 0,
+    "calculatedHistoryDepth": 0,
+    "latestAcceptedValue": null,
+    "latestAcceptedPeriod": null,
+    "blocker": "Accepted production CES input history is unavailable for all ten governed series; calculation remains suppressed until immutable accepted observations for t and t-1 exist for 10 of 10 compatible series."
+  },
+  "calculationOutputContract": {
+    "historyClass": "CURRENT_REVISED_HISTORY",
+    "forecastVintageEligible": false,
+    "requiredProvenance": ["methodologyVersion", "universeVersion", "ten exact CES series", "input observation identities", "input periods", "input revision state"],
+    "revisionPolicy": "Recalculate affected periods from newly accepted revisions and append immutable calculation evidence; never silently overwrite prior accepted calculation evidence."
+  },
+  "publicLanguage": {
+    "template": "X% of tracked private-industry supersectors contracted payrolls from the previous month.",
+    "prohibitedInterpretations": ["layoffs are spreading", "deterioration", "recession signal", "weakness", "adverse", "material", "claims will rise", "predictive signal"]
+  }
+}

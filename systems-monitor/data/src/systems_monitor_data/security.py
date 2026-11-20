@@ -4,8 +4,16 @@ import ipaddress
 import socket
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
-ALLOWED_HOSTS = {"api.bls.gov", "www.dol.gov", "oui.doleta.gov", "apps.bea.gov", "ir.eia.gov"}
+ALLOWED_HOSTS = {
+    "api.bls.gov",
+    "www.dol.gov",
+    "oui.doleta.gov",
+    "content.govdelivery.com",
+    "apps.bea.gov",
+    "ir.eia.gov",
+}
 SECRET_KEYS = {"registrationkey", "userid", "user_id", "api_key", "apikey", "token", "key", "authorization"}
+HOST_PATH_PREFIXES = {"content.govdelivery.com": ("/accounts/USDOL/bulletins/",)}
 
 
 def sanitize_url(url: str) -> str:
@@ -25,6 +33,9 @@ def validate_url(url: str, resolver=socket.getaddrinfo) -> str:
     hostname = (parts.hostname or "").lower().rstrip(".")
     if hostname not in ALLOWED_HOSTS:
         raise ValueError("host is not allowlisted")
+    allowed_prefixes = HOST_PATH_PREFIXES.get(hostname)
+    if allowed_prefixes and not any(parts.path.startswith(prefix) for prefix in allowed_prefixes):
+        raise ValueError("path is outside the allowlisted official-source scope")
     addresses = {result[4][0] for result in resolver(hostname, 443, type=socket.SOCK_STREAM)}
     if not addresses:
         raise ValueError("host did not resolve")

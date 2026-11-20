@@ -1,7 +1,10 @@
 import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
 import { SnapshotProvider } from "../src/app/SnapshotContext";
 import { SystemsMonitorApp } from "../src/app/SystemsMonitorApp";
+
+// Compile the lazy view before assertions; cold module transforms are not UI latency.
+beforeAll(async () => { await import("../src/views/summary/SummaryView"); });
 
 function renderApp(search = "") {
   window.history.replaceState(null, "", `/systems-monitor/${search}`);
