@@ -365,9 +365,9 @@ Page states, frozen before the change at 2026-11-20T08:00Z. The migration alone 
 STALE, 20 MONITORING DEGRADED, 3 COLLECTION BLOCKED). After the collector's first pass, the 100 stay STALE, the 20
 become INSUFFICIENT COVERAGE and the 3 become MONITORING DEGRADED. None reads healthy, and the product-level community
 state stays "operating". On archived pages the two method lines now read "Method disabled" instead of "Source request was
-blocked", with their old dates. The sentence "Some community sources were unavailable during the last check" leaves 7
-archived counted records at the next scoped DaVinci promotion and 20 current ones after the first pass. 21.1.1 keeps
-it while its Creative COW row is partial.
+blocked", with their old dates. The stored record sentence "Some community sources were unavailable during the last
+check" (`evidence_source_limitations`, which no page renders) leaves 7 archived counted records at the next scoped
+DaVinci promotion and 20 current ones after the first pass. 21.1.1 keeps it while its Creative COW row is partial.
 
 Tests: `test_davinci_refused_methods_disabled.py` (46), `test_powerpoint_hydration_cap_telemetry.py` (20).
 `test_reddit_access_policy.py` D.7 now checks the watchlist adapter itself for the Reddit skip.
