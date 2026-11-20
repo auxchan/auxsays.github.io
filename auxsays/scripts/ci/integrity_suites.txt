@@ -486,7 +486,11 @@ auxsays/scripts/tests/test_nvidia_driver_lookup.py = 137
 # state file with their reason through repeated exhausted cycles (unlisted, never read, title-less seed included),
 # are read longest-waiting first under the unchanged ceilings, and end with exactly one unconstrained cycle's rows
 # and decisions (9 counted, none twice); invalidation reasons, the prune, queue telemetry, seeds read by any path.
-auxsays/scripts/tests/test_nvidia_forum_evidence.py = 204
+# AUX-115 (GPT G62 R1): a queued thread's own failure cannot stop collection for every thread: a confirmed
+# success:false or a 404/410 quarantines it while the same cycle reads and counts the others; 401/403/451 suspend
+# the method and quarantine it, 429 keeps it queued; 5xx, timeouts, other shapes and redirects keep it queued
+# without a stop; listed threads and unread seeds keep their stops; quarantine is never pruned; the release path.
+auxsays/scripts/tests/test_nvidia_forum_evidence.py = 225
 auxsays/scripts/tests/test_powerpoint_multibuild_ingestion.py = 167
 auxsays/scripts/tests/test_powerpoint_realpath_identity.py = 40
 auxsays/scripts/tests/test_powerpoint_write_path_safety.py = 68

@@ -41,11 +41,21 @@ WHAT THIS PROVES, IN ORDER.
      state file with their reason through three exhausted cycles, while no longer listed and with
      no last activity; later cycles read them longest-waiting first under the unchanged ceilings,
      and the store ends with exactly the rows and decisions of one unconstrained cycle (9 counted,
-     none twice, none credited twice). A read or unchanged thread leaves the queue; a thread gone
-     (404), one whose title names no tracked version and one with no record left leave with their
-     reason recorded; a failed read stays owed at the end of the queue; a targeted run and a stop
-     keep the queue; the prune keeps owed and never-read entries; queue depth and oldest age are
-     in every health note and the runtime event; a seed read through the listing is recorded.
+     none twice, none credited twice). A read or unchanged thread leaves the queue; a thread whose
+     topic view answers 404 is quarantined (thread_unreadable); one whose title names no tracked
+     version and one with no record left leave with their reason recorded; a failed read stays owed
+     at the end of the queue; a targeted run and a stop keep the queue; the prune keeps owed and
+     never-read entries; queue depth and oldest age are in every health note and the runtime event;
+     a seed read through the listing is recorded.
+  QS A queued thread's own failure cannot stop collection for every thread (GPT G62 R1). A queued,
+     unlisted user topic answering success:false is quarantined while the SAME cycle reads and counts
+     the others (9 counted); it is never selected again (not even listed), never pruned or
+     invalidated, and only a reviewed change releases it, after which the store equals one
+     unconstrained cycle's. HTTP 401/403/451 (and an HTML page) suspend the method as before and
+     quarantine the refused thread, which is not asked again once the refusal is cleared; a 429 keeps
+     it queued. A 5xx, a timeout, another shape, a redirect and an unconfirmed success:false keep it
+     queued for three cycles running without a stop. A listed thread and a seed never read keep their
+     stops. A 410 is thread_unreadable and never retried. The prune and the release path, directly.
 
 Offline and deterministic: every socket is refused for the whole run. Run:
     PYTHONDONTWRITEBYTECODE=1 python auxsays/scripts/tests/test_nvidia_forum_evidence.py
@@ -1476,7 +1486,7 @@ def section_deferred_queue() -> None:
               "already held)", len(lane.rows()) == len(rows) and not lane.owed(),
               f"{len(lane.rows())} {sorted(lane.owed())}")
 
-    # Invalidation: a thread gone, a title that names no tracked version, a failed read, no record left.
+    # A thread unreadable (quarantined), a title that names no tracked version, a failed read, no record left.
     with tempfile.TemporaryDirectory() as tmp:
         lane = _Lane(tmp, start)
         lane.cycle(None, [(src, "MAX_THREADS_PER_CYCLE", 0)])
@@ -1490,11 +1500,14 @@ def section_deferred_queue() -> None:
         tb = lane.clock.iso()
         state_b = lane.state()
         log = {d["topic_id"]: d for d in state_b.get("deferred_invalidated") or []}
-        check("Q14 a thread whose own topic view answers 404 leaves the queue as thread_gone, recorded with "
-              "when it was first deferred",
-              "593067" not in state_b["threads"]
-              and log.get(593067) == {"topic_id": 593067, "reason": "thread_gone", "at": tb, "first_deferred_at": ta},
-              str(log.get(593067)))
+        check("Q14 a thread whose own topic view answers 404 is quarantined as thread_unreadable (GPT G62 R1): its "
+              "identity and reason stay in the state file with when it was first deferred, and nothing is logged as "
+              "invalidated",
+              (state_b["threads"].get("593067") or {}).get("quarantined")
+              == {"reason": "thread_unreadable", "detail": "HTTP 404", "at": tb, "first_deferred_at": ta,
+                  "times_deferred": 1}
+              and "deferred" not in state_b["threads"]["593067"] and 593067 not in log,
+              str(state_b["threads"].get("593067")))
         check("Q15 a thread whose title now names no tracked version leaves as title_names_no_tracked_version",
               "592907" not in state_b["threads"] and (log.get(592907) or {}).get("reason") == "title_names_no_tracked_version",
               str(log.get(592907)))
@@ -1508,10 +1521,11 @@ def section_deferred_queue() -> None:
               sorted(readb) == [592433, 592767] and all("deferred" not in state_b["threads"][t]
                                                          and int(t) not in log for t in ("592433", "592767")),
               str(readb))
-        check("Q18 the invalidations and the queue are in every health note of that cycle",
-              all("2 deferred thread(s) invalidated this cycle: thread_gone, title_names_no_tracked_version." in h["notes"]
+        check("Q18 the invalidation, the quarantine and the queue are in every health note of that cycle",
+              all("1 deferred thread(s) invalidated this cycle: title_names_no_tracked_version." in h["notes"]
+                  and "Quarantined, not read until a reviewed change releases them: 1 (thread_unreadable)." in h["notes"]
                   and "Deferred-thread queue (whole forum): 1 waiting" in h["notes"] for h in _health(resb)),
-              _health(resb)[0]["notes"][-200:])
+              _health(resb)[0]["notes"][-260:])
         check("QP1 the oldest deferral in the note is the FIRST deferral, not the requeue after a failed read",
               all(f"1 waiting, oldest deferred {ta} (12 h ago)." in h["notes"] for h in _health(resb)),
               _health(resb)[0]["notes"][-160:])
@@ -1596,10 +1610,321 @@ def section_deferred_queue() -> None:
           set(small["threads"]) == {"5", "6"} and int(horizon) < horizon, str(sorted(small["threads"])))
     st_log = {"threads": {str(t): {"deferred": dict(marker)} for t in range(30)}}
     for t in range(30):
-        nf._invalidate(st_log, {"at": "2027-03-01T00:00:00Z", "invalidated": []}, str(t), "thread_gone")
+        nf._invalidate(st_log, {"at": "2027-03-01T00:00:00Z", "invalidated": []}, str(t), "no_tracked_record")
     check("Q24 the invalidation log keeps the last 20 (newest last); the queue itself has no cap",
           [d["topic_id"] for d in st_log["deferred_invalidated"]] == list(range(10, 30)) and not st_log["threads"],
           str(len(st_log.get("deferred_invalidated") or [])))
+
+
+def _asked(seen: list[str], tid: int) -> list[str]:
+    """The requests of a cycle that name this topic (its topic view or its comments view)."""
+    return [u for u in seen if urllib.parse.urlsplit(u).path.startswith("/forums-api/1.0/topics")
+            and urllib.parse.parse_qs(urllib.parse.urlsplit(u).query).get("id") == [str(tid)]]
+
+
+def section_queued_failures() -> None:
+    print("\n[QS] a queued thread's own failure cannot stop collection for every thread (GPT G62 R1)")
+    topics = "/forums-api/1.0/topics"
+    users = {592907, 593067, 592933}
+    none_listed = {(API, "/forums-api/1.0/communities/topics", "13"): _listing("community13_topics.json", users),
+                   (API, "/forums-api/1.0/communities/pinned", "13"): _listing("community13_pinned.json", {592767})}
+    cap0 = [(src, "MAX_THREADS_PER_CYCLE", 0)]
+    poison = 593067                          # a user topic: queued, never read, not listed when it fails
+    others = [592433, 592767, 592907, 592933]
+
+    def answer(status, body, ctype="application/json; charset=utf-8", headers=None):
+        return lambda url: _respond(status, body, ctype, headers)
+    success_false = answer(200, {"success": False, "errors": {"global": [{"message": "invalid"}]}})
+
+    def poisoned(response):
+        return {**none_listed, (API, topics, str(poison)): response}
+
+    def counted(lane) -> int:
+        return sum(1 for r in lane.rows() if r["counted"])
+
+    def held(lane, tid=poison) -> dict:
+        return (lane.state()["threads"].get(str(tid)) or {}).get("quarantined") or {}
+
+    def outcomes(cyc) -> dict:
+        return {t["topic_id"]: t.get("outcome") for t in cyc.get("threads", [])}
+
+    start = datetime.now(timezone.utc).replace(microsecond=250000)
+    with tempfile.TemporaryDirectory() as tmp:
+        lane = _Lane(tmp, start)
+        lane.cycle()
+        reference = _decision_map(lane.rows())
+
+    # Poisoned-thread progress, then the quarantine held, never pruned, released, and no evidence lost.
+    with tempfile.TemporaryDirectory() as tmp:
+        lane = _Lane(tmp, start)
+        lane.cycle(None, cap0)
+        t1 = lane.clock.iso()
+        _rp, cycp, readp, _sp = lane.cycle(poisoned(success_false))
+        tp = lane.clock.iso()
+        state_p = lane.state()
+        entry = state_p["threads"].get(str(poison)) or {}
+        check("QS1 poisoned-thread progress: a queued, unlisted user topic answering success:false is quarantined "
+              "(thread_invalid_response, with the time and its first deferral) and the SAME cycle reads the other four "
+              "threads and keeps and counts their rows (9 counted); the cycle does not stop",
+              not cycp.get("stop") and sorted(readp) == others
+              and entry.get("quarantined") == {"reason": "thread_invalid_response", "detail": "success=false", "at": tp,
+                                               "first_deferred_at": t1, "times_deferred": 1}
+              and "deferred" not in entry and counted(lane) == 9 and not lane.owed(),
+              f"stop={cycp.get('stop')} read={readp} held={entry.get('quarantined')} counted={counted(lane)}")
+        lane.events.clear()
+        resn, _cn, _readn, seenn = lane.cycle()
+        note = "Quarantined, not read until a reviewed change releases them: 1 (thread_invalid_response)."
+        events = [f for e, f in lane.events if e == "nvidia_forum_cycle"]
+        check("QS2 ...and it is never selected again, not even while the listing shows it: no request for it, still "
+              "quarantined as it was; the queue is empty, and every health note and the runtime event report the "
+              "quarantine",
+              not _asked(seenn, poison) and bool(held(lane)) and held(lane) == entry.get("quarantined") and not lane.owed()
+              and all(note in h["notes"] and "Deferred-thread queue (whole forum): 0 waiting." in h["notes"]
+                      for h in _health(resn))
+              and events and all(f.get("quarantined") == 1 and f.get("queue_depth") == 0 for f in events),
+              f"asked={_asked(seenn, poison)} {_health(resn)[0]['notes'][-200:]} {events[:1]}")
+        only_1414 = {pid: [r for r in recs if r.update_version == "621.14"] for pid, recs in RECORDS.items()}
+        lane.cycle(None, records=only_1414)
+        state_3 = lane.state()
+        check("QS3 ...never pruned and never invalidated: with no record left for the version its title names, the "
+              "quarantined thread stays in the state file as it was, while the prune drops the 621.24 windows",
+              bool(held(lane)) and held(lane) == entry.get("quarantined") and "592907" not in state_3["threads"]
+              and not [d for d in state_3.get("deferred_invalidated") or [] if d.get("topic_id") == poison],
+              f"{held(lane)} {sorted(state_3['threads'])}")
+        release = ((poison, tp, "the topic answers again (checked by an operator)"),)
+        _rr, cycr, readr, _sr = lane.cycle(none_listed, [(src, "QUARANTINE_RELEASES", release)])
+        state_r = lane.state()
+        check("QS4 release: a reviewed change naming the quarantine (topic id and its time) puts the thread back on the "
+              "queue and logs the release with its reason; that same cycle reads it from the queue (not listed)",
+              poison in readr and cycr.get("released") == [poison]
+              and str(poison) in state_r["threads"]
+              and not {"quarantined", "deferred"} & set(state_r["threads"].get(str(poison)) or {})
+              and state_r.get("quarantine_released") == [
+                  {"topic_id": poison, "quarantine_reason": "thread_invalid_response", "quarantined_at": tp,
+                   "released_at": lane.clock.iso(), "reason": release[0][2]}],
+              f"{readr} {cycr.get('released')} {state_r.get('quarantine_released')}")
+        rows = lane.rows()
+        ids = [r["id"] for r in rows]
+        check("QS5 no evidence loss: the store ends with exactly the rows and decisions of one unconstrained cycle over "
+              "the committed capture (same ids, same decisions, 9 counted, none twice)",
+              _decision_map(rows) == reference and len(ids) == len(set(ids))
+              and sum(1 for c, _r in reference.values() if c) == 9 == counted(lane),
+              f"{len(rows)} vs {len(reference)}; "
+              f"diff={sorted(set(_decision_map(rows).items()) ^ set(reference.items()))[:3]}")
+
+    # Access refusals from a queued thread's own view: 401/403/451 hold it, 429 does not.
+    for code in (401, 403, 451):
+        with tempfile.TemporaryDirectory() as tmp:
+            lane = _Lane(tmp, start)
+            lane.cycle(None, cap0)
+            t1 = lane.clock.iso()
+            queued = lane.owed()
+            resa, cyca, _ra, _sa = lane.cycle(poisoned(answer(code, b"Refused", "text/plain")))
+            ta = lane.clock.iso()
+            state_a = lane.state()
+            hold = held(lane)
+            stopped = (cyca.get("stop") == "access_refused" and {h["status"] for h in _health(resa)} == {"blocked"}
+                       and "access_refused" in state_a and not lane.rows()
+                       and hold == {"reason": "access_refused", "detail": f"HTTP {code}", "at": ta,
+                                    "first_deferred_at": t1, "times_deferred": 1}
+                       and lane.owed() == {t: m for t, m in queued.items() if t != str(poison)})
+            cleared = (lane.clock.now + timedelta(hours=6)).strftime("%Y-%m-%dT%H:%M:%SZ")
+            _rc, cycc, readc, seenc = lane.cycle(none_listed, [(src, "ACCESS_REFUSAL_CLEARED_AT", cleared)])
+            check(f"QS6-{code} HTTP {code} from a queued thread's own view: the method stops and is suspended as before "
+                  "(blocked, refusal persisted, no row) and the refused thread is quarantined for human disposition, the "
+                  "rest of the queue untouched; once a reviewed change clears the refusal the method resumes, the refused "
+                  "thread is NOT asked again, and the other threads are read and counted (9)",
+                  stopped and not cycc.get("stop") and "access_refused" not in lane.state()
+                  and not _asked(seenc, poison) and sorted(readc) == others and held(lane) == hold and counted(lane) == 9,
+                  f"stopped={stopped} {cyca.get('stop')} {hold} next={cycc.get('stop')} read={readc}")
+    with tempfile.TemporaryDirectory() as tmp:
+        lane = _Lane(tmp, start)
+        lane.cycle(None, cap0)
+        before = json.dumps(lane.state()["threads"], sort_keys=True)
+        _r9, cyc9, _read9, _s9 = lane.cycle(poisoned(answer(429, b"Too Many Requests", "text/plain")))
+        state_9 = lane.state()
+        cleared = (lane.clock.now + timedelta(hours=6)).strftime("%Y-%m-%dT%H:%M:%SZ")
+        _rc, cycc, readc, _sc = lane.cycle(none_listed, [(src, "ACCESS_REFUSAL_CLEARED_AT", cleared)])
+        check("QS7 HTTP 429 from a queued thread's own view: the method stops under the rate-limit rule (blocked, "
+              "refusal persisted) and the thread stays queued exactly as it was, not quarantined; once the refusal is "
+              "cleared it is read",
+              cyc9.get("stop") == "access_refused" and "access_refused" in state_9
+              and json.dumps(state_9["threads"], sort_keys=True) == before
+              and not cycc.get("stop") and poison in readc and not lane.owed()
+              and not any(src.is_quarantined(e) for e in lane.state()["threads"].values()),
+              f"{cyc9.get('stop')} same_queue={json.dumps(state_9['threads'], sort_keys=True) == before} {readc}")
+    with tempfile.TemporaryDirectory() as tmp:
+        lane = _Lane(tmp, start)
+        lane.cycle(None, cap0)
+        _rh, cych, _readh, _sh = lane.cycle(poisoned(answer(200, b"<html><body>Topic unavailable</body></html>",
+                                                             "text/html")))
+        check("QS8 an HTML page where JSON was expected (the same access-refusal rule, with no status code) suspends the "
+              "method as before and quarantines the refused queued thread too, so it cannot suspend it again after a "
+              "clearing",
+              cych.get("stop") == "access_refused" and "access_refused" in lane.state()
+              and held(lane).get("reason") == "access_refused"
+              and held(lane).get("detail") == "an HTML page was returned where JSON was expected",
+              f"{cych.get('stop')} {held(lane)}")
+
+    # A 5xx or a timeout keeps it owed, three cycles running, and never wedges the lane.
+    def timeout(url):
+        raise TimeoutError("timed out")
+    with tempfile.TemporaryDirectory() as tmp:
+        lane = _Lane(tmp, start)
+        lane.cycle(None, cap0)
+        t1 = lane.clock.iso()
+        runs = []
+        for failure in (answer(503, b"busy", "text/plain"), timeout, answer(502, b"bad gateway", "text/plain")):
+            _res, cyc, _read, _seen = lane.cycle(poisoned(failure))
+            marker = lane.owed().get(str(poison)) or {}
+            runs.append((cyc.get("stop"), marker.get("reason"), marker.get("queued_at") == lane.clock.iso(),
+                         marker.get("first_deferred_at") == t1, outcomes(cyc).get(poison), len(outcomes(cyc))))
+        state_t = lane.state()
+        check("QS9 a 5xx or a timeout from a queued thread, three cycles running (503, a timeout, 502): never a stop, "
+              "never quarantined or invalidated; it stays queued (thread_read_failed, sent to the end, first deferral "
+              "kept) while each cycle reaches the other threads, and all 9 counted reports are kept",
+              all(r[0] == "" and r[1] == "thread_read_failed" and r[2] and r[3] and r[4] == "failed" and r[5] >= 3
+                  for r in runs)
+              and not any(src.is_quarantined(e) for e in state_t["threads"].values())
+              and not state_t.get("deferred_invalidated") and counted(lane) == 9
+              and (lane.owed().get(str(poison)) or {}).get("times_deferred") == 4, str(runs))
+
+    # success:false is held only when confirmed as the thread's own.
+    with tempfile.TemporaryDirectory() as tmp:
+        lane = _Lane(tmp, start)
+        lane.cycle(None, cap0)
+        lane.cycle(poisoned(answer(503, b"busy", "text/plain")))           # the other four are read here
+        _ru, cycu, readu, _su = lane.cycle(poisoned(success_false))
+        marker = lane.owed().get(str(poison)) or {}
+        check("QS10 an UNCONFIRMED success:false (no other thread read in full in that cycle: the two feedback threads "
+              "were unchanged) holds nothing: the thread stays queued (thread_read_failed, sent to the end)",
+              not cycu.get("stop") and not readu and set(outcomes(cycu).values()) == {"failed", "unchanged"}
+              and marker.get("reason") == "thread_read_failed" and marker.get("queued_at") == lane.clock.iso()
+              and not held(lane), f"{cycu.get('stop')} {outcomes(cycu)} {marker} {held(lane)}")
+        newer = copy.deepcopy(fixture("topic_592433.json"))
+        newer["data"]["topic"]["lastActivityStamp"] += 60
+        _rk, _ck, readk, _sk = lane.cycle({**poisoned(success_false), (API, topics, "592433"): answer(200, newer)})
+        check("QS11 ...and it is confirmed the next time another thread is read in full in the same cycle (592433, with "
+              "new activity): then it is quarantined as thread_invalid_response",
+              readk == [592433] and held(lane).get("reason") == "thread_invalid_response"
+              and held(lane).get("at") == lane.clock.iso() and str(poison) not in lane.owed(),
+              f"{readk} {held(lane)}")
+
+    # Any other failure of its own views keeps it owed: never a stop, never classified as invalid.
+    merged = copy.deepcopy(fixture("topic_592907.json"))       # another topic's answer, as after a merge
+    shapes = (answer(200, merged),
+              answer(302, b"", "text/html", {"Location": "https://forums-mirror.example.net/t/593067"}),
+              answer(200, b"busy, try again later", "text/plain"))
+    with tempfile.TemporaryDirectory() as tmp:
+        lane = _Lane(tmp, start)
+        lane.cycle(None, cap0)
+        runs = []
+        hosts: set[str] = set()
+        for shape in shapes:
+            _res, cyc, _read, seen = lane.cycle(poisoned(shape))
+            marker = lane.owed().get(str(poison)) or {}
+            runs.append((cyc.get("stop"), marker.get("reason"), marker.get("queued_at") == lane.clock.iso(),
+                         outcomes(cyc).get(poison), len(outcomes(cyc))))
+            hosts |= {urllib.parse.urlsplit(u).hostname or "" for u in seen}
+        check("QS12 another shape from a queued thread's own view (another topic's id, as after a merge; a redirect, "
+              "refused before the hop; a body that is not JSON), three cycles running: never a stop and never "
+              "quarantined; it stays queued and goes to the end while each cycle reaches the other threads; nothing "
+              "is sent to the redirect's host; all 9 counted reports are kept",
+              all(r[0] == "" and r[1] == "thread_read_failed" and r[2] and r[3] == "failed" and r[4] >= 3 for r in runs)
+              and "forums-mirror.example.net" not in hosts and not held(lane) and counted(lane) == 9, str(runs))
+
+    # A listed thread and a seed never read keep the stops they had before the queue existed.
+    with tempfile.TemporaryDirectory() as tmp:
+        lane = _Lane(tmp, start)
+        lane.cycle(None, cap0)
+        before = json.dumps(lane.state()["threads"], sort_keys=True)
+        _rl, cycl, _readl, _sl = lane.cycle({(API, topics, str(poison)): success_false})
+        check("QS13 a queued thread the listing STILL shows keeps its stop: success:false is a schema stop (broken), "
+              "nothing is quarantined, and the queue is kept exactly as it was",
+              cycl.get("stop") == "schema_changed" and json.dumps(lane.state()["threads"], sort_keys=True) == before,
+              f"{cycl.get('stop')} {held(lane)}")
+        _rd, cycd, _readd, _sd = lane.cycle({**none_listed, (API, topics, "592433"): success_false})
+        check("QS14 so does a seed never read (queued with its title unknown): success:false stops the cycle (broken), "
+              "and the queue is kept exactly as it was",
+              cycd.get("stop") == "schema_changed" and json.dumps(lane.state()["threads"], sort_keys=True) == before,
+              f"{cycd.get('stop')} {held(lane, 592433)}")
+
+    # HTTP 410: thread_unreadable, kept with its reason, never retried automatically.
+    with tempfile.TemporaryDirectory() as tmp:
+        lane = _Lane(tmp, start)
+        lane.cycle(None, cap0)
+        t1 = lane.clock.iso()
+        lane.cycle(poisoned(answer(410, {"success": False})))
+        tq = lane.clock.iso()
+        hold = held(lane)
+        _rn, _cn, _readn, seenn = lane.cycle()
+        check("QS15 HTTP 410 from a queued thread's own view: thread_unreadable, its identity and reason kept in the "
+              "state file; no automatic retry: the next cycle, whose listing shows it, sends no request for it",
+              hold == {"reason": "thread_unreadable", "detail": "HTTP 410", "at": tq, "first_deferred_at": t1,
+                       "times_deferred": 1}
+              and held(lane) == hold and not _asked(seenn, poison), f"{hold} asked={_asked(seenn, poison)}")
+
+    # The prune and the release path, directly.
+    now = datetime(2027, 3, 1, 0, 0, 0, 500000, tzinfo=timezone.utc)
+    fresh = int((now - timedelta(days=1)).timestamp())
+    stale = int((now - timedelta(days=60)).timestamp())
+    hold = {"reason": "thread_unreadable", "detail": "HTTP 404", "at": "2027-01-02T00:00:00Z",
+            "first_deferred_at": "2027-01-01T00:00:00Z", "times_deferred": 2}
+    windows = {str(1000 + i): {"title_versions": ["621.24"], "last_activity": fresh - i, "window": [[1, 1]]}
+               for i in range(src.MAX_STATE_THREADS + 5)}
+    held_entries = {
+        "7": {"title": "x 621.24", "title_versions": ["621.24"], "last_activity": stale, "window": [[5, 5]],
+              "quarantined": dict(hold)},
+        "8": {"title": "y 999.99", "title_versions": ["999.99"], "last_activity": None, "window": [],
+              "quarantined": dict(hold)},
+        "9": {"title": "", "title_versions": [], "last_activity": None, "window": [], "quarantined": dict(hold)}}
+    st = {"threads": {**windows, **held_entries}}
+    src.prune_threads(st, {"621.24"}, now)
+    check("QS16 the prune never removes a quarantined entry (past the retention, never read, naming only an untracked "
+          "version, or untitled), and it takes no window's place under the 40-window cap",
+          all((st["threads"].get(t) or {}).get("quarantined") == hold for t in held_entries)
+          and len([t for t in st["threads"] if t not in held_entries]) == src.MAX_STATE_THREADS,
+          str(sorted(set(held_entries) - set(st["threads"]))))
+    queued_marker = {"reason": "thread_cap", "first_deferred_at": "2027-01-01T00:00:00Z",
+                     "queued_at": "2027-01-01T00:00:00Z", "times_deferred": 1}
+    rel = {"threads": {"5": {"title": "x 621.24", "quarantined": {**hold, "reason": "thread_invalid_response",
+                                                                  "detail": "success=false", "times_deferred": 3}},
+                       "6": {"title": "y 621.24", "deferred": dict(queued_marker)}}}
+    before = json.dumps(rel, sort_keys=True)
+    at = "2027-02-01T00:00:00Z"
+    other_time = src.release_quarantined(rel, 5, "2027-01-03T00:00:00Z", "operator", at)
+    only_queued = src.release_quarantined(rel, 6, "2027-01-02T00:00:00Z", "operator", at)
+    unknown = src.release_quarantined(rel, 4, "2027-01-02T00:00:00Z", "operator", at)
+    try:
+        src.release_quarantined(rel, 5, "2027-01-02T00:00:00Z", "   ", at)
+        no_reason = False
+    except ValueError:
+        no_reason = True
+    untouched = json.dumps(rel, sort_keys=True) == before
+    released = src.release_quarantined(rel, 5, "2027-01-02T00:00:00Z", "checked by an operator", at)
+    twice = src.release_quarantined(rel, 5, "2027-01-02T00:00:00Z", "checked by an operator", at)
+    check("QS17 release_quarantined releases only the quarantine it names: another time, a thread that is only queued "
+          "or an unknown id change nothing, and a release without a reason is refused; the named thread goes back to "
+          "the END of the queue (queued at the release) with its first deferral and count kept, the release logged "
+          "with its reason; the same entry does not release it twice",
+          not other_time and not only_queued and not unknown and no_reason and untouched and released and not twice
+          and rel["threads"]["5"].get("deferred") == {"reason": "quarantine_released",
+                                                      "first_deferred_at": "2027-01-01T00:00:00Z",
+                                                      "queued_at": at, "times_deferred": 3}
+          and "quarantined" not in rel["threads"]["5"] and rel["threads"]["6"]["deferred"] == queued_marker
+          and rel.get("quarantine_released") == [
+              {"topic_id": 5, "quarantine_reason": "thread_invalid_response", "quarantined_at": "2027-01-02T00:00:00Z",
+               "released_at": at, "reason": "checked by an operator"}],
+          f"{other_time} {only_queued} {unknown} {no_reason} {untouched} {released} {twice} {rel}")
+    many = {"threads": {str(t): {"quarantined": {**hold, "at": f"2027-01-02T00:00:{t:02d}Z"}} for t in range(30)}}
+    for t in range(30):
+        src.release_quarantined(many, t, f"2027-01-02T00:00:{t:02d}Z", "operator", at)
+    check("QS18 the release log keeps the last 20 (newest last); every released thread is queued again",
+          [d["topic_id"] for d in many["quarantine_released"]] == list(range(10, 30))
+          and all(src.is_owed(e) and not src.is_quarantined(e) for e in many["threads"].values()),
+          str(len(many.get("quarantine_released") or [])))
+    check("QS19 the shipped release list is empty (only a reviewed change names a quarantine to release)",
+          src.QUARANTINE_RELEASES == ())
 
 
 def run() -> int:
@@ -1614,6 +1939,7 @@ def run() -> int:
     section_moved_comment()
     section_title_names()
     section_deferred_queue()
+    section_queued_failures()
     check("Z no socket was opened by the whole suite", _REFUSED[0] == 0, str(_REFUSED[0]))
     print()
     print("=" * 74)
