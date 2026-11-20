@@ -639,6 +639,16 @@ auxsays/scripts/tests/test_withdraw_g51_role_rows.py = 36
 # withdrawn report seen again is refused by the append guard; fixture-based count deltas only. Bare script on
 # frozen fixtures whose free text is synthetic; the live store is read only for the two pins and the kept rows.
 auxsays/scripts/tests/test_withdraw_g55_adobe_role_rows.py = 42
+# AUX-114: the audited withdrawal of one DaVinci Resolve 21.0.4 report that is a how-to question (21.0.4 is the
+# author's setup, not a version reported as broken), through the AUX-088 tool, unchanged, with a sixth manifest
+# under the Windows, OBS and DaVinci scope. The row needs two blind INCORRECT labels from two different named
+# reviewers that both support its reason (an earlier pair of blind labels is provenance only); its two controls,
+# the three held candidates and the control finding are not entries; the five earlier manifests are byte-identical
+# to their pins; exactly 2 lines, every row kept, all-or-nothing, idempotent; the withdrawn report seen again is
+# refused by the append guard; fixture-based count deltas only. Bare script on the AUX-108 fixture, whose free text
+# is synthetic, plus two synthetic control rows; the live store is read only for the pin, the two controls and the
+# three held rows.
+auxsays/scripts/tests/test_withdraw_g60_davinci_howto_row.py = 34
 # AUX-092: the OBS producer now stores that same day on every NEW row. source_date = the UTC day of the
 # creation stamp the release-date gate already reads (an issue's created_at, the opening post's own <time>),
 # directly after captured_at, no key when the stamp gives no UTC day; equal to every AUX-090 pin. A frozen

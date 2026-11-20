@@ -88,6 +88,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-098 | Resolved | Evidence integrity | Medium | Fourteen reports that one person had posted twice were each counted as two reports |
 | AUX-108 | Deferred | Evidence integrity | Medium | Five reports counted against a version they were not about: the build a device fell back to, the version an author upgraded from, a version only asked about (rows withdrawn; the attribution fix deferred behind named triggers) |
 | AUX-111 | Resolved | Evidence integrity | Medium | Two Adobe reports counted against a version they were not about: the Premiere Pro version a project was made in, the Acrobat Reader version an update started from |
+| AUX-114 | Resolved | Evidence integrity | Low | A DaVinci Resolve 21.0.4 how-to question was counted as a report of a problem with 21.0.4 |
 | AUX-092 | Resolved | Publication | Medium | Every new OBS report would again read "date not recorded": the collector never stored the date it checks |
 | AUX-093 | Resolved | Verdict policy | High | 234 of 236 pages with user reports said WAIT because of their product or a negative tone |
 | AUX-094 | Resolved | Verdict policy | Low | The page could print an official verdict the decision code did not give, and QA could not see it |
@@ -5477,9 +5478,9 @@ reports, by missing them, or by adding wording lists that nothing counterbalance
 them. The data correction removes the five rows both reviews confirmed; the remaining risk is in the mechanism and
 in the still-counted rows named under Current impact.
 
-**Current impact** Still counted: DaVinci 20.2.1 (held out) and the DaVinci 21.0.4 control, each awaiting its own
-audited review. The two measured rows of this class that were outside the withdrawal tool's product scope, Premiere
-Pro 26.2.2 and Acrobat Reader 15.020.20039, are withdrawn under AUX-111. About a quarter of
+**Current impact** Still counted: DaVinci 20.2.1 (held out), awaiting its own audited review. The DaVinci 21.0.4
+control is withdrawn under AUX-114. The two measured rows of this class that were outside the withdrawal tool's
+product scope, Premiere Pro 26.2.2 and Acrobat Reader 15.020.20039, are withdrawn under AUX-111. About a quarter of
 counted rows store too little text around the version to judge its role; that is an auditability gap, tracked by
 the version-centred evidence work, not proof of wrong counting.
 
@@ -5575,6 +5576,59 @@ report the store already holds, counted or not.
 **Reopen only if** either row counts again; the Acrobat Reader 15.010.20056 control or either must-stay row stops
 counting without its own audited withdrawal; or a manifest withdraws an Acrobat Reader or Premiere Pro row that the
 tool's grant does not name.
+
+---
+### AUX-114 — A DaVinci Resolve 21.0.4 how-to question was counted as a report of a problem with 21.0.4
+
+- **Status** Resolved · **Area** Evidence integrity · **Severity** Low
+- **First seen** 2026-11-19 (AUX-108's control finding) · **Resolved** 2026-11-19
+
+**Symptom** One counted DaVinci Resolve 21.0.4 report is a question. The author asks whether HDR can be enabled in
+the previews on Linux and names 21.0.4 as the version they run. Its stored text reports no problem with 21.0.4, and
+both blind reviews judged it a question rather than an issue report, so the page counted one report more than it
+should. AUX-108's blind review found it as a control and recorded it for its own review.
+
+**Scope** Only this row, and only because two fresh blind adjudicators each labelled it incorrect for the credited
+version, as not an issue report. Each read only the stored text, in a shuffled packet of four candidates and eight
+counted controls drawn by a rule written down before the draw (for each candidate, one row on its own page that must
+stay counted and one row of another version). The brief named no row and stated no hypothesis. AUX-108's two blind
+labels on the same row are recorded as provenance only.
+- The row's two controls stay counted: a 21 report labelled correct by both, and a 21.0.4 report whose stored text
+  names no version, so neither adjudicator could decide it.
+- The three other candidates, DaVinci 20.2.1, Acrobat Reader 15.010.20056 and Premiere Pro 26.2, were also labelled
+  incorrect by both, but they are held and stay counted. For the DaVinci and Premiere rows, the version mention that
+  made the row count is not in the stored text. For the Acrobat Reader row, a withdrawal would override an existing
+  rule, so the question is with the owner. That row's must-stay control drew the same labels; it belongs to the same
+  question and stays counted.
+- No acceptance rule, threshold or vocabulary changed.
+
+**Fix (data)** `withdraw_live_citation_rows.py` (AUX-088, unchanged) withdraws the row from a sixth pinned manifest,
+`scripts/audit/live_citation_withdrawal_v6.json`, under the existing Windows, OBS and DaVinci scope. The manifest
+records both blind labels, the earlier labels as provenance only, the packet's file hashes, the two controls, the
+three held candidates and the control finding. The rest is AUX-088's:
+- a five-field identity and a pinned block hash;
+- a two-line edit: `counted: false` and `exclusion_reason: not_a_real_issue_report`, the reason both adjudicators
+  support;
+- the row kept, all or nothing, idempotent.
+
+The five earlier manifests are unchanged. The record was regenerated only by the tool's own scoped writers: the
+reconcile scoped to Windows, OBS and DaVinci, then each product's own scoped promotion. A scheduled collector that
+sees the report again does not re-admit it, because the DaVinci lanes persist through the store's append guard,
+which refuses a report the store already holds, counted or not.
+
+**Measured**
+- Store: 2 lines changed; every row kept, and no row starts counting. No evidence loss.
+- Counted rows: DaVinci 331 -> 330; Windows and OBS unchanged.
+- Page: DaVinci Resolve 21.0.4 16 -> 15. The record loses exactly the withdrawn source and gains one "User report
+  count updated to 15." event.
+- Unchanged: label (Negative), evidence strength (Low-Medium), the decision (INSUFFICIENT DATA), the theme sentence,
+  the evidence samples, the newest accepted report date, maturity (pilot) and the live set.
+- A second run changes nothing.
+- `test_withdraw_g60_davinci_howto_row.py` pins it with 34 checks, fixture counts only. It also pins the five earlier
+  manifests byte for byte, and checks that the row's two controls and the three held candidates still count.
+
+**Reopen only if** the row counts again; either control or any of the three held candidates stops counting without
+its own audited withdrawal; or an earlier withdrawal manifest changes.
 
 ---
 ### AUX-092 — Every new OBS report would again read "date not recorded": the collector never stored the date it checks

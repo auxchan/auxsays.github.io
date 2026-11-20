@@ -33632,8 +33632,8 @@ evidence:
   patch_version_matched: true
   matched_version: 21.0.4
   match_basis: exact_version_text
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: not_a_real_issue_report
   issue_theme: render/export failure
   workflow_area: render/export
   platform: windows
