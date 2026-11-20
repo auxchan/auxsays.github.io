@@ -3954,14 +3954,15 @@ back unread:
 
 **Repair** (`patch_collectors/nvidia_forum.py`, `patch_collectors/nvidia_forum_source.py`):
 - A deferred thread's state entry carries `deferred`: the reason (`thread_cap`, `request_budget` or
-  `runtime_budget`), when it was first deferred, its place in the queue and how many cycles it has waited. A seed is
-  queued too, with its title still unknown.
+  `runtime_budget`; after a failed read `thread_read_failed`, after a release `quarantine_released`), when it was
+  first deferred, its place in the queue and how many cycles it has waited. A seed is queued too, with its title
+  still unknown.
 - The prune never removes an owed entry: not for its age, a missing last activity, the listing, or the 40-window
   cap. It no longer drops a never-read entry for lacking a last activity.
 - Owed threads are selected from the state file even when the listing no longer shows them. They are read first,
   longest-waiting first, then everything else in the old order. A failed read keeps the thread owed
-  (`thread_read_failed`) and sends it to the end of the queue. The request ceiling and the thread cap are unchanged:
-  the queue only orders the work.
+  (`thread_read_failed`) and sends it to the end of the queue, unless the stall correction below quarantines it.
+  The request ceiling and the thread cap are unchanged: the queue only orders the work.
 - An owed thread leaves the queue in one of three ways:
   - it is read, or found unchanged;
   - it is invalidated, and the reason is kept in `deferred_invalidated` (the last 20). The reasons are: its title
@@ -4006,10 +4007,12 @@ own:
 
 `evaluate_comment` is unchanged, and so are every acceptance rule, threshold, schedule and ceiling; the health-status
 vocabulary gains no status. Replayed on the captured windows, the decisions are identical (9 counted). Pinned by
-`test_nvidia_forum_evidence.py` sections Q and QS (175 to 225 governed checks). Each of 22 single-fix mutants of the
+`test_nvidia_forum_evidence.py` sections Q and QS (175 to 229 governed checks). Each of 22 single-fix mutants of the
 queue fails a named check, and so does each of 2 telemetry mutants (the oldest age taken from the requeue time, and
 a depth that drops owed threads read before). Each of the stall correction's 31 single-fix mutants fails a named
-check too. The suite covers:
+check too. Review 3 added four checks (a quarantine keeps the thread's entry; a refusal of a listed thread or an
+unread seed keeps its old stop; no timer releases a quarantine); each fails for reviewer mutants that the other 225
+checks let through. The suite covers:
 - three exhausted cycles (request ceiling, thread cap, time budget), with the threads unlisted and never read;
 - then reads in queue order;
 - the store ends with exactly one unconstrained cycle's rows and decisions: 9 counted, none twice, none credited
@@ -4037,9 +4040,10 @@ check too. The suite covers:
   any thread. A2 covers response classes only. No current rule names a topic page: the forum's rules are page-number
   queries.
 - A quarantined thread stays out of selection until a reviewed change releases it, even if the listing shows it
-  with new activity. Its versions report partial only in the cycle that quarantined it. After that, the
-  forum-wide count and reasons are in every health note. A deleted topic that is released answers 404 again and is
-  quarantined again: there is no disposal path other than a release, so its small entry stays in the state file.
+  with new activity. Its versions report partial (blocked, for a refusal) only in the cycle that quarantined it.
+  After that, the forum-wide count and reasons are in every health note a cycle writes after reading its state
+  file. A deleted topic that is released answers 404 again and is quarantined again: there is no disposal path
+  other than a release, so its small entry stays in the state file.
 - A 404 or 410 quarantines any queued thread, listed or not. A forum-wide change that made every topic view answer
   404 would quarantine each queued thread it reaches, and each would need a release.
 - The forum's answer for a deleted topic is still unmeasured.

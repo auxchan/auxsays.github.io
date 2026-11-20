@@ -56,6 +56,8 @@ WHAT THIS PROVES, IN ORDER.
      it queued. A 5xx, a timeout, another shape, a redirect and an unconfirmed success:false keep it
      queued for three cycles running without a stop. A listed thread and a seed never read keep their
      stops. A 410 is thread_unreadable and never retried. The prune and the release path, directly.
+     A quarantine keeps the thread's entry; a refusal of a listed thread or an unread seed keeps its
+     old stop; no timer releases a quarantine.
 
 Offline and deterministic: every socket is refused for the whole run. Run:
     PYTHONDONTWRITEBYTECODE=1 python auxsays/scripts/tests/test_nvidia_forum_evidence.py
@@ -1863,6 +1865,55 @@ def section_queued_failures() -> None:
               hold == {"reason": "thread_unreadable", "detail": "HTTP 410", "at": tq, "first_deferred_at": t1,
                        "times_deferred": 1}
               and held(lane) == hold and not _asked(seenn, poison), f"{hold} asked={_asked(seenn, poison)}")
+
+    # A quarantine keeps the thread's identity and window: a thread READ before, then queued, then unreadable.
+    with tempfile.TemporaryDirectory() as tmp:
+        lane = _Lane(tmp, start)
+        lane.cycle()
+        lane.cycle(None, cap0)
+        queued = copy.deepcopy(lane.state()["threads"]["592907"])
+        lane.cycle({**none_listed, (API, topics, "592907"): answer(404, {"success": False})})
+        entry = lane.state()["threads"].get("592907") or {}
+        check("QS20 a quarantine keeps the thread's state entry as it was (title, community, versions, last activity, "
+              "window), only its deferral replaced by the hold",
+              bool(queued.get("window")) and src.is_owed(queued) and src.is_quarantined(entry)
+              and {k: v for k, v in entry.items() if k != "quarantined"}
+              == {k: v for k, v in queued.items() if k != "deferred"},
+              f"{sorted(entry)} vs {sorted(queued)}")
+
+    # A refusal of a queued thread the listing still shows, or of a seed never read, keeps its old stop.
+    for tag, label, route in (
+            ("listed", "a queued thread the listing still shows",
+             {(API, topics, str(poison)): answer(403, b"Refused", "text/plain")}),
+            ("seed", "a seed never read", {**none_listed, (API, topics, "592433"): answer(403, b"Refused", "text/plain")})):
+        with tempfile.TemporaryDirectory() as tmp:
+            lane = _Lane(tmp, start)
+            lane.cycle(None, cap0)
+            before = json.dumps(lane.state()["threads"], sort_keys=True)
+            _rr, cycr, _readr, _sr = lane.cycle(route)
+            state_r = lane.state()
+            check(f"QS21-{tag} HTTP 403 from {label} keeps its old stop: the method is suspended (refusal persisted), "
+                  "nothing is quarantined, and the queue is kept exactly as it was",
+                  cycr.get("stop") == "access_refused" and "access_refused" in state_r
+                  and json.dumps(state_r["threads"], sort_keys=True) == before
+                  and not any(src.is_quarantined(e) for e in state_r["threads"].values()),
+                  f"{cycr.get('stop')} {[t for t, e in state_r['threads'].items() if src.is_quarantined(e)]}")
+
+    # Never a timer: with no release in code, a quarantine outlives any horizon.
+    with tempfile.TemporaryDirectory() as tmp:
+        lane = _Lane(tmp, start)
+        lane.cycle(None, cap0)
+        lane.cycle(poisoned(success_false))
+        hold = held(lane)
+        asks = []
+        for days in (2, 30, 400):
+            lane.clock.now += timedelta(days=days)
+            _rt, _ct, _readt, seent = lane.cycle()
+            asks += _asked(seent, poison)
+        check("QS22 never a timer: with no release in code, the quarantine is unchanged and the thread is never asked "
+              "2, 30 and 400 days later (while listed), and no release is logged",
+              bool(hold) and held(lane) == hold and not asks and not lane.state().get("quarantine_released"),
+              f"{held(lane)} asked={asks}")
 
     # The prune and the release path, directly.
     now = datetime(2027, 3, 1, 0, 0, 0, 500000, tzinfo=timezone.utc)
