@@ -394,7 +394,8 @@ def check_health() -> None:
     check("H2 MONITORING ACTIVE, MONITORING DEGRADED, COLLECTION BLOCKED and COLLECTION STALE (each reached by the "
           "shipped ladder) give the same projected row: the volume WAIT",
           reached == {k: k for k in states} and len(rows_seen) == 1
-          and next(iter(projections.values()))["obs-studio|99.0.0|"]["verdict"] == "WAIT", str(reached))
+          and (next(iter(projections.values())).get("obs-studio|99.0.0|") or {}).get("verdict") == "WAIT",
+          str(reached))
 
 
 # ------------------------------------------------------------------------------------------------ [W]
@@ -449,7 +450,8 @@ def check_way_forward() -> None:
     section("[F] the way forward on every WAIT")
     records, groups, entries, verdict, overview = way_forward_tree()
     pages, vrows = overview["pages"], verdict["pages"]
-    nxt = {k: (v.get("next_action") or {}) for k, v in pages.items()}
+    nxt = Missing({k: (v.get("next_action") or {}) for k, v in pages.items()})
+    pages, vrows = Missing(pages), Missing(vrows)
     check("F1 archived: 'This release is archived.' then no better-supported alternative -- never 'no newer release'",
           nxt["obs-studio|89.0.0|"] == {"kind": "archived", "lines": [eo.ARCHIVED_LINE, eo.NO_BETTER_ALTERNATIVE],
                                         "fixed": []}, str(nxt.get("obs-studio|89.0.0|")))
@@ -564,7 +566,8 @@ def check_qa(tmp: Path) -> None:
           "with no overview projection at all, is reported, and --publish-strict makes it an ERROR",
           code not in ok_e | ok_w and code in d_w and code in gone_w and code in qa.PUBLICATION_BLOCKING_CODES
           and [p["code"] for p in promoted] == [code], f"{ok_w} {d_w} {gone_w}")
-    vol = vp.project([record], {vr.record_identity(record): population}, [], [])[0]["pages"]["obs-studio|77.0.0|"]
+    vol = vp.project([record], {vr.record_identity(record): population}, [], [])[0]["pages"].get(
+        "obs-studio|77.0.0|") or {"verdict": "missing"}
     shapes = {
         "volume, no scope": (dict(vol), True),
         "reviewed WAIT, no scope": (dict(vol, reason_code="", label="", rule="R3"), False),
@@ -655,15 +658,15 @@ def check_assessment() -> None:
                   "assessed_population_sha256": eo.population_digest(population), "reviewed_at": "2026-11-21"}
     reviewed = {"schema_version": 1, "label_withheld_products": [], "assessments": [assessment]}
     verdict = vp.project([record], groups, [], [])[0]["pages"]
-    kept = eo.project([record], groups, verdict, [], reviewed, [])["pages"][f"obs-studio|{version}|"]
+    kept = Missing(eo.project([record], groups, verdict, [], reviewed, [])["pages"]).get(f"obs-studio|{version}|")
     moved_rows = population[:29] + [vrow(31, version=version)]
     moved_groups = {vr.record_identity(record): moved_rows}
-    moved = eo.project([record], moved_groups, vp.project([record], moved_groups, [], [])[0]["pages"], [], reviewed,
-                       [])["pages"][f"obs-studio|{version}|"]
+    moved = Missing(eo.project([record], moved_groups, vp.project([record], moved_groups, [], [])[0]["pages"], [],
+                               reviewed, [])["pages"]).get(f"obs-studio|{version}|")
     other = rec("55.1.0")
     other_groups = {vr.record_identity(other): rows(30, version="55.1.0")}
-    elsewhere = eo.project([other], other_groups, vp.project([other], other_groups, [], [])[0]["pages"], [], reviewed,
-                           [])["pages"]["obs-studio|55.1.0|"]
+    elsewhere = Missing(eo.project([other], other_groups, vp.project([other], other_groups, [], [])[0]["pages"], [],
+                                   reviewed, [])["pages"]).get("obs-studio|55.1.0|")
     check("A1 the finding keeps its place under a volume WAIT while the population is the assessed one; one report "
           "changed and no clause follows the count; a page without an assessment never gets it, and the universal "
           "clause never stands beside the printed WAIT",
@@ -718,7 +721,8 @@ def check_corpus_and_surfaces() -> None:
     printed_wait = [k for k, r in by_key.items()
                     if (vp.printed_row(r, projection["pages"]) or {}).get("verdict") == "WAIT"]
     no_exit = [k for k in printed_wait if not eo.has_next_action(overview["pages"].get(k))]
-    kinds = {k: (overview["pages"][k]["next_action"]["kind"], overview["pages"][k]["next_action"]["fixed"]) for k in FOUR}
+    kinds = {k: ((overview["pages"].get(k) or {}).get("next_action") or {}).get("kind") for k in FOUR}
+    kinds = {k: (v, (((overview["pages"].get(k) or {}).get("next_action") or {}).get("fixed"))) for k, v in kinds.items()}
     check("C3 every page that prints WAIT in this tree has a next action; the four: 33.0.1 the newer release, 32.1.1 "
           "archived, 32.1.2 the newer release plus its reviewed fix in 32.2.0, 32.2.2 the newer release plus its "
           "reviewed fix in 33.0.0",
@@ -749,7 +753,8 @@ def check_corpus_and_surfaces() -> None:
           "before the 2026-11-21 20:4x run) it stands under the volume WAIT, on that page only; with today's 51 rows "
           "(four added since) the reviewed entry no longer applies and no clause follows the count",
           replayable and with_finding == ["obs-studio|33.0.1|"]
-          and (replay["pages"]["obs-studio|33.0.1|"].get("count_line") == f"47 accepted patch-specific reports. {FINDING}")
+          and ((replay["pages"].get("obs-studio|33.0.1|") or {}).get("count_line")
+               == f"47 accepted patch-specific reports. {FINDING}")
           and FINDING not in str(today.get("count_line") or "") and eo.UNIVERSAL_CLAUSE not in str(today.get("count_line") or ""),
           f"replayable={replayable} {with_finding} {today.get('count_line')}")
     stored = {k: (by_key[k].get("update_decision_label"), str(by_key[k].get("update_consensus_summary") or "")[:28],
@@ -790,7 +795,8 @@ def check_corpus_and_surfaces() -> None:
     check("R0 the liquid gem renders every case", "__error__" not in out
           and not any(str(v).startswith("<<ERR") for v in out.values()), str(out.get("__error__") or
                                                                               [v[:120] for v in out.values() if str(v).startswith("<<ERR")][:2]))
-    want = {k: (f"WAIT {LABEL}", len(groups.get(tuple(k.split("|")), [])), projection["pages"][k]["body"]) for k in FOUR}
+    want = {k: (f"WAIT {LABEL}", len(groups.get(tuple(k.split("|")), [])),
+                (projection["pages"].get(k) or {}).get("body") or "(no row)") for k in FOUR}
     page_bad, home_bad, feed_bad, row_bad = [], [], [], []
     for k in sorted(FOUR):
         phrase, n, body = want[k]
@@ -840,6 +846,19 @@ def check_corpus_and_surfaces() -> None:
           and len(n322) == 3 and n322[2] == "The reviewed problem that applies if you use macOS 27.2 was fixed in OBS "
                                             "Studio 33.0.0." and n322[1].startswith("Newer release:"),
           json.dumps(way)[:600])
+
+
+class Missing(dict):
+    """A mapping whose missing key reads as an empty mapping, so a dropped row fails a named check instead of
+    crashing the suite (a crash would hide every later check from a mutant)."""
+
+    def __missing__(self, key):
+        return Missing()
+
+    def get(self, key, default=None):
+        value = super().get(key, default)
+        return Missing(value) if isinstance(value, dict) and not isinstance(value, Missing) else (
+            value if value is not None else Missing())
 
 
 def vrow_key(r: dict) -> str:
