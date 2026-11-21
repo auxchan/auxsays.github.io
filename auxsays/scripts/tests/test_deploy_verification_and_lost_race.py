@@ -709,6 +709,16 @@ class Expr:
         raise ValueError(f"unsupported token {t!r}")
 
 
+def recovery_step_index(steps: list) -> int:
+    """The patch-ingest recovery step, located STRUCTURALLY -- the step that reads the writeback's
+    lost_race output through its env -- so a mutant that edits its shell cannot also hide it."""
+    for i, s in enumerate(steps):
+        env = (s.get("env") or {}) if isinstance(s, dict) else {}
+        if "steps.commit.outputs.lost_race" in str(env.get("LOST_RACE", "")):
+            return i
+    return -1
+
+
 def writer_group_members() -> set[str]:
     out = set()
     for path in WORKFLOWS.glob("*.yml"):
@@ -808,9 +818,7 @@ def section_wiring() -> None:
     isteps = ing["jobs"]["ingest"]["steps"]
     names = [s.get("name") for s in isteps]
     commit_idx = next((i for i, s in enumerate(isteps) if s.get("id") == "commit"), -1)
-    rec_idx = next((i for i, s in enumerate(isteps)
-                    if "patch-ingest.yml" in strip_shell_comments(str(s.get("run") or ""))
-                    and "recovery_of" in strip_shell_comments(str(s.get("run") or ""))), -1)
+    rec_idx = recovery_step_index(isteps)
     check("D9 patch-ingest has a recovery step after its writeback step",
           0 <= commit_idx < rec_idx, f"commit={commit_idx} recovery={rec_idx} names={names}")
     rec = isteps[rec_idx] if rec_idx >= 0 else {}
@@ -942,7 +950,8 @@ def section_executed() -> None:
           all(set(f) <= declared_inputs(wf) for wf, f in summ if wf), str(summ))
 
     ing = load_wf(INGEST_WF)["jobs"]["ingest"]["steps"]
-    rec = next((s for s in ing if "recovery_of" in strip_shell_comments(str(s.get("run") or ""))), None)
+    idx = recovery_step_index(ing)
+    rec = ing[idx] if idx >= 0 else None
     if rec is None:
         check("E patch-ingest has a recovery step to execute", False)
         return
