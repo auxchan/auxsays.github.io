@@ -100,18 +100,46 @@ def assess(body: str, version: str = "9.1.2") -> nki.Assessment:
     return nki.assess(body, version)
 
 
+# The frozen 33.0.2 fixture keeps the vendor's STRUCTURE, not its text: every letter-word the parser does
+# not read becomes x's of the same length, while line breaks, Markdown markers, punctuation, digits and
+# versions are kept. P0 proves the parser reads the skeleton exactly as it reads the real stored body.
+_MASK_KEEP = frozenset({
+    "known", "issue", "issues", "there", "is", "are", "exist", "exists", "remain", "remains", "s",
+    "currently", "still", "also", "now", "a", "an", "one", "two", "three", "four", "five", "six", "seven",
+    "eight", "nine", "ten", "several", "multiple", "some", "no", "any", "none", "n", "na",
+    "note", "important", "warning", "caution", "tip"})
+
+
+def mask_body(text: str) -> str:
+    def word(m: re.Match) -> str:
+        w = m.group(0)
+        if w.lower() in _MASK_KEEP or (w in ("v", "V") and text[m.end():m.end() + 1].isdigit()):
+            return w
+        return "x" * len(w)
+    return re.sub(r"[A-Za-z]+", word, text)
+
+
 # --------------------------------------------------------------------------------------------
 def section_p_parser() -> None:
     print("\n[P] the parser: explicit declaration only, scoped to the release, ambiguous = unknown")
-    frozen_body = FROZEN["official_patch_notes_body"]
-    check("P0 the frozen fixture is the body stored at 9687ad0c (sha256 pinned)",
-          hashlib.sha256(frozen_body.encode("utf-8")).hexdigest() == FROZEN["sha256"]
-          and FROZEN["update_version"] == "33.0.2")
-    real = nki.assess(frozen_body, "33.0.2")
+    skeleton = FROZEN["masked_body"]
+    record = RECORDS / FROZEN["record"].rsplit("/", 1)[-1]
+    stored = str((front_of(record) if record.exists() else {}).get("official_patch_notes_body") or "")
+    pinned = hashlib.sha256(stored.encode("utf-8")).hexdigest() == FROZEN["sha256"]
+    leftover = sorted({w for w in re.findall(r"[A-Za-z]+", skeleton)
+                       if w.lower() not in _MASK_KEEP and set(w) != {"x"} and w not in ("v", "V")})
+    check("P0 the frozen fixture is the masked structure of the body stored at 9687ad0c: no vendor words, and "
+          "while the record stores that body the parser reads both alike",
+          FROZEN["update_version"] == "33.0.2" and leftover == [] and len(skeleton) > 1000
+          and (not pinned or (mask_body(stored) == skeleton
+                              and nki.assess(stored, "33.0.2") == nki.assess(skeleton, "33.0.2")
+                              and nki.assess(stored, "33.0.1") == nki.assess(skeleton, "33.0.1"))),
+          f"pinned={pinned} leftover={leftover[:5]}")
+    real = nki.assess(skeleton, "33.0.2")
     check("P1 the real stored OBS 33.0.2 body declares a known issue for 33.0.2",
           real.result == nki.DECLARED and "above the first release heading" in real.reason
           and "naming this version" in real.reason, real)
-    moved = nki.assess(frozen_body, "33.0.1")
+    moved = nki.assess(skeleton, "33.0.1")
     check("P2 the same body read for 33.0.1 does not transfer the notice (it names 33.0.2)",
           moved.result == nki.UNKNOWN, moved)
 
@@ -141,7 +169,7 @@ def section_p_parser() -> None:
     other_named = assess("> [!NOTE]\r\n> There is a known issue with 9.1.1 on older processors.\r\n\r\n" + HOTFIX)
     check("P7 a notice whose declaring sentence names another version -> unknown, not declared",
           other_named.result == nki.UNKNOWN and "naming another version" in other_named.reason, other_named)
-    both_named = assess("> [!NOTE]\r\n> 9.1.2 and 9.1.1 share a known issue on older processors.\r\n\r\n" + HOTFIX)
+    both_named = assess("> [!NOTE]\r\n> There is a known issue with 9.1.2 and 9.1.1 on older processors.\r\n\r\n" + HOTFIX)
     check("P8 a declaring sentence naming this AND another version is ambiguous -> unknown",
           both_named.result == nki.UNKNOWN, both_named)
     versionless = assess("> [!CAUTION]\r\n> Known issue: the app can fail to start on some systems.\r\n\r\n" + HOTFIX)
@@ -212,13 +240,49 @@ def section_p_parser() -> None:
                 "> [!WARNING]\r\n> Install the 2025 runtime first; the known issues with older runtimes are "
                 "listed in the FAQ.\r\n\r\n"]
     labels = ["> [!CAUTION]\r\n> **Known issue:** the app can fail to start on some systems.\r\n\r\n",
-              "> [!WARNING]\r\n> We have identified two known issues on some systems.\r\n\r\n",
+              "> [!WARNING]\r\n> Two known issues affect some systems.\r\n\r\n",
               "> [!IMPORTANT]\r\n> There are known issues with older processors.\r\n\r\n"]
     check("P22 an install/prerequisite alert that only REFERS to known issues is generic -> not declared; "
           "a label or an introduced known issue still declares",
           all(assess(b + HOTFIX).result == nki.NOT_DECLARED for b in pointers)
           and all(assess(b + HOTFIX).result == nki.DECLARED for b in labels),
           [assess(b + HOTFIX) for b in pointers + labels])
+
+    conditional = ["> [!IMPORTANT]\r\n> Please read the installation guide before upgrading. If you run into a known "
+                   "issue, check the FAQ before opening a bug report.\r\n\r\n",
+                   "> [!NOTE]\r\n> Before reporting a crash after installing, check whether it is a known issue.\r\n\r\n",
+                   "> [!WARNING]\r\n> Before installing, check whether your GPU is affected by a known issue listed "
+                   "on our wiki.\r\n\r\n",
+                   "> [!NOTE]\r\n> If your plugin has a known issue, contact its author.\r\n\r\n",
+                   "> [!IMPORTANT]\r\n> Check whether there is a known issue for your GPU before installing.\r\n\r\n",
+                   "> [!NOTE]\r\n> Known issues: none.\r\n\r\n",
+                   "> [!NOTE]\r\n> There was a known issue with exports that is now resolved.\r\n\r\n"]
+    opening = ["> [!WARNING]\r\n> Note: there is a known issue where exports can stall.\r\n\r\n",
+               "> [!CAUTION]\r\n> A known issue can stop the app from starting on some systems.\r\n\r\n",
+               "> [!IMPORTANT]\r\n> There's currently a known issue with older processors.\r\n\r\n",
+               "> [!WARNING]\r\n> Known Issues:\r\n> - exports can stall\r\n\r\n"]
+    check("P23 an installation or prerequisite alert that mentions 'a known issue' only as a condition, a "
+          "question, an empty label or a fixed past issue is generic -> not declared; a clause that OPENS by "
+          "introducing a known issue declares",
+          all(assess(b + HOTFIX).result == nki.NOT_DECLARED for b in conditional)
+          and all(assess(b + HOTFIX).result == nki.DECLARED for b in opening),
+          [assess(b + HOTFIX) for b in conditional + opening])
+
+    notice = "> [!IMPORTANT]\n> There is a known issue where the app can fail to start.\n\n"
+    mixed = ["9.1.3 Hotfix Changes\n--------------------\n\n* Fixed a crash (#103)\n\n**9.1.2 Hotfix Changes**\n\n"
+             + notice + "* Fixed audio drift (#100)\n",
+             "## 9.1.3\n\n* Fixed a crash (#103)\n\n9.1.2 Hotfix Changes:\n\n" + notice + "* Fixed audio drift (#100)\n",
+             "## 9.1.3\n\n* Fixed a crash (#103)\n\n<h2>9.1.2</h2>\n\n" + notice + "* Fixed audio drift (#100)\n"]
+    own = ["## 9.1.3\n\n" + notice + "* Fixed a crash (#103)\n\n**9.1.2 Hotfix Changes**\n\n* Fixed audio drift (#100)\n",
+           "Upgrading from 9.1.2? Read the guide first.\n\n## 9.1.3\n\n" + notice + "* Fixed a crash (#103)\n",
+           "## 9.1.3\n\n* Fixed a regression from 9.1.2 (#104)\n\n" + notice]
+    check("P24 a notice after a plain, bold or HTML line naming an older release, inside this release's own "
+          "headed section, is unknown, never this release's; one before any such line, after this release's "
+          "own heading starts its section again, or after a list item that names an older release, is still "
+          "this release's",
+          all(nki.assess(b, "9.1.3").result == nki.UNKNOWN for b in mixed)
+          and all(nki.assess(b, "9.1.3").result == nki.DECLARED for b in own),
+          [nki.assess(b, "9.1.3") for b in mixed + own])
 
 
 # --------------------------------------------------------------------------------------------

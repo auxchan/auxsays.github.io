@@ -4634,14 +4634,18 @@ the incoming body differs. Nothing turned the stored notice into a field a page 
 
 **Fix** `lib/notes_known_issue.py`, one deterministic parser shared by the writer and the migration, decides
 declared / not declared / unknown for the record's own version. Declared needs an explicit vendor declaration in
-the vendor's own structure: a NOTE/IMPORTANT/WARNING/CAUTION alert whose text introduces a known issue ("There is a
-known issue", "two known issues", "There are known issues", "Known issue: ..."), or a non-empty Known Issue(s)
-section. Alert markup alone is not one (OBS uses the same box for driver minimums and dropped OS support), and nor
-is an alert that only refers to known issues ("check the known issues page", "a list of known issues").
+the vendor's own structure: a NOTE/IMPORTANT/WARNING/CAUTION alert one of whose clauses opens by introducing a
+known issue ("Known issue: ...", "There is a known issue ...", "There are known issues ...", "A known issue ...",
+"Two known issues ..."), or a non-empty Known Issue(s) section. Alert markup alone is not one (OBS uses the same
+box for driver minimums and dropped OS support), and nor is an alert that only refers to known issues, as a
+pointer ("check the known issues page"), a condition ("If you run into a known issue, ...", "check whether it is a
+known issue"), an empty label ("Known issues: none") or a past one ("There was a known issue"). The rule is an
+allow-list of grammatical shapes, so a shape it does not know reads as generic.
 Attribution follows the multi-release body's headings: above the first release heading only when that heading is
-this release, under this release's heading, never under another release's; in a body with no Markdown release
-headings, never after a plain or bold line naming another release; a declaring sentence that names another
-version, or a position that cannot be attributed, is unknown, and unknown publishes nothing. The
+this release, under this release's heading, never under another release's; never after a plain, bold or HTML line
+naming another release, whether the body has no Markdown release headings or the line sits in this release's own
+section; a declaring sentence that names another version, or a position that cannot be attributed, is unknown,
+and unknown publishes nothing. The
 writer derives `official_notes_known_issue: declared` from the body it stores, on create and on every refresh,
 in both directions, only on change; Release Health fields (`official_*_count`, `official_known_issues_present`)
 and the user-report `known_issues_present` are untouched. A zero-network migration set the field on the one
@@ -4669,15 +4673,19 @@ extraction from sufficiently structured vendor information; no phrase list or pe
 known issue") reads as declared; a notice naming two versions, even this one, is unknown, and so is one whose
 declaring sentence names any other dotted version (an OS or driver version such as "macOS 14.4" included). A Known
 Issues section whose only content is an absence statement other than "None", "N/A" or "no known issues" ("None at
-this time.") reads as declared. A known issue introduced without an article, a count or "are/has/have" before the
-term, or a sentence-opening "Known issue" with no colon or dash after it, is not read. HTML-only and bold-line
-"headings" are not read as headings.
+this time.") reads as declared. A known issue the vendor states in a shape outside the allow-list is not read
+(fails closed): "This release has a known issue ...", "We have identified two known issues ...", "We are aware of
+a known issue ...", "Currently, there is a known issue ...", or a sentence-opening "Known issue" with no colon or
+dash after it. A notice under an unversioned heading at the release-heading level that follows this release's
+section ("## Previous releases") is still read as this release's: nothing in the structure names another release.
+HTML-only and bold-line "headings" are not read as headings.
 
 **Reopen only if** a GitHub-release record whose stored body declares a known issue for its own version renders
 without the warning, a record shows the warning for a notice attributed to another release, or a material
 published warning is missed because of the refresh window.
 
-**Evidence** `auxsays/scripts/tests/test_official_notes_known_issue.py` (59 governed checks; 10 mutants, each
+**Evidence** `auxsays/scripts/tests/test_official_notes_known_issue.py` (61 governed checks; the frozen OBS 33.0.2
+fixture is the stored body's masked structure, with no vendor text; 10 mutants, each
 killed by a named check: declaration, release scoping, removal, no churn, Release Health byte-identity,
 absent-field text, migration scope, writer scope on create and on refresh, the notice without the field);
 `migrate_official_notes_known_issue.py`.
