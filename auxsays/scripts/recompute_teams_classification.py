@@ -44,7 +44,8 @@ import yaml  # noqa: E402
 
 from lib import evidence_classification as ec  # noqa: E402
 from patch_collectors import microsoft_teams as teams  # noqa: E402
-from recompute_evidence_classification import WRITABLE, apply_writes  # noqa: E402
+from lib import evidence_facts as ef  # noqa: E402
+from recompute_evidence_classification import DERIVED_WRITABLE, WRITABLE, apply_writes  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 STORE = ROOT / "_data" / "consensus_evidence.yml"
@@ -101,6 +102,8 @@ def run(store: Path, write: bool) -> dict[str, Any]:
     rows = yaml.load(raw, Loader=yaml.SafeLoader)["evidence"]
     decisions = [(index, decide(row)) for index, row in enumerate(rows) if _s(row, "product_id") == PRODUCT_ID]
     writes = {index: d["write"] for index, d in decisions if d["write"]}
+    # The structured facts follow the labels on a row that carries them (G68): derived, never decided.
+    writes = {index: {**fields, **ef.derived_fact_updates(rows[index], fields)} for index, fields in writes.items()}
     new_text = apply_writes(raw, [row.get("id") for row in rows], writes)
     after_rows = yaml.load(new_text, Loader=yaml.SafeLoader)["evidence"]
     # Prove the edit is exactly the decided one: every other field of every row is unchanged.
@@ -109,7 +112,7 @@ def run(store: Path, write: bool) -> dict[str, Any]:
     for index, (old, new) in enumerate(zip(rows, after_rows)):
         if new != dict(old, **writes.get(index, {})):
             raise SystemExit(f"refusing row {index} ({old.get('id')}): the edit changed more than decided")
-        if set(writes.get(index, {})) - WRITABLE:
+        if set(writes.get(index, {})) - WRITABLE - DERIVED_WRITABLE:
             raise SystemExit(f"refusing row {index}: not writable")
 
     def tally(getter) -> dict[str, int]:

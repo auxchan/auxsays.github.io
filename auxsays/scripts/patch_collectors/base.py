@@ -14,6 +14,7 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 
+from lib import evidence_facts
 from lib.patch_identity import key_from as patch_key_from, require_build
 from lib.reddit_access_policy import is_policy_disabled_row
 from lib.source_segments import report_url_key
@@ -82,9 +83,15 @@ EVIDENCE_FIELDS = (
     "matched_text",
     "matched_field",
     "matched_context",
+    # Structured evidence facts (G68, lib.evidence_facts): public, derived, computed by
+    # `append_evidence_rows` from the row's own text when the row is written, and appended LAST.
+    # Optional, so a row written before they existed gains no key on a load; the zero-network
+    # migration (migrate_evidence_facts.py) backfilled every stored row.
+    *evidence_facts.STORED_FIELDS,
 )
 
 OPTIONAL_EVIDENCE_FIELDS = {
+    *evidence_facts.STORED_FIELDS,
     "archive_url",
     "target_build",
     "matched_text",
@@ -692,7 +699,9 @@ def append_evidence_rows(rows: list[dict[str, Any]], path: Path = EVIDENCE_PATH,
     preexisting_urls = set(seen_urls)
     added = 0
     for row in rows:
-        normalized = normalize_evidence_row(row)
+        # The structured facts are computed HERE, from the text this row holds, so every collector that
+        # persists through this boundary writes them (G68). Existing rows are never touched.
+        normalized = evidence_facts.with_facts(normalize_evidence_row(row))
         # Fail closed at the durable boundary: a COUNTED row for a build-aware product must carry
         # the exact build it was accepted for. Persisting a counted row without one would create
         # evidence that names a version but no patch -- unattributable to any build-specific
