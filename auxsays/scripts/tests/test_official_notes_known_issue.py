@@ -138,10 +138,10 @@ def section_p_parser() -> None:
     u = assess(unattributed, "9.1.2")
     check("P6 a version-less notice above a body whose first release heading is ANOTHER release -> unknown",
           u.result == nki.UNKNOWN and "first release heading is another version" in u.reason, u)
-    other_named = assess("> [!NOTE]\r\n> The known issue with 9.1.1 on older processors is fixed.\r\n\r\n" + HOTFIX)
+    other_named = assess("> [!NOTE]\r\n> There is a known issue with 9.1.1 on older processors.\r\n\r\n" + HOTFIX)
     check("P7 a notice whose declaring sentence names another version -> unknown, not declared",
           other_named.result == nki.UNKNOWN and "naming another version" in other_named.reason, other_named)
-    both_named = assess("> [!NOTE]\r\n> 9.1.2 fixes the known issue with 9.1.1.\r\n\r\n" + HOTFIX)
+    both_named = assess("> [!NOTE]\r\n> 9.1.2 and 9.1.1 share a known issue on older processors.\r\n\r\n" + HOTFIX)
     check("P8 a declaring sentence naming this AND another version is ambiguous -> unknown",
           both_named.result == nki.UNKNOWN, both_named)
     versionless = assess("> [!CAUTION]\r\n> Known issue: the app can fail to start on some systems.\r\n\r\n" + HOTFIX)
@@ -195,6 +195,30 @@ def section_p_parser() -> None:
           and nki.field_value(NOTICE + HOTFIX, "9.1.2") == "declared"
           and nki.field_value(HOTFIX, "9.1.2") is None
           and nki.field_value(unattributed, "9.1.2") is None)
+
+    bold = ("**9.1.3 Hotfix Changes**\n\n* Fixed a crash (#103)\n\n**9.1.2 Hotfix Changes**\n\n"
+            "> [!IMPORTANT]\n> There is a known issue where the app can fail to start.\n\n* Fixed audio drift (#100)\n")
+    plain = bold.replace("**", "")
+    top = ("**9.1.3 Hotfix Changes**\n\n> [!IMPORTANT]\n> There is a known issue where the app can fail to start.\n\n"
+           "* Fixed a crash (#103)\n\n**9.1.2 Hotfix Changes**\n\n* Fixed audio drift (#100)\n")
+    check("P21 no Markdown release headings: a notice after a line naming an older release is unknown, never "
+          "this release's; one above any such line is still this release's",
+          all(nki.assess(b, "9.1.3").result == nki.UNKNOWN for b in (bold, plain))
+          and nki.assess(top, "9.1.3").result == nki.DECLARED,
+          [nki.assess(b, "9.1.3") for b in (bold, plain, top)])
+    pointers = ["> [!IMPORTANT]\r\n> Read the installation guide before upgrading. Check the known issues page "
+                "before reporting a bug.\r\n\r\n",
+                "> [!NOTE]\r\n> For a list of known issues, see the wiki.\r\n\r\n",
+                "> [!WARNING]\r\n> Install the 2025 runtime first; the known issues with older runtimes are "
+                "listed in the FAQ.\r\n\r\n"]
+    labels = ["> [!CAUTION]\r\n> **Known issue:** the app can fail to start on some systems.\r\n\r\n",
+              "> [!WARNING]\r\n> We have identified two known issues on some systems.\r\n\r\n",
+              "> [!IMPORTANT]\r\n> There are known issues with older processors.\r\n\r\n"]
+    check("P22 an install/prerequisite alert that only REFERS to known issues is generic -> not declared; "
+          "a label or an introduced known issue still declares",
+          all(assess(b + HOTFIX).result == nki.NOT_DECLARED for b in pointers)
+          and all(assess(b + HOTFIX).result == nki.DECLARED for b in labels),
+          [assess(b + HOTFIX) for b in pointers + labels])
 
 
 # --------------------------------------------------------------------------------------------

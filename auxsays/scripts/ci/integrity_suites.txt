@@ -564,7 +564,7 @@ auxsays/scripts/tests/test_official_notes_platform_backlog.py = 10
 # Health and absent-field cards byte-identical to the pre-change card in real Liquid (R); the migration
 # is zero-network, one line per demonstrated change, idempotent, refusing, with nothing left pending in
 # the corpus (M); bare-script imports run (B). Needs ruby + liquid.
-auxsays/scripts/tests/test_official_notes_known_issue.py = 57
+auxsays/scripts/tests/test_official_notes_known_issue.py = 59
 # The one-time transcoding repair (G39): text a 2026-05-02 local pass read as cp1252 is restored only
 # where undoing the misreading is exact; correct UTF-8, ASCII, mixed fields (reported), text misread
 # twice (M10) and nested evidence copies are never changed; zero network, idempotent, and its scope proof refuses a concurrent change.

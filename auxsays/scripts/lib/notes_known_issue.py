@@ -7,11 +7,13 @@ sees: the patch page said AUXSAYS had captured no vendor issue data, and the war
 the collapsed release notes as raw Markdown.
 
 WHAT COUNTS. Only an explicit vendor declaration, read from the vendor's own structure:
-  * a GitHub alert block (NOTE, IMPORTANT, WARNING or CAUTION) whose own text says "known issue";
+  * a GitHub alert block (NOTE, IMPORTANT, WARNING or CAUTION) whose own text INTRODUCES a known
+    issue: "There is a known issue", "two known issues", "There are known issues", "Known issue: ...";
   * a heading that names a Known Issue(s) section, with something in it.
 An alert is not a known issue because of its markup: OBS uses the same IMPORTANT box for driver
 minimums, dropped OS support and a new code-signing certificate, and none of those is a declared
-known issue. A determiner of absence ("no known issues", "any known issues") is not a declaration.
+known issue. Nor is an alert that only REFERS to known issues ("check the known issues page", "a
+list of known issues", "no known issues", "any known issues"): it stays a generic alert.
 There is no list of issue phrasings here, and nothing is inferred from words like "crash".
 
 WHICH RELEASE IT BELONGS TO. OBS bodies carry several releases' notes in one page ("33.0.2 Hotfix
@@ -19,7 +21,9 @@ Changes", then "33.0.1 Hotfix Changes", ...). A notice is attributed to the rele
 only when the structure says so:
   * above the first release heading, when that heading is this release (or the body has none);
   * under this release's own heading;
-  * never when it sits under an earlier (or any other) release's heading.
+  * never when it sits under an earlier (or any other) release's heading;
+  * in a body with no Markdown release headings, never after a plain or bold line that names
+    another release ("**9.1.2 Hotfix Changes**"): position no longer says whose notice it is.
 An alert's declaring sentence may also name versions. Naming only this release confirms it; naming
 any other release makes the attribution ambiguous, because "the known issue in 33.0.2" on the
 33.0.3 page is a statement about 33.0.2. AMBIGUOUS IS UNKNOWN, and unknown publishes nothing: it is
@@ -60,6 +64,12 @@ _VERSION = re.compile(r"(?<![\w.])v?(\d+(?:\.\d+)+)(?!\w|\.\d)")
 _KNOWN_ISSUE = re.compile(r"\bknown[ \t-]+issues?\b", re.I)
 _SENTENCE_BREAK = re.compile(r"(?<=[.!?])\s+")
 _ABSENCE_DETERMINERS = frozenset({"no", "any"})
+# What may stand directly before "known issue(s)" when a sentence introduces one (see _declares):
+# an indefinite article or a count, or the verb of "There are / This release has known issues".
+_INTRODUCING_WORDS = frozenset({"a", "an", "one", "two", "three", "four", "five", "few", "several", "multiple",
+                                "some", "are", "has", "have"})
+# A label opening the sentence: "Known issue:", "**Known issues** -", "Known issue —".
+_LABEL_TAIL = re.compile(r"^[*_]*[ \t]*[:\u2013\u2014-]")
 _KI_HEADING_WORDS = frozenset({"known issue", "known issues"})
 _VACUOUS_SECTION = frozenset({"", "none", "na", "n a"})
 
@@ -158,13 +168,32 @@ def _sentences(text: str) -> list[str]:
 
 
 def _declares(sentence: str) -> bool:
-    """Does this sentence assert a known issue? "no known issues" / "any known issues" do not."""
+    """Does this sentence INTRODUCE a known issue? Only after an indefinite article, a count or the
+    verb of an existence statement ("There is a known issue", "two known issues", "There are known
+    issues"), or as a label opening the sentence ("Known issue: ..."). A mention that only refers to
+    known issues -- "the known issues page", "a list of known issues", "check known issues", "no
+    known issues", "any known issues" -- is not a declaration, so an alert that only mentions them
+    stays a generic alert (fails closed)."""
     for match in _KNOWN_ISSUE.finditer(sentence):
-        previous = re.search(r"([A-Za-z]+)[^A-Za-z]*$", sentence[:match.start()])
-        if previous and previous.group(1).lower() in _ABSENCE_DETERMINERS:
+        previous = re.search(r"([A-Za-z0-9.]+)[^A-Za-z0-9.]*$", sentence[:match.start()])
+        if previous is None:
+            if _LABEL_TAIL.match(sentence[match.end():]):
+                return True
             continue
-        return True
+        word = previous.group(1).lower()
+        if word in _INTRODUCING_WORDS or word.isdigit():
+            return True
     return False
+
+
+def _denies(sentence: str) -> bool:
+    """Does this sentence mention known issues only to say there are none ("no known issues")?"""
+    matches = list(_KNOWN_ISSUE.finditer(sentence))
+    for match in matches:
+        previous = re.search(r"([A-Za-z]+)[^A-Za-z]*$", sentence[:match.start()])
+        if not (previous and previous.group(1).lower() in _ABSENCE_DETERMINERS):
+            return False
+    return bool(matches)
 
 
 def _is_known_issues_heading(text: str) -> bool:
@@ -173,7 +202,7 @@ def _is_known_issues_heading(text: str) -> bool:
 
 
 def _section_is_vacuous(text: str) -> bool:
-    kept = [s for s in _sentences(text) if not (_KNOWN_ISSUE.search(s) and not _declares(s))]
+    kept = [s for s in _sentences(text) if not _denies(s)]
     return re.sub(r"[^a-z]+", " ", " ".join(kept).lower()).strip() in _VACUOUS_SECTION
 
 
@@ -191,8 +220,15 @@ def assess(body: Any, version: Any) -> Assessment:
     else:
         preamble_owner = "ambiguous"
 
+    # A body with no Markdown release headings can still carry several releases' notes under plain
+    # or bold lines ("**9.1.2 Hotfix Changes**"). Once a line that is not a list item or a quote has
+    # named another release, position no longer says whose notice follows: ambiguous, not this one.
+    other_release_named = False
+
     def owner_of(section: Any) -> str:
         if section == "preamble":
+            if not release_headings and other_release_named:
+                return "ambiguous"
             return preamble_owner
         if section == "ambiguous" or target is None:
             return "ambiguous"
@@ -241,6 +277,11 @@ def assess(body: Any, version: Any) -> Assessment:
         if ki is not None:
             ki["text"].append(block.text)
 
+        if (block.kind == "text" and not release_headings and target is not None
+                and not _LIST_ITEM.match(block.text) and not _QUOTE.match(block.text)
+                and _version_keys(block.text) - {target}):
+            other_release_named = True
+
         if block.kind != "alert":
             continue
         if block.alert not in NOTICE_ALERTS:
@@ -259,7 +300,9 @@ def assess(body: Any, version: Any) -> Assessment:
         elif named - {target}:
             ambiguous.append(f"{block.alert} alert {place} declares a known issue naming another version")
         elif where == "ambiguous" and target not in named:
-            ambiguous.append(f"{block.alert} alert {place} declares a known issue but the body's first release heading is another version")
+            why = ("the body's first release heading is another version" if release_headings
+                   else "an earlier line names another release")
+            ambiguous.append(f"{block.alert} alert {place} declares a known issue but {why}")
         else:
             declared.append(f"{block.alert} alert {place} declares a known issue"
                             + (" naming this version" if target in named else ""))
