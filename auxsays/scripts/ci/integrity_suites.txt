@@ -108,6 +108,11 @@ auxsays/scripts/tests/test_guarded_merge.py = 82
 auxsays/scripts/tests/test_powerpoint_same_author_context.py = 18
 auxsays/scripts/tests/test_powerpoint_github_officedev.py = 22
 auxsays/scripts/tests/test_powerpoint_evidence_integrity.py = 62
+# The one GitHub API transport (AUX-107): every caller over a fake wire -- refusals told apart, Retry-After
+# and x-ratelimit-reset honoured, no request after a refusal, blocked/partial never success, Link
+# pagination, truthful User-Agent; the open-web GitHub provider gone with nothing depending on it; and
+# contributor handles out of GitHub release notes, adapter and stored corpus agreeing byte for byte.
+auxsays/scripts/tests/test_github_api_transport.py = 109
 auxsays/scripts/tests/test_powerpoint_qna_tag_enumeration.py = 65
 auxsays/scripts/tests/test_acrobat_tiering.py = 136
 
@@ -132,6 +137,16 @@ auxsays/scripts/tests/test_reddit_access_policy.py = 86
 # records per edition per run -- so 139 of the 143 frozen identities are a standing backlog
 # that scoped dispatches clear, not a one-run lag.
 auxsays/scripts/tests/test_acrobat_retired_method_health.py = 50
+# AUX-117 (G67): DaVinci's two Blackmagic-forum methods, refused on 6,725 of 6,725 runs, are disabled in
+# davinci.py with the adapter never called and a row built outside method_status; the frozen rows of the
+# 100 archived records are reclassified by a zero-network migration proven by hash (only status /
+# blocked_reason / notes of exactly 200 rows move, last_run kept, no record touched); and the page states
+# equal the list frozen before the change, version by version (100 STALE kept, 20 DEGRADED -> INSUFFICIENT
+# COVERAGE, 3 BLOCKED -> DEGRADED, none healthy), with the method_status counterfactual measured.
+auxsays/scripts/tests/test_davinci_refused_methods_disabled.py = 46
+# AUX-117 (G67): the PowerPoint tag lane's notes carry the admitted total and the hydration-cap overflow;
+# status, counters, the 45 cap and the walk are unchanged (compared against a run with the note suppressed).
+auxsays/scripts/tests/test_powerpoint_hydration_cap_telemetry.py = 20
 
 # The two repairs AUX-027 made after a targeted collector dispatch was used to clear the AUX-026
 # health backlog. That was the wrong mechanism -- a full collector dispatch DISCOVERS EVIDENCE --
@@ -156,7 +171,7 @@ auxsays/scripts/tests/test_learn_report_identity.py = 99
 auxsays/scripts/tests/test_collector_ownership.py = 52
 auxsays/scripts/tests/test_collector_transaction.py = 23
 auxsays/scripts/tests/test_collector_txn_nested_root.py = 26
-auxsays/scripts/tests/test_collector_write_authority.py = 112
+auxsays/scripts/tests/test_collector_write_authority.py = 128
 auxsays/scripts/tests/test_davinci_bare_version_identity.py = 58
 # Budget-bounded collectors must walk the corpus newest-first. DaVinci did not, so every
 # scheduled run spent its 1200s budget on 2014-2018 records and the newest release had never
@@ -172,7 +187,7 @@ auxsays/scripts/tests/test_collector_traversal_order.py = 16
 auxsays/scripts/tests/test_dependency_reproducibility.py = 21
 auxsays/scripts/tests/test_davinci_verified_reports.py = 68
 auxsays/scripts/tests/test_evidence_method_health_dupes.py = 4
-auxsays/scripts/tests/test_method_health_append_delta.py = 55
+auxsays/scripts/tests/test_method_health_append_delta.py = 61
 auxsays/scripts/tests/test_evidence_strength_thresholds.py = 38
 # +2 (C3.6): a stored live claim the deploy-time projection does not list is still hedged (AUX-055).
 auxsays/scripts/tests/test_consensus_sample_honesty.py = 90
@@ -215,7 +230,7 @@ auxsays/scripts/tests/test_monitoring_health.py = 38
 # emitted set == owned, disabled rows make no call and executing rows do, states match the plan or
 # pinned table, refusal is never relabelled, no H7/H0 reason, every AUXSAYS_* name classified. Six
 # self-tests prove each check fails on its defect (the five pairs reintroduced fail B1).
-auxsays/scripts/tests/test_owned_method_lifecycle.py = 278
+auxsays/scripts/tests/test_owned_method_lifecycle.py = 392
 
 # A stored live claim renders as live only while it certifies at deploy time (AUX-055). Five Liquid
 # copies each turned the stored maturity words into "Live consensus", and the words outlive the
@@ -224,7 +239,7 @@ auxsays/scripts/tests/test_owned_method_lifecycle.py = 278
 # with no run context stays disabled; the projection run as pages.yml runs it, failing closed and
 # writing no record; and the one Liquid contract every consumer now renders through, certified,
 # uncertified and absent.
-auxsays/scripts/tests/test_live_render_projection.py = 66
+auxsays/scripts/tests/test_live_render_projection.py = 68
 
 # Every writer promotes and revokes live consensus from one decision (AUX-056). Until now no writer
 # could store it: the certifier declined everything, so the label existed only at render time. Each
@@ -240,7 +255,13 @@ auxsays/scripts/tests/test_frontmatter_roundtrip.py = 99
 auxsays/scripts/tests/test_normalize_davinci_version.py = 53
 auxsays/scripts/tests/test_obs_consensus_acceptance.py = 27
 auxsays/scripts/tests/test_obs_consensus_projection.py = 50
-auxsays/scripts/tests/test_obs_forum_evidence_family.py = 190
+# OBS forum health (AUX-100): one embed-only opening post made every OBS forum row partial and
+# revoked live on three patches whose evidence had not changed. Pins the empty-body split by cause
+# (textless vs missing wrapper / extraction failure / unexplained empty wrapper, the last three
+# still degrading), the pool-collapse bound at its edges, identical acceptance inputs, the
+# newest-first walk with no starvation, and budget stops that name skipped versions and give them
+# no row.
+auxsays/scripts/tests/test_obs_forum_evidence_family.py = 257
 # The same projection-coherence class for DaVinci, whose count is moved by the scheduled lane's
 # unscoped reconcile while its rebuild authority lived only in a dispatch-only workflow. Pins the
 # lane step (scoped, after reconciliation, before the first QA) and drives the real writer over a
@@ -268,11 +289,139 @@ auxsays/scripts/tests/test_davinci_archive_check.py = 76
 # feed. Proves the single authority by SUBSTITUTING it and watching every decision-bearing field
 # move, which a grep for the module name cannot do, and pins the decisions themselves so that
 # "make them agree" cannot drift into "make them lenient".
-auxsays/scripts/tests/test_patch_decision_authority.py = 180
+# [S] (GROWTH-1B) the search title and meta description: written from the verdict the patch page
+# itself rendered, never from stored fields, so a result cannot claim a verdict the page does not;
+# the exact Windows KB; "no verdict yet" for INSUFFICIENT DATA; live wording only with the page's
+# live box AND the render-time projection certificate; no supersession or safety claim; one title,
+# description and canonical; every other page keeps the site-wide SEO tag. Needs ruby + liquid.
+# 209 -> 211 (GROWTH-3 review 2, LOW-2): a WAIT / TEST FIRST title is "<identity>: <verdict scope>"
+# and its description states the count only as a count, never "from N reports", "live consensus of
+# N" or "on early evidence" (S5-S8, S12-S16 and S19 reworded; S26 over every reasoned case), and
+# mutant X8 (the old title) is caught.
+# 211 -> 213 (G43): a stored title that repeats its product label shows the label once in the heading,
+# the citation, the search title and the JSON-LD headline (S27), and an unaffected title is shown as stored (S28).
+auxsays/scripts/tests/test_patch_decision_authority.py = 213
+# GROWTH-3 (owner decisions 1-3, 2026-11-06) moved the verdict policy into lib/patch_decision.decide:
+# an official withdrawal (AVOID), Microsoft's monthly security classification (SECURITY UPDATE), or a
+# reviewed reason entry the page's counted rows still support (WAIT / TEST FIRST); else INSUFFICIENT
+# DATA. Count, sentiment, theme, severity, maturity and the clock decide nothing (G3-D1..D12). The
+# reason file's audits (G3-F*), the single KB5079391 lifecycle exception (G3-L*), wording (no pause
+# advice, G3-W*), QA severities (G3-Q*), and the Liquid gate rendering exactly what Python decides on
+# a matrix and over the whole corpus (G3-R*). The decision authority suite above grew 205 -> 209: the
+# body-follows-decision section now asserts the no-invitation check for all three caller-supplied
+# decisions (B2 x 6, was x 2), because none of them selects the body.
+# 52 -> 86 (review 1): the gate reads Python's deploy-time verdict projection and decides no WAIT /
+# TEST FIRST itself (G3-P0..P7: the projection IS decide, probes A1 and A2 fail closed on the rendered
+# page, the builder fails closed and runs before QA and Jekyll); one matrix case per support rule and
+# no-projection fail-closed (G3-R4a..j, R5); QA errors on a rendered/authority disagreement and its
+# warning names what renders (G3-Q4..Q6); the scope prints with the verdict on tables, the feed, the
+# stored summary and the page (G3-S1..S5). 24 mutants (was 17), each caught by a named check.
+# 86 -> 112 (review 2, LOW-1/3/4): the projection carries the OFFICIAL verdicts too and the gate
+# re-derives nothing (G3-P1, P8, P9; R4j and R5 restated: a forged or absent row prints as QA's model
+# says); lifecycle values must be plain unpadded strings -- probe N1's numeric builds and padded
+# values are refused and are QA errors (G3-L4, L5, Q7); the gate2 release types fail closed and are
+# QA publication errors (G3-R6, Q8); a refused lifecycle file renders no AVOID (G3-R7); a partial
+# projection is an error (G3-Q9); the menu-bar reason is non-causal (G3-W4); the feed says nothing
+# is "listed below" and its fallback keeps the patch name (G3-S6, S7); both KB5079391 pages carry the
+# replacement recommendation (G3-S8). 37 mutants (was 24), X25..X37 one fix half each.
+# 112 -> 124 (PR-A2 review, LOW-1..3 + MB1/MB2): the page key strips exactly what Liquid strips and
+# a Unicode-padded identity is a publication error (G3-R8, Q10); release types, KB numbers and dates
+# are ASCII-only and a lifecycle build must be an ASCII 12345.6789 (G3-L6, and Q8/R6 carry probe P3);
+# a lifecycle build no record carries is a publication error (G3-Q11); R4j pins the gate's
+# scope-acceptance clauses. 45 mutants (was 37), X38..X45 one fix half each.
+# 124 -> 128 (G35-04 review 2, LOW-6): the release-type SHAPE detector reads Unicode digits and the
+# NFKC form again, so a fully non-ASCII type is a publication error (G3-Q8 carries the three review
+# values); X40 is split one mutant per pattern (X40a..X40e). 49 mutants.
+# 128 -> 143 (AUX-097): every feed card states its page's official verdict at any report count --
+# the include equals lib/verdict_projection.feed_line on every page (G3-S9), every AVOID / SECURITY
+# UPDATE card prints decide's line, the 18 zero-report ones included (G3-S10), a zero-report
+# INSUFFICIENT DATA card still prints none (G3-S11), both feed loops render it under 'AUXSAYS
+# verdict' (G3-S12), and QA's feed_official_verdict_unprinted is a publication error (G3-Q12);
+# G3-S2 restated. Review 1: the pill above an official verdict names no verdict -- 'Not enough
+# reports', the patch page's word, on the 18 (G3-S13) -- and QA checks each half of the line on
+# its own (G3-Q13). 57 mutants, X46..X53 one fix half each.
+# 143 -> 146 (AUX-099, G35-04 review 2 LOW-7, probe P6): an invisible or control character (Unicode Cf,
+# Cc, Zl, Zp, or a space separator other than a plain space) inside product_id / update_version /
+# target_build is a publication error, printable Unicode changelog titles are not, and the shipped
+# corpus has none (G3-Q14). 59 mutants, X54/X55 one fix half each.
+# 146 -> 148 (AUX-099 round 3, G38 WS2 review 2 LOW-2): every Default_Ignorable_Code_Point, the Hangul fillers and
+# the braille blank are errors too, in product_id and target_build without exception; in update_version U+FE0F
+# and U+200D pass only inside an emoji sequence (G3-Q14). 61 mutants, X56/X57 one fix half each.
+# 148 -> 156 (G66): the KB5079391 entry carries the K3 provenance (file and statement sha256, UTC retrieval
+# time) as optional, validated, text-free fields (G66-L1..L4); both AVOID pages link the official statement
+# from the projection through the gate to the shipped page template, and no other verdict does (G66-S1..S4).
+auxsays/scripts/tests/test_growth3_verdict_policy.py = 156
+# G35-04, the deterministic verdict-reason producer (lib/verdict_reason_producer): the vendor-
+# confirmed-serious class on frozen copies of the stored statements, the six named pages (VRP-V1..V7);
+# the user-corroborated install-failure class and its mandatory independence gate (VRP-I1..I6); the
+# corroboration placeholder fails closed (VRP-P1); purity, no network (VRP-N1, N2); the activation
+# switch ships OFF and changes nothing, and ON the projection, QA and the real gate carry the
+# candidates (VRP-S0..S5); the shipped corpus (VRP-C1, C2). Review 1 (34 -> 51): a scope must name a
+# setup and an OBS version counts only as the defective one (V8, V9), the vendor "other setups" line
+# (V10), six frozen real rows that do not report this update failing to install (I7), codes from this
+# update only (I8), the L1/N2 duplicate pairs (I9). 21 mutants (was 10), VX11..VX21 one fix half each.
+# Review 2 (51 -> 56): a hedged scope is ambiguous -- the Q4 row and the review's unit phrasings
+# (V8b). 25 mutants, VX22..VX25 one fix half each.
+# AUX-099 (56 -> 78; AUTH_V2_38 WS2 items 1-8): independence fails closed -- an unknown second reporter never
+# counts, only a different source reporter id or conflicting incident details do, and a reworded cross-post is
+# detected by a shared distinctive passage (I2, I10a); similarity or a shared author never merges incidents
+# whose details conflict (I10b); the install verb's subject is this update and codes come only from install-
+# error context (I11); strict grouping on a shared code or stage (I12); a carried-over defect persists, never
+# new (V11); an OBS crash needs a launch or core-flow cue and a possible / rare one is queued (V12); every
+# corpus install candidate rests on separate incidents of one problem (C3); the record writers gather reasons
+# as the projection does, so switch-ON drift clears (S6). 39 mutants, VX26..VX39 one fix half each.
+# AUX-099 review (78 -> 93): only identity details (computer, CPU, edition, architecture, OS family) or a
+# reporter id separate two reports -- a failure point or an OS version never does, and a declared follow-up is a
+# copy (I14); a third row never bridges two machines, overlap is not a conflict, a copy of a copy is one report
+# (I15); install wording whose object is other software is refused (I11); Acrobat rows: another product's Exit
+# Code 7 and denials refused, grouping on the specific DW/DF error (I3, I13); any older OBS version or
+# earlier / previous / older / prior is carry-over, a causal "since" is not (V11); a freeze or hang needs the
+# core-flow cue too (V12); every judged corpus page ends as a candidate or a recorded refusal (C2, C3).
+# 51 mutants, VX40..VX51 one fix each.
+# AUX-099 round 3 (93 -> 113; G38 WS2 review 2: fail closed instead of adding phrases): a vendor WAIT only from a
+# fully recognised statement -- any trailing clause, aside, version number or history word is queued, "earlier"
+# counts only beside a version, a Microsoft row that speaks about history is queued (V11); a hedged crash is
+# uncertain (V14); identity only from own-machine statements (I16); a shared long passage beats an identity
+# conflict, reporter ids compare per site (I17); the install subject and object are an allow-list (I18);
+# Acrobat rows about another version or product are refused (I19); explicit copy declarations (I20); a stage
+# never joins two codes (I21); codes only in install-error context (I22); the writers add candidates beside a
+# reviewed entry (S7). 62 mutants, VX52..VX62 one change each.
+# G84 (AUX-124; 113 unchanged): with the switch ON only the candidates that pass the reviewed entries' own checks
+# reach the projection, the real gate, QA and the record writers; the named fixture's vendor candidates cite no
+# counted row and are refused, an Acrobat install candidate on two counted reports passes, and a projection carrying
+# a refused candidate is a QA error (S2..S4, S6, S7 restated).
+auxsays/scripts/tests/test_verdict_reason_producer.py = 113
+# G84 (AUX-124), one validation contract for every verdict reason: with the activation switch forced ON in memory a
+# producer candidate meets the reviewed schema and every WAIT fact (basis automatic:<rule version>) and
+# support_problems on its own page's counted rows before decide may read it, at the projection site and the writer
+# site, and a refused one is listed as unsupported (the bypass fixture G79 reuses); the reviewed path is unchanged
+# word for word; QA errors on a projection carrying a refused candidate (H1a..H1k). A user-corroboration candidate
+# is worded as the user class and held to the reporter minimum (H2a..H2c). An official confirmation names its
+# record by product, version and build: a true one keeps a Windows entry supported, blank-build products are
+# unchanged, the writer path too (D1a..D1f). 10 mutants, RX1..RX10, one per fix site; the switch stays OFF (N1).
+auxsays/scripts/tests/test_reason_validation_contract.py = 31
+# AUX-099, shadow operation of the reason producer (switch OFF): the deploy ledger tells a first-seen
+# candidate from a repeat appearance by stable identity -- a baseline first deploy, 0 new over unchanged
+# evidence, exactly the expected new candidate after one added row, a repeat after one more report, a
+# rules change and a lost ledger never prospective, bounded (PS-L1..L7); public-safe (P1, P2); never
+# public, never a tracked writer, pages.yml's steps main-only and continue-on-error (N1..N3); the bare
+# script end to end (S1). 6 mutants, PX1..PX6. Review (19 -> 21): one page whose install candidate changes
+# problem carries two keys, so the diagnostics also count distinct pages (PS-L8; PX7).
+# Review 2 (21 -> 26, LOW-6/LOW-7): an evicted key that returns is a repeat (the seen set, PS-L9); the rules'
+# version is a hash of the rule sources (PS-L10); the script exits 0 on an exception (PS-S2). PX8, PX9.
+auxsays/scripts/tests/test_producer_shadow.py = 26
 auxsays/scripts/tests/test_ownership_identity_fixes.py = 47
 auxsays/scripts/tests/test_ownership_reason_codes.py = 48
-auxsays/scripts/tests/test_patch_index_identity.py = 93
+auxsays/scripts/tests/test_patch_index_identity.py = 113
 auxsays/scripts/tests/test_patch_page_hierarchy.py = 262
+# The patch page's freshness notice said "Collection blocked." about one failed visit long after the
+# monitoring card beside it said COLLECTION STALE (AUX-084): it read method-health rows with no
+# freshness check. Renders the shipped layout with every include it uses resolved (the real card
+# included) at FIXED clocks over synthetic fixtures -- the Acrobat Pro shape before, at and after its
+# failed run ages out, both boundary seconds, every degraded status at four ages, rows that ran
+# before release or carry no usable time, live pages, a non-default limit -- and fails any case where
+# the notice claims a current problem the card does not show. Also pins the glossary's wording.
+auxsays/scripts/tests/test_freshness_notice_currency.py = 153
 # My Patch Watchlist: the visitor's own product list, local to their browser. Renders the shipped
 # patch layout to prove the control binds `page.product_id` (a patch page watches the PRODUCT, not
 # that one build), parses the other surfaces for their accessible state and their two distinct
@@ -283,8 +432,46 @@ auxsays/scripts/tests/test_patch_watchlist.py = 35
 # My Patch Stack: the personal dashboard over that same watchlist. Renders the shipped page with
 # Liquid and checks the half Jekyll owns -- a bounded payload (no 1,200-record dump), the newest
 # dated non-archived record per product, and a verdict derived exactly as patch-table-row does.
-# The client rendering is verified live; the storage contract it reuses is the Node suite's.
-auxsays/scripts/tests/test_patch_stack_dashboard.py = 110
+# The client rendering is verified live; the storage contract it reuses is the Node suite's. [CL]
+# runs the real card renderer: the date is "Newest accepted report captured", shown only with a report.
+# 113 -> 116 (GROWTH-3 review 1): the card, every upgrade-path release (rec[12]) and the attention
+# reason carry the verdict's scope (UP2b, PS-21, PS-22), against the authority's projection.
+auxsays/scripts/tests/test_patch_stack_dashboard.py = 116
+# The paged Patch Feed (G36-02). /updates/ was one 4.3 MB page with 819 of its patch links past the
+# 2 MB Googlebot reads. Runs the deploy gate (verify_feed_discovery.py) over synthetic built sites,
+# one failing case per way the catalogue can be lost; renders the SHIPPED paging block with Liquid
+# over eight record mixes (every record once, in order); runs the SHIPPED generator under stub Jekyll
+# classes (it counts what the layout lists); and pins the wiring statement by statement. Needs ruby
+# + liquid for [L]/[G]; without them the count drops and this fails.
+# 45 -> 59 (G36-02 follow-up): [J] runs the SHIPPED catalogue functions under node (node required):
+# the catalogue is held in feed order from every page, each patch once with the page's own card
+# winning, a page of another build retried once past the cache and otherwise refused; V11b (only
+# `feed_hidden: true` exempts), V18/V19 (STAMP), W9/W10.
+# 59 -> 67 (follow-up round 2): V20 (a stamp that is not the digest of the feed's cards fails
+# STAMP); G10/G11 (the generator ranks ties by permalink whatever the page order, and stamps the
+# feed from its cards); J8/J8b (the page plan from pages 1, 2, 8, 10 and 16), J9 (the catalogue's
+# outcome: 'mixed' is not 'failed'), J10 (what each outcome shows); W11 (the layout uses the rank).
+# 67 -> 73 (AUX-097 review 1, LOW-1): VERDICT, read from the built pages -- official cards that
+# state their page's verdict under a pill that names none pass (V21); no line (V22), an
+# 'Insufficient data' pill (V23), a stale, unscoped or doubled line (V24) and an unreadable verdict
+# box (V25) fail; W12 pins the markers to the shipped templates.
+auxsays/scripts/tests/test_feed_discovery.py = 73
+# Search signals that contradict each other (G39). Runs the deploy gate (verify_publication_hygiene.py)
+# over synthetic built sites: a correct site with an honoured explicit noindex page and a page without
+# structured data is clean, and each defect class fails a NAMED check (JSON-LD entity / parse / values,
+# robots policy vs render, noindex in the sitemap, conflicting directives, canonicals, sitemap, robots.txt,
+# a live page missing from its product hub); mojibake, company-hub gaps and entities in the SEO gem's
+# JSON-LD only warn, and a title with a no-break or doubled space whose JSON-LD says the same is clean
+# (V20); a page the deploy-time live projection certifies but the gate cannot read as live, or that
+# no built page serves, fails HUBS so the hub check cannot go vacuous (V21, V22; W4 pins the gate's
+# live marker to aux-update.html). [JL] pins the include's JSON escapes by bytes (they were once no-ops), [RB] renders
+# aux-base's robots block with the Liquid gem (ruby + liquid required), [CSS] the phone-width card rules,
+# [W] the pages.yml step.
+# 32 -> 38 (G43): CSS2 the phone-width product-page rules (Windows 11 was 441 px on a 375 px phone) sit in the
+# 860px block only; [TT] renders the title include with the Liquid gem (the repeated label shown once, every
+# other title byte-identical, no output of its own), pins its call sites, and renders aux-update.html's
+# written-out copy over the same titles (TT5).
+auxsays/scripts/tests/test_publication_hygiene.py = 38
 # The published Systems Monitor bundle is minified without its dependencies' licence comments, so
 # THIRD_PARTY_NOTICES.txt ships beside it (AUX-082). Runs the REAL Node scripts (node required, its
 # absence a failure): the committed file names exactly the lockfile's production set; regeneration over
@@ -303,6 +490,34 @@ auxsays/scripts/tests/test_powerpoint_context_resolution.py = 101
 # nothing parsed or stored; the host test is equality; same-origin fetches are byte-identical to the
 # frozen pre-change transports; the AST pin forbids urlopen in every Learn fetch module.
 auxsays/scripts/tests/test_learn_fetch_same_origin.py = 115
+# AUX-105: NVIDIA Game Ready and Studio drivers share version numbers (621.14, 621.24), so they are two
+# products and the family comes from NVIDIA's own query AND name, never a version. Pins one record per
+# family for a shared version through the real writer, no cross-family attribution (a Studio-named report
+# in a Game Ready thread is vetoed), hotfix/beta/unknown names failing closed, 401/403/429/451/challenge/
+# HTML/refusing bodies as `blocked` with no records, no request after a refusal in the same run or any
+# later one until a reviewed clearing time that has passed (cleared once), schema and host stops, the
+# per-run request budget, and provenance on the records and the health bucket -- all through the real
+# runner, offline. Also: redirects checked BEFORE they are followed (real lib.http over a fake wire: no
+# request reaches a host the lookup redirected to), and the patch-ingest.yml gate under which a FAILED
+# run that recorded a new refusal still commits its state (simulated step by step).
+auxsays/scripts/tests/test_nvidia_driver_lookup.py = 137
+# NVIDIA driver community evidence from the GeForce forum's default views (AUX-106): captured responses
+# replayed through the real lib.http transport to their recorded decisions for BOTH driver families (family
+# from a qualifying staff title or the reporter only; shared-component reports unassigned in both; notebook,
+# environment-only, disclaimed, module-crash and fine-only posts excluded), the coverage-gap contract, every
+# forbidden request shape refused before it is sent, refusal/schema/robots stops, ANY redirect refused before
+# the hop (same host included), the 12-hour cadence, the write-mode gates against a temporary store, one
+# comment served under two threads stored once, and no member's name in fixtures, stored text or stored titles.
+# AUX-115 (GPT G61 Q5): threads deferred by the request ceiling, the thread cap or the time budget persist in the
+# state file with their reason through repeated exhausted cycles (unlisted, never read, title-less seed included),
+# are read longest-waiting first under the unchanged ceilings, and end with exactly one unconstrained cycle's rows
+# and decisions (9 counted, none twice); invalidation reasons, the prune, queue telemetry, seeds read by any path.
+# AUX-115 (GPT G62 R1): a queued thread's own failure cannot stop collection for every thread: a confirmed
+# success:false or a 404/410 quarantines it while the same cycle reads and counts the others; 401/403/451 suspend
+# the method and quarantine it, 429 keeps it queued; 5xx, timeouts, other shapes and redirects keep it queued
+# without a stop; listed threads and unread seeds keep their stops; quarantine is never pruned; the release path;
+# a quarantine keeps its entry; no timer.
+auxsays/scripts/tests/test_nvidia_forum_evidence.py = 229
 auxsays/scripts/tests/test_powerpoint_multibuild_ingestion.py = 167
 auxsays/scripts/tests/test_powerpoint_realpath_identity.py = 40
 auxsays/scripts/tests/test_powerpoint_write_path_safety.py = 68
@@ -320,6 +535,16 @@ auxsays/scripts/tests/test_premiere_algolia_discovery.py = 107
 # filtered, so today's pages are byte-identical; Part B pins that.
 auxsays/scripts/tests/test_public_projection_earned_fields.py = 9
 
+# Patch pages link community reports by source, date and issue, never by the reporter's own title
+# (publication minimisation, D1). Renders the SHIPPED patch layout with the liquid gem over frozen
+# synthetic fixtures: all three report lists keep every URL, count and not-counted framing, and no
+# stored title of 20+ characters reaches the page as text or as an attribute. A confirmed source with
+# no issue label reads "issue not classified" even when workflow_area, theme, outcome and
+# classification are set (one named check per field, plus a control that must expose all four). A
+# control puts the old link text back and must expose the titles on all three lists. The real-record
+# pass at the end is WARN-only and adds no check, so evidence growth cannot change this count.
+auxsays/scripts/tests/test_publication_title_minimisation.py = 36
+
 # Premiere discovery ROUTING, and the health semantics that keep it honest. The nine-method flat
 # loop cost 546.8s over 219 HTTP requests for two records; wayback alone was 408.5s and reddit
 # 92.3s, both returning zero candidates, while Algolia produced every accepted row in 6.2s.
@@ -335,7 +560,7 @@ auxsays/scripts/tests/test_premiere_method_routing.py = 48
 # green and then broke Pages. scan_update_layout_public_copy() is the only part of that gate
 # which reads a template, and it is pure, so the suite calls it directly against the shipped
 # layout.
-auxsays/scripts/tests/test_qa_patch_records.py = 32
+auxsays/scripts/tests/test_qa_patch_records.py = 34
 # A record built from one platform's release notes says whose notes they are, read from the
 # article TITLE only, on create AND refresh, without moving identity; and no per-platform vendor
 # may count community reports until acceptance can respect the label (AUX-049).
@@ -344,9 +569,23 @@ auxsays/scripts/tests/test_official_notes_platform.py = 68
 # the record's own stored notes prove it, with the shipped classifier, and changes no other byte of
 # any file; zero network, idempotent, and its scope proof refuses a concurrent change (AUX-051).
 auxsays/scripts/tests/test_official_notes_platform_backlog.py = 10
+# AUX-125 (G85): a known issue the vendor declares in its GitHub release notes reaches the patch page.
+# The parser takes an explicit declaration only (alert markup alone is not one) for the release being
+# assessed, ambiguous = unknown (P, incl. the real stored OBS 33.0.2 body's structure, masked so it holds
+# no vendor text, frozen); end to end through
+# patch_ingest.run_source, a release's notes gain and then lose a notice and the field and rendered card
+# follow, with no churn on an unchanged body and the documented refresh window pinned (W); Release
+# Health and absent-field cards byte-identical to the pre-change card in real Liquid (R); the migration
+# is zero-network, one line per demonstrated change, idempotent, refusing, with nothing left pending in
+# the corpus (M); bare-script imports run (B). Needs ruby + liquid.
+auxsays/scripts/tests/test_official_notes_known_issue.py = 61
+# The one-time transcoding repair (G39): text a 2026-05-02 local pass read as cp1252 is restored only
+# where undoing the misreading is exact; correct UTF-8, ASCII, mixed fields (reported), text misread
+# twice (M10) and nested evidence copies are never changed; zero network, idempotent, and its scope proof refuses a concurrent change.
+auxsays/scripts/tests/test_transcoded_text_repair.py = 10
 auxsays/scripts/tests/test_reader_evidence_identity.py = 17
 auxsays/scripts/tests/test_report_count_reconciliation.py = 17
-auxsays/scripts/tests/test_acquisition_method_registry.py = 30
+auxsays/scripts/tests/test_acquisition_method_registry.py = 31
 auxsays/scripts/tests/test_teams_record_cleanup.py = 9
 auxsays/scripts/tests/test_transactional_writeback.py = 10
 auxsays/scripts/tests/test_validate_evidence_method_health.py = 13
@@ -355,15 +594,25 @@ auxsays/scripts/tests/test_validate_evidence_method_health.py = 13
 # that row shape may leave last_run empty; the suite drives the real writer and the validator as a
 # bare script over the failed run's own rows, and checks that no monitoring or H0-H7 decision moves.
 auxsays/scripts/tests/test_policy_row_last_run.py = 31
-auxsays/scripts/tests/test_validate_ingestion_sources.py = 40
+auxsays/scripts/tests/test_validate_ingestion_sources.py = 45
+# G66: the writers that print into public workflow logs never print a report's stored title or excerpt.
+# A canary in every stored text field, driven through the promotion writer's own main() (dry run,
+# --write-all, --write, --output) over a temp tree, the collection runner's payload, reconciliation's
+# lines and QA's messages; the closed key list covers every text field the live data carries.
+auxsays/scripts/tests/test_log_title_hygiene.py = 17
 # A green patch-ingestion run must not hide an enabled source that failed. Covers the nine
 # required counterfactuals (healthy / quiet / 403 / transport failure / parser rot / mixed /
 # all-failed / disabled / aged-out), the failure-MODE-change case Elgato actually exhibited,
 # a simulation of the pre-fix semantics, and a mutation harness whose catches are asserted to
 # be semantic rather than crashes.
 auxsays/scripts/tests/test_ingestion_run_health.py = 128
+# GROWTH-2A closed SOURCE-BLOCKED: the Premiere lane read healthy while HelpX refused every request
+# and only a pinned one-release announcement answered. Pins the primary failure surviving the
+# fallback (partial, never healthy, in state, run health, monitoring projection and snapshot), no
+# record without a title identity and a source date, and no inherited announcement URL.
+auxsays/scripts/tests/test_premiere_source_truth.py = 49
 auxsays/scripts/tests/test_version_outcome_attribution.py = 64
-auxsays/scripts/tests/test_windows_count_authority.py = 104
+auxsays/scripts/tests/test_windows_count_authority.py = 116
 auxsays/scripts/tests/test_windows_evidence_recovery.py = 92
 auxsays/scripts/tests/test_windows_patch_identity.py = 30
 # AUX-067: a build-only identity whose TITLE is about another KB or build is not a report on the build
@@ -377,13 +626,97 @@ auxsays/scripts/tests/test_windows_identity_not_the_subject.py = 82
 # byte-identical, all-or-nothing refusal on any drift, idempotent. Run as the bare script on frozen
 # verbatim fixtures; never reads or writes the live store beyond hashing it.
 auxsays/scripts/tests/test_withdraw_windows_identity_not_the_subject_rows.py = 44
+# AUX-110: the first audited RE-ADMISSION (counted false -> true): two Acrobat Reader rows the role veto withdrew as
+# "version named but working" that two fresh blind adjudicators both labelled CORRECT, through the AUX-088 mechanism
+# inverted (five-field selection, pinned block hashes, two lines per row, Reader only, one from-reason, two CORRECT
+# labels from two named adjudicators, the held row refused, a report already counted on the patch refused, all or
+# nothing, idempotent, two scoped Reader writers), plus recompute_evidence_classification.py's pinned correction of
+# one row's theme (the shipped classifier's own answer only, recorded as the re-admitted block's successor). Bare
+# scripts on a synthetic-text fixture; the live store is read only, and on its stored text the shipped veto refuses
+# exactly the manifest's rows among the counted Acrobat rows.
+auxsays/scripts/tests/test_readmit_adjudicated_rows.py = 72
 # AUX-079: the audited withdrawal of ten Windows rows both adjudicators judged off-topic (Track B) and four
 # later captures of a Q&A question already counted on the same patch (Track C, keep-first, derived). The
 # AUX-072 mechanism: five-field selection, pinned block hashes, three lines per row with each track's own
 # reason, kept rows and every other row byte-identical, no row starts counting, no patch counts one Learn
 # report twice, all-or-nothing refusal on any drift, idempotent; a same-question row on another patch is
 # never re-homed. Bare script on frozen verbatim fixtures; the live store is read only for the 14 pins.
-auxsays/scripts/tests/test_withdraw_windows_confirmed_and_duplicate_rows.py = 57
+# A12 (AUX-088): it shares no row with the later live-page withdrawal's manifest.
+auxsays/scripts/tests/test_withdraw_windows_confirmed_and_duplicate_rows.py = 58
+# AUX-088: the audited withdrawal of twenty live-page rows (two Windows, eighteen OBS) that the citation
+# audit and an independent blind second review both labelled INCORRECT for the credited update. The same
+# mechanism scoped to Windows and OBS: five-field selection (target_build only for Windows), pinned block
+# hashes, three lines per Windows row and two per OBS row with each row's own reason from a closed set the
+# store already uses, two duplicates pinned to their kept originals, every other row byte-identical, no row
+# starts counting, all-or-nothing refusal on any drift, idempotent; a same-report row on another identity is
+# never re-homed. Bare script on frozen fixtures whose free text is synthetic; the live store is read only
+# for the pins. H (AUX-090): a later audited change to a pinned row is accepted only through the versioned
+# supplemental baseline (the pins and the run audit stay byte-identical), only against the exact pinned hash,
+# never for a row still to withdraw; G5 proves each recorded successor is its pin plus one date line.
+auxsays/scripts/tests/test_withdraw_live_citation_rows.py = 81
+# AUX-090: the audited fill of the day each surviving counted OBS report was posted (source_date), from a
+# pinned manifest: the report's OWN creation time (an issue's created_at, a comment's own, the opening post's
+# own <time>, a reply's own, never a parent's or the page's last activity), the UTC day, one line per row,
+# captured_at and every other byte unchanged, no acceptance field, no count moves, all-or-nothing refusal,
+# idempotent; and the v2 withdrawal manifest (one forum copy of a GitHub issue the same page counts). Bare
+# script on a synthetic store and synthetic source payloads; the live store is read only for the pins.
+auxsays/scripts/tests/test_fill_obs_report_dates.py = 47
+# AUX-098: the audited withdrawal of fourteen reports one person posted twice (Windows, OBS and DaVinci), through
+# the AUX-088 tool with a third manifest. Each row needs two same_report_duplicate labels from two named reviewers
+# that name the SAME kept row; a same-time capture keeps the earlier post (the tool derives the Learn question or
+# Reddit post number from the stored URLs; any other family refuses); a manifest declares AUX-088's scope or that
+# plus DaVinci, and --regenerate runs one scoped promotion per declared product, never unscoped. Pairs the reviews
+# did not agree on stay counted. Bare script on frozen fixtures whose free text is synthetic; the live store is
+# read only for the pins.
+auxsays/scripts/tests/test_withdraw_duplicate_reports.py = 52
+# AUX-108: the audited withdrawal of five reports counted against a version they are not about (the build a device
+# rolled back to, the version an author upgraded from, a question or a post that reports no problem), through the
+# AUX-088 tool with a fourth manifest. Each row needs two blind INCORRECT labels from two different named reviewers
+# that both support its reason (the first audit is provenance only); the held-out row and the two rows that must
+# stay counted are not entries; no overlap with the AUX-072/079/088/090/098 manifests; exactly 11 lines, every row
+# kept, all-or-nothing, idempotent; a withdrawn report seen again is refused by the append guard; fixture-based
+# count deltas only, never a live-corpus count. Bare script on frozen fixtures whose free text is synthetic; the
+# live store is read only for the five pins and the kept rows.
+auxsays/scripts/tests/test_withdraw_g51_role_rows.py = 36
+# AUX-111: the audited withdrawal of two Adobe reports counted against a version they are not about (the Premiere
+# Pro version a project was created in, the Acrobat Reader version an update started from), through the AUX-088
+# tool with a fifth manifest and a third product scope, exactly (Acrobat Reader, Premiere Pro). The scope guard is
+# pinned on its own: an unrelated Adobe product (Acrobat Pro, even the same report on the same version; Photoshop),
+# a scope that adds, drops or reorders a product, an unlisted identity of a granted product, or a granted identity
+# with any one field changed refuses in the manifest reader, and the planner refuses an unlisted identity of a
+# granted product on its own, under every scope; a granted row needs two blind INCORRECT labels in the tool itself;
+# the older scopes and manifests are unchanged. Exactly 4 lines, every row kept, all-or-nothing, idempotent; a
+# withdrawn report seen again is refused by the append guard; fixture-based count deltas only. Bare script on
+# frozen fixtures whose free text is synthetic; the live store is read only for the two pins and the kept rows.
+auxsays/scripts/tests/test_withdraw_g55_adobe_role_rows.py = 42
+# AUX-114: the audited withdrawal of one DaVinci Resolve 21.0.4 report that is a how-to question (21.0.4 is the
+# author's setup, not a version reported as broken), through the AUX-088 tool, unchanged, with a sixth manifest
+# under the Windows, OBS and DaVinci scope. The row needs two blind INCORRECT labels from two different named
+# reviewers that both support its reason (an earlier pair of blind labels is provenance only); its two controls,
+# the three held candidates and the control finding are not entries; the five earlier manifests are byte-identical
+# to their pins; exactly 2 lines, every row kept, all-or-nothing, idempotent; the withdrawn report seen again is
+# refused by the append guard; fixture-based count deltas only. Bare script on the AUX-108 fixture, whose free text
+# is synthetic, plus two synthetic control rows; the live store is read only for the pin, the two controls and the
+# three held rows.
+auxsays/scripts/tests/test_withdraw_g60_davinci_howto_row.py = 34
+# AUX-118: the audited withdrawal of one OBS Studio 31.1.2 report (GitHub #13995) that names 31.1.2 only as a
+# release tag the reporter diffed, through the AUX-088 tool, unchanged, with a seventh manifest under AUX-088's own
+# Windows and OBS scope. The row needs two blind INCORRECT labels from two different named readers on one packet case
+# that both support its reason (an earlier full-source audit is provenance only); the must-stay control on its page,
+# the report's 32.2.2 row and the control finding are not entries; the six earlier manifests are byte-identical to
+# their pins; exactly 2 lines, every row kept, all-or-nothing, idempotent; the OBS collector's own dedupe authority
+# and the shared append guard both refuse the report seen again; fixture-based count deltas only. Bare script on the
+# AUX-088 fixture, whose free text is synthetic, plus one synthetic control row; the live store is read only for the
+# pin, the must-stay rows and the control finding.
+auxsays/scripts/tests/test_withdraw_g75_obs_source_tag_row.py = 37
+# AUX-092: the OBS producer now stores that same day on every NEW row. source_date = the UTC day of the
+# creation stamp the release-date gate already reads (an issue's created_at, the opening post's own <time>),
+# directly after captured_at, no key when the stamp gives no UTC day; equal to every AUX-090 pin. A frozen
+# corpus guard runs the old producer's recorded outputs (golden_base.json) against this one: identical
+# decisions, stored rows apart from the day, counts, maturity and live decisions. The gate is unchanged, the
+# collector's full rewrite leaves every stored row and every AUX-090 dated block as it was, and a rediscovered
+# report is not re-added. Offline; the live store is read only.
+auxsays/scripts/tests/test_obs_source_date_producer.py = 63
 auxsays/scripts/tests/test_windows_rollover_convergence.py = 36
 
 # A counted row carries the evidence for its own version match. Excerpts are truncated (Reddit
@@ -392,6 +725,25 @@ auxsays/scripts/tests/test_windows_rollover_convergence.py = 36
 # matched. The matcher now reports the span it ACCEPTED and the row keeps it -- never re-searched,
 # since a second search can land on a different occurrence. Forward-only; no stored row changes.
 auxsays/scripts/tests/test_matched_span_retention.py = 20
+
+# AUX-109. A NEW Adobe opening-post row (Acrobat Pro / Reader, Premiere) stores its excerpt -- same
+# field, same 280-character cap -- around the version it was accepted for, when the head does not
+# show it; every other row is byte-identical. Pins: the helper's invariants, the call sites (title,
+# alias, both joins, whole-thread candidates keep the head), excerpt independence three ways, the
+# other collectors untouched, no backfill on a throwaway store with counts/verdicts/maturity equal,
+# the privacy rules, and the shadow producer's switch OFF with the excerpt dependency beside it.
+# Reads the live store and records; writes only to a temporary directory.
+auxsays/scripts/tests/test_version_centred_excerpt.py = 70
+
+# AUX-119 (G68). Every stored row carries public structured facts (excerpt hash, title-dedup hash,
+# issue bucket, rule version) written with the row, and the distinct-reporter rule of a reviewed
+# verdict reason reads the excerpt fact, never the text. Pins: the three rules by frozen vectors and frozen
+# code fingerprints, ONE
+# bucket function, both persistence boundaries, the adversarial cases (a missing, malformed,
+# unknown-version or other-rule fact never adds support; the live corpus decides exactly as the text
+# rule did), the zero-network migration's hash-proven scope, the replay tools, and three simulated
+# mutants. Reads the live store and reason file; writes only to a temporary directory.
+auxsays/scripts/tests/test_structured_evidence_facts.py = 40
 
 # --- writer-lane governance and the methodology Notes render -----------------------
 # Both were added with the writer-queue repair, and both are proven non-vacuous by MEASUREMENT
@@ -411,13 +763,28 @@ auxsays/scripts/tests/test_matched_span_retention.py = 20
 # left it fully green, because every token it looked for survived in the prose describing those
 # guards. It now asserts against `run:` scalars with comments stripped. The sabotage that used to
 # pass now fails 10 checks.
-auxsays/scripts/tests/test_writer_queue_concurrency.py = 72
+auxsays/scripts/tests/test_writer_queue_concurrency.py = 82
 # The reaper's shell, EXECUTED against a scripted fake `gh` rather than grepped -- extracted
 # from the workflow YAML so it cannot drift from what CI runs. The sabotage that the
 # structural suite originally missed fails 6 checks here. Needs `bash`, which ubuntu-latest
 # and this repo's Windows dev setup both provide; it reports and fails if bash is absent
 # rather than passing vacuously.
-auxsays/scripts/tests/test_writer_queue_reaper_behaviour.py = 25
+auxsays/scripts/tests/test_writer_queue_reaper_behaviour.py = 29
+# AUX-120: not monitored is not too few reports. 847 zero-report patch pages of products with no
+# community collection said "Too few reports for a verdict yet." and "Community signal: Not enough
+# reports". Real Liquid renders of the patch page over every coverage and community state the
+# authority derives (and with no projection: unchanged words), byte comparisons proving only the two
+# intended lines change and only where collection is absent, and the deploy check's PATCH rule,
+# including against the real templates with each half of the wording reverted.
+auxsays/scripts/tests/test_coverage_aware_zero_report.py = 26
+# AUX-102: AUXSAYS never claims to monitor what it does not monitor. 30 of 47 catalog products had no
+# operating official lane while the catalog said "Monitoring active" and their pages said "is tracked".
+# Pins the coverage projection (official and community capabilities, five plain labels, fail closed), the
+# debt gate (a NEW switched-off Core product without a debt entry is refused; runtime impairment never
+# is), the deploy check on seeded contradictions (and on vendor record titles, which must never block),
+# real Liquid renders of the product, company and latest-signals templates, and the daily assessment's
+# flags, missing-capability reasons, detection latency and no-false-alarm cases.
+auxsays/scripts/tests/test_coverage_governance.py = 101
 
 [diagnostic]
 # Deterministic and offline; broader surface or presentation-level. Also blocking in CI --
@@ -442,12 +809,18 @@ auxsays/scripts/tests/test_http_challenge_detection.py = 32
 auxsays/scripts/tests/test_http_credential_scope.py = 55
 auxsays/scripts/tests/test_microsoft_learn_qna_source.py = 28
 auxsays/scripts/tests/test_microsoft_teams_community.py = 85
+# ComfyUI community evidence from its own GitHub issues (AUX-103): captured issues replayed to their
+# recorded decisions, core-release identity (never a package, custom-node, frontend, Desktop or
+# untagged build), the shared acceptance authority, walk health, and the write-mode gates.
+auxsays/scripts/tests/test_comfyui_github_issues.py = 131
 # Teams classification: platform from the reporter's text ('unknown' when not stated, never the product's
 # release platform), theme/area/severity from the shared scorer, nothing invented when unsupported, sentiment
 # frozen, and the builder's severity_summary no longer reads a missing severity as 'low'. Source-pins the three
 # counting predicates (acceptance) as untouched.
 auxsays/scripts/tests/test_teams_classification.py = 46
-auxsays/scripts/tests/test_microsoft_office_updates_adapter.py = 78
+# G66: H19 now proves a failed primary never falls through to support.microsoft.com (refused by
+# name, even when configured), that the source fails visibly, and that health records it end to end.
+auxsays/scripts/tests/test_microsoft_office_updates_adapter.py = 88
 auxsays/scripts/tests/test_microsoft_powerpoint_collector.py = 101
 auxsays/scripts/tests/test_microsoft_release_health_adapter.py = 80
 auxsays/scripts/tests/test_microsoft_windows_collector.py = 78
@@ -503,11 +876,23 @@ auxsays/scripts/tests/test_zendesk_help_center_adapter.py = 60
 # render checks fail with it instead of skipping. The V checks cover the second way content
 # went missing: `.reveal-up` defaulted to opacity 0 with an observer threshold of 0.08, which
 # an element taller than ~12 viewports can never satisfy, so the Adobe company page's 410-row
-# history stayed invisible on desktop permanently.
-auxsays/scripts/tests/test_template_presence_guards.py = 49
+# history stayed invisible on desktop permanently. [GA] (GROWTH-1A) executes the base layout's
+# analytics guard under node per host: gtag.js loads on auxsays.com and www only, never on
+# localhost, 127.0.0.1, file://, preview or look-alike hosts, and never when navigator.webdriver.
+# [PV] the /privacy/ notice: linked from the footer, factual, no compliance claim, published.
+auxsays/scripts/tests/test_template_presence_guards.py = 66
 auxsays/scripts/tests/test_patch_ingest_record_limit.py = 79
 auxsays/scripts/tests/test_powerpoint_production_readiness.py = 75
 auxsays/scripts/tests/test_product_page_layout.py = 54
+# GROWTH-1A: the homepage was 124,107,478 bytes because its Patch Signals loop re-scanned the whole
+# patch collection for every record and printed indentation on every pass; crawlers stop reading
+# HTML at 2 MB, so no signal link was ever seen. Renders the shipped selection beside the old nested
+# loop (frozen verbatim as a reference fixture) over synthetic corpora that reach every ranking
+# branch, holds the real corpus to the same oracle, and caps the full page at the real corpus size.
+# [D] pins the patch-first entrance: the question h1, the heading outline, one link per product
+# tracker with records (derived), and the signals ahead of everything else.
+# Needs ruby + liquid; without them the render checks fail rather than skip.
+auxsays/scripts/tests/test_homepage_signals.py = 73
 auxsays/scripts/tests/test_promote_local_playwright_captures.py = 36
 # The public projection of how evidence was gathered. The methodology page rendered the whole
 # method-health store (1,554,238 bytes; reddit_search 1,064 times) and the per-patch card

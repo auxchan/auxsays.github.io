@@ -103,9 +103,11 @@ from lib import report_counts                                            # noqa:
 from patch_collectors import adobe_acrobat_community as ac              # noqa: E402
 from patch_collectors import adobe_premiere as ap                       # noqa: E402
 from patch_collectors import base                                       # noqa: E402
+from patch_collectors import comfyui as comfy                           # noqa: E402
 from patch_collectors import microsoft_powerpoint as ppt                # noqa: E402
 from patch_collectors import microsoft_teams as teams                   # noqa: E402
 from patch_collectors import microsoft_windows as mw                    # noqa: E402
+from patch_collectors import nvidia_forum as nvf                        # noqa: E402
 from patch_collectors import obs as obs_adapter                         # noqa: E402
 from patch_collectors import obs_forum_source as forum                  # noqa: E402
 
@@ -118,7 +120,9 @@ MODES = ("workflow", "flags_on", "code_default")
 
 WINDOWS, OBS, TEAMS, PPT = "microsoft-windows-11", "obs-studio", "microsoft-teams", "microsoft-powerpoint"
 PREMIERE, PRO, READER = "adobe-premiere-pro", "adobe-acrobat-pro", "adobe-acrobat-reader"
-PRODUCTS = (WINDOWS, OBS, TEAMS, PPT, PREMIERE, PRO, READER)
+COMFY = "comfyui"
+NV_GRD, NV_NSD = "nvidia-geforce-game-ready", "nvidia-studio-driver"
+PRODUCTS = (WINDOWS, OBS, TEAMS, PPT, PREMIERE, PRO, READER, COMFY, NV_GRD, NV_NSD)
 
 PASS = FAIL = 0
 FAILURES: list[str] = []
@@ -151,6 +155,7 @@ def warn(label: str, ok: bool, detail: str = "") -> None:
 REGISTRATION_FLAGS = frozenset({
     "AUXSAYS_ENABLE_WINDOWS_LEARN_QNA_WRITEBACK", "AUXSAYS_ENABLE_ACROBAT_CONSENSUS",
     "AUXSAYS_ENABLE_POWERPOINT_CONSENSUS", "AUXSAYS_ENABLE_TEAMS_CONSENSUS",
+    "AUXSAYS_ENABLE_COMFYUI_CONSENSUS", "AUXSAYS_ENABLE_NVIDIA_FORUM_CONSENSUS",
     "AUXSAYS_ORCHESTRATED_PRODUCTS",
 })
 # MODE flags choose an owned method's state inside a production path. Each names the
@@ -320,7 +325,17 @@ legacy_obs.front_matter_parts = _memo_obs_fm
 _CLAIMS = mw.claimed_urls()               # read once; the Windows run reuses a copy each call
 _real_claimed_urls = mw.claimed_urls
 
-RECORDS = {pid: base.newest_first(base.generated_records(pid))[0] for pid in PRODUCTS}
+# A product whose official lane has not published its first record yet (the NVIDIA driver families
+# until their first scheduled ingestion run) is driven against a synthetic record of the same shape;
+# its driver stubs the record walk, so the production path still runs end to end.
+SYNTHETIC_RECORDS = {pid: base.PatchRecord(product_id=pid, update_version="621.24",
+                                           path=Path(f"{pid}-621-24.md"),
+                                           update_published_at="2026-11-12T00:00:00Z",
+                                           update_status="current", update_product=pid)
+                     for pid in (NV_GRD, NV_NSD)}
+RECORDS = {pid: (base.newest_first(base.generated_records(pid)) or [SYNTHETIC_RECORDS[pid]])[0]
+           if pid in SYNTHETIC_RECORDS else base.newest_first(base.generated_records(pid))[0]
+           for pid in PRODUCTS}
 TMP = Path(tempfile.mkdtemp(prefix="aux-owned-lifecycle-"))
 PPT_GENERATED = TMP / "generated"
 PPT_GENERATED.mkdir()
@@ -417,6 +432,38 @@ def drive_teams(scenario: str):
         return _one_result(teams.TeamsCommunityCollector().collect(_context(TEAMS)), TEAMS), {}
 
 
+def drive_comfyui(scenario: str):
+    # The per-method transport entry point is the shared GitHub request; an answered walk is a
+    # well-formed empty search page, a refused one raises the 403 the API sends.
+    empty_page = lambda: ({"total_count": 0, "incomplete_results": False, "items": []}, {})  # noqa: E731
+    with patched([(comfy.github, "request_json", stub("github_issues", scenario, answer=empty_page))]):
+        return _one_result(comfy.ComfyUICollector().collect(_context(COMFY)), COMFY), {}
+
+
+def drive_nvidia(pid: str, scenario: str):
+    # The per-method transport entry point is the forum transport's one request function: an
+    # answered cycle reads two robots files and two empty community listings per community, a
+    # refused one gets the 403 the forum sends. The cycle is per process, so it is reset per call;
+    # the state is a fresh in-memory one (never the repository file), so no cadence applies.
+    def get(self, url):
+        _hit("nvidia_forum_default_views")
+        if scenario == "refuse":
+            raise self._refusal("HTTP 403")
+        if url.endswith("/robots.txt"):
+            return "User-agent: *\nAllow: /\n"
+        return '{"success": true, "errors": [], "data": {"topics": []}}'
+    record = RECORDS[pid]
+    nvf.reset_cycle()
+    try:
+        with patched([(nvf.src.Transport, "get", get),
+                      (nvf.src, "load_state", lambda path=None: nvf.src.empty_state()),
+                      (nvf.base, "generated_records",
+                       lambda p, tv=None, **kw: [record] if p == pid else [])]):
+            return _one_result(nvf.NvidiaForumCollector(pid).collect(_context(pid)), pid), {}
+    finally:
+        nvf.reset_cycle()
+
+
 def drive_premiere(scenario: str):
     saved = dict(ap.PREMIERE_METHODS)
     try:
@@ -509,11 +556,14 @@ DRIVERS = {
     WINDOWS: drive_windows, OBS: drive_obs, TEAMS: drive_teams, PPT: drive_powerpoint,
     PREMIERE: drive_premiere,
     PRO: lambda s: drive_acrobat(PRO, s), READER: lambda s: drive_acrobat(READER, s),
+    COMFY: drive_comfyui,
+    NV_GRD: lambda s: drive_nvidia(NV_GRD, s), NV_NSD: lambda s: drive_nvidia(NV_NSD, s),
 }
 # The production path each driver calls, as the runner registers it (PowerPoint: the graph).
 DRIVER_PATH = {WINDOWS: "WindowsLearnQnaCollector", OBS: "ObsCollector", TEAMS: "TeamsCommunityCollector",
                PREMIERE: "AdobePremiereCollector", PRO: "AdobeAcrobatCollector",
-               READER: "AdobeAcrobatCollector", PPT: "graph"}
+               READER: "AdobeAcrobatCollector", PPT: "graph", COMFY: "ComfyUICollector",
+               NV_GRD: "NvidiaForumCollector", NV_NSD: "NvidiaForumCollector"}
 # A DEPENDENT method runs only on what the product's other methods hand it; with no input the
 # production path emits no row for it (the router skips RESOLVE_CONTEXT). Exactly one exists.
 DEPENDENT = {(PPT, "learn_qna_segment_context")}
@@ -525,6 +575,7 @@ PINNED = {
     WINDOWS: {"learn_qna_search_rss": "exec", "techcommunity_windows_sitemap": "exec"},
     OBS: {"github_issues": "exec", "obs_forum": "exec", "known_watchlist": "disabled"},
     TEAMS: {"learn_qna_search_rss": "exec", "tech_community_discussions": "exec"},
+    COMFY: {"github_issues": "exec"},
     PRO: {
         "adobe_community_algolia_search": lambda: "exec",
         "adobe_community_search": lambda: "exec" if flag_on("AUXSAYS_ACROBAT_RETIRED_METHODS") else "disabled",

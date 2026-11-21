@@ -93,6 +93,7 @@ jobs:
       # healthy vendors' records, exits 0, and announces itself through a `::warning` annotation
       # and the step summary, so it can no longer pass as an undifferentiated green tick.
       - name: Run enabled patch ingestion
+        id: ingest_enabled
         if: ${{ github.event.inputs.source == '' || github.event.inputs.source == null }}
         run: |
           if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
@@ -102,6 +103,7 @@ jobs:
           fi
 
       - name: Run selected patch ingestion
+        id: ingest_selected
         if: ${{ github.event.inputs.source != '' && github.event.inputs.source != null }}
         run: |
           if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
@@ -194,18 +196,42 @@ jobs:
           fi
           exit "$rc"
 
+      # A FAILED INGESTION STEP NORMALLY SKIPS THE COMMIT. ONE EXCEPTION.
+      #
+      # patch_ingest.py reports `access_refusal_recorded=true` when a run that failed outright
+      # recorded a NEW access refusal (a source that suspends itself when refused, such as NVIDIA's
+      # driver lookup). Skipping the commit then would drop that suspension from main, and the next
+      # run would ask the refusing source again. On that path only, the two pre-commit gates below
+      # still run and the state is committed when BOTH pass; the job stays failed, because the
+      # ingestion step failed. The converge steps above keep their implicit success() gate, so they
+      # do not run on that path (a failed run advanced no identity). Every other failure -- of
+      # ingestion without a new refusal, of a converge step, or of either gate -- still skips the
+      # commit, exactly as before.
       - name: Validate logo assets before commit
-        if: ${{ github.event.inputs.dry_run != 'true' }}
+        id: precommit_logos
+        if: ${{ github.event.inputs.dry_run != 'true' && !cancelled()
+          && (success()
+              || steps.ingest_enabled.outputs.access_refusal_recorded == 'true'
+              || steps.ingest_selected.outputs.access_refusal_recorded == 'true') }}
         run: python auxsays/scripts/validate_logo_assets.py
 
       - name: Run generated record QA before commit
-        if: ${{ github.event.inputs.dry_run != 'true' }}
+        id: precommit_qa
+        if: ${{ github.event.inputs.dry_run != 'true' && !cancelled()
+          && (success()
+              || steps.ingest_enabled.outputs.access_refusal_recorded == 'true'
+              || steps.ingest_selected.outputs.access_refusal_recorded == 'true') }}
         run: python auxsays/scripts/qa_patch_records.py
 
 
       - name: Commit generated patch records (conflict-safe writeback)
         id: commit
-        if: ${{ github.event.inputs.dry_run != 'true' }}
+        if: ${{ github.event.inputs.dry_run != 'true' && !cancelled()
+          && (success()
+              || ((steps.ingest_enabled.outputs.access_refusal_recorded == 'true'
+                   || steps.ingest_selected.outputs.access_refusal_recorded == 'true')
+                  && steps.precommit_logos.outcome == 'success'
+                  && steps.precommit_qa.outcome == 'success')) }}
         run: |
           python auxsays/scripts/lib/automation_writeback.py \
             --message "Ingest official patch records" \
@@ -231,3 +257,24 @@ jobs:
       - name: Mark dry run as unchanged
         if: ${{ github.event.inputs.dry_run == 'true' }}
         run: echo "Dry run complete; no commit or deploy will be performed."
+
+  chain-systems-monitor:
+    # One scheduled entry point owns the writer sequence. Keep economic data
+    # acquisition ordered behind ingestion, including when ingestion fails.
+    needs: ingest
+    if: >-
+      ${{ always() && !cancelled() && github.ref == 'refs/heads/main' &&
+          (github.event.inputs.source == '' || github.event.inputs.source == null) &&
+          github.event.inputs.dry_run != 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      actions: write
+    steps:
+      - name: Dispatch governed Systems Monitor data
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          gh workflow run systems-monitor-data.yml --ref main --repo "$REPO"

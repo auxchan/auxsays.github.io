@@ -1,0 +1,970 @@
+{
+ "success": true,
+ "errors": [],
+ "pagination": {
+  "_page": 1,
+  "_pageSize": 25,
+  "_totalPages": 4,
+  "_totalRows": 77
+ },
+ "anchor": {
+  "_anchorValue": "3634662",
+  "_anchorDirection": "+before",
+  "_anchorOffset": "0"
+ },
+ "data": {
+  "comments": [
+   {
+    "id": 3634662,
+    "createdStamp": 1795053302,
+    "updatedStamp": 1795053310,
+    "lastActivityStamp": 1795053302,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 0,
+    "isOfficialReply": 0,
+    "index": 1,
+    "upvotes": 1,
+    "topic": {
+     "id": 592767
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1061",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "Guys, WTH are you doing with all these drivers? STOP, it's getting worse.",
+    "comments": []
+   },
+   {
+    "id": 3634646,
+    "createdStamp": 1795047492,
+    "updatedStamp": 1795047500,
+    "lastActivityStamp": 1795047492,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 0,
+    "isOfficialReply": 0,
+    "index": 2,
+    "upvotes": 1,
+    "topic": {
+     "id": 592767
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1062",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "Last 2 updates makes thermal sensor read bad temperatures imo. 10 to15°C more then previous driver + my app for temp control cannot read sensor properly. It is ",
+    "comments": []
+   },
+   {
+    "id": 3634633,
+    "createdStamp": 1795040707,
+    "updatedStamp": 1795046652,
+    "lastActivityStamp": 1795040707,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 0,
+    "isOfficialReply": 0,
+    "index": 3,
+    "upvotes": 2,
+    "topic": {
+     "id": 592767
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1063",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "What is this crap, These drivers are constantly writing tons of data every sec to my Nvme! As if you can't screw customers over enough with your diversion to pu",
+    "comments": []
+   },
+   {
+    "id": 3634627,
+    "createdStamp": 1795039337,
+    "updatedStamp": 1795050405,
+    "lastActivityStamp": 1795050385,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 0,
+    "isOfficialReply": 0,
+    "index": 4,
+    "upvotes": 2,
+    "topic": {
+     "id": 592767
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1064",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "Hello NVIDIA staff\n\nI am having an issue with Meta Horizon Link with my Quest 3 HS attempting to connect to the PC via Meta Link Cable (USB-C 3.2).  When enable",
+    "comments": []
+   },
+   {
+    "id": 3634606,
+    "createdStamp": 1795033174,
+    "updatedStamp": 1795046654,
+    "lastActivityStamp": 1795033174,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 0,
+    "isOfficialReply": 0,
+    "index": 5,
+    "upvotes": 2,
+    "topic": {
+     "id": 592767
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1065",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "GPU GTX 5080 Ver. 621.24\n\nRam 32GB\n\nCPU Ryzen 7 7800X3D Ver. Driver Version\n25.10.45.16-261009a-205305C\n\nOS Windows 11 Ver. 26H2 \n\nI ain't got no audio. I have tried everything. I have clean install of all drivers. A Windows update recovery. With and without FXsound being installed or on. Bought a new HDMI cable (I will send you a hefty bill later). You thought of it I probably already did three or more times for good measure. I am running HDMI from GPU to my TV as monitor. Audio work on Bluetooth and with Nvidia HD Audio disabled, which means audio still ends up going through Bluetooth. ",
+    "comments": []
+   },
+   {
+    "id": 3634585,
+    "createdStamp": 1795022896,
+    "updatedStamp": 1795042682,
+    "lastActivityStamp": 1795024822,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 1,
+    "isOfficialReply": 0,
+    "index": 6,
+    "upvotes": 5,
+    "topic": {
+     "id": 592767
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1066",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "\nCPU 13700k\nRAM 32 GB 6000MT/S CL40\n\nGPU RTX 4080\n\nOS Windows 11\n\nConstant writes with the nvidia container service to C:\\ProgramData\\NVIDIA Corporation\\nvtopps\\nct\\nvlog.nvlgstg,even 15gbs/hour while idle with latest driver.Rolling back to 621.01fixes it.\n",
+    "comments": [
+     {
+      "id": 3634589,
+      "createdStamp": 1795024822,
+      "updatedStamp": 1795024829,
+      "lastActivityStamp": 1795024822,
+      "isVisible": 1,
+      "isGhosted": 0,
+      "status": "default",
+      "replyCount": 0,
+      "isOfficialReply": 0,
+      "index": 2,
+      "upvotes": 1,
+      "topic": {
+       "id": 592767
+      },
+      "parent": {
+       "id": 3634585
+      },
+      "user": {
+       "id": "1067",
+       "aclactions": {
+        "officialreply": false
+       }
+      },
+      "body": "cant duplicate just make a post on facebook after day one nothing has change.  12700k z690 z890 ultra7 with 4090. windows 11 also. none changes. i will keep a e",
+      "comments": []
+     }
+    ]
+   },
+   {
+    "id": 3634580,
+    "createdStamp": 1795019833,
+    "updatedStamp": 1795041140,
+    "lastActivityStamp": 1795020141,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 0,
+    "isOfficialReply": 0,
+    "index": 7,
+    "upvotes": 4,
+    "topic": {
+     "id": 592767
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1068",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "Title: G-SYNC / VRR unnecessarily switches to frame doubling at around 60 FPS\n\nI have noticed an issue with NVIDIA G-SYNC / VRR where the refresh rate appears to switch to a frame-doubling mode when the frame rate drops to approximately 60 FPS.\n\nInstead of matching the refresh rate directly to the frame rate, the monitor appears to run at twice the frame rate (e.g. 60 FPS → 120 Hz, 55 FPS → 110 Hz). This results in unnecessary frame doubling and can potentially introduce stuttering, flickering, or inconsistent frame pacing.\n\nThis behavior seems to occur even when the monitor's actual VRR range should allow it to operate at these frame rates without frame doubling.\n\nExpected behavior:\nG-SYNC appears to activate frame doubling around 60 FPS, even though the monitor may still be capable of operating within its native VRR range at that frame rate.\nOrbmu2k, the developer of NVIDIA Profile Inspector, has released a tool called NVIDIA G-SYNC Tweaks that allows users to modify the driver's LFC / frame-doubling behavior.\nIt would be great if NVIDIA could investigate this behavior and provide a proper driver-level fix or an official setting to control the LFC threshold and frame-doubling behavior.\n- NVIDIA Driver Version: 621.24",
+    "comments": []
+   },
+   {
+    "id": 3634576,
+    "createdStamp": 1795019132,
+    "updatedStamp": 1795025519,
+    "lastActivityStamp": 1795019132,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 0,
+    "isOfficialReply": 0,
+    "index": 8,
+    "upvotes": 3,
+    "topic": {
+     "id": 592767
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1069",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "GPU: RTX 4070ti\nCPU: i7-13700KF (3.40 GHz)\nRAM: 32gb\n\nCyberpunk 2077 won't launch at all with new drivers (621.24) I get the \"Watchdog Timeout 120 Seconds\" crash report.  Rolling back to 621.14 fixes everything.  As far as I can tell I do not have this issue with other games although I only tested the last 3 I played so Stalker 2, Dragons Dogma 2 and Queen's Domain all started up fine.  Have no idea why it'd just affect Cyberpunk.  I tried disabling and removing mods, removing the local folder and other things thinking it was maybe something in the settings. Nothing but rolling back the drivers worked. ",
+    "comments": []
+   },
+   {
+    "id": 3634572,
+    "createdStamp": 1795016611,
+    "updatedStamp": 1795056845,
+    "lastActivityStamp": 1795016611,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 0,
+    "isOfficialReply": 0,
+    "index": 9,
+    "upvotes": 5,
+    "topic": {
+     "id": 592767
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1070",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "nvcontainer.exe writes 125 MB/s to SSD's when pc is idle. Strangely it is goes to 0 MB/s when you open task manager and whenever you switch window from task man",
+    "comments": []
+   },
+   {
+    "id": 3634571,
+    "createdStamp": 1795016581,
+    "updatedStamp": 1795016675,
+    "lastActivityStamp": 1795016581,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 0,
+    "isOfficialReply": 0,
+    "index": 10,
+    "upvotes": 2,
+    "topic": {
+     "id": 592767
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1071",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "Support DRR(Dynamic Refresh Rate)? I am using an RTX 4070 with an LS28AG700N monitor, which supports G-SYNC Compatible and a 144Hz refresh rate. However, the Dynamic Refresh Rate (DRR) option in Windows remains disabled (grayed out).\n\nThis is not an issue specific to driver version 621.24; I had assumed that discrete GPUs (dGPUs) simply did not support DRR. Yet, when I connected an Intel ARC A770 in the exact same setup, the DRR option became enabled and actually functioned (as confirmed via the monitor's OSD). Are there any plans to support DRR on NVIDIA desktop GPUs?",
+    "comments": []
+   },
+   {
+    "id": 3634567,
+    "createdStamp": 1795015238,
+    "updatedStamp": 1795056857,
+    "lastActivityStamp": 1795015461,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 1,
+    "isOfficialReply": 0,
+    "index": 11,
+    "upvotes": 8,
+    "topic": {
+     "id": 592767
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1072",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "SSD write issue is major risk fyi. It must be solved in next GRD.",
+    "comments": [
+     {
+      "id": 3634568,
+      "createdStamp": 1795015461,
+      "updatedStamp": 1795015464,
+      "lastActivityStamp": 1795015461,
+      "isVisible": 1,
+      "isGhosted": 0,
+      "status": "default",
+      "replyCount": 0,
+      "isOfficialReply": 0,
+      "index": 3,
+      "upvotes": 1,
+      "topic": {
+       "id": 592767
+      },
+      "parent": {
+       "id": 3634567
+      },
+      "user": {
+       "id": "1073",
+       "aclactions": {
+        "officialreply": false
+       }
+      },
+      "body": "Or you can set read-only on the file  :  C:\\ProgramData\\NVIDIA Corporation\\nvtopps\\nct\\nvlog.nvlgstg",
+      "comments": []
+     }
+    ]
+   },
+   {
+    "id": 3634566,
+    "createdStamp": 1795015097,
+    "updatedStamp": 1795055815,
+    "lastActivityStamp": 1795015097,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 0,
+    "isOfficialReply": 0,
+    "index": 12,
+    "upvotes": 7,
+    "topic": {
+     "id": 592767
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1073",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "Yikes!  Y'all need to check this out.. it was indeed massively writing to log on my system when any 3d app is running\nhttps://wccftech.com/nvidia-gpu-drivers-re",
+    "comments": []
+   },
+   {
+    "id": 3634565,
+    "createdStamp": 1795015048,
+    "updatedStamp": 1795034805,
+    "lastActivityStamp": 1795034805,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 1,
+    "isOfficialReply": 0,
+    "index": 13,
+    "upvotes": 6,
+    "topic": {
+     "id": 592767
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1074",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "CRITICAL BUG\n\nConstant SSD writes, averaging 30Gb per HOUR. nvlog.nvlgstg GROWS AND GROWS! \n\n621.14 - 621.24 are affected, 621.01 is clean. \n\nSTAY AWAY FROM THIS DRIVER!",
+    "comments": [
+     {
+      "id": 3634618,
+      "createdStamp": 1795034805,
+      "updatedStamp": 1795034807,
+      "lastActivityStamp": 1795034805,
+      "isVisible": 1,
+      "isGhosted": 0,
+      "status": "default",
+      "replyCount": 0,
+      "isOfficialReply": 0,
+      "index": 1,
+      "upvotes": 1,
+      "topic": {
+       "id": 592767
+      },
+      "parent": {
+       "id": 3634565
+      },
+      "user": {
+       "id": "1073",
+       "aclactions": {
+        "officialreply": false
+       }
+      },
+      "body": "Other than this flaw, the driver seems to work just fine.",
+      "comments": []
+     }
+    ]
+   },
+   {
+    "id": 3634470,
+    "createdStamp": 1794945012,
+    "updatedStamp": 1795041217,
+    "lastActivityStamp": 1794945012,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 0,
+    "isOfficialReply": 0,
+    "index": 14,
+    "upvotes": 3,
+    "topic": {
+     "id": 592767
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1075",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "Messed up inaccurate and low bit colors came back in Call of Duty Black Ops 7 and Modern Warfare 4 in this driver. It was present in 6 Oct 2026 driver but was f",
+    "comments": []
+   },
+   {
+    "id": 3634403,
+    "createdStamp": 1794920146,
+    "updatedStamp": 1794947804,
+    "lastActivityStamp": 1794920146,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 0,
+    "isOfficialReply": 0,
+    "index": 15,
+    "upvotes": 2,
+    "topic": {
+     "id": 592767
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1076",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "• GPU: NVIDIA GeForce RTX 5070\n• CPU: AMD Ryzen 5 7500F\n• OS: Windows 11 (x64)\n• Problematic Driver: GeForce Game Ready 621.24 WHQL (clean install via DDU)\n• Last Known Good Driver: GeForce Game Ready 616.56 WHQL\nIssue Description:\nSevere framerate cap/regression (locked at ~25 FPS) in games when using the Vulkan API on driver 621.24 WHQL. Performing a clean driver reinstallation using DDU in Safe Mode did not resolve the issue. Rolling back to driver 616.56 WHQL completely restores normal high performance in the exact same games and settings.\nAffected Games: Red Dead Redemption 2, GTA 4",
+    "comments": []
+   },
+   {
+    "id": 3634344,
+    "createdStamp": 1794878508,
+    "updatedStamp": 1794947806,
+    "lastActivityStamp": 1794878770,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 0,
+    "isOfficialReply": 0,
+    "index": 16,
+    "upvotes": 3,
+    "topic": {
+     "id": 592767
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1077",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "GPU Colorful igame RTX 5080 W OC ultra\nCPU i7-14700KF\ndual display 4K TV 60Hz (hdmi) and 1440p monitor 75Hz (DP)\nWindows 11\nscreen occasionally going to black after upgrading to 621.01 . I tried express install 617.42 but still happened. then i just clean installed to 621.24 , still do happen on occasions. today i just clean installed to 617.42 , hopefully it stays stable\nLiveKernelEvent 141 and 1b8 , and both displays goes black with hard reset required\naffected apps : Phantom Blade Zero, and even if its just opera browser(could be some tabs refreshing youtube or tv streaming automatically, not sure)\nfingers crossed not GPU issue, as i just got it 6-7 months back",
+    "comments": []
+   },
+   {
+    "id": 3634314,
+    "createdStamp": 1794858765,
+    "updatedStamp": 1794908007,
+    "lastActivityStamp": 1794858765,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 0,
+    "isOfficialReply": 0,
+    "index": 17,
+    "upvotes": 4,
+    "topic": {
+     "id": 592767
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1078",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "Title: [BUG REPORT] Windows intermittently detects incorrect HDR peak brightness after startup (240 nits instead of 1038 nits)\n\nHello NVIDIA team,\n\nI would like to report an intermittent HDR detection issue involving Windows 11, an RTX 5080, and an MSI QD-OLED monitor.\n\nSystem configuration:\n\n* GPU: KFA2 GeForce RTX 5080 Core Series\n* CPU: AMD Ryzen 7 9800X3D\n* Motherboard: MSI B850 Gaming Plus WiFi\n* Monitor: MSI MAG 321UP QD-OLED X24\n* Monitor firmware: FW.012\n* Connection: DisplayPort 1.4a with DSC enabled\n* Operating system: Windows 11 26H2 (upgraded from 23H2)\n* NVIDIA driver: 621.24 WHQL\n\nIssue description:\n\nThe issue can be fully resolved by either:\n* True Black 500 mode: approximately 530 nits.\nOnce the correct brightness value is restored, it remains correct. The problem appears to occur during initial display/HDR initialization after Windows startup.\n* Performed a clean NVIDIA driver removal using DDU in Safe Mode, including removal of existing/non-present monitor entries, followed by a clean installation of driver 621.24 WHQL.\n* Restarted the NVIDIA graphics driver using Win + Ctrl + Shift + B. This did not resolve the issue.\n* Tested another DisplayPort output on the GPU using the same cable. The issue persisted.\n* Confirmed that the monitor’s OSD correctly displays the selected HDR mode even when Windows reports only 240 nits.\n* Confirmed that no custom Windows HDR Calibration profiles are installed or being used.\nThis suggests that the incorrect 240-nit value may be caused by an issue during Windows/NVIDIA HDR capability initialization or the subsequent handling of EDID/DisplayID information over DisplayPort.\nCould this issue be related to the NVIDIA driver failing to correctly initialize or refresh the monitor’s HDR capabilities during Windows startup?\nIn particular, I would appreciate investigation into the interaction between the NVIDIA driver, Windows Advanced Color/HDR initialization, and DisplayPort EDID/DisplayID or Hot Plug Detect (HPD) handling.\nI cannot confirm whether this issue was introduced by driver 621.24 or by the Windows 11 26H2 update, as I only recently noticed the behavior.",
+    "comments": []
+   },
+   {
+    "id": 3634284,
+    "createdStamp": 1794843482,
+    "updatedStamp": 1794941057,
+    "lastActivityStamp": 1794843482,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 0,
+    "isOfficialReply": 0,
+    "index": 18,
+    "upvotes": 4,
+    "topic": {
+     "id": 592767
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1079",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "Had two problems on my 5090 last 2 days. Fistly when a game plays with V-Sync on, there are artifact lines in some parts of the image, secondly & a worst one, a",
+    "comments": []
+   },
+   {
+    "id": 3634269,
+    "createdStamp": 1794835199,
+    "updatedStamp": 1794937572,
+    "lastActivityStamp": 1794937572,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 4,
+    "isOfficialReply": 0,
+    "index": 19,
+    "upvotes": 2,
+    "topic": {
+     "id": 592767
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1080",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "**RTX 5070 Ti – Random black screen issue still not fixed (Driver 621.14)**\n\nHello NVIDIA,\n\nI'm using an RTX 5070 Ti with driver version 621.14, and I'm still experiencing random black screen flickers.\n\nMy screen suddenly goes completely black for a few seconds and then returns to normal. The issue continues to occur despite previous driver updates that were supposed to address black screen problems with RTX 50-series GPUs.\n\nThis is extremely frustrating, especially with a high-end graphics card like the RTX 5070 Ti.\n\nI've noticed that other RTX 50-series users have reported similar issues, so I hope NVIDIA is still investigating this problem.\n\nCan you please confirm whether this is a known driver issue and if a proper fix is being worked on?",
+    "comments": [
+     {
+      "id": 3634369,
+      "createdStamp": 1794900541,
+      "updatedStamp": 1794937652,
+      "lastActivityStamp": 1794900541,
+      "isVisible": 1,
+      "isGhosted": 0,
+      "status": "default",
+      "replyCount": 0,
+      "isOfficialReply": 0,
+      "index": 6,
+      "upvotes": 1,
+      "topic": {
+       "id": 592767
+      },
+      "parent": {
+       "id": 3634269
+      },
+      "user": {
+       "id": "1081",
+       "aclactions": {
+        "officialreply": false
+       }
+      },
+      "body": "I've poked around these forums for years, and it's never been like this...\n\nI don't know, [name]... You would think you would have better things to do than ha",
+      "comments": []
+     },
+     {
+      "id": 3634353,
+      "createdStamp": 1794889503,
+      "updatedStamp": 1794889511,
+      "lastActivityStamp": 1794889503,
+      "isVisible": 1,
+      "isGhosted": 0,
+      "status": "default",
+      "replyCount": 0,
+      "isOfficialReply": 0,
+      "index": 7,
+      "upvotes": 1,
+      "topic": {
+       "id": 592767
+      },
+      "parent": {
+       "id": 3634269
+      },
+      "user": {
+       "id": "1082",
+       "aclactions": {
+        "officialreply": false
+       }
+      },
+      "body": "I'm experiencing a very similar issue with my RTX 5070 Ti. However, in my case, the screen goes black and the entire PC eventually restarts, reporting a VIDEO_TDR_FAILURE (0x116).\n\nAre you running Windows 11 26H2 by any chance? I strongly suspect that my issues started after that Windows update.\n\nI've tried numerous NVIDIA driver versions, always using DDU to perform a clean installation. I'm currently running driver 596.49, but unfortunately, the problem persists.\n\nI've been dealing with this issue for almost a month now. It's extremely frustrating, and I really hope NVIDIA is actively investigating it.",
+      "comments": []
+     },
+     {
+      "id": 3634323,
+      "createdStamp": 1794867666,
+      "updatedStamp": 1794876901,
+      "lastActivityStamp": 1794867666,
+      "isVisible": 1,
+      "isGhosted": 0,
+      "status": "default",
+      "replyCount": 0,
+      "isOfficialReply": 0,
+      "index": 8,
+      "upvotes": 2,
+      "topic": {
+       "id": 592767
+      },
+      "parent": {
+       "id": 3634269
+      },
+      "user": {
+       "id": "1083",
+       "aclactions": {
+        "officialreply": false
+       }
+      },
+      "body": "It's more than *painfully* obvious that @user has no clue...",
+      "comments": []
+     },
+     {
+      "id": 3634302,
+      "createdStamp": 1794851958,
+      "updatedStamp": 1794851959,
+      "lastActivityStamp": 1794851958,
+      "isVisible": 1,
+      "isGhosted": 0,
+      "status": "default",
+      "replyCount": 0,
+      "isOfficialReply": 1,
+      "index": 9,
+      "upvotes": 1,
+      "topic": {
+       "id": 592767
+      },
+      "parent": {
+       "id": 3634269
+      },
+      "user": {
+       "id": "1015",
+       "aclactions": {
+        "officialreply": true
+       }
+      },
+      "body": "To help us diagnose this issue, we will need some additional diagnostic logs.\n\nPlease refer to the following FAQ for instructions on configuring your PC to capt",
+      "comments": []
+     }
+    ]
+   },
+   {
+    "id": 3634223,
+    "createdStamp": 1794819347,
+    "updatedStamp": 1794895824,
+    "lastActivityStamp": 1794895824,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 0,
+    "isOfficialReply": 0,
+    "index": 20,
+    "upvotes": 2,
+    "topic": {
+     "id": 592767
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1084",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "last 2 drivers fc 27 crash without error. roll back  clean install 617.42  solved . but video super resulotıon not work for thıs versıon",
+    "comments": []
+   },
+   {
+    "id": 3634204,
+    "createdStamp": 1794796583,
+    "updatedStamp": 1794876943,
+    "lastActivityStamp": 1794809787,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 1,
+    "isOfficialReply": 0,
+    "index": 21,
+    "upvotes": 3,
+    "topic": {
+     "id": 592767
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1046",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "Still not working with WoW Forever, just flashing white screen.",
+    "comments": []
+   },
+   {
+    "id": 3634183,
+    "createdStamp": 1794769402,
+    "updatedStamp": 1794941248,
+    "lastActivityStamp": 1794941248,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 0,
+    "isOfficialReply": 0,
+    "index": 22,
+    "upvotes": 4,
+    "topic": {
+     "id": 592767
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1073",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "Installed 621.24 over 591, clean  install option, driver  only.   Seems fine on everything I've tested so far. The new transformer model in Cyberpunk performs very well.\nWin11 (outdated  version),  4090\n\nUpdate : No issues at all, even tested a few games with dlss5 swapper.   Looks like a good driver",
+    "comments": []
+   },
+   {
+    "id": 3634178,
+    "createdStamp": 1794766695,
+    "updatedStamp": 1794908647,
+    "lastActivityStamp": 1794908647,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 2,
+    "isOfficialReply": 0,
+    "index": 23,
+    "upvotes": 2,
+    "topic": {
+     "id": 592767
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1085",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "Hello , Starfield crashed with RTX HDR After moving the \"paper white\" slider, it closed on one occasion , I’m now using an HDR mod, and it works without any issues.\n\nCPU 9850X3D\n\nRAM 32 GB 6000MT/S CL30\n\nGPU RTX 4080\n\nOS Windows 11 home 26300.9974\n\n\n: kd> !analyze -v\nLoading Kernel Symbols\n...............................................................\n................................................................\n................................................................\n.............\nLoading User Symbols\n\nLoading unloaded module list\n.................\n*******************************************************************************\n*                        Bugcheck Analysis                                    *\n(This code can never be used for a real BugCheck; it is used to identify live dumps.)\nArg1: ffffb887b20bd050, Optional pointer to internal TDR recovery context (TDR_RECOVERY_CONTEXT).\nArg2: fffff80358342a30, The pointer into responsible device driver module (e.g. owner tag).\nArg3: 0000000000000000, The secondary driver specific bucketing key.\nDebugging Details:\nUnable to load image \\SystemRoot\\System32\\DriverStore\\FileRepository\\nvmdi.inf_amd64_6792e5c6f4ec2d9d\\nvlddmkm.sys, Win32 error 0n2\n    Key  : Analysis.IO.Write.Mb\n    Value: 10.0.29680.1004\n    Value: 10.2608.26.1 amd64fre\n    Value: 1.2608.26.1\n    Key  : Bugcheck.Code.LegacyAPI\n    Value: 0x141\n    Key  : Bugcheck.Code.TargetModel\n    Value: 0x141\n    Value: LKD_0x141_IMAGE_nvlddmkm.sys\n    Value: nvlddmkm\n    Value: 0x1992a30\n    Key  : Hypervisor.RootFlags.CrashdumpEnlightened\n    Key  : Hypervisor.RootFlags.HypervisorDebuggingEnabled\nBUGCHECK_CODE:  141\nBUGCHECK_P1: ffffb887b20bd050\nBUGCHECK_P2: fffff80358342a30\nBUGCHECK_P3: 0\nBUGCHECK_P4: ffffb887adabb080\nTAG_NOT_DEFINED_202b:  *** Unknown TAG in analysis list 202b\nVIDEO_TDR_CONTEXT: dt dxgkrnl!_TDR_RECOVERY_CONTEXT ffffb887b20bd050\nSymbol dxgkrnl!_TDR_RECOVERY_CONTEXT not found.\nnvlddmkm+1992a30\nfffff803`58342a30 488b0569d8a2ff  mov     rax,qword ptr [nvlddmkm+0x13c02a0 (fffff803`57d702a0)]\nffff850f`f334ed70 fffff803`74b1c5f8     : 00000000`00000000 00000000`00000000 00000000`00000000 00000000`00000000 : nt!DbgkpWerCaptureLiveFullDump+0x181\nffff850f`f334ee00 fffff803`74ecab19     : 00000000`00000001 ffff850f`f334efe0 fffff803`58342a30 ffffb887`a5430900 : nt!DbgkWerCaptureLiveKernelDump2+0x1ea\nffff850f`f334ee60 fffff803`06501ad8  ",
+    "comments": [
+     {
+      "id": 3634384,
+      "createdStamp": 1794908647,
+      "updatedStamp": 1794908652,
+      "lastActivityStamp": 1794908647,
+      "isVisible": 1,
+      "isGhosted": 0,
+      "status": "default",
+      "replyCount": 0,
+      "isOfficialReply": 0,
+      "index": 5,
+      "upvotes": 1,
+      "topic": {
+       "id": 592767
+      },
+      "parent": {
+       "id": 3634178
+      },
+      "user": {
+       "id": "1085",
+       "aclactions": {
+        "officialreply": false
+       }
+      },
+      "body": "Ok , thank you",
+      "comments": []
+     }
+    ]
+   },
+   {
+    "id": 3634174,
+    "createdStamp": 1794762086,
+    "updatedStamp": 1794780789,
+    "lastActivityStamp": 1794780789,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 1,
+    "isOfficialReply": 0,
+    "index": 24,
+    "upvotes": 2,
+    "topic": {
+     "id": 592767
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1086",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "Subject: Persistent VRR (G-SYNC) flickering and pixel inversion with Frame Generation on 8-bit laptop display (Drivers 616.xx – 621.24)\n\nSystem Configuration:\n- Laptop: Lenovo LOQ (dGPU / MUX Switch mode enabled, Optimus disabled)\n- GPU: NVIDIA GeForce RTX 5060 Laptop GPU (100W)\n- Display: Built-in 15.6\" 144Hz IPS panel, 8-bit (6-bit + FRC), G-SYNC Compatible, Overdrive disabled\n- Tested Drivers: Lenovo OEM 595.95 (Good) vs. Official NVIDIA 617.42, 621.14, 621.24 (Broken)\n- Games Tested: Phantom Blade Zero and other DX12 titles with Frame Generation\n\nIssue Description:\nEver since updating past the 595.95 OEM driver to the 616.xx–621.xx driver branch (including 617.42, 621.14, and the latest 621.24), there is severe screen flickering and subtle pixel inversion (shimmering/grid-like artifacts) whenever G-SYNC (VRR) is used together with Frame Generation (DLSS FG).\n1. I tested an identical route in Phantom Blade Zero at 100% screen brightness with base FPS above 70+ and an FPS cap at 137 FPS (via RTSS Reflex mode).\n2. On Lenovo OEM driver 595.95: Zero flickering occurs during the entire run.\n3. On official drivers 617.42, 621.14, and 621.24: The screen flickers 6–7 times on the exact same route, and pixel inversion/shimmering never goes away.\n4. This issue only happens in games with VRR + Frame Generation active (the desktop is completely normal). Disabling G-SYNC stops the flickering, which confirms it is a VRR / LFC threshold and 8-bit output/dithering regression introduced in the 616+ driver branch.\nSince this built-in laptop panel is natively limited to 8-bit color depth, we cannot switch to 10-bit in the NVIDIA Control Panel as a workaround. Please investigate and fix the 8-bit dithering and LFC/VRR timing behavior with Frame Generation on laptop displays.",
+    "comments": []
+   },
+   {
+    "id": 3634157,
+    "createdStamp": 1794755993,
+    "updatedStamp": 1794976484,
+    "lastActivityStamp": 1794976484,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 2,
+    "isOfficialReply": 0,
+    "index": 25,
+    "upvotes": 2,
+    "topic": {
+     "id": 592767
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1087",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "GPU: 5070 laptop\nAfter update when I ran the bench testing I realized that the gpu's max power was being locked under 90 watts when previous driver versions cou",
+    "comments": [
+     {
+      "id": 3634516,
+      "createdStamp": 1794976484,
+      "updatedStamp": 1794976491,
+      "lastActivityStamp": 1794976484,
+      "isVisible": 1,
+      "isGhosted": 0,
+      "status": "default",
+      "replyCount": 0,
+      "isOfficialReply": 0,
+      "index": 4,
+      "upvotes": 1,
+      "topic": {
+       "id": 592767
+      },
+      "parent": {
+       "id": 3634157
+      },
+      "user": {
+       "id": "1087",
+       "aclactions": {
+        "officialreply": false
+       }
+      },
+      "body": "It is an asus FA608PP amd 8940hx + 5070 laptop. The advertised max watts for both cpu+gpu is 170 watts, max gpu is 115 watts. Previous versions of drivers could reach 115 watts. (I have recorded videos on my phone for 621.24 vs 621.14) Both BIOS and VBIOS are up to date (recorded at the end of the video). The benchmark app I'm using is Superposition Benchmark. For 621.24 I have reinstalled it twice, both with clean installations and restarted laptop before benchmarking and the max watts is limited around 90 watts for some reason. the power plan is from oem app Armoury Crate turbo mode which is the highest mode (unless user customise an even higher mode), gpu display mode is nvidia gpu only (",
+      "comments": []
+     },
+     {
+      "id": 3634218,
+      "createdStamp": 1794810674,
+      "updatedStamp": 1794976497,
+      "lastActivityStamp": 1794810674,
+      "isVisible": 1,
+      "isGhosted": 0,
+      "status": "default",
+      "replyCount": 0,
+      "isOfficialReply": 1,
+      "index": 10,
+      "upvotes": 2,
+      "topic": {
+       "id": 592767
+      },
+      "parent": {
+       "id": 3634157
+      },
+      "user": {
+       "id": "1015",
+       "aclactions": {
+        "officialreply": true
+       }
+      },
+      "body": "What laptop make and model?  Is your laptop BIOS up to date?  Please email us the MSINFO32 file from your notebook to driverfeedback@nvidia.com:\n\nhttp://nvidia.",
+      "comments": []
+     }
+    ]
+   }
+  ]
+ }
+}

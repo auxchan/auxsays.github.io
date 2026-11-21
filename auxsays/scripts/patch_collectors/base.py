@@ -14,6 +14,7 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 
+from lib import evidence_facts
 from lib.patch_identity import key_from as patch_key_from, require_build
 from lib.reddit_access_policy import is_policy_disabled_row
 from lib.source_segments import report_url_key
@@ -82,9 +83,15 @@ EVIDENCE_FIELDS = (
     "matched_text",
     "matched_field",
     "matched_context",
+    # Structured evidence facts (G68, lib.evidence_facts): public, derived, computed by
+    # `append_evidence_rows` from the row's own text when the row is written, and appended LAST.
+    # Optional, so a row written before they existed gains no key on a load; the zero-network
+    # migration (migrate_evidence_facts.py) backfilled every stored row.
+    *evidence_facts.STORED_FIELDS,
 )
 
 OPTIONAL_EVIDENCE_FIELDS = {
+    *evidence_facts.STORED_FIELDS,
     "archive_url",
     "target_build",
     "matched_text",
@@ -692,7 +699,9 @@ def append_evidence_rows(rows: list[dict[str, Any]], path: Path = EVIDENCE_PATH,
     preexisting_urls = set(seen_urls)
     added = 0
     for row in rows:
-        normalized = normalize_evidence_row(row)
+        # The structured facts are computed HERE, from the text this row holds, so every collector that
+        # persists through this boundary writes them (G68). Existing rows are never touched.
+        normalized = evidence_facts.with_facts(normalize_evidence_row(row))
         # Fail closed at the durable boundary: a COUNTED row for a build-aware product must carry
         # the exact build it was accepted for. Persisting a counted row without one would create
         # evidence that names a version but no patch -- unattributable to any build-specific
@@ -865,6 +874,201 @@ def match_provenance(parts: list[tuple[str, str]], start: int, end: int) -> dict
     }
 
 
+# --- version-centred excerpts (AUX-109) ---------------------------------------------------------
+#
+# `excerpt` keeps the first 280 characters of a report. When the reporter named the version further
+# in, the stored row cannot show the occurrence its own match rests on: 132 Acrobat rows are like
+# that. For a NEW row whose text is one opening post, the SAME field and the SAME cap are positioned
+# around the accepted occurrence instead -- nothing grows, no field is added, and a row whose head
+# already shows the version is stored exactly as before. No stored row changes (the append path
+# never rewrites one, and collector ownership refuses a modified row). Acceptance never reads the
+# excerpt: every gate reads the full in-memory text, so this changes what is stored, not what counts.
+
+#: Characters a version-centred excerpt keeps before the accepted occurrence (the OBS collector's lead).
+EXCERPT_LEAD_CHARS = 90
+#: The last characters of a post, where a sign-off or a signature sits. A window never reaches into
+#: them unless the version itself is there, and then it stops at the end of the version's sentence.
+EXCERPT_TAIL_CHARS = 60
+#: Set to True by a discovery method whose candidate `report_text` is the OPENING POST ONLY (no reply,
+#: no comment, no page chrome). Only such a candidate is re-centred: in a whole-thread page a centred
+#: window could land inside another author's reply. Absent means False, so an unknown candidate
+#: shape keeps the head.
+FIRST_POST_ONLY = "report_text_is_first_post_only"
+_PLACEHOLDER = "..."
+
+# What a window must not carry that the head would not have shown: an e-mail address, an @handle
+# (with up to two capitalised words after it, a display name), a greeting with the name it addresses,
+# a sign-off or a signature. These only ever SHRINK a window -- never move it onto other text -- so
+# a false hit costs context, not privacy. The head is untouched by design (byte-identical to today).
+_EXCERPT_EMAIL_RE = re.compile(r"[\w.+-]+@[\w-]+(?:\.[\w-]+)+")
+_EXCERPT_HANDLE_RE = re.compile(r"(?<![\w.@])@\w[\w.-]*(?:\s+[A-Z][\w'-]*){0,2}")
+_EXCERPT_GREETING_RE = re.compile(
+    r"\b(?:hi|hello|hey|dear|greetings|good\s+(?:morning|afternoon|evening))\b"
+    r"(?:\s+[@\w][\w.'@-]*){0,3}?\s*[,!:]", re.I)
+_EXCERPT_SIGN_OFF_RE = re.compile(
+    r"(?<![\w'])(?:many\s+thanks|thanks|thank\s+you|thx|tia|cheers|(?:best|kind|warm|warmest)\s+regards|"
+    r"regards|best\s+wishes|sincerely|respectfully|sent\s+from\s+my)\b", re.I)
+# A dash signature closing the post: "-- Bob", " - Jane Smith", "— IT team".
+_EXCERPT_DASH_SIGNATURE_RE = re.compile(r"\s(?:--+|[-–—])\s*[A-Z][\w.'-]*(?:\s+[A-Z][\w.'-]*){0,2}\s*$")
+_EXCERPT_SENTENCE_END_RE = re.compile(r"[.!?](?=\s|$)")
+
+
+def _collapse_ws(text: str) -> str:
+    return re.sub(r"\s+", " ", text or "").strip()
+
+
+def excerpt_visible_head(text: str, width: int = 280) -> str:
+    """The part of `excerpt(text)` that is the reporter's own text: the excerpt without the
+    placeholder `textwrap.shorten` appends when it cuts. Always a prefix of the collapsed text."""
+    head = excerpt(text, width)
+    if len(_collapse_ws(text)) <= width:
+        return head
+    return head[:-len(_PLACEHOLDER)] if head.endswith(_PLACEHOLDER) else head
+
+
+def excerpt_at(text: str, start: int, end: int, width: int = 280) -> str:
+    """The stored excerpt of `text`, positioned so the accepted occurrence ``text[start:end]`` is in it.
+
+    Byte-identical to ``excerpt(text, width)`` -- today's head -- unless ALL of these hold: the span is
+    valid, the collapsed text is longer than `width`, and the occurrence does not end inside the
+    head's visible text. Then a window of at most `width` characters, cut from the same collapsed
+    text: up to EXCERPT_LEAD_CHARS before the occurrence and the rest after it, word-aligned, with
+    the placeholder at each end that does not reach the post's own start or end. The window never
+    reaches into a sign-off, signature, greeting, e-mail address or @handle around the occurrence,
+    nor (unless the occurrence is there) into the post's last EXCERPT_TAIL_CHARS characters. Any
+    inconsistency returns the head, so this can only ever fall back to today's behaviour.
+    """
+    head = excerpt(text, width)
+    if start is None or end is None or start < 0 or end <= start or end > len(text or ""):
+        return head
+    collapsed = _collapse_ws(text)
+    if len(collapsed) <= width:
+        return head
+    token = _collapse_ws(text[start:end])
+    if not token:
+        return head
+    cstart = len(re.sub(r"\s+", " ", text[:start]).lstrip())
+    cend = cstart + len(token)
+    visible = excerpt_visible_head(text, width)
+    if collapsed[cstart:cend] != token or not collapsed.startswith(visible):
+        return head
+    if cend <= len(visible):
+        return head
+    budget = width - 2 * len(_PLACEHOLDER)
+    if cend - cstart > budget:
+        return head
+    # Hard limits first: nothing the window must not carry may sit inside it.
+    left_cap, right_cap = 0, len(collapsed)
+    for rx in (_EXCERPT_EMAIL_RE, _EXCERPT_HANDLE_RE, _EXCERPT_GREETING_RE):
+        for m in rx.finditer(collapsed):
+            if m.end() <= cstart:
+                left_cap = max(left_cap, m.end())
+            elif m.start() >= cend:
+                right_cap = min(right_cap, m.start())
+            elif rx is not _EXCERPT_GREETING_RE:
+                return head                                  # it overlaps the occurrence itself
+    for m in _EXCERPT_SIGN_OFF_RE.finditer(collapsed):
+        if m.start() >= cend:
+            right_cap = min(right_cap, m.start())
+            break
+        if cstart - budget - 40 < m.end() <= cstart:
+            # A sign-off BEFORE the occurrence, within a window's reach ("Thanks, Bob. Edit: the
+            # version is ..."): the window starts after the sentence it closes, or at the occurrence
+            # itself when no sentence end follows it.
+            close = _EXCERPT_SENTENCE_END_RE.search(collapsed, m.end(), cstart)
+            left_cap = max(left_cap, close.end() if close else cstart)
+    dash = _EXCERPT_DASH_SIGNATURE_RE.search(collapsed, cend)
+    if dash:
+        right_cap = min(right_cap, dash.start())
+    # The post's last characters are where an unrecognised sign-off sits ("Bob from IT"). The window
+    # stops at the tail's start, or -- when the occurrence's own sentence runs on into the tail, or the
+    # occurrence is inside it -- at the end of that sentence, and at the occurrence itself when that
+    # sentence never ends.
+    tail = len(collapsed) - EXCERPT_TAIL_CHARS
+    sentence = _EXCERPT_SENTENCE_END_RE.search(collapsed, cend)
+    own_end = sentence.start() if sentence else None
+    if cend <= tail:
+        right_cap = min(right_cap, tail if own_end is None else max(tail, own_end))
+    else:
+        right_cap = min(right_cap, cend if own_end is None else own_end)
+    # Then the budget, between the caps: the lead before the occurrence, the rest after it, and any
+    # room the right-hand cap leaves goes back to the left.
+    lo = max(left_cap, cstart - EXCERPT_LEAD_CHARS)
+    hi = min(right_cap, lo + budget)
+    lo = max(left_cap, hi - budget)
+    # Word-aligned: an edge that falls inside a word moves to the nearest space on the window's side
+    # (a cut before trailing punctuation, or after an opening bracket or quote, is already a boundary).
+    if lo > 0 and collapsed[lo - 1] not in " ([{\"'":
+        nxt = collapsed.find(" ", lo)
+        if 0 <= nxt < cstart:
+            lo = nxt + 1
+    if hi < len(collapsed) and collapsed[hi] not in " .,;:!?)]}\"'":
+        prv = collapsed.rfind(" ", lo, hi)
+        if prv >= cend:
+            hi = prv
+    if not collapsed[hi:].strip(" .!?") and len(collapsed) - lo <= budget:
+        hi = len(collapsed)                                  # only the post's closing punctuation is left
+    window = collapsed[lo:hi].strip()
+    result = (_PLACEHOLDER if lo > 0 else "") + window + (_PLACEHOLDER if hi < len(collapsed) else "")
+    if not (lo <= cstart and cend <= hi) or token not in window or len(result) > width:
+        return head
+    return result
+
+
+def part_span(parts: list[tuple[str, str]], start: int, end: int) -> tuple[str, int, int] | None:
+    """The part of a ``" ".join(value for _name, value in parts)`` text that holds ALL of ``start:end``,
+    as ``(field_name, local_start, local_end)``; None for an invalid span or one that crosses a join.
+    The field walk `match_provenance` makes, returning offsets instead of a window."""
+    if start < 0 or end <= start:
+        return None
+    offset = 0
+    for name, value in parts:
+        if offset <= start and end <= offset + len(value):
+            return name, start - offset, end - offset
+        offset += len(value) + 1
+    return None
+
+
+def first_post_excerpt_span(
+        candidate: dict[str, Any], parts: list[tuple[str, str]], text: str, version: str,
+        aliases: Iterable[str] = (), *, accepted: tuple[bool, str, str], field: str = "report_text",
+        width: int = 280,
+) -> tuple[int, int] | None:
+    """Where a new row's excerpt is centred: offsets of the ACCEPTED occurrence inside
+    ``candidate[field]`` -- the text `make_evidence_row` cuts the excerpt from -- or None to keep
+    today's head excerpt.
+
+    `text` is the joined text acceptance matched (``" ".join`` of `parts`' values) and `accepted` the
+    (matched, matched_version, match_basis) it decided; the span comes from `exact_version_match_span`
+    over the same text and spellings, and is used only when it agrees with that decision. None when:
+    the candidate is not one opening post (FIRST_POST_ONLY), there is no exact-text match (Premiere's
+    "build 65" basis has no span), the occurrence lies in another part (a title is stored whole) or
+    across a join, or the head already shows an accepted spelling of the version.
+    """
+    if candidate.get(FIRST_POST_ONLY) is not True or not accepted or not accepted[0]:
+        return None
+    if " ".join(value for _name, value in parts) != text:
+        return None
+    aliases = tuple(aliases)
+    matched, matched_version, basis, start, end = exact_version_match_span(text, version, aliases)
+    if (matched, matched_version, basis) != tuple(accepted):
+        return None
+    located = part_span(parts, start, end)
+    if located is None or located[0] != field:
+        return None
+    raw = str(candidate.get(field) or "")
+    value = next(v for name, v in parts if name == field)
+    lead = raw.find(value) if value else -1
+    if lead < 0:
+        return None
+    local_start, local_end = located[1] + lead, located[2] + lead
+    if raw[local_start:local_end] != text[start:end]:
+        return None
+    if exact_version_match(excerpt_visible_head(raw, width), version, aliases)[0]:
+        return None
+    return local_start, local_end
+
+
 def source_url_is_specific(url: str) -> bool:
     parsed = urlparse(url)
     if parsed.scheme not in {"http", "https"} or not parsed.netloc:
@@ -946,7 +1150,12 @@ def make_evidence_row(
     matched_text: str = "",
     matched_field: str = "",
     matched_context: str = "",
+    excerpt_span: tuple[int, int] | None = None,
 ) -> dict[str, Any]:
+    # `excerpt_span` (AUX-109): offsets of the accepted occurrence in `report_text`, from
+    # `first_post_excerpt_span`. None -- every caller but the two Adobe opening-post paths -- keeps
+    # `excerpt(report_text)` exactly, and so does a span whose occurrence the head already shows.
+    stored_excerpt = excerpt_at(report_text, *excerpt_span) if excerpt_span else excerpt(report_text)
     return normalize_evidence_row({
         "id": row_id or f"{product_id}-{slug(update_version)}-{slug(source_type)}-{slug(source_url)}",
         "product_id": product_id,
@@ -956,7 +1165,7 @@ def make_evidence_row(
         "source_url": source_url,
         "parent_title": parent_title,
         "report_title": report_title,
-        "report_text_excerpt": excerpt(report_text),
+        "report_text_excerpt": stored_excerpt,
         "captured_at": captured_at,
         "source_date": source_date,
         "target_release_date": target_release_date,

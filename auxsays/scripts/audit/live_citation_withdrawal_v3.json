@@ -1,0 +1,805 @@
+{
+ "schema": 1,
+ "ledger": "AUX-098",
+ "version": 3,
+ "supplements": "auxsays/scripts/audit/live_citation_withdrawal.json (AUX-088) and live_citation_withdrawal_v2.json (AUX-090), which stay unchanged",
+ "purpose": "Pinned audited withdrawal of stored reports that one person posted twice (a cross-post or a re-post of one incident), each found by two independent adjudications that name the same original. Every row is kept; only counted and exclusion_reason change (and, for Windows, evidence_valid_for_current_patch). The original stays counted and unchanged.",
+ "selector": [
+  "product_id",
+  "update_version",
+  "target_build",
+  "id",
+  "source_url"
+ ],
+ "products": [
+  "microsoft-windows-11",
+  "obs-studio",
+  "blackmagic-davinci"
+ ],
+ "exclusion_reasons": [
+  "duplicate_existing_evidence",
+  "identity_not_the_subject",
+  "not_a_real_issue_report",
+  "version_is_rollback_target",
+  "version_named_but_working"
+ ],
+ "edit": {
+  "counted": false,
+  "exclusion_reason": "duplicate_existing_evidence",
+  "evidence_valid_for_current_patch": "false for Windows; OBS and DaVinci rows carry no such field",
+  "row_retained": true
+ },
+ "retained_choice": "The kept row is the earlier capture. When both rows were captured at the same instant (one collection run), it is the earlier post: the lower source-native post number (Microsoft Learn question number, Reddit base-36 post id), which the tool derives from the stored URLs. source_date is never used: it is a thread's last activity.",
+ "parent_commit": "ec5da166ceded6c774814dcebc2bb04b775dcd03",
+ "store_path": "auxsays/_data/consensus_evidence.yml",
+ "store_sha256_at_pin": "70c07847cc5763c59b9a108c74910ffbf797a1b6452dee9390ae1752540f6aae",
+ "basis": "A row is here only when BOTH a first adjudication and an independent blind second adjudication (first labels not seen) labelled it same_report_duplicate AND named the same kept row. The unit is a report, not a person: the same person's different incidents stay counted. Rows on which the two disagree, or that only one labels a duplicate, stay counted (held_out). Reviewer notes omit user handles and quoted post text; group keys refer to the adjudications' working files.",
+ "note": "Each entry must match exactly one stored block whose sha256 equals block_sha256_before (to withdraw) or block_sha256_after (already withdrawn). retain entries are the originals; they must stay counted and unchanged.",
+ "entries": [
+  {
+   "role": "retain",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.7623",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5708079-security-updates-are-not-installing",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5708079/security-updates-are-not-installing",
+   "record_file": "auxsays/updates/generated/2026-01-13-windows-11-25h2-26200-7623.md",
+   "target_kb": "KB5074109",
+   "target_os_build": "26200.7623",
+   "block_sha256_before": "898731539506e6b29689307a3392df9a708f601d37db20d41d2e31b355037c55",
+   "captured_at": "2026-09-05T22:25:43Z",
+   "group": "L1",
+   "note": "Kept: the original report; it stays counted and unchanged."
+  },
+  {
+   "role": "withdraw",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.7623",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5769728-security-update-kb5074109-26200-7623-i",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5769728/security-update-(kb5074109)-(26200-7623)-install-e",
+   "record_file": "auxsays/updates/generated/2026-01-13-windows-11-25h2-26200-7623.md",
+   "target_kb": "KB5074109",
+   "target_os_build": "26200.7623",
+   "block_sha256_before": "9efe557fef95c2ceefd6d338e9a381f6f2e64b959825c1194038b3518b8c54d4",
+   "exclusion_reason": "duplicate_existing_evidence",
+   "block_sha256_after": "94b60adcc8d80a6ffc76d6efb3371ce8e20cef0076398cdc90433a42182fa3ef",
+   "captured_at": "2026-09-05T22:25:43Z",
+   "kept_captured_at": "2026-09-05T22:25:43Z",
+   "capture_tie": true,
+   "group": "L1",
+   "adjudication": {
+    "first_audit": {
+     "by": "G35 research slot (2026-11-10_g35-reporter-independence/DUPLICATES.md)",
+     "label": "same_report_duplicate",
+     "duplicate_of_id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5708079-security-updates-are-not-installing",
+     "group": "L1",
+     "reason": "Near-verbatim body with the same misspellings and the same install error code (stored text only)."
+    },
+    "second_blind": {
+     "by": "G36-05 research slot (this folder; labels written before G35 files were read)",
+     "label": "same_report_duplicate",
+     "duplicate_of_id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5708079-security-updates-are-not-installing",
+     "group": "X19",
+     "reason_class": "same_report_duplicate",
+     "reason": "Verbatim body; one incident (one machine's KB5074109 install-retry loop). Learn not opened."
+    }
+   },
+   "basis": "The two Learn questions carry the same body and the same install error for one machine's KB5074109 retry loop: one report posted twice.",
+   "duplicate_of": {
+    "product_id": "microsoft-windows-11",
+    "update_version": "25H2",
+    "target_build": "26200.7623",
+    "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5708079-security-updates-are-not-installing",
+    "source_url": "https://learn.microsoft.com/en-us/answers/questions/5708079/security-updates-are-not-installing"
+   }
+  },
+  {
+   "role": "retain",
+   "product_id": "blackmagic-davinci",
+   "update_version": "20.2",
+   "target_build": "",
+   "id": "blackmagic-davinci-20-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1rnhcy6-problem-audio-after-exporting",
+   "source_url": "https://www.reddit.com/r/davinciresolve/comments/1rnhcy6/problem_audio_after_exporting/",
+   "record_file": "auxsays/updates/generated/2025-09-10-davinci-resolve-20-2.md",
+   "block_sha256_before": "54b96adfb57b5011da3557f6b45c13b85eb4a5965db34d85dd99f3db942d4c59",
+   "captured_at": "2026-07-22T00:24:03Z",
+   "group": "N1",
+   "note": "Kept: the original report; it stays counted and unchanged."
+  },
+  {
+   "role": "withdraw",
+   "product_id": "blackmagic-davinci",
+   "update_version": "20.2",
+   "target_build": "",
+   "id": "blackmagic-davinci-20-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1rvhlmx-audio-problem-after-exporting",
+   "source_url": "https://www.reddit.com/r/davinciresolve/comments/1rvhlmx/audio_problem_after_exporting/",
+   "record_file": "auxsays/updates/generated/2025-09-10-davinci-resolve-20-2.md",
+   "block_sha256_before": "081f4b2b3dfc850a3c550e8517ddb052fd63a6f2e9d0cacdc2c6b8fefef67823",
+   "exclusion_reason": "duplicate_existing_evidence",
+   "block_sha256_after": "7db1f229978353a8457c49b7e9787ad8fd3dfbc70c0ac48a2540b941fa61158d",
+   "captured_at": "2026-07-22T00:24:03Z",
+   "kept_captured_at": "2026-07-22T00:24:03Z",
+   "capture_tie": true,
+   "group": "N1",
+   "adjudication": {
+    "first_audit": {
+     "by": "G35 research slot (2026-11-10_g35-reporter-independence/DUPLICATES.md)",
+     "label": "same_report_duplicate",
+     "duplicate_of_id": "blackmagic-davinci-20-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1rnhcy6-problem-audio-after-exporting",
+     "group": "N1",
+     "reason": "Same opening sentences word for word; the titles are the same words (stored text only)."
+    },
+    "second_blind": {
+     "by": "G36-05 research slot (this folder; labels written before G35 files were read)",
+     "label": "same_report_duplicate",
+     "duplicate_of_id": "blackmagic-davinci-20-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1rnhcy6-problem-audio-after-exporting",
+     "group": "X20",
+     "reason_class": "same_report_duplicate",
+     "reason": "Verbatim opening paragraph; one incident (audio missing after export). Reddit not opened."
+    }
+   },
+   "basis": "The two Reddit posts open with the same paragraph about the same export problem: one report posted twice.",
+   "duplicate_of": {
+    "product_id": "blackmagic-davinci",
+    "update_version": "20.2",
+    "target_build": "",
+    "id": "blackmagic-davinci-20-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1rnhcy6-problem-audio-after-exporting",
+    "source_url": "https://www.reddit.com/r/davinciresolve/comments/1rnhcy6/problem_audio_after_exporting/"
+   }
+  },
+  {
+   "role": "retain",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.8894",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5956328-os-build-26200-8894-office-errors-majo",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5956328/os-build-26200-8894-office-errors-major-headache",
+   "record_file": "auxsays/updates/generated/2026-07-18-windows-11-25h2-26200-8894.md",
+   "target_kb": "KB5121767",
+   "target_os_build": "26200.8894",
+   "block_sha256_before": "96de91725defedc05d2ab2a1191eca5a0074555e03d9ae53b84dad94bd8d5287",
+   "captured_at": "2026-09-05T04:16:32Z",
+   "group": "N3",
+   "note": "Kept: the original report; it stays counted and unchanged."
+  },
+  {
+   "role": "withdraw",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.8894",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5956430-os-build-26200-8894-office-errors-majo",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5956430/os-build-26200-8894-office-errors-major-headache-p",
+   "record_file": "auxsays/updates/generated/2026-07-18-windows-11-25h2-26200-8894.md",
+   "target_kb": "KB5121767",
+   "target_os_build": "26200.8894",
+   "block_sha256_before": "da17cccb849035c513dc065da7c3d3bb58bb18beabb824205a74d0f063906f43",
+   "exclusion_reason": "duplicate_existing_evidence",
+   "block_sha256_after": "13b9216b4c48e6560b36e4aa7ff3aa087eac070656abe2c49ab173f20a6d0b10",
+   "captured_at": "2026-09-05T04:16:32Z",
+   "kept_captured_at": "2026-09-05T04:16:32Z",
+   "capture_tie": true,
+   "group": "N3",
+   "adjudication": {
+    "first_audit": {
+     "by": "G35 research slot (2026-11-10_g35-reporter-independence/DUPLICATES.md)",
+     "label": "same_report_duplicate",
+     "duplicate_of_id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5956328-os-build-26200-8894-office-errors-majo",
+     "group": "N3",
+     "reason": "The author's own 'Part 2' sequel with an identical system description."
+    },
+    "second_blind": {
+     "by": "G36-05 research slot (this folder; labels written before G35 files were read)",
+     "label": "same_report_duplicate",
+     "duplicate_of_id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5956328-os-build-26200-8894-office-errors-majo",
+     "group": "X12",
+     "reason_class": "same_report_duplicate",
+     "reason": "Identical system description; 'Part 2' continues the same Office-error incident. Learn not opened."
+    }
+   },
+   "basis": "The later question is the author's own 'Part 2' of the same Office-error incident on the same system.",
+   "duplicate_of": {
+    "product_id": "microsoft-windows-11",
+    "update_version": "25H2",
+    "target_build": "26200.8894",
+    "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5956328-os-build-26200-8894-office-errors-majo",
+    "source_url": "https://learn.microsoft.com/en-us/answers/questions/5956328/os-build-26200-8894-office-errors-major-headache"
+   }
+  },
+  {
+   "role": "retain",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.8973",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5978256-win-11-25h2kb5101684-os-builds-26200-8",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5978256/win-11-25h2kb5101684-os-builds-26200-8973-and-2610",
+   "record_file": "auxsays/updates/generated/2026-07-28-windows-11-25h2-26200-8973.md",
+   "target_kb": "KB5101684",
+   "target_os_build": "26200.8973",
+   "block_sha256_before": "453d879578d4ebfd13f83eebec50b90cc7fa217c56e301440371931a149b9267",
+   "captured_at": "2026-09-05T04:16:28Z",
+   "group": "N4",
+   "note": "Kept: the original report; it stays counted and unchanged."
+  },
+  {
+   "role": "withdraw",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.8973",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5982769-file-history-problems-after-installing",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5982769/file-history-problems-after-installing-kb5101684-a",
+   "record_file": "auxsays/updates/generated/2026-07-28-windows-11-25h2-26200-8973.md",
+   "target_kb": "KB5101684",
+   "target_os_build": "26200.8973",
+   "block_sha256_before": "7d4311ae81c3313a13795e3df692f15e313aa9efbb4288c37fb952e23aa64ea7",
+   "exclusion_reason": "duplicate_existing_evidence",
+   "block_sha256_after": "38dafecc85c318f9242082aacb4a12fa4b9c7346169fb05a380ca6ceca243fd9",
+   "captured_at": "2026-09-05T04:16:28Z",
+   "kept_captured_at": "2026-09-05T04:16:28Z",
+   "capture_tie": true,
+   "group": "N4",
+   "adjudication": {
+    "first_audit": {
+     "by": "G35 research slot (2026-11-10_g35-reporter-independence/DUPLICATES.md)",
+     "label": "same_report_duplicate",
+     "duplicate_of_id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5978256-win-11-25h2kb5101684-os-builds-26200-8",
+     "group": "N4",
+     "reason": "File History: the same two PCs and the same KB pair in every post; two posts declare the cross-posting."
+    },
+    "second_blind": {
+     "by": "G36-05 research slot (this folder; labels written before G35 files were read)",
+     "label": "same_report_duplicate",
+     "duplicate_of_id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5978256-win-11-25h2kb5101684-os-builds-26200-8",
+     "group": "X11",
+     "reason_class": "same_report_duplicate",
+     "reason": "One author for all four Tech Community threads (read from the source); the three Learn rows carry the same two-PC KB5101684 / KB5120249 fingerprint and symptom; the Tech Community author says they also posted on Microsoft Learn. One incident."
+    }
+   },
+   "basis": "Seven posts on two sites by one author describe one File History failure on the same two PCs after the same KB pair; the kept row is the earliest.",
+   "duplicate_of": {
+    "product_id": "microsoft-windows-11",
+    "update_version": "25H2",
+    "target_build": "26200.8973",
+    "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5978256-win-11-25h2kb5101684-os-builds-26200-8",
+    "source_url": "https://learn.microsoft.com/en-us/answers/questions/5978256/win-11-25h2kb5101684-os-builds-26200-8973-and-2610"
+   }
+  },
+  {
+   "role": "withdraw",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.8973",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5983062-files-are-backed-up-but-file-history-s",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5983062/files-are-backed-up-but-file-history-status-and-pr",
+   "record_file": "auxsays/updates/generated/2026-07-28-windows-11-25h2-26200-8973.md",
+   "target_kb": "KB5101684",
+   "target_os_build": "26200.8973",
+   "block_sha256_before": "d33d2ca9c5c60a8cc9a918a35b3f0441fae1d09d485d1ef87dd5513b18daf742",
+   "exclusion_reason": "duplicate_existing_evidence",
+   "block_sha256_after": "42835e0b086eb855f441b2e05ab6165c6017099f59619473dabba1bfe317d4a6",
+   "captured_at": "2026-09-05T04:16:28Z",
+   "kept_captured_at": "2026-09-05T04:16:28Z",
+   "capture_tie": true,
+   "group": "N4",
+   "adjudication": {
+    "first_audit": {
+     "by": "G35 research slot (2026-11-10_g35-reporter-independence/DUPLICATES.md)",
+     "label": "same_report_duplicate",
+     "duplicate_of_id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5978256-win-11-25h2kb5101684-os-builds-26200-8",
+     "group": "N4",
+     "reason": "File History: the same two PCs and the same KB pair in every post; two posts declare the cross-posting."
+    },
+    "second_blind": {
+     "by": "G36-05 research slot (this folder; labels written before G35 files were read)",
+     "label": "same_report_duplicate",
+     "duplicate_of_id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5978256-win-11-25h2kb5101684-os-builds-26200-8",
+     "group": "X11",
+     "reason_class": "same_report_duplicate",
+     "reason": "One author for all four Tech Community threads (read from the source); the three Learn rows carry the same two-PC KB5101684 / KB5120249 fingerprint and symptom; the Tech Community author says they also posted on Microsoft Learn. One incident."
+    }
+   },
+   "basis": "Seven posts on two sites by one author describe one File History failure on the same two PCs after the same KB pair; the kept row is the earliest.",
+   "duplicate_of": {
+    "product_id": "microsoft-windows-11",
+    "update_version": "25H2",
+    "target_build": "26200.8973",
+    "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5978256-win-11-25h2kb5101684-os-builds-26200-8",
+    "source_url": "https://learn.microsoft.com/en-us/answers/questions/5978256/win-11-25h2kb5101684-os-builds-26200-8973-and-2610"
+   }
+  },
+  {
+   "role": "withdraw",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.8973",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windowsinsiderprogram-win-11-25h2-kb5101684-previe",
+   "source_url": "https://techcommunity.microsoft.com/discussions/windowsinsiderprogram/win-11-25h2-kb5101684-preview-and-win-10-22h2-kb5120249-issue/4547615",
+   "record_file": "auxsays/updates/generated/2026-07-28-windows-11-25h2-26200-8973.md",
+   "target_kb": "KB5101684",
+   "target_os_build": "26200.8973",
+   "block_sha256_before": "834f60569bff2466dbf951d462f08860d6944ad32646c79488d5b206795454b2",
+   "exclusion_reason": "duplicate_existing_evidence",
+   "block_sha256_after": "84fdc37b982d1c3b9b100bd5f26e6a7ddf8d232b695b944e69cd90447fd9608c",
+   "captured_at": "2026-09-06T00:07:59Z",
+   "kept_captured_at": "2026-09-05T04:16:28Z",
+   "capture_tie": false,
+   "group": "N4",
+   "adjudication": {
+    "first_audit": {
+     "by": "G35 research slot (2026-11-10_g35-reporter-independence/DUPLICATES.md)",
+     "label": "same_report_duplicate",
+     "duplicate_of_id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5978256-win-11-25h2kb5101684-os-builds-26200-8",
+     "group": "N4",
+     "reason": "File History: the same two PCs and the same KB pair in every post; two posts declare the cross-posting."
+    },
+    "second_blind": {
+     "by": "G36-05 research slot (this folder; labels written before G35 files were read)",
+     "label": "same_report_duplicate",
+     "duplicate_of_id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5978256-win-11-25h2kb5101684-os-builds-26200-8",
+     "group": "X11",
+     "reason_class": "same_report_duplicate",
+     "reason": "One author for all four Tech Community threads (read from the source); the three Learn rows carry the same two-PC KB5101684 / KB5120249 fingerprint and symptom; the Tech Community author says they also posted on Microsoft Learn. One incident."
+    }
+   },
+   "basis": "Seven posts on two sites by one author describe one File History failure on the same two PCs after the same KB pair; the kept row is the earliest.",
+   "duplicate_of": {
+    "product_id": "microsoft-windows-11",
+    "update_version": "25H2",
+    "target_build": "26200.8973",
+    "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5978256-win-11-25h2kb5101684-os-builds-26200-8",
+    "source_url": "https://learn.microsoft.com/en-us/answers/questions/5978256/win-11-25h2kb5101684-os-builds-26200-8973-and-2610"
+   }
+  },
+  {
+   "role": "withdraw",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.8973",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windows11-kb5101684kb5120249-caused-file-history-e",
+   "source_url": "https://techcommunity.microsoft.com/discussions/windows11/kb5101684kb5120249-caused-file-history-errors-but-microsoft-has-not-acknowledged/4550372",
+   "record_file": "auxsays/updates/generated/2026-07-28-windows-11-25h2-26200-8973.md",
+   "target_kb": "KB5101684",
+   "target_os_build": "26200.8973",
+   "block_sha256_before": "902861af2462f8b2e8cbae3626a4404f577ad0f107b73a5bc4266ad9b9f662d4",
+   "exclusion_reason": "duplicate_existing_evidence",
+   "block_sha256_after": "c3ad03bab11810bde92f41175f9e05c2c103f45159c8d9a1194afbfa3be94f4b",
+   "captured_at": "2026-09-06T00:07:59Z",
+   "kept_captured_at": "2026-09-05T04:16:28Z",
+   "capture_tie": false,
+   "group": "N4",
+   "adjudication": {
+    "first_audit": {
+     "by": "G35 research slot (2026-11-10_g35-reporter-independence/DUPLICATES.md)",
+     "label": "same_report_duplicate",
+     "duplicate_of_id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5978256-win-11-25h2kb5101684-os-builds-26200-8",
+     "group": "N4",
+     "reason": "File History: the same two PCs and the same KB pair in every post; two posts declare the cross-posting."
+    },
+    "second_blind": {
+     "by": "G36-05 research slot (this folder; labels written before G35 files were read)",
+     "label": "same_report_duplicate",
+     "duplicate_of_id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5978256-win-11-25h2kb5101684-os-builds-26200-8",
+     "group": "X11",
+     "reason_class": "same_report_duplicate",
+     "reason": "One author for all four Tech Community threads (read from the source); the three Learn rows carry the same two-PC KB5101684 / KB5120249 fingerprint and symptom; the Tech Community author says they also posted on Microsoft Learn. One incident."
+    }
+   },
+   "basis": "Seven posts on two sites by one author describe one File History failure on the same two PCs after the same KB pair; the kept row is the earliest.",
+   "duplicate_of": {
+    "product_id": "microsoft-windows-11",
+    "update_version": "25H2",
+    "target_build": "26200.8973",
+    "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5978256-win-11-25h2kb5101684-os-builds-26200-8",
+    "source_url": "https://learn.microsoft.com/en-us/answers/questions/5978256/win-11-25h2kb5101684-os-builds-26200-8973-and-2610"
+   }
+  },
+  {
+   "role": "withdraw",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.8973",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windows11-file-history-broken-after-kb5101684-kb51",
+   "source_url": "https://techcommunity.microsoft.com/discussions/windows11/file-history-broken-after-kb5101684--kb5120249/4551560",
+   "record_file": "auxsays/updates/generated/2026-07-28-windows-11-25h2-26200-8973.md",
+   "target_kb": "KB5101684",
+   "target_os_build": "26200.8973",
+   "block_sha256_before": "6174e2cf7b0188df9714c434f8c49c7e7cbc7a87912d37047c546eca7e681d1d",
+   "exclusion_reason": "duplicate_existing_evidence",
+   "block_sha256_after": "703a0c9e96bef5100f774f648dd18a2a9d303f861fffda28843ceb66673731c1",
+   "captured_at": "2026-09-06T03:26:24Z",
+   "kept_captured_at": "2026-09-05T04:16:28Z",
+   "capture_tie": false,
+   "group": "N4",
+   "adjudication": {
+    "first_audit": {
+     "by": "G35 research slot (2026-11-10_g35-reporter-independence/DUPLICATES.md)",
+     "label": "same_report_duplicate",
+     "duplicate_of_id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5978256-win-11-25h2kb5101684-os-builds-26200-8",
+     "group": "N4",
+     "reason": "File History: the same two PCs and the same KB pair in every post; two posts declare the cross-posting."
+    },
+    "second_blind": {
+     "by": "G36-05 research slot (this folder; labels written before G35 files were read)",
+     "label": "same_report_duplicate",
+     "duplicate_of_id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5978256-win-11-25h2kb5101684-os-builds-26200-8",
+     "group": "X11",
+     "reason_class": "same_report_duplicate",
+     "reason": "One author for all four Tech Community threads (read from the source); the three Learn rows carry the same two-PC KB5101684 / KB5120249 fingerprint and symptom; the Tech Community author says they also posted on Microsoft Learn. One incident."
+    }
+   },
+   "basis": "Seven posts on two sites by one author describe one File History failure on the same two PCs after the same KB pair; the kept row is the earliest.",
+   "duplicate_of": {
+    "product_id": "microsoft-windows-11",
+    "update_version": "25H2",
+    "target_build": "26200.8973",
+    "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5978256-win-11-25h2kb5101684-os-builds-26200-8",
+    "source_url": "https://learn.microsoft.com/en-us/answers/questions/5978256/win-11-25h2kb5101684-os-builds-26200-8973-and-2610"
+   }
+  },
+  {
+   "role": "withdraw",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.8973",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windowsinsiderprogram-broken-file-history-after-ju",
+   "source_url": "https://techcommunity.microsoft.com/discussions/windowsinsiderprogram/broken-file-history-after-julyaugust-updates-kb5101684-on-win11-25h2--kb5120249-/4552324",
+   "record_file": "auxsays/updates/generated/2026-07-28-windows-11-25h2-26200-8973.md",
+   "target_kb": "KB5101684",
+   "target_os_build": "26200.8973",
+   "block_sha256_before": "2b216a664c467903c322b422dc7e2904fb33a4e1b863094a0d3707df774dfc17",
+   "exclusion_reason": "duplicate_existing_evidence",
+   "block_sha256_after": "813f1e044d2334023f2967e6eb3ff9968a2012cf6e5bb1c440e2d0cab7251cd3",
+   "captured_at": "2026-09-08T12:34:56Z",
+   "kept_captured_at": "2026-09-05T04:16:28Z",
+   "capture_tie": false,
+   "group": "N4",
+   "adjudication": {
+    "first_audit": {
+     "by": "G35 research slot (2026-11-10_g35-reporter-independence/DUPLICATES.md)",
+     "label": "same_report_duplicate",
+     "duplicate_of_id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5978256-win-11-25h2kb5101684-os-builds-26200-8",
+     "group": "N4",
+     "reason": "File History: the same two PCs and the same KB pair in every post; two posts declare the cross-posting."
+    },
+    "second_blind": {
+     "by": "G36-05 research slot (this folder; labels written before G35 files were read)",
+     "label": "same_report_duplicate",
+     "duplicate_of_id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5978256-win-11-25h2kb5101684-os-builds-26200-8",
+     "group": "X11",
+     "reason_class": "same_report_duplicate",
+     "reason": "One author for all four Tech Community threads (read from the source); the three Learn rows carry the same two-PC KB5101684 / KB5120249 fingerprint and symptom; the Tech Community author says they also posted on Microsoft Learn. One incident."
+    }
+   },
+   "basis": "Seven posts on two sites by one author describe one File History failure on the same two PCs after the same KB pair; the kept row is the earliest.",
+   "duplicate_of": {
+    "product_id": "microsoft-windows-11",
+    "update_version": "25H2",
+    "target_build": "26200.8973",
+    "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5978256-win-11-25h2kb5101684-os-builds-26200-8",
+    "source_url": "https://learn.microsoft.com/en-us/answers/questions/5978256/win-11-25h2kb5101684-os-builds-26200-8973-and-2610"
+   }
+  },
+  {
+   "role": "retain",
+   "product_id": "obs-studio",
+   "update_version": "31.1.2",
+   "target_build": "",
+   "id": "obs-studio-31-1-2-github-issue-13711",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/13711",
+   "record_file": "auxsays/updates/generated/2025-07-28-obs-studio-31-1-2.md",
+   "block_sha256_before": "66b5940d6360575894022b579c51cd06e6ecd874bc5a7b705854fda99fded640",
+   "captured_at": "2026-08-07T03:54:19Z",
+   "group": "N5",
+   "note": "Kept: the original report; it stays counted and unchanged."
+  },
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "31.1.2",
+   "target_build": "",
+   "id": "obs-studio-31-1-2-obs-forum-thread-196230",
+   "source_url": "https://obsproject.com/forum/threads/image-source-causes-rendering-lag-and-dropped-frames-when-opening-properties-or-changing-images-on-macos.196230/",
+   "record_file": "auxsays/updates/generated/2025-07-28-obs-studio-31-1-2.md",
+   "block_sha256_before": "c7edd23efaac43458d3ed324dbf6c8c250e4d6d2e17520f6058f4c8436b623b8",
+   "exclusion_reason": "duplicate_existing_evidence",
+   "block_sha256_after": "b27684e1bc6b0224c568ed490323c1b31eef500d0dc86e35b2a3e47de202a1ca",
+   "captured_at": "2026-10-12T00:33:53Z",
+   "kept_captured_at": "2026-08-07T03:54:19Z",
+   "capture_tie": false,
+   "group": "N5",
+   "adjudication": {
+    "first_audit": {
+     "by": "G35 research slot (2026-11-10_g35-reporter-independence/DUPLICATES.md)",
+     "label": "same_report_duplicate",
+     "duplicate_of_id": "obs-studio-31-1-2-github-issue-13711",
+     "group": "N5",
+     "reason": "The GitHub issue and its forum copy: the same title words, hardware block and wording."
+    },
+    "second_blind": {
+     "by": "G36-05 research slot (this folder; labels written before G35 files were read)",
+     "label": "same_report_duplicate",
+     "duplicate_of_id": "obs-studio-31-1-2-github-issue-13711",
+     "group": "X09",
+     "reason_class": "same_report_duplicate",
+     "reason": "Same machine block, same versions tested, same symptom: the forum copy of the GitHub issue."
+    }
+   },
+   "basis": "The forum thread is the same report as the GitHub issue the page counts: the same machine, versions tested and symptom.",
+   "duplicate_of": {
+    "product_id": "obs-studio",
+    "update_version": "31.1.2",
+    "target_build": "",
+    "id": "obs-studio-31-1-2-github-issue-13711",
+    "source_url": "https://github.com/obsproject/obs-studio/issues/13711"
+   }
+  },
+  {
+   "role": "retain",
+   "product_id": "obs-studio",
+   "update_version": "32.2.0",
+   "target_build": "",
+   "id": "obs-studio-32-2-0-github-issue-13685",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/13685",
+   "record_file": "auxsays/updates/generated/2026-07-21-obs-studio-32-2-0.md",
+   "block_sha256_before": "217742f2482c30da649a5347caace9f26c3e5d5e4671d84edba0c753819d26bb",
+   "captured_at": "2026-07-22T23:19:38Z",
+   "group": "N6",
+   "note": "Kept: the original report; it stays counted and unchanged."
+  },
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "32.2.0",
+   "target_build": "",
+   "id": "obs-studio-32-2-0-github-issue-13689",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/13689",
+   "record_file": "auxsays/updates/generated/2026-07-21-obs-studio-32-2-0.md",
+   "block_sha256_before": "2014b8cbe071cd354e486a902796fafa817a7815630d61021100758956b1f5a9",
+   "exclusion_reason": "duplicate_existing_evidence",
+   "block_sha256_after": "f609226b392c64e71a4e523b82f5f749331776ca9cbae2ac8ead19ab55578192",
+   "captured_at": "2026-07-23T01:10:22Z",
+   "kept_captured_at": "2026-07-22T23:19:38Z",
+   "capture_tie": false,
+   "group": "N6",
+   "adjudication": {
+    "first_audit": {
+     "by": "G35 research slot (2026-11-10_g35-reporter-independence/DUPLICATES.md)",
+     "label": "same_report_duplicate",
+     "duplicate_of_id": "obs-studio-32-2-0-github-issue-13685",
+     "group": "N6",
+     "reason": "One GitHub account filed the identical title three times in 93 minutes; a maintainer closed one as a duplicate."
+    },
+    "second_blind": {
+     "by": "G36-05 research slot (this folder; labels written before G35 files were read)",
+     "label": "same_report_duplicate",
+     "duplicate_of_id": "obs-studio-32-2-0-github-issue-13685",
+     "group": "X10",
+     "reason_class": "same_report_duplicate",
+     "reason": "All three by one GitHub account (source metadata): one dual-GPU encoder incident filed again after closure."
+    }
+   },
+   "basis": "One account filed the same encoder report three times within 93 minutes; the first issue is kept.",
+   "duplicate_of": {
+    "product_id": "obs-studio",
+    "update_version": "32.2.0",
+    "target_build": "",
+    "id": "obs-studio-32-2-0-github-issue-13685",
+    "source_url": "https://github.com/obsproject/obs-studio/issues/13685"
+   }
+  },
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "32.2.0",
+   "target_build": "",
+   "id": "obs-studio-32-2-0-github-issue-13690",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/13690",
+   "record_file": "auxsays/updates/generated/2026-07-21-obs-studio-32-2-0.md",
+   "block_sha256_before": "e5c825eed97c9d3a055c584c8657d96f78c68a5607fe2993cf480e01e26d1441",
+   "exclusion_reason": "duplicate_existing_evidence",
+   "block_sha256_after": "d5e6c39558b5a5824583754b8435f7e1bd0620d2a2b5f40f3777d377dfda563b",
+   "captured_at": "2026-07-23T01:10:22Z",
+   "kept_captured_at": "2026-07-22T23:19:38Z",
+   "capture_tie": false,
+   "group": "N6",
+   "adjudication": {
+    "first_audit": {
+     "by": "G35 research slot (2026-11-10_g35-reporter-independence/DUPLICATES.md)",
+     "label": "same_report_duplicate",
+     "duplicate_of_id": "obs-studio-32-2-0-github-issue-13685",
+     "group": "N6",
+     "reason": "One GitHub account filed the identical title three times in 93 minutes; a maintainer closed one as a duplicate."
+    },
+    "second_blind": {
+     "by": "G36-05 research slot (this folder; labels written before G35 files were read)",
+     "label": "same_report_duplicate",
+     "duplicate_of_id": "obs-studio-32-2-0-github-issue-13685",
+     "group": "X10",
+     "reason_class": "same_report_duplicate",
+     "reason": "All three by one GitHub account (source metadata): one dual-GPU encoder incident filed again after closure."
+    }
+   },
+   "basis": "One account filed the same encoder report three times within 93 minutes; the first issue is kept.",
+   "duplicate_of": {
+    "product_id": "obs-studio",
+    "update_version": "32.2.0",
+    "target_build": "",
+    "id": "obs-studio-32-2-0-github-issue-13685",
+    "source_url": "https://github.com/obsproject/obs-studio/issues/13685"
+   }
+  },
+  {
+   "role": "retain",
+   "product_id": "obs-studio",
+   "update_version": "32.2.1",
+   "target_build": "",
+   "id": "obs-studio-32-2-1-github-issue-13729",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/13729",
+   "record_file": "auxsays/updates/generated/2026-07-24-obs-studio-32-2-1.md",
+   "block_sha256_before": "bcb3ed192ccf6795984ae353af607e45078c4f56cb750f3ece7cd8c79eab14bf",
+   "captured_at": "2026-08-07T03:56:38Z",
+   "group": "N7",
+   "note": "Kept: the original report; it stays counted and unchanged."
+  },
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "32.2.1",
+   "target_build": "",
+   "id": "obs-studio-32-2-1-obs-forum-thread-195984",
+   "source_url": "https://obsproject.com/forum/threads/flatpak-dumps-core-if-ran-in-nixos-from-desktop-file-but-works-in-command-line-exec.195984/",
+   "record_file": "auxsays/updates/generated/2026-07-24-obs-studio-32-2-1.md",
+   "block_sha256_before": "d2e46a1084ed1dcdc9169fe4ec61dd61380fe7c756c5e03df56e2b8af9c8b785",
+   "exclusion_reason": "duplicate_existing_evidence",
+   "block_sha256_after": "b2c7ac5d003bdff3a9c9f9f30d9505d18006b214f8906f263f3085409dcb623c",
+   "captured_at": "2026-10-12T00:41:05Z",
+   "kept_captured_at": "2026-08-07T03:56:38Z",
+   "capture_tie": false,
+   "group": "N7",
+   "adjudication": {
+    "first_audit": {
+     "by": "G35 research slot (2026-11-10_g35-reporter-independence/DUPLICATES.md)",
+     "label": "same_report_duplicate",
+     "duplicate_of_id": "obs-studio-32-2-1-github-issue-13729",
+     "group": "N7",
+     "reason": "Same title and the same uploaded OBS log id."
+    },
+    "second_blind": {
+     "by": "G36-05 research slot (this folder; labels written before G35 files were read)",
+     "label": "same_report_duplicate",
+     "duplicate_of_id": "obs-studio-32-2-1-github-issue-13729",
+     "group": "X07",
+     "reason_class": "same_report_duplicate",
+     "reason": "Same title and the same uploaded OBS log id: the forum copy of the GitHub issue."
+    }
+   },
+   "basis": "The forum thread is the same report as the GitHub issue the page counts: the same title and uploaded log.",
+   "duplicate_of": {
+    "product_id": "obs-studio",
+    "update_version": "32.2.1",
+    "target_build": "",
+    "id": "obs-studio-32-2-1-github-issue-13729",
+    "source_url": "https://github.com/obsproject/obs-studio/issues/13729"
+   }
+  },
+  {
+   "role": "retain",
+   "product_id": "obs-studio",
+   "update_version": "32.2.1",
+   "target_build": "",
+   "id": "obs-studio-32-2-1-github-issue-13711",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/13711",
+   "record_file": "auxsays/updates/generated/2026-07-24-obs-studio-32-2-1.md",
+   "block_sha256_before": "a06e13c5148e94bbddf655f133624967444269f3406a8921c8e050f074ec6e4f",
+   "captured_at": "2026-08-07T03:56:38Z",
+   "group": "M1",
+   "note": "Kept: the original report; it stays counted and unchanged."
+  },
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "32.2.1",
+   "target_build": "",
+   "id": "obs-studio-32-2-1-obs-forum-thread-196230",
+   "source_url": "https://obsproject.com/forum/threads/image-source-causes-rendering-lag-and-dropped-frames-when-opening-properties-or-changing-images-on-macos.196230/",
+   "record_file": "auxsays/updates/generated/2026-07-24-obs-studio-32-2-1.md",
+   "block_sha256_before": "332e638e598fbc4be5a2f238a6a8d75540e3e810a216b8b1e9ab10700980544f",
+   "exclusion_reason": "duplicate_existing_evidence",
+   "block_sha256_after": "21143dfe66652c897f38c5ad3d33da687ebb8e7f33641e9b4fe132ff38a3b2e5",
+   "captured_at": "2026-10-12T00:41:05Z",
+   "kept_captured_at": "2026-08-07T03:56:38Z",
+   "capture_tie": false,
+   "group": "M1",
+   "adjudication": {
+    "first_audit": {
+     "by": "G35 research slot (2026-11-10_g35-reporter-independence/DUPLICATES.md)",
+     "label": "same_report_duplicate",
+     "duplicate_of_id": "obs-studio-32-2-1-github-issue-13711",
+     "group": "M1",
+     "reason": "The N5 pair again, on this version's page."
+    },
+    "second_blind": {
+     "by": "G36-05 research slot (this folder; labels written before G35 files were read)",
+     "label": "same_report_duplicate",
+     "duplicate_of_id": "obs-studio-32-2-1-github-issue-13711",
+     "group": "X15",
+     "reason_class": "same_report_duplicate",
+     "reason": "The same pair as N5, on this version's page: the forum copy of the GitHub issue."
+    }
+   },
+   "basis": "The forum thread is the same report as the GitHub issue the page counts: the same machine, versions tested and symptom.",
+   "duplicate_of": {
+    "product_id": "obs-studio",
+    "update_version": "32.2.1",
+    "target_build": "",
+    "id": "obs-studio-32-2-1-github-issue-13711",
+    "source_url": "https://github.com/obsproject/obs-studio/issues/13711"
+   }
+  }
+ ],
+ "held_out": [
+  {
+   "group": "N2 (G36 X17)",
+   "page": "microsoft-windows-11|25H2|26200.7922",
+   "rows": [
+    {
+     "product_id": "microsoft-windows-11",
+     "update_version": "25H2",
+     "target_build": "26200.7922",
+     "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5794016-2026-preview-update-kb5077241-26200-79",
+     "source_url": "https://learn.microsoft.com/en-us/answers/questions/5794016/2026-preview-update-(kb5077241)-(26200-7922)-could"
+    },
+    {
+     "product_id": "microsoft-windows-11",
+     "update_version": "25H2",
+     "target_build": "26200.7922",
+     "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5791250-how-to-fix-an-windows-update-that-will",
+     "source_url": "https://learn.microsoft.com/en-us/answers/questions/5791250/how-to-fix-an-windows-update-that-will-not-install"
+    }
+   ],
+   "why": "Both reviews say the two rows are one report, but they keep opposite rows: the first keeps q5794016, the blind second keeps q5791250 (the earlier post). Both were captured at the same instant. A withdrawal needs two labels naming the same kept row, so neither row is withdrawn; both stay counted."
+  },
+  {
+   "group": "R1 (G36 X14)",
+   "page": "adobe-acrobat-reader|15.020.20039|",
+   "rows": [
+    {
+     "product_id": "adobe-acrobat-reader",
+     "update_version": "15.020.20039",
+     "target_build": "",
+     "id": "acrobat-15-020-20039-adobe-community-bug-report-https-community-adobe-com-questions-12-acrobat-reader-dc-1507550",
+     "source_url": "https://community.adobe.com/questions-12/acrobat-reader-dc-1507550"
+    },
+    {
+     "product_id": "adobe-acrobat-reader",
+     "update_version": "15.020.20039",
+     "target_build": "",
+     "id": "acrobat-15-020-20039-adobe-community-bug-report-https-community-adobe-com-questions-624-adobe-acrobat-reader-dc-crash-on-launch-673695",
+     "source_url": "https://community.adobe.com/questions-624/adobe-acrobat-reader-dc-crash-on-launch-673695"
+    }
+   ],
+   "why": "Only one review labels the later thread a duplicate (the other left the pair uncertain), and Acrobat is outside this tool's scope. Both stay counted."
+  },
+  {
+   "group": "X1 (G36 X18)",
+   "page": "microsoft-windows-11|26H2|26300.9550",
+   "rows": [
+    {
+     "product_id": "microsoft-windows-11",
+     "update_version": "25H2",
+     "target_build": "26200.9550",
+     "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6014283-title-file-explorer-stuck-in-legacy-cl",
+     "source_url": "https://learn.microsoft.com/en-us/answers/questions/6014283/title-file-explorer-stuck-in-legacy-classic-ui-no"
+    },
+    {
+     "product_id": "microsoft-windows-11",
+     "update_version": "26H2",
+     "target_build": "26300.9550",
+     "id": "microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6019205-file-explorer-stuck-in-legacy-classic",
+     "source_url": "https://learn.microsoft.com/en-us/answers/questions/6019205/file-explorer-stuck-in-legacy-classic-ui-no-tabs-w"
+    }
+   ],
+   "why": "Both reviews say the 26H2 copy re-posts the 25H2 question, but the kept row is on another patch. The post itself names the 25H2 build, so its correct ground is identity_not_the_subject, and that ground has no second label. Not withdrawn here; it stays counted."
+  }
+ ]
+}

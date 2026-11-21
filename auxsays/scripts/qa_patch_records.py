@@ -12,8 +12,8 @@ from urllib.parse import urlparse
 
 import yaml
 
-from lib import maturity, patch_decision
-from lib.patch_identity import patch_key
+from lib import evidence_facts, maturity, patch_decision, verdict_projection, verdict_reasons
+from lib.patch_identity import patch_display_label, patch_key
 # The dedup identity the append path itself applies (base.evidence_key uses it), imported rather
 # than re-derived. A hand-rolled canonicaliser was measured against the corpus first and was WRONG:
 # stripping query strings collapsed six genuinely distinct Blackmagic forum threads
@@ -35,6 +35,15 @@ PRODUCTS_PATH = ROOT / "_data" / "patch_products.yml"
 SOURCES_PATH = ROOT / "_data" / "patch_ingestion_sources.yml"
 EVIDENCE_PATH = ROOT / "_data" / "consensus_evidence.yml"
 UPDATE_LAYOUT_PATH = ROOT / "_layouts" / "aux-update.html"
+REASONS_PATH = ROOT / "_data" / "verdict_reasons.yml"
+LIFECYCLE_PATH = ROOT / "_data" / "patch_lifecycle.yml"
+# Built at deploy by build_verdict_projection.py, never committed: the only source the verdict gate
+# publishes a WAIT / TEST FIRST from. Present, it must equal the authority over this tree.
+PROJECTION_PATH = ROOT / "_data" / verdict_projection.PROJECTION_NAME
+# The patch page's maturity rung and decision ladder live in these two includes, which aux-update.html
+# renders (and the homepage renders too). Their text is the layout's text for the public-copy scan:
+# a phrase moved into one of them is still on every patch page.
+UPDATE_LAYOUT_INCLUDES = (ROOT / "_includes" / "patch-evidence-state.html", ROOT / "_includes" / "patch-decision.html")
 
 # The maturity vocabulary is owned by lib.maturity (canonical words plus the legacy words a stored
 # record may still carry); QA reads it rather than keeping a fourth copy.
@@ -302,6 +311,246 @@ def load_counted_accepted_urls(
         rows, windows_targets=windows_targets_from_front_matter(records or []))
     return {key: {normalize_url(str(row.get("source_url") or "")) for row in group}
             for key, group in groups.items()}
+
+
+# verdict_policy_drift's last sentence, ONE copy (G35-04 review 1, LOW-4). The record writers
+# (apply_consensus_to_records.py, build_consensus_from_evidence.py) gather a page's reasons through
+# lib/verdict_projection.page_supported_reasons -- the reviewed entries, plus the reason producer's candidates
+# while its switch is on -- so every drift, a candidate's included, clears at the next promotion (AUX-099).
+DRIFT_CATCH_UP = ("The stored prose catches up when a record writer next promotes this page: the writers "
+                  "gather the page's reasons exactly as the verdict projection does.")
+
+
+def scan_verdict_policy(files: list[Path]) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
+    """GROWTH-3: the two reviewed fact files, what each page RENDERS against what the authority
+    decides, and each report-bearing record's stored verdict against the policy.
+
+    ERRORS (both modes):
+      * verdict_reasons_invalid / patch_lifecycle_invalid -- a malformed fact file. They change only
+        by reviewed pull request, so a structural problem is a defect in that PR, never lane drift.
+      * verdict_render_disagrees -- a page whose rendered verdict, scope, line, panel or
+        recommendations would differ from lib/patch_decision.decide over this tree. The gate
+        publishes EVERY verdict -- AVOID and SECURITY UPDATE included (review 2, LOW-1) -- only from
+        the deploy-time verdict projection (_data/verdict_projection.yml), and every surface (patch
+        page, homepage, tables, feed, My Patch Stack, search title) prints the gate, so this compares
+        what the gate will READ for every page with what Python decides: a stale, forged, partial or
+        failed projection is caught here, before Jekyll builds anything (review 1, D2). With no
+        projection on disk (a writer lane, PR-time CI) the deploy builds it from this same tree, so
+        the gate will read exactly the authority's rows.
+      * verdict_projection_invalid / verdict_projection_failed -- the projection a deploy built is
+        unreadable, or its builder could not decide: pages would fall back where the authority
+        gives a verdict.
+
+    PUBLICATION ERROR (a warning for the writeback lane, an ERROR under --publish-strict):
+      * windows_update_type_malformed -- a Windows record whose stored release type is shaped like
+        "YYYY-MM B / D / OOB" but is not one (review 2's "2026-3x B", "2026-+3 B", "2026-1  B").
+        `decide` cannot classify it, so the page fails closed to INSUFFICIENT DATA and a security
+        classification would vanish without a word; this says so. The value is collector-written,
+        so, like record_names_conflicting_actions (AUX-009), one bad row must not discard a whole
+        evidence run, and the deploy must not publish the page silently without its classification.
+      * record_identity_unicode_padding -- a record whose product_id, update_version or target_build
+        carries leading/trailing Unicode whitespace (U+00A0, U+2009, U+3000, U+0085, ...) that
+        Liquid's strip keeps and Python's removes (PR-A2 review, LOW-1, probe P5). The page and
+        `decide` agree on the padded key, but the page matches none of its reasons or counted rows,
+        so a verdict would vanish without a word. Collector-written, so the same two severities.
+      * record_identity_invisible_character -- a record whose product_id, update_version or target_build
+        contains an invisible or control character anywhere (Unicode Cf, Cc, Zl, Zp, or a space
+        separator other than a plain space; G35-04 review 2, LOW-7, probe P6: "15.010.20056" + U+200B
+        silently dropped the page's reviewed TEST FIRST). Printable Unicode -- the changelog titles
+        GitHub and Figma records use as their version -- is valid. Collector-written: the same two
+        severities.
+      * patch_lifecycle_build_unmatched -- a build listed in a lifecycle entry that no record carries
+        (scan_lifecycle_builds, its own corpus-wide scan; PR-A2 review, LOW-3, probe P4).
+      * feed_official_verdict_unprinted (AUX-097) -- a /updates/ feed card whose page the gate gives
+        AVOID or SECURITY UPDATE, and whose line (lib/verdict_projection.feed_line, the feed card's
+        contract) does not lead with that verdict and its scope and end with the page's line. Until
+        AUX-097 the card printed a line only beside a stored summary, which only a writer stores (a
+        page with reports), so 17 zero-report security updates and the withdrawn KB5079391 showed an
+        "Insufficient data" pill and no verdict. The gate's row is read exactly as it will be printed.
+
+    WARNINGS, never writer-blocking and never promoted for publication:
+      * verdict_reason_unsupported -- an entry whose cited rows no longer all count on its page (an
+        audited withdrawal, a re-attribution), that lost its second reporter, or whose official
+        confirmation is no longer in the named record's notes. The page has already fallen back --
+        the projection is decided from the same evidence -- and the message names what it renders.
+      * verdict_policy_drift -- a report-bearing record whose stored verdict or stored summary lead
+        differs from what the policy decides now. Every surface prints the gate's verdict, so the
+        page and the feed are already right. The stored prose catches up when a record writer next
+        promotes the page; that includes a difference from a reason-producer candidate (only while its
+        switch is on), because the writers gather reasons as the projection does (G35-04 review 1,
+        LOW-4; closed by AUX-099).
+      * patch_lifecycle_unmatched -- a lifecycle entry no record carries.
+    """
+    errors: list[dict[str, str]] = []
+    warnings: list[dict[str, str]] = []
+    try:
+        reasons = verdict_reasons.load_reasons(REASONS_PATH)
+    except verdict_reasons.FactFileError as exc:
+        add(errors, REASONS_PATH, "verdict_reasons_invalid", str(exc))
+        reasons = []
+    try:
+        lifecycle = verdict_reasons.load_lifecycle(LIFECYCLE_PATH)
+    except verdict_reasons.FactFileError as exc:
+        add(errors, LIFECYCLE_PATH, "patch_lifecycle_invalid", str(exc))
+        lifecycle = []
+    reason_problems = verdict_reasons.schema_errors(reasons)
+    for message in reason_problems:
+        add(errors, REASONS_PATH, "verdict_reasons_invalid", message)
+    lifecycle_problems = verdict_reasons.lifecycle_errors(lifecycle)
+    for message in lifecycle_problems:
+        add(errors, LIFECYCLE_PATH, "patch_lifecycle_invalid", message)
+    if reason_problems:
+        reasons = []
+    if lifecycle_problems:
+        lifecycle = []
+    records = [(path, front_matter(path)) for path in files]
+    entries = [(path, data) for path, data in records if data.get("update_entry") is True]
+    fronts = [data for _path, data in entries]
+    groups = counted_evidence_rows(load_evidence_rows(),
+                                   windows_targets=windows_targets_from_front_matter(fronts))
+    # The reasons decide reads -- reviewed entries, plus the reason producer's candidates only while its
+    # (temporary, owner-gated) activation switch is on: the same function the projection builder uses.
+    valid, unsupported = verdict_projection.supported_reasons(fronts, groups, reasons)
+    expected, _unsupported = verdict_projection.project(fronts, groups, reasons, lifecycle)
+    want_rows = expected["pages"]
+
+    # What the gate will READ. Absent: the deploy builds it from this tree, i.e. the authority's rows.
+    try:
+        disk = verdict_projection.load(PROJECTION_PATH)
+    except verdict_projection.ProjectionError as exc:
+        add(errors, PROJECTION_PATH, "verdict_projection_invalid",
+            f"{exc}. The verdict gate cannot read it, so every page the authority gives a verdict "
+            "would render INSUFFICIENT DATA.")
+        disk = {"schema_version": verdict_projection.SCHEMA_VERSION, "pages": {}}
+    if disk is not None and disk.get("error"):
+        add(errors, PROJECTION_PATH, "verdict_projection_failed",
+            f"the verdict projection builder could not decide ({disk.get('error')}); pages render "
+            "INSUFFICIENT DATA where the authority gives a verdict.")
+    rows = want_rows if disk is None else dict(disk.get("pages") or {})
+    source = "the deploy's verdict projection" if disk is not None else "this tree's verdict projection"
+
+    record_keys = set()
+    for path, data in entries:
+        key = verdict_projection.page_key(data)
+        record_keys.add(key)
+        release_problem = patch_decision.release_type_problem(data)
+        if release_problem:
+            add(warnings, path, "windows_update_type_malformed",
+                f"{release_problem}. lib/patch_decision.decide cannot read Microsoft's classification from "
+                "it, so this page renders no SECURITY UPDATE; correct the stored value.")
+        for padding in verdict_reasons.identity_padding_problems(data):
+            add(warnings, path, "record_identity_unicode_padding",
+                f"{padding}. The page key keeps it, so this page matches none of its reason entries or "
+                "counted reports and can lose its verdict silently; correct the stored value.")
+        for invisible in verdict_reasons.identity_invisible_problems(data):
+            add(warnings, path, "record_identity_invisible_character",
+                f"{invisible}. The page key keeps it, so this page matches none of its reason entries or "
+                "counted reports and can lose its verdict silently; correct the stored value.")
+        want = patch_decision.decide(data, valid_reasons=valid.get(verdict_reasons.record_identity(data), []),
+                                     lifecycle=lifecycle)
+        got_verdict, got_scope = verdict_projection.rendered_verdict(data, rows, lifecycle)
+        got_row, want_row = rows.get(key), want_rows.get(key)
+        if (got_verdict, got_scope) != (want.verdict, want.scope):
+            add(errors, path, "verdict_render_disagrees",
+                f"the page renders {verdict_projection.phrase(got_verdict, got_scope)!r} from {source}, "
+                f"but lib/patch_decision.decide gives {patch_decision.verdict_phrase(want)!r} for this tree.")
+        elif got_row != want_row:
+            differs = sorted(k for k in verdict_projection.ROW_KEYS
+                             if (got_row or {}).get(k) != (want_row or {}).get(k))
+            add(errors, path, "verdict_render_disagrees",
+                f"{source} differs from lib/patch_decision.decide in {differs}; the page would print "
+                "a line, panel or recommendation the authority did not write.")
+    for key in sorted(set(rows) - record_keys):
+        add(errors, PROJECTION_PATH, "verdict_render_disagrees",
+            f"{source} holds a row for {key!r}, which no record carries and the authority did not decide.")
+
+    # AUX-097: every feed card states the official verdict its page prints, at any report count.
+    for path, data in entries:
+        if data.get("feed_hidden") is True:
+            continue  # on no feed page
+        row = verdict_projection.printed_row(data, rows)
+        verdict = str((row or {}).get("verdict") or "").strip()
+        if row is None or verdict not in verdict_projection.OFFICIAL:
+            continue
+        lead = verdict_projection.phrase(verdict, str(row.get("scope") or "").strip())
+        tail = patch_decision.feed_body(str(row.get("body") or "").strip())
+        # Raw, not cleaned as the layout cleans it: a stored line is printed only when it already
+        # opens with the verdict and ends with the page's line, so either way the card must do both.
+        stored = data.get("update_consensus_summary") or data.get("community_summary") or ""
+        line = verdict_projection.feed_line(data, rows, stored)
+        if not line.startswith(f"{lead}: ") or not line.endswith(tail):
+            add(warnings, path, "feed_official_verdict_unprinted",
+                f"the page renders {lead!r} from {source}, but its /updates/ feed card would print "
+                f"{(line[:100] or 'no line')!r}: a reader of the feed would not learn the official verdict.")
+
+    pages_by_identity: dict[tuple[str, str, str], list[dict[str, Any]]] = {}
+    for data in fronts:
+        pages_by_identity.setdefault(verdict_reasons.record_identity(data), []).append(data)
+    entry_identity = {str(e.get("id") or ""): verdict_reasons.reason_identity(e) for e in reasons}
+    for reason_id, problems in sorted(unsupported.items()):
+        pages = pages_by_identity.get(entry_identity.get(reason_id, ("", "", "")), [])
+        if pages:
+            shown = sorted({verdict_projection.phrase(*verdict_projection.rendered_verdict(d, rows, lifecycle))
+                            for d in pages})
+            renders = f"The page no longer rests on it and renders {' / '.join(repr(s) for s in shown)}"
+        else:
+            renders = "No record carries this page identity, so it supports nothing"
+        add(warnings, REASONS_PATH, "verdict_reason_unsupported",
+            f"{reason_id}: {'; '.join(problems)}. {renders}; re-read the entry and correct or remove it.")
+    for entry in lifecycle:
+        if not any(patch_decision.lifecycle_for(data, [entry]) for data in fronts):
+            add(warnings, LIFECYCLE_PATH, "patch_lifecycle_unmatched",
+                f"{entry.get('id')}: no record carries this KB and build.")
+    for path, data in entries:
+        if int(data.get("update_report_count") or 0) <= 0:
+            continue
+        decision = patch_decision.decide(
+            data, valid_reasons=valid.get(verdict_reasons.record_identity(data), []), lifecycle=lifecycle)
+        expected_phrase = patch_decision.verdict_phrase(decision)
+        stored = (patch_decision.action_of(data.get("update_decision_label"))
+                  or patch_decision.action_of(patch_decision.leading_decision(data.get("update_consensus_summary"))))
+        summary = str(data.get("update_consensus_summary") or "")
+        stored_lead = summary.split(":", 1)[0].strip() if patch_decision.leading_decision(summary) else ""
+        count = int(data.get("update_report_count") or 0)
+        identity = (f"{str(data.get('update_product') or data.get('product_id') or '').strip()} "
+                    f"{patch_display_label(data.get('update_version'), data.get('target_build'), data.get('product_id'))}")
+        expected_summary = patch_decision.summary_line(decision, data, count, identity=identity)
+        if (stored and stored != decision.verdict) or (stored_lead and stored_lead != expected_phrase):
+            add(warnings, path, "verdict_policy_drift",
+                f"stored verdict {stored!r} (summary opens {stored_lead or '(none)'!r}) but the verdict "
+                f"policy decides {expected_phrase!r}; every surface renders {expected_phrase!r}. "
+                + DRIFT_CATCH_UP)
+        elif summary and summary != expected_summary:
+            add(warnings, path, "verdict_policy_drift",
+                "the stored summary is not the policy's line (lib/patch_decision.summary_line); the feed "
+                f"card still leads with {expected_phrase!r} and the page's own line (it prints stored text "
+                "only where it matches them). " + DRIFT_CATCH_UP)
+    return errors, warnings
+
+
+def scan_lifecycle_builds(files: list[Path]) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
+    """PR-A2 review, LOW-3 (probe P4): every OS build a lifecycle entry lists is carried by a record.
+
+    `patch_lifecycle_unmatched` (scan_verdict_policy) fires only when an entry matches NO page, so an
+    entry whose second build was mistyped -- or followed by an invisible character -- still matched
+    the first page and the withdrawal vanished from the second without a word. Checked per build;
+    a publication error (`patch_lifecycle_build_unmatched`, promoted by --publish-strict). Its own
+    scan because it is corpus-wide: a one-record QA fixture carries only one of the two builds."""
+    warnings: list[dict[str, str]] = []
+    try:
+        lifecycle = verdict_reasons.load_lifecycle(LIFECYCLE_PATH)
+    except verdict_reasons.FactFileError:
+        return [], []  # scan_verdict_policy reports the malformed file (patch_lifecycle_invalid)
+    if verdict_reasons.lifecycle_errors(lifecycle):
+        return [], []  # refused: it supports nothing, and scan_verdict_policy errors on it
+    fronts = [data for data in (front_matter(path) for path in files) if data.get("update_entry") is True]
+    for entry in lifecycle:
+        for build in entry.get("builds") or []:
+            if not any(patch_decision.lifecycle_for(data, [dict(entry, builds=[build])]) for data in fronts):
+                add(warnings, LIFECYCLE_PATH, "patch_lifecycle_build_unmatched",
+                    f"{entry.get('id')}: no record carries {entry.get('kb')} with OS build {build!r}, so the "
+                    "withdrawal applies to no page for that build; correct the build or the record.")
+    return [], warnings
 
 
 def scan_record(path: Path) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
@@ -594,6 +843,11 @@ def scan_update_layout_public_copy() -> tuple[list[dict[str, str]], list[dict[st
         return errors, warnings
 
     text = UPDATE_LAYOUT_PATH.read_text(encoding="utf-8")
+    for include in UPDATE_LAYOUT_INCLUDES:
+        if not include.exists():
+            add(errors, include, "missing_update_layout_include", f"{include.name}, rendered by aux-update.html, is missing.")
+            continue
+        text += "\n" + include.read_text(encoding="utf-8")
     forbidden_public_copy = {
         "Record Note": "Record notes must be folded into the verdict context, not rendered as a standalone card.",
         "Sample size": "Sample size should not render as a standalone public field.",
@@ -1030,6 +1284,38 @@ def scan_counted_row_classification(rows: list[Any]) -> list[dict[str, str]]:
     return warnings
 
 
+EVIDENCE_FACT_PROBLEMS = {
+    evidence_facts.MISSING: "carry no structured evidence facts",
+    evidence_facts.PARTIAL: "carry only part of the structured evidence facts",
+    evidence_facts.UNKNOWN_VERSION: "carry structured evidence facts of an unknown rule version",
+    evidence_facts.MALFORMED: "carry a malformed structured evidence fact",
+    evidence_facts.OUTDATED: "carry structured evidence facts computed under an earlier rule",
+    evidence_facts.STALE: "carry a structured evidence fact that differs from the value their own text gives",
+}
+
+
+def scan_evidence_facts(rows: list[Any]) -> list[dict[str, str]]:
+    """G68: every stored row carries current structured evidence facts (lib.evidence_facts) that equal
+    what its own text gives under the current rules. One warning per problem kind, with the count and
+    the first rows; the remedy is the zero-network migration (migrate_evidence_facts.py --write).
+
+    A WARNING, not an error. No page reads a fact directly yet. The one reader, the distinct-reporter
+    rule of a reviewed verdict reason (lib.verdict_reasons), already refuses a cited row without a
+    usable fact, so a reasoned verdict falls back instead of resting on it, and `verdict_reason_unsupported`
+    names that entry. This finding names the rows."""
+    warnings: list[dict[str, str]] = []
+    found = evidence_facts.store_fact_problems(rows)
+    for code in sorted(found):
+        indices = found[code]
+        sample = "; ".join(
+            f"{rows[i].get('product_id')} {rows[i].get('update_version')} {rows[i].get('id')}"
+            for i in indices[:3] if isinstance(rows[i], dict))
+        add(warnings, Path(str(EVIDENCE_PATH)), f"evidence_facts_{code}",
+            f"{len(indices)} evidence row(s) {EVIDENCE_FACT_PROBLEMS.get(code, code)} (first: {sample}). "
+            "Run migrate_evidence_facts.py --write; a reviewed reason citing such a row is unsupported.")
+    return warnings
+
+
 def scan_evidence_count_alignment(files: list[Path]) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
     errors: list[dict[str, str]] = []
     warnings: list[dict[str, str]] = []
@@ -1247,7 +1533,18 @@ def scan_route_integrity(
 # variables: an implicit rule is one nobody can exercise from a command line, which is how a
 # publication gate quietly stops gating.
 PUBLICATION_BLOCKING_CODES = frozenset({"record_names_conflicting_actions",
-                                        "record_names_unknown_verdict"})
+                                        "record_names_unknown_verdict",
+                                        # GROWTH-3 review 2 (LOW-1): a release type decide cannot read.
+                                        "windows_update_type_malformed",
+                                        # PR-A2 review (LOW-1 / LOW-3): an identity Liquid and Python
+                                        # strip differently; a lifecycle build no page carries.
+                                        "record_identity_unicode_padding",
+                                        "patch_lifecycle_build_unmatched",
+                                        # G35-04 review 2 (LOW-7, probe P6): an invisible or control
+                                        # character inside an identity field.
+                                        "record_identity_invisible_character",
+                                        # AUX-097: a feed card that hides its page's official verdict.
+                                        "feed_official_verdict_unprinted"})
 
 
 def promote_for_publication(
@@ -1303,7 +1600,15 @@ def main(argv: list[str] | None = None) -> int:
     e, w = scan_evidence_count_alignment(files)
     errors.extend(e)
     warnings.extend(w)
-    warnings.extend(scan_counted_row_classification(load_evidence_rows()))
+    evidence_rows = load_evidence_rows()
+    warnings.extend(scan_counted_row_classification(evidence_rows))
+    warnings.extend(scan_evidence_facts(evidence_rows))
+    e, w = scan_verdict_policy(files)
+    errors.extend(e)
+    warnings.extend(w)
+    e, w = scan_lifecycle_builds(files)
+    errors.extend(e)
+    warnings.extend(w)
     e, w = scan_unconfigured_platform_split(files)
     errors.extend(e)
     warnings.extend(w)

@@ -4,6 +4,19 @@ layout: aux-base
 {% assign reaction = page.update_consensus_label | default: page.community_reaction | default: page.current_consensus | default: 'Insufficient data' %}
 {% assign reaction_key = reaction | downcase %}
 {% assign report_count = page.update_report_count | default: 0 | plus: 0 %}
+{%- comment %}
+  NOT MONITORED IS NOT TOO FEW (G80, AUX-120). Whether AUXSAYS collects community reports for this
+  page's product is the coverage authority's answer (build_coverage_projection.py, AUX-102), read
+  from the deploy-time site.data.coverage_state, never decided here: `community` is operating,
+  impaired or absent. Absent means no active collection method, so a zero-report page of such a
+  product must not say its reports are too few. It says the product is not monitored, in the
+  community-signal word below and in the zero-report verdict line (patch-decision.html). Operating
+  and impaired products keep the insufficient-evidence wording. With no projection (a local render)
+  or no row, the state is unknown and the wording is unchanged. Presentation only: the verdict word,
+  the counts and every projection are untouched. The lookup is a plain loop, not a filter, so a
+  harness without Jekyll's filters still finds the right row.
+{% endcomment %}
+{%- assign page_community_coverage = 'unknown' -%}{%- for pcc_row in site.data.coverage_state.products -%}{%- if pcc_row.product_id == page.product_id -%}{%- assign page_community_coverage = pcc_row.community | default: 'unknown' -%}{%- break -%}{%- endif -%}{%- endfor %}
 {% assign evidence_metric_label = 'Not enough reports' %}
 {% assign evidence_metric_class = 'insufficient-data' %}
 {% if reaction_key contains 'negative' or reaction_key contains 'avoid' %}
@@ -18,7 +31,9 @@ layout: aux-base
 {% elsif report_count > 0 %}
   {% assign evidence_metric_label = 'Moderate' %}
   {% assign evidence_metric_class = 'moderate' %}
-{% endif %}
+{% elsif page_community_coverage == 'absent' -%}
+  {%- assign evidence_metric_label = 'Not monitored' -%}
+{%- endif %}
 {% assign reaction_class = evidence_metric_class %}
 {% if evidence_metric_class == 'negative' %}
   {% assign consensus_score_percent = 18 %}
@@ -57,7 +72,36 @@ layout: aux-base
   {% assign display_title = page.update_feed_title %}
 {% else %}
   {% assign display_title = page.update_product | append: ' ' | append: page.update_version %}
-{% endif %}
+{% endif %}{%- comment -%}
+  G43: the product label once. The same rule as _includes/patch-display-title.html, written out here
+  because this part of the layout must hold no include tag: several suites render it standalone, up to
+  its first include. test_publication_hygiene TT5 renders this block and the include over the same
+  titles and requires the same output.
+{%- endcomment -%}
+{%- assign pdt_raw = display_title -%}
+{%- assign pdt_title = display_title | default: '' -%}
+{%- assign pdt_product = page.update_product | default: '' | strip -%}
+{%- if pdt_title != '' and pdt_product != '' -%}
+  {%- assign pdt_words = pdt_product | split: ' ' -%}
+  {%- assign pdt_count = pdt_words.size -%}
+  {%- for pdt_take in (1..pdt_count) reversed -%}
+    {%- assign pdt_from = pdt_count | minus: pdt_take -%}
+    {%- assign pdt_tail = pdt_words | slice: pdt_from, pdt_take | join: ' ' -%}
+    {%- capture pdt_doubled -%}{{ pdt_product }} {{ pdt_tail }}{%- endcapture -%}
+    {%- if pdt_title == pdt_doubled -%}
+      {%- assign display_title = pdt_product -%}
+      {%- break -%}
+    {%- endif -%}
+    {%- assign pdt_prefix = pdt_doubled | append: ' ' -%}
+    {%- assign pdt_start = pdt_title | slice: 0, pdt_prefix.size -%}
+    {%- if pdt_start == pdt_prefix -%}
+      {%- assign pdt_rest = pdt_title | slice: pdt_prefix.size, pdt_title.size -%}
+      {%- assign display_title = pdt_product | append: ' ' | append: pdt_rest -%}
+      {%- break -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+{%- assign cite_title = page.update_feed_title | default: pdt_raw -%}{% if cite_title == pdt_raw %}{% assign cite_title = display_title %}{% endif %}
 {% assign evidence_checked_at = page.evidence_last_checked | default: '' %}
 {% assign evidence_checked_label = 'Not recorded' %}
 {% if evidence_checked_at != '' %}{% assign evidence_checked_label = evidence_checked_at | date: "%b %-d, %Y" %}{% endif %}
@@ -84,29 +128,14 @@ layout: aux-base
 {% endif %}
 {% assign official_body_renderable = false %}
 {% if official_body_present and official_body_polluted == false %}{% assign official_body_renderable = true %}{% endif %}
-{% assign official_captured = false %}
-{% if source_url_present or official_body_present %}{% assign official_captured = true %}{% endif %}
 {% assign official_body_missing_renderable = false %}
 {% if official_body_renderable == false and source_url_present and official_body_polluted == false %}{% assign official_body_missing_renderable = true %}{% endif %}
 {%- comment -%}
-  Maturity comes from the shared contract, never from this page's own reading of the stored
-  fields: a stored live claim is live here only while the deploy-time eligibility projection
-  certifies it, and otherwise reads as Verified reports, as it does on every other surface. Below
-  the pilot rung this page keeps its own rule: official only when an official source was captured.
+  The verdict box's maturity rung is decided in _includes/patch-evidence-state.html, which the
+  homepage renders too, so both surfaces show the same maturity for the same record. It computes
+  official_captured from the record itself; that flag feeds nothing but the rung.
 {%- endcomment -%}
-{% include maturity-state.html record=page %}
-{% assign evidence_state = 'Insufficient data' %}
-{% assign evidence_state_class = 'insufficient' %}
-{% if maturity_class == 'live' %}
-  {% assign evidence_state = 'Live consensus' %}
-  {% assign evidence_state_class = 'live' %}
-{% elsif maturity_class == 'pilot' %}
-  {% assign evidence_state = 'Verified reports' %}
-  {% assign evidence_state_class = 'pilot' %}
-{% elsif official_captured %}
-  {% assign evidence_state = 'Official source only' %}
-  {% assign evidence_state_class = 'official' %}
-{% endif %}
+{% include patch-evidence-state.html record=page %}
 {%- comment -%}
   Community evidence strength for THIS patch, derived from the confirmed report count with the
   SAME ladder patch-table-row.html uses and test_evidence_strength_thresholds locks:
@@ -179,6 +208,30 @@ layout: aux-base
 their method-health rows carries the same update_version, so this join needs the build too
 or a sibling's telemetry decides this build's freshness notice. {%- endcomment -%}
 {% assign page_target_build_token = page.target_build | default: '' | append: '' %}
+{%- comment -%}
+  A ROW SPEAKS FOR NOW ONLY WHILE THE CARD CALLS IT FRESH. The notice says collection is CURRENTLY
+  blocked or degraded, so only a row the monitoring card would count as a fresh, post-release,
+  usable run may make it say so. This join used to read the status of every row with no freshness
+  check, so a single failed visit kept reading as a present condition long after the card beside
+  it had moved to COLLECTION STALE: from about 2026-11-11 ten Acrobat Pro 25.001 pages would have
+  said "Collection blocked." about one failed visit on 2026-10-28 while their card said the
+  collection was stale.
+
+  This is the card's own rule over the card's own inputs, not a second freshness authority:
+  monitoring_max_age_days from the site config with the card's default, the same build clock, the
+  record's release time (the value the page passes the card as published_at), a timestamp that is
+  present and not in the future, a run at or after release, and an age at or below the limit
+  (exactly at the limit is still fresh, as on the card). test_freshness_notice_currency renders this
+  page with the real monitoring card beside it and fails on any case where the notice claims a
+  current problem the card does not show. An old row is still reported: the card lists it with its
+  own date, and a stale capture still produces the capture-age sentence below.
+{%- endcomment -%}
+{% assign notice_max_age_days = site.monitoring_max_age_days | default: 14 %}
+{% assign notice_max_age_s = notice_max_age_days | times: 86400 %}
+{% assign notice_now_s = site.time | date: '%s' | plus: 0 %}
+{% assign notice_pub_s = 0 %}
+{% assign notice_pub_raw = page.update_published_at | default: '' | strip %}
+{% if notice_pub_raw != '' %}{% assign notice_pub_s = notice_pub_raw | date: '%s' | plus: 0 %}{% endif %}
 {% if site.data.evidence_method_health and site.data.evidence_method_health.methods %}
   {% for method in site.data.evidence_method_health.methods %}
     {% assign method_product_id_token = method.product_id | append: '' %}
@@ -190,11 +243,20 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
       {% assign method_source_type_key = method.source_type | default: '' | downcase | replace: '_', ' ' | replace: '-', ' ' | strip %}
       {% assign method_source_type_token = '|' | append: method_source_type_key | append: '|' %}
       {% if method_health_status_tokens contains method_status_token and evidence_source_type_tokens contains method_source_type_token %}
-        {% assign method_health_blocked_or_pending = true %}
-        {% if blocked_status_tokens contains method_status_token %}
-          {% assign method_health_blocked = true %}
-        {% else %}
-          {% assign method_health_degraded = true %}
+        {% assign method_row_current = false %}
+        {% assign method_run_raw = method.last_run | default: '' | strip %}
+        {% if method_run_raw != '' %}
+          {% assign method_run_s = method_run_raw | date: '%s' | plus: 0 %}
+          {% assign method_run_age_s = notice_now_s | minus: method_run_s %}
+          {% if method_run_s <= notice_now_s and method_run_s >= notice_pub_s and method_run_age_s <= notice_max_age_s %}{% assign method_row_current = true %}{% endif %}
+        {% endif %}
+        {% if method_row_current %}
+          {% assign method_health_blocked_or_pending = true %}
+          {% if blocked_status_tokens contains method_status_token %}
+            {% assign method_health_blocked = true %}
+          {% else %}
+            {% assign method_health_degraded = true %}
+          {% endif %}
         {% endif %}
       {% endif %}
     {% endif %}
@@ -326,67 +388,7 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
     {% assign show_report_freshness_notice = true %}
   {% endif %}
 {% endif %}
-{% assign official_only_zero_reports = false %}
-{% if evidence_state == 'Official source only' and report_count == 0 %}{% assign official_only_zero_reports = true %}{% endif %}
-{% assign security_sensitive = false %}
-{% if page.security_sensitive == true or page.update_security_sensitive == true or page.official_patch_notes_source_type == 'security_advisory' or page.official_source_type == 'security_advisory' %}{% assign security_sensitive = true %}{% endif %}
-{% assign verdict_text = page.quick_verdict %}
-{% assign decision_body = page.update_decision_body %}
-{% assign decision_label = page.update_decision_label %}
-{%- comment -%}
-  `x == blank` is a no-op in this stack -- it is ALWAYS false -- so none of these branches has ever
-  run. A record that carries reports but no `update_decision_label` therefore rendered no label at
-  all: 86 records corpus-wide, and the worst of them are the pages with the MOST evidence, because
-  the zero-report rescue below only covers records with a count of 0. On Acrobat the intended
-  verdict was sitting unused in `update_consensus_summary` the whole time. Normalise to '' first.
-{%- endcomment -%}
-{% assign decision_label = decision_label | default: '' | strip %}
-{% if decision_label == '' and page.update_consensus_summary contains ':' %}
-  {% assign decision_label = page.update_consensus_summary | split: ':' | first | strip %}
-{% elsif decision_label == '' and verdict_text contains ':' %}
-  {% assign decision_label = verdict_text | split: ':' | first | strip %}
-{% elsif decision_label == '' %}
-  {% assign decision_label = 'INSUFFICIENT DATA' %}
-{% endif %}
-{%- comment -%}
-  FAIL SAFE, the same refusal the listing row carries (AUX-029). The chain above ends in a
-  `split: ':' | first`, which promotes ANY pre-colon text to the published verdict -- and this box
-  is the verdict: line ~577 renders it verbatim under the "AUXSAYS verdict" eyebrow.
-
-  Phase 1 first added this refusal to _includes/patch-table-row.html only, which left the two
-  surfaces disagreeing about the same record: fed a summary opening
-  "GitHub / Copilot Copilot code review:" the row said INSUFFICIENT DATA while THIS page published
-  the vendor's title as the verdict, and a stored label of "SHIP IT" published as-is. Rendered and
-  confirmed with the liquid gem before the fix.
-
-  Vocabulary and order come from _data/patch_verdicts.yml, which mirrors lib/patch_decision.py and
-  is pinned to it by test_patch_decision_authority. A legacy phrasing resolves to the action it
-  names; anything in neither list is not published as a decision.
-
-  LATENT when added: 0 of 1,270 records publish a non-vocabulary verdict here today, because the
-  official-source-only rule below rescues all 38 that derive a title-shaped label. That rescue is
-  one condition, and it is NOT the same condition the row uses -- the row reads the front-matter
-  evidence_state, this page rebuilds its own -- so the two could stop agreeing.
-{%- endcomment -%}
-{% assign verdict_vocab = site.data.patch_verdicts %}
-{% assign verdict_alias = verdict_vocab.legacy_aliases[decision_label] %}
-{% if verdict_alias %}{% assign verdict_action = verdict_alias %}{% else %}{% assign verdict_action = decision_label %}{% endif %}
-{% assign verdict_known = false %}
-{% for known in verdict_vocab.risk_order %}
-{% if known == verdict_action %}{% assign verdict_known = true %}{% break %}{% endif %}
-{% endfor %}
-{% unless verdict_known %}{% assign decision_label = 'INSUFFICIENT DATA' %}{% endunless %}
-{% assign decision_label_key = decision_label | downcase %}
-{% assign show_test_first_context = false %}
-{% if report_bearing_count > 0 and decision_label_key contains 'test first' %}{% assign show_test_first_context = true %}{% endif %}
-{% if official_only_zero_reports %}
-  {% assign decision_label = 'INSUFFICIENT DATA' %}
-  {% if security_sensitive %}
-    {% assign decision_body = 'Security-sensitive update. Test first if your workflow is fragile, but do not ignore security exposure.' %}
-  {% else %}
-    {% assign decision_body = 'Too few reports for a verdict yet.' %}
-  {% endif %}
-{% endif %}
+{% include patch-decision.html record=page %}
 {% assign summary_text = page.release_summary | default: page.official_summary | default: page.description | default: '' | strip %}
 {% assign record_note_text = page.record_note | default: '' | strip %}
 {%- comment -%}
@@ -449,10 +451,10 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
 {% endif %}
 {% assign issue_cluster_text = issue_cluster_text | replace: ' ,', ',' | replace: ', ,', ', ' | replace: '  ', ' ' | strip %}
 {% assign has_practical_recommendations = false %}
-{% if page.practical_recommendations and page.practical_recommendations.size > 0 %}{% assign has_practical_recommendations = true %}{% endif %}
+{% assign rec_list = page.practical_recommendations %}{% if decision_recommendations and decision_recommendations.size > 0 %}{% assign rec_list = decision_recommendations %}{% endif %}{% if rec_list and rec_list.size > 0 %}{% assign has_practical_recommendations = true %}{% endif %}
 {% assign decision_body = decision_body | default: '' | strip %}
 {% if decision_body == '' and has_practical_recommendations %}
-  {% assign decision_body = page.practical_recommendations | first %}
+  {% assign decision_body = rec_list | first %}
 {% endif %}
 {%- comment -%}
   ISSUE SENTENCE vs DECISION BODY. The reasoning block prints "Current reports mention X." under a
@@ -513,6 +515,11 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
   item one BECAME the body, the body now contains it and the list skips it, so it cannot appear
   twice. `rec_rendered` is what the block gates on -- an empty survivor set renders nothing at all,
   rather than an empty heading on the 1050 records that carry no recommendations.
+
+  WHERE AN OFFICIAL VERDICT CARRIES ITS OWN LIST (GROWTH-3 review 2, LOW-4), `rec_list` is that
+  list (decision_recommendations, from the verdict projection), not the stored field: the zero-count
+  retraction above leaves a page with no reports without one, so the 24H2 KB5079391 AVOID page told
+  readers to avoid the update without the replacement step its 25H2 sibling printed.
 {%- endcomment -%}
 {% assign rec_rendered = 0 %}
 {% assign rec_seen = '' %}
@@ -536,7 +543,7 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
 {% assign rec_body_probe = decision_body | strip | downcase | replace: '’', "'" | replace: '.', '' | replace: '  ', ' ' | replace: '  ', ' ' %}
 {% capture rec_items %}
   {%- if has_practical_recommendations -%}
-    {%- for rec in page.practical_recommendations -%}
+    {%- for rec in rec_list -%}
       {%- assign rec_text = rec | strip -%}
       {%- assign rec_probe = rec_text | downcase | replace: '’', "'" | replace: '.', '' | replace: '  ', ' ' | replace: '  ', ' ' -%}
       {%- assign rec_key = '|' | append: rec_probe | append: '|' -%}
@@ -563,7 +570,7 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
   {% if report_count > 0 %}
     {% assign decision_body = 'Review the report sources and test before updating deadline-sensitive work.' %}
   {% else %}
-    {% assign decision_body = 'Too few reports for a verdict yet.' %}
+    {% assign decision_body = zero_report_body | default: 'Too few reports for a verdict yet.' %}
   {% endif %}
 {% endif %}
 {% assign checksum_body_clean = page.official_checksums_body | default: '' | strip %}
@@ -690,8 +697,21 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
       <div id="verdict" class="update-decision-box update-decision-box--{{ evidence_state_class }}">
         <div class="update-decision-box__header">
           <span class="update-decision-eyebrow">AUXSAYS verdict</span>
-          <strong>{{ decision_label }}</strong>
+          <strong>{{ decision_label }}</strong>{% if decision_scope != '' %} <span class="update-decision-scope">{{ decision_scope }}</span>{% endif %}
           <p class="update-decision-recommendation">{{ decision_body }}</p>
+          {%- comment -%}
+            PROVENANCE (G66). An AVOID rests on an official statement; the line above restates it in
+            AUXSAYS words, and this links the statement itself so a reader can check it: a plain deep
+            link to the article's own URL with the date it was verified, from the verdict projection.
+            Only the link -- never the article's text. Empty on every other verdict. Tested for presence
+            AND non-empty: an unset variable is nil, and nil != '' is true, which would print an empty href.
+          {%- endcomment %}
+          {%- if decision_source_url and decision_source_url != '' %}
+          <p class="update-decision-source">Source: <a href="{{ decision_source_url | escape }}">{{ decision_source_label | escape }}</a>{% if decision_source_checked and decision_source_checked != '' %}, checked {{ decision_source_checked | date: "%b %-d, %Y" }}{% endif %}.</p>
+          {%- endif %}
+          {%- if decision_panel_text != '' %}
+          <div class="update-decision-panel update-decision-panel--warning" role="note"><span class="update-decision-panel__heading">{{ decision_panel_heading }}</span> {{ decision_panel_text }}</div>
+          {%- endif %}
           {%- if rec_rendered > 0 %}
           <div class="update-decision-actions">
             {%- comment -%}
@@ -722,10 +742,23 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
             carries honest framing, worded by the canonical strength ladder rather than a hard
             count, so nothing changes discontinuously at exactly n=3.
           {%- endcomment -%}
-          {% if consensus_established == false and evidence_strength == 'Low' %}<p>Too few reports for a firm verdict yet &mdash; treat this as early evidence.</p>{% endif %}
+          {% if consensus_established == false and evidence_strength == 'Low' and decision_official == false %}<p>Too few reports for a firm verdict yet &mdash; treat this as early evidence.</p>{% endif %}
           {% if record_note_text != '' %}<p>{{ record_note_text }}</p>{% endif %}
         </div>
       </div>
+      {%- comment -%}
+        VENDOR WARNING (AUX-125). When the vendor's own GitHub release notes for THIS version declare a
+        known issue, the page says so directly under the decision, where a reader deciding whether to
+        install will see it; the Vendor Known Issues card further down carries the same notice. It is
+        official vendor context, not part of the verdict and not a community report, and it prints no
+        count and no vendor text. Without the field it renders nothing, byte for byte.
+      {%- endcomment -%}
+      {%- if page.official_notes_known_issue == 'declared' %}
+      {%- assign notes_warning_url = page.update_source_url | default: page.official_patch_notes_source_url | default: page.primary_official_source | default: '' %}
+      <aside class="update-evidence-freshness-notice update-official-notes-warning" role="note" aria-label="Vendor warning from the official release notes">
+        <p><strong>Vendor warning identified.</strong> The official release notes for this version identify a known issue. Review the details before installing.{% if notes_warning_url != '' %} <a href="{{ notes_warning_url | escape }}">Official release notes ↗</a>{% endif %}</p>
+      </aside>
+      {%- endif %}
 
 
       {%- comment -%}
@@ -797,7 +830,7 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
       {% assign vki_has_data = false %}
       {% if page.official_known_issues_present == true or page.official_known_issues_present == false or page.official_active_issue_count or page.official_resolved_issue_count or page.official_safeguard_hold_count %}{% assign vki_has_data = true %}{% endif %}
       {% assign vki_source = page.update_source_url | default: page.official_patch_notes_source_url | default: page.primary_official_source %}
-      {% include aux-vendor-known-issues.html active=official_active resolved=official_resolved safeguard=official_safeguard has_data=vki_has_data source_url=vki_source scope='patch' %}
+      {% include aux-vendor-known-issues.html active=official_active resolved=official_resolved safeguard=official_safeguard has_data=vki_has_data source_url=vki_source scope='patch' notes_notice=page.official_notes_known_issue %}
     </div>
   </section>
 
@@ -905,19 +938,32 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
       {% if has_listing_card_evidence %}
       <p class="update-credibility-note">Some preserved report rows came from listing-card evidence rather than durable direct report URLs. AUXSAYS keeps the count visible but treats revalidation as pending until durable source URLs are available.</p>
       {% endif %}
+      {%- comment -%}
+        PUBLICATION MINIMISATION (D1). The three report lists on this page (this one, the Level 2
+        update-linked card and the Level 3 recent-reports card) link to each source by a descriptor
+        AUXSAYS composes from its own stored fields -- source name, report date and the AUXSAYS issue
+        label -- and never print the thread title the source's author wrote. The link, the date, the
+        counts and the counted / not-counted framing are unchanged; only the visible link text moved
+        from the author's words to AUXSAYS's. The descriptor is the whole accessible name of the
+        link, so it always carries a date and an issue: when either is missing it says so ("date not
+        recorded", "issue not classified") rather than inventing one. This list also renders the
+        evidence-samples fallback above, so the fallback is covered by the same markup.
+      {%- endcomment -%}
       <ul class="update-source-list update-source-list--accepted">
         {% for source in accepted_report_sources %}
-        {% assign source_title = source.source_title | default: source.title | default: 'User report' %}
         {% assign source_type_label = source.source_type | default: source.source_name | default: 'user report' %}
         {% assign source_issue = source.issue | default: source.issue_theme | default: '' | strip %}
         {% assign source_name_clean = source.source_name | default: '' | strip %}
         {% assign source_date_clean = source.source_date | default: '' | strip %}
         {% assign source_url_clean = source.source_url | default: '' | strip %}
         {% assign source_workflow = source.workflow_area | default: '' | strip %}
+        {% assign source_family = source_name_clean | default: 'Community' %}
+        {% assign source_family_tail = source_family | downcase | slice: -6, 6 %}
+        {% if source_family_tail == 'report' %}{% assign source_noun = source_family %}{% else %}{% assign source_noun = source_family | append: ' report' %}{% endif %}
+        {% capture source_link_text %}{{ source_noun }}, {% if source_date_clean != '' %}{{ source_date_clean | date: "%B %-d, %Y" }}{% else %}date not recorded{% endif %}: {% if source_issue != '' %}{{ source_issue }}{% else %}issue not classified{% endif %}{% endcapture %}
         <li>
-          <cite>{% if source_name_clean != '' %}{{ source_name_clean }}. {% endif %}{% if source_date_clean != '' %}({{ source_date_clean | date: "%Y, %B %-d" }}). {% endif %}{% if source_url_clean != '' %}<a href="{{ source_url_clean }}">{{ source_title }}</a>{% else %}{{ source_title }}{% endif %}.</cite>
+          <cite>{% if source_url_clean != '' %}<a href="{{ source_url_clean }}">{{ source_link_text | strip | escape }}</a>{% else %}{{ source_link_text | strip | escape }}{% endif %}.</cite>
           <span>{{ source_type_label | replace: '_', ' ' }}</span>
-          {% if source_issue != '' %}<small>Issue: {{ source_issue }}</small>{% endif %}
           {% if source_workflow != '' %}<small>Workflow: {{ source_workflow }}</small>{% endif %}
         </li>
         {% endfor %}
@@ -934,7 +980,7 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
           <li><cite>{% if src_name_clean != '' %}{{ page.update_source_name }}. {% endif %}{% if pub_at_clean != '' %}({{ page.update_published_at | date: "%Y, %B %-d" }}). {% endif %}<a href="{{ source.url }}">{{ source.label | default: source.source_type }}</a>.</cite><span>{{ source.source_type | replace: '_', ' ' }}</span></li>
           {% endfor %}
         {% elsif src_url_clean != '' %}
-          <li><cite>{% if src_name_clean != '' %}{{ page.update_source_name }}. {% endif %}{% if pub_at_clean != '' %}({{ page.update_published_at | date: "%Y, %B %-d" }}). {% endif %}<a href="{{ page.update_source_url }}">{{ page.update_feed_title | default: display_title }}</a>.</cite><span>{{ official_source_type | replace: '_', ' ' }}</span></li>
+          <li><cite>{% if src_name_clean != '' %}{{ page.update_source_name }}. {% endif %}{% if pub_at_clean != '' %}({{ page.update_published_at | date: "%Y, %B %-d" }}). {% endif %}<a href="{{ page.update_source_url }}">{{ cite_title }}</a>.</cite><span>{{ official_source_type | replace: '_', ' ' }}</span></li>
         {% endif %}
         {% if dl_url_clean != '' %}<li><cite>{% if src_name_clean != '' %}{{ page.update_source_name }}. {% endif %}<a href="{{ page.update_download_url }}">Download page</a>.</cite><span>download</span></li>{% endif %}
       </ul>
@@ -1075,8 +1121,16 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
             here and are <strong>not</strong> counted toward the consensus above.</p>
           <ul class="update-linked-list">
             {% for r in t2_rows %}
+            {%- comment -%} D1: the link text is the AUXSAYS descriptor (source, date, AUXSAYS issue
+              label), never the reporter's own title. See the note above the confirmed-sources list. {%- endcomment -%}
+            {%- assign r_issue = r.issue_summary | default: r.issue_theme | default: '' | strip -%}
+            {%- assign r_family = r.source_family | default: '' | strip | default: 'Community' -%}
+            {%- assign r_date = r.report_date | default: '' | strip -%}
+            {%- assign r_family_tail = r_family | downcase | slice: -6, 6 -%}
+            {%- if r_family_tail == 'report' -%}{%- assign r_noun = r_family -%}{%- else -%}{%- assign r_noun = r_family | append: ' report' -%}{%- endif -%}
+            {%- capture r_link_text -%}{{ r_noun }}, {% if r_date != '' %}{{ r_date | date: "%b %-d, %Y" }}{% else %}date not recorded{% endif %}: {% if r_issue != '' %}{{ r_issue }}{% else %}issue not classified{% endif %}{%- endcapture -%}
             <li class="update-linked-item">
-              <a class="update-linked-item__title" href="{{ r.source_url }}" rel="nofollow noopener" target="_blank">{{ r.report_title | escape_once }}</a>
+              <a class="update-linked-item__title" href="{{ r.source_url }}" rel="nofollow noopener" target="_blank">{{ r_link_text | strip | escape }}</a>
               <span class="update-linked-item__meta">{{ r.source_family | escape }} &middot; <time datetime="{{ r.report_date }}">{{ r.report_date | date: "%b %-d, %Y" }}</time></span>
               {%- comment -%}
                 `update_link_reason` is MIXED-TYPE across the two Tier-2 data files, so printing it
@@ -1142,8 +1196,16 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
             <strong>not</strong> counted toward the consensus above.</p>
           <ul class="recent-reports-list">
             {% for r in l3_rows limit: 8 %}
+            {%- comment -%} D1: the AUXSAYS descriptor again, never the reporter's own title. These rows
+              carry no AUXSAYS issue label, so they read "issue not classified" until one exists. {%- endcomment -%}
+            {%- assign r_issue = r.issue_summary | default: r.issue_theme | default: '' | strip -%}
+            {%- assign r_family = r.source_family | default: '' | strip | default: 'Community' -%}
+            {%- assign r_date = r.report_date | default: '' | strip -%}
+            {%- assign r_family_tail = r_family | downcase | slice: -6, 6 -%}
+            {%- if r_family_tail == 'report' -%}{%- assign r_noun = r_family -%}{%- else -%}{%- assign r_noun = r_family | append: ' report' -%}{%- endif -%}
+            {%- capture r_link_text -%}{{ r_noun }}, {% if r_date != '' %}{{ r_date | date: "%b %-d, %Y" }}{% else %}date not recorded{% endif %}: {% if r_issue != '' %}{{ r_issue }}{% else %}issue not classified{% endif %}{%- endcapture -%}
             <li class="recent-reports-item">
-              <a class="recent-reports-item__title" href="{{ r.source_url }}" rel="nofollow noopener" target="_blank">{{ r.report_title | escape_once }}</a>
+              <a class="recent-reports-item__title" href="{{ r.source_url }}" rel="nofollow noopener" target="_blank">{{ r_link_text | strip | escape }}</a>
               <span class="recent-reports-item__meta">{{ r.source_family | escape }} &middot; <time datetime="{{ r.report_date }}">{{ r.report_date | date: "%b %-d, %Y" }}</time></span>
               {%- assign win_start = r.window_start | default: '' -%}
               {%- assign win_end = r.window_end | default: '' -%}

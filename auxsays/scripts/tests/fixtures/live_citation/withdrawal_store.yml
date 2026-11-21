@@ -1,0 +1,713 @@
+schema_version: 1
+evidence:
+- id: obs-studio-32-1-2-github-issue-13373
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13373
+  parent_title: 'Synthetic fixture text (AUX-088), not recorded source text: screen capture regression in screen/window capture.'
+  report_title: 'Synthetic fixture text (AUX-088), not recorded source text: screen capture regression in screen/window capture.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-088), not recorded source text: screen capture regression in screen/window capture.'
+  captured_at: '2026-05-03T01:00:10Z'
+  source_date: null
+  target_release_date: null
+  source_date_pass: null
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: title
+  counted: true
+  exclusion_reason: null
+  issue_theme: screen capture regression
+  workflow_area: screen/window capture
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13370
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13370
+  parent_title: 'Synthetic fixture text (AUX-088), not recorded source text: camera/source regression in camera source workflow.'
+  report_title: 'Synthetic fixture text (AUX-088), not recorded source text: camera/source regression in camera source workflow.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-088), not recorded source text: camera/source regression in camera source workflow.'
+  captured_at: '2026-05-03T01:00:10Z'
+  source_date: null
+  target_release_date: null
+  source_date_pass: null
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: camera/source regression
+  workflow_area: camera source workflow
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-1-github-issue-13332
+  product_id: obs-studio
+  update_version: 32.1.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13332
+  parent_title: 'Synthetic fixture text (AUX-088), not recorded source text: unspecified issue in general OBS workflow.'
+  report_title: 'Synthetic fixture text (AUX-088), not recorded source text: unspecified issue in general OBS workflow.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-088), not recorded source text: unspecified issue in general OBS workflow.'
+  captured_at: '2026-05-03T02:44:22Z'
+  source_date: null
+  target_release_date: null
+  source_date_pass: null
+  patch_version_matched: true
+  matched_version: 32.1.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-32-1-1-github-issue-13291
+  product_id: obs-studio
+  update_version: 32.1.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13291
+  parent_title: 'Synthetic fixture text (AUX-088), not recorded source text: screen capture regression in screen/window capture.'
+  report_title: 'Synthetic fixture text (AUX-088), not recorded source text: screen capture regression in screen/window capture.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-088), not recorded source text: screen capture regression in screen/window capture.'
+  captured_at: '2026-05-03T02:44:22Z'
+  source_date: null
+  target_release_date: null
+  source_date_pass: null
+  patch_version_matched: true
+  matched_version: 32.1.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: screen capture regression
+  workflow_area: screen/window capture
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13437
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13437
+  parent_title: 'Synthetic fixture text (AUX-088), not recorded source text: audio mixer regression in audio mixer UI.'
+  report_title: 'Synthetic fixture text (AUX-088), not recorded source text: audio mixer regression in audio mixer UI.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-088), not recorded source text: audio mixer regression in audio mixer UI.'
+  captured_at: '2026-05-16T15:17:09Z'
+  source_date: null
+  target_release_date: null
+  source_date_pass: null
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: linux
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13466
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13466
+  parent_title: 'Synthetic fixture text (AUX-088), not recorded source text: audio mixer regression in audio mixer UI.'
+  report_title: 'Synthetic fixture text (AUX-088), not recorded source text: audio mixer regression in audio mixer UI.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-088), not recorded source text: audio mixer regression in audio mixer UI.'
+  captured_at: '2026-05-24T21:17:23Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13506
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13506
+  parent_title: 'Synthetic fixture text (AUX-088), not recorded source text: plugin compatibility in plugins.'
+  report_title: 'Synthetic fixture text (AUX-088), not recorded source text: plugin compatibility in plugins.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-088), not recorded source text: plugin compatibility in plugins.'
+  captured_at: '2026-05-31T16:37:22Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: plugin compatibility
+  workflow_area: plugins
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5943592-2026-06-update-kb5095093-26200-8737-wi
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  target_build: '26200.8737'
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5943592/2026-06-update-(kb5095093)-(26200-8737)-will-not-i
+  parent_title: 'Synthetic fixture text (AUX-088), not recorded source text: update/install failure in windows update.'
+  report_title: 'Synthetic fixture text (AUX-088), not recorded source text: update/install failure in windows update.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-088), not recorded source text: update/install failure in windows update.'
+  captured_at: '2026-07-14T08:17:58Z'
+  source_date: '2026-07-10'
+  target_release_date: '2026-06-23'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8737'
+  match_basis: exact_os_build
+  matched_kb: KB5095093
+  matched_os_build: '26200.8737'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windows11-unable-to-manually-install-kb5074109-449
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/windows11/unable-to-manually-install-kb5074109/4494943
+  parent_title: 'Synthetic fixture text (AUX-088), not recorded source text: update/install failure in windows update.'
+  report_title: 'Synthetic fixture text (AUX-088), not recorded source text: update/install failure in windows update.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-088), not recorded source text: update/install failure in windows update.'
+  captured_at: '2026-09-06T00:10:10Z'
+  source_date: '2026-02-13'
+  target_release_date: '2026-02-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5077181
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5077181
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.7840'
+- id: obs-studio-31-1-2-github-issue-13995
+  product_id: obs-studio
+  update_version: 31.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13995
+  parent_title: 'Synthetic fixture text (AUX-088), not recorded source text: camera/source regression in camera source workflow.'
+  report_title: 'Synthetic fixture text (AUX-088), not recorded source text: camera/source regression in camera source workflow.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-088), not recorded source text: camera/source regression in camera source workflow.'
+  captured_at: '2026-10-05T16:13:13Z'
+  patch_version_matched: true
+  matched_version: 31.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: camera/source regression
+  workflow_area: camera source workflow
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13995
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13995
+  parent_title: 'Synthetic fixture text (AUX-088), not recorded source text: camera/source regression in camera source workflow.'
+  report_title: 'Synthetic fixture text (AUX-088), not recorded source text: camera/source regression in camera source workflow.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-088), not recorded source text: camera/source regression in camera source workflow.'
+  captured_at: '2026-10-05T16:18:23Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: camera/source regression
+  workflow_area: camera source workflow
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-2-github-issue-13995
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13995
+  parent_title: 'Synthetic fixture text (AUX-088), not recorded source text: camera/source regression in camera source workflow.'
+  report_title: 'Synthetic fixture text (AUX-088), not recorded source text: camera/source regression in camera source workflow.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-088), not recorded source text: camera/source regression in camera source workflow.'
+  captured_at: '2026-10-05T16:20:31Z'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: camera/source regression
+  workflow_area: camera source workflow
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13997
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13997
+  parent_title: 'Synthetic fixture text (AUX-088), not recorded source text: camera/source regression in camera source workflow.'
+  report_title: 'Synthetic fixture text (AUX-088), not recorded source text: camera/source regression in camera source workflow.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-088), not recorded source text: camera/source regression in camera source workflow.'
+  captured_at: '2026-10-06T15:01:08Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: camera/source regression
+  workflow_area: camera source workflow
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-2-github-issue-13997
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13997
+  parent_title: 'Synthetic fixture text (AUX-088), not recorded source text: camera/source regression in camera source workflow.'
+  report_title: 'Synthetic fixture text (AUX-088), not recorded source text: camera/source regression in camera source workflow.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-088), not recorded source text: camera/source regression in camera source workflow.'
+  captured_at: '2026-10-06T15:03:13Z'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: camera/source regression
+  workflow_area: camera source workflow
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-2-obs-forum-thread-196545
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/video-capture-device-green-flickering.196545/
+  parent_title: 'Synthetic fixture text (AUX-088), not recorded source text: camera/source regression in camera source workflow.'
+  report_title: 'Synthetic fixture text (AUX-088), not recorded source text: camera/source regression in camera source workflow.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-088), not recorded source text: camera/source regression in camera source workflow.'
+  captured_at: '2026-10-12T00:39:32Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: camera/source regression
+  workflow_area: camera source workflow
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-2-obs-forum-thread-195299
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/window-capture-no-longer-working.195299/
+  parent_title: 'Synthetic fixture text (AUX-088), not recorded source text: audio mixer regression in audio mixer UI.'
+  report_title: 'Synthetic fixture text (AUX-088), not recorded source text: audio mixer regression in audio mixer UI.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-088), not recorded source text: audio mixer regression in audio mixer UI.'
+  captured_at: '2026-10-12T00:39:32Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: linux
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-2-obs-forum-thread-196545
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/video-capture-device-green-flickering.196545/
+  parent_title: 'Synthetic fixture text (AUX-088), not recorded source text: camera/source regression in camera source workflow.'
+  report_title: 'Synthetic fixture text (AUX-088), not recorded source text: camera/source regression in camera source workflow.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-088), not recorded source text: camera/source regression in camera source workflow.'
+  captured_at: '2026-10-12T00:41:50Z'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: camera/source regression
+  workflow_area: camera source workflow
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-2-obs-forum-thread-196184
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/zoominator-wayland-mouse-follow-broken-requesting-xdg-desktop-portal-support.196184/
+  parent_title: 'Synthetic fixture text (AUX-088), not recorded source text: screen capture regression in screen/window capture.'
+  report_title: 'Synthetic fixture text (AUX-088), not recorded source text: screen capture regression in screen/window capture.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-088), not recorded source text: screen capture regression in screen/window capture.'
+  captured_at: '2026-10-12T00:41:50Z'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: screen capture regression
+  workflow_area: screen/window capture
+  platform: linux
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-2-github-issue-14023
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14023
+  parent_title: 'Synthetic fixture text (AUX-088), not recorded source text: unspecified issue in general OBS workflow.'
+  report_title: 'Synthetic fixture text (AUX-088), not recorded source text: unspecified issue in general OBS workflow.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-088), not recorded source text: unspecified issue in general OBS workflow.'
+  captured_at: '2026-10-12T07:16:12Z'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: linux
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6039416-how-do-i-fix-error-0x80070306-when-ins
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6039416/how-do-i-fix-error-0x80070306-when-installing-upda
+  parent_title: 'Synthetic fixture text (AUX-088), not recorded source text: update/install failure in windows update.'
+  report_title: 'Synthetic fixture text (AUX-088), not recorded source text: update/install failure in windows update.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-088), not recorded source text: update/install failure in windows update.'
+  captured_at: '2026-10-16T12:40:38Z'
+  source_date: '2026-10-15'
+  target_release_date: '2026-01-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.7623'
+  match_basis: exact_os_build
+  matched_kb: KB5074109
+  matched_os_build: '26200.7623'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.7623'
+- id: obs-studio-32-1-2-obs-forum-thread-195407
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/srt-media-source-ffmpeg_source-cannot-recreate-listener-socket-on-reconnect-while-recording-or-streaming-is-active.195407/
+  parent_title: 'Synthetic fixture text (AUX-088), not recorded source text: plugin compatibility in plugins.'
+  report_title: 'Synthetic fixture text (AUX-088), not recorded source text: plugin compatibility in plugins.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-088), not recorded source text: plugin compatibility in plugins.'
+  captured_at: '2026-10-16T22:42:59Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: plugin compatibility
+  workflow_area: plugins
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-2-github-issue-14040
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14040
+  parent_title: 'Synthetic fixture text (AUX-088), not recorded source text: unspecified issue in general OBS workflow.'
+  report_title: 'Synthetic fixture text (AUX-088), not recorded source text: unspecified issue in general OBS workflow.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-088), not recorded source text: unspecified issue in general OBS workflow.'
+  captured_at: '2026-10-17T06:01:13Z'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: title
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: linux
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-33-0-0-github-issue-14077
+  product_id: obs-studio
+  update_version: 33.0.0
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14077
+  parent_title: 'Synthetic fixture text (AUX-088), not recorded source text: audio mixer regression in audio mixer UI.'
+  report_title: 'Synthetic fixture text (AUX-088), not recorded source text: audio mixer regression in audio mixer UI.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-088), not recorded source text: audio mixer regression in audio mixer UI.'
+  captured_at: '2026-10-24T17:36:27Z'
+  patch_version_matched: true
+  matched_version: 33.0.0
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-14088
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14088
+  parent_title: 'Synthetic fixture text (AUX-088), not recorded source text: plugin compatibility in plugins.'
+  report_title: 'Synthetic fixture text (AUX-088), not recorded source text: plugin compatibility in plugins.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-088), not recorded source text: plugin compatibility in plugins.'
+  captured_at: '2026-10-25T22:13:48Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: plugin compatibility
+  workflow_area: plugins
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-2-github-issue-14088
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14088
+  parent_title: 'Synthetic fixture text (AUX-088), not recorded source text: plugin compatibility in plugins.'
+  report_title: 'Synthetic fixture text (AUX-088), not recorded source text: plugin compatibility in plugins.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-088), not recorded source text: plugin compatibility in plugins.'
+  captured_at: '2026-10-25T22:15:24Z'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: plugin compatibility
+  workflow_area: plugins
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-33-0-0-github-issue-14088
+  product_id: obs-studio
+  update_version: 33.0.0
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14088
+  parent_title: 'Synthetic fixture text (AUX-088), not recorded source text: plugin compatibility in plugins.'
+  report_title: 'Synthetic fixture text (AUX-088), not recorded source text: plugin compatibility in plugins.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-088), not recorded source text: plugin compatibility in plugins.'
+  captured_at: '2026-10-25T22:16:01Z'
+  patch_version_matched: true
+  matched_version: 33.0.0
+  match_basis: title
+  counted: true
+  exclusion_reason: null
+  issue_theme: plugin compatibility
+  workflow_area: plugins
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-2-github-issue-14117
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14117
+  parent_title: 'Synthetic fixture text (AUX-088), not recorded source text: screen capture regression in screen/window capture.'
+  report_title: 'Synthetic fixture text (AUX-088), not recorded source text: screen capture regression in screen/window capture.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-088), not recorded source text: screen capture regression in screen/window capture.'
+  captured_at: '2026-10-30T00:18:54Z'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: screen capture regression
+  workflow_area: screen/window capture
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-33-0-0-github-issue-14117
+  product_id: obs-studio
+  update_version: 33.0.0
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14117
+  parent_title: 'Synthetic fixture text (AUX-088), not recorded source text: screen capture regression in screen/window capture.'
+  report_title: 'Synthetic fixture text (AUX-088), not recorded source text: screen capture regression in screen/window capture.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-088), not recorded source text: screen capture regression in screen/window capture.'
+  captured_at: '2026-10-30T00:19:46Z'
+  patch_version_matched: true
+  matched_version: 33.0.0
+  match_basis: title
+  counted: true
+  exclusion_reason: null
+  issue_theme: screen capture regression
+  workflow_area: screen/window capture
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-14152
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14152
+  parent_title: 'Synthetic fixture text (AUX-088), not recorded source text: plugin compatibility in plugins.'
+  report_title: 'Synthetic fixture text (AUX-088), not recorded source text: plugin compatibility in plugins.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-088), not recorded source text: plugin compatibility in plugins.'
+  captured_at: '2026-11-06T08:03:51Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: plugin compatibility
+  workflow_area: plugins
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-2-obs-forum-thread-196824
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/%D0%97%D0%B0%D0%B3%D0%BE%D0%BB%D0%BE%D0%B2%D0%BE%D0%BA-obs-33-0-1-%D0%BF%D0%B0%D0%B4%D0%B0%D0%B5%D1%82-%D1%81-c0000005-%D0%B2-obs-browser-dll-qcefwidgetinternal-init-%D0%BF%D1%80%D0%B8-%D1%81%D0%BE%D0%B7%D0%B4%D0%B0%D0%BD%D0%B8%D0%B8-%D0%B1%D1%80%D0%B0%D1%83%D0%B7%D0%B5%D1%80%D0%BD%D0%BE%D0%B3%D0%BE-%D0%B2%D0%B8%D0%B4%D0%B6%D0%B5%D1%82%D0%B0-32-x-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B0%D0%B5%D1%82.196824/
+  parent_title: 'Synthetic fixture text (AUX-088), not recorded source text: plugin compatibility in plugins.'
+  report_title: 'Synthetic fixture text (AUX-088), not recorded source text: plugin compatibility in plugins.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-088), not recorded source text: plugin compatibility in plugins.'
+  captured_at: '2026-11-06T08:03:47Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: plugin compatibility
+  workflow_area: plugins
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-33-0-1-github-issue-14152
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14152
+  parent_title: 'Synthetic fixture text (AUX-088), not recorded source text: plugin compatibility in plugins.'
+  report_title: 'Synthetic fixture text (AUX-088), not recorded source text: plugin compatibility in plugins.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-088), not recorded source text: plugin compatibility in plugins.'
+  captured_at: '2026-11-06T08:08:50Z'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: title
+  counted: true
+  exclusion_reason: null
+  issue_theme: plugin compatibility
+  workflow_area: plugins
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-33-0-1-obs-forum-thread-196824
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/%D0%97%D0%B0%D0%B3%D0%BE%D0%BB%D0%BE%D0%B2%D0%BE%D0%BA-obs-33-0-1-%D0%BF%D0%B0%D0%B4%D0%B0%D0%B5%D1%82-%D1%81-c0000005-%D0%B2-obs-browser-dll-qcefwidgetinternal-init-%D0%BF%D1%80%D0%B8-%D1%81%D0%BE%D0%B7%D0%B4%D0%B0%D0%BD%D0%B8%D0%B8-%D0%B1%D1%80%D0%B0%D1%83%D0%B7%D0%B5%D1%80%D0%BD%D0%BE%D0%B3%D0%BE-%D0%B2%D0%B8%D0%B4%D0%B6%D0%B5%D1%82%D0%B0-32-x-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B0%D0%B5%D1%82.196824/
+  parent_title: 'Synthetic fixture text (AUX-088), not recorded source text: plugin compatibility in plugins.'
+  report_title: 'Synthetic fixture text (AUX-088), not recorded source text: plugin compatibility in plugins.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-088), not recorded source text: plugin compatibility in plugins.'
+  captured_at: '2026-11-06T08:08:39Z'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: title
+  counted: true
+  exclusion_reason: null
+  issue_theme: plugin compatibility
+  workflow_area: plugins
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1

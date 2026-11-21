@@ -21,6 +21,7 @@ from urllib.error import HTTPError, URLError
 
 from .base import (
     EVIDENCE_PATH,
+    FIRST_POST_ONLY,
     CollectorContext,
     PatchRecord,
     ProductCollector,
@@ -31,6 +32,7 @@ from .base import (
     counted_rows,
     date_part,
     exact_version_match,
+    first_post_excerpt_span,
     generated_records,
     load_evidence,
     load_front_matter_and_body,
@@ -782,6 +784,9 @@ def topic_candidate(topic: dict[str, Any]) -> dict[str, Any] | None:
         "premiere_board_verified": True,
         # The platform's own statement about who wrote the opening post.
         "vendor_authored": author_is_vendor(first.get("author")),
+        # `report_text` is the opening post alone, so a new row's excerpt may be centred on the
+        # version it names (AUX-109). Every page-scraping method reads whole pages and never sets it.
+        FIRST_POST_ONLY: True,
     }
 
 
@@ -1192,12 +1197,16 @@ def evaluate_candidates(
 
 
 def row_from_candidate(record: PatchRecord, candidate: dict[str, Any], captured_at: str) -> dict[str, Any]:
-    report_text = " ".join([
-        str(candidate.get("parent_title") or ""),
-        str(candidate.get("report_title") or ""),
-        str(candidate.get("report_text") or ""),
-    ])
+    named_parts = [(field, str(candidate.get(field) or ""))
+                   for field in ("parent_title", "report_title", "report_text")]
+    report_text = " ".join(value for _field, value in named_parts)
     matched, matched_version, basis = premiere_version_match(report_text, record.update_version)
+    # Where the stored excerpt sits (AUX-109): around the accepted occurrence, for an opening-post
+    # candidate whose head does not already show it. Only an exact-text or alias match has a span;
+    # the "build 65" basis keeps the head. Decides nothing: no gate below reads the excerpt.
+    excerpt_span = first_post_excerpt_span(
+        candidate, named_parts, report_text, record.update_version,
+        version_aliases(record.update_version), accepted=(matched, matched_version, basis))
     # The concatenated blob stays the input to version matching -- acceptance authority is not
     # touched by this change -- but classification gets the title and the body separately.
     theme, workflow_area, platform, severity, sentiment = classify(
@@ -1228,6 +1237,7 @@ def row_from_candidate(record: PatchRecord, candidate: dict[str, Any], captured_
         severity=severity,
         sentiment=sentiment,
         row_id=f"{PRODUCT_ID}-{slug(record.update_version)}-{slug(str(candidate.get('source_type') or SOURCE_TYPE))}-{slug(str(candidate.get('source_url') or ''))}",
+        excerpt_span=excerpt_span,
     )
     if archive_url:
         row["archive_url"] = archive_url

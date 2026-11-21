@@ -123,6 +123,9 @@ jobs:
       - name: Build the live-consensus eligibility projection
         run: python auxsays/scripts/build_live_eligibility_projection.py
 
+      - name: Build the verdict projection
+        run: python auxsays/scripts/build_verdict_projection.py
+
       - name: Validate logo assets
         run: python auxsays/scripts/validate_logo_assets.py
 

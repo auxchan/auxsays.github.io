@@ -751,7 +751,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // to be short. Collection that has stopped or is blocked does qualify.
     const attentionOf = (entry) => {
       if (!entry || !entry.href) return '';
-      if (entry.rank === 0 || entry.rank === 1 || entry.rank === 2) return entry.verdict;
+      if (entry.rank === 0 || entry.rank === 1 || entry.rank === 2) return scopedVerdict(entry.verdict, entry.scope);
       if ((entry.oa || 0) > 0) return `${entry.oa} active vendor issue${entry.oa === 1 ? '' : 's'}`;
       if ((entry.os || 0) > 0) return `${entry.os} safeguard hold${entry.os === 1 ? '' : 's'}`;
       if (entry.mon === 'COLLECTION BLOCKED') return 'Collection blocked';
@@ -761,6 +761,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const esc = (value) => String(value == null ? '' : value)
       .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+    // A verdict and its scope are one statement ("WAIT if you use macOS 27.2"): printing the word
+    // alone tells every reader what the page tells only one setup (GROWTH-3 review 1, D1).
+    const scopedVerdict = (verdict, scope) => {
+      const word = String(verdict == null ? '' : verdict);
+      const where = String(scope == null ? '' : scope).trim();
+      return where ? `${word} ${where}` : word;
+    };
+    const verdictHtml = (verdict, scope, rank) => {
+      const where = String(scope == null ? '' : scope).trim();
+      return `<span class="patch-verdict patch-verdict--rank${Number(rank)}">${esc(verdict)}</span>`
+        + (where ? ` <span class="patch-verdict-scope">${esc(where)}</span>` : '');
+    };
 
     // `esc` handles quoting, not schemes. Every href here is a site path, so anything that is not
     // one is dropped rather than rendered as a link.
@@ -777,7 +790,7 @@ document.addEventListener('DOMContentLoaded', () => {
       parts.push('<div class="patch-stack-card__head">');
       parts.push(`<h3 class="patch-stack-card__name">${hist ? `<a href="${hist}">${name}</a>` : name}</h3>`);
       if (entry.href) {
-        parts.push(`<span class="patch-verdict patch-verdict--rank${Number(entry.rank)}">${esc(entry.verdict)}</span>`);
+        parts.push(`<span class="patch-stack-card__verdict">${verdictHtml(entry.verdict, entry.scope, entry.rank)}</span>`);
       }
       parts.push('</div>');
       if (entry.href) {
@@ -790,7 +803,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const meta = [];
         meta.push(`${Number(entry.n) || 0} confirmed report${Number(entry.n) === 1 ? '' : 's'}`);
         if (entry.ev) meta.push(esc(entry.ev));
-        if (entry.checked) meta.push(`Evidence checked ${esc(entry.checked)}`);
+        // `checked` is when the record's newest ACCEPTED report was captured, not the last time
+        // collection looked (the monitoring line below states that). So it carries the patch page's
+        // label, and it is shown only where the card counts a report.
+        if (entry.checked && Number(entry.n) > 0) meta.push(`Newest accepted report captured: ${esc(entry.checked)}`);
         if (entry.mon === 'COLLECTION BLOCKED') meta.push('Collection blocked');
         else if (entry.mon === 'COLLECTION STALE') meta.push('Collection stale');
         else if (entry.mon === 'MONITORING DEGRADED') meta.push('Monitoring degraded');
@@ -870,8 +886,7 @@ document.addEventListener('DOMContentLoaded', () => {
       out.push(href ? `<a href="${href}">${recLabel(rec)}</a>` : recLabel(rec));
       out.push('</p>');
       if (rec[5]) {
-        out.push(`<p class="patch-iv-step__verdict"><span class="patch-verdict patch-verdict--rank${Number(rec[6])}">`
-          + `${esc(rec[5])}</span></p>`);
+        out.push(`<p class="patch-iv-step__verdict">${verdictHtml(rec[5], rec[12], rec[6])}</p>`);
       }
       const meta = recMeta(rec);
       if (meta.length) out.push(`<ul class="patch-iv-step__meta"><li>${meta.join('</li><li>')}</li></ul>`);
@@ -1196,9 +1211,103 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // THE PAGED FEED'S CATALOGUE (G36-02 follow-up). These take no DOM globals, so the suite runs them
+  // as shipped under node (scripts/tests/test_feed_discovery.py, [J]).
+  // A card is the patch page its headline links: the same link the deploy gate counts.
+  const feedCardHref = (card) => card.querySelector('a.patch-identity')?.getAttribute('href') || '';
+
+  // PAGES. The pager prints one link per feed page, page 1 first. Of the links on this site's own
+  // origin, `urls` is every page but this one, in that order, by origin and path only (no query, no
+  // hash), and `before` is how many of them come ahead of this page: their cards go ahead of its own.
+  const feedPagePlan = (links, origin) => {
+    const sameSite = links.filter((link) => link.origin === origin);
+    return {
+      urls: sameSite.filter((link) => link.getAttribute('aria-current') !== 'page')
+        .map((link) => link.origin + link.pathname),
+      before: Math.max(0, sameSite.findIndex((link) => link.getAttribute('aria-current') === 'page')),
+    };
+  };
+
+  // ORDER. The build prints one list, page 1's cards then page 2's and so on, and the feed's sorts
+  // are stable: equal keys keep the order the cards are held in. Held as "this page, then the
+  // others", a sort from page 8 put page 8's records ahead of their equals from page 1, so the same
+  // search answered in a different order on every page. The catalogue is held in the build's order:
+  // the pages before this one, this page's own cards, then the pages after it.
+  // DUPLICATES. Pages are cut by position, so a new record pushes the others along and two pages
+  // from different moments can both hold one. Each patch is held once, by its link: this page's own
+  // card wins, then the first in feed order.
+  // `pages` holds the other pages' cards in pager order and `pagesBefore` says how many come first;
+  // `adopt` makes a fetched card this document's. Returns the catalogue in feed order, plus the
+  // adopted cards that go ahead of this page's own (`ahead`) and after them (`behind`).
+  const assembleFeedCatalog = (ownCards, pages, pagesBefore, adopt) => {
+    const seen = new Set(ownCards.map(feedCardHref).filter(Boolean));
+    const take = (group) => group.flat().filter((card) => {
+      const href = feedCardHref(card);
+      if (href && seen.has(href)) return false;
+      if (href) seen.add(href);
+      return true;
+    }).map(adopt);
+    const ahead = take(pages.slice(0, pagesBefore));
+    const behind = take(pages.slice(pagesBefore));
+    return { cards: ahead.concat(ownCards, behind), ahead, behind };
+  };
+
+  // BUILD. Every feed page carries the feed's stamp on the pager (data-feed-build: a digest of every
+  // card's link and page, _plugins/patch_feed_pages.rb), so it changes only when the feed does. Pages
+  // of two different feeds disagree on where each page starts, so a search across them misses records
+  // at every seam and shows others twice. Returns the index of each fetched page whose stamp is not
+  // this page's own; a missing stamp, on either side, never matches.
+  const feedPagesFromOtherBuilds = (ownBuild, builds) => builds
+    .map((build, at) => (ownBuild && build === ownBuild ? -1 : at))
+    .filter((at) => at >= 0);
+
+  // Fetches the `count` other pages through `fetchPage(at, cache)`, which resolves to
+  // { build, cards }. A page from another build is fetched ONCE more, past the browser's cache (the
+  // host lets a page be cached for ten minutes, so a deploy can leave one page old); if any page
+  // still differs this resolves null, and the controls stay on this page's cards.
+  const loadFeedPages = (count, ownBuild, fetchPage) => Promise.all(
+    Array.from({ length: count }, (_, at) => fetchPage(at, 'default')),
+  ).then((pages) => {
+    const stale = feedPagesFromOtherBuilds(ownBuild, pages.map((page) => page.build));
+    if (!stale.length) return pages;
+    return Promise.all(stale.map((at) => fetchPage(at, 'no-cache'))).then((again) => {
+      stale.forEach((at, k) => { pages[at] = again[k]; });
+      return feedPagesFromOtherBuilds(ownBuild, pages.map((page) => page.build)).length ? null : pages;
+    });
+  });
+
+  // The catalogue's outcome, as the controls' state: 'complete' with every page's cards in feed order;
+  // 'mixed' when a page is still from another feed after its retry; 'failed' when a page could not be
+  // loaded. The last two hold no catalogue: the controls stay on this page's cards.
+  const loadFeedCatalog = (ownCards, count, pagesBefore, ownBuild, fetchPage, adopt) => loadFeedPages(count, ownBuild, fetchPage)
+    .then((pages) => {
+      if (!pages) {
+        return { state: 'mixed', catalog: null };
+      }
+      return { state: 'complete', catalog: assembleFeedCatalog(ownCards, pages.map((page) => page.cards), pagesBefore, adopt) };
+    })
+    .catch(() => ({ state: 'failed', catalog: null }));
+
+  // What the feed shows for a catalogue state. With a control engaged (`wide`) the controls answer
+  // over every page, so the pager, which describes this page, is hidden, except when the answer is
+  // this page's alone ('failed', 'mixed'); the status line says which answer it is. `shown` is how
+  // many cards match, `total` the feed's size.
+  const feedCatalogView = (state, wide, shown, total) => {
+    const pageOnly = state === 'failed' || state === 'mixed';
+    let message = '';
+    if (wide && state === 'loading') message = `Searching all ${total} tracked patches…`;
+    else if (wide && state === 'failed') message = 'Showing matches from this page only: the other pages of the feed could not be loaded.';
+    else if (wide && state === 'mixed') message = 'Showing matches from this page only: the feed was updated after this page loaded. Reload to search every page.';
+    else if (wide) message = `${shown} of ${total} tracked patches match, from every page of the feed.`;
+    return { pagerHidden: wide && !pageOnly, message };
+  };
+
   // Patch Feed controls: company/software hierarchy filters, compact type/category controls, and sorting.
   const patchFeed = document.getElementById('patch-feed');
   const patchArchiveFeed = document.getElementById('patch-archive-feed');
+  const patchArchiveWrap = document.getElementById('patch-archive-wrap');
+  const feedPager = document.querySelector('[data-feed-pages]');
+  const feedStatus = document.querySelector('[data-feed-status]');
   const patchSourceGrid = document.getElementById('patch-source-grid');
   const patchSearch = document.getElementById('patch-search');
   const patchCompanySelect = document.getElementById('patch-company-select');
@@ -1224,8 +1333,25 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   if ((patchFeed || patchSourceGrid) && (filterChips.length || sortChips.length || priorityChips.length || patchCompanySelect || patchSoftwareSelect || patchSearch)) {
-    const allCards = Array.from(document.querySelectorAll('.patch-card'));
+    let allCards = Array.from(document.querySelectorAll('.patch-card'));
     const sourceCards = Array.from(document.querySelectorAll('[data-source-card="true"]'));
+    // THE FEED IS PAGED (G36-02): this page holds one slice of the catalogue, and the pager's plain
+    // links name every other page. The first search, filter, sort or My Watchlist toggle fetches
+    // those pages once and adopts their server-rendered cards, so every control still answers over
+    // the whole catalogue with the exact cards (and verdict lines) the build rendered. With nothing
+    // engaged, only this page's own cards show and the pager stays the way through.
+    // Only this site's own pages, read like a link click and carrying nothing of the visitor's: no
+    // cookies, no query, no body. The watchlist stays in this browser (see /privacy/).
+    const feedPlan = feedPagePlan(feedPager ? Array.from(feedPager.querySelectorAll('a[data-feed-page-link]')) : [],
+      window.location.origin);
+    const otherPageUrls = feedPlan.urls;
+    // How many of those pages come before this one: their cards go ahead of this page's own.
+    const pagesBefore = feedPlan.before;
+    const ownBuild = feedPager?.dataset.feedBuild || '';
+    const feedTotal = Number(feedPager?.dataset.feedTotal || 0) || allCards.length;
+    // 'page' = only this page's cards are here; 'loading'; 'complete'; 'failed' or 'mixed' (another
+    // page could not be loaded, or came from another build): both stay on this page's cards.
+    let catalogState = otherPageUrls.length ? 'page' : 'complete';
     let currentFilter = 'all';
     let currentSort = 'latest';
     let currentLane = 'all';
@@ -1277,14 +1403,70 @@ document.addEventListener('DOMContentLoaded', () => {
       return filterPass && lanePass && companyPass && softwarePass && queryPass;
     };
 
+    const isDefaultView = (query) => !query && currentFilter === 'all' && currentLane === 'all'
+      && currentCompany === 'all' && currentSoftware === 'all' && !watchlistOnly && currentSort === 'latest';
+
+    // The one request this script makes: another page of this feed, by its pager link's origin and
+    // path, without cookies. `cache` is 'default', or 'no-cache' for the one retry past the browser
+    // cache (loadFeedPages).
+    const fetchFeedPage = (at, cache) => fetch(otherPageUrls[at], { credentials: 'omit', cache }).then((response) => {
+      if (!response.ok) throw new Error(`feed page ${otherPageUrls[at]}: HTTP ${response.status}`);
+      return response.text();
+    }).then((html) => {
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      return {
+        build: doc.querySelector('[data-feed-pages]')?.dataset.feedBuild || '',
+        cards: Array.from(doc.querySelectorAll('#patch-feed .patch-card, #patch-archive-feed .patch-card')),
+      };
+    });
+
+    const adoptFeedCard = (node) => {
+      const card = document.importNode(node, true);
+      card.dataset.feedImported = 'true';
+      card.hidden = true;
+      card.style.display = 'none';
+      return card;
+    };
+    const feedHomeOf = (card) => (card.dataset.kind === 'archived' ? patchArchiveFeed : patchFeed);
+
+    // Loaded once; a failure is not retried from here (the reschedule below would loop on it), so
+    // the controls fall back to this page and the status line says so.
+    const loadCatalog = () => {
+      if (catalogState !== 'page') return;
+      catalogState = 'loading';
+      loadFeedCatalog(allCards, otherPageUrls.length, pagesBefore, ownBuild, fetchFeedPage, adoptFeedCard).then(({ state, catalog }) => {
+        if (catalog) {
+          // The DOM in the same order: the earlier pages' cards ahead of this page's own, the later
+          // pages' cards after them.
+          [patchFeed, patchArchiveFeed].forEach((home) => {
+            if (!home) return;
+            const lead = document.createDocumentFragment();
+            catalog.ahead.filter((card) => feedHomeOf(card) === home).forEach((card) => lead.appendChild(card));
+            home.insertBefore(lead, home.firstChild);
+            catalog.behind.filter((card) => feedHomeOf(card) === home).forEach((card) => home.appendChild(card));
+          });
+          allCards = catalog.cards;
+        }
+        catalogState = state;
+        schedulePatchFeed();
+      }).catch(() => {
+        catalogState = 'failed';
+        schedulePatchFeed();
+      });
+    };
+
     const applyPatchFeed = () => {
       const query = (patchSearch?.value || '').toLowerCase().trim();
       watchedIds = readWatchlist();
       const visibleUpdates = [];
       const visibleSources = [];
+      const catalogWide = !isDefaultView(query);
+      if (catalogWide) loadCatalog();
 
       allCards.forEach((card) => {
-        const isVisible = matchesUpdateFilters(card, query);
+        // Another page's card shows only while a control is engaged; otherwise it is that page's.
+        const inScope = catalogWide || card.dataset.feedImported !== 'true';
+        const isVisible = inScope && matchesUpdateFilters(card, query);
         card.hidden = !isVisible;
         card.classList.toggle('is-hidden', !isVisible);
         card.classList.toggle('is-filter-hidden', !isVisible);
@@ -1304,19 +1486,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const currentFragment = document.createDocumentFragment();
       const archiveFragment = document.createDocumentFragment();
+      let archivedShown = 0;
       visibleUpdates.forEach((card) => {
-        if (card.dataset.kind === 'archived') archiveFragment.appendChild(card);
-        else currentFragment.appendChild(card);
+        if (card.dataset.kind === 'archived') {
+          archiveFragment.appendChild(card);
+          archivedShown += 1;
+        } else currentFragment.appendChild(card);
       });
       if (patchFeed) patchFeed.appendChild(currentFragment);
       if (patchArchiveFeed) patchArchiveFeed.appendChild(archiveFragment);
+      if (patchArchiveWrap) patchArchiveWrap.hidden = archivedShown === 0;
+      // The pager describes this page; while the controls answer over every page it would mislead.
+      const feedView = feedCatalogView(catalogState, catalogWide, visibleUpdates.length, feedTotal);
+      if (feedPager) feedPager.hidden = feedView.pagerHidden;
+      if (feedStatus) {
+        feedStatus.textContent = feedView.message;
+        feedStatus.hidden = !feedView.message;
+      }
 
       // Two different silences, two different answers. "You have not chosen anything yet" needs a
       // way to start choosing; "nothing is happening to your products" is good news and must not
       // read as a broken page.
       const emptyPanel = document.getElementById('patch-watchlist-empty');
       if (emptyPanel) {
-        const showEmpty = watchlistOnly && visibleUpdates.length === 0;
+        // Not while the other pages are still arriving: their cards may be the visitor's.
+        const showEmpty = watchlistOnly && visibleUpdates.length === 0 && catalogState !== 'loading';
         emptyPanel.hidden = !showEmpty;
         if (showEmpty) {
           const nothingWatched = watchedIds.size === 0;

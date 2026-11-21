@@ -1,0 +1,32 @@
+{%- comment -%}
+  THE /updates/ FEED CARD'S EVIDENCE PILL TEXT (AUX-097, review 1, MAJOR-1).
+
+  The pill prints the page's stored community label (update_consensus_label). That label measures
+  user reports, not the verdict, but one of its values, "Insufficient data", is also the name of a
+  verdict (INSUFFICIENT DATA). On a card whose page states an OFFICIAL verdict -- AVOID or SECURITY
+  UPDATE, which the gate prints at any report count -- the pill therefore read as a second verdict,
+  placed above the real one: "INSUFFICIENT DATA" over "AVOID for new installations: ...".
+
+  On those cards the pill prints the patch page's own word for that label instead, "Not enough
+  reports" (_layouts/aux-update.html, under "Community signal"), so it says what it measures. The
+  word applies at any report count; today every page that stores an Insufficient label has none.
+  Every other card prints its stored label exactly as before: a negative or moderate label is
+  evidence vocabulary already, and a page with no official verdict keeps its pill. The pill's class
+  and the card's data-status (which drive the status filters and the "Risk first" sort) are not
+  touched.
+
+  Input:   include.item   the feed item (a site.pages patch record)
+           include.label  the card's stored label, as the card already resolved it
+  Output:  prints the pill text, and nothing else. It runs the gate (patch-verdict-gate.html), which
+           resets every gate_ variable on each call, so the card's later summary include is unchanged.
+
+  No literal Liquid tag appears in this comment on purpose: a comment block still parses tags.
+{%- endcomment -%}
+{%- assign pfp_label = include.label -%}
+{%- assign pfp_key = pfp_label | append: '' | downcase -%}
+{%- if pfp_key contains 'insufficient' -%}
+  {%- assign pfp_count = include.item.update_report_count | default: 0 | plus: 0 -%}
+  {%- include patch-verdict-gate.html record=include.item count=pfp_count -%}
+  {%- if gate_official -%}{%- assign pfp_label = 'Not enough reports' -%}{%- endif -%}
+{%- endif -%}
+{{- pfp_label -}}

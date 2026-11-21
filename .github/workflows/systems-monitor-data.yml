@@ -1,8 +1,9 @@
 name: Systems Monitor Production Data
 
 on:
-  schedule:
-    - cron: "0 */4 * * *"
+  # Dispatched after routine patch ingestion; do not add a second writer cron.
+  # The shared writer queue holds only one pending run. Its reaper repairs
+  # evicted bot dispatches, including this lane.
   workflow_dispatch:
     inputs:
       force:

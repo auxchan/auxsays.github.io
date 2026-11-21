@@ -17,8 +17,8 @@ update_version: 1.7.16
 update_logo_text: '4K '
 update_published_at: '2025-11-26T17:44:03Z'
 update_last_checked: '2026-10-23T00:14:41Z'
-source_last_checked: '2026-11-05T22:28:14Z'
-official_body_last_checked: '2026-11-05T22:28:14Z'
+source_last_checked: '2026-11-21T09:50:46Z'
+official_body_last_checked: '2026-11-21T09:50:46Z'
 record_last_updated: '2026-10-23T00:14:41Z'
 patch_file_size: ''
 patch_file_size_note: Elgato installer metadata is not exposed on the public release-note article.
@@ -71,27 +71,27 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-11-04T08:57:49Z'
+- at: '2026-11-19T10:07:04Z'
   url: https://help.elgato.com/hc/en-us/articles/41334927598097-Elgato-4K-Capture-Utility-1-7-16-Release-Notes
   status: captured-from-zendesk-help-center-api
   body_captured: true
   checksums_captured: false
-- at: '2026-11-04T17:28:53Z'
+- at: '2026-11-19T23:19:26Z'
   url: https://help.elgato.com/hc/en-us/articles/41334927598097-Elgato-4K-Capture-Utility-1-7-16-Release-Notes
   status: captured-from-zendesk-help-center-api
   body_captured: true
   checksums_captured: false
-- at: '2026-11-05T02:22:23Z'
+- at: '2026-11-20T10:04:14Z'
   url: https://help.elgato.com/hc/en-us/articles/41334927598097-Elgato-4K-Capture-Utility-1-7-16-Release-Notes
   status: captured-from-zendesk-help-center-api
   body_captured: true
   checksums_captured: false
-- at: '2026-11-05T09:03:30Z'
+- at: '2026-11-20T23:14:29Z'
   url: https://help.elgato.com/hc/en-us/articles/41334927598097-Elgato-4K-Capture-Utility-1-7-16-Release-Notes
   status: captured-from-zendesk-help-center-api
   body_captured: true
   checksums_captured: false
-- at: '2026-11-05T22:28:14Z'
+- at: '2026-11-21T09:50:46Z'
   url: https://help.elgato.com/hc/en-us/articles/41334927598097-Elgato-4K-Capture-Utility-1-7-16-Release-Notes
   status: captured-from-zendesk-help-center-api
   body_captured: true

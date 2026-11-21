@@ -14,12 +14,10 @@ from patch_collectors import runtime_budget as rb
 
 import argparse
 import json
-import os
 import re
 import sys
 import textwrap
 import urllib.parse
-import urllib.request
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
@@ -27,6 +25,8 @@ from typing import Any
 import yaml
 
 from lib import evidence_classification as ec
+from lib import evidence_facts
+from lib import github_api
 from lib.normalize import split_front_matter, atomic_write_text
 from lib.patch_identity import patch_key
 from lib.report_counts import counted_evidence_counts
@@ -35,7 +35,8 @@ from lib.target_outcome import target_is_contradicted
 ROOT = Path(__file__).resolve().parents[1]
 EVIDENCE_PATH = ROOT / "_data" / "consensus_evidence.yml"
 GENERATED_DIR = ROOT / "updates" / "generated"
-API_ROOT = "https://api.github.com"
+API_ROOT = github_api.API_ORIGIN
+SEARCH_PER_PAGE = 100
 REPO = "obsproject/obs-studio"
 PRODUCT_ID = "obs-studio"
 SOURCE_NAME = "obsproject/obs-studio"
@@ -96,35 +97,75 @@ def issue_source_date(issue: dict[str, Any]):
     return parse_date(issue.get("created_at"))
 
 
+# A served timestamp that names its own zone: GitHub's '2026-10-06T15:01:08Z', the forum's
+# '2026-10-12T20:41:00+0100'. A value without a zone has no knowable UTC day.
+_ZONED_STAMP_RE = re.compile(r"^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?)(Z|[+-]\d{2}:?\d{2})$")
+
+
+def report_source_day(issue: dict[str, Any]) -> str | None:
+    """The day the report itself was posted, as the evidence row stores it in `source_date`.
+
+    It is read from the SAME value the release-date gate reads (`issue_source_date`): the GitHub
+    issue's own `created_at`, or, for a forum thread, the opening post's own <time>, which
+    `obs_forum_source.parse_opening_post` hands over under the same key. Never `updated_at` or
+    `closed_at`, never a later reply, never `captured_at`: each of those is last activity or
+    collection time, not when the report was written.
+
+    The format and meaning are the store's, as AUX-090 wrote them for the rows dated before this
+    existed: 'YYYY-MM-DD', the UTC day of that instant. The gate keeps reading the timestamp's own
+    calendar day, unchanged. The two can differ only for a post made just after local midnight (the
+    forum serves +0100 in summer); GitHub serves UTC, so for an issue they are always the same day.
+
+    None when the value is missing, is not a timestamp, or names no time zone: its UTC day is then
+    unknown, and a guessed day would be a date the source never stated. The row is then stored
+    without a date, exactly as before, and the gate has already decided on its own reading.
+    """
+    match = _ZONED_STAMP_RE.match(str(issue.get("created_at") or "").strip())
+    if not match:
+        return None
+    zone = match.group(2)
+    if zone == "Z":
+        zone = "+00:00"
+    elif ":" not in zone:
+        zone = zone[:3] + ":" + zone[3:]
+    try:
+        instant = datetime.fromisoformat(match.group(1) + zone)
+    except ValueError:
+        return None
+    return instant.astimezone(timezone.utc).strftime("%Y-%m-%d")
+
+
 def slug(value: str) -> str:
     value = re.sub(r"[^a-z0-9]+", "-", value.lower()).strip("-")
     return value[:80].strip("-")
 
 
+def request_json_with_meta(url: str) -> tuple[Any, dict[str, str]]:
+    """One GitHub API GET through the shared transport (lib/github_api.py): paced, a truthful
+    User-Agent, the run's runtime budget, and the first refusal stops every later GitHub request."""
+    return github_api.get_json(url, endpoint_family="obs_github")
+
+
 def request_json(url: str) -> Any:
-    headers = {
-        "Accept": "application/vnd.github+json",
-        "User-Agent": "AUXSAYS-OBS-Report-Beta",
-        "X-GitHub-Api-Version": "2022-11-28",
-    }
-    token = os.getenv("GITHUB_TOKEN")
-    if token:
-        headers["Authorization"] = f"Bearer {token}"
-    req = urllib.request.Request(url, headers=headers)
-    with urllib.request.urlopen(req, timeout=rb.request_timeout(rb.get_run_budget(), 30)) as response:
-        return json.loads(rb.bounded_read(response, budget=rb.get_run_budget(), endpoint_family="obs_github").decode("utf-8"))
+    return request_json_with_meta(url)[0]
 
 
 def search_issues(version: str, since: str | None, max_pages: int) -> list[dict[str, Any]]:
+    """Every issue the search returns for this version, up to `max_pages` pages.
+
+    Paging follows GitHub's contract (rel="next" in the Link header). It used to stop only on an
+    EMPTY page, so every version with fewer than 100 hits spent a second search on a page that could
+    only be empty -- 11 of 18 versions return nothing at all.
+    """
     query = f'repo:{REPO} is:issue "{version}"'
     if since:
         query += f" created:>={since}"
     results: list[dict[str, Any]] = []
     seen: set[str] = set()
     for page in range(1, max(1, max_pages) + 1):
-        encoded = urllib.parse.urlencode({"q": query, "per_page": "100", "page": str(page)})
+        encoded = urllib.parse.urlencode({"q": query, "per_page": str(SEARCH_PER_PAGE), "page": str(page)})
         url = f"{API_ROOT}/search/issues?{encoded}"
-        payload = request_json(url)
+        payload, meta = request_json_with_meta(url)
         items = payload.get("items") or []
         if not items:
             break
@@ -135,16 +176,33 @@ def search_issues(version: str, since: str | None, max_pages: int) -> list[dict[
             if issue_url and issue_url not in seen:
                 seen.add(issue_url)
                 results.append(item)
+        if not github_api.has_next_page(meta, payload, page=page, per_page=SEARCH_PER_PAGE):
+            break
     return results
 
 
 def fetch_issue(item: dict[str, Any]) -> dict[str, Any]:
+    """The issue as GitHub serves it now, which is what every acceptance decision reads.
+
+    KEPT DELIBERATELY. The search item carries the same fields, but from the search INDEX, which can
+    lag an edit; a reporter who later adds "fixed in 32.1.2" changes what the role check reads. That
+    equivalence cannot be proven offline, so the fetch stays -- through the shared transport.
+
+    An ordinary failure (a 404 for a moved issue, a 5xx, the network) falls back to the search item,
+    exactly as before. A REFUSAL is different: the transport has stopped the run, and evaluating the
+    rest of this version from search items would publish a collection GitHub cut short as a complete
+    one, so it propagates and the version is reported as not collected.
+    """
     url = str(item.get("url") or "")
     if not url:
         return item
     try:
         issue = request_json(url)
         return issue if isinstance(issue, dict) else item
+    except github_api.GitHubError as exc:
+        if github_api.is_stop(exc):
+            raise
+        return item
     except Exception:
         return item
 
@@ -414,12 +472,18 @@ def evidence_row(issue: dict[str, Any], version: str, basis: str, captured_at: s
     point is that there is ONE set of OBS evidence semantics: a forum report and a GitHub
     issue differ in where they were found, not in what counting them means. Omitting
     `identity` reproduces the GitHub row byte for byte.
+
+    `source_date` is the day the report was posted (`report_source_day`), placed directly after
+    `captured_at` as in every OBS row AUX-090 dated. It is a display fact only: no acceptance or
+    count reads it, and `evaluate_issue` has decided before this row is built. A report whose
+    timestamp gives no UTC day gets no `source_date` key at all, so its row is what it always was.
     """
     number = issue.get("number")
     title = str(issue.get("title") or f"GitHub issue {number}").strip()
     body = str(issue.get("body") or "")
     theme, workflow_area, platform, severity, sentiment = classify(issue)
     ident = identity or {}
+    source_day = report_source_day(issue)
     return {
         "id": ident.get("row_id") or f"obs-studio-{slug(version)}-github-issue-{number}",
         "product_id": PRODUCT_ID,
@@ -432,6 +496,7 @@ def evidence_row(issue: dict[str, Any], version: str, basis: str, captured_at: s
         "report_title": title,
         "report_text_excerpt": excerpt(body or title, version),
         "captured_at": captured_at,
+        **({"source_date": source_day} if source_day else {}),
         "patch_version_matched": True,
         "matched_version": version,
         "match_basis": basis,
@@ -531,6 +596,10 @@ def write_evidence(rows: list[dict[str, Any]],
         url_key = evidence_key(row, "source_url")
         if id_key in seen_ids or url_key in seen_urls:
             continue
+        # This is OBS's own persistence boundary, so the structured facts are written here (G68), from
+        # the row as it will be serialised. Existing rows keep theirs untouched.
+        facts = evidence_facts.compute_facts(normalize_row(row))
+        row = {**{k: v for k, v in row.items() if k not in evidence_facts.STORED_FIELDS}, **facts}
         existing.append(row)
         seen_ids.add(id_key)
         seen_urls.add(url_key)

@@ -9,7 +9,8 @@ four earlier captures. Its contract, pinned here:
   A  the committed manifest names exactly those fourteen rows and the four kept rows, each by its full
      five-field identity; every Track B row carries two agreeing B labels and its reason; every
      Track C row names its kept row and the pair derives; both reasons come from the existing
-     vocabulary and neither can be laundered back into visibility; it shares no row with AUX-072
+     vocabulary and neither can be laundered back into visibility; it shares no row with AUX-072 or
+     with AUX-088 (the later withdrawal of live-page citations)
   B  a dry run (the default) plans the fourteen, keeps the four and writes nothing
   C  --write needs --confirm-write; the write changes exactly 42 lines (three per row, the track's own
      reason), keeps every row, leaves the kept rows and every other row byte-identical, starts no row
@@ -234,6 +235,10 @@ def run() -> int:  # noqa: PLR0915
                                                .read_text(encoding="utf-8"))["entries"]}
     check("A10 no row is shared with AUX-072's manifest", not (aux072_ids & {ident(e) for e in manifest["entries"]}))
     check("A11 the selector is the five fields, in order", wd.SELECTOR == SEL == tuple(manifest["selector"]))
+    aux088_ids = {ident(e) for e in json.loads((SCRIPTS / "audit" / "live_citation_withdrawal.json")
+                                               .read_text(encoding="utf-8"))["entries"]}
+    check("A12 no row is shared with AUX-088's manifest (the later live-page withdrawal), so neither run rewrites "
+          "the other's rows", len(aux088_ids) == 22 and not (aux088_ids & {ident(e) for e in manifest["entries"]}))
 
     print("B  dry run, as the bare script")
     with tempfile.TemporaryDirectory(prefix="pk1-dry-") as tmp:

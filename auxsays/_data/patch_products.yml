@@ -20,12 +20,8 @@
   product_id: openai-chatgpt
   company_url: /updates/openai/
   product_url: /updates/openai/openai-chatgpt/
-  current_status_label: Tracking initialized
   current_status_score: 0
   documented_update_count: 0
-  coverage_state: active_watch
-  coverage_status_label: Monitoring active
-  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -39,8 +35,6 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may
     miss.
-  dossier_note: ChatGPT / OpenAI is tracked for release changes, workflow impact,
-    compatibility shifts, stability signals, and community consensus.
   asset_type: product_icon
 - id: anthropic-claude
   company_name: Anthropic
@@ -63,12 +57,8 @@
   product_id: anthropic-claude
   company_url: /updates/anthropic/
   product_url: /updates/anthropic/anthropic-claude/
-  current_status_label: Tracking initialized
   current_status_score: 0
   documented_update_count: 0
-  coverage_state: active_watch
-  coverage_status_label: Monitoring active
-  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -82,8 +72,6 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may
     miss.
-  dossier_note: Claude is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
   asset_type: product_icon
 - id: google-gemini
   company_name: Google
@@ -97,8 +85,10 @@
     creation.
   watch_reason: Gemini changes affect search behavior, Workspace AI features, mobile
     creator workflows, and AI video/image pipelines.
-  source_url: https://gemini.google/updates/
-  source_label: Gemini updates
+  # The old /updates/ address answers 404. Google's own Gemini Apps release notes page replaced
+  # it on 2026-11-19 (AUX-112). Its entries are dated; they carry no app version numbers.
+  source_url: https://gemini.google/release-notes/
+  source_label: Gemini Apps release notes
   signal_notes: Watch consumer Gemini, Workspace Gemini, and Veo/Nano Banana-style
     creative updates separately.
   source_id: google-gemini
@@ -108,12 +98,8 @@
   product_id: google-gemini
   company_url: /updates/google/
   product_url: /updates/google/google-gemini/
-  current_status_label: Tracking initialized
   current_status_score: 0
   documented_update_count: 0
-  coverage_state: active_watch
-  coverage_status_label: Monitoring active
-  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -127,8 +113,6 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may
     miss.
-  dossier_note: Gemini is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
   asset_type: product_icon
 - id: perplexity
   company_name: Perplexity
@@ -151,12 +135,8 @@
   product_id: perplexity
   company_url: /updates/perplexity/
   product_url: /updates/perplexity/perplexity/
-  current_status_label: Tracking initialized
   current_status_score: 0
   documented_update_count: 0
-  coverage_state: active_watch
-  coverage_status_label: Monitoring active
-  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -170,8 +150,6 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may
     miss.
-  dossier_note: Perplexity is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
   asset_type: product_icon
 - id: midjourney
   company_name: Midjourney
@@ -195,12 +173,8 @@
   product_id: midjourney
   company_url: /updates/midjourney/
   product_url: /updates/midjourney/midjourney/
-  current_status_label: Tracking initialized
   current_status_score: 0
   documented_update_count: 0
-  coverage_state: active_watch
-  coverage_status_label: Monitoring active
-  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -214,8 +188,6 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may
     miss.
-  dossier_note: Midjourney is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
   asset_type: company_fallback
 - id: stability-ai
   company_name: Stability AI
@@ -239,12 +211,8 @@
   product_id: stability-ai
   company_url: /updates/stability-ai/
   product_url: /updates/stability-ai/stability-ai/
-  current_status_label: Tracking initialized
   current_status_score: 0
   documented_update_count: 0
-  coverage_state: active_watch
-  coverage_status_label: Monitoring active
-  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -258,8 +226,6 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may
     miss.
-  dossier_note: Stable Diffusion / Stable Audio is tracked for release changes, workflow
-    impact, compatibility shifts, stability signals, and community consensus.
   asset_type: company_fallback
 - id: runway
   company_name: Runway
@@ -284,12 +250,8 @@
   product_id: runway
   company_url: /updates/runway/
   product_url: /updates/runway/runway/
-  current_status_label: Tracking initialized
   current_status_score: 0
   documented_update_count: 0
-  coverage_state: active_watch
-  coverage_status_label: Monitoring active
-  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -303,8 +265,6 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may
     miss.
-  dossier_note: Runway is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
   asset_type: product_icon
 - id: pika
   company_name: Pika
@@ -329,12 +289,8 @@
   product_id: pika
   company_url: /updates/pika/
   product_url: /updates/pika/pika/
-  current_status_label: Tracking initialized
   current_status_score: 0
   documented_update_count: 0
-  coverage_state: active_watch
-  coverage_status_label: Monitoring active
-  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -348,8 +304,6 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may
     miss.
-  dossier_note: Pika is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
   asset_type: company_fallback
 - id: lottiefiles
   company_name: LottieFiles
@@ -374,12 +328,8 @@
   product_id: lottiefiles
   company_url: /updates/lottiefiles/
   product_url: /updates/lottiefiles/lottiefiles/
-  current_status_label: Tracking initialized
   current_status_score: 0
   documented_update_count: 0
-  coverage_state: active_watch
-  coverage_status_label: Monitoring active
-  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -393,8 +343,6 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may
     miss.
-  dossier_note: LottieFiles is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
   asset_type: product_icon
 - id: figma
   company_name: Figma
@@ -419,12 +367,8 @@
   product_id: figma
   company_url: /updates/figma/
   product_url: /updates/figma/figma/
-  current_status_label: Tracking initialized
   current_status_score: 0
   documented_update_count: 0
-  coverage_state: active_watch
-  coverage_status_label: Monitoring active
-  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -438,8 +382,6 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may
     miss.
-  dossier_note: Figma is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
   asset_type: product_icon
 - id: canva
   company_name: Canva
@@ -464,12 +406,8 @@
   product_id: canva
   company_url: /updates/canva/
   product_url: /updates/canva/canva/
-  current_status_label: Tracking initialized
   current_status_score: 0
   documented_update_count: 0
-  coverage_state: active_watch
-  coverage_status_label: Monitoring active
-  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -483,8 +421,6 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may
     miss.
-  dossier_note: Canva is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
   asset_type: product_icon
 - id: adobe-premiere-pro
   company_name: Adobe
@@ -510,12 +446,8 @@
   product_id: adobe-premiere-pro
   company_url: /updates/adobe/
   product_url: /updates/adobe/adobe-premiere-pro/
-  current_status_label: Tracking initialized
   current_status_score: 0
   documented_update_count: 0
-  coverage_state: active_watch
-  coverage_status_label: Monitoring active
-  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -529,8 +461,6 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may
     miss.
-  dossier_note: Premiere Pro is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
   asset_type: product_icon
 - id: adobe-after-effects
   company_name: Adobe
@@ -556,12 +486,8 @@
   product_id: adobe-after-effects
   company_url: /updates/adobe/
   product_url: /updates/adobe/adobe-after-effects/
-  current_status_label: Tracking initialized
   current_status_score: 0
   documented_update_count: 0
-  coverage_state: active_watch
-  coverage_status_label: Monitoring active
-  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -575,8 +501,6 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may
     miss.
-  dossier_note: After Effects is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
   asset_type: product_icon
 - id: adobe-photoshop
   company_name: Adobe
@@ -603,12 +527,8 @@
   product_id: adobe-photoshop
   company_url: /updates/adobe/
   product_url: /updates/adobe/adobe-photoshop/
-  current_status_label: Tracking initialized
   current_status_score: 0
   documented_update_count: 0
-  coverage_state: active_watch
-  coverage_status_label: Monitoring active
-  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -622,8 +542,6 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may
     miss.
-  dossier_note: Photoshop is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
   asset_type: product_icon
 - id: adobe-media-encoder
   company_name: Adobe
@@ -650,12 +568,8 @@
   product_id: adobe-media-encoder
   company_url: /updates/adobe/
   product_url: /updates/adobe/adobe-media-encoder/
-  current_status_label: Source map staged
   current_status_score: 0
   documented_update_count: 0
-  coverage_state: staged
-  coverage_status_label: Source map staged
-  ingestion_status: Official adapter staged (disabled); official source classified, not yet monitoring
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -669,8 +583,6 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may
     miss.
-  dossier_note: Media Encoder is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
   asset_type: company_fallback
 - id: adobe-lightroom-classic
   company_name: Adobe
@@ -697,12 +609,8 @@
   product_id: adobe-lightroom-classic
   company_url: /updates/adobe/
   product_url: /updates/adobe/adobe-lightroom-classic/
-  current_status_label: Tracking initialized
   current_status_score: 0
   documented_update_count: 0
-  coverage_state: active_watch
-  coverage_status_label: Monitoring active
-  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -716,8 +624,6 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may
     miss.
-  dossier_note: Lightroom Classic is tracked for release changes, workflow impact,
-    compatibility shifts, stability signals, and community consensus.
   asset_type: product_icon
 - id: blackmagic-davinci
   company_name: Blackmagic Design
@@ -742,12 +648,8 @@
   product_id: blackmagic-davinci
   company_url: /updates/blackmagic-design/
   product_url: /updates/blackmagic-design/blackmagic-davinci/
-  current_status_label: Tracking initialized
   current_status_score: 0
   documented_update_count: 2
-  coverage_state: documented
-  coverage_status_label: Patch records available
-  ingestion_status: Patch records available; automated evidence collection active
   consensus_method:
   - Official source is treated as the factual baseline.
   - Only confirmed patch-specific reports are counted.
@@ -762,8 +664,6 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may
     miss.
-  dossier_note: DaVinci Resolve is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
   ui_backdrop_path: /assets/img/software-ui/davinci-resolve-ui.webp
   asset_type: company_fallback
 - id: obs-studio
@@ -788,12 +688,8 @@
   product_id: obs-studio
   company_url: /updates/obs-project/
   product_url: /updates/obs-project/obs-studio/
-  current_status_label: Tracking initialized
   current_status_score: 0
   documented_update_count: 2
-  coverage_state: documented
-  coverage_status_label: Patch records available
-  ingestion_status: Patch records available
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -807,8 +703,6 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may
     miss.
-  dossier_note: OBS Studio is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
   asset_type: product_icon
 - id: twitch
   company_name: Twitch
@@ -832,12 +726,8 @@
   product_id: twitch
   company_url: /updates/twitch/
   product_url: /updates/twitch/twitch/
-  current_status_label: Tracking initialized
   current_status_score: 0
   documented_update_count: 0
-  coverage_state: active_watch
-  coverage_status_label: Monitoring active
-  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -851,8 +741,6 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may
     miss.
-  dossier_note: Twitch is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
   asset_type: product_icon
 - id: youtube
   company_name: YouTube
@@ -876,12 +764,8 @@
   product_id: youtube
   company_url: /updates/youtube/
   product_url: /updates/youtube/youtube/
-  current_status_label: Tracking initialized
   current_status_score: 0
   documented_update_count: 0
-  coverage_state: active_watch
-  coverage_status_label: Monitoring active
-  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -895,8 +779,6 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may
     miss.
-  dossier_note: YouTube / YouTube Studio is tracked for release changes, workflow
-    impact, compatibility shifts, stability signals, and community consensus.
   asset_type: product_icon
 - id: kick
   company_name: Kick
@@ -909,8 +791,13 @@
   impact: Live streaming alternatives, monetization, platform risk, and audience diversification.
   watch_reason: Kick matters for creators evaluating live-stream revenue, discoverability,
     and platform redundancy.
-  source_url: https://kick.com/blog
-  source_label: Kick blog
+  # No official update source is mapped (AUX-112). The old kick.com/blog address answers 404,
+  # and on 2026-11-19 no changelog or release-notes page for Kick's streaming platform was
+  # found to replace it. Kick's developer-API changelog (docs.kick.com) records API changes,
+  # not product releases, so it is not linked. Nor is a generic homepage, because it would
+  # look like a release feed.
+  source_url: null
+  source_label: null
   signal_notes: Track monetization, content policy, streaming tools, mobile app changes,
     and creator dashboard changes.
   source_id: kick
@@ -920,12 +807,8 @@
   product_id: kick
   company_url: /updates/kick/
   product_url: /updates/kick/kick/
-  current_status_label: Tracking initialized
   current_status_score: 0
   documented_update_count: 0
-  coverage_state: active_watch
-  coverage_status_label: Monitoring active
-  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -939,8 +822,6 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may
     miss.
-  dossier_note: Kick is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
   asset_type: product_icon
 - id: rumble
   company_name: Rumble
@@ -964,12 +845,8 @@
   product_id: rumble
   company_url: /updates/rumble/
   product_url: /updates/rumble/rumble/
-  current_status_label: Tracking initialized
   current_status_score: 0
   documented_update_count: 0
-  coverage_state: active_watch
-  coverage_status_label: Monitoring active
-  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -983,8 +860,6 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may
     miss.
-  dossier_note: Rumble is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
   asset_type: product_icon
 - id: epic-unreal
   company_name: Epic Games
@@ -1009,12 +884,8 @@
   product_id: epic-unreal
   company_url: /updates/epic-games/
   product_url: /updates/epic-games/epic-unreal/
-  current_status_label: Tracking initialized
   current_status_score: 0
   documented_update_count: 0
-  coverage_state: active_watch
-  coverage_status_label: Monitoring active
-  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -1028,8 +899,6 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may
     miss.
-  dossier_note: Unreal Engine is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
   asset_type: product_icon
 - id: unity
   company_name: Unity
@@ -1053,12 +922,8 @@
   product_id: unity
   company_url: /updates/unity/
   product_url: /updates/unity/unity/
-  current_status_label: Tracking initialized
   current_status_score: 0
   documented_update_count: 0
-  coverage_state: active_watch
-  coverage_status_label: Monitoring active
-  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -1072,8 +937,6 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may
     miss.
-  dossier_note: Unity is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
   asset_type: product_icon
 - id: steam
   company_name: Valve
@@ -1097,12 +960,8 @@
   product_id: steam
   company_url: /updates/valve/
   product_url: /updates/valve/steam/
-  current_status_label: Tracking initialized
   current_status_score: 0
   documented_update_count: 0
-  coverage_state: active_watch
-  coverage_status_label: Monitoring active
-  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -1116,52 +975,77 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may
     miss.
-  dossier_note: Steam is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
   asset_type: product_icon
-- id: nvidia
+- id: nvidia-geforce-game-ready
   company_name: NVIDIA
-  product_name: NVIDIA App / GeForce / Studio
-  badge_text: NV
+  product_name: GeForce Game Ready Driver
+  badge_text: GRD
   category_key: hardware-drivers
   category_label: Hardware / Drivers
   priority: Core
   cadence: High
-  impact: GPU drivers, DLSS, streaming encoders, AI workflows, and gaming performance.
-  watch_reason: NVIDIA driver and app changes can directly affect PC gaming, streaming,
-    AI, and creator stability.
-  source_url: https://www.nvidia.com/en-us/geforce/news/
-  source_label: GeForce news
-  signal_notes: Track Game Ready drivers, Studio drivers, NVENC, DLSS, app changes,
-    and known issues.
-  source_id: nvidia
+  impact: GPU driver changes for PC gaming performance, DLSS, display behavior, capture and streaming
+    encoders.
+  watch_reason: Game Ready driver updates can change gaming performance, capture and streaming stability,
+    and display behavior.
+  source_url: https://www.nvidia.com/en-us/geforce/drivers/
+  source_label: NVIDIA driver downloads
+  signal_notes: Game Ready and Studio drivers can share a version number. Each family is its own product,
+    and a record or report never carries over from one family to the other.
+  source_id: nvidia-geforce-game-ready
   logo_label: NVIDIA
   logo_path: /assets/img/patch-logos/nvidia.png
   company_id: nvidia
-  product_id: nvidia
+  product_id: nvidia-geforce-game-ready
   company_url: /updates/nvidia/
-  product_url: /updates/nvidia/nvidia/
-  current_status_label: Tracking initialized
+  product_url: /updates/nvidia/nvidia-geforce-game-ready/
   current_status_score: 0
   documented_update_count: 0
-  coverage_state: active_watch
-  coverage_status_label: Monitoring active
-  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
-  - Community reports are grouped by recurring theme, severity, and frequency.
-  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
-  - Individual update pages carry the deeper score, report count, confidence, and
-    timeline.
+  - Only confirmed patch-specific reports are counted.
+  - A report counts when the exact patch/version is named in the report itself or
+    in the parent discussion title.
+  - Every confirmed patch-specific report has equal weight.
   record_trigger_rules:
-  - New official release or changelog entry.
-  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation,
-    or web publishing.
+  - New Game Ready driver in NVIDIA's official driver listing.
+  - Meaningful workflow impact for gaming, streaming, capture or display behavior.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
-  - Security, pricing, policy, licensing, or compatibility changes that creators may
-    miss.
-  dossier_note: NVIDIA App / GeForce / Studio is tracked for release changes, workflow
-    impact, compatibility shifts, stability signals, and community consensus.
+  asset_type: company_fallback
+- id: nvidia-studio-driver
+  company_name: NVIDIA
+  product_name: NVIDIA Studio Driver
+  badge_text: NSD
+  category_key: hardware-drivers
+  category_label: Hardware / Drivers
+  priority: Core
+  cadence: High
+  impact: GPU driver changes for creative applications, video editing, 3D, encoding and AI workflows.
+  watch_reason: Studio driver updates can change stability and performance in creative applications such
+    as video editors, 3D tools and streaming software.
+  source_url: https://www.nvidia.com/en-us/geforce/drivers/
+  source_label: NVIDIA driver downloads
+  signal_notes: Studio and Game Ready drivers can share a version number. Each family is its own product,
+    and a record or report never carries over from one family to the other.
+  source_id: nvidia-studio-driver
+  logo_label: NVIDIA
+  logo_path: /assets/img/patch-logos/nvidia.png
+  company_id: nvidia
+  product_id: nvidia-studio-driver
+  company_url: /updates/nvidia/
+  product_url: /updates/nvidia/nvidia-studio-driver/
+  current_status_score: 0
+  documented_update_count: 0
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Only confirmed patch-specific reports are counted.
+  - A report counts when the exact patch/version is named in the report itself or
+    in the parent discussion title.
+  - Every confirmed patch-specific report has equal weight.
+  record_trigger_rules:
+  - New Studio driver in NVIDIA's official driver listing.
+  - Meaningful workflow impact for creative applications, encoding, 3D or AI workloads.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
   asset_type: company_fallback
 - id: amd
   company_name: AMD
@@ -1185,12 +1069,8 @@
   product_id: amd
   company_url: /updates/amd/
   product_url: /updates/amd/amd/
-  current_status_label: Tracking initialized
   current_status_score: 0
   documented_update_count: 0
-  coverage_state: active_watch
-  coverage_status_label: Monitoring active
-  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -1204,8 +1084,6 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may
     miss.
-  dossier_note: AMD Software / Radeon is tracked for release changes, workflow impact,
-    compatibility shifts, stability signals, and community consensus.
   asset_type: company_fallback
 - id: intel-arc
   company_name: Intel
@@ -1230,12 +1108,8 @@
   product_id: intel-arc
   company_url: /updates/intel/
   product_url: /updates/intel/intel-arc/
-  current_status_label: Tracking initialized
   current_status_score: 0
   documented_update_count: 0
-  coverage_state: active_watch
-  coverage_status_label: Monitoring active
-  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -1249,8 +1123,6 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may
     miss.
-  dossier_note: Intel Graphics / Arc is tracked for release changes, workflow impact,
-    compatibility shifts, stability signals, and community consensus.
   asset_type: company_fallback
 - id: blender
   company_name: Blender Foundation
@@ -1274,12 +1146,8 @@
   product_id: blender
   company_url: /updates/blender-foundation/
   product_url: /updates/blender-foundation/blender/
-  current_status_label: Tracking initialized
   current_status_score: 0
   documented_update_count: 0
-  coverage_state: active_watch
-  coverage_status_label: Monitoring active
-  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -1293,8 +1161,6 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may
     miss.
-  dossier_note: Blender is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
   asset_type: product_icon
 - id: comfyui
   company_name: ComfyUI
@@ -1319,12 +1185,8 @@
   product_id: comfyui
   company_url: /updates/comfyui/
   product_url: /updates/comfyui/comfyui/
-  current_status_label: Tracking initialized
   current_status_score: 0
   documented_update_count: 0
-  coverage_state: active_watch
-  coverage_status_label: Monitoring active
-  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -1338,8 +1200,6 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may
     miss.
-  dossier_note: ComfyUI is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
   asset_type: company_fallback
 - id: hugging-face
   company_name: Hugging Face
@@ -1363,12 +1223,8 @@
   product_id: hugging-face
   company_url: /updates/hugging-face/
   product_url: /updates/hugging-face/hugging-face/
-  current_status_label: Tracking initialized
   current_status_score: 0
   documented_update_count: 0
-  coverage_state: active_watch
-  coverage_status_label: Monitoring active
-  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -1382,8 +1238,6 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may
     miss.
-  dossier_note: Hugging Face is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
   asset_type: company_fallback
 - id: github
   company_name: GitHub
@@ -1406,12 +1260,8 @@
   product_id: github
   company_url: /updates/github/
   product_url: /updates/github/github/
-  current_status_label: Tracking initialized
   current_status_score: 0
   documented_update_count: 0
-  coverage_state: active_watch
-  coverage_status_label: Monitoring active
-  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -1425,8 +1275,6 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may
     miss.
-  dossier_note: GitHub / Copilot is tracked for release changes, workflow impact,
-    compatibility shifts, stability signals, and community consensus.
   asset_type: product_icon
 - id: cloudflare
   company_name: Cloudflare
@@ -1449,12 +1297,8 @@
   product_id: cloudflare
   company_url: /updates/cloudflare/
   product_url: /updates/cloudflare/cloudflare/
-  current_status_label: Tracking initialized
   current_status_score: 0
   documented_update_count: 0
-  coverage_state: active_watch
-  coverage_status_label: Monitoring active
-  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -1468,8 +1312,6 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may
     miss.
-  dossier_note: Cloudflare is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
   asset_type: company_fallback
 - id: netlify
   company_name: Netlify
@@ -1492,12 +1334,8 @@
   product_id: netlify
   company_url: /updates/netlify/
   product_url: /updates/netlify/netlify/
-  current_status_label: Tracking initialized
   current_status_score: 0
   documented_update_count: 0
-  coverage_state: active_watch
-  coverage_status_label: Monitoring active
-  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -1511,8 +1349,6 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may
     miss.
-  dossier_note: Netlify is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
   asset_type: company_fallback
 - id: notion
   company_name: Notion
@@ -1536,12 +1372,8 @@
   product_id: notion
   company_url: /updates/notion/
   product_url: /updates/notion/notion/
-  current_status_label: Tracking initialized
   current_status_score: 0
   documented_update_count: 0
-  coverage_state: active_watch
-  coverage_status_label: Monitoring active
-  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -1555,8 +1387,6 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may
     miss.
-  dossier_note: Notion is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
   asset_type: product_icon
 - id: zapier
   company_name: Zapier
@@ -1580,12 +1410,8 @@
   product_id: zapier
   company_url: /updates/zapier/
   product_url: /updates/zapier/zapier/
-  current_status_label: Tracking initialized
   current_status_score: 0
   documented_update_count: 0
-  coverage_state: active_watch
-  coverage_status_label: Monitoring active
-  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -1599,8 +1425,6 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may
     miss.
-  dossier_note: Zapier is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
   asset_type: company_fallback
 - id: make
   company_name: Make
@@ -1623,12 +1447,8 @@
   product_id: make
   company_url: /updates/make/
   product_url: /updates/make/make/
-  current_status_label: Tracking initialized
   current_status_score: 0
   documented_update_count: 0
-  coverage_state: active_watch
-  coverage_status_label: Monitoring active
-  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -1642,8 +1462,6 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may
     miss.
-  dossier_note: Make is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
   asset_type: product_icon
 - id: adobe-acrobat-reader
   company_name: Adobe
@@ -1670,14 +1488,8 @@
   product_id: adobe-acrobat-reader
   company_url: /updates/adobe/
   product_url: /updates/adobe/adobe-acrobat-reader/
-  current_status_label: Official ingestion active
   current_status_score: 0
   documented_update_count: 0
-  coverage_state: active_watch
-  coverage_status_label: Official ingestion active
-  ingestion_active: true
-  ingestion_status: Shared Acrobat DC official ingestion active (fail-closed); awaiting
-    first attributed record
   evidence_collection_status: 'active: community consensus collection is enabled and reachable
     from GitHub Actions via Adobe Community''s keyless inSided/Algolia JSON discovery API. The
     direct /t5 HTML search (CloudFront 403) and Reddit (403/429) remain blocked from CI and
@@ -1696,9 +1508,6 @@
   - Workflow impact involving PDFs, printing, signatures, forms, browser integration,
     or enterprise deployment.
   - Enough confirmed patch-specific public reports to evaluate install risk.
-  dossier_note: Acrobat Reader is tracked as a workplace-critical PDF platform where
-    security updates may be urgent, but fragile form, print, and signature workflows
-    still require careful testing.
   asset_type: product_icon
   ui_backdrop_path: /assets/img/software-ui/adobe-acrobat-reader-ui.svg
 - id: adobe-acrobat-pro
@@ -1725,14 +1534,8 @@
   product_id: adobe-acrobat-pro
   company_url: /updates/adobe/
   product_url: /updates/adobe/adobe-acrobat-pro/
-  current_status_label: Official ingestion active
   current_status_score: 0
   documented_update_count: 0
-  coverage_state: active_watch
-  coverage_status_label: Official ingestion active
-  ingestion_active: true
-  ingestion_status: Shared Acrobat DC official ingestion active (fail-closed); awaiting
-    first attributed record
   evidence_collection_status: 'active: community consensus collection is enabled and reachable
     from GitHub Actions via Adobe Community''s keyless inSided/Algolia JSON discovery API. The
     direct /t5 HTML search (CloudFront 403) and Reddit (403/429) remain blocked from CI and
@@ -1751,9 +1554,6 @@
   - Workflow impact involving PDF authoring, editing, e-signatures, forms, redaction,
     or enterprise deployment.
   - Enough confirmed patch-specific public reports to evaluate install risk.
-  dossier_note: Acrobat Pro is tracked as a workplace-critical PDF authoring platform
-    where security updates may be urgent, but fragile authoring, form, and signature
-    workflows still require careful testing.
   asset_type: company_fallback
 - id: microsoft-windows-11
   company_name: Microsoft
@@ -1779,12 +1579,8 @@
   product_id: microsoft-windows-11
   company_url: /updates/microsoft/
   product_url: /updates/microsoft/microsoft-windows-11/
-  current_status_label: Source map staged
   current_status_score: 0
   documented_update_count: 0
-  coverage_state: staged
-  coverage_status_label: Source map staged
-  ingestion_status: Adapter staged; official source classified
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -1795,9 +1591,6 @@
   - Security-sensitive cumulative update with creator/gaming/workplace relevance.
   - Safeguard hold or known issue affecting creator, gaming, device, or enterprise
     workflows.
-  dossier_note: Windows 11 is tracked as a security-sensitive OS platform where update
-    advice must balance exposure, known issues, staged rollout behavior, and fragile
-    creator/gaming workstations.
   asset_type: product_icon
 - id: microsoft-teams
   company_name: Microsoft
@@ -1822,20 +1615,14 @@
   product_id: microsoft-teams
   company_url: /updates/microsoft/
   product_url: /updates/microsoft/microsoft-teams/
-  current_status_label: Source map staged
   current_status_score: 0
   documented_update_count: 0
-  coverage_state: staged
-  coverage_status_label: Source map staged
-  ingestion_status: Manual watch until source parsing is proven
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
   record_trigger_rules:
   - New Teams app version history or release-note entry.
   - Meeting/calling reliability or admin-impacting rollout notice.
-  dossier_note: Microsoft Teams is tracked for meeting reliability, tenant rollout,
-    and workplace communication risk.
   asset_type: product_icon
 - id: microsoft-powerpoint
   company_name: Microsoft
@@ -1860,23 +1647,14 @@
   product_id: microsoft-powerpoint
   company_url: /updates/microsoft/
   product_url: /updates/microsoft/microsoft-powerpoint/
-  current_status_label: Official ingestion active
   current_status_score: 0
   documented_update_count: 0
-  coverage_state: active_watch
-  coverage_status_label: Official ingestion active
-  ingestion_active: true
-  ingestion_status: PowerPoint-attributed official ingestion active (fail-closed); only
-    explicit PowerPoint or explicit suite-wide release-note entries are counted; awaiting
-    first attributed record
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
   record_trigger_rules:
   - Microsoft 365 Apps release entry with PowerPoint-specific feature, fix, security,
     or regression risk.
-  dossier_note: PowerPoint is tracked for presentation-critical workplace and creator
-    workflows, especially media/export/add-in reliability.
   asset_type: product_icon
 - id: microsoft-365-apps
   company_name: Microsoft
@@ -1903,13 +1681,8 @@
   product_id: microsoft-365-apps
   company_url: /updates/microsoft/
   product_url: /updates/microsoft/microsoft-365-apps/
-  current_status_label: Official ingestion active
   current_status_score: 0
   documented_update_count: 1
-  coverage_state: active_watch
-  coverage_status_label: Monitoring active
-  ingestion_active: true
-  ingestion_status: Shared servicing ingestion active (Current Channel version/build history)
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -1917,9 +1690,6 @@
   - New Microsoft 365 Apps release-note entry.
   - Security or non-security update affecting Office desktop apps.
   - Channel-specific rollout with workplace deployment impact.
-  dossier_note: Microsoft 365 Apps is the shared servicing/platform layer (channel/build
-    releases, Click-to-Run, suite-wide security, cross-app regressions). App-specific
-    changes are attributed to the individual application pages, not duplicated here.
   asset_type: product_icon
 - id: elgato-stream-deck
   company_name: Elgato
@@ -1947,12 +1717,8 @@
   official_notes_by_platform: true
   company_url: /updates/elgato/
   product_url: /updates/elgato/elgato-stream-deck/
-  current_status_label: Source map staged
   current_status_score: 0
   documented_update_count: 0
-  coverage_state: staged
-  coverage_status_label: Source map staged
-  ingestion_status: Adapter staged; official source classified
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -1960,8 +1726,6 @@
   - New Stream Deck release-note entry.
   - Plugin, profile, OBS action, firmware, account integration, or Marketplace-impacting
     update.
-  dossier_note: Stream Deck is tracked as a live-production control surface where
-    plugin and profile stability matter.
   asset_type: product_icon
 - id: elgato-wave-link
   company_name: Elgato
@@ -1989,20 +1753,14 @@
   official_notes_by_platform: true
   company_url: /updates/elgato/
   product_url: /updates/elgato/elgato-wave-link/
-  current_status_label: Source map staged
   current_status_score: 0
   documented_update_count: 0
-  coverage_state: staged
-  coverage_status_label: Source map staged
-  ingestion_status: Adapter staged; official source classified
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
   record_trigger_rules:
   - New Wave Link release-note entry.
   - Audio routing, VST, device support, or OBS workflow-impacting update.
-  dossier_note: Wave Link is tracked for stream audio routing, mic/device behavior,
-    and OBS/live-production stability.
   asset_type: company_fallback
 - id: elgato-camera-hub
   company_name: Elgato
@@ -2030,20 +1788,14 @@
   official_notes_by_platform: true
   company_url: /updates/elgato/
   product_url: /updates/elgato/elgato-camera-hub/
-  current_status_label: Source map staged
   current_status_score: 0
   documented_update_count: 0
-  coverage_state: staged
-  coverage_status_label: Source map staged
-  ingestion_status: Adapter staged; official source classified
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
   record_trigger_rules:
   - New Camera Hub release-note entry.
   - Camera, firmware, Prompter, virtual camera, or OBS workflow-impacting update.
-  dossier_note: Camera Hub is tracked for camera-control, firmware, virtual-camera,
-    and OBS capture stability.
   asset_type: company_fallback
 - id: elgato-4k-capture-utility
   company_name: Elgato
@@ -2068,18 +1820,12 @@
   product_id: elgato-4k-capture-utility
   company_url: /updates/elgato/
   product_url: /updates/elgato/elgato-4k-capture-utility/
-  current_status_label: Source map staged
   current_status_score: 0
   documented_update_count: 0
-  coverage_state: staged
-  coverage_status_label: Source map staged
-  ingestion_status: Adapter staged; official source classified
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
   record_trigger_rules:
   - New 4K Capture Utility release-note entry.
   - Capture device, firmware, USB, HDR, or recording stability-impacting update.
-  dossier_note: 4K Capture Utility is tracked for capture-card reliability, HDR behavior,
-    USB detection, firmware, and recording stability.
   asset_type: company_fallback

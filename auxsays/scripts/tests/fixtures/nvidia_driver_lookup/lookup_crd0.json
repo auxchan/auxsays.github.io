@@ -1,0 +1,783 @@
+{
+ "Success": "12",
+ "IDS": [
+  {
+   "downloadInfo": {
+    "Success": "1",
+    "ID": "285320",
+    "DownloadTypeID": "1",
+    "DownloadStatusID": "3",
+    "Name": "GeForce%20Game%20Ready%20Driver",
+    "NameLocalized": "GeForce%20Game%20Ready%20Driver",
+    "ShortDescription": "GeForce%20Game%20Ready%20Driver",
+    "DeviceToProductFamilyName": "",
+    "Release": "620",
+    "Version": "621.24",
+    "DisplayVersion": "",
+    "GFE_DisplayVersion": "11.0.9.585",
+    "CDKitUSBEmitterDriverVersion": "",
+    "CDKitGPUDriverVersion": "",
+    "IsBeta": "0",
+    "IsWHQL": "1",
+    "IsRecommended": "0",
+    "IsFeaturePreview": "0",
+    "IsNewest": "0",
+    "IsDC": "1",
+    "IsCRD": "0",
+    "HasNetInst": "0",
+    "CudaToolkitVersion": "",
+    "IsArchive": "0",
+    "IsActive": "1",
+    "IsEmailRequired": "0",
+    "ReleaseDateTime": "Thu Nov 12, 2026",
+    "DetailsURL": "https://www.nvidia.com/en-us/drivers/details/285320/",
+    "DownloadURL": "https://us.download.nvidia.com/Windows/621.24/621.24-desktop-win10-win11-64bit-international-dch-whql.exe",
+    "EMAN_REVRES_BD": "51-lqssm-lswfg-b2wsu-drp",
+    "EMITR_BD": "memCache:1%20rTime:1%20sTime:0",
+    "DownloadURLFileSize": "1.04 GB",
+    "BannerURL": "https://www.nvidia.com/en-us/geforce/billboards/displaydriver/standalone/eve-std-game-ready-driver-2026-banners/",
+    "BannerURLGfe": "https://www.nvidia.com/en-us/geforce/billboards/displaydriver/gfe/eve-gfe-game-ready-driver-2026-banners/",
+    "ReleaseNotes": "%3Cb%3EGame%20Ready%20for%20Warhammer%2040%2C000%3A%20Dawn%20of%20War%20IV%20%26amp%3B%20Where%20Winds%20Meet%3C/b%3E%3Cbr%20/%3EThis%20new%20Game%20Ready%20Driver%20provides%20the%20best%20gaming%20experience%20for%20Warhammer%2040%2C000%3A%20Dawn%20of%20War%20IV%2C%20and%20Assetto%20Corsa%20Rally%2C%20and%20the%20addition%20of%20DLSS%205%20with%203D-Guided%20Neural%20Rendering%20to%20Where%20Winds%20Meet.%3Cbr%20/%3E%20%20%3Cbr%20/%3E%20%20%3Cb%3EFixed%20Gaming%20Bugs%3C/b%3E%3Cbr%20/%3E%20%20%3Cul%3E%3Cli%3EN/A%3C/li%3E%3C/ul%3E%20%20%20%20%20%20%3Cbr%20/%3E%20%20%20%20%20%20%3Cb%3EFixed%20General%20Bugs%3C/b%3E%3Cbr%20/%3E%20%20%20%20%20%20%3Cul%3E%3Cli%3EChaos%20Vantage%3A%20NVIDIA%20OptiX%20Denoiser%20may%20fail%20at%20high%20resolutions%20%5B6953474%5D%3C/li%3E%0D%0A%3Cli%3EWindows%20Photos/Media%20Player%3A%20Incorrect%20colors%20with%20DJI%20D-Log%20H.265%20video%20playback%20%5B6996250%5D%3C/li%3E%3C/ul%3E%20%20%20%20%20%20%20%20%20%20%3Cbr%20/%3E%20%20%20%20%20%20%20%20%20%20%3Ca%20href%3D%22https%3A//www.nvidia.com/en-us/geforce/news/warhammer-40000-dawn-of-war-4-geforce-rtx-spark-game-ready-driver/%22%3ELearn%20more%20in%20our%20Game%20Ready%20Driver%20article%20here%3C/a%3E.%20%09%3Cbr%20/%3E%20%20%20%20%20%20%20%20%20%3Cbr%20/%3E%20%20%20%20%20%20%20%20%20%3Cp%20align%3D%22justify%22%3E%3Cimg%20title%3D%22Game%20Ready%20Driver%22%20src%3D%22https%3A//images.nvidia.com/content/GRD/R620GA2/warhammer-40000-dawn-of-war-4-where-winds-meet-dlss-5-geforce-rtx-spark-game-ready-driver-1144x298.jpg%22%20alt%3D%22Game%20Ready%20Driver%22%20width%3D%22100%25%22%20/%3E%3C/p%3E",
+    "OtherNotes": "%09Effective%20October%202021%2C%20Game%20Ready%20Driver%20upgrades%2C%20including%20performance%20enhancements%2C%20new%20features%2C%20and%20bug%20fixes%2C%20will%20be%20available%20for%20systems%20utilizing%20Maxwell%2C%20Pascal%2C%20Turing%2C%20and%20Ampere-series%20GPUs.%20Critical%20security%20updates%20will%20be%20available%20on%20systems%20utilizing%20desktop%20Kepler-series%20GPUs%20through%20September%202024.%20A%20complete%20list%20of%20desktop%20Kepler-series%20GeForce%20GPUs%20can%20be%20found%20%3Ca%20href%3D%22https%3A//nvidia.custhelp.com/app/answers/detail/a_id/5202/kw/kepler%2520support%22%3Ehere%3C/a%3E.%3Cbr%20/%3E%20%20%3Cbr%20/%3E%20%20%3Cul%3E%20%20%20%20%20%3Cli%3E%3Ca%20target%3D%22_blank%22%20href%3D%22https%3A//us.download.nvidia.com/Windows/621.24/621.24-geforce-win11-x64-release-notes.pdf%22%20title%3D%22Game%20Ready%20Driver%20Release%20Notes%20v621.24%22%3EGame%20Ready%20Driver%20Release%20Notes%20%28v621.24%29%3C/a%3E%3C/li%3E%3C/ul%3E%09",
+    "InstallationNotes": "",
+    "Overview": "",
+    "LanguageName": "English%20(US)",
+    "OSName": "Windows%2011",
+    "OsCode": "10.0",
+    "OSList": [
+     {
+      "OSName": "Windows%2010%2064-bit",
+      "OsCode": "10.0"
+     },
+     {
+      "OSName": "Windows%2011",
+      "OsCode": "10.0"
+     }
+    ],
+    "Is64Bit": "1",
+    "Messaging": [
+     {
+      "MessageCode": "DownloadIDDetailsFound",
+      "MessageValue": "The Driver DownloadID details found"
+     }
+    ]
+   }
+  },
+  {
+   "downloadInfo": {
+    "Success": "1",
+    "ID": "283968",
+    "DownloadTypeID": "1",
+    "DownloadStatusID": "3",
+    "Name": "GeForce%20Game%20Ready%20Driver",
+    "NameLocalized": "GeForce%20Game%20Ready%20Driver",
+    "ShortDescription": "GeForce%20Game%20Ready%20Driver",
+    "DeviceToProductFamilyName": "",
+    "Release": "620",
+    "Version": "621.14",
+    "DisplayVersion": "",
+    "GFE_DisplayVersion": "11.0.9.565",
+    "CDKitUSBEmitterDriverVersion": "",
+    "CDKitGPUDriverVersion": "",
+    "IsBeta": "0",
+    "IsWHQL": "1",
+    "IsRecommended": "0",
+    "IsFeaturePreview": "0",
+    "IsNewest": "0",
+    "IsDC": "1",
+    "IsCRD": "0",
+    "HasNetInst": "0",
+    "CudaToolkitVersion": "",
+    "IsArchive": "0",
+    "IsActive": "1",
+    "IsEmailRequired": "0",
+    "ReleaseDateTime": "Wed Nov 04, 2026",
+    "DetailsURL": "https://www.nvidia.com/en-us/drivers/details/283968/",
+    "DownloadURL": "https://us.download.nvidia.com/Windows/621.14/621.14-desktop-win10-win11-64bit-international-dch-whql.exe",
+    "EMAN_REVRES_BD": "B0J663C-ZAMA2CE",
+    "EMITR_BD": "memCache:1%20rTime:1%20sTime:0",
+    "DownloadURLFileSize": "1.04 GB",
+    "BannerURL": "https://www.nvidia.com/en-us/geforce/billboards/displaydriver/standalone/eve-std-game-ready-driver-2026-banners/",
+    "BannerURLGfe": "https://www.nvidia.com/en-us/geforce/billboards/displaydriver/gfe/eve-gfe-game-ready-driver-2026-banners/",
+    "ReleaseNotes": "%3Cb%3EGame%20Ready%20for%20World%20of%20Warcraft%3A%20Forever%3C/b%3E%3Cbr%20/%3EThis%20new%20Game%20Ready%20Driver%20provides%20the%20best%20gaming%20experience%20for%20World%20of%20Warcraft%3A%20Forever%2C%20and%20DOOM%3A%20The%20Dark%20Ages%20%7C%20Revelations%20new%20Slaughter%20Mode%2C%20and%20the%20addition%20of%20DLSS%205%20with%203D-Guided%20Neural%20Rendering%20to%20Hogwarts%20Legacy%20and%20War%20Thunder.%3Cbr%20/%3E%20%20%3Cbr%20/%3E%20%20%3Cb%3EFixed%20Gaming%20Bugs%3C/b%3E%3Cbr%20/%3E%20%20%3Cul%3E%3Cli%3ECall%20of%20Duty%3A%20Modern%20Warfare%204%3A%20Game%20may%20display%20incorrect%20visual%20colors%20%5B6972531%5D%3C/li%3E%3C/ul%3E%20%20%20%20%20%20%3Cbr%20/%3E%20%20%20%20%20%20%3Cb%3EFixed%20General%20Bugs%3C/b%3E%3Cbr%20/%3E%20%20%20%20%20%20%3Cul%3E%3Cli%3EFixed%20an%20issue%20where%20video%20playback%20may%20freeze%20or%20black%20screen%20on%20some%20GeForce%20RTX%2050%20Series%20GPUs/RTX%20Spark%20after%20updating%20to%20GRD%20621.01.%20%5B6979343%5D%3C/li%3E%3C/ul%3E%20%20%20%20%20%20%20%20%20%20%3Cbr%20/%3E%20%20%20%20%20%20%20%20%20%20%3Ca%20href%3D%22https%3A//www.nvidia.com/en-us/geforce/news/world-of-warcraft-forever-geforce-rtx-spark-game-ready-driver%22%3ELearn%20more%20in%20our%20Game%20Ready%20Driver%20article%20here%3C/a%3E.%20%09%3Cbr%20/%3E%20%20%20%20%20%20%20%20%20%3Cbr%20/%3E%20%20%20%20%20%20%20%20%20%3Cp%20align%3D%22justify%22%3E%3Cimg%20title%3D%22Game%20Ready%20Driver%22%20src%3D%22https%3A//images.nvidia.com/content/GRD/R615GA1/nvidia-geforce-game-ready-drivers-gfe-grd-1144x298-banner.jpg%22%20alt%3D%22Game%20Ready%20Driver%22%20width%3D%22100%25%22%20/%3E%3C/p%3E",
+    "OtherNotes": "%09Effective%20October%202021%2C%20Game%20Ready%20Driver%20upgrades%2C%20including%20performance%20enhancements%2C%20new%20features%2C%20and%20bug%20fixes%2C%20will%20be%20available%20for%20systems%20utilizing%20Maxwell%2C%20Pascal%2C%20Turing%2C%20and%20Ampere-series%20GPUs.%20Critical%20security%20updates%20will%20be%20available%20on%20systems%20utilizing%20desktop%20Kepler-series%20GPUs%20through%20September%202024.%20A%20complete%20list%20of%20desktop%20Kepler-series%20GeForce%20GPUs%20can%20be%20found%20%3Ca%20href%3D%22https%3A//nvidia.custhelp.com/app/answers/detail/a_id/5202/kw/kepler%2520support%22%3Ehere%3C/a%3E.%3Cbr%20/%3E%20%20%3Cbr%20/%3E%20%20%3Cul%3E%20%20%20%20%20%3Cli%3E%3Ca%20target%3D%22_blank%22%20href%3D%22https%3A//us.download.nvidia.com/Windows/621.14/621.14-geforce-win11-x64-release-notes.pdf%22%20title%3D%22Game%20Ready%20Driver%20Release%20Notes%20v621.14%22%3EGame%20Ready%20Driver%20Release%20Notes%20%28v621.14%29%3C/a%3E%3C/li%3E%3C/ul%3E%09",
+    "InstallationNotes": "",
+    "Overview": "",
+    "LanguageName": "English%20(US)",
+    "OSName": "Windows%2011",
+    "OsCode": "10.0",
+    "OSList": [
+     {
+      "OSName": "Windows%2010%2064-bit",
+      "OsCode": "10.0"
+     },
+     {
+      "OSName": "Windows%2011",
+      "OsCode": "10.0"
+     }
+    ],
+    "Is64Bit": "1",
+    "Messaging": [
+     {
+      "MessageCode": "DownloadIDDetailsFound",
+      "MessageValue": "The Driver DownloadID details found"
+     }
+    ]
+   }
+  },
+  {
+   "downloadInfo": {
+    "Success": "1",
+    "ID": "282412",
+    "DownloadTypeID": "1",
+    "DownloadStatusID": "3",
+    "Name": "GeForce%20Game%20Ready%20Driver",
+    "NameLocalized": "GeForce%20Game%20Ready%20Driver",
+    "ShortDescription": "GeForce%20Game%20Ready%20Driver",
+    "DeviceToProductFamilyName": "",
+    "Release": "620",
+    "Version": "621.01",
+    "DisplayVersion": "",
+    "GFE_DisplayVersion": "11.0.9.565",
+    "CDKitUSBEmitterDriverVersion": "",
+    "CDKitGPUDriverVersion": "",
+    "IsBeta": "0",
+    "IsWHQL": "1",
+    "IsRecommended": "0",
+    "IsFeaturePreview": "0",
+    "IsNewest": "0",
+    "IsDC": "1",
+    "IsCRD": "0",
+    "HasNetInst": "0",
+    "CudaToolkitVersion": "",
+    "IsArchive": "0",
+    "IsActive": "1",
+    "IsEmailRequired": "0",
+    "ReleaseDateTime": "Wed Oct 21, 2026",
+    "DetailsURL": "https://www.nvidia.com/en-us/drivers/details/282412/",
+    "DownloadURL": "https://us.download.nvidia.com/Windows/621.01/621.01-desktop-win10-win11-64bit-international-dch-whql.exe",
+    "EMAN_REVRES_BD": "B0J663C-ZAMA2CE",
+    "EMITR_BD": "memCache:1%20rTime:1%20sTime:0",
+    "DownloadURLFileSize": "1.04 GB",
+    "BannerURL": "https://www.nvidia.com/en-us/geforce/billboards/displaydriver/standalone/eve-std-game-ready-driver-2026-banners/",
+    "BannerURLGfe": "https://www.nvidia.com/en-us/geforce/billboards/displaydriver/gfe/eve-gfe-game-ready-driver-2026-banners/",
+    "ReleaseNotes": "%09%3Cb%3EGame%20Ready%20for%20Phantom%20Blade%20Zero%20%26amp%3B%20Call%20of%20Duty%3A%20Modern%20Warfare%204%3C/b%3E%3Cbr%20/%3EThis%20new%20Game%20Ready%20Driver%20provides%20the%20best%20gaming%20experience%20for%20the%20latest%20new%20games%20and%20updates%20supporting%20DLSS%20and%20RTX%20technologies%20including%20Phantom%20Blade%20Zero%2C%20Call%20of%20Duty%3A%20Modern%20Warfare%204%2C%20NBA%202K27%2C%20Cyberpunk%202077%2C%20and%20Crimson%20Desert%20Enhanced%3A%20Charting%20the%20Unknown.%3Cbr%20/%3E%20%20%3Cbr%20/%3E%20%20%3Cb%3EFixed%20Gaming%20Bugs%3C/b%3E%3Cbr%20/%3E%20%20%3Cul%3E%3Cli%3EWuthering%20Waves%3A%20May%20crash%20during%20gameplay%20when%20using%20NVIDIA%20Freestyle%20filters%20with%20DLSS%20Frame%20Generation%20enabled.%20%5B5747079%5D%3C/li%3E%20%3Cli%3EStar%20Citizen%3A%20Resolves%20a%20crash%20that%20may%20be%20seen%20when%20using%20Vulkan%20API%20%5B6680590%5D%3C/li%3E%20%3Cli%3ESurviving%20Mars%3A%20Relaunched%20may%20crash%20during%20gameplay%20after%20updating%20to%20R595%20drivers%20%5B5965452%5D%3C/li%3E%3C/ul%3E%20%20%20%20%20%20%3Cbr%20/%3E%20%20%20%20%20%20%3Cb%3EFixed%20General%20Bugs%3C/b%3E%3Cbr%20/%3E%20%20%20%20%20%20%3Cul%3E%3Cli%3EQHD%20monitor%20running%20at%20360%20Hz%20may%20have%20occasional%20black%20flash%20during%20gameplay%20%5B4846825%5D%3C/li%3E%20%3Cli%3EWhen%20gaming%20on%20a%20360Hz%20G-SYNC%20Pulsar%20monitor%2C%20FPS%20may%20drop%20to%20320FPS%20%5B6408986%5D%3C/li%3E%20%3Cli%3EMeta%20Horizon%20Link%20stream%20may%20freeze%20when%20connected%20over%20USB%20%5B6292679%5D%3C/li%3E%20%3Cli%3EIntermittent%20dimming%20may%20be%20observed%20on%20certain%20Asus%20notebooks%20after%20updating%20to%20R620%20drivers%20%5B6807011%5D%3C/li%3E%3C/ul%3E%20%20%20%20%20%20%20%20%20%20%3Cbr%20/%3E%20%20%20%20%20%20%20%20%20%20%3Ca%20href%3D%22https%3A//www.nvidia.com/en-us/geforce/news/phantom-blade-zero-nvidia-geforce-game-ready-driver%22%3ELearn%20more%20in%20our%20Game%20Ready%20Driver%20article%20here%3C/a%3E.%20%20%3Cbr%20/%3E%20%20%20%20%20%20%20%20%20%3Cbr%20/%3E%20%20%20%20%20%20%20%20%20%3Cp%20align%3D%22justify%22%3E%3Cimg%20title%3D%22Game%20Ready%20Driver%22%20src%3D%22https%3A//images.nvidia.com/content/GRD/R615GA1/nvidia-geforce-game-ready-drivers-gfe-grd-1144x298-banner.jpg%22%20alt%3D%22Game%20Ready%20Driver%22%20width%3D%22100%25%22%20/%3E%3C/p%3E%09",
+    "OtherNotes": "%09Effective%20October%202021%2C%20Game%20Ready%20Driver%20upgrades%2C%20including%20performance%20enhancements%2C%20new%20features%2C%20and%20bug%20fixes%2C%20will%20be%20available%20for%20systems%20utilizing%20Maxwell%2C%20Pascal%2C%20Turing%2C%20and%20Ampere-series%20GPUs.%20Critical%20security%20updates%20will%20be%20available%20on%20systems%20utilizing%20desktop%20Kepler-series%20GPUs%20through%20September%202024.%20A%20complete%20list%20of%20desktop%20Kepler-series%20GeForce%20GPUs%20can%20be%20found%20%3Ca%20href%3D%22https%3A//nvidia.custhelp.com/app/answers/detail/a_id/5202/kw/kepler%2520support%22%3Ehere%3C/a%3E.%3Cbr%20/%3E%20%20%3Cbr%20/%3E%20%20%3Cul%3E%20%20%20%20%20%3Cli%3E%3Ca%20target%3D%22_blank%22%20href%3D%22https%3A//us.download.nvidia.com/Windows/621.01/621.01-geforce-win11-x64-release-notes.pdf%22%20title%3D%22Game%20Ready%20Driver%20Release%20Notes%20v621.01%22%3EGame%20Ready%20Driver%20Release%20Notes%20%28v621.01%29%3C/a%3E%3C/li%3E%3C/ul%3E%09",
+    "InstallationNotes": "",
+    "Overview": "",
+    "LanguageName": "English%20(US)",
+    "OSName": "Windows%2011",
+    "OsCode": "10.0",
+    "OSList": [
+     {
+      "OSName": "Windows%2010%2064-bit",
+      "OsCode": "10.0"
+     },
+     {
+      "OSName": "Windows%2011",
+      "OsCode": "10.0"
+     }
+    ],
+    "Is64Bit": "1",
+    "Messaging": [
+     {
+      "MessageCode": "DownloadIDDetailsFound",
+      "MessageValue": "The Driver DownloadID details found"
+     }
+    ]
+   }
+  },
+  {
+   "downloadInfo": {
+    "Success": "1",
+    "ID": "280103",
+    "DownloadTypeID": "1",
+    "DownloadStatusID": "3",
+    "Name": "GeForce%20Game%20Ready%20Driver",
+    "NameLocalized": "GeForce%20Game%20Ready%20Driver",
+    "ShortDescription": "GeForce%20Game%20Ready%20Driver",
+    "DeviceToProductFamilyName": "",
+    "Release": "615",
+    "Version": "617.42",
+    "DisplayVersion": "",
+    "GFE_DisplayVersion": "11.0.8.299",
+    "CDKitUSBEmitterDriverVersion": "",
+    "CDKitGPUDriverVersion": "",
+    "IsBeta": "0",
+    "IsWHQL": "1",
+    "IsRecommended": "0",
+    "IsFeaturePreview": "0",
+    "IsNewest": "0",
+    "IsDC": "1",
+    "IsCRD": "0",
+    "HasNetInst": "0",
+    "CudaToolkitVersion": "",
+    "IsArchive": "0",
+    "IsActive": "1",
+    "IsEmailRequired": "0",
+    "ReleaseDateTime": "Tue Oct 06, 2026",
+    "DetailsURL": "https://www.nvidia.com/en-us/drivers/details/280103/",
+    "DownloadURL": "https://us.download.nvidia.com/Windows/617.42/617.42-desktop-win10-win11-64bit-international-dch-whql.exe",
+    "EMAN_REVRES_BD": "71-lqssm-lswfg-a2wsu-drp",
+    "EMITR_BD": "memCache:1%20rTime:0%20sTime:0",
+    "DownloadURLFileSize": "990.85 MB",
+    "BannerURL": "https://www.nvidia.com/en-us/geforce/billboards/displaydriver/standalone/eve-std-game-ready-driver-2026-banners/",
+    "BannerURLGfe": "https://www.nvidia.com/en-us/geforce/billboards/displaydriver/gfe/eve-gfe-game-ready-driver-2026-banners/",
+    "ReleaseNotes": "%3Cb%3EGame%20Ready%20for%20Call%20of%20Duty%3A%20Modern%20Warfare%204%3C/b%3E%3Cbr%20/%3E%20This%20new%20Game%20Ready%20Driver%20provides%20the%20best%20gaming%20experience%20for%20the%20latest%20new%20games%20and%20updates%20supporting%20DLSS%20and%20RTX%20technologies%20including%20Call%20of%20Duty%3A%20Modern%20Warfare%204%2C%20STAR%20WARS%3A%20Galactic%20Racer%2C%20Dragon%26rsquo%3Bs%20Dogma%202%3A%20Dark%20Arisen%2C%20Microsoft%20Flight%20Simulator%202024%2C%20and%20Valor%20Mortis.%20%3Cbr%20/%3E%20%3Cbr%20/%3E%20%3Cb%3EFixed%20Gaming%20Bugs%3C/b%3E%3Cbr%20/%3E%20%3Cul%3E%20%3Cli%3EAssassin%27s%20Creed%20Shadows%20may%20crash%20to%20desktop%20after%20extended%20gameplay%20after%20updating%20to%20driver%20616.56%20%5B6685219%5D%3C/li%3E%3C/ul%3E%20%3Cbr%20/%3E%20%3Cb%3EFixed%20General%20Bugs%3C/b%3E%3Cbr%20/%3E%20%3Cul%3E%3Cli%3EN/A%3C/li%3E%3C/ul%3E%20%3Cbr%20/%3E%20%3Ca%20href%3D%22https%3A//www.nvidia.com/en-us/geforce/news/call-of-duty-modern-warfare-4-star-wars-galactic-racer-game-ready-driver/%22%3ELearn%20more%20in%20our%20Game%20Ready%20Driver%20article%20here%3C/a%3E.%20%20%3Cbr%20/%3E%20%20%20%20%20%20%20%20%20%3Cbr%20/%3E%20%20%20%20%20%20%20%20%20%3Cp%20align%3D%22justify%22%3E%3Cimg%20title%3D%22Game%20Ready%20Driver%22%20src%3D%22https%3A//images.nvidia.com/content/GRD/R615GA1/nvidia-geforce-game-ready-drivers-gfe-grd-1144x298-banner.jpg%22%20alt%3D%22Game%20Ready%20Driver%22%20width%3D%22100%25%22%20/%3E%3C/p%3E",
+    "OtherNotes": "Effective%20October%202021%2C%20Game%20Ready%20Driver%20upgrades%2C%20including%20performance%20enhancements%2C%20new%20features%2C%20and%20bug%20fixes%2C%20will%20be%20available%20for%20systems%20utilizing%20Maxwell%2C%20Pascal%2C%20Turing%2C%20and%20Ampere-series%20GPUs.%20Critical%20security%20updates%20will%20be%20available%20on%20systems%20utilizing%20desktop%20Kepler-series%20GPUs%20through%20September%202024.%20A%20complete%20list%20of%20desktop%20Kepler-series%20GeForce%20GPUs%20can%20be%20found%20%3Ca%20href%3D%22https%3A//nvidia.custhelp.com/app/answers/detail/a_id/5202/kw/kepler%2520support%22%3Ehere%3C/a%3E.%3Cbr%20/%3E%20%20%3Cbr%20/%3E%20%20%3Cul%3E%20%20%20%20%20%3Cli%3E%3Ca%20target%3D%22_blank%22%20href%3D%22https%3A//us.download.nvidia.com/Windows/617.42/617.42-win11-win10-release-notes.pdf%22%20title%3D%22Game%20Ready%20Driver%20Release%20Notes%20v617.42%22%3EGame%20Ready%20Driver%20Release%20Notes%20%28v617.42%29%3C/a%3E%3C/li%3E%20%20%20%20%3Cli%3E%3Ca%20target%3D%22_blank%22%20href%3D%22https%3A//us.download.nvidia.com/Windows/617.42/617.42-nvidia-control-panel-quick-start-guide.pdf%22%20title%3D%22NVIDIA%20Control%20Panel%20Quick%20Start%20Guide%22%3ENVIDIA%20Control%20Panel%20Quick%20Start%20Guide%3C/a%3E%20%3C/li%3E%20%20%3C/ul%3E",
+    "InstallationNotes": "",
+    "Overview": "",
+    "LanguageName": "English%20(US)",
+    "OSName": "Windows%2011",
+    "OsCode": "10.0",
+    "OSList": [
+     {
+      "OSName": "Windows%2010%2064-bit",
+      "OsCode": "10.0"
+     },
+     {
+      "OSName": "Windows%2011",
+      "OsCode": "10.0"
+     }
+    ],
+    "Is64Bit": "1",
+    "Messaging": [
+     {
+      "MessageCode": "DownloadIDDetailsFound",
+      "MessageValue": "The Driver DownloadID details found"
+     }
+    ]
+   }
+  },
+  {
+   "downloadInfo": {
+    "Success": "1",
+    "ID": "279803",
+    "DownloadTypeID": "1",
+    "DownloadStatusID": "3",
+    "Name": "GeForce%20Game%20Ready%20Driver",
+    "NameLocalized": "GeForce%20Game%20Ready%20Driver",
+    "ShortDescription": "GeForce%20Game%20Ready%20Driver",
+    "DeviceToProductFamilyName": "",
+    "Release": "615",
+    "Version": "617.14",
+    "DisplayVersion": "",
+    "GFE_DisplayVersion": "11.0.8.299",
+    "CDKitUSBEmitterDriverVersion": "",
+    "CDKitGPUDriverVersion": "",
+    "IsBeta": "0",
+    "IsWHQL": "1",
+    "IsRecommended": "0",
+    "IsFeaturePreview": "0",
+    "IsNewest": "0",
+    "IsDC": "1",
+    "IsCRD": "0",
+    "HasNetInst": "0",
+    "CudaToolkitVersion": "",
+    "IsArchive": "0",
+    "IsActive": "1",
+    "IsEmailRequired": "0",
+    "ReleaseDateTime": "Tue Sep 22, 2026",
+    "DetailsURL": "https://www.nvidia.com/en-us/drivers/details/279803/",
+    "DownloadURL": "https://us.download.nvidia.com/Windows/617.14/617.14-desktop-win10-win11-64bit-international-dch-whql.exe",
+    "EMAN_REVRES_BD": "71-lqssm-lswfg-a2wsu-drp",
+    "EMITR_BD": "memCache:1%20rTime:1%20sTime:0",
+    "DownloadURLFileSize": "990.85 MB",
+    "BannerURL": "https://www.nvidia.com/en-us/geforce/billboards/displaydriver/standalone/eve-std-game-ready-driver-2026-banners/",
+    "BannerURLGfe": "https://www.nvidia.com/en-us/geforce/billboards/displaydriver/gfe/eve-gfe-game-ready-driver-2026-banners/",
+    "ReleaseNotes": "%3Cb%3EGame%20Ready%20for%20CONTROL%20Resonant%2C%20Gears%20of%20War%3A%20E-Day%2C%20The%20Witcher%203%3A%20Wild%20Hunt%20%E2%80%93%20Remastered%20%26amp%3B%20AION%202%3C/b%3E%3Cbr%3E%0D%0AThis%20new%20Game%20Ready%20Driver%20provides%20the%20best%20gaming%20experience%20for%20the%20latest%20new%20games%20supporting%20DLSS%20and%20RTX%20technologies%20including%20CONTROL%20Resonant%2C%20Gears%20of%20War%3A%20E-Day%2C%20The%20Witcher%203%3A%20Wild%20Hunt%20%E2%80%93%20Remastered%20and%20AION%202.%20%3Cbr%3E%0D%0A%3Cbr%3E%0D%0A%3Cb%3EFixed%20Gaming%20Bugs%3C/b%3E%3Cbr%3E%0D%0A%3Cul%3E%0D%0A%3Cli%3EJudgement/Lost%20Judgement/%20Virtua%20Fighter%205%20R.E.V.O.%20may%20fail%20to%20launch%20after%20updating%20to%20driver%20616.56%20%5B6681537%5D%3C/li%3E%3C/ul%3E%0D%0A%3Cbr%3E%0D%0A%3Cb%3EFixed%20General%20Bugs%3C/b%3E%3Cbr%3E%0D%0A%3Cul%3E%3Cli%3ENo%20picture%20on%20Samsung%20Odyssey%20G95NC%20monitor%20when%20connected%20via%20HDMI%20after%20updating%20to%20R615%20drivers%20%5B6771206%5D%3C/li%3E%0D%0A%3Cli%3ECertain%20monitors%20may%20not%20wake%20from%20sleep%20when%20connected%20via%20DisplayPort%20after%20updating%20to%20R615%20drivers%20%5B6757568%5D%3C/li%3E%3C/ul%3E%0D%0A%3Cbr%3E%0D%0A%3Ca%20href%3D%22https%3A//www.nvidia.com/en-us/geforce/news/control-resonant-gears-of-war-e-day-geforce-game-ready-driver/%22%3ELearn%20more%20in%20our%20Game%20Ready%20Driver%20article%20here%3C/a%3E.%20%3Cbr%20/%3E%20%3Cbr%20/%3E%20%20%20%20%20%20%20%20%20%0D%0A%3Cp%20align%3D%22justify%22%3E%3Cimg%20title%3D%22Game%20Ready%20Driver%22%20src%3D%22https%3A//images.nvidia.com/content/GRD/R615GA1/nvidia-geforce-game-ready-drivers-gfe-grd-1144x298-banner.jpg%22%20alt%3D%22Game%20Ready%20Driver%22%20width%3D%22100%25%22%20/%3E%3C/p%3E",
+    "OtherNotes": "Effective%20October%202021%2C%20Game%20Ready%20Driver%20upgrades%2C%20including%20performance%20enhancements%2C%20new%20features%2C%20and%20bug%20fixes%2C%20will%20be%20available%20for%20systems%20utilizing%20Maxwell%2C%20Pascal%2C%20Turing%2C%20and%20Ampere-series%20GPUs.%20Critical%20security%20updates%20will%20be%20available%20on%20systems%20utilizing%20desktop%20Kepler-series%20GPUs%20through%20September%202024.%20A%20complete%20list%20of%20desktop%20Kepler-series%20GeForce%20GPUs%20can%20be%20found%20%3Ca%20href%3D%22https%3A//nvidia.custhelp.com/app/answers/detail/a_id/5202/kw/kepler%2520support%22%3Ehere%3C/a%3E.%3Cbr%20/%3E%20%20%3Cbr%20/%3E%20%20%3Cul%3E%20%20%20%20%20%3Cli%3E%3Ca%20target%3D%22_blank%22%20href%3D%22https%3A//us.download.nvidia.com/Windows/617.14/617.14-win11-win10-release-notes.pdf%22%20title%3D%22Game%20Ready%20Driver%20Release%20Notes%20v617.14%22%3EGame%20Ready%20Driver%20Release%20Notes%20%28v617.14%29%3C/a%3E%3C/li%3E%20%20%20%20%3Cli%3E%3Ca%20target%3D%22_blank%22%20href%3D%22https%3A//us.download.nvidia.com/Windows/617.14/617.14-nvidia-control-panel-quick-start-guide.pdf%22%20title%3D%22NVIDIA%20Control%20Panel%20Quick%20Start%20Guide%22%3ENVIDIA%20Control%20Panel%20Quick%20Start%20Guide%3C/a%3E%20%3C/li%3E%20%20%3C/ul%3E",
+    "InstallationNotes": "",
+    "Overview": "",
+    "LanguageName": "English%20(US)",
+    "OSName": "Windows%2011",
+    "OsCode": "10.0",
+    "OSList": [
+     {
+      "OSName": "Windows%2010%2064-bit",
+      "OsCode": "10.0"
+     },
+     {
+      "OSName": "Windows%2011",
+      "OsCode": "10.0"
+     }
+    ],
+    "Is64Bit": "1",
+    "Messaging": [
+     {
+      "MessageCode": "DownloadIDDetailsFound",
+      "MessageValue": "The Driver DownloadID details found"
+     }
+    ]
+   }
+  },
+  {
+   "downloadInfo": {
+    "Success": "1",
+    "ID": "278453",
+    "DownloadTypeID": "1",
+    "DownloadStatusID": "3",
+    "Name": "GeForce%20Game%20Ready%20Driver",
+    "NameLocalized": "GeForce%20Game%20Ready%20Driver",
+    "ShortDescription": "GeForce%20Game%20Ready%20Driver",
+    "DeviceToProductFamilyName": "",
+    "Release": "615",
+    "Version": "616.92",
+    "DisplayVersion": "",
+    "GFE_DisplayVersion": "11.0.8.299",
+    "CDKitUSBEmitterDriverVersion": "",
+    "CDKitGPUDriverVersion": "",
+    "IsBeta": "0",
+    "IsWHQL": "1",
+    "IsRecommended": "0",
+    "IsFeaturePreview": "0",
+    "IsNewest": "0",
+    "IsDC": "1",
+    "IsCRD": "0",
+    "HasNetInst": "0",
+    "CudaToolkitVersion": "",
+    "IsArchive": "0",
+    "IsActive": "1",
+    "IsEmailRequired": "0",
+    "ReleaseDateTime": "Wed Sep 09, 2026",
+    "DetailsURL": "https://www.nvidia.com/en-us/drivers/details/278453/",
+    "DownloadURL": "https://us.download.nvidia.com/Windows/616.92/616.92-desktop-win10-win11-64bit-international-dch-whql.exe",
+    "EMAN_REVRES_BD": "81-lqssm-lswfg-a2wsu-drp",
+    "EMITR_BD": "memCache:1%20rTime:1%20sTime:0",
+    "DownloadURLFileSize": "990.85 MB",
+    "BannerURL": "https://www.nvidia.com/en-us/geforce/billboards/displaydriver/standalone/eve-std-game-ready-driver-2026-banners/",
+    "BannerURLGfe": "https://www.nvidia.com/en-us/geforce/billboards/displaydriver/gfe/eve-gfe-game-ready-driver-2026-banners/",
+    "ReleaseNotes": "%3Cb%3EGame%20Ready%20for%20007%20First%20Light%2C%20Active%20Matter%2C%20Aniimo%20%26amp%3B%20WARDOGS%3C/b%3E%3Cbr%20/%3EGame%20Ready%20Driver%20which%20provides%20the%20best%20gaming%20experience%20for%20007%20First%20Light%26rsquo%3Bs%20Path%20Tracing%20Update%20as%20well%20as%20the%20latest%20new%20games%20and%20updates%20supporting%20DLSS%20and%20RTX%20technologies%20including%20Matter%2C%20Aniimo%2C%20PUBG%2C%20and%20WARDOGS.%20%3Cbr%20/%3E%20%20%3Cbr%20/%3E%20%20%3Cb%3EFixed%20Gaming%20Bugs%3C/b%3E%3Cbr%20/%3E%20%20%3Cul%3E%3Cli%3EN/A%3C/li%3E%3C/ul%3E%20%20%20%20%20%20%3Cbr%20/%3E%20%20%20%20%20%20%3Cb%3EFixed%20General%20Bugs%3C/b%3E%3Cbr%20/%3E%20%20%20%20%20%20%3Cul%3E%3Cli%3EIntermittent%20flicker%20may%20be%20observed%20in%20browsers%20when%20navigating%20to%20certain%20websites%20%5B6673430%5D%3C/li%3E%20%3Cli%3EFixed%20an%20issue%20where%20virtual%20displays%20could%20not%20be%20created%20after%20updating%20to%20driver%20616.56%20%5B6674464%5D%3C/li%3E%20%3Cli%3ERemote%20Desktop%20Protocol%20%28RDP%29%20sessions%20may%20display%20a%20black%20screen%20after%20updating%20to%20driver%20616.56%20%5B6687328%5D%3C/li%3E%3C/ul%3E%20%20%20%20%20%20%20%20%20%20%3Cbr%20/%3E%20%20%20%20%20%20%20%20%20%20%3Ca%20href%3D%22https%3A//www.nvidia.com/en-us/geforce/news/wardogs-aniimo-007-first-light-path-tracing-geforce-game-ready-driver/%22%3ELearn%20more%20in%20our%20Game%20Ready%20Driver%20article%20here%3C/a%3E.%20%09%3Cbr%20/%3E%20%20%20%20%20%20%20%20%20%3Cbr%20/%3E%20%20%20%20%20%20%20%20%20%3Cp%20align%3D%22justify%22%3E%3Cimg%20title%3D%22Game%20Ready%20Driver%22%20src%3D%22https%3A//images.nvidia.com/content/GRD/R615GA1/nvidia-geforce-game-ready-drivers-gfe-grd-1144x298-banner.jpg%22%20alt%3D%22Game%20Ready%20Driver%22%20width%3D%22100%25%22%20/%3E%3C/p%3E",
+    "OtherNotes": "Effective%20October%202021%2C%20Game%20Ready%20Driver%20upgrades%2C%20including%20performance%20enhancements%2C%20new%20features%2C%20and%20bug%20fixes%2C%20will%20be%20available%20for%20systems%20utilizing%20Maxwell%2C%20Pascal%2C%20Turing%2C%20and%20Ampere-series%20GPUs.%20Critical%20security%20updates%20will%20be%20available%20on%20systems%20utilizing%20desktop%20Kepler-series%20GPUs%20through%20September%202024.%20A%20complete%20list%20of%20desktop%20Kepler-series%20GeForce%20GPUs%20can%20be%20found%20%3Ca%20href%3D%22https%3A//nvidia.custhelp.com/app/answers/detail/a_id/5202/kw/kepler%2520support%22%3Ehere%3C/a%3E.%3Cbr%20/%3E%20%20%3Cbr%20/%3E%20%20%3Cul%3E%20%20%20%20%20%3Cli%3E%3Ca%20target%3D%22_blank%22%20href%3D%22https%3A//us.download.nvidia.com/Windows/616.92/616.92-win11-win10-release-notes.pdf%22%20title%3D%22Game%20Ready%20Driver%20Release%20Notes%20v616.92%22%3EGame%20Ready%20Driver%20Release%20Notes%20%28v616.92%29%3C/a%3E%3C/li%3E%20%20%20%20%3Cli%3E%3Ca%20target%3D%22_blank%22%20href%3D%22https%3A//us.download.nvidia.com/Windows/616.92/616.92-nvidia-control-panel-quick-start-guide.pdf%22%20title%3D%22NVIDIA%20Control%20Panel%20Quick%20Start%20Guide%22%3ENVIDIA%20Control%20Panel%20Quick%20Start%20Guide%3C/a%3E%20%3C/li%3E%20%20%3C/ul%3E",
+    "InstallationNotes": "",
+    "Overview": "",
+    "LanguageName": "English%20(US)",
+    "OSName": "Windows%2011",
+    "OsCode": "10.0",
+    "OSList": [
+     {
+      "OSName": "Windows%2010%2064-bit",
+      "OsCode": "10.0"
+     },
+     {
+      "OSName": "Windows%2011",
+      "OsCode": "10.0"
+     }
+    ],
+    "Is64Bit": "1",
+    "Messaging": [
+     {
+      "MessageCode": "DownloadIDDetailsFound",
+      "MessageValue": "The Driver DownloadID details found"
+     }
+    ]
+   }
+  },
+  {
+   "downloadInfo": {
+    "Success": "1",
+    "ID": "278384",
+    "DownloadTypeID": "1",
+    "DownloadStatusID": "3",
+    "Name": "GeForce%20Game%20Ready%20Driver",
+    "NameLocalized": "GeForce%20Game%20Ready%20Driver",
+    "ShortDescription": "GeForce%20Game%20Ready%20Driver",
+    "DeviceToProductFamilyName": "",
+    "Release": "615",
+    "Version": "616.64",
+    "DisplayVersion": "",
+    "GFE_DisplayVersion": "11.0.8.299",
+    "CDKitUSBEmitterDriverVersion": "",
+    "CDKitGPUDriverVersion": "",
+    "IsBeta": "0",
+    "IsWHQL": "1",
+    "IsRecommended": "0",
+    "IsFeaturePreview": "0",
+    "IsNewest": "0",
+    "IsDC": "1",
+    "IsCRD": "0",
+    "HasNetInst": "0",
+    "CudaToolkitVersion": "",
+    "IsArchive": "0",
+    "IsActive": "1",
+    "IsEmailRequired": "0",
+    "ReleaseDateTime": "Thu Sep 03, 2026",
+    "DetailsURL": "https://www.nvidia.com/en-us/drivers/details/278384/",
+    "DownloadURL": "https://us.download.nvidia.com/Windows/616.64/616.64-desktop-win10-win11-64bit-international-dch-whql.exe",
+    "EMAN_REVRES_BD": "80-lqssm-lswfg-a2wsu-drp",
+    "EMITR_BD": "memCache:1%20rTime:1%20sTime:0",
+    "DownloadURLFileSize": "984.28 MB",
+    "BannerURL": "https://www.nvidia.com/en-us/geforce/billboards/displaydriver/standalone/eve-std-game-ready-driver-2026-banners/",
+    "BannerURLGfe": "https://www.nvidia.com/en-us/geforce/billboards/displaydriver/gfe/eve-gfe-game-ready-driver-2026-banners/",
+    "ReleaseNotes": "%09%3Cb%3EGame%20Ready%20for%20NBA%202K27%3C/b%3E%3Cbr%20/%3E%20This%20new%20Game%20Ready%20Driver%20provides%20the%20best%20gaming%20experience%20for%20NBA%202K27%20featuring%20DLSS%205%203D-Guided%20Neural%20Rendering%20as%20well%20as%20the%20latest%20new%20games%20supporting%20DLSS%20and%20RTX%20technologies%20including%20Onimusha%3A%20Way%20of%20the%20Sword.%20%3Cbr%20/%3E%20%3Cbr%20/%3E%20%3Cb%3EFixed%20Gaming%20Bugs%3C/b%3E%3Cbr%20/%3E%20%3Cul%3E%3Cli%3EN/A%3C/li%3E%3C/ul%3E%20%20%20%20%20%3Cbr%20/%3E%20%20%20%20%20%3Cb%3EFixed%20General%20Bugs%3C/b%3E%3Cbr%20/%3E%20%20%20%20%20%3Cul%3E%3Cli%3EN/A%3C/li%3E%3C/ul%3E%20%20%20%20%20%20%20%20%20%3Cbr%20/%3E%20%20%20%20%20%20%20%20%20%3Ca%20href%3D%22https%3A//www.nvidia.com/en-us/geforce/news/nba-2k27-dlss-5-3d-guided-neural-rendering-geforce-game-ready-driver/%22%3ELearn%20more%20in%20our%20Game%20Ready%20Driver%20article%20here%3C/a%3E.%20%3Cbr%20/%3E%20%20%20%20%20%20%20%20%20%3Cbr%20/%3E%20%20%20%20%20%20%20%20%20%3Cp%20align%3D%22justify%22%3E%3Cimg%20title%3D%22Game%20Ready%20Driver%22%20src%3D%22https%3A//images.nvidia.com/content/GRD/R615GA1/nvidia-geforce-game-ready-drivers-gfe-grd-1144x298-banner.jpg%22%20alt%3D%22Game%20Ready%20Driver%22%20width%3D%22100%25%22%20/%3E%3C/p%3E%09",
+    "OtherNotes": "Effective%20October%202021%2C%20Game%20Ready%20Driver%20upgrades%2C%20including%20performance%20enhancements%2C%20new%20features%2C%20and%20bug%20fixes%2C%20will%20be%20available%20for%20systems%20utilizing%20Maxwell%2C%20Pascal%2C%20Turing%2C%20and%20Ampere-series%20GPUs.%20Critical%20security%20updates%20will%20be%20available%20on%20systems%20utilizing%20desktop%20Kepler-series%20GPUs%20through%20September%202024.%20A%20complete%20list%20of%20desktop%20Kepler-series%20GeForce%20GPUs%20can%20be%20found%20%3Ca%20href%3D%22https%3A//nvidia.custhelp.com/app/answers/detail/a_id/5202/kw/kepler%2520support%22%3Ehere%3C/a%3E.%3Cbr%20/%3E%20%20%3Cbr%20/%3E%20%20%3Cul%3E%20%20%20%20%20%3Cli%3E%3Ca%20target%3D%22_blank%22%20href%3D%22https%3A//us.download.nvidia.com/Windows/616.64/616.64-win11-win10-release-notes.pdf%22%20title%3D%22Game%20Ready%20Driver%20Release%20Notes%20v616.64%22%3EGame%20Ready%20Driver%20Release%20Notes%20%28v616.64%29%3C/a%3E%3C/li%3E%20%20%20%20%3Cli%3E%3Ca%20target%3D%22_blank%22%20href%3D%22https%3A//us.download.nvidia.com/Windows/616.64/616.64-nvidia-control-panel-quick-start-guide.pdf%22%20title%3D%22NVIDIA%20Control%20Panel%20Quick%20Start%20Guide%22%3ENVIDIA%20Control%20Panel%20Quick%20Start%20Guide%3C/a%3E%20%3C/li%3E%20%20%3C/ul%3E",
+    "InstallationNotes": "",
+    "Overview": "",
+    "LanguageName": "English%20(US)",
+    "OSName": "Windows%2011",
+    "OsCode": "10.0",
+    "OSList": [
+     {
+      "OSName": "Windows%2010%2064-bit",
+      "OsCode": "10.0"
+     },
+     {
+      "OSName": "Windows%2011",
+      "OsCode": "10.0"
+     }
+    ],
+    "Is64Bit": "1",
+    "Messaging": [
+     {
+      "MessageCode": "DownloadIDDetailsFound",
+      "MessageValue": "The Driver DownloadID details found"
+     }
+    ]
+   }
+  },
+  {
+   "downloadInfo": {
+    "Success": "1",
+    "ID": "278153",
+    "DownloadTypeID": "1",
+    "DownloadStatusID": "3",
+    "Name": "GeForce%20Game%20Ready%20Driver",
+    "NameLocalized": "GeForce%20Game%20Ready%20Driver",
+    "ShortDescription": "GeForce%20Game%20Ready%20Driver",
+    "DeviceToProductFamilyName": "",
+    "Release": "615",
+    "Version": "616.56",
+    "DisplayVersion": "",
+    "GFE_DisplayVersion": "11.0.8.299",
+    "CDKitUSBEmitterDriverVersion": "",
+    "CDKitGPUDriverVersion": "",
+    "IsBeta": "0",
+    "IsWHQL": "1",
+    "IsRecommended": "0",
+    "IsFeaturePreview": "0",
+    "IsNewest": "0",
+    "IsDC": "1",
+    "IsCRD": "0",
+    "HasNetInst": "0",
+    "CudaToolkitVersion": "",
+    "IsArchive": "0",
+    "IsActive": "1",
+    "IsEmailRequired": "0",
+    "ReleaseDateTime": "Wed Aug 26, 2026",
+    "DetailsURL": "https://www.nvidia.com/en-us/drivers/details/278153/",
+    "DownloadURL": "https://us.download.nvidia.com/Windows/616.56/616.56-desktop-win10-win11-64bit-international-dch-whql.exe",
+    "EMAN_REVRES_BD": "61-lqssm-lswfg-a2wsu-drp",
+    "EMITR_BD": "memCache:1%20rTime:2%20sTime:0",
+    "DownloadURLFileSize": "984.3 MB",
+    "BannerURL": "https://www.nvidia.com/en-us/geforce/billboards/displaydriver/standalone/eve-std-game-ready-driver-2026-banners/",
+    "BannerURLGfe": "https://www.nvidia.com/en-us/geforce/billboards/displaydriver/gfe/eve-gfe-game-ready-driver-2026-banners/",
+    "ReleaseNotes": "%3Cb%3EGame%20Ready%20for%20STAR%20WARS%20Zero%20Company%26trade%3B%3C/b%3E%3Cbr%20/%3E%20This%20new%20Game%20Ready%20Driver%20provides%20the%20best%20gaming%20experience%20for%20the%20latest%20new%20games%20supporting%20DLSS%20and%20RTX%20technologies%20including%20STAR%20WARS%20Zero%20Company%26trade%3B%2C%20Resonance%3A%20A%20Plague%20Tale%20Legacy%2C%20and%20Hell%20Let%20Loose%3A%20Vietnam.%3Cbr%20/%3E%20%3Cbr%20/%3E%20%3Cb%3EFixed%20Gaming%20Bugs%3C/b%3E%3Cbr%20/%3E%20%3Cul%3E%3Cli%3EDOOM%3A%20The%20Dark%20Ages%20%26amp%3B%20Indiana%20Jones%20and%20the%20Great%20Circle%3A%20Frame%20rate%20may%20exceed%20V-SYNC%20when%20DLSS%20Frame%20Generation%203x%20or%20higher%20is%20used%20%5B6061475%5D%3C/li%3E%20%20%3Cli%3EOuter%20Worlds%3A%20Texture%20flicker%20may%20be%20observed%20while%20playing%20after%20updating%20to%20R595%20and%20R610%20drivers%20%5B6238668%5D%3C/li%3E%3C/ul%3E%20%20%20%20%20%3Cbr%20/%3E%20%20%20%20%20%3Cb%3EFixed%20General%20Bugs%3C/b%3E%3Cbr%20/%3E%20%20%20%20%20%3Cul%3E%3Cli%3EASUS%20Armory%20Crate%3A%20GameVisual%20color%20profiles%20are%20not%20getting%20applied%20when%20using%20R590%20drivers%20%5B5860581%5D%3C/li%3E%20%3Cli%3EChief%20Architect%3A%20610.47%20driver%20crash%20on%20Geforce%20RTX%204000%20series%20cards%20%5B6226227%5D%3C/li%3E%20%3Cli%3EClaude%20Desktop%3A%20Driver%20incorrectly%20detects%20application%20as%20a%203D%20app%20%5B6468260%5D%3C/li%3E%20%3Cli%3EResolves%20issue%20that%20some%20instances%20can%20cause%20a%20driver%20crash%20with%2032-bit%20DirectX%2012%20apps%20%5B5725350%5D%3C/li%3E%20%3Cli%3ETycho%20Tracker%3A%20Unable%20to%20create%20individual%20OpenCL%20buffers%20greater%20than%202GB%20%5B6538978%5D%3C/li%3E%3C/ul%3E%20%20%20%20%20%20%20%20%20%3Cbr%20/%3E%20%20%20%20%20%20%20%20%20%3Ca%20href%3D%22https%3A//www.nvidia.com/en-us/geforce/news/star-wars-zero-company-geforce-game-ready-driver/%22%3ELearn%20more%20in%20our%20Game%20Ready%20Driver%20article%20here.%3C/a%3E%3Cbr%20/%3E%20%20%20%20%20%20%20%20%20%3Cbr%20/%3E%20%20%20%20%20%20%20%20%20%3Cp%20align%3D%22justify%22%3E%3Cimg%20title%3D%22Game%20Ready%20Driver%22%20src%3D%22https%3A//images.nvidia.com/content/GRD/R615GA1/nvidia-geforce-game-ready-drivers-gfe-grd-1144x298-banner.jpg%22%20alt%3D%22Game%20Ready%20Driver%22%20width%3D%22100%25%22%20/%3E%3C/p%3E",
+    "OtherNotes": "Effective%20October%202021%2C%20Game%20Ready%20Driver%20upgrades%2C%20including%20performance%20enhancements%2C%20new%20features%2C%20and%20bug%20fixes%2C%20will%20be%20available%20for%20systems%20utilizing%20Maxwell%2C%20Pascal%2C%20Turing%2C%20and%20Ampere-series%20GPUs.%20Critical%20security%20updates%20will%20be%20available%20on%20systems%20utilizing%20desktop%20Kepler-series%20GPUs%20through%20September%202024.%20A%20complete%20list%20of%20desktop%20Kepler-series%20GeForce%20GPUs%20can%20be%20found%20%3Ca%20href%3D%22https%3A//nvidia.custhelp.com/app/answers/detail/a_id/5202/kw/kepler%2520support%22%3Ehere%3C/a%3E.%3Cbr%20/%3E%20%20%3Cbr%20/%3E%20%20%3Cul%3E%20%20%20%20%20%3Cli%3E%3Ca%20target%3D%22_blank%22%20href%3D%22https%3A//us.download.nvidia.com/Windows/616.56/616.56-win11-win10-release-notes.pdf%22%20title%3D%22Game%20Ready%20Driver%20Release%20Notes%20v616.56%22%3EGame%20Ready%20Driver%20Release%20Notes%20%28v616.56%29%3C/a%3E%3C/li%3E%20%20%20%20%3Cli%3E%3Ca%20target%3D%22_blank%22%20href%3D%22https%3A//us.download.nvidia.com/Windows/616.56/616.56-nvidia-control-panel-quick-start-guide.pdf%22%20title%3D%22NVIDIA%20Control%20Panel%20Quick%20Start%20Guide%22%3ENVIDIA%20Control%20Panel%20Quick%20Start%20Guide%3C/a%3E%20%3C/li%3E%20%20%3C/ul%3E",
+    "InstallationNotes": "",
+    "Overview": "",
+    "LanguageName": "English%20(US)",
+    "OSName": "Windows%2011",
+    "OsCode": "10.0",
+    "OSList": [
+     {
+      "OSName": "Windows%2010%2064-bit",
+      "OsCode": "10.0"
+     },
+     {
+      "OSName": "Windows%2011",
+      "OsCode": "10.0"
+     }
+    ],
+    "Is64Bit": "1",
+    "Messaging": [
+     {
+      "MessageCode": "DownloadIDDetailsFound",
+      "MessageValue": "The Driver DownloadID details found"
+     }
+    ]
+   }
+  },
+  {
+   "downloadInfo": {
+    "Success": "1",
+    "ID": "274383",
+    "DownloadTypeID": "1",
+    "DownloadStatusID": "3",
+    "Name": "GeForce%20Game%20Ready%20Driver",
+    "NameLocalized": "GeForce%20Game%20Ready%20Driver",
+    "ShortDescription": "GeForce%20Game%20Ready%20Driver",
+    "DeviceToProductFamilyName": "",
+    "Release": "610",
+    "Version": "610.88",
+    "DisplayVersion": "",
+    "GFE_DisplayVersion": "11.0.8.299",
+    "CDKitUSBEmitterDriverVersion": "",
+    "CDKitGPUDriverVersion": "",
+    "IsBeta": "0",
+    "IsWHQL": "1",
+    "IsRecommended": "0",
+    "IsFeaturePreview": "0",
+    "IsNewest": "0",
+    "IsDC": "1",
+    "IsCRD": "0",
+    "HasNetInst": "0",
+    "CudaToolkitVersion": "",
+    "IsArchive": "0",
+    "IsActive": "1",
+    "IsEmailRequired": "0",
+    "ReleaseDateTime": "Tue Jul 28, 2026",
+    "DetailsURL": "https://www.nvidia.com/en-us/drivers/details/274383/",
+    "DownloadURL": "https://us.download.nvidia.com/Windows/610.88/610.88-desktop-win10-win11-64bit-international-dch-whql.exe",
+    "EMAN_REVRES_BD": "31-lqssm-lswfg-a2wsu-drp",
+    "EMITR_BD": "memCache:1%20rTime:1%20sTime:0",
+    "DownloadURLFileSize": "979.65 MB",
+    "BannerURL": "https://www.nvidia.com/en-us/geforce/billboards/displaydriver/standalone/eve-std-game-ready-driver-2026-banners/",
+    "BannerURLGfe": "https://www.nvidia.com/en-us/geforce/billboards/displaydriver/gfe/eve-gfe-game-ready-driver-2026-banners/",
+    "ReleaseNotes": "%09%3Cstrong%3EGame%20Ready%20for%20Halo%3A%20Campaign%20Evolved%20%26%20Gears%20of%20War%3A%20E-Day%20Beta%3C/strong%3E%3Cbr%3E%20%20This%20new%20Game%20Ready%20Driver%20provides%20the%20best%20gaming%20experience%20for%20the%20latest%20new%20games%20supporting%20DLSS%20and%20RTX%20technologies%20including%20Halo%3A%20Campaign%20Evolved%2C%20Gears%20of%20War%3A%20E-Day%20Multiplayer%20Beta%2C%20and%20Mistfall%20Hunter.%3Cbr%3E%3Cbr%3E%20%20%3Cstrong%3EFixed%20Gaming%20Bugs%3C/strong%3E%3Cbr%3E%20%20%3Cul%3E%3Cli%3E%5BHalo%3A%20Campaign%20Evolved%5D%3A%20Resolved%20game%20crashes%20observed%20on%20RTX%2050%20Series%20GPUs%20with%20R610%20drivers.%20%5B6259837%5D%3C/li%3E%20%20%3Cli%3EPath%20of%20Exile%202%3A%20Fixed%20intermittent%20long%20pauses%20that%20could%20occur%20after%20extended%20gameplay%20sessions%20in%20DX12%20mode%20%5B5090018%5D%3C/li%3E%20%20%3Cli%3ESilent%20Hill%20F%3A%20Gaming%20stability%20improvements%20%5B6432954%5D%3C/li%3E%20%20%3Cli%3E%5BStrange%20Brigade/Zombie%20Army%204%3ADead%20War%5D%3A%20Game%20may%20crash%20when%20exiting%20if%20NVIDIA%20App%20In-Game%20Overlay%20is%20enabled%20%5B6392324%5D%3C/li%3E%20%20%3Cli%3EImproves%20frame%20pacing%20in%20certain%20DX11%20games%20when%20Smooth%20Motion%20is%20used%20while%20G-SYNC%20is%20enabled%20%5B6300603%5D%3C/li%3E%3C/ul%3E%3Cbr%3E%20%20%3Cstrong%3EFixed%20General%20Bugs%3C/strong%3E%3Cbr%3E%20%20%3Cul%3E%3Cli%3ERTX%20Dynamic%20Vibrance%20is%20incorrectly%20applied%20to%20Wallpaper%20Engine%20%5B6244021%5D%3C/li%3E%20%20%3Cli%3EPaint.NET%20may%20crash%20during%20launch%20when%20NVIDIA%20Surround%20is%20enabled%20%5B5366537%5D%3C/li%3E%3C/ul%3E%20%20%3Cbr%3E%20%20%3Ca%20href%3D%22https%3A//www.nvidia.com/en-us/geforce/news/gears-of-war-e-day-beta-halo-campaign-evolved-game-ready-driver/%22%3ELearn%20more%20in%20our%20Game%20Ready%20Driver%20article%20here.%3C/a%3E%3Cbr%20/%3E%3Cbr%20/%3E%20%20%3Cp%20align%3D%22justify%22%3E%3Cimg%20title%3D%22Game%20Ready%20Driver%22%20src%3D%22https%3A//images.nvidia.com/content/GRD/R610GA3/grd-gfe-driver-news-main-1144x298.jpg%22%20alt%3D%22Game%20Ready%20Driver%22%20width%3D%22100%25%22%20/%3E%3C/p%3E%09",
+    "OtherNotes": "Effective%20October%202021%2C%20Game%20Ready%20Driver%20upgrades%2C%20including%20performance%20enhancements%2C%20new%20features%2C%20and%20bug%20fixes%2C%20will%20be%20available%20for%20systems%20utilizing%20Maxwell%2C%20Pascal%2C%20Turing%2C%20and%20Ampere-series%20GPUs.%20Critical%20security%20updates%20will%20be%20available%20on%20systems%20utilizing%20desktop%20Kepler-series%20GPUs%20through%20September%202024.%20A%20complete%20list%20of%20desktop%20Kepler-series%20GeForce%20GPUs%20can%20be%20found%20%3Ca%20href%3D%22https%3A//nvidia.custhelp.com/app/answers/detail/a_id/5202/kw/kepler%2520support%22%3Ehere%3C/a%3E.%3Cbr%20/%3E%20%20%3Cbr%20/%3E%20%20%3Cul%3E%20%20%20%20%3Cli%3E%3Ca%20target%3D%22_blank%22%20href%3D%22https%3A//us.download.nvidia.com/Windows/610.88/610.88-win11-win10-release-notes.pdf%22%20title%3D%22Game%20Ready%20Driver%20Release%20Notes%20v610.88%22%3EGame%20Ready%20Driver%20Release%20Notes%20%28v610.88%29%3C/a%3E%3C/li%3E%20%20%20%20%3Cli%3E%3Ca%20target%3D%22_blank%22%20href%3D%22https%3A//us.download.nvidia.com/Windows/610.88/610.88-nvidia-control-panel-quick-start-guide.pdf%22%20title%3D%22NVIDIA%20Control%20Panel%20Quick%20Start%20Guide%22%3ENVIDIA%20Control%20Panel%20Quick%20Start%20Guide%3C/a%3E%20%3C/li%3E%20%20%3C/ul%3E%20%20%09",
+    "InstallationNotes": "",
+    "Overview": "",
+    "LanguageName": "English%20(US)",
+    "OSName": "Windows%2011",
+    "OsCode": "10.0",
+    "OSList": [
+     {
+      "OSName": "Windows%2010%2064-bit",
+      "OsCode": "10.0"
+     },
+     {
+      "OSName": "Windows%2011",
+      "OsCode": "10.0"
+     }
+    ],
+    "Is64Bit": "1",
+    "Messaging": [
+     {
+      "MessageCode": "DownloadIDDetailsFound",
+      "MessageValue": "The Driver DownloadID details found"
+     }
+    ]
+   }
+  },
+  {
+   "downloadInfo": {
+    "Success": "1",
+    "ID": "274187",
+    "DownloadTypeID": "1",
+    "DownloadStatusID": "3",
+    "Name": "GeForce%20Game%20Ready%20Driver",
+    "NameLocalized": "GeForce%20Game%20Ready%20Driver",
+    "ShortDescription": "GeForce%20Game%20Ready%20Driver",
+    "DeviceToProductFamilyName": "",
+    "Release": "610",
+    "Version": "610.74",
+    "DisplayVersion": "",
+    "GFE_DisplayVersion": "11.0.7.247",
+    "CDKitUSBEmitterDriverVersion": "",
+    "CDKitGPUDriverVersion": "",
+    "IsBeta": "0",
+    "IsWHQL": "1",
+    "IsRecommended": "0",
+    "IsFeaturePreview": "0",
+    "IsNewest": "0",
+    "IsDC": "1",
+    "IsCRD": "0",
+    "HasNetInst": "0",
+    "CudaToolkitVersion": "",
+    "IsArchive": "0",
+    "IsActive": "1",
+    "IsEmailRequired": "0",
+    "ReleaseDateTime": "Tue Jul 07, 2026",
+    "DetailsURL": "https://www.nvidia.com/en-us/drivers/details/274187/",
+    "DownloadURL": "https://us.download.nvidia.com/Windows/610.74/610.74-desktop-win10-win11-64bit-international-dch-whql.exe",
+    "EMAN_REVRES_BD": "31-lqssm-lswfg-a2wsu-drp",
+    "EMITR_BD": "memCache:1%20rTime:0%20sTime:0",
+    "DownloadURLFileSize": "979.17 MB",
+    "BannerURL": "https://www.nvidia.com/en-us/geforce/billboards/displaydriver/standalone/eve-std-game-ready-driver-2026-banners/",
+    "BannerURLGfe": "https://www.nvidia.com/en-us/geforce/billboards/displaydriver/gfe/eve-gfe-game-ready-driver-2026-banners/",
+    "ReleaseNotes": "%3Cstrong%3EGame%20Ready%20for%20DOOM%3A%20The%20Dark%20Ages%20%7C%20Revelations%3C/strong%3E%3Cbr%3E%0D%0AThis%20new%20Game%20Ready%20Driver%20provides%20the%20best%20gaming%20experience%20for%20the%20latest%20new%20games%20supporting%20DLSS%20and%20RTX%20technologies%20including%20DOOM%3A%20The%20Dark%20Ages%20%7C%20Revelations%20and%20Assassin%27s%20Creed%20Black%20Flag%20Resynced.%3Cbr%3E%3Cbr%3E%0D%0A%3Cstrong%3EFixed%20Gaming%20Bugs%3C/strong%3E%3Cbr%3E%0D%0A%3Cul%3E%3Cli%3EN/A%3C/li%3E%3C/ul%3E%3Cbr%3E%0D%0A%3Cstrong%3EFixed%20General%20Bugs%3C/strong%3E%3Cbr%3E%0D%0A%3Cul%3E%3Cli%3ETencent%20Meeting%3A%20Flickering%20may%20be%20observed%20when%20Smooth%20Motion%20is%20enabled%20globally%20%5B6329207%5D%3C/li%3E%3C/ul%3E%0D%0A%3Cbr%3E%0D%0A%3Ca%20href%3D%22https%3A//www.nvidia.com/en-us/geforce/news/doom-the-dark-ages-revelations-geforce-game-ready-driver/%22%3ELearn%20more%20in%20our%20Game%20Ready%20Driver%20article%20here.%3C/a%3E%3Cbr%20/%3E%3Cbr%20/%3E%0D%0A%3Cp%20align%3D%22justify%22%3E%3Cimg%20title%3D%22Game%20Ready%20Driver%22%20src%3D%22https%3A//images.nvidia.com/content/GRD/R610GA2/grd-gfe-driver-news-main-1144x298.jpg%22%20alt%3D%22Game%20Ready%20Driver%22%20width%3D%22100%25%22%20/%3E%3C/p%3E",
+    "OtherNotes": "Effective%20October%202021%2C%20Game%20Ready%20Driver%20upgrades%2C%20including%20performance%20enhancements%2C%20new%20features%2C%20and%20bug%20fixes%2C%20will%20be%20available%20for%20systems%20utilizing%20Maxwell%2C%20Pascal%2C%20Turing%2C%20and%20Ampere-series%20GPUs.%20Critical%20security%20updates%20will%20be%20available%20on%20systems%20utilizing%20desktop%20Kepler-series%20GPUs%20through%20September%202024.%20A%20complete%20list%20of%20desktop%20Kepler-series%20GeForce%20GPUs%20can%20be%20found%20%3Ca%20href%3D%22https%3A//nvidia.custhelp.com/app/answers/detail/a_id/5202/kw/kepler%2520support%22%3Ehere%3C/a%3E.%3Cbr%20/%3E%20%20%3Cbr%20/%3E%20%20%3Cul%3E%20%20%20%20%3Cli%3E%3Ca%20target%3D%22_blank%22%20href%3D%22https%3A//us.download.nvidia.com/Windows/610.74/610.74-win11-win10-release-notes.pdf%22%20title%3D%22Game%20Ready%20Driver%20Release%20Notes%20v610.74%22%3EGame%20Ready%20Driver%20Release%20Notes%20%28v610.74%29%3C/a%3E%3C/li%3E%20%20%20%20%3Cli%3E%3Ca%20target%3D%22_blank%22%20href%3D%22https%3A//us.download.nvidia.com/Windows/610.74/610.74-nvidia-control-panel-quick-start-guide.pdf%22%20title%3D%22NVIDIA%20Control%20Panel%20Quick%20Start%20Guide%22%3ENVIDIA%20Control%20Panel%20Quick%20Start%20Guide%3C/a%3E%20%3C/li%3E%20%20%3C/ul%3E%20%20%09",
+    "InstallationNotes": "",
+    "Overview": "",
+    "LanguageName": "English%20(US)",
+    "OSName": "Windows%2011",
+    "OsCode": "10.0",
+    "OSList": [
+     {
+      "OSName": "Windows%2010%2064-bit",
+      "OsCode": "10.0"
+     },
+     {
+      "OSName": "Windows%2011",
+      "OsCode": "10.0"
+     }
+    ],
+    "Is64Bit": "1",
+    "Messaging": [
+     {
+      "MessageCode": "DownloadIDDetailsFound",
+      "MessageValue": "The Driver DownloadID details found"
+     }
+    ]
+   }
+  },
+  {
+   "downloadInfo": {
+    "Success": "1",
+    "ID": "272764",
+    "DownloadTypeID": "1",
+    "DownloadStatusID": "3",
+    "Name": "GeForce%20Game%20Ready%20Driver",
+    "NameLocalized": "GeForce%20Game%20Ready%20Driver",
+    "ShortDescription": "GeForce%20Game%20Ready%20Driver",
+    "DeviceToProductFamilyName": "",
+    "Release": "610",
+    "Version": "610.62",
+    "DisplayVersion": "",
+    "GFE_DisplayVersion": "11.0.7.247",
+    "CDKitUSBEmitterDriverVersion": "",
+    "CDKitGPUDriverVersion": "",
+    "IsBeta": "0",
+    "IsWHQL": "1",
+    "IsRecommended": "0",
+    "IsFeaturePreview": "0",
+    "IsNewest": "0",
+    "IsDC": "1",
+    "IsCRD": "0",
+    "HasNetInst": "0",
+    "CudaToolkitVersion": "",
+    "IsArchive": "0",
+    "IsActive": "1",
+    "IsEmailRequired": "0",
+    "ReleaseDateTime": "Tue Jun 16, 2026",
+    "DetailsURL": "https://www.nvidia.com/en-us/drivers/details/272764/",
+    "DownloadURL": "https://us.download.nvidia.com/Windows/610.62/610.62-desktop-win10-win11-64bit-international-dch-whql.exe",
+    "EMAN_REVRES_BD": "81-lqssm-lswfg-a2wsu-drp",
+    "EMITR_BD": "memCache:1%20rTime:2%20sTime:0",
+    "DownloadURLFileSize": "978.41 MB",
+    "BannerURL": "https://www.nvidia.com/en-us/geforce/billboards/displaydriver/standalone/eve-std-game-ready-driver-2026-banners/",
+    "BannerURLGfe": "https://www.nvidia.com/en-us/geforce/billboards/displaydriver/gfe/eve-gfe-game-ready-driver-2026-banners/",
+    "ReleaseNotes": "%3Cstrong%3EGame%20Ready%20for%20Empulse%3C/strong%3E%3Cbr%3E%0D%0AThis%20new%20Game%20Ready%20Driver%20provides%20the%20best%20gaming%20experience%20for%20the%20latest%20new%20games%20supporting%20DLSS%20and%20RTX%20technologies%20including%20Empulse.%3Cbr%3E%3Cbr%3E%0D%0A%3Cstrong%3EFixed%20Gaming%20Bugs%3C/strong%3E%3Cbr%3E%0D%0A%3Cul%20type%3D%22disc%22%3E%0D%0A%3Cli%3EWorld%20of%20Warcraft%3A%20Gaming%20stability%20improvements%20%5B5563205%5D%3C/li%3E%0D%0A%3Cli%3EApex%20Legends%3A%20Occasional%20visual%20corruption%20after%20extended%20gameplay%20%5B6239327%5D%3C/li%3E%0D%0A%3Cli%3EUsers%20may%20observe%20DLSS%20settings%20being%20grayed%20out%20in%20certain%20games%20after%20updating%20to%20display%20driver%20615.47%20%5B6262805%5D%3C/li%3E%0D%0A%3Cli%3EImproved%20gaming%20stability%20in%20multi-monitor%20configurations%20when%20using%20V-SYNC%20with%20DLSS%20Frame%20Generation%20%5B6158481%5D%3C/li%3E%0D%0A%3Cli%3EResolved%20an%20issue%20that%20could%20cause%20jittering%20or%20ghosting%20in%20some%20DirectX%2011%20games%20when%20Smooth%20Motion%20is%20enabled%20%5B5937897%5D%3C/li%3E%0D%0A%3Cli%3EResolved%20an%20issue%20that%20could%20cause%20some%20games%20to%20crash%20when%20launched%20with%20Smooth%20Motion%20enabled%20%5B5466398%5D%3C/li%3E%0D%0A%3C/ul%3E%3Cbr%3E%0D%0A%3Cstrong%3EFixed%20General%20Bugs%3C/strong%3E%3Cbr%3E%0D%0A%3Cul%20type%3D%22disc%22%3E%0D%0A%3Cli%3E%5BAda%5D%20Resolves%20a%20frame%20pacing%20issue%20on%20certain%20monitors%20when%20G-SYNC%20is%20enabled%20%5B6226972%5D%3C/li%3E%0D%0A%3Cli%3EResolved%20an%20issue%20that%20prevented%20the%20EDID%20from%20being%20read%20on%20certain%20monitors%20causing%20them%20to%20be%20identified%20as%20%22NVIDIA%20NV-Failsafe%E2%80%9D%20%5B6005508%5D%3C/li%3E%0D%0A%3Cli%3EResolved%20an%20issue%20where%20certain%20monitors%20would%20not%20wake%20from%20sleep%20mode%20%5B5806798/5635230%5D%3C/li%3E%0D%0A%3Cli%3EGeneral%20stability%20improvements%20when%20the%20system%20fails%20to%20create%20a%20new%20allocation%20%5B5449920%5D%3C/li%3E%0D%0A%3C/ul%3E%3Cbr%3E%0D%0A%3Ca%20href%3D%22https%3A//www.nvidia.com/en-us/geforce/news/june-16-2026-geforce-game-ready-driver/%22%3ELearn%20more%20in%20our%20Game%20Ready%20Driver%20article%20here.%3C/a%3E%3Cbr%20/%3E%0D%0A%3Cbr%20/%3E%0D%0A%3Cp%20align%3D%22justify%22%3E%3Cimg%20title%3D%22Game%20Ready%20Driver%22%20src%3D%22https%3A//images.nvidia.com/content/GRD/R610GA1.1/rtx-remix-1-5-agent-skills-update-gfe-grd-1144x298-banner.jpg%22%20alt%3D%22Game%20Ready%20Driver%22%20width%3D%22100%25%22%20/%3E%3C/p%3E",
+    "OtherNotes": "Effective%20October%202021%2C%20Game%20Ready%20Driver%20upgrades%2C%20including%20performance%20enhancements%2C%20new%20features%2C%20and%20bug%20fixes%2C%20will%20be%20available%20for%20systems%20utilizing%20Maxwell%2C%20Pascal%2C%20Turing%2C%20and%20Ampere-series%20GPUs.%20Critical%20security%20updates%20will%20be%20available%20on%20systems%20utilizing%20desktop%20Kepler-series%20GPUs%20through%20September%202024.%20A%20complete%20list%20of%20desktop%20Kepler-series%20GeForce%20GPUs%20can%20be%20found%20%3Ca%20href%3D%22https%3A//nvidia.custhelp.com/app/answers/detail/a_id/5202/kw/kepler%2520support%22%3Ehere%3C/a%3E.%3Cbr%20/%3E%20%20%3Cbr%20/%3E%20%20%3Cul%3E%20%20%20%20%3Cli%3E%3Ca%20target%3D%22_blank%22%20href%3D%22https%3A//us.download.nvidia.com/Windows/610.62/610.62-win11-win10-release-notes.pdf%22%20title%3D%22Game%20Ready%20Driver%20Release%20Notes%20v610.62%22%3EGame%20Ready%20Driver%20Release%20Notes%20%28v610.62%29%3C/a%3E%3C/li%3E%20%20%20%20%3Cli%3E%3Ca%20target%3D%22_blank%22%20href%3D%22https%3A//us.download.nvidia.com/Windows/610.62/610.62-nvidia-control-panel-quick-start-guide.pdf%22%20title%3D%22NVIDIA%20Control%20Panel%20Quick%20Start%20Guide%22%3ENVIDIA%20Control%20Panel%20Quick%20Start%20Guide%3C/a%3E%20%3C/li%3E%20%20%3C/ul%3E%20%20%09",
+    "InstallationNotes": "",
+    "Overview": "",
+    "LanguageName": "English%20(US)",
+    "OSName": "Windows%2011",
+    "OsCode": "10.0",
+    "OSList": [
+     {
+      "OSName": "Windows%2010%2064-bit",
+      "OsCode": "10.0"
+     },
+     {
+      "OSName": "Windows%2011",
+      "OsCode": "10.0"
+     }
+    ],
+    "Is64Bit": "1",
+    "Messaging": [
+     {
+      "MessageCode": "DownloadIDDetailsFound",
+      "MessageValue": "The Driver DownloadID details found"
+     }
+    ]
+   }
+  },
+  {
+   "downloadInfo": {
+    "Success": "1",
+    "ID": "271418",
+    "DownloadTypeID": "1",
+    "DownloadStatusID": "3",
+    "Name": "GeForce%20Game%20Ready%20Driver",
+    "NameLocalized": "GeForce%20Game%20Ready%20Driver",
+    "ShortDescription": "GeForce%20Game%20Ready%20Driver",
+    "DeviceToProductFamilyName": "",
+    "Release": "610",
+    "Version": "610.47",
+    "DisplayVersion": "",
+    "GFE_DisplayVersion": "11.0.7.247",
+    "CDKitUSBEmitterDriverVersion": "",
+    "CDKitGPUDriverVersion": "",
+    "IsBeta": "0",
+    "IsWHQL": "1",
+    "IsRecommended": "0",
+    "IsFeaturePreview": "0",
+    "IsNewest": "0",
+    "IsDC": "1",
+    "IsCRD": "0",
+    "HasNetInst": "0",
+    "CudaToolkitVersion": "",
+    "IsArchive": "0",
+    "IsActive": "1",
+    "IsEmailRequired": "0",
+    "ReleaseDateTime": "Tue May 26, 2026",
+    "DetailsURL": "https://www.nvidia.com/en-us/drivers/details/271418/",
+    "DownloadURL": "https://us.download.nvidia.com/Windows/610.47/610.47-desktop-win10-win11-64bit-international-dch-whql.exe",
+    "EMAN_REVRES_BD": "B0J663C-ZAMA2CE",
+    "EMITR_BD": "memCache:1%20rTime:1%20sTime:0",
+    "DownloadURLFileSize": "978.47 MB",
+    "BannerURL": "https://www.nvidia.com/en-us/geforce/billboards/displaydriver/standalone/eve-std-game-ready-driver-2026-banners/",
+    "BannerURLGfe": "https://www.nvidia.com/en-us/geforce/billboards/displaydriver/gfe/eve-gfe-game-ready-driver-2026-banners/",
+    "ReleaseNotes": "%3Cstrong%3EGame%20Ready%20for%20007%20First%20Light%3C/strong%3E%3Cbr%3E%0D%0A%3Cbr%3E%0D%0AThis%20new%20Game%20Ready%20Driver%20provides%20the%20best%20gaming%20experience%20for%20the%20latest%20new%20games%20supporting%20DLSS%20and%20RTX%20technologies%20including%20007%20First%20Light%2C%20LEGO%C2%AE%20Batman%E2%84%A2%3A%20Legacy%20of%20the%20Dark%20Knight%2C%20EA%20SPORTS%E2%84%A2%20F1%C2%AE%2025%3A%202026%20Season%20Pack%2C%20and%20World%20of%20Tanks%3A%20HEAT.%3Cbr%3E%0D%0A%3Cbr%3E%0D%0A%3Cstrong%3EFixed%20Gaming%20Bugs%3C/strong%3E%3Cbr%3E%0D%0A%3Cul%20type%3D%22disc%22%3E%0D%0A%20%20%3Cli%3ELike%20a%20Dragon%3A%20Infinite%20Wealth%3A%20Shadow/light%20flicker%20after%20driver%20update%20%5B5973185%5D%3C/li%3E%0D%0A%20%20%3Cli%3EEnshrouded%3A%20Missing%20terrain%20after%20driver%20update%20%5B5955501%5D%3C/li%3E%0D%0A%20%20%3Cli%3EVisual%20corruption%20may%20appear%20in%20certain%20games%20using%20Godot%20engine%20%5B5955501%5D%3C/li%3E%0D%0A%20%20%3Cli%3EMultimonitor%20gaming%20stability%20improvements%20when%20using%20V-SYNC%20%5B5343252%5D%3C/li%3E%0D%0A%3C/ul%3E%0D%0A%3Cbr%3E%0D%0A%3Cstrong%3EFixed%20General%20Bugs%3C/strong%3E%3Cbr%3E%0D%0A%3Cul%20type%3D%22disc%22%3E%0D%0A%20%20%3Cli%3EAdobe%20Lightroom%20Classic%3A%20Application%20stability%20issues%20%5B6090770%5D%3C/li%3E%0D%0A%20%20%3Cli%3EAutodesk%20Forma%3A%20Memory%20leak%20during%20camera%20orbit%20when%20OpenGL%20is%20used%20%5B5935127%5D%3C/li%3E%0D%0A%20%20%3Cli%3EApple%20Studio%20Display%20XDR%20only%20displays%20480p%20after%20driver%20update%20%5B5976295%5D%3C/li%3E%0D%0A%20%20%3Cli%3ESamsung%20The%20Frame%3A%20Using%20display%27s%20Game%20mode%20disables%20key%20functionality%20%5B5825631%5D%3C/li%3E%0D%0A%3C/ul%3E%0D%0A%3Cbr%3E%0D%0A%3Ca%20href%3D%22https%3A//www.nvidia.com/en-us/geforce/news/007-first-light-geforce-game-ready-driver/%22%3ELearn%20more%20in%20our%20Game%20Ready%20Driver%20article%20here.%3C/a%3E%3Cbr%20/%3E%0D%0A%3Cbr%20/%3E%0D%0A%3Cp%20align%3D%22justify%22%3E%3Cimg%20title%3D%22Game%20Ready%20Driver%22%20src%3D%22https%3A//images.nvidia.com/content/GRD/R610GA1/007-first-light-geforce-game-ready-driver-gfe-grd-1144x298-banner.jpg%22%20alt%3D%22Game%20Ready%20Driver%22%20width%3D%22100%25%22%20/%3E%3C/p%3E",
+    "OtherNotes": "Effective%20October%202021%2C%20Game%20Ready%20Driver%20upgrades%2C%20including%20performance%20enhancements%2C%20new%20features%2C%20and%20bug%20fixes%2C%20will%20be%20available%20for%20systems%20utilizing%20Maxwell%2C%20Pascal%2C%20Turing%2C%20and%20Ampere-series%20GPUs.%20Critical%20security%20updates%20will%20be%20available%20on%20systems%20utilizing%20desktop%20Kepler-series%20GPUs%20through%20September%202024.%20A%20complete%20list%20of%20desktop%20Kepler-series%20GeForce%20GPUs%20can%20be%20found%20%3Ca%20href%3D%22https%3A//nvidia.custhelp.com/app/answers/detail/a_id/5202/kw/kepler%2520support%22%3Ehere%3C/a%3E.%3Cbr%20/%3E%20%20%3Cbr%20/%3E%20%20%3Cul%3E%20%20%20%20%3Cli%3E%3Ca%20target%3D%22_blank%22%20href%3D%22https%3A//us.download.nvidia.com/Windows/610.47/610.47-win11-win10-release-notes.pdf%22%20title%3D%22Game%20Ready%20Driver%20Release%20Notes%20v610.47%22%3EGame%20Ready%20Driver%20Release%20Notes%20%28v610.47%29%3C/a%3E%3C/li%3E%20%20%20%20%3Cli%3E%3Ca%20target%3D%22_blank%22%20href%3D%22https%3A//us.download.nvidia.com/Windows/610.47/610.47-nvidia-control-panel-quick-start-guide.pdf%22%20title%3D%22NVIDIA%20Control%20Panel%20Quick%20Start%20Guide%22%3ENVIDIA%20Control%20Panel%20Quick%20Start%20Guide%3C/a%3E%20%3C/li%3E%20%20%3C/ul%3E%20%20%09",
+    "InstallationNotes": "",
+    "Overview": "",
+    "LanguageName": "English%20(US)",
+    "OSName": "Windows%2011",
+    "OsCode": "10.0",
+    "OSList": [
+     {
+      "OSName": "Windows%2010%2064-bit",
+      "OsCode": "10.0"
+     },
+     {
+      "OSName": "Windows%2011",
+      "OsCode": "10.0"
+     }
+    ],
+    "Is64Bit": "1",
+    "Messaging": [
+     {
+      "MessageCode": "DownloadIDDetailsFound",
+      "MessageValue": "The Driver DownloadID details found"
+     }
+    ]
+   }
+  }
+ ],
+ "spcall": "EXEC NDL_usp_Download_select_by_matrix_values null,929,120,null,135,null,0, null,1033,-1,null,0,null,null,null,null,0,null,null,0,null,12,null,0,0,null,null,null,null,null,null,null,null,null,null,null,null,null,1,0",
+ "Request": [
+  {
+   "downloadID": "null",
+   "pfid": "929",
+   "psid": "120",
+   "deviceID": "null",
+   "osID": "135",
+   "osCode": "null",
+   "is64bit": "0",
+   "languageID": "null",
+   "languageCode": "1033",
+   "dltype": "-1",
+   "isArchive": "null",
+   "beta": "0",
+   "includebeta": "null",
+   "gtversion": "null",
+   "version": "null",
+   "release": "null",
+   "isWHQL": "0",
+   "isNewest": "null",
+   "locationID": "null",
+   "sort1": "0",
+   "sort2": "null",
+   "numberOfResults": "12",
+   "isNewFeature": "null",
+   "gfeExclusive": "0",
+   "webExclusive": "0",
+   "null,null,null,null,null,null,null,null,null,null,null,null,": "",
+   "cudaToolkitID": "null",
+   "theSystemIsDc": "1",
+   "theUserRequestedCRD": "0"
+  }
+ ]
+}

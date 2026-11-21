@@ -1,0 +1,125 @@
+[
+ {
+  "file": "2025-09-10-davinci-resolve-20-2.md",
+  "front_matter": {
+   "update_entry": true,
+   "product_id": "blackmagic-davinci",
+   "update_version": "20.2"
+  }
+ },
+ {
+  "file": "2026-07-28-windows-11-24h2-26100-8973.md",
+  "front_matter": {
+   "update_entry": true,
+   "product_id": "microsoft-windows-11",
+   "update_version": "24H2",
+   "target_build": "26100.8973",
+   "target_kb": "KB5101684",
+   "target_os_build": "26100.8973",
+   "target_feature_version": "24H2",
+   "target_release_date": "2026-07-28T00:00:00Z"
+  }
+ },
+ {
+  "file": "2026-01-13-windows-11-25h2-26200-7623.md",
+  "front_matter": {
+   "update_entry": true,
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.7623",
+   "target_kb": "KB5074109",
+   "target_os_build": "26200.7623",
+   "target_feature_version": "25H2",
+   "target_release_date": "2026-01-13T00:00:00Z"
+  }
+ },
+ {
+  "file": "2026-02-24-windows-11-25h2-26200-7922.md",
+  "front_matter": {
+   "update_entry": true,
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.7922",
+   "target_kb": "KB5077241",
+   "target_os_build": "26200.7922",
+   "target_feature_version": "25H2",
+   "target_release_date": "2026-02-24T00:00:00Z"
+  }
+ },
+ {
+  "file": "2026-07-18-windows-11-25h2-26200-8894.md",
+  "front_matter": {
+   "update_entry": true,
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.8894",
+   "target_kb": "KB5121767",
+   "target_os_build": "26200.8894",
+   "target_feature_version": "25H2",
+   "target_release_date": "2026-07-18T00:00:00Z"
+  }
+ },
+ {
+  "file": "2026-07-28-windows-11-25h2-26200-8973.md",
+  "front_matter": {
+   "update_entry": true,
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.8973",
+   "target_kb": "KB5101684",
+   "target_os_build": "26200.8973",
+   "target_feature_version": "25H2",
+   "target_release_date": "2026-07-28T00:00:00Z"
+  }
+ },
+ {
+  "file": "2026-09-22-windows-11-25h2-26200-9550.md",
+  "front_matter": {
+   "update_entry": true,
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.9550",
+   "target_kb": "KB5124010",
+   "target_os_build": "26200.9550",
+   "target_feature_version": "25H2",
+   "target_release_date": "2026-09-22T00:00:00Z"
+  }
+ },
+ {
+  "file": "2026-09-29-windows-11-26h2-26300-9550.md",
+  "front_matter": {
+   "update_entry": true,
+   "product_id": "microsoft-windows-11",
+   "update_version": "26H2",
+   "target_build": "26300.9550",
+   "target_kb": "KB5124010",
+   "target_os_build": "26300.9550",
+   "target_feature_version": "26H2",
+   "target_release_date": "2026-09-29T00:00:00Z"
+  }
+ },
+ {
+  "file": "2025-07-28-obs-studio-31-1-2.md",
+  "front_matter": {
+   "update_entry": true,
+   "product_id": "obs-studio",
+   "update_version": "31.1.2"
+  }
+ },
+ {
+  "file": "2026-07-21-obs-studio-32-2-0.md",
+  "front_matter": {
+   "update_entry": true,
+   "product_id": "obs-studio",
+   "update_version": "32.2.0"
+  }
+ },
+ {
+  "file": "2026-07-24-obs-studio-32-2-1.md",
+  "front_matter": {
+   "update_entry": true,
+   "product_id": "obs-studio",
+   "update_version": "32.2.1"
+  }
+ }
+]

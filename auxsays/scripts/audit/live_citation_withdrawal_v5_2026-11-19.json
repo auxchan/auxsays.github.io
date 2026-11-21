@@ -1,0 +1,100 @@
+{
+ "entries": [
+  {
+   "role": "withdraw",
+   "product_id": "adobe-acrobat-reader",
+   "update_version": "15.020.20039",
+   "target_build": "",
+   "id": "acrobat-15-020-20039-adobe-community-bug-report-https-community-adobe-com-questions-12-failed-to-patch-from-15-020-20039-to-15-020-2042-1510656",
+   "source_url": "https://community.adobe.com/questions-12/failed-to-patch-from-15-020-20039-to-15-020-2042-1510656",
+   "block_sha256_before_run": "a7f8065c7cf653e60397a3f6830127d94fd702c34fb4b5507c3f89dd545f79b6",
+   "counted_before_run": true,
+   "action": "withdraw",
+   "exclusion_reason": "version_named_but_working"
+  },
+  {
+   "role": "withdraw",
+   "product_id": "adobe-premiere-pro",
+   "update_version": "26.2.2",
+   "target_build": "",
+   "id": "adobe-premiere-pro-26-2-2-adobe-community-bug-report-https-community-adobe-com-bug-reports-728-premiere-pro-27-fewer-audio-channels-error-when-relink",
+   "source_url": "https://community.adobe.com/bug-reports-728/premiere-pro-27-fewer-audio-channels-error-when-relinking-projects-from-version-26-2-2-workaround-found-1656474",
+   "block_sha256_before_run": "9ffefc5db640a698d70208aa76ba97442a6a995a82f442e3874b8314bdcfa5e6",
+   "counted_before_run": true,
+   "action": "withdraw",
+   "exclusion_reason": "version_named_but_working"
+  }
+ ],
+ "withdrawn_now": 2,
+ "counted_population": {
+  "adobe-acrobat-reader": [
+   168,
+   167
+  ],
+  "adobe-premiere-pro": [
+   28,
+   27
+  ]
+ },
+ "per_patch": [
+  {
+   "product_id": "adobe-acrobat-reader",
+   "update_version": "15.020.20039",
+   "target_build": "",
+   "before": 6,
+   "after": 5
+  },
+  {
+   "product_id": "adobe-premiere-pro",
+   "update_version": "26.2.2",
+   "target_build": "",
+   "before": 19,
+   "after": 18
+  }
+ ],
+ "newly_counted_rows": [],
+ "same_report_rows_on_other_identities": [],
+ "product_scope": [
+  "adobe-acrobat-reader",
+  "adobe-premiere-pro"
+ ],
+ "generated_at": "2026-11-19T17:20:01Z",
+ "exclusion_reasons": [
+  "duplicate_existing_evidence",
+  "identity_not_the_subject",
+  "not_a_real_issue_report",
+  "version_is_rollback_target",
+  "version_named_but_working"
+ ],
+ "store_sha256_before": "2a052694b646a2970abf4778e9bb89afe873f8064c16bcb387a44ed8b1716076",
+ "store_sha256_after": "c08b6d5c506039a9ace77474aea61d19067ed9ebf931c758d325bfdb33a893e8",
+ "manifest_sha256": "4cba0edcdea03d3406999891e8b6960c1fb9f23da72badda252208813935826d",
+ "baseline_sha256": "b378fa62c22c9e6a7e7de5e6383d799349d9fc1c1eed9ddd4059f7bfb9192248",
+ "written": true,
+ "writers": [
+  {
+   "command": "build_consensus_from_evidence.py --product-id adobe-acrobat-reader --product-id adobe-premiere-pro --reconcile-only",
+   "returncode": 0,
+   "output": [
+    "Reconciled report counts on 2 record(s) to final counted evidence (scoped to adobe-acrobat-reader, adobe-premiere-pro).",
+    "  2016-10-11-adobe-acrobat-reader-15-020-20039.md: adobe-acrobat-reader 15.020.20039 6 -> 5",
+    "  2026-05-01-premiere-pro-26-2-2.md: adobe-premiere-pro 26.2.2 19 -> 18"
+   ]
+  },
+  {
+   "command": "apply_consensus_to_records.py --product-id adobe-acrobat-reader --write-all --confirm-write",
+   "returncode": 0,
+   "output": [
+    "[apply_consensus_to_records] write_back: 75 group(s); 75 would write; 0 blocked; 167 included; 21 excluded."
+   ]
+  },
+  {
+   "command": "apply_consensus_to_records.py --product-id adobe-premiere-pro --write-all --confirm-write",
+   "returncode": 0,
+   "output": [
+    "[apply_consensus_to_records] write_back: 2 group(s); 2 would write; 0 blocked; 27 included; 4 excluded."
+   ]
+  }
+ ],
+ "parent_commit": "cfd2c36af236d9c4c59f9a32f8548b116856d525"
+}

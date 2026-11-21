@@ -17,8 +17,8 @@ update_version: New pull request overview page in public preview
 update_logo_text: GIT
 update_published_at: '2026-11-05T08:00:00Z'
 update_last_checked: '2026-11-05T22:27:22Z'
-source_last_checked: '2026-11-05T22:27:22Z'
-official_body_last_checked: '2026-11-05T22:27:22Z'
+source_last_checked: '2026-11-06T09:21:50Z'
+official_body_last_checked: '2026-11-06T09:21:50Z'
 record_last_updated: '2026-11-05T22:27:22Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -95,6 +95,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-11-05T22:27:22Z'
+  url: https://github.blog/changelog/2026-11-05-new-pull-request-overview-page-in-public-preview
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-06T09:21:50Z'
   url: https://github.blog/changelog/2026-11-05-new-pull-request-overview-page-in-public-preview
   status: captured-from-rss-feed
   body_captured: true

@@ -109,6 +109,11 @@ def status_for(source: dict[str, Any], source_state: dict[str, Any], last_error:
         since = str(source_state.get("last_extraction_at") or "")[:10]
         return "Error", (f"No records extracted since {since}" if since
                          else "No records extracted for many checks")
+    # The primary failed and only a fallback answered (Premiere Pro: HelpX refuses, a pinned
+    # one-release announcement answers). Never "Active": that is what this source published while
+    # it could see nothing newer than the pinned release.
+    if explicit == "partial":
+        return "Partial", "Primary official source failed; fallback source only"
 
     if checked and fetched == 0 and written == 0:
         # A successful run with no extracted/written records is not a degraded
@@ -201,7 +206,7 @@ def main() -> int:
         })
 
     # Status order first, then alpha. Active/error enabled sources should be easy to audit.
-    status_order = {"Error": 0, "Unknown": 1, "Active": 2, "Manual watch": 3, "Needs adapter": 4, "Disabled": 5}
+    status_order = {"Error": 0, "Partial": 1, "Unknown": 2, "Active": 3, "Manual watch": 4, "Needs adapter": 5, "Disabled": 6}
     rows.sort(key=lambda row: (status_order.get(row.get("status"), 9), (row.get("company") or "").lower(), (row.get("software") or "").lower()))
     OUTPUT_PATH.write_text(yaml.safe_dump(rows, sort_keys=False, allow_unicode=True, width=140), encoding="utf-8")
     print(f"Wrote {len(rows)} source-health rows to {OUTPUT_PATH.relative_to(ROOT)}")

@@ -2,7 +2,9 @@
 
 `.github/workflows/pages.yml` builds and deploys on every push to `main` or manual dispatch. It uses Node 24, `npm ci`, UI validation, Jekyll build, static-site verification, and GitHub Pages deployment. The workflow itself contains no Taylor-approval or release-evidence check; the restriction is governance/process, not a technical workflow guard.
 
-The Systems Monitor production workflow (`.github/workflows/systems-monitor-data.yml`) runs on a four-hour heartbeat. It retrieves only already-governed BLS/DOL series, validates acceptance and source evidence, and writes the production read model through the repository's conflict-safe writeback helper. Successful unchanged source checks are stored separately so polling cadence survives without republishing an unchanged snapshot. This bounded runner does not activate the wider candidate-source scheduler.
+The Systems Monitor production workflow (`.github/workflows/systems-monitor-data.yml`) is dispatched after routine patch ingestion, including an ingestion failure. The repository has one scheduled writer entry point on a six-hour cycle; actual acquisition also depends on queue and upstream run time. A four-hour minimum source interval prevents redundant checks and is not a four-hour delivery guarantee. The writer-queue reaper repairs evicted automated dispatches. Targeted, dry-run, cancelled, and non-main ingestion runs do not dispatch economic acquisition.
+
+The runner retrieves only already-governed BLS/DOL series, validates acceptance and source evidence, and writes the production read model through the repository's conflict-safe writeback helper. Successful unchanged source checks are stored separately so polling cadence survives without republishing an unchanged snapshot. This bounded runner does not activate the wider candidate-source scheduler.
 
 Secrets belong only in GitHub secrets/environment variables. Implemented candidate acquisition uses `AUXSAYS_BEA_USER_ID` and `AUXSAYS_CENSUS_API_KEY`; `AUXSAYS_EIA_API_KEY` is documented for a blocked candidate route. Never persist values or expose credential-bearing transport URLs in logs, commands, or artifacts.
 

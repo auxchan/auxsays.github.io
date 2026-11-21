@@ -26,8 +26,8 @@
   company_name: Google
   priority: Core
   category_key: ai-tools
-  source_url: https://gemini.google/updates/
-  source_label: Gemini updates
+  source_url: https://gemini.google/release-notes/
+  source_label: Gemini Apps release notes
   coverage_state: active_watch
   documented_update_count: 0
   backfill_status: queued
@@ -246,8 +246,8 @@
   company_name: Kick
   priority: Core
   category_key: creator-platforms
-  source_url: https://kick.com/blog
-  source_label: Kick blog
+  source_url: null
+  source_label: null
   coverage_state: active_watch
   documented_update_count: 0
   backfill_status: queued
@@ -292,17 +292,6 @@
   category_key: game-platforms
   source_url: https://store.steampowered.com/news/group/4145017
   source_label: Steam news
-  coverage_state: active_watch
-  documented_update_count: 0
-  backfill_status: queued
-- product_id: nvidia
-  company_id: nvidia
-  product_name: NVIDIA App / GeForce / Studio
-  company_name: NVIDIA
-  priority: Core
-  category_key: hardware-drivers
-  source_url: https://www.nvidia.com/en-us/geforce/news/
-  source_label: GeForce news
   coverage_state: active_watch
   documented_update_count: 0
   backfill_status: queued

@@ -1,0 +1,74 @@
+[
+ {
+  "file": "2016-10-11-adobe-acrobat-reader-15-020-20039.md",
+  "front_matter": {
+   "update_entry": true,
+   "product_id": "adobe-acrobat-reader",
+   "update_version": "15.020.20039"
+  }
+ },
+ {
+  "file": "2016-01-12-adobe-acrobat-reader-15-010-20056.md",
+  "front_matter": {
+   "update_entry": true,
+   "product_id": "adobe-acrobat-reader",
+   "update_version": "15.010.20056"
+  }
+ },
+ {
+  "file": "2018-12-11-adobe-acrobat-reader-19-010-20064.md",
+  "front_matter": {
+   "update_entry": true,
+   "product_id": "adobe-acrobat-reader",
+   "update_version": "19.010.20064"
+  }
+ },
+ {
+  "file": "2026-05-01-premiere-pro-26-2-2.md",
+  "front_matter": {
+   "update_entry": true,
+   "product_id": "adobe-premiere-pro",
+   "update_version": "26.2.2"
+  }
+ },
+ {
+  "file": "2026-04-30-premiere-pro-26-2.md",
+  "front_matter": {
+   "update_entry": true,
+   "product_id": "adobe-premiere-pro",
+   "update_version": "26.2"
+  }
+ },
+ {
+  "file": "2025-05-28-davinci-resolve-20.md",
+  "front_matter": {
+   "update_entry": true,
+   "product_id": "blackmagic-davinci",
+   "update_version": "20"
+  }
+ },
+ {
+  "file": "fixture-adobe-acrobat-pro-26-001-21529.md",
+  "front_matter": {
+   "update_entry": true,
+   "product_id": "adobe-acrobat-pro",
+   "update_version": "26.001.21529"
+  }
+ },
+ {
+  "file": "fixture-adobe-acrobat-pro-15-020-20039.md",
+  "front_matter": {
+   "update_entry": true,
+   "product_id": "adobe-acrobat-pro",
+   "update_version": "15.020.20039"
+  }
+ },
+ {
+  "file": "fixture-adobe-photoshop-27-1.md",
+  "front_matter": {
+   "update_entry": true,
+   "product_id": "adobe-photoshop",
+   "update_version": "27.1"
+  }
+ }
+]

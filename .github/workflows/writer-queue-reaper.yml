@@ -66,10 +66,11 @@ jobs:
       GROUP_MEMBERS: >-
         obs-evidence-collection.yml patch-ingest.yml
         davinci-updates.yml promote-davinci-verified-reports.yml
+        systems-monitor-data.yml
       # The lanes whose loss is repaired automatically. The two DaVinci lanes are deliberately
       # absent: they are operator-driven (`workflow_dispatch` only, no cron), so a lost run there is
       # a human's own action and visible to them, whereas these two carry the routine cycle.
-      REAPABLE: obs-evidence-collection.yml patch-ingest.yml
+      REAPABLE: obs-evidence-collection.yml patch-ingest.yml systems-monitor-data.yml
     steps:
       - name: Re-dispatch writer runs that were evicted while queued
         id: reap

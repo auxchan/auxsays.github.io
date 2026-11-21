@@ -14,7 +14,8 @@ for one of them:
   * a health status is invented here that the routing module cannot evaluate;
   * `method_routing.py` routes to a method id the registry never heard of, so the catalogue and the
     thing it catalogues disagree;
-  * an unimplemented capability is listed beside working methods and reads as operational.
+  * an unimplemented capability is listed beside working methods and reads as operational;
+  * a source-rights status is recorded without its basis, or reads as a clearance.
 
 WHAT THIS IS NOT. It does not check that a method still WORKS -- that is runtime health, and it
 lives in `_data/evidence_method_health.yml` and the source-health rows. Nothing here makes a network
@@ -225,6 +226,22 @@ def run() -> int:
           "acceptance" in doc_string.lower() and "same" in doc_string.lower()
           and "discovery" in doc_string.lower(),
           "the shared-gate invariant is no longer stated in the module docstring")
+
+    # Source rights are a different question from reachability, so they are a separate OPTIONAL
+    # field. A recorded status must be a declared value and state its basis (a bare "unresolved" is a
+    # label without its terms), and no note may call the access authorised. The methods whose requests
+    # go to Adobe Community carry it while the owner's decision on Adobe's terms is pending (AUX-113),
+    # which also keeps this check from passing on an empty set.
+    adobe_community = {"adobe_community_algolia_search", "adobe_community_known_url_recheck",
+                       "adobe_community_search", "adobe_community_bug_tab_index",
+                       "single_page_prose_extraction", "ordered_official_source_failover"}
+    bad_rights = [m["method_id"] for m in methods
+                  if ("rights_status" in m or m["method_id"] in adobe_community)
+                  and (m.get("rights_status") not in am.RIGHTS_STATUSES
+                       or not str(m.get("rights_note") or "").strip()
+                       or "authori" in str(m.get("rights_note") or "").lower())]
+    check("R23 a recorded rights status is declared, states its basis, and covers Adobe Community",
+          not bad_rights and adobe_community <= set(ids), str(bad_rights[:5]))
 
     print()
     print("=" * 74)

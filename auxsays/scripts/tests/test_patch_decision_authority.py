@@ -31,6 +31,8 @@ to avoid it on active projects, in prose that carries no second verdict. [R] a r
 prose already contradicts its verdict is repaired by ordinary regeneration, with no hand edit. [N]
 the run after that writes nothing. [X] five mutants, each restoring one half of the old design,
 must each be caught by a NAMED check -- a crash or an import error does not count as a catch.
+[S] (GROWTH-1B) the search title and meta description repeat the verdict the page itself rendered,
+read back from the page, so a search result cannot become a second decision. Needs ruby + liquid.
 
 Deterministic and offline: no network, no git, writes only inside a temp dir.
 
@@ -39,6 +41,7 @@ Run: PYTHONDONTWRITEBYTECODE=1 python auxsays/scripts/tests/test_patch_decision_
 from __future__ import annotations
 
 import contextlib
+import html as htmlmod
 import io
 import json
 import re
@@ -271,8 +274,10 @@ def check_wiring() -> None:
     appears somewhere in the file.
     """
     sentinel = "MANUAL WATCH"          # a real decision, so nothing downstream rejects it as junk
-    original = patch_decision.decision_label
-    patch_decision.decision_label = lambda *a, **k: sentinel
+    # GROWTH-3: the authority's entry point is `decide`; `decision_label` is now its thin wrapper.
+    # Substituting `decide` therefore reaches every caller, the wrapper's included.
+    original = patch_decision.decide
+    patch_decision.decide = lambda *a, **k: patch_decision.Decision(sentinel, "RX")
     try:
         fields = proposed(DAV, "21 Public Beta 1")
         check("W1 the summary prefix follows the substituted authority",
@@ -293,7 +298,7 @@ def check_wiring() -> None:
                   [evidence_row(DAV, "21 Public Beta 1", i) for i in range(15)],
                   bce.Counter({"negative": 15}), bce.Counter({"playback_stutter": 15}))) == sentinel)
     finally:
-        patch_decision.decision_label = original
+        patch_decision.decide = original
 
     # And the beta rule itself is single-sourced: both former copies now answer from one definition.
     beta_re_original = patch_decision._BETA_RE
@@ -325,18 +330,18 @@ def check_wiring() -> None:
     # what pins that: two calls could judge different version strings -- the summary path used to
     # read `patch_display_label(...)` while the verdict read the raw version -- and a suite whose
     # fixtures all have an empty build would never see the difference in the output.
-    original = patch_decision.decision_label
+    original = patch_decision.decide
     calls = []
 
     def counting(*a, **k):
-        calls.append((a, tuple(sorted(k))))
+        calls.append((tuple(sorted((a[0] or {}).items())) if a else (), tuple(sorted(k))))
         return original(*a, **k)
 
-    patch_decision.decision_label = counting
+    patch_decision.decide = counting
     try:
         proposed(WIN, "25H2", build="26200.1234")
     finally:
-        patch_decision.decision_label = original
+        patch_decision.decide = original
     check("W8 one record asks the authority exactly once",
           len(calls) == 1, f"{len(calls)} calls: {calls}")
 
@@ -346,17 +351,18 @@ def check_wiring() -> None:
     # build (32.1.1, 43 reports) while the record said WAIT.
     #
     # AUX-007 removed the record-state input, so this now pins something STRONGER: the two writers
-    # agree AND both answer the same whichever way `update_status` is set. The sentiment is
-    # negative, so the evidence-driven answer is WAIT for both.
+    # agree AND both answer the same whichever way `update_status` is set. GROWTH-3: with no
+    # reviewed reason and no official fact, the answer is INSUFFICIENT DATA for both, whatever the
+    # (negative) sentiment says.
     pairs = []
     answers = set()
     for status in ("archived", "current"):
         writer = proposed(OBS, "32.1.1", sentiment="negative", count=43, status=status)
         aggregate = bce.recommendation_prefix(OBS, "32.1.1", "negative", 43, update_status=status)
         answers |= decisions_named(writer) | {aggregate}
-        if not (decisions_named(writer) == {"WAIT"} and aggregate == "WAIT"):
+        if not (decisions_named(writer) == {"INSUFFICIENT DATA"} and aggregate == "INSUFFICIENT DATA"):
             pairs.append(f"{status}: record={sorted(decisions_named(writer))} "
-                         f"aggregate={aggregate!r} expected='WAIT'")
+                         f"aggregate={aggregate!r} expected='INSUFFICIENT DATA'")
     if len(answers) != 1:
         pairs.append(f"update_status changed the decision: {sorted(answers)}")
     check("W10 both writers agree, and update_status does not change the decision",
@@ -429,38 +435,41 @@ def check_matrix() -> None:
 # "make the two fields agree" can never drift into "make the recommendation friendlier". Every
 # entry here is the word the READER-FACING VERDICT published before this change; the summary is what
 # moved to meet it.
+# GROWTH-3 (owner decisions 1-3, 2026-11-06). The product branches and the sentiment fallback are
+# gone: with no reviewed reason entry and no official fact, EVERY row below decides INSUFFICIENT
+# DATA -- whatever the product, the sentiment, the beta string or `update_status`. The rows are kept
+# because each one used to decide something else; they now prove that none of those inputs decides
+# anything (G3-D3 sentiment, product, status), not that a preferred word survived.
+_ID = "INSUFFICIENT DATA"
 POLICY = [
-    # DaVinci: the beta and the stable build name the same ACTION. The label was
-    # "WAIT for production systems" until AUX-029; that phrasing is a legacy alias now, and the
-    # production-systems half is a qualification the prose still states.
-    (DAV, "21 Public Beta 1", "negative", "current", "WAIT"),
-    (DAV, "21 Public Beta 1", "positive", "current", "WAIT"),
-    (DAV, "21", "negative", "current", "WAIT"),
-    (DAV, "20.2", "positive", "current", "WAIT"),
+    (DAV, "21 Public Beta 1", "negative", "current", _ID),
+    (DAV, "21 Public Beta 1", "positive", "current", _ID),
+    (DAV, "21", "negative", "current", _ID),
+    (DAV, "20.2", "positive", "current", _ID),
     # OBS IS EVIDENCE-DRIVEN (AUX-007). It used to read `update_status`: maintained -> TEST FIRST,
     # archived -> WAIT, which let a positional metadata field outrank the community consensus. The
     # archived row below is UNCHANGED in outcome and that is the point -- the old rule happened to
     # agree with the evidence there, which is how it passed for as long as it did.
-    (OBS, "31.2.1", "negative", "current", "WAIT"),
-    (OBS, "30.0.0", "negative", "archived", "WAIT"),
-    (OBS, "31.2.1", "positive", "current", "SAFE ENOUGH"),
-    (OBS, "31.2.1", "moderate", "current", "TEST FIRST"),
+    (OBS, "31.2.1", "negative", "current", _ID),
+    (OBS, "30.0.0", "negative", "archived", _ID),
+    (OBS, "31.2.1", "positive", "current", _ID),
+    (OBS, "31.2.1", "moderate", "current", _ID),
     # The same three sentiments with the status flipped. These are the rows that FAIL if
     # `update_status` is ever wired back into the decision.
-    (OBS, "31.2.1", "negative", "archived", "WAIT"),
-    (OBS, "31.2.1", "positive", "archived", "SAFE ENOUGH"),
-    (OBS, "31.2.1", "moderate", "archived", "TEST FIRST"),
-    (WIN, "25H2", "negative", "current", "WAIT"),
+    (OBS, "31.2.1", "negative", "archived", _ID),
+    (OBS, "31.2.1", "positive", "archived", _ID),
+    (OBS, "31.2.1", "moderate", "archived", _ID),
+    (WIN, "25H2", "negative", "current", _ID),
     # The positive rows are the ones that prove these branches EXIST. On negative sentiment the
     # Windows and Premiere branches and the sentiment fallback both answer "WAIT", so deleting
     # either branch was previously caught by nothing.
-    (WIN, "25H2", "positive", "current", "WAIT"),
-    (PREM, "26.2", "negative", "current", "WAIT"),
-    (PREM, "26.2", "positive", "current", "WAIT"),
-    (PREM, "26.2", "moderate", "current", "WAIT"),
-    (ACRO, "25.001.20800", "negative", "current", "WAIT"),
-    (ACRO, "25.001.20800", "positive", "current", "SAFE ENOUGH"),
-    (ACRO, "25.001.20800", "moderate", "current", "TEST FIRST"),
+    (WIN, "25H2", "positive", "current", _ID),
+    (PREM, "26.2", "negative", "current", _ID),
+    (PREM, "26.2", "positive", "current", _ID),
+    (PREM, "26.2", "moderate", "current", _ID),
+    (ACRO, "25.001.20800", "negative", "current", _ID),
+    (ACRO, "25.001.20800", "positive", "current", _ID),
+    (ACRO, "25.001.20800", "moderate", "current", _ID),
 ]
 
 
@@ -480,10 +489,10 @@ def check_policy() -> None:
           leading_decision(beta.get("update_consensus_summary")) != "AVOID for production",
           repr(str(beta.get("update_consensus_summary"))[:110]))
     check("P3 the public beta decides one canonical action, everywhere",
-          decisions_named(beta) == {"WAIT"},
+          decisions_named(beta) == {_ID},
           repr(sorted(decisions_named(beta))))
     check("P3b and that action is canonical, not the legacy phrasing",
-          patch_decision.is_canonical("WAIT")
+          patch_decision.is_canonical(_ID)
           and "WAIT for production systems" not in decisions_named(beta),
           repr(sorted(decisions_named(beta))))
 
@@ -495,10 +504,12 @@ def check_policy() -> None:
     # rule says WAIT. So if that rule ever leaked into OBS, this fails.
     obs_beta = proposed(OBS, "31.2.1 beta", sentiment="positive")
     dav_beta = proposed(DAV, "21 Public Beta 1", sentiment="positive")
-    check("P4 a beta version of another product keeps that product's own decision",
-          decisions_named(obs_beta) == {"SAFE ENOUGH"}, repr(sorted(decisions_named(obs_beta))))
-    check("P4b and the case discriminates: the two products answer differently here",
-          decisions_named(obs_beta) != decisions_named(dav_beta),
+    # GROWTH-3: a positive OBS beta used to read SAFE ENOUGH and the DaVinci beta WAIT. Neither
+    # positive sentiment nor a beta string decides anything now, and SAFE ENOUGH is unreachable.
+    check("P4 a positive beta of another product gains no verdict (SAFE ENOUGH stays unreachable)",
+          decisions_named(obs_beta) == {_ID}, repr(sorted(decisions_named(obs_beta))))
+    check("P4b and the two products answer the same: product and beta string decide nothing",
+          decisions_named(obs_beta) == decisions_named(dav_beta) == {_ID},
           f"obs={sorted(decisions_named(obs_beta))} davinci={sorted(decisions_named(dav_beta))}")
 
     # ZERO EVIDENCE. An official-source-only record must not drift into an invitation to
@@ -544,7 +555,10 @@ def check_body_follows_decision() -> None:
     every one of them is a maintained build.
     """
     from collections import Counter as _C
-    for decision, invites in (("WAIT", False), ("TEST FIRST", True), ("SAFE ENOUGH", True)):
+    # GROWTH-3: the `decision` a caller passes no longer selects the body. The writer decides from
+    # facts and the body is the policy's line, so no caller string -- TEST FIRST or SAFE ENOUGH
+    # included -- can put an invitation to install on a record the policy gives no reason for.
+    for decision, invites in (("WAIT", False), ("TEST FIRST", False), ("SAFE ENOUGH", False)):
         for status in ("current", "archived"):
             fields = acr._record_coherence_fields(
                 "obs-studio", "32.2.2", 42,
@@ -554,13 +568,13 @@ def check_body_follows_decision() -> None:
             steps = " ".join(fields.get("practical_recommendations") or [])
             offers = "Test on a backup profile" in body
             check(f"B1 {decision}/{status}: the body offers testing == {invites}",
-                  offers is invites, repr(body[:90]))
+                  offers is invites and body.startswith("No verdict yet:"), repr(body[:90]))
             if not invites:
                 check(f"B2 {decision}/{status}: the recommendations do not open with an invitation",
                       not steps.startswith("Test with a backup"), repr(steps[:90]))
             # The authority decides whether prose may invite installation; the branch must agree.
-            check(f"B3 {decision}/{status}: the body agrees with permits_testing",
-                  offers is patch_decision.permits_testing(decision))
+            check(f"B3 {decision}/{status}: the body agrees with permits_testing of the POLICY's verdict",
+                  offers is patch_decision.permits_testing(str(fields.get("update_decision_label"))))
     # `update_status` may QUALIFY and may not DECIDE: same decision, same instruction, one extra
     # sentence for the archived build.
     from collections import Counter as _C2
@@ -571,12 +585,13 @@ def check_body_follows_decision() -> None:
                                        {"update_product": "OBS Studio", "update_status": "archived"},
                                        _C2(), decision="WAIT")
     check("B4 archived does not change the decision label",
-          cur["update_decision_label"] == arc["update_decision_label"] == "WAIT")
+          cur["update_decision_label"] == arc["update_decision_label"] == _ID)
     check("B5 archived does not change the quick verdict",
           cur["quick_verdict"] == arc["quick_verdict"])
-    check("B6 archived adds a qualification and nothing else",
-          arc["update_decision_body"].startswith(cur["update_decision_body"])
-          and "archived build" in arc["update_decision_body"],
+    # GROWTH-3: the archived notice is rendered by its own include; it no longer rides on the
+    # verdict line, which is the policy's alone.
+    check("B6 archived changes nothing in the verdict line",
+          arc["update_decision_body"] == cur["update_decision_body"],
           repr(arc["update_decision_body"][-110:]))
     check("B7 and the maintained build carries no archived sentence",
           "archived" not in cur["update_decision_body"])
@@ -590,7 +605,7 @@ def check_detail_page_failsafe() -> None:
     "GitHub / Copilot Copilot code review" in the detail page's AUXSAYS verdict box -- the two
     surfaces disagreeing about one patch, which is the invariant this sprint exists to establish.
     """
-    layout = DETAIL_LAYOUT.read_text(encoding="utf-8")
+    layout = detail_layout_text()
     check("B8 the detail layout reads the shared vocabulary",
           "site.data.patch_verdicts" in layout,
           "the detail page still publishes unvalidated labels")
@@ -612,9 +627,11 @@ def check_detail_page_failsafe() -> None:
           "install liquid 4.0.4; CI does this explicitly and must not skip these silently")
     if not liquid_ok:
         return
+    # GROWTH-3: a STORED label publishes nothing by itself any more. WAIT needs a supported reason
+    # entry, SAFE ENOUGH is unreachable, so all five records publish INSUFFICIENT DATA.
     for name, expected in (("prose", "INSUFFICIENT DATA"), ("garbage", "INSUFFICIENT DATA"),
-                           ("wait", "WAIT"), ("legacy", "WAIT for production systems"),
-                           ("safe", "SAFE ENOUGH")):
+                           ("wait", "INSUFFICIENT DATA"), ("legacy", "INSUFFICIENT DATA"),
+                           ("safe", "INSUFFICIENT DATA")):
         got = rendered_verdict(html[name])
         check(f"B10 detail page publishes {expected!r} for the {name} record",
               got == expected, repr(got))
@@ -654,7 +671,7 @@ def _qa_on(tree, argv):
     out = tree / "qa_status.json"
     keys = ("scan_priority_source_coverage", "scan_evidence_count_alignment",
             "scan_update_layout_public_copy", "scan_required_record_paths",
-            "scan_route_integrity")
+            "scan_route_integrity", "scan_lifecycle_builds")
     saved = {k: getattr(qa, k) for k in keys}
     saved_dir, saved_out = qa.GENERATED_DIR, qa.OUT_PATH
     try:
@@ -665,6 +682,8 @@ def _qa_on(tree, argv):
         qa.scan_update_layout_public_copy = lambda: ([], [])
         qa.scan_required_record_paths = lambda: ([], [])
         qa.scan_route_integrity = lambda: ([], [])
+        # Corpus-wide too: the shipped lifecycle file lists two builds a one-record fixture lacks.
+        qa.scan_lifecycle_builds = lambda files: ([], [])
         with contextlib.redirect_stdout(io.StringIO()):
             rc = qa.main(argv)
         return rc, json.loads(out.read_text(encoding="utf-8"))
@@ -889,22 +908,22 @@ def check_qualification() -> None:
     beta = proposed(DAV, "21 Public Beta 1")
     blob = prose_blob(beta)
     check("Q1 the beta still warns production editors off active projects",
-          "avoid it on active projects" in blob.lower(), repr(blob[:160]))
+          "keep it off active client projects" in blob.lower(), repr(blob[:160]))
     check("Q2 that warning is prose, not a second verdict",
           not embedded_decisions(blob), repr(sorted(embedded_decisions(blob))))
 
     obs = proposed(OBS, "31.2.1", sentiment="negative")
     obs_blob = prose_blob(obs)
-    check("Q3 a TEST FIRST record may still counsel caution in prose",
-          "test on a backup profile" in obs_blob.lower(), repr(obs_blob[:160]))
+    check("Q3 an OBS record may still counsel caution in prose",
+          "keep a backup of your scene collection and profile" in obs_blob.lower(), repr(obs_blob[:160]))
     check("Q4 that caution names no competing action",
           not embedded_decisions(obs_blob), repr(sorted(embedded_decisions(obs_blob))))
 
     # A qualification may soften the decision; it may not reverse it. The positive-sentiment
     # sentence offers testing, and for the four policy products a positive record can carry a WAIT.
     pos_wait = proposed(WIN, "25H2", sentiment="positive")
-    check("Q6 prose does not invite testing under a WAIT decision",
-          decisions_named(pos_wait) == {"WAIT"}
+    check("Q6 positive sentiment gains no verdict and no invitation to install",
+          decisions_named(pos_wait) == {_ID}
           and "most users can test the update" not in prose_blob(pos_wait).lower(),
           repr(prose_blob(pos_wait)[:200]))
 
@@ -987,6 +1006,23 @@ def check_corpus_audit(tmp: Path) -> None:
 # ---------------------------------------------------------------- [V] what the reader is told
 
 DETAIL_LAYOUT = _REPO / "auxsays" / "_layouts" / "aux-update.html"
+PAGE_INCLUDE_TAG = re.compile(r"\{%-?\s*include\s+(patch-evidence-state|patch-decision)\.html\s+record=([\w.]+)\s*-?%\}")
+
+
+GATE_INCLUDE_TAG = re.compile(r"\{%-?\s*include\s+patch-verdict-gate\.html\s+record=([\w.]+)\s+count=([\w.]+)\s*-?%\}")
+
+
+def detail_layout_text() -> str:
+    """The patch-detail layout with its maturity rung and decision ladder inlined. GROWTH-1C moved
+    both into _includes/patch-evidence-state.html and patch-decision.html, which the layout renders
+    (and the homepage too); they are the page's own code, bound here to their record= argument.
+    GROWTH-3: patch-decision renders the verdict gate, inlined the same way (record= and count=)."""
+    text = PAGE_INCLUDE_TAG.sub(
+        lambda m: (_REPO / "auxsays" / "_includes" / f"{m.group(1)}.html").read_text(encoding="utf-8")
+        .replace("include.record", m.group(2)), DETAIL_LAYOUT.read_text(encoding="utf-8"))
+    gate = (_REPO / "auxsays" / "_includes" / "patch-verdict-gate.html").read_text(encoding="utf-8")
+    return GATE_INCLUDE_TAG.sub(lambda m: gate.replace("include.record", m.group(1))
+                                .replace("include.count", m.group(2)), text)
 
 # render! rather than render, so a Liquid error RAISES instead of landing in the output where an
 # extraction that finds no verdict would read as "no contradiction".
@@ -1020,7 +1056,7 @@ def render_detail(cases: dict[str, dict], vocab: dict | None = None) -> tuple[bo
     Rendering with an empty `site` would blank every verdict and these assertions would be
     measuring the harness instead of the template.
     """
-    src = DETAIL_LAYOUT.read_text(encoding="utf-8").split("---", 2)[-1]
+    src = detail_layout_text().split("---", 2)[-1]
     src = re.sub(r"\{%-?\s*include\s.*?-?%\}", "", src, flags=re.S)
     ruby = shutil.which("ruby")
     if not ruby:
@@ -1035,6 +1071,10 @@ def render_detail(cases: dict[str, dict], vocab: dict | None = None) -> tuple[bo
                 "evidence_method_health": {},
                 "patch_verdicts": vocab if vocab is not None else yaml.safe_load(
                     (_REPO / "auxsays" / "_data" / "patch_verdicts.yml").read_text(encoding="utf-8")),
+                "verdict_reasons": yaml.safe_load(
+                    (_REPO / "auxsays" / "_data" / "verdict_reasons.yml").read_text(encoding="utf-8")),
+                "patch_lifecycle": yaml.safe_load(
+                    (_REPO / "auxsays" / "_data" / "patch_lifecycle.yml").read_text(encoding="utf-8")),
             }},
             "cases": cases,
         }), encoding="utf-8")
@@ -1100,6 +1140,539 @@ def check_render() -> None:
           "is supposed to catch")
 
 
+# ------------------------------------------------- [S] the search result says what the page says
+#
+# GROWTH-1B. A patch page's <title> and meta description now carry the decision. They are written
+# by _includes/patch-search-meta.html from the verdict the page itself rendered, never from the
+# stored fields, so a search result cannot publish a verdict the page does not. Rendered here
+# end to end: the shipped aux-update layout with its real includes, then the shipped aux-base
+# head over that output, exactly the two stages Jekyll runs.
+
+BASE_LAYOUT = _REPO / "auxsays" / "_layouts" / "aux-base.html"
+SEARCH_META = _REPO / "auxsays" / "_includes" / "patch-search-meta.html"
+INCLUDES_DIR = _REPO / "auxsays" / "_includes"
+SITE_URL = "https://auxsays.com"
+SEO_STUB = "<!--SITE-WIDE-SEO-TAG-->"
+
+_SEARCH_RB = r"""
+require 'liquid'
+require 'json'
+
+class JekyllInclude < Liquid::Tag
+  SYNTAX = /([\w.\/-]+)((\s+\w+\s*=\s*(?:"[^"]*"|'[^']*'|[\w.\[\]\/-]+))*)/
+  def initialize(name, markup, tokens)
+    super
+    m = markup.strip.match(SYNTAX) or raise Liquid::SyntaxError, "bad include: #{markup}"
+    @file = m[1]
+    @params = {}
+    (m[2] || "").scan(/(\w+)\s*=\s*("[^"]*"|'[^']*'|[\w.\[\]\/-]+)/) { |k, v| @params[k] = v }
+  end
+  def render(context)
+    path = File.join(context.registers[:include_root], @file)
+    raise Liquid::FileSystemError, "missing include #{@file}" unless File.exist?(path)
+    vals = {}
+    @params.each do |k, v|
+      vals[k] = (v =~ /\A"(.*)"\z/m || v =~ /\A'(.*)'\z/m) ? $1 : context[v]
+    end
+    partial = (context.registers[:cache] ||= {})[path] ||=
+      Liquid::Template.parse(File.read(path, encoding: "utf-8"))
+    context.stack { context["include"] = vals; partial.render!(context) }
+  end
+end
+Liquid::Template.register_tag("include", JekyllInclude)
+
+class SeoStub < Liquid::Tag
+  def render(_ctx) = "<!--SITE-WIDE-SEO-TAG-->"
+end
+Liquid::Template.register_tag("seo", SeoStub)
+
+module Shims
+  def relative_url(i) = "/" + i.to_s.sub(%r{\A/}, "")
+  def absolute_url(i) = "https://auxsays.com/" + i.to_s.sub(%r{\A/}, "")
+  def jsonify(i) = JSON.generate(i)
+  def markdownify(i) = i.to_s
+  def where(input, property, value)
+    input = input.values if input.is_a?(Hash)
+    return input unless input.respond_to?(:select)
+    input.select { |item| item.is_a?(Hash) && item[property].to_s == value.to_s }
+  end
+end
+Liquid::Template.register_filter(Shims)
+
+payload = JSON.parse(File.read(ARGV[0], encoding: "utf-8"))
+update = Liquid::Template.parse(payload["update"])
+base = Liquid::Template.parse(payload["base"])
+out = {}
+payload["cases"].each do |name, c|
+  begin
+    content = c.key?("content") ? c["content"] :
+      update.render!({ "site" => c["site"], "page" => c["page"], "content" => "" },
+                     registers: { include_root: payload["includes"] })
+    html = base.render!({ "site" => c["site"], "page" => c["page"], "content" => content,
+                          "jekyll" => { "version" => "4.4.1" } },
+                        registers: { include_root: payload["includes"] })
+    out[name] = { "content" => content, "html" => html }
+  rescue => e
+    out[name] = { "content" => "", "html" => "<<RENDER FAILED: #{e.class}: #{e.message}>>" }
+  end
+end
+print JSON.generate(out)
+"""
+
+SEARCH_TITLE_RE = re.compile(r"<title>(.*?)</title>", re.S)
+SEARCH_DESC_RE = re.compile(r'<meta name="description" content="(.*?)" />', re.S)
+SEARCH_CANON_RE = re.compile(r'<link rel="canonical" href="(.*?)" />', re.S)
+SEARCH_OGURL_RE = re.compile(r'<meta property="og:url" content="(.*?)" />', re.S)
+SEARCH_OGT_RE = re.compile(r'<meta property="og:title" content="(.*?)" />', re.S)
+SEARCH_OGD_RE = re.compile(r'<meta name="twitter:description" property="og:description" content="(.*?)" />',
+                           re.S)
+SEARCH_TWT_RE = re.compile(r'<meta name="twitter:title" content="(.*?)" />', re.S)
+SEARCH_JSONLD_RE = re.compile(r'<script type="application/ld\+json">\s*(.*?)</script>', re.S)
+DECISION_WORDS = ("AVOID", "WAIT", "TEST FIRST", "SECURITY UPDATE", "SAFE ENOUGH", "OFFICIAL ONLY",
+                  "MANUAL WATCH")
+UNEARNED_CLAIMS = ("safe to install", "safe to update", "no problems", "no issues", "no known issues",
+                   "is safe", "pause updates", "pause windows", "supersed", "replaced by")
+PATCH_URL = "/updates/obs-project/obs-studio/99-0-0/"
+WIN_URL = "/updates/microsoft/microsoft-windows-11/25h2/26200.7840/"
+# GROWTH-3: a stored label no longer publishes a verdict, so the search fixtures carry the facts that
+# do -- reviewed reason entries for the synthetic pages, cited by the reports the pages count.
+U = [f"https://reports.test/{i}" for i in range(1, 5)]
+
+
+def _reason(rid, pid, version, verdict, rclass, scope, reason, urls, build=""):
+    entry = {"id": rid, "product_id": pid, "update_version": version, "verdict": verdict,
+             "reason_class": rclass, "scope": scope, "reason": reason,
+             "evidence": [{"id": f"{rid}-{i}", "source_url": u} for i, u in enumerate(urls)],
+             "new_in_this_version": rclass == "regression", "reviewed_at": "2026-11-10", "basis": "test"}
+    if build:
+        entry["target_build"] = build
+    if rclass == "regression":
+        entry.update(transition={"working": "98.0.0", "failing": version}, material="it stops working")
+    return entry
+
+
+SEARCH_REASONS = {"schema_version": 1, "entries": [
+    _reason("obs:99:wait", OBS, "99.0.0", "WAIT", "regression", "if you use the test setup",
+            "Users report that the test setup stops working after updating. A second sentence stays on the page.",
+            U[:2]),
+    _reason("obs:99:tf", OBS, "99.0.0", "TEST FIRST", "corroborated_issue", "if you use the test dock",
+            "Two users report that the test dock disappears.", U[2:]),
+    _reason("win:7840:wait", WIN, "25H2", "WAIT", "regression", "if you use the test driver",
+            "Users report that the test driver stops working after updating. This page covers one cumulative update.",
+            U[:2], build="26200.7840"),
+]}
+SOURCES_WAIT = [{"source_url": u} for u in U[:2]]
+
+
+def search_site(listed=(), *, projection: bool = True, pages=None) -> dict:
+    data = {"evidence_method_health": {},
+            "patch_verdicts": yaml.safe_load(
+                (_REPO / "auxsays" / "_data" / "patch_verdicts.yml").read_text(encoding="utf-8")),
+            "verdict_reasons": SEARCH_REASONS, "patch_lifecycle": {"schema_version": 1, "entries": []}}
+    if projection:
+        data["live_eligibility"] = {"urls": list(listed)}
+    site = {"time": "2026-11-06T00:00:00Z", "title": "AUXSAYS", "lang": "en", "url": SITE_URL,
+            "tagline": "Tactical knowledge for creators who want control",
+            "monitoring_max_age_days": 14, "monitoring_min_healthy_methods": 2, "data": data}
+    if pages is not None:
+        site["pages"] = pages
+    return site
+
+
+def search_page(**over) -> dict:
+    """A report-bearing OBS patch page as a writer leaves it, writer's default title included."""
+    base = {
+        "layout": "aux-update", "url": PATCH_URL, "update_entry": True,
+        "title": "OBS Studio 99.0.0 official update breakdown",
+        "description": "Official OBS Studio update record captured from OBS Project.",
+        "product_id": OBS, "update_product": "OBS Studio", "update_version": "99.0.0",
+        "target_build": "", "update_detail_title": "OBS Studio 99.0.0",
+        "update_consensus_label": "Negative", "update_published_at": "2026-10-01T00:00:00Z",
+        "update_source_url": "https://example.test/notes", "update_status": "current",
+        "evidence_state": "pilot_sample", "consensus_collection_status": "pilot_initial_sample",
+        "intelligence_stage": "pilot",
+        "update_report_count": 12, "confirmed_patch_specific_report_count": 12,
+        "accepted_report_sources": SOURCES_WAIT,
+        "evidence_last_checked": "2026-10-20T00:00:00Z",
+        "update_decision_label": "WAIT",
+        "update_decision_body": "Current reports mention startup crashes. A second sentence stays on the page.",
+    }
+    base.update(over)
+    return base
+
+
+def windows_page(**over) -> dict:
+    base = search_page(
+        url=WIN_URL, product_id=WIN, update_product="Windows 11", update_version="25H2",
+        target_build="26200.7840", target_kb="KB5127648",
+        update_detail_title="Windows 11 25H2 (Build 26200.7840)",
+        title="Windows 11 25H2 (Build 26200.7840) official update breakdown",
+        update_decision_body=("Current reports mention update/install failure and bsod / stop error. "
+                              "This page covers one cumulative update, not the whole servicing train."))
+    base.update(over)
+    return base
+
+
+def live_axes() -> dict:
+    from lib import maturity
+    return maturity.CONSENSUS_LIVE.axes()
+
+
+def official_zero(**over) -> dict:
+    page = search_page(update_report_count=0, confirmed_patch_specific_report_count=0,
+                       accepted_report_sources=[], evidence_last_checked="",
+                       update_consensus_label="Insufficient data", update_decision_label="",
+                       update_decision_body="", evidence_state="official_only",
+                       consensus_collection_status="deferred_official_only",
+                       intelligence_stage="official_live",
+                       quick_verdict="OBS Studio 99.0.0 has an official AUXSAYS record.")
+    page.update(over)
+    return page
+
+
+def synthetic_content(box: str, *, verdicts: int = 1, label: str = "WAIT") -> str:
+    """Patch-page markup written by hand, to reach states the real layout never produces."""
+    verdict = ('<span class="update-decision-eyebrow">AUXSAYS verdict</span>\n'
+               f"          <strong>{label}</strong>\n")
+    return ('<h1 class="update-title">OBS Studio 99.0.0</h1>\n'
+            f'<div id="verdict" class="update-decision-box update-decision-box--{box}">\n'
+            + verdict * verdicts
+            + '<p class="update-decision-recommendation">Hold this build for now.</p></div>')
+
+
+def with_projection(cases: dict) -> dict:
+    """Give each case's site the verdict projection a deploy would build for its page: the gate
+    prints WAIT / TEST FIRST only from that (GROWTH-3 review 1, D2). The page's accepted sources
+    stand for its COUNTED rows, one row per cited source, so the authority -- not a template rule --
+    decides which entry the page's evidence supports."""
+    from lib import evidence_facts, verdict_projection, verdict_reasons  # noqa: PLC0415
+    for case in cases.values():
+        page = case["page"]
+        if page.get("update_entry") is not True:
+            continue
+        urls = {str(s.get("source_url") or "") for s in page.get("accepted_report_sources") or []}
+        # Rows as the persistence boundary writes them, with their structured evidence facts (G68): the
+        # distinct-reporter rule reads the excerpt fact, never the text.
+        rows = [evidence_facts.with_facts({"id": item["id"], "source_url": item["source_url"],
+                                           "report_text_excerpt": f"Report at {item['source_url']}"})
+                for e in SEARCH_REASONS["entries"] for item in e["evidence"] if item["source_url"] in urls]
+        case["site"]["data"]["verdict_projection"] = verdict_projection.project(
+            [page], {verdict_reasons.record_identity(page): rows}, SEARCH_REASONS["entries"], [])[0]
+    return cases
+
+
+def search_cases() -> dict:
+    return with_projection(_search_cases())
+
+
+def _search_cases() -> dict:
+    live = dict(live_axes(), update_report_count=40, confirmed_patch_specific_report_count=40)
+    newer_b = windows_page(url="/updates/microsoft/microsoft-windows-11/25h2/26200.7999/",
+                           target_build="26200.7999", target_kb="KB5199999", update_type="2026-03 B",
+                           update_published_at="2026-03-10T00:00:00Z")
+    return {
+        "win_wait": {"page": windows_page(), "site": search_site()},
+        "win_no_kb": {"page": windows_page(target_kb=""), "site": search_site()},
+        "early": {"page": search_page(update_decision_label="TEST FIRST", update_report_count=3,
+                                      confirmed_patch_specific_report_count=3,
+                                      accepted_report_sources=[{"source_url": u} for u in U[2:]]),
+                  "site": search_site()},
+        "official_zero": {"page": official_zero(), "site": search_site()},
+        "nothing_zero": {"page": official_zero(update_source_url=""), "site": search_site()},
+        "refused_label": {"page": search_page(update_decision_label="SHIP IT", update_report_count=4,
+                                              confirmed_patch_specific_report_count=4,
+                                              accepted_report_sources=[]),
+                          "site": search_site()},
+        "live_certified": {"page": search_page(**live), "site": search_site([PATCH_URL])},
+        "live_uncertified": {"page": search_page(**live), "site": search_site([])},
+        "live_absent": {"page": search_page(**live), "site": search_site(projection=False)},
+        # GROWTH-3: the real layout never prints a legacy phrasing now, so the read-back of one is
+        # reached with hand-written markup, as the box_* cases reach theirs.
+        "legacy": {"page": search_page(update_decision_label="WAIT for production systems"),
+                   "site": search_site(), "content": synthetic_content("pilot", label="WAIT for production systems")},
+        "safe": {"page": search_page(update_decision_label="SAFE ENOUGH", update_report_count=10,
+                                     confirmed_patch_specific_report_count=10,
+                                     update_consensus_label="Positive", accepted_report_sources=[],
+                                     update_decision_body="Reports so far concern interface changes."),
+                 "site": search_site()},
+        "newer_b_exists": {"page": windows_page(update_type="2026-02 B",
+                                                update_published_at="2026-02-10T00:00:00Z"),
+                           "site": search_site(pages=[newer_b])},
+        "escaping": {"page": search_page(update_detail_title='Copilot "agent" & tools 1.0'),
+                     "site": search_site()},
+        # G43: the writer's "<label> <vendor headline>" when the headline opens with the label's last word.
+        "label_twice": {"page": search_page(update_product=LABEL_TWICE_PRODUCT,
+                                            update_detail_title=LABEL_TWICE_STORED,
+                                            update_feed_title=LABEL_TWICE_STORED,
+                                            title=LABEL_TWICE_STORED + " official update breakdown"),
+                        "site": search_site()},
+        "box_live_uncertified": {"page": search_page(**live), "site": search_site([]),
+                                 "content": synthetic_content("live")},
+        "box_pilot_certified": {"page": search_page(**live), "site": search_site([PATCH_URL]),
+                                "content": synthetic_content("pilot")},
+        "not_a_patch_page": {"page": {"layout": "aux-home", "url": "/", "title": "Home"},
+                             "site": search_site(), "content": "<p>home</p>"},
+        "unreadable_page": {"page": search_page(), "site": search_site(), "content": "<p>no verdict</p>"},
+        "two_verdicts": {"page": search_page(), "site": search_site(),
+                         "content": synthetic_content("pilot", verdicts=2)},
+    }
+
+
+FALLBACK_CASES = ("not_a_patch_page", "unreadable_page", "two_verdicts")
+LABEL_TWICE_PRODUCT = "GitHub / Copilot"
+LABEL_TWICE_STORED = "GitHub / Copilot Copilot Student GPT-5.3-Codex removal from model picker"
+LABEL_ONCE = "GitHub / Copilot Student GPT-5.3-Codex removal from model picker"
+
+
+def render_search(cases: dict) -> dict[str, dict]:
+    """{name: {"content": page body markup, "html": the full page}} through the shipped layouts."""
+    ruby = shutil.which("ruby")
+    failed = {n: {"content": "", "html": "<<RENDER FAILED: ruby is not on PATH>>"} for n in cases}
+    if not ruby:
+        return failed
+    update_src = DETAIL_LAYOUT.read_text(encoding="utf-8").split("---", 2)[-1]
+    with tempfile.TemporaryDirectory() as td:
+        script, payload = Path(td) / "s.rb", Path(td) / "p.json"
+        script.write_text(_SEARCH_RB, encoding="utf-8")
+        payload.write_text(json.dumps({"update": update_src,
+                                       "base": BASE_LAYOUT.read_text(encoding="utf-8"),
+                                       "includes": str(INCLUDES_DIR), "cases": cases}),
+                           encoding="utf-8")
+        proc = subprocess.run([ruby, str(script), str(payload)], capture_output=True, text=True,
+                              encoding="utf-8", errors="replace", timeout=600)
+    if proc.returncode != 0 or not proc.stdout.strip():
+        return {n: {"content": "", "html": f"<<RENDER FAILED: {(proc.stderr or '')[-300:]}>>"}
+                for n in cases}
+    return json.loads(proc.stdout)
+
+
+def search_head(html: str) -> dict:
+    """What a search engine reads from the rendered head."""
+    head = html.split("</head>", 1)[0]
+
+    def all_of(regex):
+        return [htmlmod.unescape(v) for v in regex.findall(head)]
+    titles = all_of(SEARCH_TITLE_RE)
+    ld = SEARCH_JSONLD_RE.findall(head)
+    try:
+        parsed = json.loads(ld[0]) if len(ld) == 1 else None
+    except ValueError:
+        parsed = None
+    # G39: the JSON-LD is read as a search engine reads it -- NOT unescaped. A <script> element is raw
+    # text, so its values must already be the plain text the head tags decode to; "&amp;" there is
+    # five characters. (This used to unescape them, which is how 16 Figma pages passed S20.)
+    return {"titles": titles, "descriptions": all_of(SEARCH_DESC_RE),
+            "canonicals": all_of(SEARCH_CANON_RE), "og_url": all_of(SEARCH_OGURL_RE),
+            "og_title": all_of(SEARCH_OGT_RE), "og_description": all_of(SEARCH_OGD_RE),
+            "twitter_title": all_of(SEARCH_TWT_RE), "jsonld": parsed, "jsonld_raw": ld,
+            "stub": SEO_STUB in head, "raw_head": head}
+
+
+def title_claim(title: str) -> str:
+    """The words after "<identity>: " and before " | AUXSAYS"."""
+    claim = title.rsplit(" | ", 1)[0]
+    return claim.split(": ", 1)[1] if ": " in claim else ""
+
+
+def decision_words(text: str) -> list[str]:
+    return [w for w in DECISION_WORDS if re.search(r"(?<![A-Z])" + re.escape(w) + r"(?![A-Z])", text)]
+
+
+def page_action(content: str) -> str:
+    """The canonical action of the verdict the page body printed."""
+    verdict = rendered_verdict(content)
+    vocab = yaml.safe_load((_REPO / "auxsays" / "_data" / "patch_verdicts.yml").read_text(encoding="utf-8"))
+    return (vocab.get("legacy_aliases") or {}).get(verdict, verdict)
+
+
+def check_search_snippets() -> None:
+    cases = search_cases()
+    out = render_search(cases)
+    heads = {n: search_head(out[n]["html"]) for n in cases}
+    patch_cases = [n for n in cases if n not in FALLBACK_CASES]
+    failed = [n for n in cases if "RENDER FAILED" in out[n]["html"]]
+    check("S1 the shipped aux-update and aux-base layouts render every case through the liquid gem",
+          not failed, f"{failed[:3]} {out[failed[0]]['html'][-200:] if failed else ''}")
+
+    def one_each(n):
+        h = heads[n]
+        return (len(h["titles"]) == 1 and len(h["descriptions"]) == 1 and len(h["canonicals"]) == 1
+                and not h["stub"])
+    bad = [n for n in patch_cases if not one_each(n)]
+    check("S2 a patch page emits exactly one title, one description and one canonical, and not the "
+          "site-wide tag beside them", not bad and bool(patch_cases),
+          f"{bad[:4]} {heads[bad[0]]['raw_head'][-400:] if bad else ''}")
+
+    def url_of(n):
+        return SITE_URL + cases[n]["page"]["url"]
+    moved = [n for n in patch_cases
+             if heads[n]["canonicals"] != [url_of(n)] or heads[n]["og_url"] != [url_of(n)]]
+    check("S3 the canonical URL and og:url are the page's own URL, unchanged", not moved,
+          f"{moved[:3]} {[heads[n]['canonicals'] for n in moved[:2]]}")
+
+    mismatched = []
+    for n in patch_cases:
+        words = decision_words(title_claim((heads[n]["titles"] or [""])[0]))
+        action = page_action(out[n]["content"])
+        if not action or (words and words != [action]) or (not words and action in DECISION_WORDS):
+            mismatched.append((n, words, action))
+    check("S4 a title names a decision exactly when the page does, and it is the page's own verdict",
+          not mismatched and len(patch_cases) >= 14, str(mismatched[:4]))
+
+    win = heads["win_wait"]
+    # GROWTH-3 review 2 (LOW-2): a WAIT or TEST FIRST rests on a reviewed reason about a stated
+    # setup, so its title is "<identity>: <verdict scope>" and its description gives the reason, then
+    # the count as a count -- never "from N reports", "live consensus of N" or "on early evidence".
+    check("S5 a Windows title leads with the exact KB, feature version and build, then the verdict and "
+          "its scope only",
+          win["titles"] == ["Windows 11 KB5127648 (25H2, Build 26200.7840): WAIT if you use the test driver | AUXSAYS"],
+          str(win["titles"]))
+    check("S6 its description states the verdict and scope, then the page's first recommendation sentence, "
+          "then the count as a count (never 'from N user reports')",
+          win["descriptions"] == [
+              "AUXSAYS verdict for Windows 11 KB5127648 (25H2, Build 26200.7840): WAIT if you use the "
+              "test driver. Users report that the test driver stops working after updating. 12 user "
+              "reports matched so far."], str(win["descriptions"]))
+    nokb = heads["win_no_kb"]
+    check("S7 a record with no KB keeps the page's own heading and invents none",
+          nokb["titles"] == ["Windows 11 25H2 (Build 26200.7840): WAIT if you use the test driver | AUXSAYS"]
+          and "KB" not in " ".join(nokb["titles"] + nokb["descriptions"]), str(nokb["titles"]))
+    early_text = " ".join(heads["early"]["titles"] + heads["early"]["descriptions"])
+    check("S8 a low-evidence verdict is not attributed to the maturity: its title and description say "
+          "nothing about early evidence, and the count stays a count",
+          heads["early"]["titles"] == ["OBS Studio 99.0.0: TEST FIRST if you use the test dock | AUXSAYS"]
+          and "early evidence" not in early_text
+          and (heads["early"]["descriptions"] or [""])[0].endswith(" 3 user reports matched so far."),
+          f"{heads['early']['titles']} {heads['early']['descriptions']}")
+    oz = heads["official_zero"]
+    check("S9 an official-only page with no reports says there is no verdict, and claims none",
+          oz["titles"] == ["OBS Studio 99.0.0: official notes, no verdict yet | AUXSAYS"]
+          and oz["descriptions"] == ["Official release notes for OBS Studio 99.0.0, released Oct 1, 2026. "
+                                     "No user reports have been counted for this update yet, so there is "
+                                     "no AUXSAYS verdict."], f"{oz['titles']} {oz['descriptions']}")
+    nz = heads["nothing_zero"]
+    check("S10 with nothing captured either, it does not claim release notes",
+          nz["titles"] == ["OBS Studio 99.0.0: no verdict yet | AUXSAYS"]
+          and "release notes" not in (nz["descriptions"] or [""])[0], f"{nz['titles']} {nz['descriptions']}")
+    rl = heads["refused_label"]
+    check("S11 a stored label the page refuses is refused in the title too",
+          rendered_verdict(out["refused_label"]["content"]) == "INSUFFICIENT DATA"
+          and rl["titles"] == ["OBS Studio 99.0.0: no verdict yet, 4 user reports so far | AUXSAYS"]
+          and "SHIP IT" not in rl["raw_head"], str(rl["titles"]))
+    lc = heads["live_certified"]
+    check("S12 a claim the deploy projection certifies reads as live consensus -- of the COUNT, in the "
+          "description: the title is the verdict and its scope only",
+          lc["titles"] == ["OBS Studio 99.0.0: WAIT if you use the test setup | AUXSAYS"]
+          and (lc["descriptions"] or [""])[0].endswith(" 40 user reports matched so far (live consensus)."),
+          f"{lc['titles']} {lc['descriptions']}")
+    lv = [n for n in ("live_uncertified", "live_absent")
+          if heads[n]["titles"] != ["OBS Studio 99.0.0: WAIT if you use the test setup | AUXSAYS"]
+          or "live" in " ".join(heads[n]["titles"] + heads[n]["descriptions"]).lower()]
+    check("S13 the same stored claim, uncertified or with no projection, carries no live wording",
+          not lv, str([(n, heads[n]["titles"]) for n in lv]))
+    check("S14 markup that says live is not enough: the certificate is required too",
+          "live" not in " ".join(heads["box_live_uncertified"]["titles"]
+                                 + heads["box_live_uncertified"]["descriptions"]).lower()
+          and heads["box_live_uncertified"]["titles"] == ["OBS Studio 99.0.0: WAIT | AUXSAYS"],
+          str(heads["box_live_uncertified"]["titles"]))
+    check("S15 and a certificate is not enough when the page itself does not render live",
+          heads["box_pilot_certified"]["titles"] == ["OBS Studio 99.0.0: WAIT | AUXSAYS"]
+          and "live" not in " ".join(heads["box_pilot_certified"]["descriptions"]).lower(),
+          str(heads["box_pilot_certified"]["titles"]))
+    check("S16 a legacy phrasing on the page prints its canonical action in the title",
+          heads["legacy"]["titles"] == ["OBS Studio 99.0.0: WAIT | AUXSAYS"]
+          and page_action(out["legacy"]["content"]) == "WAIT", str(heads["legacy"]["titles"]))
+    unearned = [(n, c) for n in patch_cases for c in UNEARNED_CLAIMS
+                if c in " ".join(heads[n]["titles"] + heads[n]["descriptions"]).lower()]
+    check("S17 no title or description adds a safety, pause or supersession claim (a stored SAFE ENOUGH publishes none)",
+          not unearned and heads["safe"]["titles"]
+          == ["OBS Studio 99.0.0: no verdict yet, 10 user reports so far | AUXSAYS"],
+          f"{unearned[:4]} {heads['safe']['titles']}")
+    nb = heads["newer_b_exists"]
+    # GROWTH-3: this record is itself a monthly ("B") release, so it reads SECURITY UPDATE -- from
+    # Microsoft's classification, not from the later record -- and still names no newer update.
+    check("S18 a later Patch Tuesday record is never read as supersession",
+          nb["titles"] == ["Windows 11 KB5127648 (25H2, Build 26200.7840): SECURITY UPDATE | AUXSAYS"]
+          and "KB5199999" not in nb["raw_head"], str(nb["titles"]))
+    esc = heads["escaping"]
+    # G39: the JSON-LD carries the plain text (no HTML entity), with "&" written as the JSON escape
+    # backslash-u0026 so nothing in it can close the script element. chr(92) is the backslash.
+    esc_ld = "".join(esc["jsonld_raw"])
+    check("S19 identity text is escaped once and the JSON-LD parses",
+          '<title>Copilot &quot;agent&quot; &amp; tools 1.0: WAIT' in esc["raw_head"]
+          and "&amp;amp;" not in esc["raw_head"] and bool(esc["jsonld"])
+          and esc["titles"] == ['Copilot "agent" & tools 1.0: WAIT if you use the test setup | AUXSAYS']
+          and esc["jsonld"].get("headline") == 'Copilot "agent" & tools 1.0: WAIT if you use the test setup'
+          and "&" not in esc_ld and chr(92) + "u0026" in esc_ld,
+          esc["raw_head"][:400] + " || " + esc_ld[:300])
+    incoherent = [n for n in patch_cases
+                  if not heads[n]["jsonld"]
+                  or heads[n]["jsonld"].get("headline") != (heads[n]["og_title"] or [None])[0]
+                  or (heads[n]["og_title"] or [None])[0] != (heads[n]["twitter_title"] or [None])[0]
+                  or heads[n]["titles"] != [f"{(heads[n]['og_title'] or [''])[0]} | AUXSAYS"]
+                  or heads[n]["jsonld"].get("description") != (heads[n]["descriptions"] or [None])[0]
+                  or heads[n]["og_description"] != heads[n]["descriptions"]
+                  or heads[n]["jsonld"].get("url") != url_of(n)
+                  or heads[n]["jsonld"].get("@type") != "WebPage"]
+    check("S20 og, twitter and JSON-LD carry the same title, description and URL as the page head",
+          not incoherent, str(incoherent[:4]))
+    fell_back = [n for n in FALLBACK_CASES
+                 if not heads[n]["stub"] or heads[n]["titles"] or "Patch page search metadata" in out[n]["html"]]
+    check("S21 every other page, and a patch page whose verdict cannot be read back once, keeps the "
+          "site-wide SEO tag", not fell_back, str(fell_back))
+
+    emitted = re.sub(r"\{%-?\s*comment\s*-?%\}.*?\{%-?\s*endcomment\s*-?%\}", "",
+                     SEARCH_META.read_text(encoding="utf-8"), flags=re.S)
+    stored = [f for f in ("update_decision_label", "quick_verdict", "update_consensus_summary",
+                          "update_decision_body", "update_consensus_label", "evidence_state",
+                          "consensus_collection_status") if f in emitted]
+    check("S22 the include reads no stored decision or maturity field: the page is its only source",
+          not stored and "content | split" in emitted, str(stored))
+    live_gate = re.search(r"\{%-?\s*if (psm_box == 'live' and maturity_live)\s*-?%\}\{%-?\s*assign psm_live = true",
+                          emitted)
+    check("S23 live wording is gated on the page's live box AND the render-time certificate",
+          live_gate is not None and emitted.count("assign psm_live = true") == 1)
+    config = yaml.safe_load((_REPO / "auxsays" / "_config.yml").read_text(encoding="utf-8"))
+    unmirrored = [k for k in ("twitter", "facebook", "webmaster_verifications", "google_site_verification",
+                              "logo", "author", "image") if config.get(k)]
+    check("S24 the site sets none of the SEO-tag options the patch head does not mirror",
+          not unmirrored, f"configured: {unmirrored}; mirror them in patch-search-meta.html first")
+    base_src = BASE_LAYOUT.read_text(encoding="utf-8")
+    seo_lines = [line.strip() for line in base_src.splitlines() if "{% seo" in line]
+    check("S25 aux-base routes only aux-update pages through the include, and every other page to "
+          "the unchanged site-wide tag",
+          seo_lines == ["{% assign patch_search_emitted = false %}{% if page.layout == 'aux-update' %}"
+                        "{% include patch-search-meta.html record=page %}{% endif %}"
+                        "{% unless patch_search_emitted %}{% seo %}{% endunless %}"], str(seo_lines))
+    reasoned = [n for n in patch_cases if page_action(out[n]["content"]) in ("WAIT", "TEST FIRST")]
+    attributed = [(n, (heads[n]["titles"] or [""])[0]) for n in reasoned
+                  if "user report" in title_claim((heads[n]["titles"] or [""])[0])
+                  or re.search(r"\bfrom \d+ user reports?|live consensus of|on early evidence",
+                               " ".join(heads[n]["titles"] + heads[n]["descriptions"]))
+                  or not (heads[n]["descriptions"] or [""])[0].startswith("AUXSAYS verdict for ")]
+    check(f"S26 no WAIT or TEST FIRST title or description ties the verdict to the report population or the "
+          f"maturity: the title is '<identity>: <verdict scope>', the count only a count ({len(reasoned)} pages; "
+          "GROWTH-3 review 2, LOW-2)", len(reasoned) >= 8 and not attributed, str(attributed[:3]))
+    # G43: a stored title that repeats its product label is shown with the label once, in the heading, the
+    # source citation and every search field read back from the heading; S20 above already holds the
+    # JSON-LD headline equal to that title for this case too.
+    twice, twice_head = out["label_twice"]["content"], heads["label_twice"]
+    twice_title = (twice_head["titles"] or [""])[0]
+    check("S27 a title that repeats its product label shows the label once in the heading, the citation, "
+          "the search title and the JSON-LD headline (G43)",
+          f'<h1 class="update-title">{LABEL_ONCE}</h1>' in twice and f">{LABEL_ONCE}</a>" in twice
+          and twice_title.startswith(LABEL_ONCE + ": ")
+          and (twice_head["jsonld"] or {}).get("headline") == twice_title.rsplit(" | ", 1)[0]
+          and "Copilot Copilot" not in twice + twice_head["raw_head"],
+          f"title={twice_title!r} jsonld={(twice_head['jsonld'] or {}).get('headline')!r}")
+    early_title = (heads["early"]["titles"] or [""])[0]
+    check("S28 a title that does not repeat its label is shown exactly as stored (G43)",
+          '<h1 class="update-title">OBS Studio 99.0.0</h1>' in out["early"]["content"]
+          and early_title.startswith("OBS Studio 99.0.0: ")
+          and (heads["escaping"]["titles"] or [""])[0].startswith('Copilot "agent" & tools 1.0: '),
+          f"{early_title!r} {(heads['escaping']['titles'] or [''])[0]!r}")
+
+
 # ---------------------------------------------------------------- [R]/[N] regeneration repairs
 
 def build_tree(tmp: Path) -> tuple[Path, Path, dict[str, Path]]:
@@ -1145,7 +1718,7 @@ def check_regeneration(tmp: Path) -> None:
 
     after_beta = front_matter(paths["beta"])
     check("R2 regeneration repaired the stale contradictory summary with no hand edit",
-          decisions_named(after_beta) == {"WAIT"},
+          decisions_named(after_beta) == {_ID},
           repr(sorted(decisions_named(after_beta))))
     check("R2b and it wrote the CANONICAL label, not the legacy phrasing",
           patch_decision.is_canonical(str(after_beta.get("update_decision_label") or "")),
@@ -1160,20 +1733,23 @@ def check_regeneration(tmp: Path) -> None:
     # that regeneration collapses the two decision-shaped fields onto one action with no hand edit
     # -- is unchanged; only the action it lands on moved, and it moved because the policy did.
     check("R4 the OBS half of the class is repaired by the same path",
-          decisions_named(after_obs) == {"WAIT"}, repr(sorted(decisions_named(after_obs))))
+          decisions_named(after_obs) == {_ID}, repr(sorted(decisions_named(after_obs))))
 
     after_stable = front_matter(paths["stable"])
-    check("R5 the stable sibling still decides WAIT",
-          decisions_named(after_stable) == {"WAIT"}, repr(sorted(decisions_named(after_stable))))
-    check("R6 the stable sibling's decision text did not move",
-          leading_decision(after_stable.get("quick_verdict")) == "WAIT"
-          and leading_decision(after_stable.get("update_consensus_summary")) == "WAIT")
+    # GROWTH-3: the stable sibling's stored WAIT had no reviewed reason behind it, so regeneration
+    # moves it to the policy's answer -- and to that answer only, in every field.
+    check("R5 the stable sibling decides what the policy decides (no reviewed reason: INSUFFICIENT DATA)",
+          decisions_named(after_stable) == {_ID}, repr(sorted(decisions_named(after_stable))))
+    check("R6 the stable sibling's quick verdict and summary carry that same action",
+          leading_decision(after_stable.get("quick_verdict")) == _ID
+          and leading_decision(after_stable.get("update_consensus_summary")) == _ID)
     # Compare AFTER against BEFORE. The old version of this check asserted that the fixture's own
     # literal was in the fixture and that one particular word was absent, so a promotion that
     # churned the stable sibling from WAIT to TEST FIRST passed it.
-    check("R7 a record that was already coherent is not churned into a new decision",
-          decisions_named(after_stable) == stable_before,
-          f"{sorted(stable_before)} -> {sorted(decisions_named(after_stable))}")
+    check("R7 the regenerated body is the policy's line, not the old product prose",
+          str(after_stable.get("update_decision_body") or "").startswith("No verdict yet: 12 user reports")
+          and stable_before == {"WAIT"},
+          f"{sorted(stable_before)} -> {after_stable.get('update_decision_body')!r}")
 
     snapshot = {k: p.read_bytes() for k, p in paths.items()}
     promote(tree, evidence, DAV)
@@ -1258,6 +1834,24 @@ def swap(owner, name: str, replacement):
     return mutate, restore
 
 
+def search_meta_mutant(tmp: Path):
+    """(mutate, restore) rendering the search include from a temp copy whose WAIT / TEST FIRST title
+    re-attaches the report count and maturity, round 1's wording."""
+    text = SEARCH_META.read_text(encoding="utf-8")
+    old = ("{%- capture psm_title -%}{{ psm_identity }}: {{ psm_phrase }}{%- endcapture -%}\n      "
+           "{%- capture psm_description -%}AUXSAYS verdict for {{ psm_identity }}: {{ psm_phrase }}.{% if "
+           "psm_sentence != '' %} {{ psm_sentence }}{% endif %}{% if psm_count > 0 %} {{ psm_reports }} matched so "
+           "far{% if psm_live %} (live consensus)")
+    assert text.count(old) == 1, "the reasoned title anchor moved"
+    new = old.replace("{{ psm_phrase }}{%- endcapture -%}",
+                      "{{ psm_phrase }}{% if psm_live %}, live consensus of {{ psm_reports }}{% elsif psm_count > 0 %}, "
+                      "from {{ psm_reports }}{% endif %}{%- endcapture -%}", 1)
+    copy_dir = Path(tempfile.mkdtemp(dir=tmp)) / "_includes"
+    shutil.copytree(INCLUDES_DIR, copy_dir)
+    (copy_dir / "patch-search-meta.html").write_bytes(text.replace(old, new).encode("utf-8"))
+    return swap(sys.modules[__name__], "INCLUDES_DIR", copy_dir)
+
+
 def check_mutations(tmp: Path) -> None:
     mutants: list[tuple[str, list[str], str]] = []
     real_coherence = acr._record_coherence_fields
@@ -1294,13 +1888,14 @@ def check_mutations(tmp: Path) -> None:
               lambda pid, ver, label, total, **k: (
                   "AVOID for production" if pid == DAV and bce.version_is_beta(ver) else "WAIT"))),
         # X4 -- "coherence" achieved by deleting the nuance instead of subordinating it.
-        ("X4 the beta's avoid-on-active-projects nuance is deleted",
+        ("X4 the beta's keep-off-active-projects qualification is lost",
          check_qualification,
-         swap(acr, "_affected_workflow_sentence", lambda *a, **k: "")),
-        # X5 -- prose may invite testing again regardless of the decision.
-        ("X5 supporting prose offers testing under a WAIT decision",
-         check_qualification,
-         swap(patch_decision, "permits_testing", lambda decision: True)),
+         swap(acr, "_davinci_version_is_beta", lambda version: False)),
+        # X5 -- prose invites testing again with no policy reason behind it.
+        ("X5 supporting prose offers testing without a policy reason",
+         check_body_follows_decision,
+         swap(patch_decision, "public_body",
+              lambda *a, **k: "Test on a backup profile before using this OBS build.")),
         # X6 -- regeneration stops refreshing the summary, so stale contradictory prose survives.
         ("X6 stale contradictory prose survives regeneration",
          lambda: check_regeneration(tmp / f"x-{next(regen_runs)}"),
@@ -1309,6 +1904,9 @@ def check_mutations(tmp: Path) -> None:
         ("X7 the corpus audit collapses every action into one",
          lambda: check_corpus_audit(tmp / f"x-{next(regen_runs)}"),
          swap(patch_decision, "action_of", lambda decision: "WAIT")),
+        # X8 -- GROWTH-3 review 2 (LOW-2): a reasoned verdict's title is tied to the count again.
+        ("X8 a WAIT / TEST FIRST title says 'live consensus of N' / 'from N user reports' again",
+         check_search_snippets, search_meta_mutant(tmp)),
     ]
 
     for label, body, (mutate, restore) in cases:
@@ -1361,6 +1959,9 @@ def run() -> int:
 
         print("\n[V] the rendered page and the feed's summary agree")
         check_render()
+
+        print("\n[S] the search title and description say what the page says (GROWTH-1B)")
+        check_search_snippets()
 
         print("\n[R]/[N] ordinary regeneration repairs stale prose, then writes nothing")
         check_regeneration(tmp / "regen")

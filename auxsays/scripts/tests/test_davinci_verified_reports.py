@@ -495,10 +495,12 @@ def run() -> int:
         # is still DERIVED FROM EVIDENCE rather than hard-coded -- b5259931 replaced the literal
         # sentence with _issue_cluster_sentence(themes), so the theme is the durable assertion.
         "stable/Studio" in active_prose and "beta" in active_prose.lower()
-        # Pinned to the decision body specifically: the theme must reach the field the reader sees,
-        # not merely appear somewhere in the managed prose, or planting the literal in a static
-        # description would satisfy it while the body stopped deriving from evidence at all.
-        and "render/export failures" in str(active_stable_fields.get("update_decision_body") or ""),
+        # Pinned to the decision body specifically: it must be DERIVED, not a literal. GROWTH-3 made
+        # the body the verdict policy's own line, which states the evidence it was decided on (the
+        # number of matched reports), so the count -- not a theme -- is the durable assertion. Planting
+        # a literal in a static description cannot satisfy it.
+        and str(active_stable_fields.get("update_decision_body") or "").startswith(
+            f"No verdict yet: {len(coherence_rows)} user reports are matched to this exact update"),
         f"active_prose={active_prose!r}",
     )
 

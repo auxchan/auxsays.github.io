@@ -38,6 +38,7 @@ import re
 from typing import Any
 
 from lib import evidence_classification as ec
+from lib import github_api
 from lib import learn_fetch_policy
 from lib.build_claims import (
     BUILD_TOKEN_RE, OFFICE_FULL_VERSION_RE, extract_build_claims,
@@ -127,7 +128,9 @@ TECH_COMMUNITY_MAX_HYDRATIONS = 30
 # it reach threads outside every enumerator's window.
 OPEN_WEB_METHOD_ID = "open_web_discovery"
 OPEN_WEB_MAX_QUERIES = 10
-OPEN_WEB_MAX_REQUESTS = 24
+# 8 queries x 2 providers. It was 24 = 8 x 3 while GitHub search was a third provider; keeping 8
+# queries keeps the Learn and Stack Exchange traffic exactly what it was when that provider left.
+OPEN_WEB_MAX_REQUESTS = 16
 OPEN_WEB_MAX_HYDRATIONS = 120
 # How far back a run looks. 60 days covers every currently tracked PowerPoint build's release date
 # with margin; older builds cannot gain new reports from a recency sweep, and pretending otherwise
@@ -1183,7 +1186,9 @@ def github_method_status(candidates: list[dict[str, Any]], accepted: list[dict[s
     if errors and (candidates or rejected):
         return "partial"
     if errors:
-        return "blocked" if any("rate_limited" in str(e.get("reason") or "") for e in errors) else "broken"
+        # Any refusal that stops the run (rate limit, access denial, other 403) is `blocked`; the
+        # blocked_reason names which one.
+        return "blocked" if any(github_api.is_stop(e.get("reason")) for e in errors) else "broken"
     if rejected and any(str(r.get("exclusion_reason")) in NEAR_MISS_REASONS for r in rejected):
         return "low_confidence"
     return "no_results"
@@ -1227,6 +1232,38 @@ def qna_lane_blocked_reason(status: str, errors: list[dict[str, Any]]) -> str | 
     return errors[0].get("reason") if status == "blocked" and errors else None
 
 
+def qna_tag_admitted(enumerated: list[dict[str, Any]], since: str) -> list[dict[str, Any]]:
+    """The enumerated questions admitted for hydration, newest first.
+
+    Filtered BEFORE spending requests: in window, and the title reads as a concrete problem. Newest
+    first, so a bounded run always hydrates the most recent reports. One function, so the hydration
+    walk and the health notes cannot disagree about how many were admitted."""
+    wanted = [row for row in enumerated
+              if str(row.get("date") or "") >= since
+              and QNA_TAG_SYMPTOM_RE.search(str(row.get("title") or ""))]
+    wanted.sort(key=lambda row: str(row.get("date") or ""), reverse=True)
+    return wanted
+
+
+def qna_tag_hydration_note(enumerated: list[dict[str, Any]], since: str) -> str:
+    """Telemetry only (AUX-117): how many questions were admitted for hydration, and whether the
+    per-run cap cut that list short.
+
+    Without this, the overflow fact `hydration_cap_reached_<cap>_of_<admitted>` existed only in a
+    run's in-memory error list. It never reached the notes, and on a run with nothing accepted it did
+    not move the status either, so a run that left admitted questions unread looked exactly like one
+    that read them all, and a catch-up loss after a missed run would be invisible. This changes
+    nothing but the notes: the cap, the enumeration, the error list the status is computed from, and
+    the status itself are as they were."""
+    admitted = len(qna_tag_admitted(enumerated, since))
+    note = f"Admitted for hydration {admitted} (cap {QNA_TAG_MAX_HYDRATIONS} a run). "
+    overflow = admitted - QNA_TAG_MAX_HYDRATIONS
+    if overflow > 0:
+        note += (f"hydration_cap_reached_{QNA_TAG_MAX_HYDRATIONS}_of_{admitted}: {overflow} admitted "
+                 "questions were not hydrated this run. ")
+    return note
+
+
 def run_qna_tag_method(record: PatchRecord, target: dict[str, Any], context: CollectorContext,
                        seen: set[str], run_accepted_urls: dict[str, str] | None,
                        captured_at: str) -> tuple[list[dict[str, Any]], list[dict[str, Any]], dict[str, Any]]:
@@ -1255,12 +1292,7 @@ def run_qna_tag_method(record: PatchRecord, target: dict[str, Any], context: Col
     enumerated = cached_product_candidates("qna_tag_enumeration", [since], _walk)
 
     def _hydrate() -> list[dict[str, Any]]:
-        # Filter BEFORE spending requests: in window, and the title reads as a concrete problem.
-        # Newest first, so a bounded run always hydrates the most recent reports.
-        wanted = [row for row in enumerated
-                  if str(row.get("date") or "") >= since
-                  and QNA_TAG_SYMPTOM_RE.search(str(row.get("title") or ""))]
-        wanted.sort(key=lambda row: str(row.get("date") or ""), reverse=True)
+        wanted = qna_tag_admitted(enumerated, since)
         admitted_total = len(wanted)
         built: list[dict[str, Any]] = []
         for row in wanted[:QNA_TAG_MAX_HYDRATIONS]:
@@ -1300,6 +1332,7 @@ def run_qna_tag_method(record: PatchRecord, target: dict[str, Any], context: Col
         f"Microsoft Q&A PowerPoint community enumeration ({len(qna_tags.POWERPOINT_TAGS)} tag "
         f"inventories, newest-first since {since}). Questions enumerated {len(enumerated)}, "
         f"hydrated {len(tag_candidates)}, accepted {len(accepted)}, rejected {len(rejected)}. "
+        + qna_tag_hydration_note(enumerated, since)
         + (f"Top rejections: {format_rejection_counts(rejected)}. " if rejected else "")
         + "Discovery browses the community inventory rather than querying a search index, so a "
           "report is not limited to the words its author happened to use. Acceptance is the same "
@@ -1541,13 +1574,18 @@ def run_github_method(record: PatchRecord, target: dict[str, Any], context: Coll
     queries = build_queries + list(GITHUB_SYMPTOM_QUERIES)
 
     def _symptom_route():
+        symptom_errors: list[dict[str, Any]] = []
         found, tel = github_officedev_source.collect_officedev_candidates(
-            queries=list(GITHUB_SYMPTOM_QUERIES), errors=gh_errors,
+            queries=list(GITHUB_SYMPTOM_QUERIES), errors=symptom_errors,
             max_requests=len(GITHUB_SYMPTOM_QUERIES), source_type=GITHUB_SOURCE_TYPE)
-        return [{"candidates": found, "telemetry": tel}]
+        return [{"candidates": found, "telemetry": tel, "errors": symptom_errors}]
 
     payload = cached_product_candidates("github_symptom", list(GITHUB_SYMPTOM_QUERIES),
                                         _symptom_route)[0]
+    # The symptom route runs once per run and its answer is shared by every record, so a failure in
+    # it is a failure in EVERY record's collection. Carrying only the first record's copy let the
+    # other records report a refused route as a complete one.
+    gh_errors.extend(dict(e) for e in payload.get("errors") or [])
     gh_candidates = list(payload["candidates"])
     telemetry = dict(payload["telemetry"])
     if build_queries:
@@ -1578,6 +1616,7 @@ def run_github_method(record: PatchRecord, target: dict[str, Any], context: Coll
         + "Product comes from the template's Host field, so an Excel issue stays Excel however often "
         "it says PowerPoint; only the desktop half of the Office version field can supply a build. "
         "Same acceptance gates as every other method."
+        + (f" {github_api.stop_note()}" if github_api.stop_state() and gh_errors else "")
     )
     row = health_row(record, GITHUB_METHOD_ID, GITHUB_SOURCE_TYPE, gh_status, gh_candidates, gh_accepted, gh_rejected, gh_errors, captured_at, gh_notes)
     return gh_accepted, gh_rejected, row

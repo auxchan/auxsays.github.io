@@ -14,11 +14,24 @@ auxsays/_data/consensus_status.json
 # Generated at deploy by build_live_eligibility_projection.py: which live claims still certify NOW.
 # Absent, every live claim renders as Verified reports (fail closed).
 auxsays/_data/live_eligibility.yml
+# Generated at deploy by build_verdict_projection.py: lib/patch_decision.decide's WAIT / TEST FIRST
+# per page, the only source the verdict gate publishes them from. Absent, no page shows one.
+auxsays/_data/verdict_projection.yml
+# Generated at deploy by build_verdict_projection.py (lib/verdict_reason_producer, G35-04): the
+# reason producer's candidates, refusals and TEMPORARY review queue. No page renders from it.
+auxsays/_data/verdict_reason_candidates.yml
+# AUX-099: the reason producer's shadow ledger, carried between deploys by the Actions cache (pages.yml),
+# outside the site source. Never committed: no writeback lane writes it.
+.producer-shadow/
 # Generated at deploy by build_monitoring_projection.py, never committed: the state is a function
 # of the current time and of ingest state that every scheduled lane moves, so any committed copy
 # went stale between push and CI. The layouts fail closed to 'unverified' when it is absent.
 auxsays/_data/monitoring_state.yml
 auxsays/_data/monitoring_company_state.yml
+# Generated at deploy by build_coverage_projection.py (AUX-102), never committed, for the same reason:
+# coverage moves with the clock and with files every lane rewrites. Pages read "Coverage status unknown"
+# when it is absent, and ci/verify_coverage_claims.py refuses that on a deploy build.
+auxsays/_data/coverage_state.yml
 # Generated at deploy by source_health_snapshot.py (pages.yml), never committed. It is a function of
 # ingest state that every scheduled lane moves, so the committed copy went stale (37 rows against 47
 # sources, an older status vocabulary). No template, include or layout reads it; see AUX-069.

@@ -248,16 +248,6 @@ steam:
   source_id: steam
   logo_label: Steam
   logo_path: /assets/img/patch-logos/steam.png
-nvidia:
-  company_name: NVIDIA
-  product_name: NVIDIA App / GeForce / Studio
-  badge_text: NV
-  accent: '#d6ab4e'
-  category_label: Hardware / Drivers
-  company_label: NVIDIA
-  source_id: nvidia
-  logo_label: NVIDIA
-  logo_path: /assets/img/patch-logos/nvidia.png
 amd:
   company_name: AMD
   product_name: AMD Software / Radeon

@@ -1,0 +1,11 @@
+{%- comment -%}
+  One homepage product tracker (GROWTH-1C): the link to the product page, carrying the product name
+  and, under it, the source the tracker follows -- the product's own source_label in
+  _data/patch_products.yml, the words its product page shows beside the official source link. A
+  product with no source_label shows its name alone rather than an invented line. The source sits
+  inside the link, so it is part of the link's name and adds no second tap target.
+
+  Input: include.tracker, one entry of site.data.patch_products. Emits the link only.
+{%- endcomment -%}
+{%- assign hti_source = include.tracker.source_label | default: '' | strip -%}
+<a class="home-tracker-link" href="{{ include.tracker.product_url | relative_url }}" data-home-tracker><span class="home-tracker-name">{{ include.tracker.product_name }}</span>{% if hti_source != '' %}<span class="home-tracker-desc" data-home-tracker-desc>{{ hti_source }}</span>{% endif %}</a>

@@ -1,0 +1,62 @@
+{
+ "success": true,
+ "errors": [],
+ "data": {
+  "topic": {
+   "id": 592933,
+   "title": "NVIDIA Driver 621.24 – Samsung QE55Q6FNATXXH TV no longer detected via HDMI (RTX 5070)",
+   "type": "support",
+   "isVisible": 1,
+   "status": "default",
+   "createdStamp": 1794652816,
+   "replyCount": 2,
+   "upvotes": 1,
+   "lastActivityStamp": 1794908985,
+   "isPinned": 0,
+   "isGhosted": 0,
+   "publishAt": 0,
+   "updatedStamp": 1794909035,
+   "hasOfficialReply": 0,
+   "user": {
+    "id": "1014",
+    "aclactions": {
+     "officialreply": false
+    }
+   },
+   "lastComment": {
+    "id": 3634385
+   },
+   "communities": [
+    {
+     "id": 13,
+     "title": "Game-Ready Drivers"
+    }
+   ],
+   "firstComment": {
+    "id": 3633860,
+    "createdStamp": 1794652816,
+    "updatedStamp": 0,
+    "lastActivityStamp": 1794652816,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 0,
+    "isOfficialReply": 0,
+    "upvotes": 0,
+    "topic": {
+     "id": 592933
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1014",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "Hello NVIDIA community,\nI would like to report a display detection issue introduced with NVIDIA GeForce driver version 621.24.\nAfter updating from driver 621.14 to 621.24, my Samsung QE55Q6FNATXXH television completely disappeared from Windows 11 display settings.\n\nSystem configuration:\nGPU: MSI GeForce RTX 5070 GAMING TRIO OC 12GB\nOS: Windows 11 2H2\nProblematic driver: NVIDIA 621.24\nPrevious working driver: NVIDIA 621.14\nMain monitor: Dell S2721DGF (2560×1440, 165Hz, DisplayPort)\nTV: Samsung QE55Q6FNATXXH (HDMI)\nConnection: Direct HDMI connection from RTX 5070 to Samsung TV, without adapters or AV receivers.\nHAGS: Enabled\nVariable Refresh Rate: Enabled\n\nProblem description:\nWith driver 621.14, both displays worked correctly.\nImmediately after updating to driver 621.24, the Samsung television stopped being detected.\nRestarting the NVIDIA graphics driver using Win + Ctrl + Shift + B does not resolve the issue.\nInstall NVIDIA driver 621.14 and verify that both displays work.\nUpdate the driver to version 621.24.\nConfirmed workaround\nReinstalling NVIDIA driver 621.14 immediately restores Samsung TV detection and normal operation.\nThis strongly suggests a regression in driver 621.24, potentially related to HDMI display detection or EDID communication.\nI have also submitted a report through NVIDIA's official driver feedback form.\nI would appreciate it if NVIDIA could investigate this issue and address it in a future driver release.\nHas anyone else experienced similar HDMI detection problems with Samsung televisions after installing driver 621.24?"
+   }
+  }
+ }
+}

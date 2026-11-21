@@ -44,7 +44,18 @@ _AUX = _REPO / "auxsays"
 
 LAYOUT_PATH = _AUX / "_layouts" / "aux-update.html"
 CSS_PATH = _AUX / "assets" / "css" / "auxsays-custom.css"
-LAYOUT = LAYOUT_PATH.read_text(encoding="utf-8")
+# GROWTH-1C moved the patch page's maturity rung and decision ladder into two includes that the
+# homepage renders too. They are the patch page's own code, so they are inlined here, bound to their
+# record= argument, before anything reads the layout -- as the maturity contract is.
+PAGE_INCLUDE_TAG = re.compile(r"\{%-?\s*include\s+(patch-evidence-state|patch-decision)\.html\s+record=([\w.]+)\s*-?%\}")
+
+
+def expand_page_includes(text: str) -> str:
+    return PAGE_INCLUDE_TAG.sub(lambda m: (_AUX / "_includes" / f"{m.group(1)}.html").read_text(encoding="utf-8")
+                                .replace("include.record", m.group(2)), text)
+
+
+LAYOUT = expand_page_includes(LAYOUT_PATH.read_text(encoding="utf-8"))
 # Liquid comments never render. An assertion of the form "this sentence must not appear" has to
 # read the EMITTING markup only -- otherwise a comment that documents the sentence being removed
 # (which is exactly how this repair is documented) makes the check fail forever.
@@ -282,9 +293,14 @@ def render_gate_matrix():
     # can neither hide an occurrence nor invent one -- it only removes the need for a file system.
     src = re.sub(r"\{%-?\s*include\s.*?-?%\}", "", src, flags=re.S)
 
+    # Every row ran the day before the matrix clock. A blocked or degraded row makes the notice say
+    # so in the present tense only while the monitoring card would still call that run fresh, so a
+    # row with no run time at all is NOT a current problem (the card reads it as COLLECTION STALE).
+    # The freshness boundary itself is pinned by test_freshness_notice_currency.
     def health(status: str) -> dict:
         return {"methods": [{"product_id": "obs-studio", "update_version": "31.0.4",
-                             "target_build": "", "source_type": "forum_thread", "status": status}]}
+                             "target_build": "", "source_type": "forum_thread", "status": status,
+                             "last_run": "2026-09-08T00:00:00Z"}]}
 
     healthy = health("success")
     # `official` is not a curiosity: consensus_collection_status is deferred_official_only on 942 of
@@ -777,8 +793,12 @@ def run() -> int:
     rec_block = LAYOUT_EMITTED.index('update-decision-actions__list')
     verdict_at = LAYOUT_EMITTED.index('<div id="verdict"')
     reasoning_at = LAYOUT_EMITTED.index('update-decision-reasoning')
+    # GROWTH-3 review 2 (LOW-4): the list is `rec_list` -- the stored field, or the list an official
+    # verdict carries from the verdict projection (AVOID) -- so a zero-report AVOID page lists the
+    # replacement step too. It is still the whole list.
     check("R1 the list is rendered, not just item one",
-          "for rec in page.practical_recommendations" in LAYOUT_EMITTED,
+          "for rec in rec_list" in LAYOUT_EMITTED
+          and "assign rec_list = page.practical_recommendations" in LAYOUT_EMITTED,
           "only the `| first` fallback consumes the field")
     check("R2 it sits with the primary decision content, not in methodology or context",
           verdict_at < rec_block < reasoning_at,
@@ -805,7 +825,7 @@ def run() -> int:
           "rec_seen contains rec_key" in LAYOUT_EMITTED)
     check("R7 recommendation text is escaped", "rec_text | escape" in LAYOUT_EMITTED)
     check("R8 the fallback that substitutes item one is preserved, so dedupe covers it",
-          "page.practical_recommendations | first" in LAYOUT_EMITTED)
+          "rec_list | first" in LAYOUT_EMITTED)
     for cls in ("update-decision-actions", "update-decision-actions__list"):
         check(f"R9 {cls} is styled rather than left to browser defaults",
               f".{cls} {{" in CSS, "no rule; the list would render unstyled in the verdict box")

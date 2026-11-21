@@ -24,6 +24,7 @@ from patch_collectors.base import (  # noqa: E402
 )
 from lib.collector_txn import CollectorTransaction, UnexpectedMutation, GitUnavailable  # noqa: E402
 from lib import collector_ownership as ownership  # noqa: E402
+from lib.log_redaction import log_safe  # noqa: E402
 from patch_collectors import runtime_budget as rb  # noqa: E402
 from patch_collectors.adobe_premiere import AdobePremiereCollector  # noqa: E402
 from patch_collectors.davinci import DavinciCollector  # noqa: E402
@@ -102,6 +103,15 @@ POWERPOINT_CONSENSUS_PRODUCT_ID = "microsoft-powerpoint"
 POWERPOINT_CONSENSUS_ENABLE_ENV = "AUXSAYS_ENABLE_POWERPOINT_CONSENSUS"
 TEAMS_CONSENSUS_PRODUCT_ID = "microsoft-teams"
 TEAMS_CONSENSUS_ENABLE_ENV = "AUXSAYS_ENABLE_TEAMS_CONSENSUS"
+# ComfyUI community evidence from its own public GitHub issues. Same registration shape as Teams:
+# default off here, set "true" on the scheduled --write step of obs-evidence-collection.yml.
+COMFYUI_CONSENSUS_PRODUCT_ID = "comfyui"
+COMFYUI_CONSENSUS_ENABLE_ENV = "AUXSAYS_ENABLE_COMFYUI_CONSENSUS"
+# NVIDIA driver community evidence from the NVIDIA GeForce forum's default views. One collector
+# class registered once per driver family (Game Ready, Studio), the Acrobat shape; both share one
+# forum cycle per run. Default off here, set "true" on the scheduled --write step.
+NVIDIA_FORUM_PRODUCT_IDS = ("nvidia-geforce-game-ready", "nvidia-studio-driver")
+NVIDIA_FORUM_ENABLE_ENV = "AUXSAYS_ENABLE_NVIDIA_FORUM_CONSENSUS"
 
 
 def powerpoint_consensus_enabled(env: dict[str, str] | None = None) -> bool:
@@ -127,6 +137,23 @@ def teams_consensus_enabled(env: dict[str, str] | None = None) -> bool:
     bool(os.getenv(...)) pitfall where the string "false" is truthy."""
     source = os.environ if env is None else env
     return str(source.get(TEAMS_CONSENSUS_ENABLE_ENV, "")).strip().lower() == "true"
+
+
+def comfyui_consensus_enabled(env: dict[str, str] | None = None) -> bool:
+    """Deterministic default-off gate for registering the ComfyUI GitHub-issues collector.
+
+    Explicit true-only, the same shape as every other gated collector: "false", "0", "1", "yes",
+    "on", empty and absent all return False."""
+    source = os.environ if env is None else env
+    return str(source.get(COMFYUI_CONSENSUS_ENABLE_ENV, "")).strip().lower() == "true"
+
+
+def nvidia_forum_enabled(env: dict[str, str] | None = None) -> bool:
+    """Deterministic default-off gate for registering the NVIDIA forum collector (both families).
+
+    Explicit true-only, the same shape as every other gated collector."""
+    source = os.environ if env is None else env
+    return str(source.get(NVIDIA_FORUM_ENABLE_ENV, "")).strip().lower() == "true"
 
 
 def orchestrated_products(env: dict[str, str] | None = None) -> set[str]:
@@ -177,6 +204,13 @@ def build_collectors(env: dict[str, str] | None = None) -> dict[str, Any]:
     if teams_consensus_enabled(env):
         from patch_collectors.microsoft_teams import TeamsCommunityCollector
         collectors[TEAMS_CONSENSUS_PRODUCT_ID] = TeamsCommunityCollector
+    if comfyui_consensus_enabled(env):
+        from patch_collectors.comfyui import ComfyUICollector
+        collectors[COMFYUI_CONSENSUS_PRODUCT_ID] = ComfyUICollector
+    if nvidia_forum_enabled(env):
+        from patch_collectors.nvidia_forum import NvidiaForumCollector
+        for pid in NVIDIA_FORUM_PRODUCT_IDS:
+            collectors[pid] = lambda p=pid: NvidiaForumCollector(p)
     # NO DOUBLE COLLECTION. A product driven by the orchestration graph is REMOVED from this
     # registry, so the legacy path cannot also collect it in the same run. Enforcing it here rather
     # than by workflow discipline means there is exactly one authoritative execution path per
@@ -321,6 +355,11 @@ def _extra_write_surface(product_id: str) -> list[Path]:
     if product_id in ("adobe-acrobat-reader", "adobe-acrobat-pro"):
         from patch_collectors.adobe_acrobat_community import TIER2_PATH, TIER3_PATH
         return [TIER2_PATH, TIER3_PATH]
+    if product_id in NVIDIA_FORUM_PRODUCT_IDS:
+        # The forum cycle's own state (last windows, refusal, cadence). Whichever family runs first
+        # in a run writes it; both declare it so either may.
+        from patch_collectors.nvidia_forum_source import STATE_PATH
+        return [STATE_PATH]
     return []
 
 
@@ -525,7 +564,10 @@ def main(argv: list[str] | None = None) -> int:
         "method_health_rows_changed": method_health_changed,
         "method_health_rows_total": method_health_total,
     }
-    print(json.dumps(payload, indent=2, ensure_ascii=False))
+    # Printed into the public run log. Each collector returns its own free-form result dicts, so a
+    # stored report title or excerpt riding along in one is removed here, at the one place they are
+    # all printed (G66, lib.log_redaction). None carries one today; this keeps it that way.
+    print(json.dumps(log_safe(payload), indent=2, ensure_ascii=False))
     # Exit 0 for success AND partial (so healthy collectors publish); non-zero ONLY for a total
     # failure (nothing succeeded -> nothing safe to write). This is NOT "merely forcing exit 0":
     # a partial is emitted as outcome=partial + ::warning:: annotations + a job-summary table.

@@ -504,6 +504,19 @@ html.js-reveal .reveal-up.is-visible { opacity:1; transform:none; }
   .about-portrait-wrap { max-width: min(280px, 72vw); }
   .patch-card-headline { align-items: flex-start; }
   .patch-status-stack { justify-items: start; }
+  /* G39: a phone-width card kept its content on one 393-577 px track inside a 351 px card, and the
+     page clipped the rest. The track may now shrink to the card, the status stack drops under the
+     product name when both do not fit, and the monitoring pill wraps under its label. */
+  .patch-card { grid-template-columns: minmax(0, 1fr); }
+  .patch-card-headline { flex-wrap: wrap; }
+  .patch-status-stack { max-width: 100%; }
+  .patch-card-monitoring { flex-wrap: wrap; }
+  /* G43: the Windows 11 product page was 441 px wide on a 375 px phone. A patch-history row's
+     "No accepted patch-specific reports" pill (white-space: nowrap, 261 px) beside its label set the
+     table's narrowest width, and the product-page grid track grew to fit it. The track may now shrink
+     to the page, and the pill wraps inside itself. The selector outranks the later .patch-monitoring rule. */
+  .patch-intel-shell { grid-template-columns: minmax(0, 1fr); }
+  .patch-cell-monitoring .patch-monitoring { white-space: normal; }
 }
 
 /* Refinement pass: clearer homepage icons, visible hero terrain, softer About portrait */
@@ -1411,20 +1424,7 @@ html.js-reveal .reveal-up.is-visible { opacity:1; transform:none; }
   background: currentColor;
 }
 
-.home-patch-dot--positive {
-  color: #6df05f;
-}
-
-.home-patch-dot--moderate {
-  color: #f0ca67;
-}
-
-.home-patch-dot--negative {
-  color: #ff524f;
-}
-
-.home-patch-dot--insufficient,
-.home-patch-dot--insufficient-data {
+.home-patch-dot--insufficient {
   color: #9aa8b2;
 }
 
@@ -1998,14 +1998,19 @@ html.js-reveal .reveal-up.is-visible { opacity:1; transform:none; }
 /* MONITORING STATE pills. Colour is SUPPLEMENTARY here: each state already carries distinct
    text ("Monitoring active" vs "Source is refusing automated checks"), so the state is never
    conveyed by styling alone. Only `healthy` is green; everything else is deliberately not,
-   because a reader glancing at the pill should not read an unestablished state as working. */
-.patch-coverage-pill--monitor-healthy {
+   because a reader glancing at the pill should not read an unestablished state as working.
+   The COVERAGE pills (AUX-102) share these groups: an operating official lane is green, an impaired
+   lane is red, a mixed or unknown state is amber, and planned or not monitored is neutral. */
+.patch-coverage-pill--monitor-healthy,
+.patch-coverage-pill--coverage-full,
+.patch-coverage-pill--coverage-official_only {
   border-color: rgba(59,165,103,.34);
   background: rgba(59,165,103,.12);
   color: #d9f7e5;
 }
 
 .patch-coverage-pill--monitor-failing,
+.patch-coverage-pill--coverage-impaired,
 .patch-coverage-pill--monitor-blocked,
 .patch-coverage-pill--monitor-unreachable,
 .patch-coverage-pill--monitor-broken {
@@ -2015,6 +2020,8 @@ html.js-reveal .reveal-up.is-visible { opacity:1; transform:none; }
 }
 
 .patch-coverage-pill--monitor-partial,
+.patch-coverage-pill--coverage-mixed,
+.patch-coverage-pill--coverage-unknown,
 .patch-coverage-pill--monitor-stale,
 .patch-coverage-pill--monitor-unverified {
   border-color: rgba(214,176,96,.34);
@@ -2023,6 +2030,8 @@ html.js-reveal .reveal-up.is-visible { opacity:1; transform:none; }
 }
 
 .patch-coverage-pill--monitor-disabled,
+.patch-coverage-pill--coverage-planned,
+.patch-coverage-pill--coverage-not_monitored,
 .patch-coverage-pill--monitor-unconfigured {
   border-color: var(--border-subtle);
   background: rgba(255,255,255,.03);
@@ -4412,6 +4421,14 @@ html.js-reveal .reveal-up.is-visible { opacity:1; transform:none; }
   font-weight: 700;
 }
 
+/* The official statement an AVOID rests on, linked under the verdict line (G66). */
+.update-decision-source {
+  margin: .35rem 0 0;
+  padding-left: .75rem;
+  color: var(--text-2);
+  font-size: .82rem;
+}
+
 .update-decision-reasoning {
   display: grid;
   gap: .4rem;
@@ -5420,3 +5437,118 @@ tr.patch-row.is-your-version { background: rgba(240,202,103,.045); }
   .patch-iv-step--tied::after { left: calc(-.75rem - 3px); }
   .patch-iv-step__meta { gap: .05rem .4rem; }
 }
+
+/* ==========================================================
+   GROWTH-1A homepage: patch decisions first (Direction A)
+   Scoped to classes only aux-home.html emits. The proposition, the
+   product trackers and the latest Patch Signals share the first
+   viewport; everything else AUXSAYS publishes follows below.
+   ========================================================== */
+.hero-panel.hero-panel--patch { min-height: 0; }
+.hero-panel--patch .hero-panel-content { width: min(740px, calc(100% - 56px)); padding: 2.4rem 0 2.3rem 2.6rem; }
+.hero-title--question { max-width: 18ch; font-size: clamp(2.2rem, 3.7vw, 3.8rem); line-height: 1.02; letter-spacing: -.045em; }
+.hero-panel--patch .cta-row { margin-top: 1.45rem; align-items: center; }
+.home-hero-link {
+  display: inline-flex; align-items: center; min-height: 44px; padding: 0 .35rem;
+  color: var(--cyan-1); font-weight: 700;
+}
+.home-hero-link:hover, .home-hero-link:focus-visible { text-decoration: underline; text-underline-offset: 4px; }
+.home-hero-link:focus-visible,
+.home-tracker-link:focus-visible { outline: 2px solid var(--accent-1); outline-offset: 3px; }
+h2.home-section-label { margin-top: 0; line-height: 1.3; font-family: inherit; }
+
+.home-dashboard--patch { grid-template-columns: minmax(0, 2fr) minmax(300px, 1fr); }
+.home-dashboard--patch .home-signals-column { grid-column: 1; grid-row: 1; min-width: 0; }
+.home-dashboard--patch .home-tracker-nav { grid-column: 2; grid-row: 1; }
+.home-signals-column .home-patch-feed--signals .home-patch-head p { max-width: none; }
+.home-tracker-nav { padding: 1.1rem 1.15rem 1.2rem; min-width: 0; }
+.home-tracker-nav p { margin: 0 0 .85rem; color: var(--text-2); font-size: .88rem; }
+.home-tracker-list { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .45rem; }
+.home-tracker-link {
+  display: inline-flex; align-items: center; min-height: 40px; padding: .35rem .82rem;
+  border: 1px solid var(--border-subtle); border-radius: 999px;
+  color: var(--text-0); font-size: .88rem; line-height: 1.2;
+  transition: border-color .2s ease, color .2s ease, background .2s ease;
+}
+.home-tracker-link:hover, .home-tracker-link:focus-visible { border-color: var(--border-strong); color: var(--accent-1); background: rgba(199,162,85,.08); }
+
+.home-also { display: grid; gap: 1.2rem; }
+.home-also > .eyebrow { margin-bottom: 0; }
+.home-also-grid .home-main-column { grid-column: 1; grid-row: 1; }
+.home-also-grid .home-also-card { grid-column: 2; grid-row: 1; }
+.home-also-card { padding: 1.1rem 1.2rem; display: grid; gap: .35rem; justify-items: start; }
+.home-also-card__title { margin: 0; font-size: 1.15rem; line-height: 1.2; }
+.home-also-card p { margin: 0; color: var(--text-1); }
+
+@media (max-width: 1180px) {
+  .home-dashboard--patch { grid-template-columns: 1fr; }
+  .home-dashboard--patch .home-signals-column,
+  .home-dashboard--patch .home-tracker-nav,
+  .home-also-grid .home-main-column,
+  .home-also-grid .home-also-card { grid-column: auto; grid-row: auto; }
+}
+
+@media (max-width: 860px) {
+  .hero-panel--patch .hero-panel-content { width: calc(100% - 32px); padding: 1.6rem 0 1.7rem 1.3rem; }
+  .hero-title--question { font-size: clamp(2rem, 8.6vw, 2.9rem); }
+}
+
+/* GROWTH-1A privacy notice: its links must read as links (the site resets `a` to inherit). */
+.privacy-page .methodology-card a { color: var(--cyan-1); text-decoration: underline; text-underline-offset: 3px; }
+.privacy-page .methodology-card a:focus-visible { outline: 2px solid var(--accent-1); outline-offset: 2px; }
+
+/* ==========================================================
+   GROWTH-1C homepage: a signal row shows its patch page's verdict and evidence
+   state (the dot takes the colour of that page's verdict-box border), and each
+   product tracker says where its updates come from.
+   ========================================================== */
+.home-patch-dot--live,
+.home-patch-dot--pilot { color: #f0ca67; }
+.home-patch-dot--official { color: #5fd4e5; }
+.home-patch-verdict { color: var(--text-0); font-weight: 700; }
+.home-tracker-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 9rem), 1fr)); gap: .45rem; }
+.home-tracker-item { display: grid; min-width: 0; }
+.home-tracker-item .home-tracker-link { display: grid; align-content: center; gap: .1rem; border-radius: 14px; padding: .4rem .78rem; }
+.home-tracker-desc { color: var(--text-2); font-size: .72rem; line-height: 1.25; }
+
+/* GROWTH-3 verdict policy: the verdict's scope ("WAIT if you use macOS 27.2") sits beside the word,
+   and a security update's affected-configuration / deployment-caution panel is its own box so the
+   SECURITY UPDATE verdict is never replaced by it. Meaning is carried by the words, not the colour. */
+.update-decision-scope { margin-left: .35rem; color: var(--text-0); font-weight: 650; font-size: clamp(1rem, 1.6vw, 1.2rem); }
+.update-decision-panel {
+  margin: .6rem 0 0;
+  padding: .65rem .8rem;
+  border: 1px solid rgba(240,202,103,.55);
+  border-radius: 10px;
+  background: rgba(240,202,103,.08);
+  color: var(--text-0);
+  line-height: 1.5;
+}
+.update-decision-panel__heading { display: block; margin-bottom: .2rem; font-weight: 750; }
+
+/* GROWTH-3 review 1 (D1): wherever a verdict is printed its scope prints with it -- table rows, My
+   Patch Stack cards and upgrade-path steps, the /updates/ feed -- so "WAIT" for one setup never reads
+   as WAIT for everyone. Plain text beside the pill, so it wraps instead of widening the column. */
+.patch-verdict-scope { color: var(--text-1); font-size: .82rem; line-height: 1.35; }
+.patch-stack-card__verdict { display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: .3rem; justify-content: flex-end; }
+
+/* G36-02: the Patch Feed is paged. The page list is plain links styled as the feed's chips; the
+   status line says when a search or filter is reading every page rather than this one. The archive
+   section ships hidden on pages whose slice holds no archived record, and the script unhides it. */
+.patch-archive-wrap[hidden],
+.patch-pagination[hidden],
+.patch-feed-status[hidden] { display: none !important; }
+.patch-pagination { padding: 1.1rem 1.25rem; display: grid; gap: .7rem; }
+.patch-pagination-summary,
+.patch-page-note,
+.patch-feed-status { margin: 0; color: var(--text-1); font-size: .86rem; line-height: 1.5; }
+.patch-pagination-list { list-style: none; margin: 0; padding: 0; }
+.patch-pagination-list a { display: inline-block; min-width: 2.6rem; text-align: center; text-decoration: none; }
+.patch-pagination-list a:focus-visible,
+.patch-pagination-step a:focus-visible { outline: 2px solid var(--accent-1); outline-offset: 3px; }
+.patch-pagination-step { margin: 0; display: flex; flex-wrap: wrap; gap: .5rem 1.25rem; }
+.patch-pagination-step a,
+.patch-page-note a { color: var(--accent-1); text-decoration: none; font-weight: 700; }
+.patch-pagination-step a:hover,
+.patch-page-note a:hover { text-decoration: underline; }
+.patch-page-note { margin-top: .6rem; }

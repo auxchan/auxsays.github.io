@@ -263,6 +263,36 @@ def run() -> int:
           _src != _mutant and "file_size_pill_value_guard_missing" in _codes,
           f"mutation applied={_src != _mutant}; codes={sorted(_codes)}")
 
+    # GROWTH-1C moved the patch page's maturity rung and decision ladder into two includes the
+    # layout renders. The scan reads them as the layout's text: without that, the rung's pinned
+    # 'Verified reports' literal is no longer "in the layout" and the deploy gate fails on a correct
+    # page; and a forbidden phrase written into an include would reach every patch page unscanned.
+    _real_includes = qa.UPDATE_LAYOUT_INCLUDES
+    check("the layout scan reads the two includes the patch page renders its verdict from",
+          sorted(p.name for p in _real_includes) == ["patch-decision.html", "patch-evidence-state.html"]
+          and all(p.exists() for p in _real_includes), str(_real_includes))
+    _inc_tmp = Path(tempfile.mkdtemp(prefix="auxsays-qa-include-"))
+    _inc_mutants = []
+    for _inc in _real_includes:
+        _copy = _inc_tmp / _inc.name
+        _text = _inc.read_text(encoding="utf-8")
+        if _inc.name == "patch-decision.html":
+            _text = _text.replace("Too few reports for a verdict yet.", "Too few reports. Sample size: small.")
+        _copy.write_text(_text, encoding="utf-8")
+        _inc_mutants.append(_copy)
+    try:
+        qa.UPDATE_LAYOUT_INCLUDES = tuple(_inc_mutants)
+        include_errors, _ = qa.scan_update_layout_public_copy()
+        qa.UPDATE_LAYOUT_INCLUDES = ()
+        bare_errors, _ = qa.scan_update_layout_public_copy()
+    finally:
+        qa.UPDATE_LAYOUT_INCLUDES = _real_includes
+    include_codes = {str(e.get("code", "")) for e in include_errors}
+    bare_codes = {str(e.get("code", "")) for e in bare_errors}
+    check("...a forbidden phrase written into an include fails the scan, and so does reading the layout alone",
+          "layout_public_copy_regression" in include_codes and "layout_pilot_sample_label_missing" in bare_codes,
+          f"include={sorted(include_codes)} bare={sorted(bare_codes)}")
+
     print()
     print("=" * 60)
     total = _PASS + _FAIL

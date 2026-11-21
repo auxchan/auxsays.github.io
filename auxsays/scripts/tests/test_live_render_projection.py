@@ -503,11 +503,17 @@ def section_r() -> None:
 
 # ------------------------------------------------------------------------------- [W] consumers
 CONSUMERS = {
-    "_layouts/aux-update.html": {"record=page": 1},
+    # GROWTH-1C: the patch page's maturity rung moved into _includes/patch-evidence-state.html, which
+    # the patch page renders (record=page) and the homepage renders for each signal row
+    # (record=item), so neither layout calls the contract directly any more for that.
+    "_includes/patch-evidence-state.html": {"record=pes_record": 1},
+    "_layouts/aux-update.html": {},
     "_layouts/aux-updates.html": {"record=item": 2},
-    "_layouts/aux-home.html": {"record=candidate": 1, "record=item": 1},
+    "_layouts/aux-home.html": {"record=candidate": 1},
     "updates/my-stack.md": {"record=chosen": 1, "record=rec": 1},
 }
+# Who renders the rung, and for which record.
+RUNG_CALLERS = {"_layouts/aux-update.html": ["page"], "_layouts/aux-home.html": ["item"]}
 # The variables the five private ladders compared to the live word. The homepage's "is this
 # candidate worth ranking at all" filter still reads `candidate_evidence_state`; it is not a ladder
 # (an uncertified claim renders as Verified reports, which is just as worth ranking) and the
@@ -537,12 +543,17 @@ def section_w() -> None:
         found = {arg: tags.count(arg) for arg in set(tags)}
         check(f"W1 {rel} includes the contract as expected {expected}", found == expected, str(found))
         check(f"W2 {rel} keeps no private live ladder",
-              not private_ladder(emitted, allowed_live=1 if rel.endswith("aux-update.html") else 0))
+              not private_ladder(emitted, allowed_live=1 if rel.endswith("patch-evidence-state.html") else 0))
     update = (_AUX / "_layouts" / "aux-update.html").read_text(encoding="utf-8")
-    check("W3 the patch page derives its class from the contract and keeps the pinned literals",
-          "{% if maturity_class == 'live' %}" in update and "{% elsif maturity_class == 'pilot' %}" in update
-          and "{% assign evidence_state = 'Verified reports' %}" in update
-          and "{% if evidence_state_class == 'live' %}{% assign consensus_established = true %}" in update)
+    rung = (_AUX / "_includes" / "patch-evidence-state.html").read_text(encoding="utf-8")
+    callers = {rel: re.findall(r"\{%-?\s*include\s+patch-evidence-state\.html\s+record=(\w+)\s*-?%\}",
+                               COMMENT_RE.sub("", (_AUX / rel).read_text(encoding="utf-8"))) for rel in RUNG_CALLERS}
+    check("W3 the patch page derives its class from the contract and keeps the pinned literals "
+          "(the rung in patch-evidence-state.html, rendered by the patch page and the homepage)",
+          "{% if maturity_class == 'live' %}" in rung and "{% elsif maturity_class == 'pilot' %}" in rung
+          and "{% assign evidence_state = 'Verified reports' %}" in rung
+          and "{% if evidence_state_class == 'live' %}{% assign consensus_established = true %}" in update
+          and callers == RUNG_CALLERS, str(callers))
     home = (_AUX / "_layouts" / "aux-home.html").read_text(encoding="utf-8")
     check("W4 the homepage ranks a candidate 2 only for a certified claim, 1 for verified reports",
           re.search(r"\{% if maturity_live %\}\s*\{% assign candidate_state_rank = 2 %\}\s*"

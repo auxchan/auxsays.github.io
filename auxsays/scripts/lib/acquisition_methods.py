@@ -118,6 +118,15 @@ FALLBACK_RELATIONSHIPS = frozenset({
 # historical -- removed or superseded; kept because the measurement still teaches something
 STATUSES = frozenset({"active", "blocked", "disabled", "staged", "historical"})
 
+# OPTIONAL `rights_status`: what is known about the right to collect from the source. That is a
+# different question from `status` (whether the source answers), and a method can be `active` with
+# its rights unresolved.
+# unresolved -- the source's own terms appear to restrict this access and nothing settles it yet
+#               (no permission from the source, no owner decision). Collection may continue
+#               provisionally; `rights_note` says on what basis and what stops it. Never a clearance.
+# An entry WITHOUT the field records nothing about rights. Absence is not a clearance either.
+RIGHTS_STATUSES = frozenset({"unresolved"})
+
 # Canonical health vocabulary. Imported from the routing module rather than restated, so the two
 # cannot drift: a status this registry claims a method can report must be one routing can evaluate.
 from lib.method_routing import HEALTH_STATUSES  # noqa: E402  (re-exported on purpose)
@@ -125,6 +134,21 @@ from lib.method_routing import HEALTH_STATUSES  # noqa: E402  (re-exported on pu
 REQUIRED_FIELDS = (
     "method_id", "method_family", "implementation", "purpose", "discovery_model",
     "transport", "status", "fallback_relationship", "evidence",
+)
+
+# The rights note shared by every method whose requests go to Adobe Community (community.adobe.com).
+# Stated once so the entries that carry it cannot drift apart. Ledger: AUX-113.
+_ADOBE_COMMUNITY_RIGHTS_NOTE = (
+    "Unresolved since 2026-11-19. Adobe's General Terms of Use (effective 2025-10-03) count discussion "
+    "forums as Services. On a plain reading, s6.18 (no data mining or similar data gathering and "
+    "extraction in connection with the Services) and s6.6 (access only through an interface Adobe "
+    "provides or permits) cover this access. Where robots.txt does not disallow an endpoint, that "
+    "settles nothing about the terms. The owner's decision on Adobe Community collection is pending. "
+    "Until it is made, the methods that run continue unchanged and the switched-off ones stay off, as "
+    "a temporary position, not a clearance: no new method, query, host or scope; the no-evasion "
+    "safeguards stay; a method Adobe refuses or objects to is suspended, "
+    "never worked around. An owner risk acceptance, if given, would not be permission from Adobe. The "
+    "same status covers the Acrobat Pro, Acrobat Reader and Premiere Pro lanes."
 )
 
 # --- the registry ------------------------------------------------------------------------------
@@ -368,6 +392,8 @@ METHODS: list[dict[str, Any]] = [
         "implementation": "adobe_community_announcement_prose_parser",
         "source_family": "community.adobe.com official announcement threads (vendor-authored posts on a forum platform)",
         "status": "active",
+        "rights_status": "unresolved",
+        "rights_note": _ADOBE_COMMUNITY_RIGHTS_NOTE + " This entry is the official lane's one pinned announcement page, not community collection; it carries the status because the terms cover the forum host, whoever wrote the post.",
         "fallback_relationship": "fallback",
         "purpose": ["official_ingestion"],
         "discovery_model": ["direct_fetch"],
@@ -380,19 +406,19 @@ METHODS: list[dict[str, Any]] = [
         "Both apostrophe forms are handled explicitly, curly and straight — the marker list carries each phrase twice",
     ],
         "blind_spots": [
-        "No test in tests/ exercises this fallback — test_adobe_release_notes_adapter.py calls _records_from_version_headings directly and never...",
+        "test_premiere_source_truth.py exercises this fallback offline (a frozen page of the pinned announcement's shape behind a frozen HelpX 403); before it, no test reached fetch()'s prose path",
         "Because the page is a forum thread, replies below the vendor post are on the same URL; only the end markers keep them out of the body",
     ],
         "failure_modes": [
         "Every marker is a hardcoded English string, several of them PRODUCT-specific (\"What's new in Premiere Pro\"); a different Adobe product's...",
-        "If no version appears anywhere in the page text the record's version becomes the literal 'official-update' (adobe_release_notes.py:89),...",
+        "Identity and date come from the page TITLE only; a title without a dotted version or a date yields NO record and reports an extraction mismatch (until 2026-11-06 it minted the literal version 'official-update' and dated a dateless page today)",
         "One cleanup rule is a literal one-off: a regex that rewrites 'welcome to premiere 26.2! welcome to premiere 26.2! | community' to a single...",
         "The 2600-character body cap is tighter than every other path in the fleet (6000 in html_changelog, 7000 for the html_changelog Adobe path,...",
         "A community-hosted URL sets official_source_type 'community_official_post', which downgrades the HelpX entry in official_sources[] to...",
     ],
         "execution": "No auth, no key, no JS, no pagination. Reachable from CI — this is the fetch-stable host the lane was redesigned around.",
         "evidence_rules": "official_ingestion authority ONLY. The module states it directly at adobe_release_notes.py:272: 'Official Adobe posts are not counted as user consensus evidence.' A vendor post on a community platform must not be read as a user report — the record sets official_note_status 'official_source_captured' and...",
-        "measured_notes": "This is the production path for adobe-premiere-pro today: secondary_official_url is a community.adobe.com announcement and the live run at 2026-09-29T08:02:18Z produced exactly 1 record (fetched 1, written 1, seen ledger 2, status healthy). PREMIERE_OFFICIAL_CONTEXT_URLS pins the two real announcement URLs it has been built against: 26.2 -> community.adobe.com/announcements-727/welcome-to-premiere-26-2-1557825 and 26.2.2 -> .../what-s-new-in-adobe-premiere-26-2-2-may-2026-1560755 (adobe_release_notes.py:53-56).",
+        "measured_notes": "This is the production path for adobe-premiere-pro today: secondary_official_url is a community.adobe.com announcement and the live run at 2026-09-29T08:02:18Z produced exactly 1 record (fetched 1, written 1, seen ledger 2, status healthy). PREMIERE_OFFICIAL_CONTEXT_URLS pins the two real announcement URLs it has been built against: 26.2 -> community.adobe.com/announcements-727/welcome-to-premiere-26-2-1557825 and 26.2.2 -> .../what-s-new-in-adobe-premiere-26-2-2-may-2026-1560755 (adobe_release_notes.py:53-56). 2026-11-06: HelpX has refused CI with HTTP 403 since 2026-09-08 (run 34252632666), so this fallback is the only page that answers, and it is ONE release's announcement: the source now records `partial`, never healthy, and nothing newer than 26.2.2 can be discovered from it (GROWTH-2A closed SOURCE-BLOCKED). 2026-11-19 (AUX-087 reopened): reachable is not complete. The 2026-09-29 'written 1' created nothing new: CI has created one Premiere record ever, 26.2 on 2026-04-30 (ae96e579), and 26.2.2 was added by hand (2774273e) and is only refreshed. The page answers on the runs examined, but this method has no discovery stage, so it can only re-read 26.2.2: vendor posts for 26.3 (June 2026) and 27.0 (posted 2026-11-10 per the board's topic data) sit on the same board and were never fetched. Re-pinning to the 27.0 post would yield no record (its title carries no date and the fail-closed rule drops it) and is held; the 26.2.2 pin stays until automated discovery can replace it without losing coverage.",
         "evidence": "D:/Auxsays/.am/auxsays/scripts/adapters/adobe_release_notes.py:53-56, :87-102, :105-141, :232-240, :281-341, :353-366; D:/Auxsays/.am/auxsays/_data/patch_ingest_state.json (adobe-premiere-pro bucket, 2026-09-29T08:02:18Z).",
     },
     {
@@ -465,6 +491,8 @@ METHODS: list[dict[str, Any]] = [
         "implementation": "adobe_community_premiere_bug_tab_listing_walk",
         "source_family": "adobe_community_premiere_pro_product_hub",
         "status": "blocked",
+        "rights_status": "unresolved",
+        "rights_note": _ADOBE_COMMUNITY_RIGHTS_NOTE + " This method's listing URL carries sort=latest_replies, which community.adobe.com/robots.txt disallows (Disallow: *&sort=*, read 2026-11-19): it must not be re-enabled as written.",
         "fallback_relationship": "archive_recheck",
         "purpose": ["candidate_discovery", "fallback"],
         "discovery_model": ["query_search", "enumeration"],
@@ -516,7 +544,7 @@ METHODS: list[dict[str, Any]] = [
         "Issue comments are unreadable by design",
     ],
         "failure_modes": [
-        "rate_limited — HTTP 403 AND 429 both map to it, because GitHub signals secondary rate limits with 403",
+        "Refusals through the shared transport (lib/github_api.py, G49): rate_limited (429; 403 with x-ratelimit-remaining 0, retry-after or a rate-limit body), access_denied (401; a 403 refusing the credentials), http_403_error (any other 403). The first stops every GitHub request for the rest of the run and ends the query loop; health reads blocked",
         "http_<code>_error, network_unreachable, payload_parse_failed",
         "request_budget_exhausted_after_<n>",
         "A bare build token finds nothing: 'repo:OfficeDev/office-js \"20228.20124\" returns 0 results' — GitHub's tokenizer does not match the dotted...",
@@ -524,7 +552,7 @@ METHODS: list[dict[str, Any]] = [
         "A version line naming both a web and a desktop build: taking whichever token appeared first 'would have attributed a web build to a desktop...",
         "Crash/event-log vocabulary (AppName, ModName, Faulting application/module) means the version token is a FAULTING BINARY's version, so the...",
     ],
-        "execution": "Paced at _MIN_INTERVAL = 2.1 s, about 28 requests/minute, strictly under the documented 30/min authenticated search allowance (github_officedev_source.py:47-49). Unauthenticated search allows only 10 requests/minute, so a token is used when the environment offers one and the query budget stays...",
+        "execution": "Through lib/github_api.py (G49): truthful User-Agent, api.github.com only, paced at MIN_INTERVAL = 2.1 s, about 28 requests/minute, strictly under the documented 30/min authenticated search allowance. The issue author's login and id are not read. Unauthenticated search allows only 10 requests/minute, so a token is used when the environment offers one and the query budget stays...",
         "evidence_rules": "'Search is DISCOVERY ONLY -- a search hit is not evidence; the issue is fetched and adjudicated by the unchanged PowerPoint authority' (github_officedev_source.py:11-12). report_text is title + body + the desktop version field promoted to the front; comments are never folded in, because 'a maintainer's or another...",
         "measured_notes": "'a bare build token finds nothing. repo:OfficeDev/office-js \"20228.20124\" returns 0 results, while \"16.0.20228.20124\" returns 6 including the calibration issue' (github_officedev_source.py:14-17). 'unauthenticated search allows only 10 requests/minute' (github_officedev_source.py:17-19). 'Authenticated GitHub SEARCH is 30 requests/minute. 0.8s paced at 75/min, and the real merged run drained \"rate remaining\" by 4 per record until two records came back blocked. 2.1s is 28/min.' (github_officedev_source.py:47-49)....",
         "break_history": "Pacing was 0.8 s (75/min) against a 30/min authenticated allowance; a real merged run drained the rate budget by 4 per record until two records came back blocked, and the interval was raised to 2.1 s. Separately, the web/desktop guard keyed on the literal 'web:' form, letting 'web 16.0...', 'Office on the web...",
@@ -553,13 +581,47 @@ METHODS: list[dict[str, Any]] = [
         "failure_modes": [
         "Before the scope split, issuing all four queries per record sent '~75 of every 100 search requests as exact duplicates and exhausted the...",
         "Fixed phrasings: a symptom nobody worded as crash/settings/slideshow is unreachable",
-        "Inherits rate_limited (403/429), request_budget_exhausted_after_<n> and the rest of the GitHub transport taxonomy",
+        "Inherits the lib/github_api refusal taxonomy (rate_limited, access_denied, http_403_error) and request_budget_exhausted_after_<n>; since G49 the route's errors are carried to every record that reuses the cached result, so a refused route never reads as complete",
     ],
         "execution": "3 requests per run in total (one per symptom query), max_requests = len(GITHUB_SYMPTOM_QUERIES). The cache is per-run, not permanent: the graph — the only production path — calls reset_symptom_cache() each run (tests/test_powerpoint_evidence_integrity.py:250-261).",
         "evidence_rules": "Discovery only; identical Host-field product gate, identical desktop-only version rule and identical acceptance authority as the build route. Telemetry is reported as the RUN's cost as this record saw it: the record-specific request is added to the cached symptom cost, and the rate headers come from the most recent...",
         "measured_notes": "Control G4.3 pins at least 3 symptom queries, all repo-scoped, and G4.2 pins that no query hardcodes an issue number or URL (tests/test_powerpoint_github_officedev.py:127-131). MAX_GITHUB_QUERIES = 4 per record: 1 build query plus 3 symptom queries (microsoft_powerpoint.py:98-104). A real run's note reads 'Queries 4, requests 4, issues discovered 61, rate remaining 26/30' — 61 issues discovered reduced to 11 candidates after the PR and Host gates.",
         "break_history": "Originally all four queries were issued per record across 25 records, sending roughly 75% duplicate search requests and exhausting the 30/min allowance mid-run; fixed by splitting on SCOPE (record-specific build query vs product-level symptom queries) and caching the symptom half per run...",
         "evidence": "auxsays/scripts/patch_collectors/microsoft_powerpoint.py:98-104 (queries + ceiling), :1451-1484 (scope split, caching, cross-route dedupe); auxsays/scripts/patch_collectors/github_officedev_source.py:228-272;...",
+    },
+    {
+        "method_id": "github_issues",
+        "method_family": "issue_tracker_search_api",
+        "implementation": "project_repository_issues_search: obs-studio queries per version; comfyui enumerates issues by creation window",
+        "source_family": "GitHub issues of the product's own public repository (obsproject/obs-studio, Comfy-Org/ComfyUI)",
+        "status": "active",
+        "fallback_relationship": "independent_primary",
+        "purpose": ["community_discovery", "candidate_discovery"],
+        "discovery_model": ["query_search", "enumeration", "api_pagination"],
+        "transport": ["github_api", "rest_json"],
+        "health_statuses": ["blocked", "broken", "no_results", "partial", "success"],
+        "proven_on": ["obs-studio", "comfyui"],
+        "strengths": [
+        "The project's own tracker: reporters are users of exactly this product, and created_at is the issue's own creation time, which a later comment never moves",
+        "ComfyUI enumeration (created:>=<since>, newest first) reaches every issue in the window for all records in about eight requests, whatever spelling the reporter used for the version",
+        "Opening posts only: a reply's version never becomes the reporter's identity",
+    ],
+        "blind_spots": [
+        "Issue comments are never read",
+        "ComfyUI's issue forms ask no version question, so identity rests on the version output ComfyUI itself prints (startup log, error-report system information, ComfyUI-Manager describe) or the reporter naming ComfyUI beside the number",
+        "Patch tags with no GitHub Release (v0.45.1-v0.45.6 and similar) have no record, so reports declaring them cannot attach anywhere",
+        "The OBS per-version query misses spellings GitHub tokenizes differently ('v0.44.0' is not '0.44.0')",
+    ],
+        "failure_modes": [
+        "rate_limited / access_denied / http_403_error from lib/github_api; the first refusal stops every GitHub request for the rest of the run; a walk that read no page reports blocked and one cut short partial, never no_results; an OBS version whose issue fetch was refused is not evaluated and reads blocked",
+        "A search result window over 1000 issues, or incomplete_results, is reported partial (search_result_window_truncated / search_incomplete_results)",
+        "100-issue pages of log-heavy ComfyUI bodies measured about 1 MB against the 2 MB read cap, so ComfyUI pages hold 50",
+    ],
+        "execution": "Authenticated with the job's GITHUB_TOKEN when present (api.github.com only). Both products go through lib/github_api.py (G49): paced at 2.1 s, truthful User-Agent, pages followed by the Link header's rel=next (OBS no longer spends a search on an empty second page). One walk per run is shared by every ComfyUI record. OBS keeps its per-issue GET, because the search index can lag an edit the acceptance rules read.",
+        "evidence_rules": "Discovery only. OBS candidates go to collect_obs_reports.evaluate_issue; ComfyUI candidates go through product identity resolution (patch_collectors/comfyui.py resolve_identity: core version only, never a package, custom-node, frontend or Desktop version, never a build past the release tag) and then the shared base.apply_acceptance_gates and lib.target_outcome role veto. Exclusions are stored as counted: false rows with their reason.",
+        "measured_notes": "G42 (2026-11-18), Comfy-Org/ComfyUI, issues created 2026-09-29..11-19: 368 issues, 115 name one of the 10 newest releases exactly; a per-version search for the bare number found 78 of them, the bare and v-prefixed searches together all 115; offline replay through the shipped adapter accepted 60 across 9 of 10 releases (exclusions: not core identity 23, untagged build 23, custom node in failure path 5, one each concreteness, date, packages behind, repost).",
+        "revisit_trigger": "A ComfyUI run reporting partial with search_result_window_truncated (the window outgrew 1000 issues), or ComfyUI adding a version field to its issue forms.",
+        "evidence": "auxsays/scripts/patch_collectors/comfyui.py (enumerate_issues, resolve_identity, evaluate_issue, method_status); auxsays/scripts/collect_obs_reports.py:156-176 (OBS per-version search); auxsays/scripts/tests/test_comfyui_github_issues.py",
     },
     {
         "method_id": "creativecow_forum_index",
@@ -815,13 +877,13 @@ METHODS: list[dict[str, Any]] = [
         "method_family": "html_release_history",
         "implementation": "helpx_release_notes_heading_parser",
         "source_family": "Adobe HelpX release-notes documents (one page, many versions)",
-        "status": "active",
+        "status": "blocked",
         "fallback_relationship": "primary",
         "purpose": ["official_ingestion"],
         "discovery_model": ["query_search"],
         "transport": ["html"],
-        "health_statuses": ["no_results", "success"],
-        "proven_on": ["adobe-premiere-pro"],
+        "health_statuses": ["blocked", "no_results", "success"],
+        "proven_on": ["adobe-premiere-pro (parser proven on test fixtures only; CI has never received a HelpX page)"],
         "strengths": [
         "Test-pinned on real HelpX heading shapes: two <h2> headings 'May 2026 (version 26.2.2)' and 'April 2026 (version 26.2)' produce two...",
         "The test explicitly pins that an official record carries NO report_count: '26.2.2 remains official-only before community evidence' asserts...",
@@ -836,10 +898,10 @@ METHODS: list[dict[str, Any]] = [
         "The body of a Premiere record can be REPLACED by a hand-authored constant: when product_id == 'adobe-premiere-pro' and (source_type ==...",
         "A dormant hardcoded consensus seed exists: _premiere_262_pilot_consensus returns a fixed consensus_label 'Moderate',...",
     ],
-        "execution": "No auth, no key, no pagination, no JS. Runs on whatever bytes the failover produced.",
+        "execution": "BLOCKED from CI egress: helpx.adobe.com has answered every collection run with HTTP 403 Access Denied since 2026-09-08 (run 34252632666); before that the request timed out. No auth, no key, no pagination, no JS. Runs on whatever bytes the failover produced, which since then are always the pinned community announcement's, never a HelpX page.",
         "evidence_rules": "official_ingestion. The record carries official_note_status 'release_notes_captured', official_note_label 'Official release notes', capture_status 'captured-from-official-adobe-source', and the hand-authored bodies state their own class: 'AUXSAYS note: this is an official release-note/fixed-issue summary. Community...",
-        "measured_notes": "The pilot-consensus seed is INERT in production: it is gated on ingestion.allow_legacy_premiere_pilot_consensus_seed (adobe_release_notes.py:342) and a repo-wide grep finds that key ONLY at that line — it appears in no YAML file. Live 2026-09-29 run produced 1 record for adobe-premiere-pro, and the seen ledger holds 2 identities total.",
-        "revisit_trigger": "A Premiere version other than 26.2 / 26.2.2 is captured from a release_notes-classified URL — _premiere_release_notes_body will fall through to the parsed body and the record's substance will change shape without any...",
+        "measured_notes": "The pilot-consensus seed is INERT in production: it is gated on ingestion.allow_legacy_premiere_pilot_consensus_seed (adobe_release_notes.py:342) and a repo-wide grep finds that key ONLY at that line — it appears in no YAML file. Live 2026-09-29 run produced 1 record for adobe-premiere-pro, and the seen ledger holds 2 identities total. 2026-11-19 (AUX-087 reopened): status corrected from active to blocked. CI has never received a HelpX page: runs took about 25 s (the HelpX timeout) until 2026-09-08 and get a fast 403 since, and the runs examined refresh the title-derived 26.2.2 id with upstream_candidates 0 (for example run 44502299432, 2026-11-19). That 2026-09-29 record was the pinned fallback's refresh, not this path. Two parser hazards stay open for the day this path first sees real bytes: the version-heading pattern's lazy span can cross element boundaries, and the release date is then read from the next 14,000 characters, which on a forum page are replies.",
+        "revisit_trigger": "HelpX, or another official Adobe route carrying Premiere release identity, answers HTTP 200 from CI: this path then sees real markup for the first time and must be re-verified against that capture before its records are trusted. Separately: a Premiere version other than 26.2 / 26.2.2 is captured from a release_notes-classified URL — _premiere_release_notes_body will fall through to the parsed body and the record's substance will change shape without any...",
         "evidence": "D:/Auxsays/.am/auxsays/scripts/adapters/adobe_release_notes.py:20-37, :73-89, :175-196, :199-228, :243-279, :281-344; D:/Auxsays/.am/auxsays/scripts/tests/test_adobe_release_notes_adapter.py:47-80; repo-wide grep for allow_legacy_premiere_pilot_consensus_seed...",
     },
     {
@@ -914,6 +976,8 @@ METHODS: list[dict[str, Any]] = [
         "implementation": "adobe_community_t5_searchpage_html_scrape",
         "source_family": "adobe_community_legacy_t5_forums",
         "status": "blocked",
+        "rights_status": "unresolved",
+        "rights_note": _ADOBE_COMMUNITY_RIGHTS_NOTE,
         "fallback_relationship": "archive_recheck",
         "purpose": ["context_resolution", "candidate_discovery"],
         "discovery_model": ["query_search", "enumeration"],
@@ -1151,6 +1215,78 @@ METHODS: list[dict[str, Any]] = [
         "evidence": "D:/Auxsays/.am/auxsays/scripts/adapters/blackmagic_support_downloads.py:1-7 (docstring), :24-51 (fetch), :54-65 (_fetch_json), :68-74 (_sort_key), :77-102 (_is_davinci_resolve_download/_download_titles), :105-125 (_normalized_version), :128-191...",
     },
     {
+        "method_id": "nvidia_driver_lookup_json_listing",
+        "method_family": "json_api_listing",
+        "implementation": "nvidia_driver_lookup_json",
+        "source_family": "vendor driver-listing JSON (gfwsl.geforce.com DriverManualLookup, one pinned desktop/Windows 11/DCH query per driver family) plus the per-driver details JSON on www.nvidia.com",
+        "status": "active",
+        "fallback_relationship": "none",
+        "purpose": ["official_ingestion"],
+        "discovery_model": ["enumeration"],
+        "transport": ["rest_json"],
+        "health_statuses": ["blocked", "broken", "no_results", "success"],
+        "proven_on": ["nvidia-geforce-game-ready", "nvidia-studio-driver"],
+        "strengths": [
+        "the driver family is NVIDIA's own query parameter AND NVIDIA's own name for every row, both required, so a shared version number (621.14, 621.24) yields one record per family and never crosses",
+        "version, branch, release date and driver page are supplied by the listing, never inferred; the details record for a NEW driver is an independent cross-check of the same download id",
+        "one request per family when nothing is new",
+    ],
+        "blind_spots": [
+        "the 12 newest stable desktop DCH drivers only; hotfix, beta and notebook packages are outside the query",
+        "release date only (no time of day)",
+        "Studio rows are not flagged WHQL by the listing, so WHQL gates Game Ready rows only",
+        "NVIDIA App has its own version line and is not covered",
+    ],
+        "failure_modes": [
+        "the lookup answers with Content-Type text/html although the body is JSON, so HTML is detected by content, not by header",
+        "HTTP 401/403/429/451, a bot challenge, an HTML body or a refusing body suspend the method in this run and every later one until a reviewed config change clears it (a clearing time counts once it has passed, and once); a run that failed outright still commits the suspension",
+        "a changed envelope, request echo or identity field is a schema stop (no records); a listing with rows but none of the family reads broken immediately",
+        "a configured URL other than the pinned query, a redirect to another host, or a driver page off www.nvidia.com is a source-authority stop; redirects are bounded to the host asked and checked before they are followed (lib.http redirect_hosts), so nothing is sent to the other host",
+    ],
+        "execution": "Unauthenticated, honest client name, no retries, no downloads. Per family per run: one lookup plus at most two details reads, each for a driver not verified before (adapters/nvidia_driver_lookup.py DETAILS_PER_RUN).",
+        "evidence_rules": "official_ingestion only: records are official_only with zero reports and carry driver_family, driver_branch, nvidia_download_id and provenance (source_origin, collection_method, collection_authorization). Any future user-report path must use lib/nvidia_driver_identity.report_family, under which an explicit other-family mention vetoes a thread's family.",
+        "measured_notes": "Local reads 2026-11-19: both family lookups 200 in about 6 s, 12 rows each, Akamai-fronted; details 200 application/json in about 0.3 s and identical to the lookup row except a server tag. CI reachability is unmeasured until the first scheduled ingestion run, which is the probe.",
+        "evidence": "auxsays/scripts/adapters/nvidia_driver_lookup.py (fetch, stop rules); auxsays/scripts/lib/nvidia_driver_identity.py (listing_matches, report_family); auxsays/scripts/tests/test_nvidia_driver_lookup.py; auxsays/_data/patch_ingestion_sources.yml (nvidia-geforce-game-ready, nvidia-studio-driver)",
+    },
+    {
+        "method_id": "nvidia_forum_default_views",
+        "method_family": "json_api_listing",
+        "implementation": "nvidia_geforce_forum_default_views",
+        "source_family": "NVIDIA GeForce forum (www.nvidia.com/en-us/geforce/forums), read through the calls its own pages make for the two default views: a community's pinned and 15 most recently active topics, and a topic's latest 25 top-level comments with the replies the forum embeds",
+        "status": "active",
+        "fallback_relationship": "primary",
+        "purpose": ["community_discovery", "candidate_discovery"],
+        "discovery_model": ["enumeration"],
+        "transport": ["rest_json"],
+        "health_statuses": ["blocked", "broken", "disabled", "no_results", "partial", "success"],
+        "proven_on": ["nvidia-geforce-game-ready", "nvidia-studio-driver"],
+        "strengths": [
+        "NVIDIA posts a feedback thread for every Game Ready release; users report problems there within hours, with the exact driver version and often a rollback or a contrast version",
+        "each comment carries its own creation time, which replies, votes and edits never move",
+        "one cycle per 12 hours of at most 16 requests serves both driver families; a thread whose last activity has not moved is not re-read",
+    ],
+        "blind_spots": [
+        "only the latest 25 top-level comments of a thread and the replies the forum embeds are visible; older comments, later replies and other pages are never read, so coverage is a window, never the whole thread",
+        "user topics are read only while the community's default listing shows them, or later if the thread cap, the request ceiling or the time budget deferred them (the deferred-thread queue keeps them until they are read, invalidated or quarantined)",
+        "Studio drivers have no feedback thread; Studio reports appear as family-named comments in Game Ready threads or user topics",
+        "a comment naming no driver family in a user topic (the shared-component defects) is stored unassigned and counts for neither family",
+    ],
+        "failure_modes": [
+        "HTTP 401/403/429/451, a bot challenge, an HTML page where JSON was expected or a refusing body suspend the method in this run and every later one until a reviewed change clears it",
+        "no redirect is followed, not even on the same host (an empty lib.http redirect bound, checked before the hop): any redirect is a source-authority stop with nothing sent to its destination",
+        "a response missing the fields identity rests on is a schema stop: no rows that cycle, the last windows kept",
+        "robots.txt of www.nvidia.com and of the API host is re-read every cycle; a policy that disallows the view, or one that cannot be read, skips the cycle",
+        "possible missed comments between two cycles (no overlap with the last window, a boundary tie, a comment appearing inside the span already read, more new comments than the window shows) report partial with the reason; the number or content of missed comments is never inferred and never fetched",
+        "a thread the thread cap, the request ceiling or the time budget could not reach reports partial for the versions its title names (every version, for a seed whose title is not known yet) and is kept in the state file with its reason until a later cycle reads it, longest-waiting first, or invalidates it with a recorded reason; queue depth and oldest deferral are in every health note a cycle writes after reading its state file",
+        "a queued thread whose topic view answers 404/410 is quarantined: kept in the state file with its reason, never read again until a reviewed change releases it; a queued thread the listing does not show (other than a seed never read) cannot stop the cycle for the others: a success:false confirmed by another thread read in full that cycle quarantines it and the cycle goes on; a refusal of its own view still suspends the method and also quarantines it, except a 429, which keeps it queued; a 5xx, a timeout, another shape or a redirect keep it queued and send it to the end; quarantined threads are counted in every health note a cycle writes after reading its state file",
+    ],
+        "execution": "Unauthenticated, honest client name, no retries, at least 4 s between requests, at most 16 requests and 5 threads per cycle, one cycle per 12 hours whatever the lane's cron (patch_collectors/nvidia_forum_source.py). Every request must be one of the default-view calls or a robots file; anything else (page 2 and later, oldest-first, comment anchors, reply expansion, search, user pages, the all-communities listing) is refused before it is sent.",
+        "evidence_rules": "Discovery only. A comment is a candidate only when its own text names a tracked version exactly. Family comes from a staff feedback thread whose title names exactly one version and one family (for that version only) or from the reporter naming it (lib/nvidia_driver_identity.report_family); otherwise the row is stored excluded for both families. Notebook reports (a first-person notebook always, and an unowned 'another laptop' too; another person's only through a possessive owner or inside an other-machine phrase's description), versions named only on a specification line, disclaimed attribution, module crashes without regression evidence for the record's own version and fine-only posts are excluded with their reasons. A row is keyed on the comment, so a comment served again under another thread is never a second row. Members' @handles and display names are removed from stored comment text and stored thread titles. Then base.apply_acceptance_gates and lib.target_outcome unchanged.",
+        "measured_notes": "G46 Lane 2 measurement (2026-11-19, 14 requests, no refusal): the 621.14 feedback thread's earliest SSD-write report (comment 3633066, 2026-11-08 16:08Z) sat inside the latest-25 window from posting onward. Offline replay of the captured windows through the shipped path: Game Ready 621.14 7 counted, 621.24 2 counted (comment 3634344, a module crash that began on 621.01 and persisted on 617.42, is investigated); every SSD-topic comment family-unassigned. CI reachability is unmeasured until the first scheduled run.",
+        "revisit_trigger": "A run reporting partial with possible_missed_comments on a feedback thread in its first days, or NVIDIA posting Studio feedback threads.",
+        "evidence": "auxsays/scripts/patch_collectors/nvidia_forum_source.py (permitted_request, robots, Transport, compare_windows, state); auxsays/scripts/patch_collectors/nvidia_forum.py (evaluate_comment, family_reason, run_cycle, health); auxsays/scripts/tests/test_nvidia_forum_evidence.py",
+    },
+    {
         "method_id": "github_releases_api_listing",
         "method_family": "json_api_listing",
         "implementation": "github_rest_releases_api",
@@ -1178,7 +1314,7 @@ METHODS: list[dict[str, Any]] = [
         "If the release body is empty the record ships a literal placeholder string, 'No official release body was returned by the GitHub Releases...",
         "An HTTP 403 (the shape an exhausted anonymous rate limit takes) is classified by lib/state.py:classify_error as error_type 'blocked' and...",
     ],
-        "execution": "Authenticated when GITHUB_TOKEN is present in the job environment, and ONLY for https://api.github.com:443; lib/http.py:306 states the reason as 'higher authenticated rate limits'. The file records no numeric rate limit. No JS. CI-reachable — it is running on schedule today.",
+        "execution": "Through lib/github_api.py since G49: authenticated when GITHUB_TOKEN/GH_TOKEN is present, ONLY for https://api.github.com:443, truthful User-Agent, and the first refusal stops the other GitHub release source in the same run. Release bodies are stored without contributor handles (lib/contributor_credits.py). No JS. CI-reachable — it is running on schedule today.",
         "evidence_rules": "official_ingestion authority only. patch_ingest.py:12 states 'This is official-source ingestion only. Confirmed patch-specific consensus is intentionally deferred.' and patch_ingest.py:10 'Does not overwrite manually curated verdict/report/evidence fields on existing records.' None of the six adapters in this task map...",
         "measured_notes": "Live state 2026-09-29T08:02:19Z (auxsays/_data/patch_ingest_state.json): obs-studio status healthy, last_records_fetched 15, written 2, skipped 13, seen ledger 16, run 1198 ms. comfyui 2026-09-29T08:02:21Z status healthy, fetched 30, written 2, skipped 28, seen ledger 40, run 930 ms. patch_ingest.py calls the adapter with limit = max(record_limit, BACKFILL_SCAN_LIMIT) where BACKFILL_SCAN_LIMIT = 200 (patch_ingest.py:204) and SEEN_RETENTION = 200 (lib/state.py:25) — yet the runs returned 30 and 15, which is the...",
         "revisit_trigger": "A third product is configured with adapter github_releases — _preferred_asset will silently hand it assets[0].",
@@ -1257,6 +1393,8 @@ METHODS: list[dict[str, Any]] = [
         "implementation": "adobe_community_insided_algolia_search_plus_gettopics_hydration",
         "source_family": "adobe_community_insided_forums",
         "status": "active",
+        "rights_status": "unresolved",
+        "rights_note": _ADOBE_COMMUNITY_RIGHTS_NOTE,
         "fallback_relationship": "fallback",
         "purpose": ["community_discovery", "candidate_discovery", "fallback"],
         "discovery_model": ["query_search", "enumeration"],
@@ -1299,7 +1437,7 @@ METHODS: list[dict[str, Any]] = [
         "method_family": "json_api_search",
         "implementation": "search_github_officedev_issues",
         "source_family": "github_officedev_office_js",
-        "status": "active",
+        "status": "historical",
         "fallback_relationship": "fallback",
         "purpose": ["context_resolution", "candidate_discovery"],
         "discovery_model": ["federated_search", "query_search"],
@@ -1327,8 +1465,8 @@ METHODS: list[dict[str, Any]] = [
         "execution": "Works keyless; a token is used when present because 'unauthenticated search allows only 10 requests/minute' (github_officedev_source.py:18-19). Hard-capped at max_requests=1 per federation query, so one query is one GitHub search request (open_web_source.py:153-154). The native lane's default is...",
         "evidence_rules": "Discovery-only; the errors list passed in by this provider is a throwaway ([]), so provider-internal failures surface to the federation only as an exception with a reason token (open_web_source.py:153-154). Acceptance is the unchanged PowerPoint authority. The underlying module enforces two structural rules the...",
         "measured_notes": "Two measurements stated in-module: (1) 'repo:OfficeDev/office-js \"20228.20124\"' returns 0 results while '\"16.0.20228.20124\"' returns 6 including the calibration issue; (2) unauthenticated GitHub search allows 10 requests/minute (github_officedev_source.py:14-19). Search page size 25, sort=created, order=desc (github_officedev_source.py:188-190). Native-lane default max_requests=6 vs the federation's 1 (github_officedev_source.py:232; open_web_source.py:154). Supported-host marker maps to source_type...",
-        "break_history": "The bare-build-token finding is itself a recorded break-and-fix: build-first search MUST use the full 16.0.<build> form or it silently returns nothing (github_officedev_source.py:14-17).",
-        "revisit_trigger": "open_web build_queries starts emitting the 16.0.<build> form, or a run records a GitHub rate-limit reason for this provider.",
+        "break_history": "REMOVED in G49 (2026-11-19): open_web_source.PROVIDERS no longer has github_search. Every URL it returned was discarded -- hydrate_discovered_url has no GitHub branch, so a GitHub URL hydrated to None without a single request and was never read (a code fact, pinned by suite test_github_api_transport P3.1/P3.2). The stored telemetry cannot show this on its own: 'hydrated' counts non-None results among the first 120 discovered URLs, and on 2026-11-19 32 of the 37 open_web_discovery rows read 'hydrated 120' and 5 read 'hydrated 119'. It cost about 296 searches a run (about 80% of all AUXSAYS GitHub search traffic) and passed errors=[], so GitHub refusals were invisible. OfficeDev issues stay covered by github_officedev_issues. Earlier: build-first search MUST use the full 16.0.<build> form or it silently returns nothing (github_officedev_source.py:14-17).",
+        "revisit_trigger": "Only if hydrate_discovered_url gains a GitHub branch AND a measured report is reachable through the federation that github_officedev_issues cannot reach; any return goes through lib/github_api.",
         "evidence": "D:/Auxsays/.am/auxsays/scripts/patch_collectors/open_web_source.py:52-59, :147-162, :220-247, :269-300; D:/Auxsays/.am/auxsays/scripts/patch_collectors/github_officedev_source.py:1-26, :40-45, :89-111, :188-190, :232-246.",
     },
     {
@@ -1450,6 +1588,8 @@ METHODS: list[dict[str, Any]] = [
         "implementation": "premiere_stored_evidence_url_refetch",
         "source_family": "auxsays_own_consensus_evidence_store",
         "status": "active",
+        "rights_status": "unresolved",
+        "rights_note": _ADOBE_COMMUNITY_RIGHTS_NOTE + " The URLs come from AUXSAYS's own evidence store, but each recheck fetches the report page from Adobe Community again.",
         "fallback_relationship": "archive_recheck",
         "purpose": ["candidate_discovery", "recheck"],
         "discovery_model": ["query_search", "direct_fetch"],
@@ -1608,7 +1748,7 @@ METHODS: list[dict[str, Any]] = [
     ],
         "execution": "Bounded by OPEN_WEB_MAX_HYDRATIONS = 120 per run; exceptions are caught per row and recorded as open-web method-health errors (microsoft_powerpoint.py:120-123, 1380-1392). No auth.",
         "evidence_rules": "'The candidate's source_url is the URL the PAGE declares, not the one search returned: a search result is id-only while the native lanes store the slugged form, and two spellings of one thread would become two evidence rows' (microsoft_powerpoint.py:1298-1305). Same opening-post-only attribution and same body-less...",
-        "measured_notes": "_data/update_linked_evidence.yml holds 6 microsoft_tech_community rows (Tier 2), the population these federated / known-URL paths feed. open_web_source.PROVIDERS are learn_qna_search, stack_exchange_search and github_search, so Tech Community is reached as a RESULT of those searches (one query shape is 'site:techcommunity.microsoft.com', open_web_source.py:158-162, 217) and never by querying Tech Community's own search, which silently returns the same ids for pages 1-3 (techcommunity_source.py:18-20).",
+        "measured_notes": "_data/update_linked_evidence.yml holds 6 microsoft_tech_community rows (Tier 2), the population these federated / known-URL paths feed. open_web_source.PROVIDERS are learn_qna_search and stack_exchange_search (github_search was removed in G49), so Tech Community is reached as a RESULT of those searches (one query shape is 'site:techcommunity.microsoft.com', open_web_source.py:158-162, 217) and never by querying Tech Community's own search, which silently returns the same ids for pages 1-3 (techcommunity_source.py:18-20).",
         "evidence": "auxsays/scripts/patch_collectors/microsoft_powerpoint.py:1298-1305 (dispatch contract), :1330-1336 (Tech Community branch), :1380-1392 (bounded loop); auxsays/scripts/patch_collectors/techcommunity_source.py:107-135, :200-254;...",
     },
     {
@@ -1674,7 +1814,7 @@ METHODS: list[dict[str, Any]] = [
         "Massive over-supply relative to hydration capacity: a run discovers ~600-645 supported URLs but hydrates only the first 120, so most...",
         "Discovery reaching venues that cannot be ingested at all -- reddit.com and answers.microsoft.com are counted as 'uningestable' rather than...",
     ],
-        "execution": "Keyless -- every provider is an endpoint the repo already queries in production; no paid key and no login. Bounded by max_requests (default 14 in the module, 24 as wired for PowerPoint) with an explicit 'request_budget_exhausted_after_<n>' error row when the cap bites (open_web_source.py:251-267;...",
+        "execution": "Keyless -- every provider is an endpoint the repo already queries in production; no paid key and no login. Bounded by max_requests (default 14 in the module, 16 as wired for PowerPoint since G49: 8 queries x 2 providers, the same Learn and Stack Exchange traffic as the former 24 = 8 x 3) with an explicit 'request_budget_exhausted_after_<n>' error row when the cap bites (open_web_source.py:251-267;...",
         "evidence_rules": "A snippet is never evidence. The docstring is explicit: 'Search output is used for ONE thing: producing candidate URLs. Titles and summaries are discarded immediately. The original page is fetched, hydrated and classified by the same unchanged gates as every other lane, or the candidate is dropped.'...",
         "measured_notes": "29 open_web_discovery rows for microsoft-powerpoint on the 2026-09-29 runs: 14 blocked, 14 low_confidence, 1 partial. Representative low_confidence row: 'Queries 8, requests 24, results 1083, supported URLs 642, hydrated 120, accepted 0, rejected 116. Top rejections: different_version_not_target=9, missing_powerpoint_version=90, official_announcement_not_user_report=1, product_not_powerpoint=16' (evidence_method_health.yml:19942-19954). The one partial row (2501 / 18429.20132) records 'results 1086, supported URLs...",
         "break_history": "No regression recorded for this lane in the repo; the measured history is of alternatives being rejected before implementation (see future_note). The 14 blocked rows carrying http_400_error are the only recurring live failure.",
@@ -1954,7 +2094,7 @@ METHODS: list[dict[str, Any]] = [
     ],
         "execution": "Keyless, CI-reachable (the native learn_qna_search_rss lane runs in production on the same endpoint). Paced by the federation's shared 1.1s interval before the call (open_web_source.py:126). One request per query.",
         "evidence_rules": "Discovery-only, and weaker than the native lane by design: only the question id survives, so nothing the feed says about the thread can influence acceptance. Hydration re-fetches the page and the candidate is then judged by the unchanged PowerPoint authority (microsoft_powerpoint.py:1307-1327).",
-        "measured_notes": "Named 'learn_qna_search_rss' in the federation's PROVIDERS tuple and pinned by the suite: 'J.2 the providers are endpoints this repo already queries in production' asserts the provider set is exactly {learn_qna_search, stack_exchange_search, github_search} (open_web_source.py:158-162; tests/test_update_linked_tier2.py:498-499). Across a PowerPoint run the three providers together return ~800-1090 raw results of which ~490-645 are supported URLs (evidence_method_health.yml open_web_discovery notes).",
+        "measured_notes": "Named 'learn_qna_search_rss' in the federation's PROVIDERS tuple and pinned by the suite: 'J.2 the providers are endpoints this repo already queries in production' asserts the provider set is exactly {learn_qna_search, stack_exchange_search} since G49 removed github_search (tests/test_update_linked_tier2.py J.2). Measured before G49, across a PowerPoint run the three providers together return ~800-1090 raw results of which ~490-645 are supported URLs (evidence_method_health.yml open_web_discovery notes).",
         "revisit_trigger": "search_learn_qna returns 0 URLs on a run where the native learn_qna_search_rss lane reports candidates_found > 0 -- that divergence means the regex, not the endpoint, has broken.",
         "evidence": "D:/Auxsays/.am/auxsays/scripts/patch_collectors/open_web_source.py:122-130, :158-162; D:/Auxsays/.am/auxsays/scripts/patch_collectors/microsoft_learn_qna_source.py:1-18, :35-39, :74-86; D:/Auxsays/.am/auxsays/scripts/tests/test_update_linked_tier2.py:498-499.",
     },
@@ -2122,13 +2262,15 @@ METHODS: list[dict[str, Any]] = [
         "failure_modes": [
         "http_<code> from HTTPError, url_error_<reason-type> from URLError, timeout, os_error_<type>; ForumUnavailable carries the reason to the health row",
         "all_listings_failed is raised ONLY when every listing request failed, so a total outage reports blocked rather than an empty forum",
-        "A bbWrapper class rename would degrade the family to titles only; threads_bodyless counts it and forces partial, because that degradation is otherwise silent",
+        "A bbWrapper class rename would degrade the family to titles only. An empty opening-post body is therefore classified by cause (classify_body, with an independent stdlib-parser scan of the wrapper): a missing wrapper, a wrapper whose text the extractor failed to return, or a wrapper with nothing explainable in it counts in threads_bodyless and forces partial on any count, because that degradation is otherwise silent",
+        "A legitimately textless opening post -- only an image, embed or attachment, or only a quote (quotes are stripped by design) -- counts in threads_textless instead, stays in the pool and is still judged on its title. It degrades the pool only when empty bodies are a material share of it (empty_body_collapse), which is what a site-wide markup change looks like. Each empty-body thread is named, with its class, in a bounded obs_forum_empty_body diagnostic",
+        "A budget stop inside the pool emits obs_forum_budget_stop with fetched, parsed, failed and skipped counts; the version walk that follows hits the same deadline, so a cut-short pool writes no version rows and their committed rows age under the staleness rule",
         "The page renders THREE timestamps on an old thread and the last is last-activity (thread 8870: 2013, 2013, 2025); reading page-wide would date a 2013 thread to 2025",
     ],
         "execution": "Per run: 3 listing requests (page 1 of each support subforum, raised to 3 pages by listing_pages) plus one request per enumerated thread, capped at 60 threads per subforum. ONE pool per run, evaluated against every tracked version offline -- per-version fetching would multiply the request count by the number of tracked patches. Measured locally at ~1s/request: 36 threads in 35.6s with 0 failures.",
         "evidence_rules": "This method DISCOVERS only. Acceptance is collect_obs_reports.evaluate_issue, the same authority the GitHub Issues method uses, and rows are built by collect_obs_reports.evidence_row with a forum identity -- so a forum report and a GitHub issue differ in where they were found, not in what counting them means. source_weight is 1 on both. Sticky threads are excluded at DISCOVERY: they are staff advice guides written in the vocabulary of the problems they are about, they sit on page 1 forever, and the authority would accept them on that vocabulary. Quoted blocks are stripped with a balanced scan before the text is read, so a quoted member version is never attributed to the quoting author.",
         "measured_notes": "Feasibility pass 2026-10-09: 200 and no auth. Subforum node ids Windows 32, Mac 33, Linux 34; listing page 1 carries 24 thread links in ~120 KB. Windows Support has 5 pinned threads, every one a Read this first style guide. Live bounded run over 36 threads: 10 candidates across 16 tracked versions, 5 accepted on 3 patches, 5 refused as generic_or_no_concrete_issue, 0 transport failures, 0 body-less. Thread 196545 is the case that proves the R3 counterweight: the author downgraded to 32.1.2 and says the exact same issue happens, so the rollback destination counts for the version it rolled back to rather than being vetoed.",
-        "break_history": "Reddit and GitHub Discussions were measured in the same pass and rejected -- Reddit on robots policy (Disallow: /), Discussions on content (312 discussions, no user bug-report category, same platform as Issues). The slot this method fills was previously held by known_watchlist, which emitted disabled and never discovered a candidate; it is now retired with blocked_reason retired_superseded_by_obs_forum. The sibling GitHub Issues evidence method for OBS predates this catalogue and is still uncatalogued.",
+        "break_history": "Reddit and GitHub Discussions were measured in the same pass and rejected -- Reddit on robots policy (Disallow: /), Discussions on content (312 discussions, no user bug-report category, same platform as Issues). The slot this method fills was previously held by known_watchlist, which emitted disabled and never discovered a candidate; it is now retired with blocked_reason retired_superseded_by_obs_forum. The sibling GitHub Issues evidence method for OBS predates this catalogue; it is catalogued as github_issues since G42 (AUX-103). 2026-11-11: one embed-only opening post (thread 196879, a wrapper holding only a video player) made threads_bodyless 1 of 180, which turned every OBS version's forum row partial and revoked live consensus on three patches whose evidence had not changed; the empty-body counter was split by cause (AUX-100).",
         "revisit_trigger": "Re-measure if accepted forum reports stay at zero across a full week of scheduled runs while threads_in_pool stays healthy -- that moves the limit from reach to acceptance. Also re-measure the robots policy before adding any query-shaped endpoint.",
         "evidence": "auxsays/scripts/patch_collectors/obs_forum_source.py:1-40 (robots measurement, enumeration-not-query rule, opening-post-only rule, date trap), :SUPPORT_FORUMS (pinned node ids), sticky_thread_paths/list_thread_paths (sticky exclusion), parse_opening_post (own-extent bound), _strip_blockquotes (balanced quote strip), build_pool/get_pool (stats and blocked vs partial); auxsays/scripts/patch_collectors/obs.py (forum_candidates uses match_basis, evaluate_forum_candidates, forum_status, github_health, retired_watchlist_row); auxsays/scripts/tests/test_obs_forum_evidence_family.py (122 checks, 20 mutants).",
     },
@@ -2138,11 +2280,13 @@ METHODS: list[dict[str, Any]] = [
         "implementation": "adobe_official_then_secondary_candidate_chain",
         "source_family": "Adobe: helpx.adobe.com release notes (primary) and community.adobe.com announcement posts (secondary)",
         "status": "active",
+        "rights_status": "unresolved",
+        "rights_note": _ADOBE_COMMUNITY_RIGHTS_NOTE + " This entry makes the request to the pinned community.adobe.com announcement (its secondary candidate) that single_page_prose_extraction parses. Its primary, HelpX, is not Adobe Community.",
         "fallback_relationship": "none",
         "purpose": ["official_ingestion"],
         "discovery_model": ["enumeration"],
         "transport": ["subprocess_curl"],
-        "health_statuses": ["blocked", "no_results", "success"],
+        "health_statuses": ["blocked", "no_results", "partial", "success"],
         "proven_on": ["adobe-premiere-pro"],
         "strengths": [
         "The failover is DECLARED in source config, not inferred: patch_ingestion_sources.yml records update_detection_method 'Adobe HelpX release...",
@@ -2150,11 +2294,11 @@ METHODS: list[dict[str, Any]] = [
         "An empty 200 counts as a failure, which is the precise failure shape the module docstring says HelpX exhibits",
     ],
         "blind_spots": [
-        "PREMIERE_OFFICIAL_CONTEXT_URLS hardcodes two community announcement URLs keyed by version string '26.2' and '26.2.2', with a hardcoded...",
+        "PREMIERE_OFFICIAL_CONTEXT_URLS hardcodes two community announcement URLs keyed by version string '26.2' and '26.2.2'; any other version gets no announcement link (until 2026-11-06 it inherited the 26.2 URL)",
         "official_sources[] is populated only when product_id == 'adobe-premiere-pro' (adobe_release_notes.py:310); the other three Adobe sources on...",
     ],
         "failure_modes": [
-        "The module docstring states the measured problem verbatim: 'Adobe HelpX release notes are official but have repeatedly timed out from...",
+        "HelpX refused CI with a fast HTTP 403 from 2026-09-08 (it had timed out before); until 2026-11-06 the failover DISCARDED that error whenever the fallback answered, so the lane read healthy. The primary's error is now kept and the source records `partial`",
         "Only 2 candidates are ever tried; there is no third tier",
         "retries defaults to 0 for this adapter, and adobe-premiere-pro's config leaves it at 0 — so a single transient failure on HelpX immediately...",
         "Only the last two error strings survive into the raised message (adobe_release_notes.py:171), so with a longer candidate list the earliest...",
@@ -2163,7 +2307,7 @@ METHODS: list[dict[str, Any]] = [
         "evidence_rules": "official_ingestion only, and the module is explicit that an official community post is NOT user evidence: 'Official Adobe posts are not counted as user consensus evidence.' (adobe_release_notes.py:272). Consensus stays patch-specific and separate.",
         "measured_notes": "Live state 2026-09-29T08:02:18Z: adobe-premiere-pro status healthy, last_adapter adobe_release_notes, fetched 1, written 1, skipped 0, 1013 ms, seen ledger 2, consecutive_failures 0. Config: official_url https://helpx.adobe.com/premiere/desktop/whats-new/release-notes.html, secondary_official_url https://community.adobe.com/announcements-727/what-s-new-in-adobe-premiere-26-2-2-may-2026-1560755, request {timeout_seconds 25, retries 0, backoff_seconds 2.0, max_bytes 500000, curl_fallback false, headers...",
         "break_history": "The lane exists because the canonical Adobe documentation host became unreliable from CI; the module was written to keep HelpX as a 'secondary official reference' while a fetch-stable community announcement carries the fetch (adobe_release_notes.py:1-10).",
-        "revisit_trigger": "A Premiere version beyond 26.2.2 ships — PREMIERE_OFFICIAL_CONTEXT_URLS will hand it the 26.2 announcement URL as context.",
+        "revisit_trigger": "An official Adobe route carrying Premiere release identity answers 200 from CI, or Adobe resumes public release posts (the GROWTH-2A reopen condition).",
         "evidence": "D:/Auxsays/.am/auxsays/scripts/adapters/adobe_release_notes.py:1-10, :53-56, :59-70, :144-154, :157-172, :232-240, :281-310, :336-338, :353-357; D:/Auxsays/.am/auxsays/_data/patch_ingestion_sources.yml:927 (adobe-premiere-pro block, incl....",
     },
 ]

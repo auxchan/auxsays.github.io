@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html id="XF" lang="en-US" dir="LTR">
 <head>
-<title>KB5127936 broke Ctrl-Alt-Del/Restart. Is there a fix? | Windows 11 Forum</title>
+<title>KB5127936 &amp; Ctrl-Alt-Del: restart hangs, any fix? | Windows 11 Forum</title>
 <script type="application/ld+json">
 {
  "@context": "https://schema.org",
  "@type": "WebPage",
- "url": "https://www.elevenforum.com/t/kb5127936-broke-ctrl-alt-del-restart-is-there-a-fix.50594/",
+ "url": "https://www.elevenforum.com/t/kb5127936-ctrl-alt-del-restart-hangs-any-fix.50594/",
  "mainEntity": {
   "@type": "DiscussionForumPosting",
-  "@id": "https://www.elevenforum.com/t/kb5127936-broke-ctrl-alt-del-restart-is-there-a-fix.50594/",
-  "headline": "KB5127936 broke Ctrl-Alt-Del/Restart. Is there a fix?",
+  "@id": "https://www.elevenforum.com/t/kb5127936-ctrl-alt-del-restart-hangs-any-fix.50594/",
+  "headline": "KB5127936 & Ctrl-Alt-Del: restart hangs, any fix?",
   "datePublished": "2026-11-03T21:25:13+00:00",
-  "url": "https://www.elevenforum.com/t/kb5127936-broke-ctrl-alt-del-restart-is-there-a-fix.50594/",
-  "text": "I waited until today (03 Nov 2026) to install KB5127936. The install took a while (which I expected), rebooted 3 times (also expected) and my PC seemed to come back ok. But it wasn't OK.\n\nI first ran DISM /Online /Cleanup-Image /AnalyzeComponentStore using PowerShell Admin. It got to 98.1% and got stuck there. I waited a couple of minutes and couldn't end it. So I used Command Prompt to run SFC /ScanNow. That completed but said it found errors and corrected them. \n\nI thought maybe those errors were preventing DISM from completing. So I did Ctrl-Alt-Del/Restart. My 2 screens went blank except for my animated cursor which kept going. After waiting quite a while with nothing else happening I pushed my PC's power button. That caused a display of Shutting Down on my primary monitor (along with the animated cursor.) \n\nAfter waiting a while longer I cut the PC power, turned it back on, and the system booted OK. Then I repeated all of the above and got exactly the sale results.\n\nSo I rebooted again and ran DISM /Online /Cleanup-Image /RestoreHealth. That too got stuck at 98.1%. I looked at the CBS log file but could not make any sense out of it. \n\nSo...I've got a Macrium Reflect full disk backup that I made yesterday. Should I retore this? Or maybe try the Point-in-Time backup from yesterday? (I'm not sure how to do that.) Or maybe just wait until the next official update? \n\nMy system seems to run OK so this is not a catastrophic error. I just don't want it to turn into one."
+  "url": "https://www.elevenforum.com/t/kb5127936-ctrl-alt-del-restart-hangs-any-fix.50594/",
+  "text": "KB5127936 got installed today (03 Nov 2026), which I had been putting off. Three reboots and a long wait, all normal, and the PC looked healthy afterwards. It wasn't.\n\nAn elevated DISM /Online /Cleanup-Image /AnalyzeComponentStore stalled at 98.1% and would not cancel. SFC /ScanNow then ran to the end and claimed to have repaired some errors.\n\nHoping that would unblock DISM, I chose Restart from the Ctrl-Alt-Del menu: both monitors went dark apart from the spinning cursor, and only pulling the power got the PC back. A repeat gave the same outcome, and a later DISM /Online /Cleanup-Image /RestoreHealth stalled at 98.1% as well; the CBS log meant nothing to me.\n\nI have yesterday's full disk image. Restore it, or sit tight for the next official patch? Everything else works, so it isn't urgent."
  }
 }
 </script>
 </head>
 <body>
-<!-- fixture: trimmed to the JSON-LD block the adapter reads; replies omitted -->
+<!-- fixture: SYNTHETIC opening post written by AUXSAYS for tests. Modelled on a thread recorded 2026-11-04: it keeps that thread's id, dates, version identifiers, error codes and commands; the wording is AUXSAYS's own. Structure mirrors the JSON-LD block the adapter reads; no replies -->
 </body>
 </html>

@@ -47,8 +47,8 @@ PHASE3_METRICS = {
     "JTS000000000000000HIL": "US_LABOR_HIRES",
 }
 SOURCE_INTERVAL_HOURS = {
-    # One combined BLS request and bounded DOL retrieval per four-hour heartbeat.
-    # Sparse release cadence must not delay detection by days or weeks.
+    # Minimum polling interval, independent of writer-queue scheduling. Routine
+    # dispatch follows patch ingestion's six-hour cycle, plus queue/run time.
     "dol-ui-claims": 4,
     "bls-jolts": 4,
     "bls-cps": 4,
@@ -737,7 +737,7 @@ def update_production(
         "lineage": ["official source", "content-addressed raw evidence", "exact-series candidate validation", "governed acceptance", "immutable accepted history", "deterministic calculations", "production read model", "Vite bundle"],
         "governance": GOVERNANCE,
         "automation": {
-            "heartbeat": "0 */4 * * *",
+            "heartbeat": "CHAINED_AFTER_ROUTINE_PATCH_INGEST",
             "dueSources": sorted(due_sources),
             "sourceChecks": source_checks,
             "sourceDiagnostics": source_diagnostics,

@@ -8,8 +8,10 @@ its issue template asks reporters for exactly the fields AUXSAYS needs:
     * Host [Excel, Word, PowerPoint, etc.]: PowerPoint
     * Office version number: web: 16.0.20329.45605; desktop: Version 2607 Build 16.0.20228.20124
 
-TRANSPORT. The public REST/Search API, never HTML. Search is DISCOVERY ONLY -- a search hit is not
-evidence; the issue is fetched and adjudicated by the unchanged PowerPoint authority.
+TRANSPORT. The public REST/Search API, never HTML, through the one GitHub transport
+(lib/github_api.py): paced, a truthful User-Agent, and the first refusal ends every GitHub request
+for the rest of the run. Search is DISCOVERY ONLY -- a search hit is not evidence; the issue is
+adjudicated by the unchanged PowerPoint authority.
 
 TWO MEASURED FACTS drive the query design:
   * a bare build token finds nothing. `repo:OfficeDev/office-js "20228.20124"` returns 0 results,
@@ -26,28 +28,23 @@ appeared first would have attributed a web build to a desktop patch.
 """
 from __future__ import annotations
 
-import json
-import os
 import re
-import time
-import urllib.error
 import urllib.parse
-import urllib.request
 from typing import Any
 
-API_BASE = "https://api.github.com"
+from lib import github_api
+
+API_BASE = github_api.API_ORIGIN
 REPO = "OfficeDev/office-js"
 DEFAULT_SOURCE_TYPE = "github_officedev_issue"
 DEFAULT_SOURCE_NAME = "OfficeDev office-js"
 ENDPOINT_FAMILY = "github_officedev_issues"
 
-USER_AGENT = "AUXSAYS-patch-evidence/1.0 (+https://auxsays.com)"
-REQUEST_TIMEOUT = 30
-MAX_BYTES = 2_000_000
+USER_AGENT = github_api.USER_AGENT
 # Authenticated GitHub SEARCH is 30 requests/minute. 0.8s paced at 75/min, and the real merged run
 # drained "rate remaining" by 4 per record until two records came back `blocked`. 2.1s is 28/min.
-_MIN_INTERVAL = 2.1
-_last_at = 0.0
+# The pacing itself lives in the shared transport; this name is the value it uses.
+_MIN_INTERVAL = github_api.MIN_INTERVAL
 
 # `* Host [Excel, Word, PowerPoint, etc.]: PowerPoint`  (the bracketed list is part of the template)
 HOST_FIELD_RE = re.compile(r"^\s*[*\-]?\s*Host\b[^:\n]*:\s*(.+)$", re.I | re.M)
@@ -68,63 +65,13 @@ _WEB_SEGMENT_RE = re.compile(r"web\s*:\s*(.+?)(?:;|$)", re.I)
 _WEB_MARKER_RE = re.compile(r"\bweb\b", re.I)
 
 
-class GitHubError(Exception):
-    def __init__(self, reason: str, *, status: int | None = None) -> None:
-        super().__init__(reason)
-        self.reason = reason
-        self.status = status
-        self.endpoint_family = ENDPOINT_FAMILY
-
-
-def error_reason(exc: Exception) -> str:
-    if isinstance(exc, GitHubError):
-        return exc.reason
-    if isinstance(exc, urllib.error.HTTPError):
-        return f"http_{exc.code}_error"
-    if isinstance(exc, urllib.error.URLError):
-        return "network_unreachable"
-    return type(exc).__name__
-
-
-def _token() -> str:
-    """A read-only token when the environment offers one. Never required, never logged."""
-    for name in ("GITHUB_TOKEN", "GH_TOKEN"):
-        value = os.environ.get(name, "").strip()
-        if value:
-            return value
-    return ""
-
-
-def _pace() -> None:
-    global _last_at
-    delta = time.monotonic() - _last_at
-    if delta < _MIN_INTERVAL:
-        time.sleep(_MIN_INTERVAL - delta)
-    _last_at = time.monotonic()
+GitHubError = github_api.GitHubError
+error_reason = github_api.error_reason
 
 
 def request_json(url: str) -> tuple[Any, dict[str, str]]:
-    _pace()
-    headers = {"User-Agent": USER_AGENT, "Accept": "application/vnd.github+json"}
-    token = _token()
-    if token:
-        headers["Authorization"] = f"Bearer {token}"
-    request = urllib.request.Request(url, headers=headers)
-    try:
-        with urllib.request.urlopen(request, timeout=REQUEST_TIMEOUT) as response:
-            raw = response.read(MAX_BYTES)
-            meta = {k: v for k, v in response.headers.items()
-                    if k.lower().startswith("x-ratelimit")}
-    except urllib.error.HTTPError as exc:
-        if exc.code in (403, 429):
-            raise GitHubError("rate_limited", status=exc.code) from exc
-        raise GitHubError(f"http_{exc.code}_error", status=exc.code) from exc
-    except urllib.error.URLError as exc:
-        raise GitHubError("network_unreachable") from exc
-    try:
-        return json.loads(raw.decode("utf-8", "replace")), meta
-    except ValueError as exc:
-        raise GitHubError("payload_parse_failed") from exc
+    """One GitHub API GET through the shared transport. ComfyUI's walk uses this too."""
+    return github_api.get_json(url, endpoint_family=ENDPOINT_FAMILY)
 
 
 def declared_host(body: str) -> str:
@@ -202,7 +149,7 @@ def issue_candidate(issue: dict[str, Any], *, source_type: str, source_name: str
     # matter how often PowerPoint appears elsewhere in the text.
     if host and host != "powerpoint":
         return None
-    user = issue.get("user") or {}
+    # The author's login and id are never read: nothing here needs to know who wrote the issue.
     return {
         "source_type": source_type,
         "source_name": source_name,
@@ -215,8 +162,6 @@ def issue_candidate(issue: dict[str, Any], *, source_type: str, source_name: str
         "original_post_date": str(issue.get("created_at") or ""),
         "github_repo": REPO,
         "github_issue_number": str(number),
-        "github_author_login": str(user.get("login") or ""),
-        "github_author_id": str(user.get("id") or ""),
         "github_declared_host": host,
         # Emitted as its own field so the collector can canonicalise the DESKTOP build alone,
         # without touching any web build that shares the same version line.
@@ -237,6 +182,10 @@ def collect_officedev_candidates(
 
     Dedupe identity is repository + issue number: the same issue found by a build query and by a
     symptom query is ONE candidate, never two. Discovery routes are not evidence.
+
+    A refusal (rate limit, access denial, other 403) ends the loop: the transport has stopped the
+    run, and asking again would only be refused locally. `requests` counts requests actually SENT,
+    failed ones included, so the budget cannot be spent on refusals the transport never sent.
     """
     candidates: list[dict[str, Any]] = []
     seen: set[str] = set()
@@ -251,7 +200,11 @@ def collect_officedev_candidates(
         try:
             payload, meta = request_json(search_url(query))
         except Exception as exc:  # noqa: BLE001 - reason recorded for method health
+            if getattr(exc, "sent", True):
+                telemetry["requests"] += 1
             errors.append({"source_url": API_BASE, "reason": error_reason(exc)})
+            if github_api.is_stop(exc):
+                break
             continue
         telemetry["requests"] += 1
         telemetry["rate_remaining"] = meta.get("X-RateLimit-Remaining", "")

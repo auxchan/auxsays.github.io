@@ -1,0 +1,74 @@
+{
+ "entries": [
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "32.1.2",
+   "target_build": "",
+   "id": "obs-studio-32-1-2-obs-forum-thread-196545",
+   "source_url": "https://obsproject.com/forum/threads/video-capture-device-green-flickering.196545/",
+   "block_sha256_before_run": "a6bacac21425eac6f6df92d9dd145d3a58185680c8ad8344e3f96d2d53d32708",
+   "counted_before_run": true,
+   "action": "withdraw",
+   "exclusion_reason": "duplicate_existing_evidence"
+  },
+  {
+   "role": "retain",
+   "product_id": "obs-studio",
+   "update_version": "32.1.2",
+   "target_build": "",
+   "id": "obs-studio-32-1-2-github-issue-13997",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/13997",
+   "block_sha256_before_run": "554ffb2faa99f2f26ee7b3050701cfc3cb4a6900f9c1ec9a237051353f1a3e36",
+   "counted_before_run": true,
+   "action": "kept"
+  }
+ ],
+ "withdrawn_now": 1,
+ "counted_population": {
+  "microsoft-windows-11": [
+   515,
+   515
+  ],
+  "obs-studio": [
+   283,
+   282
+  ]
+ },
+ "per_patch": [
+  {
+   "product_id": "obs-studio",
+   "update_version": "32.1.2",
+   "target_build": "",
+   "before": 102,
+   "after": 101
+  }
+ ],
+ "newly_counted_rows": [],
+ "same_report_rows_on_other_identities": [
+  {
+   "product_id": "obs-studio",
+   "update_version": "32.2.2",
+   "target_build": "",
+   "id": "obs-studio-32-2-2-obs-forum-thread-196545",
+   "source_url": "https://obsproject.com/forum/threads/video-capture-device-green-flickering.196545/",
+   "counted": false,
+   "exclusion_reason": "duplicate_existing_evidence",
+   "unchanged": true
+  }
+ ],
+ "generated_at": "2026-11-06T16:53:18Z",
+ "exclusion_reasons": [
+  "duplicate_existing_evidence",
+  "identity_not_the_subject",
+  "not_a_real_issue_report",
+  "version_is_rollback_target",
+  "version_named_but_working"
+ ],
+ "store_sha256_before": "68dceaeac8af11e9abb4594db895deaee1aa4b60d9f0460c8e22fad5de84f3a9",
+ "store_sha256_after": "7b1cbe11a5fd58d582b6419ec735c44cc2266e25d90adc932647a66b62a2f66b",
+ "manifest_sha256": "51adfe324fed5eaea98a46e3857b9a737847d7f91a8777e332a793ad161d1490",
+ "baseline_sha256": "b378fa62c22c9e6a7e7de5e6383d799349d9fc1c1eed9ddd4059f7bfb9192248",
+ "written": true,
+ "parent_commit": "480bd8a2893e78243f88c8c7f52b8bf7a0f88734"
+}

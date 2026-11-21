@@ -33,6 +33,7 @@ import re
 import time
 import urllib.error
 import urllib.request
+from html.parser import HTMLParser
 from typing import Any
 
 from . import runtime_budget as rb
@@ -87,6 +88,135 @@ _TAG_RE = re.compile(r"<[^>]+>")
 _WS_RE = re.compile(r"\s+")
 
 _BODY_START_RE = re.compile(r'<div class="bbWrapper">')
+
+# WHY AN OPENING POST'S BODY CAME OUT EMPTY. One empty body used to mean one thing -- "the
+# bbWrapper markup changed" -- and any count of them marked the whole pool partial. But an empty
+# body has causes that are not a markup change at all: a post that is only an image or an embed
+# has no words to lose, and a post that only quotes someone else is empty BY DESIGN, because
+# quotes are stripped so a stranger's version is never attributed to this author. Both are
+# legitimately textless. The rest are not: no wrapper at all, a wrapper whose text our extractor
+# failed to return, and a wrapper with nothing in it we can explain (which is also what hidden or
+# moderated content looks like). Those stay degrading, exactly as before.
+BODY_TEXT = "text"
+BODY_NO_WRAPPER = "no_wrapper"
+BODY_EXTRACTION_FAILED = "extraction_failed"
+BODY_EMPTY_WRAPPER = "empty_wrapper"
+BODY_QUOTE_ONLY = "quote_only"
+BODY_NON_TEXT_ONLY = "non_text_only"
+DEGRADING_BODY_STATES = frozenset({BODY_NO_WRAPPER, BODY_EXTRACTION_FAILED, BODY_EMPTY_WRAPPER})
+TEXTLESS_BODY_STATES = frozenset({BODY_QUOTE_ONLY, BODY_NON_TEXT_ONLY})
+
+# Content that carries no text of its own: images, embedded players, media. An attachment is
+# rendered OUTSIDE the wrapper, in the post's own attachment block, so it is looked for there.
+_NON_TEXT_TAGS = frozenset({"img", "iframe", "video", "audio", "embed", "object", "picture", "source"})
+_ATTACHMENTS_RE = re.compile(r'class="[^"]*\b(?:message-attachments|attachmentList)\b')
+
+
+class _WrapperScan(HTMLParser):
+    """A second, INDEPENDENT reading of the opening post's body wrapper.
+
+    The regex extractor is the thing being checked, so it cannot also be the check: a regression
+    in its own balanced-div slicing or quote stripping would empty every body and still look like
+    "the posts had no text". This walks the same markup with the standard library's parser and
+    records only booleans -- text outside quotes, text inside quotes, non-text content -- never
+    the text itself.
+    """
+
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.found = False
+        self.closed = False
+        self._divs = 0
+        self._quotes = 0
+        self._skip = 0
+        self.text_outside_quotes = False
+        self.text_inside_quotes = False
+        self.non_text = False
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if self.closed:
+            return
+        if not self.found:
+            if tag == "div" and "bbWrapper" in str(dict(attrs).get("class") or "").split():
+                self.found = True
+                self._divs = 1
+            return
+        if tag == "div":
+            self._divs += 1
+        elif tag == "blockquote":
+            self._quotes += 1
+        elif tag in ("script", "style"):
+            self._skip += 1
+        if tag in _NON_TEXT_TAGS:
+            self.non_text = True
+
+    def handle_endtag(self, tag: str) -> None:
+        if not self.found or self.closed:
+            return
+        if tag == "div":
+            self._divs -= 1
+            if self._divs <= 0:
+                self.closed = True
+        elif tag == "blockquote" and self._quotes:
+            self._quotes -= 1
+        elif tag in ("script", "style") and self._skip:
+            self._skip -= 1
+
+    def handle_data(self, data: str) -> None:
+        if not self.found or self.closed or self._skip or not data.strip():
+            return
+        if self._quotes:
+            self.text_inside_quotes = True
+        else:
+            self.text_outside_quotes = True
+
+
+def classify_body(own: str, wrapper_found: bool, body: str) -> str:
+    """Which BODY_* state an opening post is in. Decides health only; never what counts.
+
+    Ordered so that doubt degrades: text the independent scan can see outside any quote is an
+    extraction failure even if quotes or images are also present, and a wrapper with nothing
+    explainable in it is degrading rather than presumed empty.
+    """
+    if str(body or "").strip():
+        return BODY_TEXT
+    if not wrapper_found:
+        return BODY_NO_WRAPPER
+    scan = _WrapperScan()
+    try:
+        scan.feed(own)
+        scan.close()
+    except Exception:  # noqa: BLE001 -- an unreadable wrapper is not evidence the post is empty
+        return BODY_EXTRACTION_FAILED
+    if not scan.found or scan.text_outside_quotes:
+        return BODY_EXTRACTION_FAILED
+    if scan.text_inside_quotes:
+        return BODY_QUOTE_ONLY
+    if scan.non_text or _ATTACHMENTS_RE.search(own):
+        return BODY_NON_TEXT_ONLY
+    return BODY_EMPTY_WRAPPER
+
+
+# POOL-COLLAPSE SAFEGUARD. Legitimately textless posts stop degrading the pool one at a time, but
+# not in bulk: a markup change that keeps the wrapper and empties it (or a regression that makes
+# every post look image-only) would otherwise read as healthy while the family silently degraded
+# to titles only -- the failure the empty-body counter exists to catch. Bounds measured against
+# history: across ~90 scheduled runs of a ~180-thread pool the empty-body count read 0, and since
+# 2026-11-11 it has read 1. One post in twenty is many times that ceiling and far below what a
+# site-wide change produces (every post at once). The floor keeps one or two legitimately empty
+# posts from degrading a small pool on their own; it can never exceed the pool itself.
+_EMPTY_BODY_COLLAPSE_DENOMINATOR = 20
+_EMPTY_BODY_COLLAPSE_FLOOR = 3
+
+
+def empty_body_collapse(stats: dict[str, int]) -> bool:
+    """True when opening posts with no readable text are a MATERIAL share of the pool."""
+    in_pool = int(stats.get("threads_in_pool") or 0)
+    empty = int(stats.get("threads_bodyless") or 0) + int(stats.get("threads_textless") or 0)
+    if empty <= 0 or in_pool <= 0:
+        return False
+    share = -(-in_pool // _EMPTY_BODY_COLLAPSE_DENOMINATOR)
+    return empty >= max(share, min(_EMPTY_BODY_COLLAPSE_FLOOR, in_pool))
 
 
 class ForumUnavailable(RuntimeError):
@@ -302,6 +432,9 @@ def parse_opening_post(html: str) -> dict[str, Any] | None:
         "created_at": time_match.group(1),
         "author": author_match.group(1) if author_match else "",
         "post_id": post_id_match.group(1),
+        # Health diagnostics only. The acceptance authority reads title/body/labels/created_at,
+        # and evidence_row names every field it writes, so this key cannot reach a row.
+        "body_state": classify_body(own, bool(body_start), body),
     }
 
 
@@ -337,17 +470,29 @@ def build_pool(max_threads_per_forum: int = MAX_THREADS_PER_FORUM,
     returned with its own counters so the caller can report `partial` honestly rather than
     claiming success -- a source whose extractor maps nothing must not read as healthy.
     """
-    stats = {"listings_requested": 0, "listings_failed": 0, "threads_requested": 0,
-             "threads_failed": 0, "threads_unparsed": 0, "threads_bodyless": 0}
+    stats = {"listings_requested": 0, "listings_failed": 0, "listings_skipped": 0,
+             "threads_requested": 0, "threads_failed": 0, "threads_unparsed": 0,
+             "threads_bodyless": 0, "threads_textless": 0, "threads_skipped": 0}
     paths: list[str] = []
-    for slug, node_id in SUPPORT_FORUMS:
+    pool: list[dict[str, Any]] = []
+    stopped = False
+    for forum_index, (slug, node_id) in enumerate(SUPPORT_FORUMS):
+        if stopped:
+            break
         found = 0
-        for url in _listing_urls(slug, node_id, listing_pages):
+        urls = _listing_urls(slug, node_id, listing_pages)
+        for url_index, url in enumerate(urls):
             if found >= max_threads_per_forum:
                 break
             budget = rb.get_run_budget()
             if budget is not None and budget.collector_finalize_expired():
-                rb.emit("obs_forum_budget_stop", reason="listing_enumeration")
+                # Every listing this run will now never read: the rest of this subforum and all
+                # of the later ones. The deadline is monotonic, so nothing after this could run.
+                stats["listings_skipped"] = (len(urls) - url_index) + sum(
+                    len(_listing_urls(s, n, listing_pages)) for s, n in SUPPORT_FORUMS[forum_index + 1:])
+                rb.emit("obs_forum_budget_stop", reason="listing_enumeration",
+                        **budget_stop_counts(stats, pool))
+                stopped = True
                 break
             stats["listings_requested"] += 1
             try:
@@ -365,11 +510,16 @@ def build_pool(max_threads_per_forum: int = MAX_THREADS_PER_FORUM,
     if stats["listings_requested"] and stats["listings_failed"] == stats["listings_requested"]:
         raise ForumUnavailable("all_listings_failed")
 
-    pool: list[dict[str, Any]] = []
-    for path in paths:
+    empty_reported = 0
+    empty_suppressed = 0
+    for path_index, path in enumerate(paths):
         budget = rb.get_run_budget()
         if budget is not None and budget.collector_finalize_expired():
-            rb.emit("obs_forum_budget_stop", reason="thread_fetch")
+            # Counted, so a slow forum is visible the run it happens rather than only when rows
+            # go stale two weeks later.
+            stats["threads_skipped"] = len(paths) - path_index
+            rb.emit("obs_forum_budget_stop", reason="thread_fetch",
+                    **budget_stop_counts(stats, pool))
             break
         stats["threads_requested"] += 1
         try:
@@ -383,15 +533,50 @@ def build_pool(max_threads_per_forum: int = MAX_THREADS_PER_FORUM,
             continue
         post["source_url"] = thread_url(path)
         post["thread_path"] = path
-        # A post that parsed but carries no body text is the signature of a bbWrapper markup
-        # change. It is kept -- a title can legitimately carry the whole report -- but it is
-        # COUNTED, because a family that quietly degrades to titles only would otherwise keep
-        # reporting success while its recall collapsed.
+        # A post that parsed but carries no body text is kept either way -- a title can
+        # legitimately carry the whole report, and the authority judges exactly the same inputs
+        # -- but it is COUNTED by cause. A missing wrapper, an extraction failure or an
+        # unexplained empty wrapper is the signature of a markup change and stays degrading
+        # (threads_bodyless), because a family that quietly degrades to titles only would
+        # otherwise keep reporting success while its recall collapsed. A legitimately textless
+        # post (images or embeds only, or only a quote) is counted apart (threads_textless) and
+        # degrades the pool only in bulk, through empty_body_collapse. Anything not positively
+        # identified as textless fails closed into the degrading counter.
         if not str(post.get("body") or "").strip():
-            stats["threads_bodyless"] += 1
+            state = str(post.get("body_state") or BODY_NO_WRAPPER)
+            if state in TEXTLESS_BODY_STATES:
+                stats["threads_textless"] += 1
+            else:
+                stats["threads_bodyless"] += 1
+            # Name the thread, so the next one is identifiable from the run log. Path and class
+            # only, never the post text, and bounded so a collapse cannot flood the log.
+            if empty_reported < _MAX_EMPTY_BODY_EVENTS:
+                empty_reported += 1
+                rb.emit("obs_forum_empty_body", thread=path, thread_id=thread_id(path),
+                        state=state, degrading=state not in TEXTLESS_BODY_STATES)
+            else:
+                empty_suppressed += 1
         pool.append(post)
+    if empty_suppressed:
+        rb.emit("obs_forum_empty_body_suppressed", count=empty_suppressed)
     stats["threads_in_pool"] = len(pool)
     return pool, stats
+
+
+_MAX_EMPTY_BODY_EVENTS = 10
+
+
+def budget_stop_counts(stats: dict[str, int], pool: list[dict[str, Any]]) -> dict[str, int]:
+    """Fetched, parsed, failed and skipped counts for a budget-stop diagnostic."""
+    return {
+        "listings_requested": int(stats.get("listings_requested") or 0),
+        "listings_failed": int(stats.get("listings_failed") or 0),
+        "listings_skipped": int(stats.get("listings_skipped") or 0),
+        "threads_fetched": int(stats.get("threads_requested") or 0),
+        "threads_parsed": len(pool),
+        "threads_failed": int(stats.get("threads_failed") or 0) + int(stats.get("threads_unparsed") or 0),
+        "threads_skipped": int(stats.get("threads_skipped") or 0),
+    }
 
 
 def get_pool(max_threads_per_forum: int = MAX_THREADS_PER_FORUM,

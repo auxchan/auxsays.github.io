@@ -1,0 +1,783 @@
+{
+ "Success": "12",
+ "IDS": [
+  {
+   "downloadInfo": {
+    "Success": "1",
+    "ID": "285317",
+    "DownloadTypeID": "1",
+    "DownloadStatusID": "3",
+    "Name": "NVIDIA%20Studio%20Driver",
+    "NameLocalized": "NVIDIA%20Studio%20Driver",
+    "ShortDescription": "NVIDIA%20Studio%20Driver",
+    "DeviceToProductFamilyName": "",
+    "Release": "620",
+    "Version": "621.24",
+    "DisplayVersion": "",
+    "GFE_DisplayVersion": "11.0.9.565",
+    "CDKitUSBEmitterDriverVersion": "",
+    "CDKitGPUDriverVersion": "",
+    "IsBeta": "0",
+    "IsWHQL": "0",
+    "IsRecommended": "0",
+    "IsFeaturePreview": "0",
+    "IsNewest": "0",
+    "IsDC": "1",
+    "IsCRD": "1",
+    "HasNetInst": "0",
+    "CudaToolkitVersion": "",
+    "IsArchive": "0",
+    "IsActive": "1",
+    "IsEmailRequired": "0",
+    "ReleaseDateTime": "Thu Nov 12, 2026",
+    "DetailsURL": "https://www.nvidia.com/en-us/drivers/details/285317/",
+    "DownloadURL": "https://us.download.nvidia.com/Windows/621.24/621.24-desktop-win10-win11-64bit-international-nsd-dch-whql.exe",
+    "EMAN_REVRES_BD": "80-lqssm-lswfg-a2wsu-drp",
+    "EMITR_BD": "memCache:1%20rTime:1%20sTime:0",
+    "DownloadURLFileSize": "1.04 GB",
+    "BannerURL": "https://www.nvidia.com/en-us/geforce/billboards/displaydriver/standalone/eve-std-studio-driver-2026-banners/",
+    "BannerURLGfe": "https://www.nvidia.com/en-us/geforce/billboards/displaydriver/gfe/eve-gfe-studio-driver-2026-banners/",
+    "ReleaseNotes": "NVIDIA%20Studio%20Drivers%20provide%20artists%2C%20creators%2C%20and%203D%20developers%20the%20best%20performance%20and%20reliability%20when%20working%20with%20creative%20applications.%20To%20achieve%20the%20highest%20level%20of%20reliability%2C%20Studio%20Drivers%20undergo%20extensive%20testing%20against%20multi-app%20creator%20workflows%20and%20multiple%20revisions%20of%20the%20top%20creative%20applications%20from%20Adobe%20to%20Autodesk%20and%20beyond.%3Cbr%20/%3E%20%20%3Cbr%20/%3E%20%20%3Cb%3EApplications%3C/b%3E%3Cbr%20/%3EThe%20November%20NVIDIA%20Studio%20Driver%20provides%20optimal%20performance%20and%20support%20for%20the%20latest%20new%20creative%20applications%20and%20updates%20including%20OBS%20Studio%2033%2C%20Chaos%20Vantage%2C%20llama.cpp%2C%20PyTorch%2C%20Topaz%20Gigapixel%2C%20Maxon%20Redshift%2C%20and%20DaVinci%20Resolve%2021.1.1%20as%20well%20as%20support%20for%20DLSS%204.5%20Ray%20Reconstruction%20within%20Blender%205.3%20and%20Autodesk%20Arnold%207.5.4.0.%3Cbr%20/%3E%20%20%3Cbr%20/%3E%20%20%3Cb%3EFixed%20Application%20Bugs%3C/b%3E%3Cbr%20/%3E%20%20%3Cul%3E%3Cli%3EWuthering%20Waves%3A%20May%20crash%20during%20gameplay%20when%20using%20NVIDIA%20Freestyle%20filters%20with%20DLSS%20Frame%20Generation%20enabled.%20%5B5747079%5D%3C/li%3E%20%3Cli%3EStar%20Citizen%3A%20Resolves%20a%20crash%20that%20may%20be%20seen%20when%20using%20Vulkan%20API%20%5B6680590%5D%3C/li%3E%20%3Cli%3ESurviving%20Mars%3A%20Relaunched%20may%20crash%20during%20gameplay%20after%20updating%20to%20R595%20drivers%20%5B5965452%5D%3C/li%3E%20%3Cli%3EChaos%20Vantage%3A%20NVIDIA%20OptiX%20Denoiser%20may%20fail%20at%20high%20resolutions%20%5B6953474%5D%3C/li%3E%20%3Cli%3EWindows%20Photos/Media%20Player%3A%20Incorrect%20colors%20with%20DJI%20D-Log%20H.265%20video%20playback%20%5B6996250%5D%3C/li%3E%3C/ul%3E%20%20%20%20%20%20%3Cbr%20/%3E%20%20%20%20%20%20%3Cb%3EFixed%20General%20Bugs%3C/b%3E%3Cbr%20/%3E%20%20%20%20%20%20%3Cul%3E%3Cli%3EFixed%20an%20issue%20where%20video%20playback%20may%20freeze%20or%20black%20screen%20on%20some%20GeForce%20RTX%2050%20Series%20GPUs/RTX%20Spark%20after%20updating%20to%20GRD%20621.01.%20%5B6979343%5D%3C/li%3E%20%3Cli%3EQHD%20monitor%20running%20at%20360%20Hz%20may%20have%20occasional%20black%20flash%20during%20gameplay%20%5B4846825%5D%3C/li%3E%20%3Cli%3EWhen%20gaming%20on%20a%20360Hz%20G-SYNC%20Pulsar%20monitor%2C%20FPS%20may%20drop%20to%20320FPS%20%5B6408986%5D%3C/li%3E%20%3Cli%3EMeta%20Horizon%20Link%20stream%20may%20freeze%20when%20connected%20over%20USB%20%5B6292679%5D%3C/li%3E%20%3Cli%3EIntermittent%20dimming%20may%20be%20observed%20on%20certain%20Asus%20notebooks%20after%20updating%20to%20R615%20drivers%20%5B6807011%5D%3C/li%3E%3C/ul%3E",
+    "OtherNotes": "%09%3Cul%3E%3Cli%3E%3Ca%20target%3D%22_blank%22%20href%3D%22https%3A//us.download.nvidia.com/Windows/621.24/621.24-win11-x64-nsd-release-notes.pdf%22%20title%3D%22NVIDIA%20Studio%20Driver%20Release%20Notes%20v621.24%22%3ENVIDIA%20Studio%20Driver%20Release%20Notes%20%28v621.24%29%3C/a%3E%3C/li%3E%3C/ul%3E%20",
+    "InstallationNotes": "",
+    "Overview": "",
+    "LanguageName": "English%20(US)",
+    "OSName": "Windows%2011",
+    "OsCode": "10.0",
+    "OSList": [
+     {
+      "OSName": "Windows%2010%2064-bit",
+      "OsCode": "10.0"
+     },
+     {
+      "OSName": "Windows%2011",
+      "OsCode": "10.0"
+     }
+    ],
+    "Is64Bit": "1",
+    "Messaging": [
+     {
+      "MessageCode": "DownloadIDDetailsFound",
+      "MessageValue": "The Driver DownloadID details found"
+     }
+    ]
+   }
+  },
+  {
+   "downloadInfo": {
+    "Success": "1",
+    "ID": "283966",
+    "DownloadTypeID": "1",
+    "DownloadStatusID": "3",
+    "Name": "NVIDIA%20Studio%20Driver",
+    "NameLocalized": "NVIDIA%20Studio%20Driver",
+    "ShortDescription": "NVIDIA%20Studio%20Driver",
+    "DeviceToProductFamilyName": "",
+    "Release": "620",
+    "Version": "621.14",
+    "DisplayVersion": "",
+    "GFE_DisplayVersion": "11.0.9.565",
+    "CDKitUSBEmitterDriverVersion": "",
+    "CDKitGPUDriverVersion": "",
+    "IsBeta": "0",
+    "IsWHQL": "0",
+    "IsRecommended": "0",
+    "IsFeaturePreview": "0",
+    "IsNewest": "0",
+    "IsDC": "1",
+    "IsCRD": "1",
+    "HasNetInst": "0",
+    "CudaToolkitVersion": "",
+    "IsArchive": "0",
+    "IsActive": "1",
+    "IsEmailRequired": "0",
+    "ReleaseDateTime": "Wed Nov 04, 2026",
+    "DetailsURL": "https://www.nvidia.com/en-us/drivers/details/283966/",
+    "DownloadURL": "https://us.download.nvidia.com/Windows/621.14/621.14-desktop-win10-win11-64bit-international-nsd-dch-whql.exe",
+    "EMAN_REVRES_BD": "91-lqssm-lswfg-b2wsu-drp",
+    "EMITR_BD": "memCache:1%20rTime:1%20sTime:0",
+    "DownloadURLFileSize": "1.04 GB",
+    "BannerURL": "https://www.nvidia.com/en-us/geforce/billboards/displaydriver/standalone/eve-std-studio-driver-2026-banners/",
+    "BannerURLGfe": "https://www.nvidia.com/en-us/geforce/billboards/displaydriver/gfe/eve-gfe-studio-driver-2026-banners/",
+    "ReleaseNotes": "NVIDIA%20Studio%20Drivers%20provide%20artists%2C%20creators%2C%20and%203D%20developers%20the%20best%20performance%20and%20reliability%20when%20working%20with%20creative%20applications.%20To%20achieve%20the%20highest%20level%20of%20reliability%2C%20Studio%20Drivers%20undergo%20extensive%20testing%20against%20multi-app%20creator%20workflows%20and%20multiple%20revisions%20of%20the%20top%20creative%20applications%20from%20Adobe%20to%20Autodesk%20and%20beyond.%3Cbr%3E%0D%0A%3Cbr%3E%0D%0A%3Cb%3EApplications%3C/b%3E%3Cbr%3E%0D%0A%3Cbr%3E%0D%0AThe%20November%20NVIDIA%20Studio%20Driver%20provides%20optimal%20performance%20and%20support%20for%20the%20latest%20new%20creative%20applications%20and%20updates%20including%20OBS%20Studio%2033%2C%20Chaos%20Vantage%2C%20llama.cpp%2C%20PyTorch%2C%20Topaz%20Gigapixel%2C%20Maxon%20Redshift%2C%20and%20DaVinci%20Resolve%2021.1.1%20as%20well%20as%20support%20for%20DLSS%204.5%20Ray%20Reconstruction%20within%20Blender%205.3%20and%20Autodesk%20Arnold%207.5.4.0.%3Cbr%3E%0D%0A%3Cbr%3E%0D%0A%3Cb%3EFixed%20Application%20Bugs%3C/b%3E%3Cbr%3E%0D%0A%3Cul%3E%0D%0A%20%20%3Cli%3EWuthering%20Waves%3A%20May%20crash%20during%20gameplay%20when%20using%20NVIDIA%20Freestyle%20filters%20with%20DLSS%20Frame%20Generation%20enabled.%20%5B5747079%5D%3C/li%3E%0D%0A%3Cli%3EStar%20Citizen%3A%20Resolves%20a%20crash%20that%20may%20be%20seen%20when%20using%20Vulkan%20API%20%5B6680590%5D%3C/li%3E%0D%0A%3Cli%3ESurviving%20Mars%3A%20Relaunched%20may%20crash%20during%20gameplay%20after%20updating%20to%20R595%20drivers%20%5B5965452%5D%3C/li%3E%0D%0A%3C/ul%3E%0D%0A%3Cbr%20/%3E%0D%0A%3Cb%3EFixed%20General%20Bugs%3C/b%3E%3Cbr%3E%0D%0A%3Cul%3E%0D%0A%20%20%3Cli%3EFixed%20an%20issue%20where%20video%20playback%20may%20freeze%20or%20black%20screen%20on%20some%20GeForce%20RTX%2050%20Series%20GPUs/RTX%20Spark%20after%20updating%20to%20GRD%20621.01.%20%5B6979343%5D%3C/li%3E%0D%0A%3Cli%3EQHD%20monitor%20running%20at%20360%20Hz%20may%20have%20occasional%20black%20flash%20during%20gameplay%20%5B4846825%5D%3C/li%3E%0D%0A%3Cli%3EWhen%20gaming%20on%20a%20360Hz%20G-SYNC%20Pulsar%20monitor%2C%20FPS%20may%20drop%20to%20320FPS%20%5B6408986%5D%3C/li%3E%0D%0A%3Cli%3EMeta%20Horizon%20Link%20stream%20may%20freeze%20when%20connected%20over%20USB%20%5B6292679%5D%3C/li%3E%0D%0A%3Cli%3EIntermittent%20dimming%20may%20be%20observed%20on%20certain%20Asus%20notebooks%20after%20updating%20to%20R615%20drivers%20%5B6807011%5D%3C/li%3E%0D%0A%3C/ul%3E%0D%0A",
+    "OtherNotes": "%09%3Cul%3E%3Cli%3E%3Ca%20target%3D%22_blank%22%20href%3D%22https%3A//us.download.nvidia.com/Windows/621.14/621.14-win10-win11-nsd-release-notes.pdf%22%20title%3D%22NVIDIA%20Studio%20Driver%20Release%20Notes%20v621.14%22%3ENVIDIA%20Studio%20Driver%20Release%20Notes%20%28v621.14%29%3C/a%3E%3C/li%3E%3C/ul%3E%20",
+    "InstallationNotes": "",
+    "Overview": "",
+    "LanguageName": "English%20(US)",
+    "OSName": "Windows%2011",
+    "OsCode": "10.0",
+    "OSList": [
+     {
+      "OSName": "Windows%2010%2064-bit",
+      "OsCode": "10.0"
+     },
+     {
+      "OSName": "Windows%2011",
+      "OsCode": "10.0"
+     }
+    ],
+    "Is64Bit": "1",
+    "Messaging": [
+     {
+      "MessageCode": "DownloadIDDetailsFound",
+      "MessageValue": "The Driver DownloadID details found"
+     }
+    ]
+   }
+  },
+  {
+   "downloadInfo": {
+    "Success": "1",
+    "ID": "280101",
+    "DownloadTypeID": "1",
+    "DownloadStatusID": "3",
+    "Name": "NVIDIA%20Studio%20Driver",
+    "NameLocalized": "NVIDIA%20Studio%20Driver",
+    "ShortDescription": "NVIDIA%20Studio%20Driver",
+    "DeviceToProductFamilyName": "",
+    "Release": "615",
+    "Version": "617.42",
+    "DisplayVersion": "",
+    "GFE_DisplayVersion": "11.0.9.251",
+    "CDKitUSBEmitterDriverVersion": "",
+    "CDKitGPUDriverVersion": "",
+    "IsBeta": "0",
+    "IsWHQL": "0",
+    "IsRecommended": "0",
+    "IsFeaturePreview": "0",
+    "IsNewest": "0",
+    "IsDC": "1",
+    "IsCRD": "1",
+    "HasNetInst": "0",
+    "CudaToolkitVersion": "",
+    "IsArchive": "0",
+    "IsActive": "1",
+    "IsEmailRequired": "0",
+    "ReleaseDateTime": "Tue Oct 06, 2026",
+    "DetailsURL": "https://www.nvidia.com/en-us/drivers/details/280101/",
+    "DownloadURL": "https://us.download.nvidia.com/Windows/617.42/617.42-desktop-win10-win11-64bit-international-nsd-dch-whql.exe",
+    "EMAN_REVRES_BD": "41-lqssm-lswfg-b2wsu-drp",
+    "EMITR_BD": "memCache:1%20rTime:1%20sTime:0",
+    "DownloadURLFileSize": "990.86 MB",
+    "BannerURL": "https://www.nvidia.com/en-us/geforce/billboards/displaydriver/standalone/eve-std-studio-driver-2026-banners/",
+    "BannerURLGfe": "https://www.nvidia.com/en-us/geforce/billboards/displaydriver/gfe/eve-gfe-studio-driver-2026-banners/",
+    "ReleaseNotes": "NVIDIA%20Studio%20Drivers%20provide%20artists%2C%20creators%2C%20and%203D%20developers%20the%20best%20performance%20and%20reliability%20when%20working%20with%20creative%20applications.%20To%20achieve%20the%20highest%20level%20of%20reliability%2C%20Studio%20Drivers%20undergo%20extensive%20testing%20against%20multi-app%20creator%20workflows%20and%20multiple%20revisions%20of%20the%20top%20creative%20applications%20from%20Adobe%20to%20Autodesk%20and%20beyond.%3Cbr%3E%0D%0A%3Cbr%3E%0D%0A%3Cb%3EApplications%3C/b%3E%3Cbr%3E%0D%0A%3Cbr%3E%0D%0AThe%20October%20NVIDIA%20Studio%20Driver%20provides%20optimal%20support%20for%20the%20latest%20new%20creative%20applications%20and%20updates%20including%20DaVinci%20Resolve%2021.1%2C%20Adobe%20Premiere%20Pro%2C%20Perplexity%20App%2C%20and%20support%20for%20Topaz%20Labs%20Hyperion%202.5.%3Cbr%3E%0D%0A%3Cbr%3E%0D%0A%3Cb%3EFixed%20Application%20Bugs%3C/b%3E%3Cbr%3E%0D%0A%3Cul%3E%0D%0A%20%20%3Cli%3EAssassin%27s%20Creed%20Shadows%20may%20crash%20to%20desktop%20after%20extended%20gameplay%20after%20updating%20to%20driver%20616.56%20%5B6685219%5D%3C/li%3E%0D%0A%20%20%3Cli%3EJudgement/Lost%20Judgement/%20Virtua%20Fighter%205%20R.E.V.O.%20may%20fail%20to%20launch%20after%20updating%20to%20driver%20616.56%20%5B6681537%5D%3C/li%3E%0D%0A%3C/ul%3E%0D%0A%3Cbr%20/%3E%0D%0A%3Cb%3EFixed%20General%20Bugs%3C/b%3E%3Cbr%3E%0D%0A%3Cul%3E%0D%0A%20%20%3Cli%3ENo%20picture%20on%20Samsung%20Odyssey%20G95NC%20monitor%20when%20connected%20via%20HDMI%20after%20updating%20to%20R615%20drivers%20%5B6771206%5D%3C/li%3E%0D%0A%20%20%3Cli%3ECertain%20monitors%20may%20not%20wake%20from%20sleep%20when%20connected%20via%20DisplayPort%20after%20updating%20to%20R615%20drivers%20%5B6757568%5D%3C/li%3E%0D%0A%3C/ul%3E%0D%0A",
+    "OtherNotes": "%3Cul%3E%3Cli%3E%3Ca%20target%3D%22_blank%22%20href%3D%22https%3A//us.download.nvidia.com/Windows/617.42/617.42-win10-win11-nsd-release-notes.pdf%22%20title%3D%22NVIDIA%20Studio%20Driver%20Release%20Notes%20v617.42%22%3ENVIDIA%20Studio%20Driver%20Release%20Notes%20%28v617.42%29%3C/a%3E%3C/li%3E%3Cli%3E%3Ca%20target%3D%22_blank%22%20href%3D%22https%3A//us.download.nvidia.com/Windows/617.42/617.42-nvidia-control-panel-quick-start-guide.pdf%22%20title%3D%22NVIDIA%20Control%20Panel%20Quick%20Start%20Guide%22%3ENVIDIA%20Control%20Panel%20Quick%20Start%20Guide%3C/a%3E%20%3C/li%3E%3C/ul%3E%20%09",
+    "InstallationNotes": "",
+    "Overview": "",
+    "LanguageName": "English%20(US)",
+    "OSName": "Windows%2011",
+    "OsCode": "10.0",
+    "OSList": [
+     {
+      "OSName": "Windows%2010%2064-bit",
+      "OsCode": "10.0"
+     },
+     {
+      "OSName": "Windows%2011",
+      "OsCode": "10.0"
+     }
+    ],
+    "Is64Bit": "1",
+    "Messaging": [
+     {
+      "MessageCode": "DownloadIDDetailsFound",
+      "MessageValue": "The Driver DownloadID details found"
+     }
+    ]
+   }
+  },
+  {
+   "downloadInfo": {
+    "Success": "1",
+    "ID": "278455",
+    "DownloadTypeID": "1",
+    "DownloadStatusID": "3",
+    "Name": "NVIDIA%20Studio%20Driver",
+    "NameLocalized": "NVIDIA%20Studio%20Driver",
+    "ShortDescription": "NVIDIA%20Studio%20Driver",
+    "DeviceToProductFamilyName": "",
+    "Release": "615",
+    "Version": "616.92",
+    "DisplayVersion": "",
+    "GFE_DisplayVersion": "11.0.8.299",
+    "CDKitUSBEmitterDriverVersion": "",
+    "CDKitGPUDriverVersion": "",
+    "IsBeta": "0",
+    "IsWHQL": "0",
+    "IsRecommended": "0",
+    "IsFeaturePreview": "0",
+    "IsNewest": "0",
+    "IsDC": "1",
+    "IsCRD": "1",
+    "HasNetInst": "0",
+    "CudaToolkitVersion": "",
+    "IsArchive": "0",
+    "IsActive": "1",
+    "IsEmailRequired": "0",
+    "ReleaseDateTime": "Wed Sep 09, 2026",
+    "DetailsURL": "https://www.nvidia.com/en-us/drivers/details/278455/",
+    "DownloadURL": "https://us.download.nvidia.com/Windows/616.92/616.92-desktop-win10-win11-64bit-international-nsd-dch-whql.exe",
+    "EMAN_REVRES_BD": "60-lqssm-lswfg-a2wsu-drp",
+    "EMITR_BD": "memCache:1%20rTime:1%20sTime:0",
+    "DownloadURLFileSize": "990.89 MB",
+    "BannerURL": "https://www.nvidia.com/en-us/geforce/billboards/displaydriver/standalone/eve-std-studio-driver-2026-banners/",
+    "BannerURLGfe": "https://www.nvidia.com/en-us/geforce/billboards/displaydriver/gfe/eve-gfe-studio-driver-2026-banners/",
+    "ReleaseNotes": "NVIDIA%20Studio%20Drivers%20provide%20artists%2C%20creators%2C%20and%203D%20developers%20the%20best%20performance%20and%20reliability%20when%20working%20with%20creative%20applications.%20To%20achieve%20the%20highest%20level%20of%20reliability%2C%20Studio%20Drivers%20undergo%20extensive%20testing%20against%20multi-app%20creator%20workflows%20and%20multiple%20revisions%20of%20the%20top%20creative%20applications%20from%20Adobe%20to%20Autodesk%20and%20beyond.%3Cbr%3E%0D%0A%3Cbr%3E%0D%0A%3Cb%3EApplications%3C/b%3E%3Cbr%3E%0D%0A%3Cbr%3E%0D%0AThe%20September%20NVIDIA%20Studio%20Driver%20provides%20optimal%20support%20for%20the%20latest%20new%20creative%20applications%20and%20updates%20including%20Adobe%20Premiere%2C%20Blender%2C%20Maxon%20Redshift%2C%20and%20llama.ccp%20support%20for%20CUDA%2013.3%20and%20CUDA%2013.4.%3Cbr%3E%0D%0A%3Cbr%3E%0D%0A%3Cb%3EFixed%20Application%20Bugs%3C/b%3E%3Cbr%3E%0D%0A%3Cul%3E%0D%0A%20%20%3Cli%3EN/A%3C/li%3E%0D%0A%3C/ul%3E%0D%0A%3Cbr%20/%3E%0D%0A%3Cb%3EFixed%20General%20Bugs%3C/b%3E%3Cbr%3E%0D%0A%3Cul%3E%0D%0A%20%20%3Cli%3EIntermittent%20flicker%20may%20be%20observed%20in%20browsers%20when%20navigating%20to%20certain%20websites%20%5B6673430%5D%3C/li%3E%0D%0A%09%3Cli%3EFixed%20an%20issue%20where%20virtual%20displays%20could%20not%20be%20created%20after%20updating%20to%20driver%20616.56%20%5B6674464%5D%3C/li%3E%0D%0A%09%3Cli%3ERemote%20Desktop%20Protocol%20%28RDP%29%20sessions%20may%20display%20a%20black%20screen%20after%20updating%20to%20driver%20616.56%20%5B6687328%5D%3C/li%3E%0D%0A%3C/ul%3E%0D%0A",
+    "OtherNotes": "%3Cul%3E%3Cli%3E%3Ca%20target%3D%22_blank%22%20href%3D%22https%3A//us.download.nvidia.com/Windows/616.92/616.92-win10-win11-nsd-release-notes.pdf%22%20title%3D%22NVIDIA%20Studio%20Driver%20Release%20Notes%20v616.92%22%3ENVIDIA%20Studio%20Driver%20Release%20Notes%20%28v616.92%29%3C/a%3E%3C/li%3E%3Cli%3E%3Ca%20target%3D%22_blank%22%20href%3D%22https%3A//us.download.nvidia.com/Windows/616.92/616.92-nvidia-control-panel-quick-start-guide.pdf%22%20title%3D%22NVIDIA%20Control%20Panel%20Quick%20Start%20Guide%22%3ENVIDIA%20Control%20Panel%20Quick%20Start%20Guide%3C/a%3E%20%3C/li%3E%3C/ul%3E%20%09",
+    "InstallationNotes": "",
+    "Overview": "",
+    "LanguageName": "English%20(US)",
+    "OSName": "Windows%2011",
+    "OsCode": "10.0",
+    "OSList": [
+     {
+      "OSName": "Windows%2010%2064-bit",
+      "OsCode": "10.0"
+     },
+     {
+      "OSName": "Windows%2011",
+      "OsCode": "10.0"
+     }
+    ],
+    "Is64Bit": "1",
+    "Messaging": [
+     {
+      "MessageCode": "DownloadIDDetailsFound",
+      "MessageValue": "The Driver DownloadID details found"
+     }
+    ]
+   }
+  },
+  {
+   "downloadInfo": {
+    "Success": "1",
+    "ID": "278087",
+    "DownloadTypeID": "1",
+    "DownloadStatusID": "3",
+    "Name": "NVIDIA%20Studio%20Driver",
+    "NameLocalized": "NVIDIA%20Studio%20Driver",
+    "ShortDescription": "NVIDIA%20Studio%20Driver",
+    "DeviceToProductFamilyName": "",
+    "Release": "615",
+    "Version": "616.56",
+    "DisplayVersion": "",
+    "GFE_DisplayVersion": "11.0.8.299",
+    "CDKitUSBEmitterDriverVersion": "",
+    "CDKitGPUDriverVersion": "",
+    "IsBeta": "0",
+    "IsWHQL": "0",
+    "IsRecommended": "0",
+    "IsFeaturePreview": "0",
+    "IsNewest": "0",
+    "IsDC": "1",
+    "IsCRD": "1",
+    "HasNetInst": "0",
+    "CudaToolkitVersion": "",
+    "IsArchive": "0",
+    "IsActive": "1",
+    "IsEmailRequired": "0",
+    "ReleaseDateTime": "Wed Aug 26, 2026",
+    "DetailsURL": "https://www.nvidia.com/en-us/drivers/details/278087/",
+    "DownloadURL": "https://us.download.nvidia.com/Windows/616.56/616.56-desktop-win10-win11-64bit-international-nsd-dch-whql.exe",
+    "EMAN_REVRES_BD": "50-lqssm-lswfg-a2wsu-drp",
+    "EMITR_BD": "memCache:1%20rTime:1%20sTime:0",
+    "DownloadURLFileSize": "984.32 MB",
+    "BannerURL": "https://www.nvidia.com/en-us/geforce/billboards/displaydriver/standalone/eve-std-studio-driver-2026-banners/",
+    "BannerURLGfe": "https://www.nvidia.com/en-us/geforce/billboards/displaydriver/gfe/eve-gfe-studio-driver-2026-banners/",
+    "ReleaseNotes": "NVIDIA%20Studio%20Drivers%20provide%20artists%2C%20creators%2C%20and%203D%20developers%20the%20best%20performance%20and%20reliability%20when%20working%20with%20creative%20applications.%20To%20achieve%20the%20highest%20level%20of%20reliability%2C%20Studio%20Drivers%20undergo%20extensive%20testing%20against%20multi-app%20creator%20workflows%20and%20multiple%20revisions%20of%20the%20top%20creative%20applications%20from%20Adobe%20to%20Autodesk%20and%20beyond.%3Cbr%3E%0D%0A%3Cbr%3E%0D%0A%3Cb%3EApplications%3C/b%3E%3Cbr%3E%0D%0A%3Cbr%3E%0D%0AThe%20August%20NVIDIA%20Studio%20Driver%20provides%20optimal%20support%20for%20the%20latest%20new%20creative%20applications%20and%20updates%20including%20Lightroom%2C%20and%20performance%20updates%20for%20LTX-2.5%2C%20and%20ComfyUI%20for%20WAN-Animate-2%20and%20MiniMax-H3.%3Cbr%3E%0D%0A%3Cbr%3E%0D%0A%3Cb%3EFixed%20Application%20Bugs%3C/b%3E%3Cbr%3E%0D%0A%3Cul%3E%0D%0A%20%20%3Cli%3EDOOM%3A%20The%20Dark%20Ages%20%26amp%3B%20Indiana%20Jones%20and%20the%20Great%20Circle%3A%20Frame%20rate%20may%20exceed%20V-SYNC%20when%20DLSS%20Frame%20Generation%203x%20or%20higher%20is%20used%20%5B6061475%5D%3C/li%3E%0D%0A%20%20%3Cli%3EOuter%20Worlds%3A%20Texture%20flicker%20may%20be%20observed%20while%20playing%20after%20updating%20to%20R595%20and%20R610%20drivers%20%5B6238668%5D%3C/li%3E%0D%0A%20%20%3Cli%3EASUS%20Armory%20Crate%3A%20GameVisual%20color%20profiles%20are%20not%20getting%20applied%20when%20using%20R590%20drivers%20%5B5860581%5D%3C/li%3E%0D%0A%20%20%3Cli%3EChief%20Architect%3A%20610.47%20driver%20crash%20on%20Geforce%20RTX%204000%20series%20cards%20%5B6226227%5D%3C/li%3E%0D%0A%20%20%3Cli%3EClaude%20Desktop%3A%20Driver%20incorrectly%20detects%20application%20as%20a%203D%20app%20%5B6468260%5D%3C/li%3E%0D%0A%20%20%3Cli%3ETycho%20Tracker%3A%20Unable%20to%20create%20individual%20OpenCL%20buffers%20greater%20than%202GB%20%5B6538978%5D%3C/li%3E%0D%0A%3C/ul%3E%0D%0A%3Cbr%20/%3E%0D%0A%3Cb%3EFixed%20General%20Bugs%3C/b%3E%3Cbr%3E%0D%0A%3Cul%3E%0D%0A%20%20%3Cli%3EResolves%20issue%20that%20some%20instances%20can%20cause%20a%20driver%20crash%20with%2032-bit%20DirectX%2012%20apps%20%5B5725350%5D%3C/li%3E%0D%0A%3C/ul%3E%0D%0A",
+    "OtherNotes": "%3Cul%3E%3Cli%3E%3Ca%20target%3D%22_blank%22%20href%3D%22https%3A//us.download.nvidia.com/Windows/616.56/616.56-win10-win11-nsd-release-notes.pdf%22%20title%3D%22NVIDIA%20Studio%20Driver%20Release%20Notes%20v616.56%22%3ENVIDIA%20Studio%20Driver%20Release%20Notes%20%28v616.56%29%3C/a%3E%3C/li%3E%3Cli%3E%3Ca%20target%3D%22_blank%22%20href%3D%22https%3A//us.download.nvidia.com/Windows/616.56/616.56-nvidia-control-panel-quick-start-guide.pdf%22%20title%3D%22NVIDIA%20Control%20Panel%20Quick%20Start%20Guide%22%3ENVIDIA%20Control%20Panel%20Quick%20Start%20Guide%3C/a%3E%20%3C/li%3E%3C/ul%3E%20%09",
+    "InstallationNotes": "",
+    "Overview": "",
+    "LanguageName": "English%20(US)",
+    "OSName": "Windows%2011",
+    "OsCode": "10.0",
+    "OSList": [
+     {
+      "OSName": "Windows%2010%2064-bit",
+      "OsCode": "10.0"
+     },
+     {
+      "OSName": "Windows%2011",
+      "OsCode": "10.0"
+     }
+    ],
+    "Is64Bit": "1",
+    "Messaging": [
+     {
+      "MessageCode": "DownloadIDDetailsFound",
+      "MessageValue": "The Driver DownloadID details found"
+     }
+    ]
+   }
+  },
+  {
+   "downloadInfo": {
+    "Success": "1",
+    "ID": "274381",
+    "DownloadTypeID": "1",
+    "DownloadStatusID": "3",
+    "Name": "NVIDIA%20Studio%20Driver",
+    "NameLocalized": "NVIDIA%20Studio%20Driver",
+    "ShortDescription": "NVIDIA%20Studio%20Driver",
+    "DeviceToProductFamilyName": "",
+    "Release": "610",
+    "Version": "610.88",
+    "DisplayVersion": "",
+    "GFE_DisplayVersion": "11.0.8.299",
+    "CDKitUSBEmitterDriverVersion": "",
+    "CDKitGPUDriverVersion": "",
+    "IsBeta": "0",
+    "IsWHQL": "0",
+    "IsRecommended": "0",
+    "IsFeaturePreview": "0",
+    "IsNewest": "0",
+    "IsDC": "1",
+    "IsCRD": "1",
+    "HasNetInst": "0",
+    "CudaToolkitVersion": "",
+    "IsArchive": "0",
+    "IsActive": "1",
+    "IsEmailRequired": "0",
+    "ReleaseDateTime": "Tue Jul 28, 2026",
+    "DetailsURL": "https://www.nvidia.com/en-us/drivers/details/274381/",
+    "DownloadURL": "https://us.download.nvidia.com/Windows/610.88/610.88-desktop-win10-win11-64bit-international-nsd-dch-whql.exe",
+    "EMAN_REVRES_BD": "71-lqssm-lswfg-b2wsu-drp",
+    "EMITR_BD": "memCache:1%20rTime:1%20sTime:0",
+    "DownloadURLFileSize": "979.58 MB",
+    "BannerURL": "https://www.nvidia.com/en-us/geforce/billboards/displaydriver/standalone/eve-std-studio-driver-2026-banners/",
+    "BannerURLGfe": "https://www.nvidia.com/en-us/geforce/billboards/displaydriver/gfe/eve-gfe-studio-driver-2026-banners/",
+    "ReleaseNotes": "NVIDIA%20Studio%20Drivers%20provide%20artists%2C%20creators%2C%20and%203D%20developers%20the%20best%20performance%20and%20reliability%20when%20working%20with%20creative%20applications.%20To%20achieve%20the%20highest%20level%20of%20reliability%2C%20Studio%20Drivers%20undergo%20extensive%20testing%20against%20multi-app%20creator%20workflows%20and%20multiple%20revisions%20of%20the%20top%20creative%20applications%20from%20Adobe%20to%20Autodesk%20and%20beyond.%3Cbr%3E%0D%0A%3Cbr%3E%0D%0A%3Cb%3EApplications%3C/b%3E%3Cbr%3E%0D%0A%3Cbr%3E%0D%0AThe%20July%20NVIDIA%20Studio%20Driver%20provides%20optimal%20support%20for%20the%20latest%20new%20creative%20applications%20and%20updates%20including%20Blender%205.2%20LTS%20and%20DaVinci%20Resolve%2021.0.2%2C%20and%20performance%20updates%20for%20Topaz%20Photo%20AI%20NeuroServer%20and%20V-Ray%207.4%20for%20Maya.%3Cbr%3E%0D%0A%3Cbr%3E%0D%0A%3Cb%3EFixed%20Application%20Bugs%3C/b%3E%3Cbr%3E%0D%0A%3Cul%3E%0D%0A%20%20%3Cli%3EChaos%20Vantage%3A%20Broken%20gaussian%20splat%20rendering%20when%20SER%20%28Shader%20Execution%20Reordering%29%20is%20enabled%20%5B6060019%5D%3C/li%3E%0D%0A%20%20%3Cli%3EAdobe%20Substance%3A%20Sampler%20crash%20at%20exit%20with%20610%20drivers.%20%5B6237191%5D%3C/li%3E%0D%0A%20%20%3Cli%3E%5BHalo%3A%20Campaign%20Evolved%5D%3A%20Resolved%20game%20crashes%20observed%20on%20RTX%2050%20Series%20GPUs%20with%20R610%20drivers.%20%5B6259837%5D%3C/li%3E%0D%0A%20%20%3Cli%3EPath%20of%20Exile%202%3A%20Fixed%20intermittent%20long%20pauses%20that%20could%20occur%20after%20extended%20gameplay%20sessions%20in%20DX12%20mode%20%5B5090018%5D%3C/li%3E%0D%0A%20%20%3Cli%3ESilent%20Hill%20F%3A%20Gaming%20stability%20improvements%20%5B6432954%5D%3C/li%3E%0D%0A%20%20%3Cli%3E%5BStrange%20Brigade/Zombie%20Army%204%3ADead%20War%5D%3A%20Game%20may%20crash%20when%20exiting%20if%20NVIDIA%20App%20In-Game%20Overlay%20is%20enabled%20%5B6392324%5D%3C/li%3E%0D%0A%09%3Cli%3EImproves%20frame%20pacing%20in%20certain%20DX11%20games%20when%20Smooth%20Motion%20is%20used%20while%20G-SYNC%20is%20enabled%20%5B6300603%3C/li%3E%0D%0A%09%3Cli%3ERTX%20Dynamic%20Vibrance%20is%20incorrectly%20applied%20to%20Wallpaper%20Engine%20%5B6244021%5D%3C/li%3E%0D%0A%09%3Cli%3EPaint.NET%20may%20crash%20during%20launch%20when%20NVIDIA%20Surround%20is%20enabled%20%5B5366537%5D%3C/li%3E%0D%0A%09%3Cli%3ETencent%20Meeting%3A%20Flickering%20may%20be%20observed%20when%20Smooth%20Motion%20is%20enabled%20globally%20%5B6329207%5D%3C/li%3E%0D%0A%3C/ul%3E%0D%0A%3Cbr%20/%3E%0D%0A%3Cb%3EFixed%20General%20Bugs%3C/b%3E%3Cbr%3E%0D%0A%3Cul%3E%0D%0A%20%20%3Cli%3EN/A%3C/li%3E%0D%0A%3C/ul%3E%0D%0A",
+    "OtherNotes": "%3Cul%3E%3Cli%3E%3Ca%20target%3D%22_blank%22%20href%3D%22https%3A//us.download.nvidia.com/Windows/610.88/610.88-win10-win11-nsd-release-notes.pdf%22%20title%3D%22NVIDIA%20Studio%20Driver%20Release%20Notes%20v610.88%22%3ENVIDIA%20Studio%20Driver%20Release%20Notes%20%28v610.88%29%3C/a%3E%3C/li%3E%3Cli%3E%3Ca%20target%3D%22_blank%22%20href%3D%22https%3A//us.download.nvidia.com/Windows/610.88/610.88-nvidia-control-panel-quick-start-guide.pdf%22%20title%3D%22NVIDIA%20Control%20Panel%20Quick%20Start%20Guide%22%3ENVIDIA%20Control%20Panel%20Quick%20Start%20Guide%3C/a%3E%20%3C/li%3E%3C/ul%3E%20%09",
+    "InstallationNotes": "",
+    "Overview": "",
+    "LanguageName": "English%20(US)",
+    "OSName": "Windows%2011",
+    "OsCode": "10.0",
+    "OSList": [
+     {
+      "OSName": "Windows%2010%2064-bit",
+      "OsCode": "10.0"
+     },
+     {
+      "OSName": "Windows%2011",
+      "OsCode": "10.0"
+     }
+    ],
+    "Is64Bit": "1",
+    "Messaging": [
+     {
+      "MessageCode": "DownloadIDDetailsFound",
+      "MessageValue": "The Driver DownloadID details found"
+     }
+    ]
+   }
+  },
+  {
+   "downloadInfo": {
+    "Success": "1",
+    "ID": "272766",
+    "DownloadTypeID": "1",
+    "DownloadStatusID": "3",
+    "Name": "NVIDIA%20Studio%20Driver",
+    "NameLocalized": "NVIDIA%20Studio%20Driver",
+    "ShortDescription": "NVIDIA%20Studio%20Driver",
+    "DeviceToProductFamilyName": "",
+    "Release": "610",
+    "Version": "610.62",
+    "DisplayVersion": "",
+    "GFE_DisplayVersion": "11.0.7.247",
+    "CDKitUSBEmitterDriverVersion": "",
+    "CDKitGPUDriverVersion": "",
+    "IsBeta": "0",
+    "IsWHQL": "0",
+    "IsRecommended": "0",
+    "IsFeaturePreview": "0",
+    "IsNewest": "0",
+    "IsDC": "1",
+    "IsCRD": "1",
+    "HasNetInst": "0",
+    "CudaToolkitVersion": "",
+    "IsArchive": "0",
+    "IsActive": "1",
+    "IsEmailRequired": "0",
+    "ReleaseDateTime": "Tue Jun 16, 2026",
+    "DetailsURL": "https://www.nvidia.com/en-us/drivers/details/272766/",
+    "DownloadURL": "https://us.download.nvidia.com/Windows/610.62/610.62-desktop-win10-win11-64bit-international-nsd-dch-whql.exe",
+    "EMAN_REVRES_BD": "B0J663C-ZAMA2CE",
+    "EMITR_BD": "memCache:1%20rTime:1%20sTime:0",
+    "DownloadURLFileSize": "978.43 MB",
+    "BannerURL": "https://www.nvidia.com/en-us/geforce/billboards/displaydriver/standalone/eve-std-studio-driver-2026-banners/",
+    "BannerURLGfe": "https://www.nvidia.com/en-us/geforce/billboards/displaydriver/gfe/eve-gfe-studio-driver-2026-banners/",
+    "ReleaseNotes": "NVIDIA%20Studio%20Drivers%20provide%20artists%2C%20creators%2C%20and%203D%20developers%20the%20best%20performance%20and%20reliability%20when%20working%20with%20creative%20applications.%20To%20achieve%20the%20highest%20level%20of%20reliability%2C%20Studio%20Drivers%20undergo%20extensive%20testing%20against%20multi-app%20creator%20workflows%20and%20multiple%20revisions%20of%20the%20top%20creative%20applications%20from%20Adobe%20to%20Autodesk%20and%20beyond.%3Cbr%3E%0D%0A%3Cbr%3E%0D%0A%3Cb%3EApplications%3C/b%3E%3Cbr%3E%0D%0A%3Cbr%3E%0D%0AThe%20June%20NVIDIA%20Studio%20Driver%20provides%20optimal%20support%20for%20the%20latest%20new%20creative%20applications%20and%20updates%20including%20NVIDIA%20Broadcast%202.2%2C%20Reallusion%20Character%20Creator%205.1%2C%20and%20the%20latest%20multi-GPU%20optimizations%20for%20llama.cpp%20and%20ComfyUI.%3Cbr%3E%0D%0A%3Cbr%3E%0D%0A%3Cb%3EFixed%20Application%20Bugs%3C/b%3E%3Cbr%3E%0D%0A%3Cul%3E%0D%0A%20%20%3Cli%3EWorld%20of%20Warcraft%3A%20Gaming%20stability%20improvements%20%5B5563205%5D%3C/li%3E%0D%0A%20%20%3Cli%3EApex%20Legends%3A%20Occasional%20visual%20corruption%20after%20extended%20gameplay%20%5B6239327%5D%3C/li%3E%0D%0A%20%20%3Cli%3EUsers%20may%20observe%20DLSS%20settings%20being%20grayed%20out%20in%20certain%20games%20after%20updating%20to%20display%20driver%20615.47%20%5B6262805%5D%3C/li%3E%0D%0A%20%20%3Cli%3EImproved%20gaming%20stability%20in%20multi-monitor%20configurations%20when%20using%20V-SYNC%20with%20DLSS%20Frame%20Generation%20%5B6158481%5D%3C/li%3E%0D%0A%20%20%3Cli%3EResolved%20an%20issue%20that%20could%20cause%20jittering%20or%20ghosting%20in%20some%20DirectX%2011%20games%20when%20Smooth%20Motion%20is%20enabled%20%5B5937897%5D%3C/li%3E%0D%0A%20%20%3Cli%3EResolved%20an%20issue%20that%20could%20cause%20some%20games%20to%20crash%20when%20launched%20with%20Smooth%20Motion%20enabled%20%5B5466398%5D%3C/li%3E%0D%0A%3C/ul%3E%0D%0A%3Cbr%20/%3E%0D%0A%3Cb%3EFixed%20General%20Bugs%3C/b%3E%3Cbr%3E%0D%0A%3Cul%3E%0D%0A%20%20%3Cli%3E%5BAda%5D%20Resolves%20a%20frame%20pacing%20issue%20on%20certain%20monitors%20when%20G-SYNC%20is%20enabled%20%5B6226972%5D%3C/li%3E%0D%0A%20%20%3Cli%3EResolved%20an%20issue%20that%20prevented%20the%20EDID%20from%20being%20read%20on%20certain%20monitors%20causing%20them%20to%20be%20identified%20as%20%26quot%3BNVIDIA%20NV-Failsafe%26rdquo%3B%20%5B6005508%5D%3C/li%3E%0D%0A%20%20%3Cli%3EResolved%20an%20issue%20where%20certain%20monitors%20would%20not%20wake%20from%20sleep%20mode%20%5B5806798/5635230%5D%3C/li%3E%0D%0A%20%20%3Cli%3EGeneral%20stability%20improvements%20when%20the%20system%20fails%20to%20create%20a%20new%20allocation%20%5B5449920%5D%3C/li%3E%0D%0A%3C/ul%3E%0D%0A",
+    "OtherNotes": "%3Cul%3E%3Cli%3E%3Ca%20target%3D%22_blank%22%20href%3D%22https%3A//us.download.nvidia.com/Windows/610.62/610.62-win10-win11-nsd-release-notes.pdf%22%20title%3D%22NVIDIA%20Studio%20Driver%20Release%20Notes%20v610.62%22%3ENVIDIA%20Studio%20Driver%20Release%20Notes%20%28v610.62%29%3C/a%3E%3C/li%3E%3Cli%3E%3Ca%20target%3D%22_blank%22%20href%3D%22https%3A//us.download.nvidia.com/Windows/610.62/610.62-nvidia-control-panel-quick-start-guide.pdf%22%20title%3D%22NVIDIA%20Control%20Panel%20Quick%20Start%20Guide%22%3ENVIDIA%20Control%20Panel%20Quick%20Start%20Guide%3C/a%3E%20%3C/li%3E%3C/ul%3E%20%09",
+    "InstallationNotes": "",
+    "Overview": "",
+    "LanguageName": "English%20(US)",
+    "OSName": "Windows%2011",
+    "OsCode": "10.0",
+    "OSList": [
+     {
+      "OSName": "Windows%2010%2064-bit",
+      "OsCode": "10.0"
+     },
+     {
+      "OSName": "Windows%2011",
+      "OsCode": "10.0"
+     }
+    ],
+    "Is64Bit": "1",
+    "Messaging": [
+     {
+      "MessageCode": "DownloadIDDetailsFound",
+      "MessageValue": "The Driver DownloadID details found"
+     }
+    ]
+   }
+  },
+  {
+   "downloadInfo": {
+    "Success": "1",
+    "ID": "271420",
+    "DownloadTypeID": "1",
+    "DownloadStatusID": "3",
+    "Name": "NVIDIA%20Studio%20Driver",
+    "NameLocalized": "NVIDIA%20Studio%20Driver",
+    "ShortDescription": "NVIDIA%20Studio%20Driver",
+    "DeviceToProductFamilyName": "",
+    "Release": "610",
+    "Version": "610.47",
+    "DisplayVersion": "",
+    "GFE_DisplayVersion": "11.0.7.247",
+    "CDKitUSBEmitterDriverVersion": "",
+    "CDKitGPUDriverVersion": "",
+    "IsBeta": "0",
+    "IsWHQL": "0",
+    "IsRecommended": "0",
+    "IsFeaturePreview": "0",
+    "IsNewest": "0",
+    "IsDC": "1",
+    "IsCRD": "1",
+    "HasNetInst": "0",
+    "CudaToolkitVersion": "",
+    "IsArchive": "0",
+    "IsActive": "1",
+    "IsEmailRequired": "0",
+    "ReleaseDateTime": "Tue May 26, 2026",
+    "DetailsURL": "https://www.nvidia.com/en-us/drivers/details/271420/",
+    "DownloadURL": "https://us.download.nvidia.com/Windows/610.47/610.47-desktop-win10-win11-64bit-international-nsd-dch-whql.exe",
+    "EMAN_REVRES_BD": "B0J663C-ZAMA2CE",
+    "EMITR_BD": "memCache:1%20rTime:1%20sTime:0",
+    "DownloadURLFileSize": "978.48 MB",
+    "BannerURL": "https://www.nvidia.com/en-us/geforce/billboards/displaydriver/standalone/eve-std-studio-driver-2026-banners/",
+    "BannerURLGfe": "https://www.nvidia.com/en-us/geforce/billboards/displaydriver/gfe/eve-gfe-studio-driver-2026-banners/",
+    "ReleaseNotes": "NVIDIA%20Studio%20Drivers%20provide%20artists%2C%20creators%2C%20and%203D%20developers%20the%20best%20performance%20and%20reliability%20when%20working%20with%20creative%20applications.%20To%20achieve%20the%20highest%20level%20of%20reliability%2C%20Studio%20Drivers%20undergo%20extensive%20testing%20against%20multi-app%20creator%20workflows%20and%20multiple%20revisions%20of%20the%20top%20creative%20applications%20from%20Adobe%20to%20Autodesk%20and%20beyond.%3Cbr%3E%3Cbr%3E%0D%0A%0D%0A%3Cb%3EApplications%3C/b%3E%3Cbr%3E%3Cbr%3E%0D%0A%0D%0AThe%20May%20NVIDIA%20Studio%20Driver%20provides%20optimal%20support%20for%20the%20latest%20new%20creative%20applications%20and%20updates%20including%20performance%20optimized%20releases%20for%20ComfyUI%20and%20Llama.cpp.%3Cbr%3E%3Cbr%3E%0D%0A%0D%0A%3Cb%3EFixed%20Application%20Bugs%3C/b%3E%3Cbr%3E%0D%0A%0D%0A%3Cul%3E%0D%0A%20%20%3Cli%3EAdobe%3A%20NVIDIA%20Driver%20crash%20in%20Lightroom%20Classic%20%5B6090770%5D%3C/li%3E%0D%0A%20%20%3Cli%3EAutodesk%20Forma%3A%20OpenGL%20driver%20memory%20leak%20during%20camera%20orbit%20%5B5935127%5D%3C/li%3E%0D%0A%20%20%3Cli%3EFoundry%20Mari%207.0v2%20viewport%20displays%20flickering%20%5B6102981%5D%3C/li%3E%0D%0A%20%20%3Cli%3ELike%20a%20Dragon%3A%20Infinite%20Wealth%3A%20Shadow/light%20flicker%20after%20driver%20update%20%5B5973185%5D%3C/li%3E%0D%0A%20%20%3Cli%3EEnshrouded%3A%20Missing%20terrain%20after%20driver%20update%20%5B5955501%5D%3C/li%3E%0D%0A%20%20%3Cli%3EVisual%20corruption%20may%20appear%20in%20certain%20games%20using%20Godot%20engine%20%5B5955501%5D%3C/li%3E%0D%0A%3C/ul%3E%3Cbr%20/%3E%0D%0A%0D%0A%3Cb%3EFixed%20General%20Bugs%3C/b%3E%3Cbr%3E%0D%0A%0D%0A%3Cul%3E%0D%0A%20%20%3Cli%3EApple%20Studio%20Display%20XDR%20only%20displays%20480p%20after%20driver%20update%20%5B5976295%5D%3C/li%3E%0D%0A%20%20%3Cli%3ESamsung%20The%20Frame%3A%20Using%20display%27s%20Game%20mode%20disables%20key%20functionality%20%5B5825631%5D%3C/li%3E%0D%0A%20%20%3Cli%3EMultimonitor%20gaming%20stability%20improvements%20when%20using%20V-SYNC%20%5B5343252%5D%3C/li%3E%0D%0A%20%20%3Cli%3EEnhanced%20smoothness%20when%20DLSS%20Frame%20Generation%20is%20used%20with%20V-SYNC%20%5B5999586%5D%3C/li%3E%0D%0A%3C/ul%3E",
+    "OtherNotes": "%3Cul%3E%3Cli%3E%3Ca%20target%3D%22_blank%22%20href%3D%22https%3A//us.download.nvidia.com/Windows/610.47/610.47-win10-win11-nsd-release-notes.pdf%22%20title%3D%22NVIDIA%20Studio%20Driver%20Release%20Notes%20v610.47%22%3ENVIDIA%20Studio%20Driver%20Release%20Notes%20%28v610.47%29%3C/a%3E%3C/li%3E%3Cli%3E%3Ca%20target%3D%22_blank%22%20href%3D%22https%3A//us.download.nvidia.com/Windows/610.47/610.47-nvidia-control-panel-quick-start-guide.pdf%22%20title%3D%22NVIDIA%20Control%20Panel%20Quick%20Start%20Guide%22%3ENVIDIA%20Control%20Panel%20Quick%20Start%20Guide%3C/a%3E%20%3C/li%3E%3C/ul%3E%20%09",
+    "InstallationNotes": "",
+    "Overview": "",
+    "LanguageName": "English%20(US)",
+    "OSName": "Windows%2011",
+    "OsCode": "10.0",
+    "OSList": [
+     {
+      "OSName": "Windows%2010%2064-bit",
+      "OsCode": "10.0"
+     },
+     {
+      "OSName": "Windows%2011",
+      "OsCode": "10.0"
+     }
+    ],
+    "Is64Bit": "1",
+    "Messaging": [
+     {
+      "MessageCode": "DownloadIDDetailsFound",
+      "MessageValue": "The Driver DownloadID details found"
+     }
+    ]
+   }
+  },
+  {
+   "downloadInfo": {
+    "Success": "1",
+    "ID": "267262",
+    "DownloadTypeID": "1",
+    "DownloadStatusID": "3",
+    "Name": "NVIDIA%20Studio%20Driver",
+    "NameLocalized": "NVIDIA%20Studio%20Driver",
+    "ShortDescription": "NVIDIA%20Studio%20Driver",
+    "DeviceToProductFamilyName": "",
+    "Release": "595",
+    "Version": "596.36",
+    "DisplayVersion": "",
+    "GFE_DisplayVersion": "11.0.7.237",
+    "CDKitUSBEmitterDriverVersion": "",
+    "CDKitGPUDriverVersion": "",
+    "IsBeta": "0",
+    "IsWHQL": "0",
+    "IsRecommended": "0",
+    "IsFeaturePreview": "0",
+    "IsNewest": "0",
+    "IsDC": "1",
+    "IsCRD": "1",
+    "HasNetInst": "0",
+    "CudaToolkitVersion": "",
+    "IsArchive": "0",
+    "IsActive": "1",
+    "IsEmailRequired": "0",
+    "ReleaseDateTime": "Tue Apr 28, 2026",
+    "DetailsURL": "https://www.nvidia.com/en-us/drivers/details/267262/",
+    "DownloadURL": "https://us.download.nvidia.com/Windows/596.36/596.36-desktop-win10-win11-64bit-international-nsd-dch-whql.exe",
+    "EMAN_REVRES_BD": "31-lqssm-lswfg-b2wsu-drp",
+    "EMITR_BD": "memCache:1%20rTime:4%20sTime:1",
+    "DownloadURLFileSize": "958.85 MB",
+    "BannerURL": "https://www.nvidia.com/en-us/geforce/billboards/displaydriver/standalone/eve-std-studio-driver-2026-banners/",
+    "BannerURLGfe": "https://www.nvidia.com/en-us/geforce/billboards/displaydriver/gfe/eve-gfe-studio-driver-2026-banners/",
+    "ReleaseNotes": "NVIDIA%20Studio%20Drivers%20provide%20artists%2C%20creators%2C%20and%203D%20developers%20the%20best%20performance%20and%20reliability%20when%20working%20with%20creative%20applications.%20To%20achieve%20the%20highest%20level%20of%20reliability%2C%20Studio%20Drivers%20undergo%20extensive%20testing%20against%20multi-app%20creator%20workflows%20and%20multiple%20revisions%20of%20the%20top%20creative%20applications%20from%20Adobe%20to%20Autodesk%20and%20beyond.%3Cbr%20/%3E%0D%0A%3Cbr%20/%3E%0D%0A%3Cb%3EApplications%3C/b%3E%20%3Cbr%20/%3E%0D%0AThe%20April%20NVIDIA%20Studio%20Driver%20provides%20optimal%20support%20for%20the%20latest%20new%20creative%20applications%20and%20updates%20including%20Adobe%20Premiere%20Pro%2C%20DaVinci%20Resolve%2021%2C%20Wondershare%20Filmora%2C%20Maxon%20Redshift%202026.4%2C%20Lightricks%20LTX%20Desktop%2C%20and%20Reincubate%20Camo.%20In%20addition%2C%20this%20NVIDIA%20Studio%20Driver%20offers%20support%20for%20the%20new%20GeForce%20RTX%205070%20Laptop%20GPU%20%2812GB%29.%3Cbr%20/%3E%0D%0A%3Cbr%20/%3E%0D%0A%3Cb%3EFixed%20Application%20Bugs%3C/b%3E%20%3Cbr%20/%3E%0D%0A%3Cul%3E%0D%0A%20%20%3Cli%3EBlender%205.0.1%20EEVEE%3A%20Non-shader%20nodes%20connected%20to%20the%20material%20output%20rendered%20as%20black%20%28zero%20value%29%20%5B5965763%5D%3C/li%3E%0D%0A%20%20%3Cli%3EGod%20of%20War%3A%20Ragnarok%3A%20Certain%20textures%20may%20intermittently%20flash%20white%20during%20gameplay%20%5B5856704%5D%3C/li%3E%0D%0A%20%20%3Cli%3EAssassins%20Creed%20Shadows%3A%20Flickering%20on%20character%20model%20clothing%20%5B5987951%5D%3C/li%3E%0D%0A%20%20%3Cli%3EThe%20Crew%20Motorfest%3A%20Grass%20and%20vegetation%20flickering%20%5B5950261%5D%3C/li%3E%0D%0A%20%20%3Cli%3EArknights%3A%20Endfield%3A%20stutter%20may%20be%20observed%20in%20some%20gameplay%20%5B5950402%5D%3C/li%3E%0D%0A%20%20%3Cli%3EHalo%20Infinite%3A%20Texture%20corruption%20may%20occur%20on%20R595%20drivers%20%5B5957741%5D%3C/li%3E%0D%0A%20%20%3Cli%3EHITMAN%20World%20of%20Assassination%3A%20Game%20stability%20issues%20when%20NVIDIA%20Smooth%20Motion%20is%20enabled%20%5B5849519%5D%3C/li%3E%0D%0A%20%20%3Cli%3EGame%20stability%20issues%20after%20enabling%20DLSS%20FG%20when%20Instant%20Replay%20is%20enabled%20%5B5732936%5D%3C/li%3E%0D%0A%3C/ul%3E%0D%0A%3Cbr%20/%3E%0D%0A%3Cb%3EFixed%20General%20Bugs%3C/b%3E%20%3Cbr%20/%3E%0D%0A%3Cul%3E%0D%0A%20%20%3Cli%3EBlocky%20artifacts%20when%20playing%20back%20H.264%20content%20with%20DXVA%202.0%20%5B6058551%5D%3C/li%3E%0D%0A%3C/ul%3E",
+    "OtherNotes": "%09%20%3Cul%3E%3Cli%3E%3Ca%20target%3D%22_blank%22%20href%3D%22https%3A//us.download.nvidia.com/Windows/596.36/596.36-win10-win11-nsd-release-notes.pdf%22%20title%3D%22NVIDIA%20Studio%20Driver%20Release%20Notes%20v596.36%22%3ENVIDIA%20Studio%20Driver%20Release%20Notes%20%28v596.36%29%3C/a%3E%3C/li%3E%3Cli%3E%3Ca%20target%3D%22_blank%22%20href%3D%22https%3A//us.download.nvidia.com/Windows/596.36/596.36-nvidia-control-panel-quick-start-guide.pdf%22%20title%3D%22NVIDIA%20Control%20Panel%20Quick%20Start%20Guide%22%3ENVIDIA%20Control%20Panel%20Quick%20Start%20Guide%3C/a%3E%20%3C/li%3E%3C/ul%3E%20%09",
+    "InstallationNotes": "",
+    "Overview": "",
+    "LanguageName": "English%20(US)",
+    "OSName": "Windows%2011",
+    "OsCode": "10.0",
+    "OSList": [
+     {
+      "OSName": "Windows%2010%2064-bit",
+      "OsCode": "10.0"
+     },
+     {
+      "OSName": "Windows%2011",
+      "OsCode": "10.0"
+     }
+    ],
+    "Is64Bit": "1",
+    "Messaging": [
+     {
+      "MessageCode": "DownloadIDDetailsFound",
+      "MessageValue": "The Driver DownloadID details found"
+     }
+    ]
+   }
+  },
+  {
+   "downloadInfo": {
+    "Success": "1",
+    "ID": "265478",
+    "DownloadTypeID": "1",
+    "DownloadStatusID": "3",
+    "Name": "NVIDIA%20Studio%20Driver",
+    "NameLocalized": "NVIDIA%20Studio%20Driver",
+    "ShortDescription": "NVIDIA%20Studio%20Driver",
+    "DeviceToProductFamilyName": "",
+    "Release": "595",
+    "Version": "595.79",
+    "DisplayVersion": "",
+    "GFE_DisplayVersion": "11.0.6.383",
+    "CDKitUSBEmitterDriverVersion": "",
+    "CDKitGPUDriverVersion": "",
+    "IsBeta": "0",
+    "IsWHQL": "0",
+    "IsRecommended": "0",
+    "IsFeaturePreview": "0",
+    "IsNewest": "0",
+    "IsDC": "1",
+    "IsCRD": "1",
+    "HasNetInst": "0",
+    "CudaToolkitVersion": "",
+    "IsArchive": "0",
+    "IsActive": "1",
+    "IsEmailRequired": "0",
+    "ReleaseDateTime": "Tue Mar 10, 2026",
+    "DetailsURL": "https://www.nvidia.com/en-us/drivers/details/265478/",
+    "DownloadURL": "https://us.download.nvidia.com/Windows/595.79/595.79-desktop-win10-win11-64bit-international-nsd-dch-whql.exe",
+    "EMAN_REVRES_BD": "71-lqssm-lswfg-b2wsu-drp",
+    "EMITR_BD": "memCache:1%20rTime:4%20sTime:0",
+    "DownloadURLFileSize": "957.3 MB",
+    "BannerURL": "https://www.nvidia.com/en-us/geforce/billboards/displaydriver/standalone/eve-std-studio-driver-2026-banners/",
+    "BannerURLGfe": "https://www.nvidia.com/en-us/geforce/billboards/displaydriver/gfe/eve-gfe-studio-driver-2026-banners/",
+    "ReleaseNotes": "NVIDIA%20Studio%20Drivers%20provide%20artists%2C%20creators%2C%20and%203D%20developers%20the%20best%20performance%20and%20reliability%20when%20working%20with%20creative%20applications.%20To%20achieve%20the%20highest%20level%20of%20reliability%2C%20Studio%20Drivers%20undergo%20extensive%20testing%20against%20multi-app%20creator%20workflows%20and%20multiple%20revisions%20of%20the%20top%20creative%20applications%20from%20Adobe%20to%20Autodesk%20and%20beyond.%3Cbr%20/%3E%0D%0A%3Cbr%20/%3E%0D%0A%3Cb%3EApplications%3C/b%3E%20%3Cbr%20/%3E%0D%0AThe%20March%20NVIDIA%20Studio%20Driver%20provides%20optimal%20support%20for%20the%20latest%20new%20creative%20applications%20and%20updates%20including%20Topaz%20NeuroStream%2C%20Lightricks%20LTX-2.3%2C%20Windows%20ML%20support%20for%20VoiceMod%2C%20and%20the%20latest%20updates%20for%20FLUX.2%20Klein%209B%20and%20ComfyUI.%3Cbr%20/%3E%0D%0A%3Cbr%20/%3E%0D%0A%3Cb%3EFixed%20Application%20Bugs%3C/b%3E%20%3Cbr%20/%3E%0D%0A%3Cul%3E%0D%0A%20%20%3Cli%3EBlackmagic%20Design%3A%20AV1%20decode%20crash%20with%20multiple%20obu%20in%20one%20packet%20%5B5671098%5D%3C/li%3E%0D%0A%20%20%3Cli%3EThe%20Ascent%3A%20Intermittent%20black%20bar%20on%20top%20of%20screen%20on%20GeForce%20RTX%2050%20Series%20GPUs%20%5B5859818%5D%3C/li%3E%0D%0A%20%20%3Cli%3ETotal%20War%3A%20THREE%20KINGDOMS%3A%20Green%20artifacts%20appear%20on%20GeForce%20RTX%2050%20series%20%5B5745647%5D%3C/li%3E%0D%0A%20%20%3Cli%3EFINAL%20FANTASY%20XII%20The%20Zodiac%20Age%20crashes%20with%20fatal%20error%20after%20driver%20update%20%5B5741199%5D%3C/li%3E%0D%0A%20%20%3Cli%3ECall%20of%20Duty%20Modern%20Warfare%20%282019%29%20displays%20image%20corruption%20after%20driver%20update%20%5B5733427%5D%3C/li%3E%0D%0A%20%20%3Cli%3EQuantum%20Break%3A%20Performance%20drops%20significantly%20on%20Act%204%20Part%201%20%5B5607678%5D%3C/li%3E%0D%0A%20%20%3Cli%3ETotal%20War%3A%20Three%20Kingdoms%3A%20Artifacts%20may%20be%20observed%20during%20gameplay%20when%20Screen%20Space%20Reflections%20is%20enabled%20%5B5745647%5D%3C/li%3E%0D%0A%20%20%3Cli%3ECrimson%20Desert%3A%20Game%20crashes%20when%20launched%20on%20R595%20drivers%20%5B5861012%5D%3C/li%3E%0D%0A%20%20%3Cli%3EResident%20Evil%20Requiem%3A%20White%20glowing%20light/dots%20may%20appear%20in%20game%20when%20Subsurface%20Scattering%20is%20enabled%20%5B5915673%5D%3C/li%3E%0D%0A%20%20%3Cli%3EStar%20Citizen%3A%20Game%20client%20crashes%20when%20launched%20%5B5935027%5D%3C/li%3E%0D%0A%3C/ul%3E%0D%0A%3Cbr%20/%3E%0D%0A%3Cb%3EFixed%20General%20Bugs%3C/b%3E%20%3Cbr%20/%3E%0D%0A%3Cul%3E%0D%0A%20%20%3Cli%3EColor%20banding%20observed%20with%20SDR%20content%20when%20Windows%20Automatic%20Color%20Management%20enabled%20%5B5754551%5D%3C/li%3E%0D%0A%20%20%3Cli%3EAsus%20G14%20may%20freeze%20on%20startup%20when%20Asus%20Ultimate%20Mode%20is%20enabled%20%5B5754849%5D%3C/li%3E%0D%0A%20%20%3Cli%3EWhen%20the%20graphics%20card%20is%20overclocked%2C%20GPU%20voltage%20may%20become%20capped%2C%20preventing%20it%20from%20boosting%20to%20expected%20levels%20%5B5934973%5D%3C/li%3E%0D%0A%20%20%3Cli%3EIntermittent%20application%20crash%20or%20driver%20timeout%20may%20be%20observed%20when%20playing%20multi-key%20DRM%20content%20in%20a%20browser%20on%20HDCP%201.x%20monitors%20%5B5934450%5D%3C/li%3E%0D%0A%3C/ul%3E%0D%0A",
+    "OtherNotes": "%09%20%3Cul%3E%3Cli%3E%3Ca%20target%3D%22_blank%22%20href%3D%22https%3A//us.download.nvidia.com/Windows/595.79/595.79-win10-win11-nsd-release-notes.pdf%22%20title%3D%22NVIDIA%20Studio%20Driver%20Release%20Notes%20v595.79%22%3ENVIDIA%20Studio%20Driver%20Release%20Notes%20%28v595.79%29%3C/a%3E%3C/li%3E%3Cli%3E%3Ca%20target%3D%22_blank%22%20href%3D%22https%3A//us.download.nvidia.com/Windows/595.79/595.79-nvidia-control-panel-quick-start-guide.pdf%22%20title%3D%22NVIDIA%20Control%20Panel%20Quick%20Start%20Guide%22%3ENVIDIA%20Control%20Panel%20Quick%20Start%20Guide%3C/a%3E%20%3C/li%3E%3C/ul%3E%20%09",
+    "InstallationNotes": "",
+    "Overview": "",
+    "LanguageName": "English%20(US)",
+    "OSName": "Windows%2011",
+    "OsCode": "10.0",
+    "OSList": [
+     {
+      "OSName": "Windows%2010%2064-bit",
+      "OsCode": "10.0"
+     },
+     {
+      "OSName": "Windows%2011",
+      "OsCode": "10.0"
+     }
+    ],
+    "Is64Bit": "1",
+    "Messaging": [
+     {
+      "MessageCode": "DownloadIDDetailsFound",
+      "MessageValue": "The Driver DownloadID details found"
+     }
+    ]
+   }
+  },
+  {
+   "downloadInfo": {
+    "Success": "1",
+    "ID": "260362",
+    "DownloadTypeID": "1",
+    "DownloadStatusID": "3",
+    "Name": "NVIDIA%20Studio%20Driver",
+    "NameLocalized": "NVIDIA%20Studio%20Driver",
+    "ShortDescription": "NVIDIA%20Studio%20Driver",
+    "DeviceToProductFamilyName": "",
+    "Release": "590",
+    "Version": "591.74",
+    "DisplayVersion": "",
+    "GFE_DisplayVersion": "11.0.5.420",
+    "CDKitUSBEmitterDriverVersion": "",
+    "CDKitGPUDriverVersion": "",
+    "IsBeta": "0",
+    "IsWHQL": "0",
+    "IsRecommended": "0",
+    "IsFeaturePreview": "0",
+    "IsNewest": "0",
+    "IsDC": "1",
+    "IsCRD": "1",
+    "HasNetInst": "0",
+    "CudaToolkitVersion": "",
+    "IsArchive": "0",
+    "IsActive": "1",
+    "IsEmailRequired": "0",
+    "ReleaseDateTime": "Mon Jan 05, 2026",
+    "DetailsURL": "https://www.nvidia.com/en-us/drivers/details/260362/",
+    "DownloadURL": "https://us.download.nvidia.com/Windows/591.74/591.74-desktop-win10-win11-64bit-international-nsd-dch-whql.exe",
+    "EMAN_REVRES_BD": "81-lqssm-lswfg-a2wsu-drp",
+    "EMITR_BD": "memCache:1%20rTime:4%20sTime:0",
+    "DownloadURLFileSize": "919.65 MB",
+    "BannerURL": "https://www.nvidia.com/en-us/geforce/billboards/displaydriver/standalone/eve-std-studio-driver-2026-banners/",
+    "BannerURLGfe": "https://www.nvidia.com/en-us/geforce/billboards/displaydriver/gfe/eve-gfe-studio-driver-2026-banners/",
+    "ReleaseNotes": "NVIDIA%20Studio%20Drivers%20provide%20artists%2C%20creators%2C%20and%203D%20developers%20the%20best%20performance%20and%20reliability%20when%20working%20with%20creative%20applications.%20To%20achieve%20the%20highest%20level%20of%20reliability%2C%20Studio%20Drivers%20undergo%20extensive%20testing%20against%20multi-app%20creator%20workflows%20and%20multiple%20revisions%20of%20the%20top%20creative%20applications%20from%20Adobe%20to%20Autodesk%20and%20beyond.%3Cbr%20/%3E%0D%0A%3Cbr%20/%3E%0D%0A%3Cb%3EApplications%3C/b%3E%20%3Cbr%20/%3E%0D%0AThe%20January%20NVIDIA%20Studio%20Driver%20provides%20optimal%20support%20for%20the%20latest%20new%20creative%20applications%20and%20updates%20including%20NVIDIA%20Broadcast%202.1%2C%20PyTorch%20NVFP4%20and%20NVFP8%20support%20in%20ComfyUI%2C%20and%20RTX%20optimizations%20for%20LTX-2.%3Cbr%20/%3E%0D%0A%3Cbr%20/%3E%0D%0A%3Cb%3EFixed%20Application%20Bugs%3C/b%3E%20%3Cbr%20/%3E%0D%0A%3Cul%3E%0D%0A%20%20%3Cli%3EArena%20Breakout%3A%20Infinite%3A%20Game%20stability%20issues%20%5B5748974%5D%3C/li%3E%0D%0A%20%20%3Cli%3EEnshrouded%3A%20Game%20stability%20issues%20on%20GeForce%20RTX%2050%20Series%20GPUs%20%5B5664067%5D%3C/li%3E%0D%0A%20%20%3Cli%3EAssassin%27s%20Creed%20Valhalla%3A%20HDR%20toggle%20not%20functional%20when%20Smooth%20Motion%20is%20enabled%20%5B5469746%5D%3C/li%3E%0D%0A%20%20%3Cli%3EDying%20Light%3A%20The%20Beast%3A%20Game%20stability%20issues%20after%20updating%20to%20591.44%20driver%20%5B5720536%5D%3C/li%3E%0D%0A%3C/ul%3E%0D%0A%3Cbr%20/%3E%0D%0A%3Cb%3EFixed%20General%20Bugs%3C/b%3E%20%3Cbr%20/%3E%0D%0A%3Cul%3E%0D%0A%20%20%3Cli%3EBrightness%20adjustment%20issues%20on%20various%20displays%20%5B5739739%5D%3C/li%3E%0D%0A%20%20%3Cli%3EColors%20are%20not%20applied%20correctly%20when%20using%20Digital%20Vibrance%20%5B5718365%5D%3C/li%3E%0D%0A%20%20%3Cli%3ESlight%20banding%20may%20be%20observed%20on%20gradiants%20in%20SDR%20color%20mode%20%5B5720512%5D%3C/li%3E%0D%0A%20%20%3Cli%3EUnable%20to%20deselect%20%22Show%20Notification%20Tray%20Icon%22%20from%20NVIDIA%20Control%20Panel%20%5B5622213%5D%3C/li%3E%0D%0A%20%20%3Cli%3EDisplay%20color%20seems%20faded%20after%20switching%20to%20non-native%20resolution%20%5B5548662%5D%3C/li%3E%0D%0A%20%20%3Cli%3EUsing%20RTX%20HDR%20on%20select%20televisions%20causes%20games%20to%20blackscreen%20%5B5720286%5D%3C/li%3E%0D%0A%20%20%3Cli%3EUsing%20RTX%20HDR%20in%20Vulkan%20games%20causes%20black%20screen%20on%20LG%20OLED%20TVs%20%5B5763163%5D%20%3C/li%3E%0D%0A%3C/ul%3E%0D%0A",
+    "OtherNotes": "%09%20%3Cul%3E%3Cli%3E%3Ca%20target%3D%22_blank%22%20href%3D%22https%3A//us.download.nvidia.com/Windows/591.74/591.74-win10-win11-nsd-release-notes.pdf%22%20title%3D%22NVIDIA%20Studio%20Driver%20Release%20Notes%20v591.74%22%3ENVIDIA%20Studio%20Driver%20Release%20Notes%20%28v591.74%29%3C/a%3E%3C/li%3E%3Cli%3E%3Ca%20target%3D%22_blank%22%20href%3D%22https%3A//us.download.nvidia.com/Windows/591.74/591.74-nvidia-control-panel-quick-start-guide.pdf%22%20title%3D%22NVIDIA%20Control%20Panel%20Quick%20Start%20Guide%22%3ENVIDIA%20Control%20Panel%20Quick%20Start%20Guide%3C/a%3E%20%3C/li%3E%3C/ul%3E%20%09",
+    "InstallationNotes": "",
+    "Overview": "",
+    "LanguageName": "English%20(US)",
+    "OSName": "Windows%2011",
+    "OsCode": "10.0",
+    "OSList": [
+     {
+      "OSName": "Windows%2010%2064-bit",
+      "OsCode": "10.0"
+     },
+     {
+      "OSName": "Windows%2011",
+      "OsCode": "10.0"
+     }
+    ],
+    "Is64Bit": "1",
+    "Messaging": [
+     {
+      "MessageCode": "DownloadIDDetailsFound",
+      "MessageValue": "The Driver DownloadID details found"
+     }
+    ]
+   }
+  },
+  {
+   "downloadInfo": {
+    "Success": "1",
+    "ID": "258747",
+    "DownloadTypeID": "1",
+    "DownloadStatusID": "3",
+    "Name": "NVIDIA%20Studio%20Driver",
+    "NameLocalized": "NVIDIA%20Studio%20Driver",
+    "ShortDescription": "NVIDIA%20Studio%20Driver",
+    "DeviceToProductFamilyName": "",
+    "Release": "590",
+    "Version": "591.44",
+    "DisplayVersion": "",
+    "GFE_DisplayVersion": "11.0.5.420",
+    "CDKitUSBEmitterDriverVersion": "",
+    "CDKitGPUDriverVersion": "",
+    "IsBeta": "0",
+    "IsWHQL": "0",
+    "IsRecommended": "0",
+    "IsFeaturePreview": "0",
+    "IsNewest": "0",
+    "IsDC": "1",
+    "IsCRD": "1",
+    "HasNetInst": "0",
+    "CudaToolkitVersion": "",
+    "IsArchive": "0",
+    "IsActive": "1",
+    "IsEmailRequired": "0",
+    "ReleaseDateTime": "Thu Dec 04, 2025",
+    "DetailsURL": "https://www.nvidia.com/en-us/drivers/details/258747/",
+    "DownloadURL": "https://us.download.nvidia.com/Windows/591.44/591.44-desktop-win10-win11-64bit-international-nsd-dch-whql.exe",
+    "EMAN_REVRES_BD": "31-lqssm-lswfg-a2wsu-drp",
+    "EMITR_BD": "memCache:1%20rTime:5%20sTime:1",
+    "DownloadURLFileSize": "919.57 MB",
+    "BannerURL": "https://www.nvidia.com/en-us/geforce/billboards/displaydriver/standalone/eve-std-studio-driver-2025-banners/",
+    "BannerURLGfe": "https://www.nvidia.com/en-us/geforce/billboards/displaydriver/gfe/eve-gfe-studio-driver-2025-banners/",
+    "ReleaseNotes": "NVIDIA%20Studio%20Drivers%20provide%20artists%2C%20creators%2C%20and%203D%20developers%20the%20best%20performance%20and%20reliability%20when%20working%20with%20creative%20applications.%20To%20achieve%20the%20highest%20level%20of%20reliability%2C%20Studio%20Drivers%20undergo%20extensive%20testing%20against%20multi-app%20creator%20workflows%20and%20multiple%20revisions%20of%20the%20top%20creative%20applications%20from%20Adobe%20to%20Autodesk%20and%20beyond.%3Cbr%20/%3E%0D%0A%3Cbr%20/%3E%0D%0A%3Cb%3EApplications%3C/b%3E%20%3Cbr%20/%3E%0D%0AThe%20December%20NVIDIA%20Studio%20Driver%20provides%20optimal%20support%20for%20the%20latest%20new%20creative%20applications%20and%20updates%20including%20support%20for%20RTX%20optimizations%20in%20ComfyUI%2C%20NVFP8%20and%20RTX%20optimizations%20in%20FLUX.2%2C%20NVIDIA%20LSS%20in%20Blender%205.0%2C%20and%20TensorRT-RTX%20in%20Topaz%20Video%20AI%20and%20Topaz%20Photo%20AI.%3Cbr%20/%3E%0D%0A%3Cbr%20/%3E%0D%0A%3Cb%3EFixed%20Application%20Bugs%3C/b%3E%20%3Cbr%20/%3E%0D%0A%3Cul%3E%0D%0A%20%20%3Cli%3EAdobe%20Premiere%20Pro%3A%20Freeze%20During%20Export%20Using%20Hardware%20Encoding%20%5B5431822%5D%3C/li%3E%0D%0A%20%20%3Cli%3EVulkan%20apps%20crash%20when%20launched%20on%20Core%202%20Duo%20/%20Core%202%20Quad%20CPUs%20%5B5509161%5D%3C/li%3E%0D%0A%20%20%3Cli%3EF1%2025%3A%20Performance%20optimizations%20when%20using%20DLSS%20Frame%20Generation%20%5B5422722%5D%3C/li%3E%0D%0A%20%20%3Cli%3EBattlefield%206%3A%20Gaming%20stability%20issues%20%5B5582125%5D%3C/li%3E%0D%0A%20%20%3Cli%3ECounter-Strike%202%3A%20Text%20may%20appear%20slightly%20distorted%20when%20in-game%20resolution%20is%20lower%20than%20the%20native%20resolution%20of%20the%20display%20%5B5278913%5D%3C/li%3E%0D%0A%20%20%3Cli%3ELike%20a%20Dragon%3A%20Infinite%20Wealth%3A%20Light%20flickering%20after%20driver%20update%20on%20some%20system%20configurations%20%5B5432356%5D%3C/li%3E%0D%0A%20%20%3Cli%3ELike%20a%20Dragon%20Gaiden%3A%20The%20Man%20Who%20Erased%20His%20Name%3A%20Corruption%20after%20driver%20update%20on%20some%20system%20configurations%20%5B5432356%5D%3C/li%3E%0D%0A%20%20%3Cli%3EBlack%20Myth%3A%20Wukong%3A%20Lower%20performance%20in%20driver%20branches%20newer%20than%20R570%20%5B5562283%5D%3C/li%3E%0D%0A%20%20%3Cli%3EMonster%20Hunter%20World%3A%20Iceborne%3A%20Some%20particle%20effects%20may%20be%20missing%20on%20GeForce%20RTX%2050%20Series%20GPUs%20%5B5546598%5D%3C/li%3E%0D%0A%20%20%3Cli%3ECall%20of%20Duty%3A%20Black%20Ops%203%3A%20Gameplay%20becomes%20dim%20over%20time%20%5B5488108%5D%3C/li%3E%0D%0A%20%20%3Cli%3EMadden%2026%3A%20Stability%20issues%20%5B5535693%5D%3C/li%3E%0D%0A%20%20%3Cli%3EUsers%20running%20R580%20branch%20drivers%20%2858x.xx%29%20or%20newer%20may%20observe%20lower%20performance%20in%20some%20games%20after%20updating%20to%20Windows%2011%20October%202025%20KB5066835%20%5B5561605%5D%3C/a%3E%3C/li%3E%0D%0A%20%20%3Cli%3EThe%20Witcher%203%3A%20Wild%20Hunt%3A%20Random%20corruption%20on%20main%20character%27s%20sword%20corruption%20%5B5363151%5D%3C/li%3E%0D%0A%3C/ul%3E%0D%0A%3Cbr%20/%3E%0D%0A%3Cb%3EFixed%20General%20Bugs%3C/b%3E%20%3Cbr%20/%3E%0D%0A%3Cul%3E%0D%0A%20%20%3Cli%3ESophos%20Home%20Antivirus%3A%20System%20stability%20issues%20%5B5581371%5D%3C/li%3E%0D%0A%20%20%3Cli%3EGreen%20line%20observed%20while%20viewing%20videos%20in%20Chromium%20browser%20on%20GeForce%20RTX%2050%20Series%20GPUs%20%5B5535388%5D%3C/li%3E%0D%0A%3C/ul%3E%0D%0A",
+    "OtherNotes": "%09%20%3Cul%3E%3Cli%3E%3Ca%20target%3D%22_blank%22%20href%3D%22https%3A//us.download.nvidia.com/Windows/591.44/591.44-win10-win11-nsd-release-notes.pdf%22%20title%3D%22NVIDIA%20Studio%20Driver%20Release%20Notes%20v591.44%22%3ENVIDIA%20Studio%20Driver%20Release%20Notes%20%28v591.44%29%3C/a%3E%3C/li%3E%3Cli%3E%3Ca%20target%3D%22_blank%22%20href%3D%22https%3A//us.download.nvidia.com/Windows/591.44/591.44-nvidia-control-panel-quick-start-guide.pdf%22%20title%3D%22NVIDIA%20Control%20Panel%20Quick%20Start%20Guide%22%3ENVIDIA%20Control%20Panel%20Quick%20Start%20Guide%3C/a%3E%20%3C/li%3E%3C/ul%3E%20%09",
+    "InstallationNotes": "",
+    "Overview": "",
+    "LanguageName": "English%20(US)",
+    "OSName": "Windows%2011",
+    "OsCode": "10.0",
+    "OSList": [
+     {
+      "OSName": "Windows%2010%2064-bit",
+      "OsCode": "10.0"
+     },
+     {
+      "OSName": "Windows%2011",
+      "OsCode": "10.0"
+     }
+    ],
+    "Is64Bit": "1",
+    "Messaging": [
+     {
+      "MessageCode": "DownloadIDDetailsFound",
+      "MessageValue": "The Driver DownloadID details found"
+     }
+    ]
+   }
+  }
+ ],
+ "spcall": "EXEC NDL_usp_Download_select_by_matrix_values null,929,120,null,135,null,0, null,1033,-1,null,0,null,null,null,null,0,null,null,0,null,12,null,0,0,null,null,null,null,null,null,null,null,null,null,null,null,null,1,1",
+ "Request": [
+  {
+   "downloadID": "null",
+   "pfid": "929",
+   "psid": "120",
+   "deviceID": "null",
+   "osID": "135",
+   "osCode": "null",
+   "is64bit": "0",
+   "languageID": "null",
+   "languageCode": "1033",
+   "dltype": "-1",
+   "isArchive": "null",
+   "beta": "0",
+   "includebeta": "null",
+   "gtversion": "null",
+   "version": "null",
+   "release": "null",
+   "isWHQL": "0",
+   "isNewest": "null",
+   "locationID": "null",
+   "sort1": "0",
+   "sort2": "null",
+   "numberOfResults": "12",
+   "isNewFeature": "null",
+   "gfeExclusive": "0",
+   "webExclusive": "0",
+   "null,null,null,null,null,null,null,null,null,null,null,null,": "",
+   "cudaToolkitID": "null",
+   "theSystemIsDc": "1",
+   "theUserRequestedCRD": "1"
+  }
+ ]
+}

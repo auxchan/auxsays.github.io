@@ -200,7 +200,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--fixtures", default=str(FIXTURES))
     parser.add_argument("--targets", choices=("repo", "synthetic"), default="synthetic")
     parser.add_argument("--since", default="2026-10-18",
-                        help="window start (YYYY-MM-DD); the fixtures were recorded 2026-11-04")
+                        help="window start (YYYY-MM-DD); the synthetic fixtures keep the dates of pages recorded 2026-11-04")
     args = parser.parse_args(argv)
     report = run(args)
     print(json.dumps(report, indent=2, ensure_ascii=False))

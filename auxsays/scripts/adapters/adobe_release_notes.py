@@ -2,11 +2,23 @@
 
 Operating rule:
 - Premiere Pro remains the active Adobe test lane.
-- Adobe HelpX release notes are official but have repeatedly timed out from
-  GitHub Actions with 0 response bytes.
-- For Premiere, use a fetch-stable Adobe Community announcement as the active
-  official Adobe source, while keeping HelpX release notes as a secondary
-  official reference.
+- Adobe HelpX release notes are official, but since 2026-09-08 HelpX refuses
+  automated requests from CI at once (HTTP 403 "Access Denied"); before that it
+  timed out with 0 response bytes.
+- For Premiere, the configured secondary URL is a PINNED Adobe Community
+  announcement for ONE release (26.2.2). It keeps that record current, and it
+  can say nothing about any newer release.
+
+Truthfulness rules this module keeps (GROWTH-2A closed SOURCE-BLOCKED):
+- A failed primary source is REPORTED even when the fallback answers. The probe
+  carries `primary_source_error`; patch ingestion records the source as
+  `partial`, never as healthy, so a pinned single-release page is never read as
+  coverage of the current version.
+- A candidate becomes a record only with a release identity (a dotted version)
+  and a release date read from the source. A missing date stays missing: the
+  candidate is dropped, never dated today.
+- A version with no pinned announcement gets no announcement link. It never
+  inherits another release's URL.
 """
 from __future__ import annotations
 
@@ -15,7 +27,7 @@ import re
 from typing import Any
 
 from lib.http import fetch_text
-from lib.normalize import strip_tags, normalize_date, first_nonempty
+from lib.normalize import strip_tags
 
 VERSION_HEADING_RE = re.compile(
     r"<h(?P<level>[1-4])\b[^>]*>(?P<title>.*?(?:version|v)\s*[0-9]+(?:\.[0-9]+){0,3}.*?)</h(?P=level)>",
@@ -81,15 +93,25 @@ def _date_from_text(text: str) -> str:
     if month_match:
         return f"{month_match.group(2)}-{MONTHS.get(month_match.group(1).lower(), '01')}-01T00:00:00Z"
 
-    return normalize_date("")
+    # FAIL CLOSED. This used to return normalize_date(""), which is the CURRENT time: a page with no
+    # readable date became a release "published today". The candidate is dropped instead (see
+    # _has_release_identity), which is what the record writer's MissingPublicationDate demands.
+    return ""
 
 
 def _version_from_text(text: str) -> str:
+    # No placeholder identity. This used to return the literal "official-update", which is not a
+    # version and would have become a record of its own.
     match = VERSION_RE.search(text or "")
-    return match.group(1).strip() if match else "official-update"
+    return match.group(1).strip() if match else ""
 
 
-def _first_title(html: str, software: str, version: str) -> str:
+def _has_release_identity(record: dict[str, Any]) -> bool:
+    """A candidate is a release record only with a dotted version AND a date read from the source."""
+    return bool(str(record.get("version") or "").strip()) and bool(str(record.get("published_at") or "").strip())
+
+
+def _page_title(html: str) -> str:
     for regex in (VERSION_HEADING_RE, HEADING_RE, TITLE_RE):
         match = regex.search(html or "")
         if match:
@@ -99,7 +121,11 @@ def _first_title(html: str, software: str, version: str) -> str:
                 # Adobe titles often append boilerplate after pipes/dashes.
                 title = re.split(r"\s+[|]\s+|\s+[-–]\s+Adobe", title)[0].strip()
                 return title
-    return f"{software} {version} official update"
+    return ""
+
+
+def _first_title(html: str, software: str, version: str) -> str:
+    return _page_title(html) or f"{software} {version} official update"
 
 
 def _clean_body(title: str, html: str) -> str:
@@ -155,13 +181,20 @@ def _source_candidates(source: dict[str, Any]) -> list[str]:
 
 
 def _fetch_first_available(source: dict[str, Any]):
+    """Return ``(result, failures)``: the first candidate that answered, and every earlier failure.
+
+    The failures are RETURNED, not discarded. This used to drop them whenever a later candidate
+    succeeded, so a HelpX 403 behind a working pinned fallback left no trace in any log or health
+    row, and the lane reported "healthy / Fetch succeeded." while it could see nothing newer than
+    the one pinned release.
+    """
     options = _request_options(source)
     errors: list[str] = []
     for url in _source_candidates(source):
         try:
             result = fetch_text(url, **options)
             if result.text and result.text.strip():
-                return result
+                return result, list(errors)
             errors.append("empty response from official Adobe source")
         except Exception as exc:
             errors.append(str(exc))
@@ -172,7 +205,13 @@ def _fetch_first_available(source: dict[str, Any]):
     raise RuntimeError(f"{source.get('product_id', 'adobe-source')} is missing usable Adobe source URLs")
 
 
-def _records_from_version_headings(source: dict[str, Any], source_url: str, html: str, limit: int) -> list[dict[str, Any]]:
+def _records_from_version_headings(
+    source: dict[str, Any],
+    source_url: str,
+    html: str,
+    limit: int,
+    dropped: list[str] | None = None,
+) -> list[dict[str, Any]]:
     matches = list(VERSION_HEADING_RE.finditer(html))
     records: list[dict[str, Any]] = []
 
@@ -189,7 +228,13 @@ def _records_from_version_headings(source: dict[str, Any], source_url: str, html
         body = _clean_body(title, html[section_start:section_end])
         version = _version_from_text(title)
         published = _date_from_text(title + " " + body)
-        records.append(_record(source, source_url, title, version, published, body))
+        record = _record(source, source_url, title, version, published, body)
+        if not _has_release_identity(record):
+            # Fail closed: no dotted version or no source date means no record.
+            if dropped is not None:
+                dropped.append(title)
+            continue
+        records.append(record)
         if len(records) >= limit:
             break
 
@@ -286,10 +331,10 @@ def _record(
 ) -> dict[str, Any]:
     digest = hashlib.sha256((source_url + version + title).encode("utf-8")).hexdigest()[:16]
     source_type = _classified_source_type(source_url)
-    premiere_context_url = PREMIERE_OFFICIAL_CONTEXT_URLS.get(
-        str(version),
-        "https://community.adobe.com/announcements-727/welcome-to-premiere-26-2-1557825",
-    )
+    # Only a version with its OWN pinned announcement gets an announcement link. This used to fall
+    # back to the 26.2 announcement for every other version, so 26.3 or 26.5 would have cited a
+    # page about a different release as its official announcement.
+    premiere_context_url = PREMIERE_OFFICIAL_CONTEXT_URLS.get(str(version), "")
     official_sources = [
         {
             "label": "Adobe Premiere Pro release notes",
@@ -298,14 +343,15 @@ def _record(
             "trust_level": "official",
             "extraction_status": "summary_captured" if source_type == "release_notes" else "reference_only",
         },
-        {
+    ] if source.get("product_id") == "adobe-premiere-pro" else []
+    if official_sources and premiere_context_url:
+        official_sources.append({
             "label": "Adobe Premiere Pro community announcement",
             "url": premiere_context_url,
             "source_type": "community_official_post",
             "trust_level": "official",
             "extraction_status": "summary_captured" if source_type == "community_official_post" else "reference_only",
-        },
-    ] if source.get("product_id") == "adobe-premiere-pro" else []
+        })
 
     if source.get("product_id") == "adobe-premiere-pro" and (source_type == "release_notes" or str(version) == "26.2.2"):
         body = _premiere_release_notes_body(str(version), body)
@@ -348,19 +394,38 @@ def _official_summary(source: dict[str, Any], version: str) -> str:
     return f"Adobe published {source['software']} {version} release information."
 
 
-def fetch(source: dict[str, Any], limit: int = 3) -> list[dict[str, Any]]:
-    result = _fetch_first_available(source)
+def fetch(source: dict[str, Any], limit: int = 3, probe: dict[str, Any] | None = None) -> list[dict[str, Any]]:
+    result, failures = _fetch_first_available(source)
+    if probe is not None:
+        # Always set, so patch ingestion knows this adapter has an ordered primary/fallback chain:
+        # "" means the primary answered; anything else is the primary's error, kept even though a
+        # fallback answered after it.
+        probe["primary_source_error"] = failures[0] if failures else ""
     html = result.text
+    source_url = result.final_url or result.url
 
-    records = _records_from_version_headings(source, result.final_url or result.url, html, limit)
-    if records:
-        return records
+    dropped: list[str] = []
+    records = _records_from_version_headings(source, source_url, html, limit, dropped)
+    if not records:
+        # Fetch-stable Adobe Community announcement pages carry the release in the page title
+        # rather than in a HelpX-style version heading. Identity AND date come from that title
+        # only: the rest of a forum page holds replies, sidebars and links to other releases, and
+        # none of that is this release's identity or date.
+        page_title = _page_title(html)
+        version = _version_from_text(page_title)
+        title = _first_title(html, source.get("software") or "Adobe product", version)
+        published = _date_from_text(page_title)
+        body = _clean_body(title, html)
+        record = _record(source, source_url, title, version, published, body)
+        if _has_release_identity(record):
+            records = [record]
+        else:
+            dropped.append(title)
 
-    # Fetch-stable Adobe Community announcement pages often contain the current
-    # version in prose/title rather than in a HelpX-style version heading.
-    text = strip_tags(html)
-    version = _version_from_text(text)
-    title = _first_title(html, source.get("software") or "Adobe product", version)
-    published = _date_from_text(text)
-    body = _clean_body(title, html)
-    return [_record(source, result.final_url or result.url, title, version, published, body)]
+    if probe is not None and dropped:
+        # The page listed candidates and none of the dropped ones could be dated or identified.
+        # When nothing survived, that is an extraction mismatch, reported now instead of after a
+        # streak of quiet checks.
+        probe["upstream_candidates"] = len(records) + len(dropped)
+        probe["extraction_mismatch"] = not records
+    return records

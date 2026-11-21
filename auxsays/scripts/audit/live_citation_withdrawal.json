@@ -1,0 +1,576 @@
+{
+ "schema": 1,
+ "ledger": "AUX-088",
+ "purpose": "Pinned audited withdrawal of stored Windows and OBS rows cited on the live-consensus pages that an independent citation audit and a blind second review BOTH judged INCORRECT for the credited update. Every row is kept; only counted and exclusion_reason change (and, for Windows, evidence_valid_for_current_patch).",
+ "selector": [
+  "product_id",
+  "update_version",
+  "target_build",
+  "id",
+  "source_url"
+ ],
+ "products": [
+  "microsoft-windows-11",
+  "obs-studio"
+ ],
+ "exclusion_reasons": [
+  "duplicate_existing_evidence",
+  "identity_not_the_subject",
+  "not_a_real_issue_report",
+  "version_is_rollback_target",
+  "version_named_but_working"
+ ],
+ "edit": {
+  "counted": false,
+  "exclusion_reason": "per entry (closed vocabulary)",
+  "evidence_valid_for_current_patch": "false for Windows; OBS rows carry no such field",
+  "row_retained": true
+ },
+ "parent_commit": "16ef476f8a9af7794015296471ce243c62309c56",
+ "store_path": "auxsays/_data/consensus_evidence.yml",
+ "store_sha256_at_pin": "5d6b22a68e5dbc6cc9298f8e473d2a05e9409148e9214f66a85ebcf2982ea2ac",
+ "basis": "A row is here only when BOTH the first citation audit (cited source read; Microsoft Learn from the stored excerpt only) and an independent blind second review (first labels not seen) labelled it INCORRECT for the credited update, with a concrete reason. Rows where the two disagree stay counted, as does every report of a problem that began earlier but is experienced on the credited version. Case keys refer to the audit's working files.",
+ "note": "Each entry must match exactly one stored block whose sha256 equals block_sha256_before (to withdraw) or block_sha256_after (already withdrawn). retain entries are the earlier reports two duplicates cross-post; they must stay counted and unchanged.",
+ "entries": [
+  {
+   "role": "withdraw",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.7623",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6039416-how-do-i-fix-error-0x80070306-when-ins",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/6039416/how-do-i-fix-error-0x80070306-when-installing-upda",
+   "record_file": "auxsays/updates/generated/2026-01-13-windows-11-25h2-26200-7623.md",
+   "target_kb": "KB5074109",
+   "target_os_build": "26200.7623",
+   "block_sha256_before": "8cf6b14cd9790dd743ef8714ae305a6ed0f03ef15fc8b7ed49449fb355248d22",
+   "exclusion_reason": "identity_not_the_subject",
+   "block_sha256_after": "c27236fab47e9f97665ceb328a8843f2f1723f18b231e305953785d595748511",
+   "adjudication": {
+    "first_audit": {
+     "case_key": "W090",
+     "label": "INCORRECT",
+     "reason": "identity_not_the_subject"
+    },
+    "second_blind": {
+     "case": "C60",
+     "label": "INCORRECT",
+     "reason_class": "different_product_version_or_kb"
+    }
+   },
+   "basis": "The question is about a later cumulative update, the October 2026 one named in its title and body, not the January update this page tracks."
+  },
+  {
+   "role": "withdraw",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.7840",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windows11-unable-to-manually-install-kb5074109-449",
+   "source_url": "https://techcommunity.microsoft.com/discussions/windows11/unable-to-manually-install-kb5074109/4494943",
+   "record_file": "auxsays/updates/generated/2026-02-10-windows-11-25h2-26200-7840.md",
+   "target_kb": "KB5077181",
+   "target_os_build": "26200.7840",
+   "block_sha256_before": "85082f5b77898edc6203c251b078bc5755e1a9879605d6a1891473dec7b540d9",
+   "exclusion_reason": "identity_not_the_subject",
+   "block_sha256_after": "a99308a5afa41f1fc13a3bf3e6e5e6d9978a8396d6030e763b4a7100b4d4d5ce",
+   "adjudication": {
+    "first_audit": {
+     "case_key": "W121",
+     "label": "INCORRECT",
+     "reason": "identity_not_the_subject"
+    },
+    "second_blind": {
+     "case": "C06",
+     "label": "INCORRECT",
+     "reason_class": "different_product_version_or_kb"
+    }
+   },
+   "basis": "The failure is a manual install of the January update on an older build; this page's update is named only as a possible next step."
+  },
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "32.1.1",
+   "target_build": "",
+   "id": "obs-studio-32-1-1-github-issue-13291",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/13291",
+   "record_file": "auxsays/updates/generated/2026-04-02-obs-studio-32-1-1.md",
+   "block_sha256_before": "b6c97fa1d23ed8e496a6867a6666d5cab8f8d6ec72d39d34e3651d11d81baa0b",
+   "exclusion_reason": "identity_not_the_subject",
+   "block_sha256_after": "e1157c7d503c793550593dfe1eb28708bd87fb97472396aed964650ba7a42e82",
+   "adjudication": {
+    "first_audit": {
+     "case_key": "G037",
+     "label": "INCORRECT",
+     "reason": "identity_not_the_subject"
+    },
+    "second_blind": {
+     "case": "C47",
+     "label": "INCORRECT",
+     "reason_class": "author_withdrew"
+    }
+   },
+   "basis": "The reporter closed it: the cause was their own bitrate setting, and streaming worked after changing it."
+  },
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "32.1.1",
+   "target_build": "",
+   "id": "obs-studio-32-1-1-github-issue-13332",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/13332",
+   "record_file": "auxsays/updates/generated/2026-04-02-obs-studio-32-1-1.md",
+   "block_sha256_before": "d23639cdafb70e1f2152d201089af6889283b71c5bfa7b8d033cd5afdcf06edb",
+   "exclusion_reason": "identity_not_the_subject",
+   "block_sha256_after": "25e34b85e8f34eba49531aa782a337c7b67f116ddf9a86ac9f595b12bff4ea33",
+   "adjudication": {
+    "first_audit": {
+     "case_key": "G020",
+     "label": "INCORRECT",
+     "reason": "identity_not_the_subject"
+    },
+    "second_blind": {
+     "case": "C34",
+     "label": "INCORRECT",
+     "reason_class": "different_product_version_or_kb"
+    }
+   },
+   "basis": "About signing in to the project's forum website, not the OBS Studio application; fixed on the server."
+  },
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "32.1.2",
+   "target_build": "",
+   "id": "obs-studio-32-1-2-github-issue-13370",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/13370",
+   "record_file": "auxsays/updates/generated/2026-04-21-obs-studio-32-1-2.md",
+   "block_sha256_before": "76b5c01246a549b916a17eb8886a8fd4f511d1636d0af8d801d650ff31bac6ef",
+   "exclusion_reason": "not_a_real_issue_report",
+   "block_sha256_after": "6f4d34573091ddba934fe385e4b463f575d8b68e877fffcbc9633da5a166f934",
+   "adjudication": {
+    "first_audit": {
+     "case_key": "G053",
+     "label": "INCORRECT",
+     "reason": "not_a_real_issue_report"
+    },
+    "second_blind": {
+     "case": "C01",
+     "label": "INCORRECT",
+     "reason_class": "author_withdrew"
+    }
+   },
+   "basis": "A maintainer explained it is intended behaviour, and the reporter accepted that."
+  },
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "32.1.2",
+   "target_build": "",
+   "id": "obs-studio-32-1-2-github-issue-13373",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/13373",
+   "record_file": "auxsays/updates/generated/2026-04-21-obs-studio-32-1-2.md",
+   "block_sha256_before": "d4aa733dd90124b415861be960af2e1318d723e434b753a580b0d21c5757a3f1",
+   "exclusion_reason": "version_named_but_working",
+   "block_sha256_after": "dbfd988945eebc870be909d27e1ff7e6a271213cf23d35060fa2fb63b46fd9da",
+   "adjudication": {
+    "first_audit": {
+     "case_key": "G051",
+     "label": "INCORRECT",
+     "reason": "version_named_but_working"
+    },
+    "second_blind": {
+     "case": "C63",
+     "label": "INCORRECT",
+     "reason_class": "author_withdrew"
+    }
+   },
+   "basis": "The reporter's follow-up says 32.1.2 works for them."
+  },
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "32.1.2",
+   "target_build": "",
+   "id": "obs-studio-32-1-2-github-issue-13437",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/13437",
+   "record_file": "auxsays/updates/generated/2026-04-21-obs-studio-32-1-2.md",
+   "block_sha256_before": "5b9fad13d1ecf6b1255cd05fb613bd8678decee7ad1c1fe7e6abe823cf001c68",
+   "exclusion_reason": "identity_not_the_subject",
+   "block_sha256_after": "f92ebf52ed1cd96da3bfac7721ee63e1afe24e00c07b134e3d2bb446651454fb",
+   "adjudication": {
+    "first_audit": {
+     "case_key": "G071",
+     "label": "INCORRECT",
+     "reason": "identity_not_the_subject"
+    },
+    "second_blind": {
+     "case": "C27",
+     "label": "INCORRECT",
+     "reason_class": "author_withdrew"
+    }
+   },
+   "basis": "Fixed by a newer graphics driver with OBS 32.1.2 unchanged."
+  },
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "32.1.2",
+   "target_build": "",
+   "id": "obs-studio-32-1-2-github-issue-13466",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/13466",
+   "record_file": "auxsays/updates/generated/2026-04-21-obs-studio-32-1-2.md",
+   "block_sha256_before": "5070cb3da1a7bdf9e20f5092f9a345b829348abebadb9cf7f6ff1e9873d457a4",
+   "exclusion_reason": "identity_not_the_subject",
+   "block_sha256_after": "c36e31ffafe1f7b5c0f89fc86f1dccd320cff5118e61a5d8b6bcf1642a23c778",
+   "adjudication": {
+    "first_audit": {
+     "case_key": "G079",
+     "label": "INCORRECT",
+     "reason": "identity_not_the_subject"
+    },
+    "second_blind": {
+     "case": "C33",
+     "label": "INCORRECT",
+     "reason_class": "author_withdrew"
+    }
+   },
+   "basis": "The reporter found the cause was a damaged desktop shortcut; a fresh copy worked."
+  },
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "32.1.2",
+   "target_build": "",
+   "id": "obs-studio-32-1-2-github-issue-13995",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/13995",
+   "record_file": "auxsays/updates/generated/2026-04-21-obs-studio-32-1-2.md",
+   "block_sha256_before": "7da91e6e0fdcc4e076a9bd17d1d1c383f71e4efe23a5e7a7dcf830cfcd347344",
+   "exclusion_reason": "identity_not_the_subject",
+   "block_sha256_after": "4fe6ce7daea55d17dfc6355c68e4ca61a55fc3479ae35bab3c964013334e6fa0",
+   "adjudication": {
+    "first_audit": {
+     "case_key": "G146",
+     "label": "INCORRECT",
+     "reason": "identity_not_the_subject"
+    },
+    "second_blind": {
+     "case": "C23",
+     "label": "INCORRECT",
+     "reason_class": "different_product_version_or_kb"
+    }
+   },
+   "basis": "The failure was experienced on 32.2.2; 32.1.2 appears only as a source reference that was never run."
+  },
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "32.1.2",
+   "target_build": "",
+   "id": "obs-studio-32-1-2-github-issue-14088",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/14088",
+   "record_file": "auxsays/updates/generated/2026-04-21-obs-studio-32-1-2.md",
+   "block_sha256_before": "9a54dddcf5a107b108277d0e3990ea498c139a6189cc706be2e94f87fe51b2c8",
+   "exclusion_reason": "version_named_but_working",
+   "block_sha256_after": "897d6c7f3f75490bce2c8966a820e3a6123d33ca59dc65ea60ab52a72a51ae5d",
+   "adjudication": {
+    "first_audit": {
+     "case_key": "G148",
+     "label": "INCORRECT",
+     "reason": "version_named_but_working"
+    },
+    "second_blind": {
+     "case": "C04",
+     "label": "INCORRECT",
+     "reason_class": "not_a_problem_on_credited_version"
+    }
+   },
+   "basis": "About 33.0.0; the report names 32.1.2 as the version that starts normally."
+  },
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "32.1.2",
+   "target_build": "",
+   "id": "obs-studio-32-1-2-github-issue-14152",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/14152",
+   "record_file": "auxsays/updates/generated/2026-04-21-obs-studio-32-1-2.md",
+   "block_sha256_before": "b5f929974e71a27b41bd899719f68d5d6c757ff84e277f9a7c0baeaa459c6146",
+   "exclusion_reason": "version_is_rollback_target",
+   "block_sha256_after": "ca1fb725d7a7c6b33de1d846fd28fa2450f71fc0742c35daabdfffafa557ade3",
+   "adjudication": {
+    "first_audit": {
+     "case_key": "G149",
+     "label": "INCORRECT",
+     "reason": "version_is_rollback_target"
+    },
+    "second_blind": {
+     "case": "C55",
+     "label": "INCORRECT",
+     "reason_class": "not_a_problem_on_credited_version"
+    }
+   },
+   "basis": "About 33.0.1; 32.1.2 is the version the reporter went back to, and it works."
+  },
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "32.1.2",
+   "target_build": "",
+   "id": "obs-studio-32-1-2-obs-forum-thread-195299",
+   "source_url": "https://obsproject.com/forum/threads/window-capture-no-longer-working.195299/",
+   "record_file": "auxsays/updates/generated/2026-04-21-obs-studio-32-1-2.md",
+   "block_sha256_before": "9c45df6a75a6e401e6fc59eaacfddb5564ff2bfafcde5b9aab0ef8562da47872",
+   "exclusion_reason": "identity_not_the_subject",
+   "block_sha256_after": "0bf29646e1c3a810d9954179f8eeffb216a2e3fb082c960cc4586cf2f24d002c",
+   "adjudication": {
+    "first_audit": {
+     "case_key": "F195299",
+     "label": "INCORRECT",
+     "reason": "identity_not_the_subject"
+    },
+    "second_blind": {
+     "case": "C05",
+     "label": "INCORRECT",
+     "reason_class": "author_withdrew"
+    }
+   },
+   "basis": "Solved by reinstalling the same OBS package after a hardware change; not a fault of 32.1.2."
+  },
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "32.1.2",
+   "target_build": "",
+   "id": "obs-studio-32-1-2-obs-forum-thread-195407",
+   "source_url": "https://obsproject.com/forum/threads/srt-media-source-ffmpeg_source-cannot-recreate-listener-socket-on-reconnect-while-recording-or-streaming-is-active.195407/",
+   "record_file": "auxsays/updates/generated/2026-04-21-obs-studio-32-1-2.md",
+   "block_sha256_before": "6674dc14411f92150500cd52ce1a227b2a18574f10fcc8384fc70318f6eee842",
+   "exclusion_reason": "duplicate_existing_evidence",
+   "block_sha256_after": "6d69273d7dcd065f2a5ab4ade5cd30e93ec1570baa81f2c41643868a32b586cc",
+   "adjudication": {
+    "first_audit": {
+     "case_key": "F195407",
+     "label": "INCORRECT",
+     "reason": "duplicate_existing_evidence"
+    },
+    "second_blind": {
+     "case": "C22",
+     "label": "INCORRECT",
+     "reason_class": "duplicate_same_page"
+    }
+   },
+   "basis": "The same author's cross-post of a GitHub issue that this page already counts.",
+   "duplicate_of": {
+    "product_id": "obs-studio",
+    "update_version": "32.1.2",
+    "target_build": "",
+    "id": "obs-studio-32-1-2-github-issue-13506",
+    "source_url": "https://github.com/obsproject/obs-studio/issues/13506"
+   }
+  },
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "32.1.2",
+   "target_build": "",
+   "id": "obs-studio-32-1-2-obs-forum-thread-196824",
+   "source_url": "https://obsproject.com/forum/threads/%D0%97%D0%B0%D0%B3%D0%BE%D0%BB%D0%BE%D0%B2%D0%BE%D0%BA-obs-33-0-1-%D0%BF%D0%B0%D0%B4%D0%B0%D0%B5%D1%82-%D1%81-c0000005-%D0%B2-obs-browser-dll-qcefwidgetinternal-init-%D0%BF%D1%80%D0%B8-%D1%81%D0%BE%D0%B7%D0%B4%D0%B0%D0%BD%D0%B8%D0%B8-%D0%B1%D1%80%D0%B0%D1%83%D0%B7%D0%B5%D1%80%D0%BD%D0%BE%D0%B3%D0%BE-%D0%B2%D0%B8%D0%B4%D0%B6%D0%B5%D1%82%D0%B0-32-x-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B0%D0%B5%D1%82.196824/",
+   "record_file": "auxsays/updates/generated/2026-04-21-obs-studio-32-1-2.md",
+   "block_sha256_before": "4e3ad390b3d3e9c988cbd66e2996e4be27360c885b9ce2fea60fb7e1dbbd0a4c",
+   "exclusion_reason": "version_is_rollback_target",
+   "block_sha256_after": "459d3660f4b0d3079a9c70b0e278d1d43bc1dd48d5c2144709550530202f9b4c",
+   "adjudication": {
+    "first_audit": {
+     "case_key": "F196824",
+     "label": "INCORRECT",
+     "reason": "version_is_rollback_target"
+    },
+    "second_blind": {
+     "case": "C15",
+     "label": "INCORRECT",
+     "reason_class": "not_a_problem_on_credited_version"
+    }
+   },
+   "basis": "About an OBS 33.0.1 crash; 32.1.2 is the version the reporter reinstalled, and it works."
+  },
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "32.2.2",
+   "target_build": "",
+   "id": "obs-studio-32-2-2-github-issue-14023",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/14023",
+   "record_file": "auxsays/updates/generated/2026-08-14-obs-studio-32-2-2.md",
+   "block_sha256_before": "84024445c0bb6d318bde84ae8cbeec4667b15dabf9da0f93ec0bf18f6c229081",
+   "exclusion_reason": "identity_not_the_subject",
+   "block_sha256_after": "4b9d6f0b50c4d0118b5a511e48d40d8f262ce5994282a9ff8da44c41a1c41fb8",
+   "adjudication": {
+    "first_audit": {
+     "case_key": "G185",
+     "label": "INCORRECT",
+     "reason": "identity_not_the_subject"
+    },
+    "second_blind": {
+     "case": "C28",
+     "label": "INCORRECT",
+     "reason_class": "author_withdrew"
+    }
+   },
+   "basis": "Fixed by clearing a system font cache; the reporter judged it not specific to OBS."
+  },
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "32.2.2",
+   "target_build": "",
+   "id": "obs-studio-32-2-2-github-issue-14040",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/14040",
+   "record_file": "auxsays/updates/generated/2026-08-14-obs-studio-32-2-2.md",
+   "block_sha256_before": "ede0396cd1d4e704a5e4c35e077f549f62b0b6574de31cfd7ed5c64bc68d1773",
+   "exclusion_reason": "identity_not_the_subject",
+   "block_sha256_after": "f35754d258ebba6267b10657c24bf1784340db038e4107fd08051d1997426743",
+   "adjudication": {
+    "first_audit": {
+     "case_key": "G189",
+     "label": "INCORRECT",
+     "reason": "identity_not_the_subject"
+    },
+    "second_blind": {
+     "case": "C32",
+     "label": "INCORRECT",
+     "reason_class": "author_withdrew"
+    }
+   },
+   "basis": "A distribution package built against a mismatched library; the same version worked after a rebuild."
+  },
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "32.2.2",
+   "target_build": "",
+   "id": "obs-studio-32-2-2-github-issue-14088",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/14088",
+   "record_file": "auxsays/updates/generated/2026-08-14-obs-studio-32-2-2.md",
+   "block_sha256_before": "df47131662b3fd2dd5e71b019d2f4b5681c0b28af570de80315e9e925a067b77",
+   "exclusion_reason": "identity_not_the_subject",
+   "block_sha256_after": "36d47a1a2eaf880efd655130d6b96c0c0e61fc522560634b271c95f9f14be247",
+   "adjudication": {
+    "first_audit": {
+     "case_key": "G194",
+     "label": "INCORRECT",
+     "reason": "identity_not_the_subject"
+    },
+    "second_blind": {
+     "case": "C37",
+     "label": "INCORRECT",
+     "reason_class": "different_product_version_or_kb"
+    }
+   },
+   "basis": "The reporter corrected the version to 33.0.0; 32.2.2 appears only as another user's rollback."
+  },
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "32.2.2",
+   "target_build": "",
+   "id": "obs-studio-32-2-2-github-issue-14117",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/14117",
+   "record_file": "auxsays/updates/generated/2026-08-14-obs-studio-32-2-2.md",
+   "block_sha256_before": "2261fe6d94e8eae5e177d13471768a23a1780e471f91ab1fdfd70168fcfd037a",
+   "exclusion_reason": "version_named_but_working",
+   "block_sha256_after": "a9665c763386e78be4b49a2affdeee062ae9077967b627f862809fcebc05d863",
+   "adjudication": {
+    "first_audit": {
+     "case_key": "G197",
+     "label": "INCORRECT",
+     "reason": "version_named_but_working"
+    },
+    "second_blind": {
+     "case": "C20",
+     "label": "INCORRECT",
+     "reason_class": "not_a_problem_on_credited_version"
+    }
+   },
+   "basis": "About 33.0.0; the report says the problem was not present in 32.x."
+  },
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "32.2.2",
+   "target_build": "",
+   "id": "obs-studio-32-2-2-obs-forum-thread-196184",
+   "source_url": "https://obsproject.com/forum/threads/zoominator-wayland-mouse-follow-broken-requesting-xdg-desktop-portal-support.196184/",
+   "record_file": "auxsays/updates/generated/2026-08-14-obs-studio-32-2-2.md",
+   "block_sha256_before": "9994111c95779ffee43a01e9c7f5a4e084c4343b9000981e111bada403023a2e",
+   "exclusion_reason": "not_a_real_issue_report",
+   "block_sha256_after": "aef75bff49f52afc1e774b5ac5ed7a4e4013a49ab15ed201490bc02f05b54907",
+   "adjudication": {
+    "first_audit": {
+     "case_key": "F196184",
+     "label": "INCORRECT",
+     "reason": "not_a_real_issue_report"
+    },
+    "second_blind": {
+     "case": "C48",
+     "label": "INCORRECT",
+     "reason_class": "different_product_version_or_kb"
+    }
+   },
+   "basis": "A feature request for a third-party plugin's support on Wayland; 32.2.2 appears only in the system details."
+  },
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "32.2.2",
+   "target_build": "",
+   "id": "obs-studio-32-2-2-obs-forum-thread-196545",
+   "source_url": "https://obsproject.com/forum/threads/video-capture-device-green-flickering.196545/",
+   "record_file": "auxsays/updates/generated/2026-08-14-obs-studio-32-2-2.md",
+   "block_sha256_before": "68ab66abcde9cea0c8d31689d8ce17ff1f8a224ceeba62e3e1bca97d375c1f40",
+   "exclusion_reason": "duplicate_existing_evidence",
+   "block_sha256_after": "f8280e4588af75c71d565d32a574d3e3effc5b86f9ee644f21971f52d9580884",
+   "adjudication": {
+    "first_audit": {
+     "case_key": "F196545",
+     "label": "INCORRECT",
+     "reason": "duplicate_existing_evidence"
+    },
+    "second_blind": {
+     "case": "C41",
+     "label": "INCORRECT",
+     "reason_class": "duplicate_same_page"
+    }
+   },
+   "basis": "The same author's cross-post of a GitHub issue that this page already counts.",
+   "duplicate_of": {
+    "product_id": "obs-studio",
+    "update_version": "32.2.2",
+    "target_build": "",
+    "id": "obs-studio-32-2-2-github-issue-13997",
+    "source_url": "https://github.com/obsproject/obs-studio/issues/13997"
+   }
+  },
+  {
+   "role": "retain",
+   "product_id": "obs-studio",
+   "update_version": "32.1.2",
+   "target_build": "",
+   "id": "obs-studio-32-1-2-github-issue-13506",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/13506",
+   "record_file": "auxsays/updates/generated/2026-04-21-obs-studio-32-1-2.md",
+   "block_sha256_before": "6b340982e79be9c1f98a2e45c0a3c39a9869bbbde73abe999e0b012cf7b5da1f",
+   "note": "Kept: the earlier report the duplicate cross-posts; it stays counted."
+  },
+  {
+   "role": "retain",
+   "product_id": "obs-studio",
+   "update_version": "32.2.2",
+   "target_build": "",
+   "id": "obs-studio-32-2-2-github-issue-13997",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/13997",
+   "record_file": "auxsays/updates/generated/2026-08-14-obs-studio-32-2-2.md",
+   "block_sha256_before": "3ba9754af7720e0986a7895b9be73cdd4591458a290554dc82d9a0b0597b94c8",
+   "note": "Kept: the earlier report the duplicate cross-posts; it stays counted."
+  }
+ ]
+}

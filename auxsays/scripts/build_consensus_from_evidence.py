@@ -6,7 +6,6 @@ This does not scrape communities and does not modify generated update records.
 from __future__ import annotations
 
 import json
-import re
 import sys
 from collections import Counter
 from lib.patch_identity import patch_display_label, patch_key
@@ -17,7 +16,7 @@ from typing import Any
 import yaml
 
 from patch_collectors.base import load_front_matter_and_body
-from lib import live_eligibility, maturity, patch_decision
+from lib import evidence_facts, live_eligibility, maturity, patch_decision, verdict_projection, verdict_reasons
 from lib.report_counts import (EvidenceStoreError, counted_evidence_rows, format_maturity_transition,
                                format_reconcile_detail, load_evidence_store, reconcile_record_counts,
                                windows_targets_from_front_matter)
@@ -91,12 +90,7 @@ def evidence_state(total: int) -> str:
     return maturity.maturity_for(max(int(total), 0)).evidence_state
 
 
-def clean_public_phrase(value: Any, *, fallback: str = "") -> str:
-    text = str(value or "").strip()
-    if not text:
-        return fallback
-    text = re.sub(r"[_-]+", " ", text)
-    return re.sub(r"\s+", " ", text).strip()
+clean_public_phrase = evidence_facts.clean_public_phrase
 
 
 def product_label(product_id: str) -> str:
@@ -131,49 +125,10 @@ def number_word(value: int) -> str:
     return words.get(value, str(value))
 
 
-def public_issue_bucket(product_id: str, item: dict[str, Any]) -> str:
-    raw_theme = clean_public_phrase(item.get("issue_theme"))
-    raw_workflow = clean_public_phrase(item.get("workflow_area"))
-    raw_title = clean_public_phrase(item.get("report_title") or item.get("source_title") or item.get("parent_title"))
-    text = " ".join([raw_theme, raw_workflow, raw_title]).lower()
-
-    if product_id == "blackmagic-davinci":
-        if "magic mask" in text:
-            return "Magic Mask crashes"
-        if "decode" in text and ("render" in text or "export" in text):
-            return "render/decode failures"
-        if "render" in text or "export" in text or "delivery" in text:
-            return "render/export failures"
-        if "crash" in text or "startup" in text or "launch" in text:
-            return "startup or application crashes"
-        if "performance" in text or "slow" in text:
-            return "performance slowdowns"
-        if "install" in text:
-            return "installation problems"
-
-    if product_id == "obs-studio":
-        if "scene list" in text or ("scene" in text and "selection" in text):
-            return "scene list workflow regressions"
-        if "audio" in text or "mixer" in text or "monitoring" in text:
-            return "audio mixer or routing issues"
-        # "window" and "hang" are word-bounded: as substrings they matched "Windows" (the OS) and
-        # "change"/"changing" (AUX-060). Mirrored in apply_consensus_to_records._public_issue_bucket.
-        if "capture" in text or "camera" in text or "xcomposite" in text or "screen" in text or re.search(r"\bwindow\b", text):
-            return "capture-source issues"
-        if "plugin" in text or "setup" in text or "profile" in text:
-            return "plugin or setup compatibility"
-        if "crash" in text or "freeze" in text or re.search(r"\bhang(?:s|ing|ed)?\b", text) or "stability" in text:
-            return "crash or stability problems"
-        if "hotkey" in text or "shortcut" in text:
-            return "keyboard shortcut regressions"
-        if "output" in text or "recording" in text or "stream" in text:
-            return "output or recording regressions"
-
-    if raw_theme and raw_theme.lower() != "unspecified issue":
-        return raw_theme.lower()
-    if raw_workflow and not raw_workflow.lower().startswith("general "):
-        return raw_workflow.lower()
-    return "general workflow reports"
+# ONE bucket function (G68): lib.evidence_facts.compute_issue_bucket, rule `issue-bucket-1`. This module
+# and apply_consensus_to_records each carried a mirrored copy, kept equal only by a test; the stored
+# `issue_bucket` fact is computed by the same function. Behaviour is unchanged.
+public_issue_bucket = evidence_facts.compute_issue_bucket
 
 
 UNSPECIFIED_SEVERITY = "unspecified"
@@ -237,6 +192,51 @@ def record_status_index() -> dict[str, str]:
     return index
 
 
+def record_fact_index() -> dict[tuple[str, str, str], dict[str, Any]]:
+    """patch_key -> that record's front matter: the facts the GROWTH-3 policy reads (release type,
+    KB, build, captured official notes for a reason's confirmation)."""
+    if not GENERATED_DIR.exists():
+        return {}
+    index: dict[tuple[str, str, str], dict[str, Any]] = {}
+    for path in sorted(GENERATED_DIR.glob("*.md")):
+        data = load_front_matter_and_body(path)[0]
+        product_id = str(data.get("product_id") or "").strip()
+        version = str(data.get("update_version") or "").strip()
+        if not product_id or not version:
+            continue
+        index[patch_key(product_id, version, data.get("target_build"))] = data
+    return index
+
+
+def policy_decision(product_id: str, version: str, target_build: str, items: list[dict[str, Any]],
+                    record: dict[str, Any] | None, records: dict[tuple[str, str, str], dict[str, Any]] | None = None):
+    """The same decision apply_consensus_to_records._policy_decision makes for this group: the
+    authority, fed the reason entries these counted rows support. Fail closed on a bad fact file."""
+    facts = dict(record or {})
+    facts.setdefault("product_id", product_id)
+    facts.setdefault("update_version", version)
+    if target_build:
+        facts["target_build"] = target_build
+    try:
+        reasons = verdict_reasons.load_reasons()
+        lifecycle = verdict_reasons.load_lifecycle()
+    except verdict_reasons.FactFileError:
+        reasons, lifecycle = [], []
+    if verdict_reasons.schema_errors(reasons):
+        reasons = []
+    if verdict_reasons.lifecycle_errors(lifecycle):
+        lifecycle = []
+    by_identity = {verdict_reasons.record_identity(r): r for r in (records or {}).values()}
+    ident = verdict_reasons.record_identity(facts)
+    valid = [e for e in reasons if verdict_reasons.reason_identity(e) == ident
+             and not verdict_reasons.support_problems(e, items, by_identity)]
+    # As apply_consensus_to_records gathers them: the reason producer's candidates join only while its
+    # (temporary, owner-gated) switch is on (AUX-099).
+    valid = verdict_projection.page_supported_reasons(
+        facts, items, valid, lambda: [r for r in (records or {}).values() if r.get("update_entry") is True])
+    return patch_decision.decide(facts, valid_reasons=valid, lifecycle=lifecycle), facts
+
+
 def recommendation_prefix(product_id: str, version: str, label: str, total: int,
                           *, update_status: str = "") -> str:
     # THE DECISION IS NOT CHOSEN HERE. This was the third independent implementation of one policy;
@@ -292,7 +292,7 @@ def issue_cluster_sentence(themes: Counter[str]) -> str:
     return "Current reports are too varied to group cleanly."
 
 
-def consensus_summary(product_id: str, version: str, items: list[dict[str, Any]], counts: Counter[str], themes: Counter[str], target_build: str = "", update_status: str = "") -> str:
+def consensus_summary(product_id: str, version: str, items: list[dict[str, Any]], counts: Counter[str], themes: Counter[str], target_build: str = "", update_status: str = "", record: dict[str, Any] | None = None, records: dict[tuple[str, str, str], dict[str, Any]] | None = None) -> str:
     total = len(items)
     label_name = product_label(product_id)
     # Build-aware products must name the exact patch: 28 Windows records share "25H2", so
@@ -314,18 +314,17 @@ def consensus_summary(product_id: str, version: str, items: list[dict[str, Any]]
             "found yet. "
             "Use the official source only until reports are available."
         )
-    label = consensus_label(counts).lower()
-    confidence_label = confidence(total)
     report_word = "report" if total == 1 else "reports"
-    sample_sentence = "Small sample size." if total < 8 else "User reports show a repeat pattern."
-    decision = recommendation_prefix(product_id, raw_version, label, total,
-                                     update_status=update_status)
-    return " ".join([
-        f"{decision}: {label_name} {version} has {total} user {report_word} found.",
-        sample_sentence,
-        issue_cluster_sentence(themes),
-        f"{affected_workflow_sentence(product_id, raw_version, label, themes, decision)} {source_limitation_sentence(items, confidence_label)}",
-    ])
+    # GROWTH-3: the same decision and the same line the record writer stores and the page renders.
+    policy, facts = policy_decision(product_id, raw_version, target_build, items,
+                                    record if record is not None else {"update_status": update_status},
+                                    records)
+    # Review 1 (D1): verdict and scope first, then the exact patch, then the page's line -- the string
+    # the record writer stores and the feed prints (lib/patch_decision.summary_line), never a bare
+    # verdict by a count.
+    return patch_decision.summary_line(
+        policy, facts, total, fallback=f"{label_name} {version} has {total} user {report_word} found.",
+        identity=f"{label_name} {version}")
 
 
 def latest_captured_at(items: list[dict[str, Any]]) -> str:
@@ -446,7 +445,10 @@ def main(argv: list[str] | None = None) -> int:
             excluded.append(item)
 
     aggregate = []
-    record_statuses = record_status_index()
+    # One scan of the records serves both the status index and the policy facts.
+    record_facts = record_fact_index()
+    record_statuses = {key: str(data.get("update_status") or "").strip()
+                       for key, data in record_facts.items()}
     for (product_id, version, _build), items in sorted(groups.items()):  # noqa: B007
         sentiments = Counter(str(item.get("sentiment")).lower() for item in items)
         severities = Counter(severity_summary_key(item) for item in items)
@@ -469,7 +471,9 @@ def main(argv: list[str] | None = None) -> int:
             "evidence_state": evidence_state(len(items)),
             "consensus_summary": consensus_summary(
                 product_id, version, items, sentiments, themes, _build,
-                record_statuses.get(patch_key(product_id, version, _build), "")),
+                record_statuses.get(patch_key(product_id, version, _build), ""),
+                record=record_facts.get(patch_key(product_id, version, _build)),
+                records=record_facts),
             "evidence_last_checked": latest_captured_at(items),
         })
 

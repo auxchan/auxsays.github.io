@@ -1,0 +1,150 @@
+      {% assign all_update_pages = site.pages | where: "update_entry", true %}
+      {% assign update_pages = all_update_pages | where_exp: "item", "item.update_status != 'archived' and item.feed_hidden != true" | sort: "update_published_at" | reverse %}
+      {% assign home_patch_limit = 10 %}
+      {% assign home_patch_count = 0 %}
+      {% assign home_product_seen = '|' %}
+      <p class="home-watchlist-note" data-home-watchlist-note hidden>
+        <span class="home-watchlist-note__mark" aria-hidden="true"></span>
+        Your watched products are shown first.
+        <a class="home-watchlist-note__link" href="{{ '/updates/my-stack/' | relative_url }}">My Patch Stack →</a>
+      </p>
+      <div class="home-patch-list home-patch-list--signals" data-home-signal-list>
+        {% comment %}
+          Homepage Patch Signals is intentionally stricter than the full Patch Feed.
+          It promotes one actionable signal per product, not every official-only capture.
+          Product identity uses product_id, then update_brand_id, then update_product.
+          Within each product, the representative record is chosen by:
+          featured, current status, release/update recency, then evidence strength for close calls.
+        {% endcomment %}
+
+        {% for item in update_pages %}
+          {% assign item_product_identity = item.product_id | default: item.update_brand_id | default: item.update_product | default: item.url | downcase | replace: ' ', '-' | replace: '/', '-' | replace: '|', '-' %}
+          {% assign item_product_key = '|' | append: item_product_identity | append: '|' %}
+          {% unless home_product_seen contains item_product_key %}
+            {% assign best_item_url = '' %}
+            {% assign best_item_score = 0 %}
+
+            {% for candidate in update_pages %}
+              {% assign candidate_product_identity = candidate.product_id | default: candidate.update_brand_id | default: candidate.update_product | default: candidate.url | downcase | replace: ' ', '-' | replace: '/', '-' | replace: '|', '-' %}
+              {% if candidate_product_identity == item_product_identity %}
+                {% assign candidate_update_report_count = candidate.update_report_count | default: 0 | plus: 0 %}
+                {% assign candidate_confirmed_report_count = candidate.confirmed_patch_specific_report_count | default: 0 | plus: 0 %}
+                {% assign candidate_known_issues_value = candidate.known_issues_present | default: false %}
+                {% assign candidate_evidence_state = candidate.evidence_state | default: 'insufficient_data' | downcase | replace: '-', '_' %}
+                {% assign candidate_intelligence_stage = candidate.intelligence_stage | default: '' | downcase | replace: '-', '_' %}
+                {% assign candidate_is_known_issue = false %}
+                {% if candidate_known_issues_value == true or candidate_known_issues_value == 'true' or candidate_known_issues_value == 'yes' %}
+                  {% assign candidate_is_known_issue = true %}
+                {% endif %}
+                {% assign candidate_has_report_signal = false %}
+                {% if candidate_update_report_count > 0 or candidate_confirmed_report_count > 0 %}
+                  {% assign candidate_has_report_signal = true %}
+                {% endif %}
+                {% assign candidate_official_active = candidate.official_active_issue_count | default: 0 | plus: 0 %}
+                {% assign candidate_official_safeguard = candidate.official_safeguard_hold_count | default: 0 | plus: 0 %}
+                {% assign candidate_has_official_issue = false %}
+                {% if candidate_official_active > 0 or candidate_official_safeguard > 0 %}
+                  {% assign candidate_has_official_issue = true %}
+                {% endif %}
+                {% assign candidate_is_meaningful = false %}
+                {% if candidate.homepage_featured == true or candidate_has_report_signal == true or candidate_has_official_issue == true or candidate_is_known_issue == true or candidate_evidence_state == 'pilot_sample' or candidate_evidence_state == 'consensus_live' or candidate_intelligence_stage == 'pilot' or candidate_intelligence_stage == 'consensus_live' %}
+                  {% assign candidate_is_meaningful = true %}
+                {% endif %}
+
+                {% if candidate_is_meaningful == true %}
+                  {% assign candidate_timestamp = candidate.update_published_at | default: candidate.record_last_updated | default: candidate.evidence_last_checked | default: candidate.update_last_checked %}
+                  {% assign candidate_time_rank = candidate_timestamp | date: "%s" | plus: 0 %}
+                  {% assign candidate_score = candidate_time_rank %}
+                  {% if candidate.update_status != 'archived' %}
+                    {% assign candidate_score = candidate_score | plus: 10000000000000 %}
+                  {% endif %}
+                  {% comment %}Ranked by the shared contract: an uncertified live claim ranks as the verified reports it renders as.{% endcomment %}
+                  {% include maturity-state.html record=candidate %}
+                  {% assign candidate_state_rank = 0 %}
+                  {% if maturity_live %}
+                    {% assign candidate_state_rank = 2 %}
+                  {% elsif maturity_class == 'pilot' %}
+                    {% assign candidate_state_rank = 1 %}
+                  {% endif %}
+                  {% assign candidate_state_score = candidate_state_rank | times: 150000 %}
+                  {% assign candidate_score = candidate_score | plus: candidate_state_score %}
+                  {% if candidate_is_known_issue == true %}
+                    {% assign candidate_score = candidate_score | plus: 200000 %}
+                  {% endif %}
+                  {% if candidate_has_official_issue == true %}
+                    {% assign candidate_score = candidate_score | plus: 220000 %}
+                  {% endif %}
+                  {% if candidate_has_report_signal == true %}
+                    {% assign candidate_score = candidate_score | plus: 250000 %}
+                  {% endif %}
+                  {% if candidate_intelligence_stage == 'pilot' or candidate_intelligence_stage == 'consensus_live' %}
+                    {% assign candidate_score = candidate_score | plus: 50000 %}
+                  {% endif %}
+                  {% if candidate.homepage_featured == true %}
+                    {% assign candidate_score = candidate_score | plus: 1000000000000000 %}
+                  {% endif %}
+                  {% if candidate_score > best_item_score %}
+                    {% assign best_item_score = candidate_score %}
+                    {% assign best_item_url = candidate.url %}
+                  {% endif %}
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+
+            {% if best_item_url == item.url and home_patch_count < home_patch_limit %}
+              {% assign update_report_count = item.update_report_count | default: 0 | plus: 0 %}
+              {% assign confirmed_report_count = item.confirmed_patch_specific_report_count | default: 0 | plus: 0 %}
+              {% assign report_count = update_report_count %}
+              {% if report_count == 0 and confirmed_report_count > 0 %}
+                {% assign report_count = confirmed_report_count %}
+              {% endif %}
+              {% assign known_issues_value = item.known_issues_present | default: false %}
+              {% assign consensus_label = item.update_consensus_label | default: item.community_reaction | default: item.current_consensus | default: 'Insufficient data' %}
+              {% assign consensus_key = consensus_label | downcase | replace: ' ', '-' %}
+              {% assign is_known_issue = false %}
+              {% if known_issues_value == true or known_issues_value == 'true' or known_issues_value == 'yes' %}
+                {% assign is_known_issue = true %}
+              {% endif %}
+                {%- comment -%}
+                  `intelligence_stage_label` does not exist anywhere in this repository -- a
+                  repo-wide grep finds it on this line only -- so the chain ALWAYS fell through
+                  to `intelligence_stage` and printed the internal stage vocabulary
+                  de-underscored on the home page: measured over 1,305 records, 1,052 rendered
+                  "Official live", 233 "Pilot" and 1 "Manual watch". Mapped to reader-facing
+                  words, defaulting to EMPTY rather than to a raw token, so an unmapped stage
+                  costs a label instead of publishing an identifier. Both words now come from
+                  the shared maturity contract, which says "Established reports" only beside a
+                  certified live claim.
+                {%- endcomment -%}
+                {% include maturity-state.html record=item %}
+                {% assign evidence_label = maturity_label %}
+                {% assign stage_label = maturity_stage_label %}
+                {% assign item_official_active = item.official_active_issue_count | default: 0 | plus: 0 %}
+                {% assign item_official_safeguard = item.official_safeguard_hold_count | default: 0 | plus: 0 %}
+                <a class="home-patch-item home-patch-item--signal" href="{{ item.url | relative_url }}" data-home-patch-signal data-product-id="{{ item_product_identity }}">
+                  <span class="home-patch-dot home-patch-dot--{{ consensus_key }}" aria-hidden="true"></span>
+                  <span class="home-watch-flag" data-home-watch-flag hidden>Watching</span>
+                  <span class="home-patch-copy">
+                    <strong>{{ item.update_feed_title | default: item.update_detail_title | default: item.title }}</strong>
+                    <em>
+                      {{ consensus_label }}
+                      {% if report_count > 0 %}
+                        • {{ report_count }} confirmed community report{% unless report_count == 1 %}s{% endunless %}
+                      {% elsif item_official_active > 0 or item_official_safeguard > 0 %}
+                        • {% if item_official_active > 0 %}{{ item_official_active }} active Microsoft issue{% unless item_official_active == 1 %}s{% endunless %}{% endif %}{% if item_official_active > 0 and item_official_safeguard > 0 %}, {% endif %}{% if item_official_safeguard > 0 %}{{ item_official_safeguard }} safeguard hold{% unless item_official_safeguard == 1 %}s{% endunless %}{% endif %}
+                      {% elsif is_known_issue == true %}
+                        • known issues
+                      {% endif %}
+                    </em>
+                    <span class="home-patch-meta">
+                      <span>{{ evidence_label }}</span>
+                      {% if stage_label != '' %}<span>{{ stage_label }}</span>{% endif %}
+                    </span>
+                  </span>
+                  <time>{{ item.update_published_at | date: "%b %-d" }}</time>
+                </a>
+                {% assign home_product_seen = home_product_seen | append: item_product_identity | append: '|' %}
+                {% assign home_patch_count = home_patch_count | plus: 1 %}
+            {% endif %}
+          {% endunless %}
+        {% endfor %}

@@ -17,8 +17,8 @@ update_version: Turn your ChatGPT conversations into Figma Slides presentations 
 update_logo_text: FIG
 update_published_at: '2025-12-11T00:00:00.000Z'
 update_last_checked: '2026-08-02T16:53:05Z'
-source_last_checked: '2026-10-10T14:54:21Z'
-official_body_last_checked: '2026-10-10T14:54:21Z'
+source_last_checked: '2026-11-16T09:02:56Z'
+official_body_last_checked: '2026-11-16T09:02:56Z'
 record_last_updated: '2026-08-02T16:53:05Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -80,6 +80,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-10-10T14:54:21Z'
+  url: https://www.figma.com/release-notes/?title=turn-your-chatgpt-brainstorms-into-figma-slides-presentations-and-figma-buzz-assets
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-16T09:02:56Z'
   url: https://www.figma.com/release-notes/?title=turn-your-chatgpt-brainstorms-into-figma-slides-presentations-and-figma-buzz-assets
   status: captured-from-rss-feed
   body_captured: true

@@ -4,7 +4,291 @@ note: Concrete PowerPoint problems reported while a release was current. These a
   and these rows are excluded from every consensus calculation.
 reports:
 - attribution_state: not_established
-  captured_at: '2026-11-05T02:16:22Z'
+  captured_at: '2026-11-21T09:42:13Z'
+  classification: recent_report
+  product_id: microsoft-powerpoint
+  promotion_eligible: true
+  release_window_key: microsoft-powerpoint|2611|20625.20108
+  report_date: '2026-11-20'
+  report_excerpt: PowerPoint Slide Show ignores animation timings, advances to end PowerPoint Slide Show
+    ignores animation timings on a slide, advances past slides to end of presentation.Presentations with
+    working animation timings are now broken. Animation preview is unaffected.A/B Environment...
+  report_id: microsoft-powerpoint:ff97bcfdc80900f5
+  report_title: PowerPoint Slide Show ignores animation timings, advances to end
+  source_family: Microsoft Tech Community
+  source_report_id: '4575215'
+  source_type: microsoft_tech_community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoft-365/powerpoint-slide-show-ignores-animation-timings-advances-to-end/4575215
+  strict_exclusion_reason: missing_powerpoint_version
+  window_build: '20625.20108'
+  window_start: '2026-11-17'
+  window_version: '2611'
+- attribution_state: not_established
+  captured_at: '2026-11-21T09:42:13Z'
+  classification: recent_report
+  product_id: microsoft-powerpoint
+  promotion_eligible: true
+  release_window_key: microsoft-powerpoint|2611|20625.20108
+  report_date: '2026-11-20'
+  report_excerpt: I CANT OPEN MY POWERPOINT APPLICATION I CANT OPEN MY POWERPOINT APPLICATION PLEASE HELP
+    ME I CAN'T OPEN MY POWERPOINT APPLICATION. HOW TO FIX THIS ONE
+  report_id: microsoft-powerpoint:1cbfd8dfe7a65728
+  report_title: I CANT OPEN MY POWERPOINT APPLICATION
+  source_family: Microsoft Q&A
+  source_report_id: '6077146'
+  source_type: microsoft_learn_qna
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6077146/i-cant-open-my-powerpoint-application
+  strict_exclusion_reason: missing_powerpoint_version
+  window_build: '20625.20108'
+  window_start: '2026-11-17'
+  window_version: '2611'
+- attribution_state: not_established
+  captured_at: '2026-11-21T09:42:13Z'
+  classification: recent_report
+  product_id: microsoft-powerpoint
+  promotion_eligible: true
+  release_window_key: microsoft-powerpoint|2611|20625.20108
+  report_date: '2026-11-19'
+  report_excerpt: powerpoint not working powerpoint not working i can't repair PowerPoint, it fails to
+    open new ppt and cant read
+  report_id: microsoft-powerpoint:6ca8d918d7dc5d6a
+  report_title: powerpoint not working
+  source_family: Microsoft Q&A
+  source_report_id: '6076075'
+  source_type: microsoft_learn_qna
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6076075/powerpoint-not-working
+  strict_exclusion_reason: missing_powerpoint_version
+  window_build: '20625.20108'
+  window_start: '2026-11-17'
+  window_version: '2611'
+- attribution_state: not_established
+  captured_at: '2026-11-21T09:42:13Z'
+  classification: recent_report
+  product_id: microsoft-powerpoint
+  promotion_eligible: true
+  release_window_key: microsoft-powerpoint|2611|20625.20108
+  report_date: '2026-11-18'
+  report_excerpt: PowerPoint Error PowerPoint Error Microsoft PowerPoint shows an error and won't open.
+    I opted for "Repair now", but it persists.
+  report_id: microsoft-powerpoint:8d622bf28b7acfb0
+  report_title: PowerPoint Error
+  source_family: Microsoft Q&A
+  source_report_id: '6075009'
+  source_type: microsoft_learn_qna
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6075009/powerpoint-error
+  strict_exclusion_reason: missing_powerpoint_version
+  window_build: '20625.20108'
+  window_start: '2026-11-17'
+  window_version: '2611'
+- attribution_state: not_established
+  captured_at: '2026-11-18T10:00:20Z'
+  classification: recent_report
+  product_id: microsoft-powerpoint
+  promotion_eligible: true
+  release_window_key: microsoft-powerpoint|2610|20527.20196
+  report_date: '2026-11-17'
+  report_excerpt: POWER POINT IS NOT WORKING POWER POINT IS NOT WORKING MY POWER POINT IS NOT WORKING
+    WHAT IS THE PROBLEM ITS NOT TAKING REPAIR ALSO WHAT IS THE ISSUSE OF MY POWER POINT
+  report_id: microsoft-powerpoint:a8ae94d568182e31
+  report_title: POWER POINT IS NOT WORKING
+  source_family: Microsoft Q&A
+  source_report_id: '6074357'
+  source_type: microsoft_learn_qna
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6074357/power-point-is-not-working
+  strict_exclusion_reason: missing_powerpoint_version
+  window_build: '20527.20196'
+  window_start: '2026-11-10'
+  window_version: '2610'
+- attribution_state: not_established
+  captured_at: '2026-11-21T09:42:13Z'
+  classification: recent_report
+  product_id: microsoft-powerpoint
+  promotion_eligible: true
+  release_window_key: microsoft-powerpoint|2611|20625.20108
+  report_date: '2026-11-17'
+  report_excerpt: The sun button in PowerPoint is not working The sun button in PowerPoint is not working
+    The "Sun", "Sun from the Beginning", or "Server View" buttons do not work; the Sun application closes
+    automatically as soon as it is opened.
+  report_id: microsoft-powerpoint:27f71da9328df227
+  report_title: The sun button in PowerPoint is not working
+  source_family: Microsoft Q&A
+  source_report_id: '6073732'
+  source_type: microsoft_learn_qna
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6073732/the-sun-button-in-powerpoint-is-not-working
+  strict_exclusion_reason: missing_powerpoint_version
+  window_build: '20625.20108'
+  window_start: '2026-11-17'
+  window_version: '2611'
+- attribution_state: not_established
+  captured_at: '2026-11-21T09:42:13Z'
+  classification: recent_report
+  product_id: microsoft-powerpoint
+  promotion_eligible: true
+  release_window_key: microsoft-powerpoint|2610|20527.20196
+  report_date: '2026-11-16'
+  report_excerpt: Powerpoint not open Powerpoint not open I am unable to open power point from 2 days,
+    below message displayed
+  report_id: microsoft-powerpoint:edcc6ee4d49ee07c
+  report_title: Powerpoint not open
+  source_family: Microsoft Q&A
+  source_report_id: '6072652'
+  source_type: microsoft_learn_qna
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6072652/powerpoint-not-open
+  strict_exclusion_reason: missing_powerpoint_version
+  window_build: '20527.20196'
+  window_end: '2026-11-17'
+  window_start: '2026-11-10'
+  window_version: '2610'
+- attribution_state: not_established
+  captured_at: '2026-11-21T09:42:13Z'
+  classification: recent_report
+  product_id: microsoft-powerpoint
+  promotion_eligible: true
+  release_window_key: microsoft-powerpoint|2610|20527.20196
+  report_date: '2026-11-16'
+  report_excerpt: The PowerPoint presentation button is not working. The PowerPoint presentation button
+    is not working. The "launch," "re-launch," or "server view" buttons are not working; the server closes
+    as soon as it is launched.
+  report_id: microsoft-powerpoint:c5d1bd88579299ba
+  report_title: The PowerPoint presentation button is not working.
+  source_family: Microsoft Q&A
+  source_report_id: '6073231'
+  source_type: microsoft_learn_qna
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6073231/the-powerpoint-presentation-button-is-not-working
+  strict_exclusion_reason: missing_powerpoint_version
+  window_build: '20527.20196'
+  window_end: '2026-11-17'
+  window_start: '2026-11-10'
+  window_version: '2610'
+- attribution_state: not_established
+  captured_at: '2026-11-21T09:42:13Z'
+  classification: recent_report
+  product_id: microsoft-powerpoint
+  promotion_eligible: true
+  release_window_key: microsoft-powerpoint|2610|20527.20196
+  report_date: '2026-11-13'
+  report_excerpt: PowerPoint Is not openining PowerPoint Is not openining My PowerPoint is not working
+    currently showing error and repair now i tried but not working any help so i can run again my PowerPoint.
+  report_id: microsoft-powerpoint:44ab91aaa380b894
+  report_title: PowerPoint Is not openining
+  source_family: Microsoft Q&A
+  source_report_id: '6070180'
+  source_type: microsoft_learn_qna
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6070180/powerpoint-is-not-openining
+  strict_exclusion_reason: missing_powerpoint_version
+  window_build: '20527.20196'
+  window_end: '2026-11-17'
+  window_start: '2026-11-10'
+  window_version: '2610'
+- attribution_state: not_established
+  captured_at: '2026-11-21T09:42:13Z'
+  classification: recent_report
+  product_id: microsoft-powerpoint
+  promotion_eligible: true
+  release_window_key: microsoft-powerpoint|2610|20527.20196
+  report_date: '2026-11-13'
+  report_excerpt: I cannot open the PowerPoint file; an error occurred while opening it I cannot open
+    the PowerPoint file; an error occurred while opening it I cannot open the PowerPoint file; it shows
+    an error
+  report_id: microsoft-powerpoint:0cdde1a5f1024298
+  report_title: I cannot open the PowerPoint file; an error occurred while opening it
+  source_family: Microsoft Q&A
+  source_report_id: '6070877'
+  source_type: microsoft_learn_qna
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6070877/i-cannot-open-the-powerpoint-file-an-error-occurre
+  strict_exclusion_reason: missing_powerpoint_version
+  window_build: '20527.20196'
+  window_end: '2026-11-17'
+  window_start: '2026-11-10'
+  window_version: '2610'
+- attribution_state: not_established
+  captured_at: '2026-11-21T09:42:13Z'
+  classification: recent_report
+  product_id: microsoft-powerpoint
+  promotion_eligible: true
+  release_window_key: microsoft-powerpoint|2610|20527.20196
+  report_date: '2026-11-11'
+  report_excerpt: My power point is not working. I have tried to get it to work on my new mac computer
+    but it is not cooperating My power point is not working. I have tried to get it to work on my new
+    mac computer but it is not cooperating The power point fails to launch on my mac. The...
+  report_id: microsoft-powerpoint:117b501aee448dca
+  report_title: My power point is not working. I have tried to get it to work on my new mac computer but
+    it is not cooperating
+  source_family: Microsoft Q&A
+  source_report_id: '6067337'
+  source_type: microsoft_learn_qna
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6067337/my-power-point-is-not-working-i-have-tried-to-get
+  strict_exclusion_reason: missing_powerpoint_version
+  window_build: '20527.20196'
+  window_end: '2026-11-17'
+  window_start: '2026-11-10'
+  window_version: '2610'
+- attribution_state: not_established
+  captured_at: '2026-11-21T09:42:13Z'
+  classification: recent_report
+  product_id: microsoft-powerpoint
+  promotion_eligible: true
+  release_window_key: microsoft-powerpoint|2610|20527.20196
+  report_date: '2026-11-10'
+  report_excerpt: I cant open powerpoint.It is showing error message I cant open powerpoint.It is showing
+    error message the popup message says powerpoint has run into an error and needs to be closed as a
+    result
+  report_id: microsoft-powerpoint:9256afd076219747
+  report_title: I cant open powerpoint.It is showing error message
+  source_family: Microsoft Q&A
+  source_report_id: '6066522'
+  source_type: microsoft_learn_qna
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6066522/i-cant-open-powerpoint-it-is-showing-error-message
+  strict_exclusion_reason: missing_powerpoint_version
+  window_build: '20527.20196'
+  window_end: '2026-11-17'
+  window_start: '2026-11-10'
+  window_version: '2610'
+- attribution_state: not_established
+  captured_at: '2026-11-21T09:42:13Z'
+  classification: recent_report
+  product_id: microsoft-powerpoint
+  promotion_eligible: true
+  release_window_key: microsoft-powerpoint|2610|20527.20150
+  report_date: '2026-11-09'
+  report_excerpt: unable to open powerpoint on my school acc unable to open powerpoint on my school acc
+    i received the powerpoint access invite on my school outlook acc. i clicked the invite and it brings
+    me to the powerpoint web page and logged in with my personal acc. i need to open and edit...
+  report_id: microsoft-powerpoint:37a2df4b4c6545fa
+  report_title: unable to open powerpoint on my school acc
+  source_family: Microsoft Q&A
+  source_report_id: '6065967'
+  source_type: microsoft_learn_qna
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6065967/unable-to-open-powerpoint-on-my-school-acc
+  strict_exclusion_reason: missing_powerpoint_version
+  window_build: '20527.20150'
+  window_end: '2026-11-10'
+  window_start: '2026-11-04'
+  window_version: '2610'
+- attribution_state: not_established
+  captured_at: '2026-11-21T09:42:13Z'
+  classification: recent_report
+  product_id: microsoft-powerpoint
+  promotion_eligible: true
+  release_window_key: microsoft-powerpoint|2610|20527.20150
+  report_date: '2026-11-08'
+  report_excerpt: I have a corrupt powerpoint that I need urgently for tomorrow and it will not open I
+    need urgent help I have a corrupt powerpoint that I need urgently for tomorrow and it will not open
+    I need urgent help I have a corrupt powerpoint that I need urgently for tomorrow and it will...
+  report_id: microsoft-powerpoint:59dbcdde046923b2
+  report_title: I have a corrupt powerpoint that I need urgently for tomorrow and it will not open I need
+    urgent help
+  source_family: Microsoft Q&A
+  source_report_id: '6064785'
+  source_type: microsoft_learn_qna
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6064785/i-have-a-corrupt-powerpoint-that-i-need-urgently-f
+  strict_exclusion_reason: missing_powerpoint_version
+  window_build: '20527.20150'
+  window_end: '2026-11-10'
+  window_start: '2026-11-04'
+  window_version: '2610'
+- attribution_state: not_established
+  captured_at: '2026-11-21T09:42:13Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -21,10 +305,11 @@ reports:
   source_url: https://learn.microsoft.com/en-us/answers/questions/6058519/powerpoint-slides-are-not-opening
   strict_exclusion_reason: missing_powerpoint_version
   window_build: '20527.20112'
+  window_end: '2026-11-04'
   window_start: '2026-10-28'
   window_version: '2610'
 - attribution_state: not_established
-  captured_at: '2026-11-05T02:16:22Z'
+  captured_at: '2026-11-21T09:42:13Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -40,6 +325,7 @@ reports:
   source_url: https://learn.microsoft.com/en-us/answers/questions/6057918/error-on-my-powerpoint
   strict_exclusion_reason: missing_powerpoint_version
   window_build: '20527.20112'
+  window_end: '2026-11-04'
   window_start: '2026-10-28'
   window_version: '2610'
 - attribution_state: not_established
@@ -63,7 +349,7 @@ reports:
   window_start: '2026-10-21'
   window_version: '2610'
 - attribution_state: not_established
-  captured_at: '2026-11-05T02:16:22Z'
+  captured_at: '2026-11-21T09:42:13Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -83,7 +369,7 @@ reports:
   window_start: '2026-10-21'
   window_version: '2610'
 - attribution_state: not_established
-  captured_at: '2026-11-05T02:16:22Z'
+  captured_at: '2026-11-18T10:00:20Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -123,7 +409,7 @@ reports:
   window_start: '2026-10-13'
   window_version: '2609'
 - attribution_state: not_established
-  captured_at: '2026-11-05T02:16:22Z'
+  captured_at: '2026-11-06T21:54:02Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -393,7 +679,7 @@ reports:
   window_start: '2026-08-11'
   window_version: '2607'
 - attribution_state: not_established
-  captured_at: '2026-11-05T02:16:22Z'
+  captured_at: '2026-11-13T02:15:44Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -624,7 +910,29 @@ reports:
   window_start: '2025-07-22'
   window_version: '2506'
 - attribution_state: not_established
-  captured_at: '2026-11-05T02:16:22Z'
+  captured_at: '2026-11-21T09:42:13Z'
+  classification: recent_report
+  product_id: microsoft-powerpoint
+  promotion_eligible: true
+  release_window_key: microsoft-powerpoint|2506|18925.20184
+  report_date: '2025-11-11'
+  report_excerpt: keystroke to mute a playing video in powerpoint and to resume playing after pausing
+    with a P styroke keystroke to mute a playing video in powerpoint and to resume playing after pausing
+    with a P styroke I am on a PC Windows 11 playing a video in PowerPoint (I'm not sure which...
+  report_id: microsoft-powerpoint:67198e36b60482cd
+  report_title: keystroke to mute a playing video in powerpoint and to resume playing after pausing with
+    a P styroke
+  source_family: Microsoft Q&A
+  source_report_id: '5618252'
+  source_type: microsoft_learn_qna
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5618252/keystroke-to-mute-a-playing-video-in-powerpoint-an
+  strict_exclusion_reason: missing_powerpoint_version
+  window_build: '18925.20184'
+  window_end: '2026-01-27'
+  window_start: '2025-07-22'
+  window_version: '2506'
+- attribution_state: not_established
+  captured_at: '2026-11-21T09:42:13Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -667,7 +975,7 @@ reports:
   window_start: '2025-01-30'
   window_version: '2501'
 - attribution_state: not_established
-  captured_at: '2026-11-05T02:16:22Z'
+  captured_at: '2026-11-21T09:42:13Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -688,7 +996,7 @@ reports:
   window_start: '2024-12-05'
   window_version: '2411'
 - attribution_state: not_established
-  captured_at: '2026-11-05T02:16:22Z'
+  captured_at: '2026-11-21T09:42:13Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -752,7 +1060,7 @@ reports:
   window_start: '2024-11-12'
   window_version: '2410'
 - attribution_state: not_established
-  captured_at: '2026-11-05T02:16:22Z'
+  captured_at: '2026-11-21T09:42:13Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -773,7 +1081,7 @@ reports:
   window_start: '2024-05-14'
   window_version: '2404'
 - attribution_state: not_established
-  captured_at: '2026-11-05T02:16:22Z'
+  captured_at: '2026-11-21T09:42:13Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true

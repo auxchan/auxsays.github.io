@@ -91,6 +91,13 @@ METHOD_PLANS: dict[str, dict[str, Any]] = {
                      "reddit_search", "brave_search_api",
                      "creativecow_forum_index", "creativecow_brave_search"],
     },
+    # NVIDIA driver families: ONE primary, the forum's default views, shared by both families in
+    # one cycle per run. Declared here so the method can be switched off the same day without a
+    # code change to the collector: moving it to "disabled" for BOTH families stops every forum
+    # request and reports an honest `disabled` row (nothing stored is removed). No fallback, by
+    # design: the other public NVIDIA communities were measured unusable (G44/G45).
+    "nvidia-geforce-game-ready": {"primary": ["nvidia_forum_default_views"]},
+    "nvidia-studio-driver": {"primary": ["nvidia_forum_default_views"]},
 }
 
 DEFAULT_PLAN: dict[str, Any] = {"primary": [], "fallback": [], "fallback_when": [],

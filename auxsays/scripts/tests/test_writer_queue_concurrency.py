@@ -405,7 +405,8 @@ def main() -> int:
         env = ((reaper.get("jobs") or {}).get("reap") or {}).get("env") or {}
         check("8g the reaper re-dispatches every routine writer",
               set(str(env.get("REAPABLE", "")).split()) == {"obs-evidence-collection.yml",
-                                                            "patch-ingest.yml"},
+                                                            "patch-ingest.yml",
+                                                            "systems-monitor-data.yml"},
               f"REAPABLE={env.get('REAPABLE')!r}")
         # CLOSED WORLD over the lane. A new workflow must not be able to join the writer group
         # without the reaper's group-wide guard knowing about it.
@@ -557,6 +558,23 @@ def main() -> int:
           bool(lost_bare), "the model no longer discriminates -- section 10 would be vacuous")
     check("10h and the reaper is what removes that loss",
           reaper is not None, "the model is only meaningful if the reaper is implemented")
+
+    print(NEWLINE + "[11] Systems Monitor follows routine ingestion without competing for the queue")
+    monitor = docs.get("systems-monitor-data.yml") or {}
+    ingest = docs.get("patch-ingest.yml") or {}
+    chain = (ingest.get("jobs") or {}).get("chain-systems-monitor") or {}
+    chain_if = str(chain.get("if") or "")
+    check("11a economic acquisition is dispatch-only", set(triggers_of(monitor)) == {"workflow_dispatch"})
+    check("11b the dispatch waits for ingestion", chain.get("needs") == "ingest")
+    check("11c ingestion failure does not starve economic acquisition",
+          "always()" in chain_if and "success()" not in chain_if and ".result" not in chain_if)
+    check("11d cancelled and non-main runs cannot dispatch production acquisition",
+          "!cancelled()" in chain_if and "github.ref == 'refs/heads/main'" in chain_if)
+    check("11e targeted and dry-run ingestion do not dispatch unrelated acquisition",
+          "github.event.inputs.source == ''" in chain_if and "github.event.inputs.dry_run != 'true'" in chain_if)
+    chain_shell = effective_shell(ingest, "chain-systems-monitor")
+    check("11f the real chain dispatches the governed production workflow on main",
+          "gh workflow run systems-monitor-data.yml --ref main" in chain_shell)
 
     print(NEWLINE + "=" * 74)
     print(f"Results: {_passed}/{_passed + _failed} passed, {_failed} failed")

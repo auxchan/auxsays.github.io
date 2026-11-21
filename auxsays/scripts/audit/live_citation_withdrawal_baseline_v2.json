@@ -1,0 +1,60 @@
+{
+ "schema": 1,
+ "version": 2,
+ "ledger": "AUX-090",
+ "purpose": "Supplemental verification baseline for the AUX-088 withdrawal manifest (and its version 2). It records, for each pinned row that a later audited change legitimately moved, the pinned hash, the hash that change produced and the change itself. The original manifest is never rewritten; a pinned hash is also satisfied by the successor recorded here against that exact hash.",
+ "selector": [
+  "product_id",
+  "update_version",
+  "target_build",
+  "id",
+  "source_url"
+ ],
+ "entries": [
+  {
+   "pinned_by": "auxsays/scripts/audit/live_citation_withdrawal.json",
+   "role": "retain",
+   "product_id": "obs-studio",
+   "update_version": "32.1.2",
+   "target_build": "",
+   "id": "obs-studio-32-1-2-github-issue-13506",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/13506",
+   "block_sha256_pinned": "6b340982e79be9c1f98a2e45c0a3c39a9869bbbde73abe999e0b012cf7b5da1f",
+   "block_sha256_now": "b3e1ed7576e46bfd42a3cb92bf7f18d8a54dbb9d09c313c8bd8d245db5597de3",
+   "change": {
+    "source_date": "2026-05-31"
+   },
+   "changed_by": "AUX-090 (auxsays/scripts/fill_obs_report_dates.py, auxsays/scripts/audit/obs_report_dates.json)"
+  },
+  {
+   "pinned_by": "auxsays/scripts/audit/live_citation_withdrawal.json",
+   "role": "retain",
+   "product_id": "obs-studio",
+   "update_version": "32.2.2",
+   "target_build": "",
+   "id": "obs-studio-32-2-2-github-issue-13997",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/13997",
+   "block_sha256_pinned": "3ba9754af7720e0986a7895b9be73cdd4591458a290554dc82d9a0b0597b94c8",
+   "block_sha256_now": "7ad39ec808baa216a2b7aca9423d99a178a6fb1e79c155cadbe0f4b37299cced",
+   "change": {
+    "source_date": "2026-10-06"
+   },
+   "changed_by": "AUX-090 (auxsays/scripts/fill_obs_report_dates.py, auxsays/scripts/audit/obs_report_dates.json)"
+  },
+  {
+   "pinned_by": "auxsays/scripts/audit/live_citation_withdrawal_v2.json",
+   "role": "retain",
+   "product_id": "obs-studio",
+   "update_version": "32.1.2",
+   "target_build": "",
+   "id": "obs-studio-32-1-2-github-issue-13997",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/13997",
+   "block_sha256_pinned": "554ffb2faa99f2f26ee7b3050701cfc3cb4a6900f9c1ec9a237051353f1a3e36",
+   "block_sha256_now": "33d659816be820afec1a3eb6d0b058158cb3d559b74b6b2585a3819ea215d997",
+   "change": {
+    "source_date": "2026-10-06"
+   },
+   "changed_by": "AUX-090 (auxsays/scripts/fill_obs_report_dates.py, auxsays/scripts/audit/obs_report_dates.json)"
+  }
+ ]
+}

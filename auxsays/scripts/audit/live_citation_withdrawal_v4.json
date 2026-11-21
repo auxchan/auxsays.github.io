@@ -1,0 +1,265 @@
+{
+ "schema": 1,
+ "ledger": "AUX-108",
+ "version": 4,
+ "supplements": "auxsays/scripts/audit/live_citation_withdrawal.json (AUX-088), live_citation_withdrawal_v2.json (AUX-090) and live_citation_withdrawal_v3.json (AUX-098), which stay unchanged",
+ "purpose": "Pinned audited withdrawal of five stored reports counted against a version the report is not about: the version the device rolled back to, the version the author upgraded from, or a version the author only asked about or never installed. Every row is kept; only counted and exclusion_reason change (and, for Windows, evidence_valid_for_current_patch).",
+ "selector": [
+  "product_id",
+  "update_version",
+  "target_build",
+  "id",
+  "source_url"
+ ],
+ "products": [
+  "microsoft-windows-11",
+  "obs-studio",
+  "blackmagic-davinci"
+ ],
+ "exclusion_reasons": [
+  "duplicate_existing_evidence",
+  "identity_not_the_subject",
+  "not_a_real_issue_report",
+  "version_is_rollback_target",
+  "version_named_but_working"
+ ],
+ "edit": {
+  "counted": false,
+  "exclusion_reason": "per entry (closed vocabulary)",
+  "evidence_valid_for_current_patch": "false for Windows; DaVinci rows carry no such field",
+  "row_retained": true
+ },
+ "parent_commit": "f5bd8e66b7504467f92eef6adde051295dd571d5",
+ "store_path": "auxsays/_data/consensus_evidence.yml",
+ "store_sha256_at_pin": "eaa16062ddec3f84049faf720343185b212cfcc591a39ee1cae5281f3ffe6f92",
+ "basis": "A row is here only when TWO independent blind adjudications, each made from the stored text alone without the first audit's labels, the selection key or each other's labels, labelled it INCORRECT for the credited version: second_blind and third_blind. The candidates were mixed with controls in a shuffled packet. first_audit is the corpus measurement that proposed the row; it is recorded as provenance and is not one of the two determinations. Each row takes the closed reason both blind reviews support. Rows not labelled INCORRECT by both stay counted.",
+ "note": "Each entry must match exactly one stored block whose sha256 equals block_sha256_before (to withdraw) or block_sha256_after (already withdrawn). No retain entries: none of these is a duplicate.",
+ "entries": [
+  {
+   "role": "withdraw",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.9168",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5976649-windows-insider-build-26220-9022-keeps",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5976649/windows-insider-build-26220-9022-keeps-failing-to",
+   "record_file": "auxsays/updates/generated/2026-08-11-windows-11-25h2-26200-9168.md",
+   "target_kb": "KB5121003",
+   "target_os_build": "26200.9168",
+   "block_sha256_before": "ab08554d9b0117a40b252ad4ab701b545d5d6675b8bf918385792a85e47c6179",
+   "exclusion_reason": "version_is_rollback_target",
+   "block_sha256_after": "806bfaa3e7cf7184c5fda4ed22e80481edb6ac4af78e57d710c70ee834d5a80a",
+   "captured_at": "2026-08-17T14:07:55Z",
+   "case": "H1",
+   "adjudication": {
+    "first_audit": {
+     "by": "G51 corpus measurer (2026-11-19_g51-rollback-attribution/CORPUS.md)",
+     "case": "H1",
+     "label": "INCORRECT",
+     "reason": "rollback target: the failing build is an Insider build; the counted build is the one the machine fell back to.",
+     "counts_toward_the_two": false
+    },
+    "second_blind": {
+     "by": "G52 blind adjudicator A (2026-11-19_g52-role-row-withdrawal/adjudication/LABELS_A.md; stored text only; no first labels, key or audit read)",
+     "case": "P07",
+     "label": "INCORRECT",
+     "reason_class": "version_is_rollback_target",
+     "reason": "The failing build is Insider 26220.9022; 26200.9168 is the build it rolls back to and is not reported as having a problem."
+    },
+    "third_blind": {
+     "by": "G52 blind adjudicator B (2026-11-19_g52-role-row-withdrawal/adjudication/LABELS_B.md; stored text only; no first labels, key, audit or other adjudicator's file read)",
+     "case": "P07",
+     "label": "INCORRECT",
+     "reason_class": "version_is_rollback_target",
+     "reason": "The failing update is Insider build 26220.9022; build 26200.9168 is only the build it rolls back to."
+    }
+   },
+   "basis": "The question is about an Insider build that keeps failing to install; this page's build is only the one the device returns to (stored title: \"... Keeps Failing to Install and Rolls Back to 26200.9168\")."
+  },
+  {
+   "role": "withdraw",
+   "product_id": "blackmagic-davinci",
+   "update_version": "21",
+   "target_build": "",
+   "id": "blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wazcmw-davinci-resolve-211-your-gpu-memory-is-fu",
+   "source_url": "https://www.reddit.com/r/davinciresolve/comments/1wazcmw/davinci_resolve_211_your_gpu_memory_is_full/",
+   "record_file": "auxsays/updates/generated/2026-04-14-davinci-resolve-21.md",
+   "block_sha256_before": "4cbed1c520cc7b05e58e9aba86bb838530a08524df802b191915136f8671a3e5",
+   "exclusion_reason": "identity_not_the_subject",
+   "block_sha256_after": "a94f5dfa9875c856a8fc86e44432e5c2c2fa559036102eb0f3c4e9aaa5267547",
+   "captured_at": "2026-09-10T00:11:14Z",
+   "case": "T3",
+   "adjudication": {
+    "first_audit": {
+     "by": "G51 corpus measurer (2026-11-19_g51-rollback-attribution/CORPUS.md)",
+     "case": "T3",
+     "label": "INCORRECT",
+     "reason": "earlier working version: the author upgraded from 21 to 21.1 and the error began after that.",
+     "counts_toward_the_two": false
+    },
+    "second_blind": {
+     "by": "G52 blind adjudicator A (2026-11-19_g52-role-row-withdrawal/adjudication/LABELS_A.md; stored text only; no first labels, key or audit read)",
+     "case": "P09",
+     "label": "INCORRECT",
+     "reason_class": "version_named_but_working",
+     "reason": "The poster upgraded from 21 to 21.1 and the GPU-memory error came after that; 21 is the upgrade source, not the failing version.",
+     "alternative_reason_class": "identity_not_the_subject"
+    },
+    "third_blind": {
+     "by": "G52 blind adjudicator B (2026-11-19_g52-role-row-withdrawal/adjudication/LABELS_B.md; stored text only; no first labels, key, audit or other adjudicator's file read)",
+     "case": "P09",
+     "label": "INCORRECT",
+     "reason_class": "identity_not_the_subject",
+     "reason": "Version 21 is only the upgrade source; the GPU-memory problem is reported against 21.1."
+    }
+   },
+   "basis": "The author upgraded from 21 to 21.1 and the error appeared after that, so the report is about 21.1, where the same post stays counted; 21 is only the version upgraded from."
+  },
+  {
+   "role": "withdraw",
+   "product_id": "blackmagic-davinci",
+   "update_version": "21.1",
+   "target_build": "",
+   "id": "blackmagic-davinci-21-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wbshk6-is-resolve-211-finally-stable-enough-to-u",
+   "source_url": "https://www.reddit.com/r/davinciresolve/comments/1wbshk6/is_resolve_211_finally_stable_enough_to_update/",
+   "record_file": "auxsays/updates/generated/2026-09-08-davinci-resolve-21-1.md",
+   "block_sha256_before": "96f409e2d235344aefa2664e28523863bc7f496f317e1749486a41970b665485",
+   "exclusion_reason": "not_a_real_issue_report",
+   "block_sha256_after": "a172f0514d30bbb80024376bf240a353d462611e77d1b3cdccfccd2bc048a166",
+   "captured_at": "2026-09-17T17:43:51Z",
+   "case": "T4",
+   "adjudication": {
+    "first_audit": {
+     "by": "G51 corpus measurer (2026-11-19_g51-rollback-attribution/CORPUS.md)",
+     "case": "T4",
+     "label": "INCORRECT",
+     "reason": "question about a candidate fix: the author still runs 20.3.1 and never ran 21.1.",
+     "counts_toward_the_two": false
+    },
+    "second_blind": {
+     "by": "G52 blind adjudicator A (2026-11-19_g52-role-row-withdrawal/adjudication/LABELS_A.md; stored text only; no first labels, key or audit read)",
+     "case": "P13",
+     "label": "INCORRECT",
+     "reason_class": "not_a_real_issue_report",
+     "reason": "A question about whether 21.1 is stable; the poster runs 20.3.1, has not installed 21.x, and reports no problem with 21.1."
+    },
+    "third_blind": {
+     "by": "G52 blind adjudicator B (2026-11-19_g52-role-row-withdrawal/adjudication/LABELS_B.md; stored text only; no first labels, key, audit or other adjudicator's file read)",
+     "case": "P13",
+     "label": "INCORRECT",
+     "reason_class": "not_a_real_issue_report",
+     "reason": "A question (stable enough to update?); the poster runs 20.3.1, has not used 21.1, and repeats hearsay."
+    }
+   },
+   "basis": "A question asking whether 21.1 is stable enough to install, from someone still on 20.3.1; no problem with 21.1 is reported."
+  },
+  {
+   "role": "withdraw",
+   "product_id": "blackmagic-davinci",
+   "update_version": "20",
+   "target_build": "",
+   "id": "blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1utwlro-small-red-section-at-the-beginning-of-the",
+   "source_url": "https://www.reddit.com/r/davinciresolve/comments/1utwlro/small_red_section_at_the_beginning_of_the_render/",
+   "record_file": "auxsays/updates/generated/2025-05-28-davinci-resolve-20.md",
+   "block_sha256_before": "6d978ab376e2f2240ccc159b553a3d6bdddf5c8c4ebce8a7a9601575995768e9",
+   "exclusion_reason": "not_a_real_issue_report",
+   "block_sha256_after": "728bc7c64b6742416ba22c35f9eb1b85e02eff03786d54f12e8f2353ed608cd7",
+   "captured_at": "2026-09-10T21:59:55Z",
+   "case": "T5",
+   "adjudication": {
+    "first_audit": {
+     "by": "G51 corpus measurer (2026-11-19_g51-rollback-attribution/CORPUS.md)",
+     "case": "T5",
+     "label": "INCORRECT",
+     "reason": "version reported working: a technical curiosity; the author says everything works.",
+     "counts_toward_the_two": false
+    },
+    "second_blind": {
+     "by": "G52 blind adjudicator A (2026-11-19_g52-role-row-withdrawal/adjudication/LABELS_A.md; stored text only; no first labels, key or audit read)",
+     "case": "P06",
+     "label": "INCORRECT",
+     "reason_class": "not_a_real_issue_report",
+     "reason": "A technical-curiosity post; it says everything works and there are no playback problems on Studio 20.",
+     "alternative_reason_class": "version_named_but_working"
+    },
+    "third_blind": {
+     "by": "G52 blind adjudicator B (2026-11-19_g52-role-row-withdrawal/adjudication/LABELS_B.md; stored text only; no first labels, key, audit or other adjudicator's file read)",
+     "case": "P06",
+     "label": "INCORRECT",
+     "reason_class": "not_a_real_issue_report",
+     "reason": "Presented as a technical curiosity; the poster says everything works in Studio 20, with no playback problems."
+    }
+   },
+   "basis": "The author calls the post \"just a technical curiosity\" and says everything works in Studio 20, with no playback problems; no problem with this version is reported."
+  },
+  {
+   "role": "withdraw",
+   "product_id": "blackmagic-davinci",
+   "update_version": "21",
+   "target_build": "",
+   "id": "blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wbshk6-is-resolve-211-finally-stable-enough-to-u",
+   "source_url": "https://www.reddit.com/r/davinciresolve/comments/1wbshk6/is_resolve_211_finally_stable_enough_to_update/",
+   "record_file": "auxsays/updates/generated/2026-04-14-davinci-resolve-21.md",
+   "block_sha256_before": "8e1b7fe7b31228efce3fa09d1d6980f23f66ce358bedaa473e0c2ab146a92a0f",
+   "exclusion_reason": "not_a_real_issue_report",
+   "block_sha256_after": "61b492fcec0cd4734dc96f5e767bf3344e0994bb0773cb16dc959ad0214cb1b8",
+   "captured_at": "2026-09-10T00:11:14Z",
+   "case": "T6",
+   "adjudication": {
+    "first_audit": {
+     "by": "G51 corpus measurer (2026-11-19_g51-rollback-attribution/CORPUS.md)",
+     "case": "T6",
+     "label": "INCORRECT",
+     "reason": "other role (avoided version, hearsay): the author did not install 21 and cites other posts.",
+     "counts_toward_the_two": false
+    },
+    "second_blind": {
+     "by": "G52 blind adjudicator A (2026-11-19_g52-role-row-withdrawal/adjudication/LABELS_A.md; stored text only; no first labels, key or audit read)",
+     "case": "P15",
+     "label": "INCORRECT",
+     "reason_class": "not_a_real_issue_report",
+     "reason": "Hearsay: the poster never updated to 21 and only saw other posts calling it buggy; no first-hand problem with 21."
+    },
+    "third_blind": {
+     "by": "G52 blind adjudicator B (2026-11-19_g52-role-row-withdrawal/adjudication/LABELS_B.md; stored text only; no first labels, key, audit or other adjudicator's file read)",
+     "case": "P15",
+     "label": "INCORRECT",
+     "reason_class": "not_a_real_issue_report",
+     "reason": "The same question post as the 21.1 row; the poster never updated to 21, and the bugginess claim is hearsay from other posts."
+    }
+   },
+   "basis": "The same question post as the 21.1 row: the author never installed 21 and only repeats what other posts said about it."
+  }
+ ],
+ "held_out": [
+  {
+   "group": "T2",
+   "page": "blackmagic-davinci|20.2.1|",
+   "rows": [
+    {
+     "product_id": "blackmagic-davinci",
+     "update_version": "20.2.1",
+     "target_build": "",
+     "id": "blackmagic-davinci-20-2-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1noccl9-davinci-resolve-2021is-out",
+     "source_url": "https://www.reddit.com/r/davinciresolve/comments/1noccl9/davinci_resolve_2021is_out/"
+    }
+   ],
+   "why": "Held out before adjudication and kept counted: the stored excerpt is cut mid-post, the source cannot be re-read, and the first audit's label was only medium confidence. Both blind reviews later labelled it INCORRECT; that does not withdraw it here, because the hold was decided first."
+  }
+ ],
+ "findings_not_withdrawn": [
+  {
+   "group": "control P12",
+   "page": "blackmagic-davinci|21.0.4|",
+   "rows": [
+    {
+     "product_id": "blackmagic-davinci",
+     "update_version": "21.0.4",
+     "target_build": "",
+     "id": "blackmagic-davinci-21-0-4-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1w23ivu-linux-is-there-a-way-to-enable-hdr-in-the",
+     "source_url": "https://www.reddit.com/r/davinciresolve/comments/1w23ivu/linux_is_there_a_way_to_enable_hdr_in_the/"
+    }
+   ],
+   "why": "A random counted control that both blind reviews labelled INCORRECT (a how-to question). It was not a candidate, so it is reported for its own audited review and stays counted here."
+  }
+ ]
+}

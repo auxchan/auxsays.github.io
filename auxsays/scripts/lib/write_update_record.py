@@ -6,6 +6,7 @@ from typing import Any
 import yaml
 
 from . import maturity
+from . import notes_known_issue
 from .patch_identity import (
     REASON_BUILD_MISSING, REASON_FILENAME_BUILD_MISMATCH, InconsistentBuildIdentity,
     assert_build_identity, identity_build, is_build_aware, patch_display_label, permalink_path,
@@ -93,6 +94,21 @@ TEAMS_IDENTITY_FIELDS = (
     "teams_edition",
 )
 
+# NVIDIA driver records: the family NVIDIA named the driver under, its branch, NVIDIA's download id
+# (provenance, not identity -- identity is product_id + update_version), the precision of the
+# release date NVIDIA gives, and where the record came from and under what authority. Written to
+# front matter only; no layout renders them. Same lesson as teams_edition: a field an adapter emits
+# reaches disk only if it is listed here.
+NVIDIA_DRIVER_FIELDS = (
+    "driver_family",
+    "driver_branch",
+    "nvidia_download_id",
+    "release_date_precision",
+    "source_origin",
+    "collection_method",
+    "collection_authorization",
+)
+
 # Explicit cross-product applicability: the list of product_ids one official item applies
 # to, plus a human label. Opt-in. Lets a single official item feed several app pages while
 # preserving a common source identity and an auditable applicability list (never blind
@@ -147,7 +163,7 @@ ATTRIBUTION_LABELS = {
 # which would silently downgrade a record the moment one parse failed to see the app block.
 OPTIONAL_STRUCTURED_FIELDS = (
     OFFICE_APP_IDENTITY_FIELDS + ACROBAT_IDENTITY_FIELDS + TEAMS_IDENTITY_FIELDS
-    + APPLICABILITY_FIELDS
+    + APPLICABILITY_FIELDS + NVIDIA_DRIVER_FIELDS
 )
 
 
@@ -501,6 +517,12 @@ def build_front_matter(record: dict[str, Any]) -> dict[str, Any]:
         basis = notes_platform_basis(record.get("official_notes_platform_basis"))
         if basis:
             front["official_notes_platform_basis"] = basis
+    # A known issue the vendor's own GitHub release notes declare for THIS release (AUX-125). Derived
+    # from the body this record stores, never taken from the caller, and refreshed in
+    # refresh_existing_record from the merged body -- so the field cannot disagree with the notes on
+    # the page. Not an issue count, not a Release Health field, not the user-report known_issues_present.
+    if notes_known_issue.is_github_release(front) and notes_known_issue.field_value(useful_body, version):
+        front[notes_known_issue.FIELD] = notes_known_issue.DECLARED
     return front
 
 
@@ -576,6 +598,22 @@ def refresh_existing_record(path: Path, record: dict[str, Any]) -> tuple[Path, s
         existing["official_checksums_body"] = incoming_checksums
         existing["official_checksums_capture_status"] = "captured-from-official-release"
         material_changed = True
+
+    # Vendor-declared known issue in GitHub release notes (AUX-125): follows the body this record now
+    # stores, in BOTH directions. A vendor that adds a known-issue notice after publication sets the
+    # field on the next refresh that captures the edit; one that removes it clears the field. Read
+    # from the MERGED body, not the incoming one, so an observation whose body the block above refused
+    # (a placeholder, a failed capture) cannot clear a notice the stored notes still carry. Written
+    # only on change, so an unchanged record gains no churn from it.
+    if notes_known_issue.is_github_release(existing) or notes_known_issue.is_github_release(record):
+        wanted = notes_known_issue.field_value(existing.get("official_patch_notes_body"),
+                                               existing.get("update_version") or record.get("version"))
+        if wanted and existing.get(notes_known_issue.FIELD) != wanted:
+            existing[notes_known_issue.FIELD] = wanted
+            material_changed = True
+        elif not wanted and notes_known_issue.FIELD in existing:
+            existing.pop(notes_known_issue.FIELD)
+            material_changed = True
 
     # Official Release Health issue counts change over time (active -> resolved), so
     # update-on-change (not setdefault). Only fields the incoming record supplied are

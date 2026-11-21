@@ -106,7 +106,10 @@
   "steam": [
     "steam"
   ],
-  "nvidia": [
+  "nvidia-geforce-game-ready": [
+    "nvidia"
+  ],
+  "nvidia-studio-driver": [
     "nvidia"
   ],
   "amd": [

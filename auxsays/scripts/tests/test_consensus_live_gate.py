@@ -370,8 +370,12 @@ def run_suite() -> int:
             target = gen / candidate.name
             target.write_text(promoted_text, encoding="utf-8")
             orig_dir, orig_loader = qa.GENERATED_DIR, qa.load_counted_evidence_counts
+            orig_lifecycle_scan = qa.scan_lifecycle_builds
             qa.GENERATED_DIR = gen
             qa.load_counted_evidence_counts = lambda _records=None: {real_key: authoritative}
+            # Corpus-wide, like the record-count authority stubbed above: the shipped lifecycle file
+            # lists two builds this one-record fixture does not carry (patch_lifecycle_build_unmatched).
+            qa.scan_lifecycle_builds = lambda files: ([], [])
             try:
                 check("Part G: a legitimate promoted record passes normal validation",
                       safe_main(["--read-only"]) == 0)
@@ -388,6 +392,7 @@ def run_suite() -> int:
                       safe_main(["--read-only", "--publish-strict"]) == 1)
             finally:
                 qa.GENERATED_DIR, qa.load_counted_evidence_counts = orig_dir, orig_loader
+                qa.scan_lifecycle_builds = orig_lifecycle_scan
     else:
         check("Part G: the real candidate record is present to promote", False, str(candidate))
 

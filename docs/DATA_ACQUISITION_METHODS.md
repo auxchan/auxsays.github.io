@@ -43,7 +43,7 @@ widening how we look never widens what counts. The validator refuses any entry t
 
 ## The families
 
-21 families, 59 concrete implementations. Counts are generated from the registry.
+21 families, 62 concrete implementations. Counts are generated from the registry.
 
 | family | methods | purposes | transports |
 |---|---|---|---|
@@ -56,8 +56,8 @@ widening how we look never widens what counts. The validator refuses any entry t
 | `html_search_result_scrape` | 1 | candidate_discovery, context_resolution | html |
 | `html_table_enumeration` | 4 | community_discovery, fallback, official_ingestion | html |
 | `in_page_harvest` | 1 | candidate_discovery, context_resolution, recheck | html |
-| `issue_tracker_search_api` | 2 | candidate_discovery | github_api, html, rest_json |
-| `json_api_listing` | 4 | candidate_discovery, official_ingestion | github_api, rest_json |
+| `issue_tracker_search_api` | 3 | candidate_discovery, community_discovery | github_api, html, rest_json |
+| `json_api_listing` | 6 | candidate_discovery, community_discovery, official_ingestion | github_api, rest_json |
 | `json_api_search` | 5 | candidate_discovery, community_discovery, context_resolution, fallback, recheck | github_api, html, rest_json |
 | `known_url_recheck` | 5 | candidate_discovery, context_resolution, recheck | html, rest_json, rss_xml |
 | `manual_watch` | 1 | candidate_discovery | html |
@@ -69,8 +69,17 @@ widening how we look never widens what counts. The validator refuses any entry t
 | `sitemap_walk` | 2 | candidate_discovery, recheck | html, rss_xml |
 | `transport_failover` | 2 | candidate_discovery, official_ingestion | subprocess_curl |
 
-**22** methods carry `official_ingestion`; **36** do community or candidate discovery; **19** are not
-running today — 13 blocked, 3 disabled, 3 staged — and all of them are kept.
+**23** methods carry `official_ingestion`; **40** do community or candidate discovery; **24** are not
+running today — 16 blocked, 4 disabled, 3 staged, 1 historical — and all of them are kept.
+
+**Reachable is not complete, and neither is permitted.** A method's `status` says whether its source
+answers. It says nothing about whether the method finds every release, and nothing about the right to
+collect from the source. Premiere's official lane is the measured case (AUX-087): its pinned fallback
+kept answering on schedule while no release after 26.2.2 could ever be discovered from it, and the
+HelpX path it falls back from is `blocked`. Source rights are recorded in a separate optional field,
+`rights_status`, with the basis in `rights_note`. The methods that read Adobe Community carry
+`unresolved` (AUX-113). An entry without the field records nothing about rights, which is not a
+clearance.
 
 ### Enumeration and search are different shapes
 
@@ -164,7 +173,7 @@ The web AUXSAYS reads from will keep changing underneath it. The concrete change
 | feed removed | `rss_feed_poll`, `rss_search` | `html_link_enumeration`, `sitemap_walk` |
 | search index degrades or stops covering a corpus | `rss_search`, `open_web_search_api` | `paginated_listing_enumeration`, `sitemap_walk` — enumeration is bounded by *where*, not *what you ask* |
 | bot/CDN policy tightens | any direct fetch | `capability_probe` first; if it is reputation-based, there is no request shape that fixes it |
-| API authentication becomes mandatory | public API methods | none — only `api.github.com` may ever receive a credential, and that is an origin-scoped allowance in `lib/http.py`, not a general capability |
+| API authentication becomes mandatory | public API methods | none — only `api.github.com` may ever receive a credential, and that is an origin-scoped allowance in `lib/http.py` and `lib/github_api.py`, not a general capability |
 | pagination becomes infinite scroll | `paginated_listing_enumeration` | `json_api_listing` against whatever endpoint the scroll calls |
 | schema drift | any parser | the method's own `broken` health status — *not* `no_results` |
 

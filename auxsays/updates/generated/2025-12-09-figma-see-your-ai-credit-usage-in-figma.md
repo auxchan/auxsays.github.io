@@ -17,8 +17,8 @@ update_version: See your AI credit usage in Figma
 update_logo_text: FIG
 update_published_at: '2025-12-09T00:00:00.000Z'
 update_last_checked: '2026-08-03T06:53:15Z'
-source_last_checked: '2026-10-11T08:19:04Z'
-official_body_last_checked: '2026-10-11T08:19:04Z'
+source_last_checked: '2026-11-17T23:25:42Z'
+official_body_last_checked: '2026-11-17T23:25:42Z'
 record_last_updated: '2026-08-03T06:53:15Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -81,6 +81,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-10-11T08:19:04Z'
+  url: https://www.figma.com/release-notes/?title=see-your-ai-credit-usage-in-figma
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-17T23:25:42Z'
   url: https://www.figma.com/release-notes/?title=see-your-ai-credit-usage-in-figma
   status: captured-from-rss-feed
   body_captured: true

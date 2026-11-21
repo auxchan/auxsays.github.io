@@ -1,0 +1,384 @@
+{
+ "entries": [
+  {
+   "role": "retain",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.7623",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5708079-security-updates-are-not-installing",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5708079/security-updates-are-not-installing",
+   "block_sha256_before_run": "898731539506e6b29689307a3392df9a708f601d37db20d41d2e31b355037c55",
+   "counted_before_run": true,
+   "action": "kept"
+  },
+  {
+   "role": "withdraw",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.7623",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5769728-security-update-kb5074109-26200-7623-i",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5769728/security-update-(kb5074109)-(26200-7623)-install-e",
+   "block_sha256_before_run": "9efe557fef95c2ceefd6d338e9a381f6f2e64b959825c1194038b3518b8c54d4",
+   "counted_before_run": true,
+   "action": "withdraw",
+   "exclusion_reason": "duplicate_existing_evidence"
+  },
+  {
+   "role": "retain",
+   "product_id": "blackmagic-davinci",
+   "update_version": "20.2",
+   "target_build": "",
+   "id": "blackmagic-davinci-20-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1rnhcy6-problem-audio-after-exporting",
+   "source_url": "https://www.reddit.com/r/davinciresolve/comments/1rnhcy6/problem_audio_after_exporting/",
+   "block_sha256_before_run": "54b96adfb57b5011da3557f6b45c13b85eb4a5965db34d85dd99f3db942d4c59",
+   "counted_before_run": true,
+   "action": "kept"
+  },
+  {
+   "role": "withdraw",
+   "product_id": "blackmagic-davinci",
+   "update_version": "20.2",
+   "target_build": "",
+   "id": "blackmagic-davinci-20-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1rvhlmx-audio-problem-after-exporting",
+   "source_url": "https://www.reddit.com/r/davinciresolve/comments/1rvhlmx/audio_problem_after_exporting/",
+   "block_sha256_before_run": "081f4b2b3dfc850a3c550e8517ddb052fd63a6f2e9d0cacdc2c6b8fefef67823",
+   "counted_before_run": true,
+   "action": "withdraw",
+   "exclusion_reason": "duplicate_existing_evidence"
+  },
+  {
+   "role": "retain",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.8894",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5956328-os-build-26200-8894-office-errors-majo",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5956328/os-build-26200-8894-office-errors-major-headache",
+   "block_sha256_before_run": "96de91725defedc05d2ab2a1191eca5a0074555e03d9ae53b84dad94bd8d5287",
+   "counted_before_run": true,
+   "action": "kept"
+  },
+  {
+   "role": "withdraw",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.8894",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5956430-os-build-26200-8894-office-errors-majo",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5956430/os-build-26200-8894-office-errors-major-headache-p",
+   "block_sha256_before_run": "da17cccb849035c513dc065da7c3d3bb58bb18beabb824205a74d0f063906f43",
+   "counted_before_run": true,
+   "action": "withdraw",
+   "exclusion_reason": "duplicate_existing_evidence"
+  },
+  {
+   "role": "retain",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.8973",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5978256-win-11-25h2kb5101684-os-builds-26200-8",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5978256/win-11-25h2kb5101684-os-builds-26200-8973-and-2610",
+   "block_sha256_before_run": "453d879578d4ebfd13f83eebec50b90cc7fa217c56e301440371931a149b9267",
+   "counted_before_run": true,
+   "action": "kept"
+  },
+  {
+   "role": "withdraw",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.8973",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5982769-file-history-problems-after-installing",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5982769/file-history-problems-after-installing-kb5101684-a",
+   "block_sha256_before_run": "7d4311ae81c3313a13795e3df692f15e313aa9efbb4288c37fb952e23aa64ea7",
+   "counted_before_run": true,
+   "action": "withdraw",
+   "exclusion_reason": "duplicate_existing_evidence"
+  },
+  {
+   "role": "withdraw",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.8973",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5983062-files-are-backed-up-but-file-history-s",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5983062/files-are-backed-up-but-file-history-status-and-pr",
+   "block_sha256_before_run": "d33d2ca9c5c60a8cc9a918a35b3f0441fae1d09d485d1ef87dd5513b18daf742",
+   "counted_before_run": true,
+   "action": "withdraw",
+   "exclusion_reason": "duplicate_existing_evidence"
+  },
+  {
+   "role": "withdraw",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.8973",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windowsinsiderprogram-win-11-25h2-kb5101684-previe",
+   "source_url": "https://techcommunity.microsoft.com/discussions/windowsinsiderprogram/win-11-25h2-kb5101684-preview-and-win-10-22h2-kb5120249-issue/4547615",
+   "block_sha256_before_run": "834f60569bff2466dbf951d462f08860d6944ad32646c79488d5b206795454b2",
+   "counted_before_run": true,
+   "action": "withdraw",
+   "exclusion_reason": "duplicate_existing_evidence"
+  },
+  {
+   "role": "withdraw",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.8973",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windows11-kb5101684kb5120249-caused-file-history-e",
+   "source_url": "https://techcommunity.microsoft.com/discussions/windows11/kb5101684kb5120249-caused-file-history-errors-but-microsoft-has-not-acknowledged/4550372",
+   "block_sha256_before_run": "902861af2462f8b2e8cbae3626a4404f577ad0f107b73a5bc4266ad9b9f662d4",
+   "counted_before_run": true,
+   "action": "withdraw",
+   "exclusion_reason": "duplicate_existing_evidence"
+  },
+  {
+   "role": "withdraw",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.8973",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windows11-file-history-broken-after-kb5101684-kb51",
+   "source_url": "https://techcommunity.microsoft.com/discussions/windows11/file-history-broken-after-kb5101684--kb5120249/4551560",
+   "block_sha256_before_run": "6174e2cf7b0188df9714c434f8c49c7e7cbc7a87912d37047c546eca7e681d1d",
+   "counted_before_run": true,
+   "action": "withdraw",
+   "exclusion_reason": "duplicate_existing_evidence"
+  },
+  {
+   "role": "withdraw",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.8973",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windowsinsiderprogram-broken-file-history-after-ju",
+   "source_url": "https://techcommunity.microsoft.com/discussions/windowsinsiderprogram/broken-file-history-after-julyaugust-updates-kb5101684-on-win11-25h2--kb5120249-/4552324",
+   "block_sha256_before_run": "2b216a664c467903c322b422dc7e2904fb33a4e1b863094a0d3707df774dfc17",
+   "counted_before_run": true,
+   "action": "withdraw",
+   "exclusion_reason": "duplicate_existing_evidence"
+  },
+  {
+   "role": "retain",
+   "product_id": "obs-studio",
+   "update_version": "31.1.2",
+   "target_build": "",
+   "id": "obs-studio-31-1-2-github-issue-13711",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/13711",
+   "block_sha256_before_run": "66b5940d6360575894022b579c51cd06e6ecd874bc5a7b705854fda99fded640",
+   "counted_before_run": true,
+   "action": "kept"
+  },
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "31.1.2",
+   "target_build": "",
+   "id": "obs-studio-31-1-2-obs-forum-thread-196230",
+   "source_url": "https://obsproject.com/forum/threads/image-source-causes-rendering-lag-and-dropped-frames-when-opening-properties-or-changing-images-on-macos.196230/",
+   "block_sha256_before_run": "c7edd23efaac43458d3ed324dbf6c8c250e4d6d2e17520f6058f4c8436b623b8",
+   "counted_before_run": true,
+   "action": "withdraw",
+   "exclusion_reason": "duplicate_existing_evidence"
+  },
+  {
+   "role": "retain",
+   "product_id": "obs-studio",
+   "update_version": "32.2.0",
+   "target_build": "",
+   "id": "obs-studio-32-2-0-github-issue-13685",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/13685",
+   "block_sha256_before_run": "217742f2482c30da649a5347caace9f26c3e5d5e4671d84edba0c753819d26bb",
+   "counted_before_run": true,
+   "action": "kept"
+  },
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "32.2.0",
+   "target_build": "",
+   "id": "obs-studio-32-2-0-github-issue-13689",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/13689",
+   "block_sha256_before_run": "2014b8cbe071cd354e486a902796fafa817a7815630d61021100758956b1f5a9",
+   "counted_before_run": true,
+   "action": "withdraw",
+   "exclusion_reason": "duplicate_existing_evidence"
+  },
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "32.2.0",
+   "target_build": "",
+   "id": "obs-studio-32-2-0-github-issue-13690",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/13690",
+   "block_sha256_before_run": "e5c825eed97c9d3a055c584c8657d96f78c68a5607fe2993cf480e01e26d1441",
+   "counted_before_run": true,
+   "action": "withdraw",
+   "exclusion_reason": "duplicate_existing_evidence"
+  },
+  {
+   "role": "retain",
+   "product_id": "obs-studio",
+   "update_version": "32.2.1",
+   "target_build": "",
+   "id": "obs-studio-32-2-1-github-issue-13729",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/13729",
+   "block_sha256_before_run": "bcb3ed192ccf6795984ae353af607e45078c4f56cb750f3ece7cd8c79eab14bf",
+   "counted_before_run": true,
+   "action": "kept"
+  },
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "32.2.1",
+   "target_build": "",
+   "id": "obs-studio-32-2-1-obs-forum-thread-195984",
+   "source_url": "https://obsproject.com/forum/threads/flatpak-dumps-core-if-ran-in-nixos-from-desktop-file-but-works-in-command-line-exec.195984/",
+   "block_sha256_before_run": "d2e46a1084ed1dcdc9169fe4ec61dd61380fe7c756c5e03df56e2b8af9c8b785",
+   "counted_before_run": true,
+   "action": "withdraw",
+   "exclusion_reason": "duplicate_existing_evidence"
+  },
+  {
+   "role": "retain",
+   "product_id": "obs-studio",
+   "update_version": "32.2.1",
+   "target_build": "",
+   "id": "obs-studio-32-2-1-github-issue-13711",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/13711",
+   "block_sha256_before_run": "a06e13c5148e94bbddf655f133624967444269f3406a8921c8e050f074ec6e4f",
+   "counted_before_run": true,
+   "action": "kept"
+  },
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "32.2.1",
+   "target_build": "",
+   "id": "obs-studio-32-2-1-obs-forum-thread-196230",
+   "source_url": "https://obsproject.com/forum/threads/image-source-causes-rendering-lag-and-dropped-frames-when-opening-properties-or-changing-images-on-macos.196230/",
+   "block_sha256_before_run": "332e638e598fbc4be5a2f238a6a8d75540e3e810a216b8b1e9ab10700980544f",
+   "counted_before_run": true,
+   "action": "withdraw",
+   "exclusion_reason": "duplicate_existing_evidence"
+  }
+ ],
+ "withdrawn_now": 14,
+ "counted_population": {
+  "microsoft-windows-11": [
+   532,
+   524
+  ],
+  "obs-studio": [
+   293,
+   288
+  ],
+  "blackmagic-davinci": [
+   336,
+   335
+  ]
+ },
+ "per_patch": [
+  {
+   "product_id": "blackmagic-davinci",
+   "update_version": "20.2",
+   "target_build": "",
+   "before": 16,
+   "after": 15
+  },
+  {
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.7623",
+   "before": 41,
+   "after": 40
+  },
+  {
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.8894",
+   "before": 7,
+   "after": 6
+  },
+  {
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.8973",
+   "before": 16,
+   "after": 10
+  },
+  {
+   "product_id": "obs-studio",
+   "update_version": "31.1.2",
+   "target_build": "",
+   "before": 4,
+   "after": 3
+  },
+  {
+   "product_id": "obs-studio",
+   "update_version": "32.2.0",
+   "target_build": "",
+   "before": 10,
+   "after": 8
+  },
+  {
+   "product_id": "obs-studio",
+   "update_version": "32.2.1",
+   "target_build": "",
+   "before": 28,
+   "after": 26
+  }
+ ],
+ "newly_counted_rows": [],
+ "same_report_rows_on_other_identities": [],
+ "product_scope": [
+  "microsoft-windows-11",
+  "obs-studio",
+  "blackmagic-davinci"
+ ],
+ "generated_at": "2026-11-12T21:57:13Z",
+ "exclusion_reasons": [
+  "duplicate_existing_evidence",
+  "identity_not_the_subject",
+  "not_a_real_issue_report",
+  "version_is_rollback_target",
+  "version_named_but_working"
+ ],
+ "store_sha256_before": "70c07847cc5763c59b9a108c74910ffbf797a1b6452dee9390ae1752540f6aae",
+ "store_sha256_after": "59936c9fdbabfd2b380a52007f5e26a63215e567f8a91b050a02c8010d978b97",
+ "manifest_sha256": "eae1abf5d5f9f2c5be3c09fa1ea59b37438457a2ff01cb0309bc1ee62b9b588d",
+ "baseline_sha256": "b378fa62c22c9e6a7e7de5e6383d799349d9fc1c1eed9ddd4059f7bfb9192248",
+ "written": true,
+ "writers": [
+  {
+   "command": "build_consensus_from_evidence.py --product-id microsoft-windows-11 --product-id obs-studio --product-id blackmagic-davinci --reconcile-only",
+   "returncode": 0,
+   "output": [
+    "Reconciled report counts on 7 record(s) to final counted evidence (scoped to blackmagic-davinci, microsoft-windows-11, obs-studio).",
+    "  2025-07-28-obs-studio-31-1-2.md: obs-studio 31.1.2 4 -> 3",
+    "  2025-09-10-davinci-resolve-20-2.md: blackmagic-davinci 20.2 16 -> 15",
+    "  2026-01-13-windows-11-25h2-26200-7623.md: microsoft-windows-11 25H2 41 -> 40",
+    "  2026-07-18-windows-11-25h2-26200-8894.md: microsoft-windows-11 25H2 7 -> 6",
+    "  2026-07-21-obs-studio-32-2-0.md: obs-studio 32.2.0 10 -> 8",
+    "  2026-07-24-obs-studio-32-2-1.md: obs-studio 32.2.1 28 -> 26",
+    "  2026-07-28-windows-11-25h2-26200-8973.md: microsoft-windows-11 25H2 16 -> 10"
+   ]
+  },
+  {
+   "command": "apply_consensus_to_records.py --product-id microsoft-windows-11 --write-all --confirm-write",
+   "returncode": 0,
+   "output": [
+    "[apply_consensus_to_records] write_back: 57 group(s); 57 would write; 0 blocked; 524 included; 59 excluded."
+   ]
+  },
+  {
+   "command": "apply_consensus_to_records.py --product-id obs-studio --write-all --confirm-write",
+   "returncode": 0,
+   "output": [
+    "[apply_consensus_to_records] write_back: 13 group(s); 13 would write; 0 blocked; 288 included; 25 excluded."
+   ]
+  },
+  {
+   "command": "apply_consensus_to_records.py --product-id blackmagic-davinci --write-all --confirm-write",
+   "returncode": 0,
+   "output": [
+    "[apply_consensus_to_records] write_back: 28 group(s); 28 would write; 0 blocked; 335 included; 1 excluded."
+   ]
+  }
+ ],
+ "parent_commit": "ec5da166ceded6c774814dcebc2bb04b775dcd03"
+}

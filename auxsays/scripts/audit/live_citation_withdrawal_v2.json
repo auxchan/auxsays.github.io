@@ -1,0 +1,81 @@
+{
+ "schema": 1,
+ "ledger": "AUX-090",
+ "version": 2,
+ "supplements": "auxsays/scripts/audit/live_citation_withdrawal.json (AUX-088), which stays unchanged",
+ "purpose": "Pinned audited withdrawal of the one live-page citation the AUX-088 blind review never saw: the OBS forum copy, on OBS 32.1.2, of a GitHub issue the same page already counts. Withdrawn only because the two posts are the same report; the GitHub issue stays counted and unchanged.",
+ "selector": [
+  "product_id",
+  "update_version",
+  "target_build",
+  "id",
+  "source_url"
+ ],
+ "products": [
+  "microsoft-windows-11",
+  "obs-studio"
+ ],
+ "exclusion_reasons": [
+  "duplicate_existing_evidence",
+  "identity_not_the_subject",
+  "not_a_real_issue_report",
+  "version_is_rollback_target",
+  "version_named_but_working"
+ ],
+ "edit": {
+  "counted": false,
+  "exclusion_reason": "duplicate_existing_evidence",
+  "row_retained": true
+ },
+ "parent_commit": "0c518de401e58d87283420b1f8dddd25cdce9f6c",
+ "store_path": "auxsays/_data/consensus_evidence.yml",
+ "store_sha256_at_pin": "68dceaeac8af11e9abb4594db895deaee1aa4b60d9f0460c8e22fad5de84f3a9",
+ "basis": "Withdrawn only when the two posts demonstrably describe the same underlying report with matching concrete details; the same author alone is not enough. The first citation audit labelled the forum row INCORRECT for another reason (32.1.2 is the version its author went back to); that ground is not used here.",
+ "note": "Each entry must match exactly one stored block whose sha256 equals block_sha256_before (to withdraw) or block_sha256_after (already withdrawn), or a successor recorded in live_citation_withdrawal_baseline_v2.json. The retain entry is the earlier report the duplicate cross-posts; it must stay counted.",
+ "entries": [
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "32.1.2",
+   "target_build": "",
+   "id": "obs-studio-32-1-2-obs-forum-thread-196545",
+   "source_url": "https://obsproject.com/forum/threads/video-capture-device-green-flickering.196545/",
+   "record_file": "auxsays/updates/generated/2026-04-21-obs-studio-32-1-2.md",
+   "block_sha256_before": "a6bacac21425eac6f6df92d9dd145d3a58185680c8ad8344e3f96d2d53d32708",
+   "exclusion_reason": "duplicate_existing_evidence",
+   "block_sha256_after": "0dfba0aeb53e3811a21379b5a2c103e42384414530f17b257a71c4a3862e0d95",
+   "adjudication": {
+    "first_audit": {
+     "case_key": "F196545 (32.1.2)",
+     "label": "INCORRECT",
+     "reason": "version_is_rollback_target"
+    },
+    "second_blind": {
+     "case": "N3",
+     "label": "INCORRECT",
+     "reason_class": "duplicate_same_page",
+     "judge": "judged by the same worker that implemented AUX-090; a separate reviewer context could not be started, and the worker had read the first audit's summary"
+    }
+   },
+   "basis": "The forum opening post and GitHub issue 13997 are one report: the same title, the same uploaded OBS log URL, the same device setup (an iPad as a video capture device for a PDF lesson), the same symptom sequence (lag, then green flicker on that source only) and the same history (32.2.2 first, then 32.1.2 with the same result). The forum copy was posted about seven hours after the issue and three hours after a maintainer pointed the issue to the forum.",
+   "duplicate_of": {
+    "product_id": "obs-studio",
+    "update_version": "32.1.2",
+    "target_build": "",
+    "id": "obs-studio-32-1-2-github-issue-13997",
+    "source_url": "https://github.com/obsproject/obs-studio/issues/13997"
+   }
+  },
+  {
+   "role": "retain",
+   "product_id": "obs-studio",
+   "update_version": "32.1.2",
+   "target_build": "",
+   "id": "obs-studio-32-1-2-github-issue-13997",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/13997",
+   "record_file": "auxsays/updates/generated/2026-04-21-obs-studio-32-1-2.md",
+   "block_sha256_before": "554ffb2faa99f2f26ee7b3050701cfc3cb4a6900f9c1ec9a237051353f1a3e36",
+   "note": "Kept: the earlier report the duplicate cross-posts; it stays counted (the two reviews of it disagree)."
+  }
+ ]
+}

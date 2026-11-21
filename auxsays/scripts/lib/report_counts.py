@@ -283,10 +283,20 @@ ZERO_COUNT_PROJECTION_FIELDS = ("update_consensus_summary", "accepted_report_sou
 # premiere branch of `_record_coherence_fields` generates. Replacing 26.2's prose with that same
 # generator is the point rather than the cost: a record no automated lane may touch is a record that
 # can only be corrected by hand.
+# comfyui joins on the Teams terms, in the same change that activates its community collector and
+# adds its scoped promotion step: its in-collector writeback sets freshness only, so without the step
+# the first accepted ComfyUI report would reach QA with a count and no summary. Every ComfyUI record
+# is at zero with the official-only shape today, so membership retracts nothing; comfyui has no
+# branch in _record_coherence_fields, so promotion cannot write verdict prose.
+# The two NVIDIA driver families join on the same terms, in the change that activates their forum
+# collector and adds one scoped promotion step per family. No NVIDIA record carries a count today
+# (the official lane has not published its first records yet), so membership retracts nothing; the
+# products have no branch in _record_coherence_fields, so promotion cannot write verdict prose.
 CONSENSUS_PROMOTION_PRODUCTS = frozenset({"microsoft-powerpoint", "microsoft-windows-11",
                                           "obs-studio", "adobe-acrobat-pro",
                                           "adobe-acrobat-reader", "microsoft-teams",
-                                          "adobe-premiere-pro"})
+                                          "adobe-premiere-pro", "comfyui",
+                                          "nvidia-geforce-game-ready", "nvidia-studio-driver"})
 
 
 def format_reconcile_detail(detail: dict[str, Any]) -> str:
