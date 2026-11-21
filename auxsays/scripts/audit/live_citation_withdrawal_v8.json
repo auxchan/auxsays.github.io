@@ -1,0 +1,98 @@
+{
+ "schema": 1,
+ "ledger": "AUX-127",
+ "version": 8,
+ "supplements": "auxsays/scripts/audit/live_citation_withdrawal.json (AUX-088), live_citation_withdrawal_v2.json (AUX-090), live_citation_withdrawal_v3.json (AUX-098), live_citation_withdrawal_v4.json (AUX-108), live_citation_withdrawal_v5.json (AUX-111), live_citation_withdrawal_v6.json (AUX-114) and live_citation_withdrawal_v7.json (AUX-118), which stay unchanged",
+ "purpose": "Pinned withdrawal of one stored OBS Studio 32.1.1 report that was posted the day before OBS Studio 32.1.1 was released. The OBS acceptance gate refuses such a report (collect_obs_reports.release_date_gate returns before_release_date); this row was accepted before the gate read the post date. The row is kept; only counted and exclusion_reason change.",
+ "selector": [
+  "product_id",
+  "update_version",
+  "target_build",
+  "id",
+  "source_url"
+ ],
+ "products": [
+  "microsoft-windows-11",
+  "obs-studio"
+ ],
+ "exclusion_reasons": [
+  "before_release_date",
+  "duplicate_existing_evidence",
+  "identity_not_the_subject",
+  "not_a_real_issue_report",
+  "version_is_rollback_target",
+  "version_named_but_working"
+ ],
+ "edit": {
+  "counted": false,
+  "exclusion_reason": "before_release_date (derived; the OBS collector's own rejection string)",
+  "evidence_valid_for_current_patch": "not present on OBS rows; a block carrying it refuses",
+  "source_date_pass": "left as stored (null)",
+  "row_retained": true
+ },
+ "parent_commit": "4a559ed9f59cc5bb37e1003a001bdf9ba6529ec2",
+ "store_path": "auxsays/_data/consensus_evidence.yml",
+ "store_sha256_at_pin": "f92914e16ab1c1bbe035a6dd625868e93223236161e2c282db2e3de84a1a2674",
+ "derivation": {
+  "kind": "derived, label-free",
+  "gate": "collect_obs_reports.release_date_gate(issue, release_date): before_release_date when the report's own UTC creation day is earlier than the record's release day",
+  "post_time_source": "auxsays/scripts/audit/obs_report_dates.json (AUX-090): source.created_at, read once from the GitHub REST API",
+  "post_time_source_sha256": "c39ed71349bc26c7f3c5ff65255362cf641d76d99ee1c77e03449e42ee4efccd",
+  "release_date_source": "the record's update_published_at",
+  "recomputed": "on every run, by the tool, by calling the gate; the run refuses unless the gate returns before_release_date and the stored source_date is the pinned post day"
+ },
+ "basis": "No label decides this withdrawal. The report's own creation time, pinned from its source, is 2026-04-01T12:05:03Z; OBS Studio 32.1.1 was released 2026-04-02T19:54:40Z. A report posted before a release cannot report a problem with that release, and the OBS acceptance gate refuses one. The stored source_date (2026-04-01) is the pinned post day.",
+ "note": "The entry must match exactly one stored block whose sha256 equals block_sha256_before (to withdraw) or block_sha256_after (already withdrawn). No retain entries: it is not a duplicate. The must-stay rows are the first two counted 32.1.1 reports posted after the release, which the same gate accepts.",
+ "entries": [
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "32.1.1",
+   "target_build": "",
+   "id": "obs-studio-32-1-1-github-issue-13278",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/13278",
+   "record_file": "auxsays/updates/generated/2026-04-02-obs-studio-32-1-1.md",
+   "block_sha256_before": "14e0b6ce062ad24616c9d5d2eed8fa93a537ad79b81eca06b2b267b091488490",
+   "exclusion_reason": "before_release_date",
+   "block_sha256_after": "9420d28e66d843734411c388a01e30aa1e859ac7f65fbcf57376e4ff9ea90ee7",
+   "captured_at": "2026-05-03T02:44:22Z",
+   "derived_basis": {
+    "pinned_created_at": "2026-04-01T12:05:03Z",
+    "stored_source_date": "2026-04-01",
+    "record_update_published_at": "2026-04-02T19:54:40Z",
+    "gate_result": "before_release_date"
+   },
+   "basis": "Posted 2026-04-01 (UTC), the day before OBS Studio 32.1.1 was released on 2026-04-02; the OBS acceptance gate returns before_release_date for it."
+  }
+ ],
+ "held_out": [],
+ "must_stay_counted": [
+  {
+   "product_id": "obs-studio",
+   "update_version": "32.1.1",
+   "target_build": "",
+   "id": "obs-studio-32-1-1-obs-forum-thread-194821",
+   "source_url": "https://obsproject.com/forum/threads/nvenc-video-encoder-has-disappeared.194821/",
+   "control_role": "the earliest counted 32.1.1 report posted after the release (2026-04-03T05:22Z UTC); the gate accepts it",
+   "block_sha256": "96335041770fc283eaa75fdde28245ed3ab71d7af694a3c3b8fa10060f60e066"
+  },
+  {
+   "product_id": "obs-studio",
+   "update_version": "32.1.1",
+   "target_build": "",
+   "id": "obs-studio-32-1-1-github-issue-13286",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/13286",
+   "control_role": "the earliest counted 32.1.1 GitHub issue posted after the release (2026-04-03T07:38:07Z); the gate accepts it",
+   "block_sha256": "e672383238be42c93ef5d77feae8f4e7ea70e7f63a7928a7099c037ea9d5fb62"
+  }
+ ],
+ "out_of_scope": [
+  {
+   "product_id": "obs-studio",
+   "update_version": "32.1.2",
+   "target_build": "",
+   "id": "obs-studio-32-1-2-github-issue-13518",
+   "why": "Not a pre-release report (posted 2026-06-05, after the 2026-04-21 release). It needs its own adjudicated withdrawal; it is not touched here."
+  }
+ ]
+}

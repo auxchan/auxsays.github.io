@@ -17,7 +17,9 @@ deletion (lib/evidence_loss.py). Each row takes the reason its two reviews suppo
 only a closed set of names the store already uses: `identity_not_the_subject` (AUX-072),
 `duplicate_existing_evidence` (AUX-079 and the append guard), `version_named_but_working`,
 `version_is_rollback_target` (OBS's own role vocabulary) and `not_a_real_issue_report`. None of them is
-a reason any resolver or tier can promote back into view.
+a reason any resolver or tier can promote back into view. A version-8 manifest may also use one reason
+taken from the OBS collector's rejection vocabulary, `before_release_date`, derived rather than labelled
+(see A DERIVED REASON below).
 
 THE MECHANISM IS AUX-072's AND AUX-079's, imported rather than copied: five-field selection
 (product_id, update_version, target_build, id, source_url), the block splitter and its row-for-block
@@ -106,6 +108,33 @@ ways and adds no route around any check above:
 Both products have no build contract (target_build empty) and take the two-line edit; a block carrying a
 validity line refuses, as for DaVinci.
 
+A DERIVED REASON, NOT A LABEL (G87, AUX-127). Every reason above rests on two agreeing human labels. One
+withdrawal does not need them, because the store already holds everything that decides it: a counted OBS
+row whose report was posted BEFORE the release it is counted against. The OBS acceptance gate refuses such
+a report today (collect_obs_reports.release_date_gate returns `before_release_date`); one row was accepted
+before the gate read the post date. This is the FIRST label-free withdrawal reason, so it is closed four
+ways and widens nothing above:
+
+  vocabulary  `before_release_date` is the collector's own rejection string, not a name any withdrawal
+              wrote into the store before. It exists only in a manifest that declares version 8 and lists
+              the five reasons plus this one (DERIVED_VOCABULARY); every manifest of version 1-7 must still
+              list exactly the five, so each one validates byte-for-byte as before.
+  grant       it may withdraw ONLY the five-field identities DERIVED_GRANTS names, and only OBS rows: a new
+              row needs its own grant here, never a wider manifest.
+  recompute   the tool decides it again on every run by CALLING release_date_gate with the post time pinned
+              in audit/obs_report_dates.json (AUX-090, read from the source once) against the record's
+              update_published_at. It refuses when the pinned time is missing, the release date is missing or
+              unreadable, the gate says anything but before_release_date, the stored source_date names a
+              different day from the pinned time, the entry or the row carries adjudication labels, or the
+              entry names a kept row (duplicate_of).
+  edit        the same two OBS lines as every other reason (counted, exclusion_reason); source_date_pass
+              stays as stored.
+
+No resolver, tier or re-admission lane can promote the reason back into view: each reads a positive list
+that does not contain it (context_resolution.RESOLVABLE_REASONS, tier2_evidence.PROMOTABLE_REJECTIONS,
+acrobat_tiering's tierable set, readmit_adjudicated_rows.FROM_REASONS), and the OBS collector's dedupe holds
+the report's id and URL whether the row counts or not.
+
 Exit: 0 dry run, written, or nothing left to do; 1 refused (nothing written); 2 usage error;
 3 a scoped writer failed after the store step.
 """
@@ -168,6 +197,19 @@ SELECTOR = aux072.SELECTOR
 DUPLICATE_REASON = "duplicate_existing_evidence"
 REASONS = frozenset({aux072.REASON, DUPLICATE_REASON, "version_named_but_working",
                      "version_is_rollback_target", "not_a_real_issue_report"})
+# G87 (AUX-127): the one DERIVED reason -- collect_obs_reports.release_date_gate's own rejection string. Valid
+# only in a manifest that declares DERIVED_VOCABULARY_VERSION and lists DERIVED_VOCABULARY; every earlier manifest
+# keeps REASONS, unchanged. Bound to DERIVED_GRANTS: a new row needs its own grant here.
+DERIVED_REASON = "before_release_date"
+DERIVED_VOCABULARY_VERSION = 8
+DERIVED_VOCABULARY = REASONS | {DERIVED_REASON}
+DERIVED_GRANTS: dict[str, frozenset[tuple[str, ...]]] = {
+    DERIVED_REASON: frozenset({(
+        OBS_PRODUCT_ID, "32.1.1", "", "obs-studio-32-1-1-github-issue-13278",
+        "https://github.com/obsproject/obs-studio/issues/13278")}),
+}
+# The post time of every counted OBS report, read once from its source and pinned (AUX-090).
+REPORT_DATES = SCRIPTS / "audit" / "obs_report_dates.json"
 INCORRECT = "INCORRECT"
 DUPLICATE_LABEL = "same_report_duplicate"
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
@@ -295,12 +337,52 @@ def manifest_scope(doc: dict[str, Any]) -> tuple[str, ...]:
     return scope
 
 
+def manifest_vocabulary(doc: dict[str, Any]) -> frozenset[str]:
+    """The closed reasons this manifest may use: REASONS for every manifest, exactly as before, and
+    DERIVED_VOCABULARY only for one that declares version DERIVED_VOCABULARY_VERSION and lists it (G87). A
+    version-8 manifest listing only the five is refused too, so the version alone never changes a reading."""
+    declared = sorted(doc.get("exclusion_reasons") or [])
+    if doc.get("version") == DERIVED_VOCABULARY_VERSION:
+        if declared != sorted(DERIVED_VOCABULARY):
+            raise Refusal("manifest: a version-8 manifest must list the five closed reasons and "
+                          f"{DERIVED_REASON!r}, exactly")
+        return DERIVED_VOCABULARY
+    if declared != sorted(REASONS):
+        raise Refusal("manifest: the exclusion reasons differ from the tool's closed vocabulary")
+    return REASONS
+
+
+def _derived_grant_refusal(ident: tuple[str, ...]) -> str:
+    """'' only for an OBS row whose exact five-field identity DERIVED_GRANTS names."""
+    if ident[0] != OBS_PRODUCT_ID:
+        return f"the derived reason {DERIVED_REASON!r} applies to OBS Studio rows only: {ident}"
+    if tuple(ident) not in DERIVED_GRANTS[DERIVED_REASON]:
+        return f"not an identity this tool grants the derived reason {DERIVED_REASON!r}: {ident}"
+    return ""
+
+
+def _derived_entry_refusal(entry: dict[str, Any]) -> str:
+    """'' when a derived entry carries what it must and nothing it must not: no adjudication labels (the
+    reason is decided from stored facts, never from a label), no kept row, a granted OBS identity, and a
+    stated basis."""
+    ident = _ident(entry)
+    if entry.get("adjudication"):
+        return f"a derived withdrawal carries adjudication labels: {ident[3]}"
+    if entry.get("duplicate_of"):
+        return f"a derived withdrawal names a kept row (duplicate_of): {ident[3]}"
+    granted = _derived_grant_refusal(ident)
+    if granted:
+        return granted
+    if not str(entry.get("basis") or "").strip():
+        return f"a derived withdrawal states no basis: {ident[3]}"
+    return ""
+
+
 def manifest_entries(doc: dict[str, Any]) -> list[dict[str, Any]]:  # noqa: PLR0912
     """The pinned entries, refusing a manifest that could select ambiguously or widen the vocabulary."""
     if list(doc.get("selector") or []) != list(SELECTOR):
         raise Refusal("manifest: the selector is not the five-field identity")
-    if sorted(doc.get("exclusion_reasons") or []) != sorted(REASONS):
-        raise Refusal("manifest: the exclusion reasons differ from the tool's closed vocabulary")
+    vocabulary = manifest_vocabulary(doc)
     scope = manifest_scope(doc)
     entries = doc.get("entries")
     if not isinstance(entries, list) or not entries:
@@ -336,8 +418,13 @@ def manifest_entries(doc: dict[str, Any]) -> list[dict[str, Any]]:  # noqa: PLR0
         if role == "retain":
             retained.add(ident)
             continue
-        if entry.get("exclusion_reason") not in REASONS:
+        if entry.get("exclusion_reason") not in vocabulary:
             raise Refusal(f"manifest: reason {entry.get('exclusion_reason')!r} is outside the closed vocabulary: {ident[3]}")
+        if entry.get("exclusion_reason") == DERIVED_REASON:
+            why = _derived_entry_refusal(entry)
+            if why:
+                raise Refusal("manifest: " + why)
+            continue  # decided again from stored facts in plan(); no label can stand in for that
         if not _two_labels(entry) or not str(entry.get("basis") or "").strip():
             raise Refusal(f"manifest: row lacks two INCORRECT labels (or two same_report_duplicate labels from "
                           f"two reviewers naming its kept row) with reasons and a stated basis: {ident[3]}")
@@ -434,6 +521,55 @@ def _record_refusal(entry: dict[str, Any], records: dict) -> str:
     return ""
 
 
+def load_report_dates(path: Path | None = REPORT_DATES) -> dict[tuple[str, ...], str]:
+    """Five-field identity -> the pinned source creation time (AUX-090's `source.created_at`). An absent
+    file is an empty map, so every derived entry then refuses for want of a pinned time."""
+    if path is None or not Path(path).exists():
+        return {}
+    doc = json.loads(Path(path).read_text(encoding="utf-8"))
+    if list(doc.get("selector") or []) != list(SELECTOR) or not isinstance(doc.get("entries"), list):
+        raise Refusal("report dates: not a five-field pinned date file")
+    out: dict[tuple[str, ...], str] = {}
+    for entry in doc["entries"]:
+        created = str(((entry.get("source") or {}).get("created_at")) or "").strip()
+        if created:
+            out[_ident(entry)] = created
+    return out
+
+
+def derived_refusal(entry: dict[str, Any], row: dict[str, Any], records: dict,
+                    report_dates: dict[tuple[str, ...], str]) -> str:
+    """'' when the derived reason holds for this stored row TODAY, decided by the OBS acceptance gate itself
+    (collect_obs_reports.release_date_gate) on the pinned post time and the record's release date."""
+    import collect_obs_reports as obs  # noqa: PLC0415 - the acceptance gate, imported only when a derived entry runs
+
+    ident = _ident(entry)
+    why = _derived_entry_refusal(entry)
+    if why:
+        return why
+    if row.get("adjudication"):
+        return f"the stored row carries adjudication labels: {ident[3]}"
+    created = report_dates.get(tuple(ident), "")
+    if not created:
+        return f"no pinned post time for {ident[3]} in the report dates"
+    found = records.get(patch_key(ident[0], ident[1], ident[2]), [])
+    published = (found[0][1].get("update_published_at") if len(found) == 1 else None)
+    if hasattr(published, "isoformat"):
+        published = published.isoformat()
+    release_day = obs.parse_date(published)
+    if release_day is None:
+        return f"the record for {ident[1]} has no readable update_published_at"
+    verdict = obs.release_date_gate({"created_at": created}, release_day)
+    if verdict != DERIVED_REASON:
+        return (f"the OBS release-date gate gives {verdict!r}, not {DERIVED_REASON!r}, for {ident[3]} "
+                f"(posted {created}, released {release_day.isoformat()})")
+    stored_day, pinned_day = obs.parse_date(row.get("source_date")), obs.parse_date(created)
+    if stored_day is None or stored_day != pinned_day:
+        return (f"the stored source_date {row.get('source_date')!r} is not the pinned post day "
+                f"{pinned_day.isoformat() if pinned_day else None!r} for {ident[3]}")
+    return ""
+
+
 def source_ordinal(url: str) -> tuple[str, int] | None:
     """(family, the source's own post number) for a URL of a family with sequential post ids, else None."""
     for family, pattern, base in ORDINAL_FAMILIES:
@@ -483,13 +619,18 @@ def _duplicate_refusal(row: dict[str, Any], kept: dict[str, Any], entry: dict[st
 
 
 def plan(text: str, entries: list[dict[str, Any]], records: dict,  # noqa: PLR0912, PLR0915
-         baseline: dict | None = None, scope: tuple[str, ...] | None = None) -> dict[str, Any]:
+         baseline: dict | None = None, scope: tuple[str, ...] | None = None,
+         report_dates: dict[tuple[str, ...], str] | None = None) -> dict[str, Any]:
     """Decide every entry and prove the resulting text, without writing. Raises Refusal.
     `scope` is the manifest's declared product scope (when omitted: the first scope holding every entry's
-    product, so AUX-088's when every entry is a Windows or OBS row, and otherwise AUX-098's)."""
+    product, so AUX-088's when every entry is a Windows or OBS row, and otherwise AUX-098's).
+    `report_dates` is the pinned post time per identity (load_report_dates), read only for a derived entry;
+    when omitted and a derived entry is planned, the committed file is read."""
     if scope is None:
         products = {e.get("product_id") for e in entries}
         scope = next((s for s in SCOPES if products <= set(s)), EXTENDED_PRODUCTS)
+    if report_dates is None and any(e.get("exclusion_reason") == DERIVED_REASON for e in entries):
+        report_dates = load_report_dates(REPORT_DATES)
     blocks = aux072.store_blocks(text)
     by_identity: dict[tuple[str, ...], list[int]] = {}
     for index, (_lo, _hi, row) in enumerate(blocks):
@@ -521,6 +662,17 @@ def plan(text: str, entries: list[dict[str, Any]], records: dict,  # noqa: PLR09
             continue
         item = {"role": entry["role"], **dict(zip(SELECTOR, ident)),
                 "block_sha256_before_run": digest, "counted_before_run": row.get("counted")}
+        if entry["role"] == "withdraw" and entry.get("exclusion_reason") == DERIVED_REASON:
+            # Decided again on every run, from stored facts, by the acceptance gate itself (G87).
+            why = derived_refusal(entry, row, records, report_dates or {})
+            if why:
+                refusals.append(why)
+                continue
+            item["derived_basis"] = {"gate": "collect_obs_reports.release_date_gate",
+                                     "pinned_created_at": (report_dates or {}).get(tuple(ident), ""),
+                                     "release_date": str(records[patch_key(*ident[:3])][0][1]
+                                                         .get("update_published_at") or ""),
+                                     "gate_result": DERIVED_REASON}
         if entry["role"] == "retain":
             if not _pin_holds(entry, "block_sha256_before", digest, baseline):
                 refusals.append(f"kept row changed: {label}")
@@ -611,17 +763,20 @@ def plan(text: str, entries: list[dict[str, Any]], records: dict,  # noqa: PLR09
 
 
 def run(store: Path, generated_dir: Path, manifest: Path, write: bool,
-        baseline: Path | None = BASELINE) -> dict[str, Any]:
+        baseline: Path | None = BASELINE, report_dates: Path | None = REPORT_DATES) -> dict[str, Any]:
     raw = Path(store).read_bytes()
     text = raw.decode("utf-8")
     doc = json.loads(Path(manifest).read_text(encoding="utf-8"))
     scope = manifest_scope(doc)
-    result = plan(text, manifest_entries(doc), patch_records(generated_dir), load_baseline(baseline), scope)
+    entries = manifest_entries(doc)
+    dates = (load_report_dates(report_dates)
+             if any(e.get("exclusion_reason") == DERIVED_REASON for e in entries) else {})
+    result = plan(text, entries, patch_records(generated_dir), load_baseline(baseline), scope, dates)
     new_text = result.pop("new_text")
     result.update({
         "product_scope": list(scope),
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-        "exclusion_reasons": sorted(REASONS),
+        "exclusion_reasons": sorted(manifest_vocabulary(doc)),
         "store_sha256_before": sha(raw),
         "store_sha256_after": sha(new_text),
         "manifest_sha256": sha(Path(manifest).read_bytes()),
@@ -659,6 +814,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--manifest", type=Path, default=MANIFEST)
     ap.add_argument("--baseline", type=Path, default=BASELINE,
                     help="supplemental baseline of later audited changes to pinned rows")
+    ap.add_argument("--report-dates", type=Path, default=REPORT_DATES,
+                    help="pinned OBS post times, read only for a derived before_release_date entry")
     ap.add_argument("--write", action="store_true", help="apply the withdrawal in place")
     ap.add_argument("--confirm-write", action="store_true", help="required together with --write")
     ap.add_argument("--regenerate", action="store_true",
@@ -678,7 +835,7 @@ def main(argv: list[str] | None = None) -> int:
               "--generated-dir must be the defaults")
         return 2
     try:
-        result = run(args.store, args.generated_dir, args.manifest, args.write, args.baseline)
+        result = run(args.store, args.generated_dir, args.manifest, args.write, args.baseline, args.report_dates)
     except Refusal as exc:
         print("REFUSED, nothing written: " + str(exc))
         return 1

@@ -101,6 +101,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-095 | Deferred | Verdict policy | Medium | A vendor-confirmed serious defect or a corroborated install failure gave no caution unless someone hand-wrote a reason (producer built; public activation OFF, temporary) |
 | AUX-099 | Deferred | Verdict policy | Medium | The reason producer counted unknown accounts as independent reporters and had no record of what it would have published (repaired; shadow operation; public activation OFF) |
 | AUX-124 | Resolved | Verdict policy | Medium | Automatically drafted verdict reasons skipped the checks a reviewed reason meets, and a true official confirmation could take away a Windows entry's support |
+| AUX-127 | Resolved | Verdict policy | High | Pages with 30 or more accepted problem reports said INSUFFICIENT DATA, and a report posted before its release was counted |
 | AUX-065 | Resolved | Coverage | Medium | DaVinci Resolve versions never archived, so routine collection spent its whole budget on releases nobody installs |
 | AUX-075 | Resolved | CI governance | Medium | The DaVinci archive build check asserted the one-time migration, so it failed on every pull request after it ran |
 | AUX-062 | Deferred | Evidence integrity | Low | Three classifier misses the sprint measured but did not fix |
@@ -456,6 +457,53 @@ current main with `--expected-store-sha256`.
 **Reopen only if** either row stops counting without its own audited withdrawal, a row is re-admitted without two
 CORRECT labels from two adjudicators, 25.001.21111 counts before its context is recovered through an authorised
 procedure, or a replay of the veto over stored rows flags a counted row this manifest does not name.
+
+---
+
+### AUX-127 — Pages with 30 or more accepted problem reports said INSUFFICIENT DATA, and a report posted before its release was counted
+
+- **Status** Resolved · **Area** Verdict policy · **Severity** High
+- **First seen** 2026-11-21 (owner review of OBS Studio 33.0.1; G87 calibration) · **Resolved** 2026-11-21 (G87)
+
+**Symptom (data)** One counted OBS Studio 32.1.1 report, GitHub issue #13278, was opened on 2026-04-01 (UTC). OBS
+Studio 32.1.1 was released on 2026-04-02. A report posted before a release cannot report a problem with it, and the
+OBS acceptance gate refuses one today (`collect_obs_reports.release_date_gate` returns `before_release_date`); this
+row was accepted before the gate read the post date (it was dated later, by AUX-090).
+
+**Fix (data): the first label-free derived withdrawal.** Every earlier withdrawal reason rests on two agreeing human
+labels. This one is decided from stored facts, so `withdraw_live_citation_rows.py` gains one closed, derived reason
+and nothing else:
+- the reason is `before_release_date`, the collector's own rejection string (not a name any withdrawal wrote before);
+- the vocabulary is versioned: manifests v1-v7 must still list exactly the five reasons, byte for byte; only a
+  manifest that declares version 8 may list the five plus this one, and a version-8 manifest without it refuses;
+- it is granted in code (`DERIVED_GRANTS`) for exactly one five-field identity; a new row needs its own grant;
+- the tool decides it again on every run by CALLING `release_date_gate` with the post time pinned in
+  `scripts/audit/obs_report_dates.json` (AUX-090) and the record's `update_published_at`, and refuses when the pinned
+  time is missing, the release date is missing or unreadable, the gate returns anything else, the stored
+  `source_date` is not the pinned day, the entry or the stored row carries adjudication labels, the entry names a
+  kept row, the product is not OBS, or the row is not granted;
+- the edit is the usual two OBS lines (`counted: false`, `exclusion_reason: before_release_date`);
+  `source_date_pass` stays as stored (null); the row is kept.
+
+The eighth manifest is `scripts/audit/live_citation_withdrawal_v8.json`; the run audit,
+`scripts/audit/live_citation_withdrawal_v8_2026-11-21.json`, states the derived basis (the gate, the pinned post time
+2026-04-01T12:05:03Z, the release time 2026-04-02T19:54:40Z). The record was regenerated only by the tool's own scoped
+writers (the reconcile scoped to Windows and OBS, then each product's scoped promotion). No resolver, tier or
+re-admission lane can promote the reason back: `context_resolution.RESOLVABLE_REASONS`,
+`tier2_evidence.PROMOTABLE_REJECTIONS`, `acrobat_tiering.ACROBAT_TIERABLE_REJECTIONS` and
+`readmit_adjudicated_rows.FROM_REASONS` are positive lists without it, and the OBS collector's dedupe holds the
+report's id and URL whether the row counts or not. AUX-088's suite now names this later withdrawal of one of its
+disagreement rows explicitly instead of requiring it to count.
+
+**Measured (data)** Store: 2 lines changed, every other one of 3,482 blocks byte-identical (hash proof), no row starts
+counting, no evidence loss. Counted rows: OBS 317 -> 316, Windows 560 unchanged. Page: OBS Studio 32.1.1 43 -> 42
+counted, 42 unique report URLs; no counted 32.1.1 row is posted before the release now. The 32.1.2 row #13518 is not
+touched (it needs its own adjudicated withdrawal).
+
+**Test** `test_withdraw_g87_obs_prerelease_row.py` (43 checks, blocking).
+
+**Reopen only if** a counted OBS row is found whose pinned post day precedes its record's release day (it needs its
+own grant), or any resolver, tier or re-admission lane adds `before_release_date` to the set it promotes from.
 
 ---
 
