@@ -19,7 +19,7 @@ update_published_at: '2025-03-21T00:00:00Z'
 update_last_checked: '2026-07-22T19:47:26Z'
 source_last_checked: '2026-07-22T19:47:26Z'
 official_body_last_checked: '2026-07-22T19:47:26Z'
-record_last_updated: '2026-07-23T12:43:25.988691Z'
+record_last_updated: '2026-11-21T21:13:25.566652Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
@@ -175,7 +175,6 @@ accepted_report_sources:
   workflow_area: application stability
 evidence_source_limitations:
 - Current reports are Reddit-heavy, so production users should test before updating.
-- Some community sources were unavailable during the last check; unavailable sources were not counted as reports.
 update_decision_label: INSUFFICIENT DATA
 update_decision_body: 'No verdict yet: 3 user reports are matched to this exact update, but no problem in them is
   confirmed as reported independently by two or more users. If one matches your setup, test before relying on this

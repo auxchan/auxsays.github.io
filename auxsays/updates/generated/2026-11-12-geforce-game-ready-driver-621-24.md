@@ -19,7 +19,7 @@ update_published_at: '2026-11-12T00:00:00Z'
 update_last_checked: '2026-11-19T10:05:12Z'
 source_last_checked: '2026-11-21T09:48:44Z'
 official_body_last_checked: '2026-11-21T09:48:44Z'
-record_last_updated: '2026-11-20T22:10:19.375752Z'
+record_last_updated: '2026-11-21T21:17:47.698955Z'
 patch_file_size: 1.04 GB
 patch_file_size_note: Installer size as NVIDIA lists it for the Windows desktop DCH package.
 patch_file_size_status: captured
@@ -27,21 +27,21 @@ update_status: current
 update_feed_title: GeForce Game Ready Driver 621.24
 update_detail_title: GeForce Game Ready Driver 621.24
 update_consensus_label: Negative
-update_report_count: 3
+update_report_count: 4
 update_consensus_confidence: Low
-quick_verdict: GeForce Game Ready Driver 621.24 has an official AUXSAYS record. Confirmed patch-specific consensus is deferred
-  until the consensus refresh pipeline is active.
+quick_verdict: GeForce Game Ready Driver 621.24 has an official AUXSAYS record. Confirmed patch-specific consensus
+  is deferred until the consensus refresh pipeline is active.
 official_summary: NVIDIA published GeForce Game Ready Driver 621.24 on 2026-11-12.
 release_summary: NVIDIA lists GeForce Game Ready Driver 621.24 (branch R620) for Windows desktop, released 2026-11-12.
-consensus_report: '3 user reports found for GeForce Game Ready Driver 621.24. Current reports mention crash or driver reset,
-  performance or stutter, and black screen or display loss. Small sample size; production users should test before updating.
-  Sources represented: NVIDIA GeForce forum (user reports).'
+consensus_report: '4 user reports found for GeForce Game Ready Driver 621.24. Current reports mention crash or driver
+  reset, performance or stutter, and black screen or display loss. Small sample size; production users should test
+  before updating. Sources represented: NVIDIA GeForce forum (user reports).'
 evidence_state: pilot_sample
 evidence_state_label: Verified reports
 intelligence_stage: pilot
 official_source_captured: true
-confirmed_patch_specific_report_count: 3
-evidence_last_checked: '2026-11-20T21:29:41Z'
+confirmed_patch_specific_report_count: 4
+evidence_last_checked: '2026-11-21T20:35:34Z'
 known_issues_present: null
 consensus_collection_status: pilot_initial_sample
 consensus_match_policy: confirmed_patch_specific_reports_v1
@@ -63,6 +63,9 @@ status_events:
 - at: '2026-11-20T22:10:19.375752Z'
   label: User reports found
   note: User report count updated to 3.
+- at: '2026-11-21T21:17:47.698955Z'
+  label: User reports found
+  note: User report count updated to 4.
 official_patch_notes_source_type: download_portal
 primary_official_source: https://www.nvidia.com/en-us/geforce/drivers/
 fallback_official_sources: []
@@ -71,8 +74,8 @@ official_patch_notes_source_url: https://www.nvidia.com/en-us/drivers/details/28
 official_note_status: official_source_captured
 official_note_label: Official driver listing
 official_source_type: download_portal
-official_source_classification_note: NVIDIA's driver listing is treated as an official download-portal source. It confirms
-  the driver family, version, branch and release date; community evidence remains separate.
+official_source_classification_note: NVIDIA's driver listing is treated as an official download-portal source. It
+  confirms the driver family, version, branch and release date; community evidence remains separate.
 official_sources:
 - label: NVIDIA driver page
   url: https://www.nvidia.com/en-us/drivers/details/285320/
@@ -140,8 +143,8 @@ official_patch_notes_body: 'NVIDIA driver listing: GeForce Game Ready Driver 621
   Official release notes (PDF): https://us.download.nvidia.com/Windows/621.24/621.24-geforce-win11-x64-release-notes.pdf
 
 
-  AUXSAYS note: this is official NVIDIA driver metadata, not community consensus. Game Ready and Studio drivers that share
-  a version number are separate records.'
+  AUXSAYS note: this is official NVIDIA driver metadata, not community consensus. Game Ready and Studio drivers
+  that share a version number are separate records.'
 official_checksums_body: ''
 official_checksums_capture_status: not-present
 driver_family: GeForce Game Ready
@@ -151,9 +154,9 @@ release_date_precision: day
 source_origin: NVIDIA official
 collection_method: public driver-lookup endpoint
 collection_authorization: owner risk acceptance; NVIDIA permission not established
-update_consensus_summary: 'INSUFFICIENT DATA: GeForce Game Ready Driver 621.24. 3 user reports are matched to this exact update,
-  but no problem in them is confirmed as reported independently by two or more users. If one matches your setup, test before
-  relying on this update.'
+update_consensus_summary: 'INSUFFICIENT DATA: GeForce Game Ready Driver 621.24. 4 user reports are matched to this
+  exact update, but no problem in them is confirmed as reported independently by two or more users. If one matches
+  your setup, test before relying on this update.'
 evidence_samples:
 - source_name: NVIDIA GeForce forum (user reports)
   source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3634576
@@ -179,6 +182,14 @@ evidence_samples:
   patch_version_matched: true
   issue: black screen or display loss in display output
   outcome: high
+- source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3633591
+  source_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  counted: true
+  version_matched: '621.24'
+  patch_version_matched: true
+  issue: general workflow reports
+  outcome: medium
 evidence_sample_visible_limit: 5
 accepted_report_sources:
 - source_name: NVIDIA GeForce forum (user reports)
@@ -208,6 +219,15 @@ accepted_report_sources:
   patch_version_matched: true
   issue: black screen or display loss in display output
   workflow_area: display output
+- source_name: NVIDIA GeForce forum (user reports)
+  source_type: nvidia forum comment
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3633591
+  source_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  source_date: '2026-11-12'
+  version_matched: '621.24'
+  patch_version_matched: true
+  issue: general workflow reports
+  workflow_area: ''
 evidence_source_limitations:
 - Small sample size; production users should test before updating.
 - Some community sources were unavailable during the last check; unavailable sources were not counted as reports.

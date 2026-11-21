@@ -19,7 +19,7 @@ update_published_at: '2026-07-22T00:00:00Z'
 update_last_checked: '2026-07-22T04:19:49Z'
 source_last_checked: '2026-09-08T06:44:15Z'
 official_body_last_checked: '2026-09-08T06:44:15Z'
-record_last_updated: '2026-08-05T23:35:19.805917Z'
+record_last_updated: '2026-11-21T21:14:09.536819Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
@@ -30,13 +30,15 @@ update_consensus_label: Negative
 update_report_count: 2
 update_consensus_confidence: Low
 quick_verdict: 'INSUFFICIENT DATA: DaVinci Resolve 21.0.3 has 2 user reports found.'
-official_summary: Blackmagic Design lists DaVinci Resolve Studio 21.0.3 Update in its official support downloads feed.
-release_summary: This software update adds new ease modes for retime speed and frame curves, as well as improved handling
-  of interlaced media, keyframe editing, multicam audio and PSD imports. This update also reinstates QuickSync encode options
-  for older Intel systems and adds a custom install location for encode SDK plugins on Windows ARM. This version requires
-  a DaVinci Resolve Studio license dongle, Blackmagic Cloud license or software activation code.
-consensus_report: '2 user reports found for DaVinci Resolve 21.0.3. Current reports mention performance slowdowns and render/export
-  failures. Too few reports for a firm verdict yet. Sources represented: r/davinciresolve.'
+official_summary: Blackmagic Design lists DaVinci Resolve Studio 21.0.3 Update in its official support downloads
+  feed.
+release_summary: This software update adds new ease modes for retime speed and frame curves, as well as improved
+  handling of interlaced media, keyframe editing, multicam audio and PSD imports. This update also reinstates QuickSync
+  encode options for older Intel systems and adds a custom install location for encode SDK plugins on Windows ARM.
+  This version requires a DaVinci Resolve Studio license dongle, Blackmagic Cloud license or software activation
+  code.
+consensus_report: '2 user reports found for DaVinci Resolve 21.0.3. Current reports mention performance slowdowns
+  and render/export failures. Too few reports for a firm verdict yet. Sources represented: r/davinciresolve.'
 evidence_state: pilot_sample
 evidence_state_label: Verified reports
 intelligence_stage: pilot
@@ -70,8 +72,8 @@ official_patch_notes_source_url: https://www.blackmagicdesign.com/support/family
 official_note_status: official_source_captured
 official_note_label: Official download portal entry
 official_source_type: download_portal
-official_source_classification_note: Blackmagic's support downloads API is treated as an official download-portal source.
-  It confirms version availability and summary text; community evidence remains separate.
+official_source_classification_note: Blackmagic's support downloads API is treated as an official download-portal
+  source. It confirms version availability and summary text; community evidence remains separate.
 official_sources:
 - label: Blackmagic support downloads
   url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
@@ -118,10 +120,10 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   Platforms listed: Mac OS X, Windows, Linux, Windows ARM
 
 
-  This software update adds new ease modes for retime speed and frame curves, as well as improved handling of interlaced media,
-  keyframe editing, multicam audio and PSD imports. This update also reinstates QuickSync encode options for older Intel systems
-  and adds a custom install location for encode SDK plugins on Windows ARM. This version requires a DaVinci Resolve Studio
-  license dongle, Blackmagic Cloud license or software activation code.
+  This software update adds new ease modes for retime speed and frame curves, as well as improved handling of interlaced
+  media, keyframe editing, multicam audio and PSD imports. This update also reinstates QuickSync encode options
+  for older Intel systems and adds a custom install location for encode SDK plugins on Windows ARM. This version
+  requires a DaVinci Resolve Studio license dongle, Blackmagic Cloud license or software activation code.
 
 
   Official support page: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
@@ -174,7 +176,6 @@ accepted_report_sources:
   workflow_area: render/export
 evidence_source_limitations:
 - Too few reports for a firm verdict yet.
-- Some community sources were unavailable during the last check; unavailable sources were not counted as reports.
 update_decision_label: INSUFFICIENT DATA
 update_decision_body: 'No verdict yet: 2 user reports are matched to this exact update, but no problem in them is
   confirmed as reported independently by two or more users. If one matches your setup, test before relying on this

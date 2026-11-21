@@ -95045,7 +95045,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
   excerpt_norm_sha256: 21521c31af1b07e48a0aeb2ddfe5ec08f52d3b1870cecc8935e0c2178a97743c
   title_dedup_sha256: af6fb41ed9da708ce1ac56532c7e867a3c6e1f563ec015bdecdc1668fe4b467d
   issue_bucket: capture-source issues
@@ -95074,7 +95073,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
   excerpt_norm_sha256: 724a167946f106478a26ee86086e93d76f47f2f2a4e9107093fb8d1a1d2bfd4a
   title_dedup_sha256: b2051b5a0fb2baa654b47b4404e643db725f9da1487b95dda917e0ac0b1fd941
   issue_bucket: general workflow reports
@@ -95108,7 +95106,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26300.9974'
-
   excerpt_norm_sha256: b886624acbd4211a6001c934d7bb5c9eddbad149065c4523eedcb86a1b00ac13
   title_dedup_sha256: 1606e36fad0c2d56fb9773a547a81ccfc796303cac4c2d56739c8c930f482404
   issue_bucket: update/install failure
@@ -95142,7 +95139,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26300.9818'
-
   excerpt_norm_sha256: 4958dfc296048bcceec096cd34d9faccebc8277e6187e6a9cac3caff8e0a1157
   title_dedup_sha256: 30f95341c9800c44e964cc3a784d51e5dda6769c613492de33e20f569e26101d
   issue_bucket: update/install failure
@@ -95176,7 +95172,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26300.9457'
-
   excerpt_norm_sha256: 92b687d51cc9a014a0898ef498e0733d4903f6c0eee7e80c26df93cd74285231
   title_dedup_sha256: da65d27629287f3eff5298e21bffd7388249ee74e326e3932928e22543cd0f54
   issue_bucket: update/install failure
@@ -97285,7 +97280,6 @@ evidence:
   matched_text: '616.92'
   matched_field: report_text
   matched_context: '...tall. Still on 610.88 because 616.56 caused colour flicker on this panel. Does 616.92 (or a hotfix) change anything for 0x19 deferred-destruction crashes on Blackwel...'
-
   excerpt_norm_sha256: d5230768e8e6e5cd901d9f3a8aba91636af80765e235f5a23c716174ffc285cc
   title_dedup_sha256: d5ee2b24af810e182803e66aab1d3ca99f671dcc51ddd5c51ca08aec10b03174
   issue_bucket: crash or driver reset
@@ -99273,4 +99267,2717 @@ evidence:
   excerpt_norm_sha256: a6abb42517e8011d84bfadcc8c56efbb5fba0a8050217804370a800b5b581fa0
   title_dedup_sha256: b8b623030234c6e88f3aba8553f5e25b24904f4507cec5db914698888bd335b4
   issue_bucket: excessive disk writes
+  facts_rule_version: v1
+- id: comfyui-0-46-0-github-issue-17905
+  product_id: comfyui
+  update_version: 0.46.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17905
+  parent_title: 'Text encoder memory not released after #17361 (Combine Parallel Linear Weights), diffusion model loads partially'
+  report_title: 'Text encoder memory not released after #17361 (Combine Parallel Linear Weights), diffusion model loads partially'
+  report_text_excerpt: 'Text encoder memory not released after #17361 (Combine Parallel Linear Weights), diffusion model loads partially ### Custom Node Testing - [x] I have tried disabling custom nodes and the issue persists (see [how to disable custom...'
+  captured_at: '2026-11-21T20:02:01Z'
+  source_date: '2026-11-21'
+  target_release_date: '2026-11-18'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: core_version_untagged_build
+  issue_theme: out of memory
+  workflow_area: GPU and system memory
+  platform: linux
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.46.0
+  matched_field: report_text
+  matched_context: '...f completely. With the attached workflow on current master (f99de883d, ComfyUI 0.46.0): - 1st run: loaded partially; 18811.95 MB usable, 18779.61 MB loaded, 769.44 M...'
+  excerpt_norm_sha256: 30dd8e8abbef28e787e03fee8e3ae67c1055215d9189bdd940c121d84d1f49e0
+  title_dedup_sha256: afacc1c01cc3e50b8789b0250cc37f2ef9b54d50392e0b8d459fdf792ac03596
+  issue_bucket: out of memory
+  facts_rule_version: v1
+- id: comfyui-0-44-0-github-issue-17905
+  product_id: comfyui
+  update_version: 0.44.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17905
+  parent_title: 'Text encoder memory not released after #17361 (Combine Parallel Linear Weights), diffusion model loads partially'
+  report_title: 'Text encoder memory not released after #17361 (Combine Parallel Linear Weights), diffusion model loads partially'
+  report_text_excerpt: 'Text encoder memory not released after #17361 (Combine Parallel Linear Weights), diffusion model loads partially ### Custom Node Testing - [x] I have tried disabling custom nodes and the issue persists (see [how to disable custom...'
+  captured_at: '2026-11-21T20:02:01Z'
+  source_date: '2026-11-21'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: declared_core_version_differs
+  issue_theme: out of memory
+  workflow_area: GPU and system memory
+  platform: linux
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.44.0
+  matched_field: report_text
+  matched_context: '...oding, and the Qwen-Image diffusion model loads completely on every run, as in v0.44.0. ### Actual Behavior Since commit 48b090cb (#17361), part of the text encoder...'
+  excerpt_norm_sha256: 30dd8e8abbef28e787e03fee8e3ae67c1055215d9189bdd940c121d84d1f49e0
+  title_dedup_sha256: afacc1c01cc3e50b8789b0250cc37f2ef9b54d50392e0b8d459fdf792ac03596
+  issue_bucket: out of memory
+  facts_rule_version: v1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-has-anyone-found-a-good-way-to-use
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/has-anyone-found-a-good-way-to-use-teams-transcripts-as-a-record-of-manager-empl/4575096
+  parent_title: Has anyone found a good way to use Teams transcripts as a record of manager-employee commitments?
+  report_title: Has anyone found a good way to use Teams transcripts as a record of manager-employee commitments?
+  report_text_excerpt: Has anyone found a good way to use Teams transcripts as a record of manager-employee commitments? Has anyone found a good way to use Teams transcripts as a record of manager-employee commitments? We’ve started using transcription more consistently in recurring 1:1s and manager...
+  captured_at: '2026-11-21T20:03:34Z'
+  source_date: '2026-11-20'
+  target_release_date: '2026-11-05'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: f4d245711eadac62a040c7e996ca87a3fcb5bbd9b544123ca9a9997eee2e8aeb
+  title_dedup_sha256: 7d96405363b72e6c84f23942e91cb9bba9832012bba7b58cfe5d3c8e0f592989
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-unexpectedly-ends-calls-with
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-unexpectedly-ends-calls-with-anker-powerconf-s3-a3302-over-usb/4561624
+  parent_title: Teams unexpectedly ends calls with Anker PowerConf S3 A3302 over USB
+  report_title: Teams unexpectedly ends calls with Anker PowerConf S3 A3302 over USB
+  report_text_excerpt: 'Teams unexpectedly ends calls with Anker PowerConf S3 A3302 over USB ANKER POWERCONF SthreeUnintended Teams call terminations&amp;nbsp;Diagnostic dossier - public version&amp;nbsp;Model Athree three zero two ; Public version: hostname, GUIDs and original archive names...'
+  captured_at: '2026-11-21T20:03:34Z'
+  source_date: '2026-10-01'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: audio / video failure
+  workflow_area: meeting audio and video
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: a6e537a061f4814ab5a8ab7f227212928fece9167e57d523986198d9d729cb9b
+  title_dedup_sha256: 53091cc047a5963d6286df91b2624a244b18d9d5360e72cb4ae16ba3b911e487
+  issue_bucket: audio / video failure
+  facts_rule_version: v1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-has-anyone-found-a-good-way-to-use
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/has-anyone-found-a-good-way-to-use-teams-transcripts-as-a-record-of-manager-empl/4575096
+  parent_title: Has anyone found a good way to use Teams transcripts as a record of manager-employee commitments?
+  report_title: Has anyone found a good way to use Teams transcripts as a record of manager-employee commitments?
+  report_text_excerpt: Has anyone found a good way to use Teams transcripts as a record of manager-employee commitments? Has anyone found a good way to use Teams transcripts as a record of manager-employee commitments? We’ve started using transcription more consistently in recurring 1:1s and manager...
+  captured_at: '2026-11-21T20:03:34Z'
+  source_date: '2026-11-20'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: f4d245711eadac62a040c7e996ca87a3fcb5bbd9b544123ca9a9997eee2e8aeb
+  title_dedup_sha256: 7d96405363b72e6c84f23942e91cb9bba9832012bba7b58cfe5d3c8e0f592989
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-unexpectedly-ends-calls-with
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-unexpectedly-ends-calls-with-anker-powerconf-s3-a3302-over-usb/4561624
+  parent_title: Teams unexpectedly ends calls with Anker PowerConf S3 A3302 over USB
+  report_title: Teams unexpectedly ends calls with Anker PowerConf S3 A3302 over USB
+  report_text_excerpt: 'Teams unexpectedly ends calls with Anker PowerConf S3 A3302 over USB ANKER POWERCONF SthreeUnintended Teams call terminations&amp;nbsp;Diagnostic dossier - public version&amp;nbsp;Model Athree three zero two ; Public version: hostname, GUIDs and original archive names...'
+  captured_at: '2026-11-21T20:03:34Z'
+  source_date: '2026-10-01'
+  target_release_date: '2026-10-22'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: audio / video failure
+  workflow_area: meeting audio and video
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: a6e537a061f4814ab5a8ab7f227212928fece9167e57d523986198d9d729cb9b
+  title_dedup_sha256: 53091cc047a5963d6286df91b2624a244b18d9d5360e72cb4ae16ba3b911e487
+  issue_bucket: audio / video failure
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-has-anyone-found-a-good-way-to-use
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/has-anyone-found-a-good-way-to-use-teams-transcripts-as-a-record-of-manager-empl/4575096
+  parent_title: Has anyone found a good way to use Teams transcripts as a record of manager-employee commitments?
+  report_title: Has anyone found a good way to use Teams transcripts as a record of manager-employee commitments?
+  report_text_excerpt: Has anyone found a good way to use Teams transcripts as a record of manager-employee commitments? Has anyone found a good way to use Teams transcripts as a record of manager-employee commitments? We’ve started using transcription more consistently in recurring 1:1s and manager...
+  captured_at: '2026-11-21T20:03:34Z'
+  source_date: '2026-11-20'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: f4d245711eadac62a040c7e996ca87a3fcb5bbd9b544123ca9a9997eee2e8aeb
+  title_dedup_sha256: 7d96405363b72e6c84f23942e91cb9bba9832012bba7b58cfe5d3c8e0f592989
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-unexpectedly-ends-calls-with
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-unexpectedly-ends-calls-with-anker-powerconf-s3-a3302-over-usb/4561624
+  parent_title: Teams unexpectedly ends calls with Anker PowerConf S3 A3302 over USB
+  report_title: Teams unexpectedly ends calls with Anker PowerConf S3 A3302 over USB
+  report_text_excerpt: 'Teams unexpectedly ends calls with Anker PowerConf S3 A3302 over USB ANKER POWERCONF SthreeUnintended Teams call terminations&amp;nbsp;Diagnostic dossier - public version&amp;nbsp;Model Athree three zero two ; Public version: hostname, GUIDs and original archive names...'
+  captured_at: '2026-11-21T20:03:34Z'
+  source_date: '2026-10-01'
+  target_release_date: '2026-10-15'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: audio / video failure
+  workflow_area: meeting audio and video
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: a6e537a061f4814ab5a8ab7f227212928fece9167e57d523986198d9d729cb9b
+  title_dedup_sha256: 53091cc047a5963d6286df91b2624a244b18d9d5360e72cb4ae16ba3b911e487
+  issue_bucket: audio / video failure
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-has-anyone-found-a-good-way-to-use
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/has-anyone-found-a-good-way-to-use-teams-transcripts-as-a-record-of-manager-empl/4575096
+  parent_title: Has anyone found a good way to use Teams transcripts as a record of manager-employee commitments?
+  report_title: Has anyone found a good way to use Teams transcripts as a record of manager-employee commitments?
+  report_text_excerpt: Has anyone found a good way to use Teams transcripts as a record of manager-employee commitments? Has anyone found a good way to use Teams transcripts as a record of manager-employee commitments? We’ve started using transcription more consistently in recurring 1:1s and manager...
+  captured_at: '2026-11-21T20:03:34Z'
+  source_date: '2026-11-20'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: f4d245711eadac62a040c7e996ca87a3fcb5bbd9b544123ca9a9997eee2e8aeb
+  title_dedup_sha256: 7d96405363b72e6c84f23942e91cb9bba9832012bba7b58cfe5d3c8e0f592989
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-unexpectedly-ends-calls-with
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-unexpectedly-ends-calls-with-anker-powerconf-s3-a3302-over-usb/4561624
+  parent_title: Teams unexpectedly ends calls with Anker PowerConf S3 A3302 over USB
+  report_title: Teams unexpectedly ends calls with Anker PowerConf S3 A3302 over USB
+  report_text_excerpt: 'Teams unexpectedly ends calls with Anker PowerConf S3 A3302 over USB ANKER POWERCONF SthreeUnintended Teams call terminations&amp;nbsp;Diagnostic dossier - public version&amp;nbsp;Model Athree three zero two ; Public version: hostname, GUIDs and original archive names...'
+  captured_at: '2026-11-21T20:03:34Z'
+  source_date: '2026-10-01'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: audio / video failure
+  workflow_area: meeting audio and video
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: a6e537a061f4814ab5a8ab7f227212928fece9167e57d523986198d9d729cb9b
+  title_dedup_sha256: 53091cc047a5963d6286df91b2624a244b18d9d5360e72cb4ae16ba3b911e487
+  issue_bucket: audio / video failure
+  facts_rule_version: v1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-has-anyone-found-a-good-way-to-use
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/has-anyone-found-a-good-way-to-use-teams-transcripts-as-a-record-of-manager-empl/4575096
+  parent_title: Has anyone found a good way to use Teams transcripts as a record of manager-employee commitments?
+  report_title: Has anyone found a good way to use Teams transcripts as a record of manager-employee commitments?
+  report_text_excerpt: Has anyone found a good way to use Teams transcripts as a record of manager-employee commitments? Has anyone found a good way to use Teams transcripts as a record of manager-employee commitments? We’ve started using transcription more consistently in recurring 1:1s and manager...
+  captured_at: '2026-11-21T20:03:34Z'
+  source_date: '2026-11-20'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: f4d245711eadac62a040c7e996ca87a3fcb5bbd9b544123ca9a9997eee2e8aeb
+  title_dedup_sha256: 7d96405363b72e6c84f23942e91cb9bba9832012bba7b58cfe5d3c8e0f592989
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-unexpectedly-ends-calls-with
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-unexpectedly-ends-calls-with-anker-powerconf-s3-a3302-over-usb/4561624
+  parent_title: Teams unexpectedly ends calls with Anker PowerConf S3 A3302 over USB
+  report_title: Teams unexpectedly ends calls with Anker PowerConf S3 A3302 over USB
+  report_text_excerpt: 'Teams unexpectedly ends calls with Anker PowerConf S3 A3302 over USB ANKER POWERCONF SthreeUnintended Teams call terminations&amp;nbsp;Diagnostic dossier - public version&amp;nbsp;Model Athree three zero two ; Public version: hostname, GUIDs and original archive names...'
+  captured_at: '2026-11-21T20:03:34Z'
+  source_date: '2026-10-01'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: audio / video failure
+  workflow_area: meeting audio and video
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: a6e537a061f4814ab5a8ab7f227212928fece9167e57d523986198d9d729cb9b
+  title_dedup_sha256: 53091cc047a5963d6286df91b2624a244b18d9d5360e72cb4ae16ba3b911e487
+  issue_bucket: audio / video failure
+  facts_rule_version: v1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-has-anyone-found-a-good-way-to-use
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/has-anyone-found-a-good-way-to-use-teams-transcripts-as-a-record-of-manager-empl/4575096
+  parent_title: Has anyone found a good way to use Teams transcripts as a record of manager-employee commitments?
+  report_title: Has anyone found a good way to use Teams transcripts as a record of manager-employee commitments?
+  report_text_excerpt: Has anyone found a good way to use Teams transcripts as a record of manager-employee commitments? Has anyone found a good way to use Teams transcripts as a record of manager-employee commitments? We’ve started using transcription more consistently in recurring 1:1s and manager...
+  captured_at: '2026-11-21T20:03:34Z'
+  source_date: '2026-11-20'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: f4d245711eadac62a040c7e996ca87a3fcb5bbd9b544123ca9a9997eee2e8aeb
+  title_dedup_sha256: 7d96405363b72e6c84f23942e91cb9bba9832012bba7b58cfe5d3c8e0f592989
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-unexpectedly-ends-calls-with
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-unexpectedly-ends-calls-with-anker-powerconf-s3-a3302-over-usb/4561624
+  parent_title: Teams unexpectedly ends calls with Anker PowerConf S3 A3302 over USB
+  report_title: Teams unexpectedly ends calls with Anker PowerConf S3 A3302 over USB
+  report_text_excerpt: 'Teams unexpectedly ends calls with Anker PowerConf S3 A3302 over USB ANKER POWERCONF SthreeUnintended Teams call terminations&amp;nbsp;Diagnostic dossier - public version&amp;nbsp;Model Athree three zero two ; Public version: hostname, GUIDs and original archive names...'
+  captured_at: '2026-11-21T20:03:34Z'
+  source_date: '2026-10-01'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: audio / video failure
+  workflow_area: meeting audio and video
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: a6e537a061f4814ab5a8ab7f227212928fece9167e57d523986198d9d729cb9b
+  title_dedup_sha256: 53091cc047a5963d6286df91b2624a244b18d9d5360e72cb4ae16ba3b911e487
+  issue_bucket: audio / video failure
+  facts_rule_version: v1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6037477-patch-regression-kb5002934-october-202
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6037477/patch-regression-kb5002934-october-2026-breaks-cop
+  parent_title: 'Patch Regression: KB5002934 (October 2026) breaks copy/paste fix originally provided by KB5002665 in Excel 2016 MSI - Microsoft Q&A'
+  report_title: 'Patch Regression: KB5002934 (October 2026) breaks copy/paste fix originally provided by KB5002665 in Excel 2016 MSI - Microsoft Q&A'
+  report_text_excerpt: 'Patch Regression: KB5002934 (October 2026) breaks copy/paste fix originally provided by KB5002665 in Excel 2016 MSI Issue Description: The silent copy/paste failure in Excel 2016 (MSI) has returned immediately after installing the cumulative update KB5002934 (released October...'
+  captured_at: '2026-11-21T20:03:34Z'
+  source_date: '2026-10-14'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: install/update failure
+  workflow_area: update
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 98cd4a41f8cc4a22e775491ad2e69b5e0dae17d22e56f1d45d16db4d35cef9ae
+  title_dedup_sha256: 78e4ed61ff1aaa815c5292ba9455b615f0837652062287d1bf271817d715da5a
+  issue_bucket: install/update failure
+  facts_rule_version: v1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-has-anyone-found-a-good-way-to-use
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/has-anyone-found-a-good-way-to-use-teams-transcripts-as-a-record-of-manager-empl/4575096
+  parent_title: Has anyone found a good way to use Teams transcripts as a record of manager-employee commitments?
+  report_title: Has anyone found a good way to use Teams transcripts as a record of manager-employee commitments?
+  report_text_excerpt: Has anyone found a good way to use Teams transcripts as a record of manager-employee commitments? Has anyone found a good way to use Teams transcripts as a record of manager-employee commitments? We’ve started using transcription more consistently in recurring 1:1s and manager...
+  captured_at: '2026-11-21T20:03:34Z'
+  source_date: '2026-11-20'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: f4d245711eadac62a040c7e996ca87a3fcb5bbd9b544123ca9a9997eee2e8aeb
+  title_dedup_sha256: 7d96405363b72e6c84f23942e91cb9bba9832012bba7b58cfe5d3c8e0f592989
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-unexpectedly-ends-calls-with
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-unexpectedly-ends-calls-with-anker-powerconf-s3-a3302-over-usb/4561624
+  parent_title: Teams unexpectedly ends calls with Anker PowerConf S3 A3302 over USB
+  report_title: Teams unexpectedly ends calls with Anker PowerConf S3 A3302 over USB
+  report_text_excerpt: 'Teams unexpectedly ends calls with Anker PowerConf S3 A3302 over USB ANKER POWERCONF SthreeUnintended Teams call terminations&amp;nbsp;Diagnostic dossier - public version&amp;nbsp;Model Athree three zero two ; Public version: hostname, GUIDs and original archive names...'
+  captured_at: '2026-11-21T20:03:34Z'
+  source_date: '2026-10-01'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: audio / video failure
+  workflow_area: meeting audio and video
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: a6e537a061f4814ab5a8ab7f227212928fece9167e57d523986198d9d729cb9b
+  title_dedup_sha256: 53091cc047a5963d6286df91b2624a244b18d9d5360e72cb4ae16ba3b911e487
+  issue_bucket: audio / video failure
+  facts_rule_version: v1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-has-anyone-found-a-good-way-to-use
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/has-anyone-found-a-good-way-to-use-teams-transcripts-as-a-record-of-manager-empl/4575096
+  parent_title: Has anyone found a good way to use Teams transcripts as a record of manager-employee commitments?
+  report_title: Has anyone found a good way to use Teams transcripts as a record of manager-employee commitments?
+  report_text_excerpt: Has anyone found a good way to use Teams transcripts as a record of manager-employee commitments? Has anyone found a good way to use Teams transcripts as a record of manager-employee commitments? We’ve started using transcription more consistently in recurring 1:1s and manager...
+  captured_at: '2026-11-21T20:03:34Z'
+  source_date: '2026-11-20'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: f4d245711eadac62a040c7e996ca87a3fcb5bbd9b544123ca9a9997eee2e8aeb
+  title_dedup_sha256: 7d96405363b72e6c84f23942e91cb9bba9832012bba7b58cfe5d3c8e0f592989
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-unexpectedly-ends-calls-with
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-unexpectedly-ends-calls-with-anker-powerconf-s3-a3302-over-usb/4561624
+  parent_title: Teams unexpectedly ends calls with Anker PowerConf S3 A3302 over USB
+  report_title: Teams unexpectedly ends calls with Anker PowerConf S3 A3302 over USB
+  report_text_excerpt: 'Teams unexpectedly ends calls with Anker PowerConf S3 A3302 over USB ANKER POWERCONF SthreeUnintended Teams call terminations&amp;nbsp;Diagnostic dossier - public version&amp;nbsp;Model Athree three zero two ; Public version: hostname, GUIDs and original archive names...'
+  captured_at: '2026-11-21T20:03:34Z'
+  source_date: '2026-10-01'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: audio / video failure
+  workflow_area: meeting audio and video
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: a6e537a061f4814ab5a8ab7f227212928fece9167e57d523986198d9d729cb9b
+  title_dedup_sha256: 53091cc047a5963d6286df91b2624a244b18d9d5360e72cb4ae16ba3b911e487
+  issue_bucket: audio / video failure
+  facts_rule_version: v1
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6077949-question-6077949
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6077949/kb5132057-26300-10075-will-not-install
+  parent_title: (KB5132057) (26300.10075) will not install - Microsoft Q&A
+  report_title: (KB5132057) (26300.10075) will not install - Microsoft Q&A
+  report_text_excerpt: (KB5132057) (26300.10075) will not install - Microsoft Q&A (KB5132057) (26300.10075) will not finish installation Addition error messages include 0xc000012f
+  captured_at: '2026-11-21T20:14:06Z'
+  source_date: '2026-11-20'
+  target_release_date: '2026-11-19'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.10075'
+  match_basis: exact_os_build
+  matched_kb: KB5132057
+  matched_os_build: '26300.10075'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.10075'
+  excerpt_norm_sha256: 0093125de7a6fe3b67e96f741374797c49bbfb8bee50bccc3594efebfea612a6
+  title_dedup_sha256: 4e632dc75ea9ab6823d89862e32d0f90b7e8755225a2c47bbf41aded0bbe01c5
+  issue_bucket: update/install failure
+  facts_rule_version: v1
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6077410-question-6077410
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6077410/kb5132061-kb5131090-xps-print-jobs-truncated-last
+  parent_title: 'KB5132061 / KB5131090: XPS print jobs truncated (last page missing) – tax software fails on Microsoft Print to PDF and mxdwdrv.dll-based printers - Microsoft Q&A'
+  report_title: 'KB5132061 / KB5131090: XPS print jobs truncated (last page missing) – tax software fails on Microsoft Print to PDF and mxdwdrv.dll-based printers - Microsoft Q&A'
+  report_text_excerpt: 'KB5132061 / KB5131090: XPS print jobs truncated (last page missing) – tax software fails on Microsoft Print to PDF and mxdwdrv.dll-based printers - Microsoft Q&A Since the November 2026 updates, printing from tax preparation software (confirmed: Drake Tax, TaxAct) is broken on...'
+  captured_at: '2026-11-21T20:14:33Z'
+  source_date: '2026-11-20'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9974'
+  match_basis: exact_os_build
+  matched_kb: KB5132061
+  matched_os_build: '26300.9974'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9974'
+  excerpt_norm_sha256: b7e337f75cdeb0fd402d16b604064fd6b8c09f172c35b6f968c178d267680ba8
+  title_dedup_sha256: bfce7c1fbc92f6a8a3bf619e6b7d809d61e4210cd9138fb41def672bcf9dfb0b
+  issue_bucket: update/install failure
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-24-nvidia-forum-comment-3633591
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3633591
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: Hi NVIDIA Team, NVIDIA Surround is still broken on my RTX 5090 with the latest 621.24 driver. I've tested drivers 616.92, 617.14, 617.42 and 621.24, and all of them cause my triple LG C4 4K OLED setup to lose signal when enabling Surround. **Driver 610.88 is the last version...
+  captured_at: '2026-11-21T20:35:34Z'
+  source_date: '2026-11-12T20:55:46Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: negative
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: Hi NVIDIA Team, NVIDIA Surround is still broken on my RTX 5090 with the latest 621.24 driver. I've tested drivers 616.92, 617.14, 617.42 and 621.24, and all of them...
+  excerpt_norm_sha256: e24dd372513b6610a0880de099232962fd09483d34db74433270ee5dc0d1199b
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-24-nvidia-forum-comment-3633566
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3633566
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'Advanced Shader Delivery no longer works after installing the latest driver. Forza went through the entire compiling process instead of downloading the shaders. GPU: GEFORCE RTX 5070 TI CPU: Ryzen 5800x Monitor: Asus ROG XG279Q OS: Windows 11 Pro Driver: 621.24 Game: Forza...'
+  captured_at: '2026-11-21T20:35:34Z'
+  source_date: '2026-11-12T18:11:30Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_version_environment_only
+  issue_theme: ''
+  workflow_area: ''
+  platform: windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...X 5070 TI CPU: Ryzen 5800x Monitor: Asus ROG XG279Q OS: Windows 11 Pro Driver: 621.24 Game: Forza Motorsport'
+  excerpt_norm_sha256: c1fe84ee830204b043c52e1130ca531a61f369c65bfde733d5818a01c2d547b2
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-24-nvidia-forum-comment-3633576
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3633576
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'GPU: GEFORCE RTX 4080 CPU: i7 14700KF Monitor: Asus ROG PG27AQN OS: Windows 11 Pro x64 Driver: 621.24 Game: S.T.A.L.K.E.R 2 Issue: STILL BROKEN since 621.01 ! The game loads, reaches the shader compilation stage, and then freezes without the compilation progress bar starting...'
+  captured_at: '2026-11-21T20:35:34Z'
+  source_date: '2026-11-12T19:10:58Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_version_environment_only
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...X 4080 CPU: i7 14700KF Monitor: Asus ROG PG27AQN OS: Windows 11 Pro x64 Driver: 621.24 Game: S.T.A.L.K.E.R 2 Issue: STILL BROKEN since 621.01 ! The game loads, reache...'
+  excerpt_norm_sha256: f8454f1490b20f38e75b9318e70947b1024f6c6f6db9bbb5c43cc79b2fb0ac65
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: crash or driver reset
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-24-nvidia-forum-comment-3633589
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3633589
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: does anyone know if the black screens are fixed for 5070 cards? i have a QHD monitor 3440x1440 180hz asking about version 621.24
+  captured_at: '2026-11-21T20:35:34Z'
+  source_date: '2026-11-12T20:42:10Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_version_environment_only
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...fixed for 5070 cards? i have a QHD monitor 3440x1440 180hz asking about version 621.24'
+  excerpt_norm_sha256: 681be55cb1b297675e58d7c8a90cf53b50b907ede69489f4b3385230a2dfc8b8
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-24-nvidia-forum-comment-3633593
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3633593
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'Display calibration raises black by 1-2 levels on driver 621.24 (contrast 599:1 vs 963:1 on driver 591.74, same calibration) - still present (first reported in the 621.14 thread) TL;DR: On recent drivers (full A/B tests on 621.14 and 621.24), while a display calibration (gamma...'
+  captured_at: '2026-11-21T20:35:34Z'
+  source_date: '2026-11-12T21:29:01Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: multiple_tracked_versions_named
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: Display calibration raises black by 1-2 levels on driver 621.24 (contrast 599:1 vs 963:1 on driver 591.74, same calibration) - still present (f...
+  excerpt_norm_sha256: d52c0696253ff08508ad9a91537afcda51000900fddeb7e396d3702b562ca4b9
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: flicker or wrong colors
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-24-nvidia-forum-comment-3633619
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3633619
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'Across multiple NVIDIA driver releases after 610.88, users have reported recurring display failures including: - Black screens - Display initialization / detection failures - Fullscreen failures - Incorrect resolution / forced windowed mode - HDR instability - Wake / recovery...'
+  captured_at: '2026-11-21T20:35:34Z'
+  source_date: '2026-11-12T23:25:40Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: notebook_driver_not_tracked
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...se users who have been affected by earlier driver updates please report whether 621.24 is **better, worse, or unchanged**, along with your GPU and monitor. My config...'
+  excerpt_norm_sha256: f6456b5fa564b380507d95adf411fa934d2da63c311a83c556ed6ad620463eaf
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-24-nvidia-forum-comment-3633626
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3633626
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: Stalker 2 game still not working. 617.42 game works... 621.01 621.14 621.24 game not work. black screen. or shader screen frozen.
+  captured_at: '2026-11-21T20:35:34Z'
+  source_date: '2026-11-12T23:54:23Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: multiple_tracked_versions_named
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: Stalker 2 game still not working. 617.42 game works... 621.01 621.14 621.24 game not work. black screen. or shader screen frozen.
+  excerpt_norm_sha256: 930caa1f298ca58d2a7355102456550de0b03f73572ac2ec5cd008107955ef83
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-24-nvidia-forum-comment-3633646
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3633646
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: NVIDIA staff 621.24 you already fix shader cached disabled stop create DXcache or not. Don't tell me you haven't fix it
+  captured_at: '2026-11-21T20:35:34Z'
+  source_date: '2026-11-13T01:49:03Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: not_a_real_issue_report
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: NVIDIA staff 621.24 you already fix shader cached disabled stop create DXcache or not. Don't tell m...
+  excerpt_norm_sha256: 584ba5b01710ba2372729d779b7430a5de0d308e10fd93e0bb7e0c096f5c3610
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-24-nvidia-forum-comment-3635059
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3635059
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: 'Follow-up to my Path of Exile 2 / DX12 hang report above (RTX 4090: 621.14 hangs, 617.70 is fine). 1) Both systems I know of that fail on 621.14 are on Windows 11 build 26300 (Insider) with AMD Ryzen desktop CPUs: mine (RTX 4090, Ryzen 9 5950X, 10.0.26300.10075) and the WoW:...'
+  captured_at: '2026-11-21T20:35:34Z'
+  source_date: '2026-11-21T19:48:13Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...eadlock detected" and zero pipeline failures in the game log. I have not tested 621.24 or hotfix 621.35; their release notes do not mention this issue.'
+  excerpt_norm_sha256: d49ec9f7bb60d2f572272eb2129e9fe06301425a2d0123332ff2ed7e08f930f6
+  title_dedup_sha256: 5ed9045128af1fb603384e902a5e090ca835b2503a4677d30f78c0aaa8a49239
+  issue_bucket: crash or driver reset
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-14-nvidia-forum-comment-3633593
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3633593
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'Display calibration raises black by 1-2 levels on driver 621.24 (contrast 599:1 vs 963:1 on driver 591.74, same calibration) - still present (first reported in the 621.14 thread) TL;DR: On recent drivers (full A/B tests on 621.14 and 621.24), while a display calibration (gamma...'
+  captured_at: '2026-11-21T20:35:34Z'
+  source_date: '2026-11-12T21:29:01Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '...63:1 on driver 591.74, same calibration) - still present (first reported in the 621.14 thread) TL;DR: On recent drivers (full A/B tests on 621.14 and 621.24), while...'
+  excerpt_norm_sha256: d52c0696253ff08508ad9a91537afcda51000900fddeb7e396d3702b562ca4b9
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: flicker or wrong colors
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-14-nvidia-forum-comment-3633626
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3633626
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: Stalker 2 game still not working. 617.42 game works... 621.01 621.14 621.24 game not work. black screen. or shader screen frozen.
+  captured_at: '2026-11-21T20:35:34Z'
+  source_date: '2026-11-12T23:54:23Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: Stalker 2 game still not working. 617.42 game works... 621.01 621.14 621.24 game not work. black screen. or shader screen frozen.
+  excerpt_norm_sha256: 930caa1f298ca58d2a7355102456550de0b03f73572ac2ec5cd008107955ef83
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-14-nvidia-forum-comment-3633654
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3633654
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: I'd like to report a simple issue other Oled monitors have experienced. Alienware Aw2726DM experiences a pixel shift that randomly during games turns the screen black within a split second basically a blink and you could miss it but if your locked in it gets annoying. Vsync/...
+  captured_at: '2026-11-21T20:35:34Z'
+  source_date: '2026-11-13T04:33:30Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '...ed on different amd based systems with multiple different cpus. Nvidia driver 621.14. Ryzen 9 7900x, Ryzen 9 9900x am5 asus strix x870-F gaming wifi ddr5 2x16gb 64...'
+  excerpt_norm_sha256: 3364958eb05866d3be1d323d7504f283b916850042f9deb7196635c0c1cd1e00
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: flicker or wrong colors
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-14-nvidia-forum-comment-3635059
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3635059
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: 'Follow-up to my Path of Exile 2 / DX12 hang report above (RTX 4090: 621.14 hangs, 617.70 is fine). 1) Both systems I know of that fail on 621.14 are on Windows 11 build 26300 (Insider) with AMD Ryzen desktop CPUs: mine (RTX 4090, Ryzen 9 5950X, 10.0.26300.10075) and the WoW:...'
+  captured_at: '2026-11-21T20:35:34Z'
+  source_date: '2026-11-21T19:48:13Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: notebook_driver_not_tracked
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: 'Follow-up to my Path of Exile 2 / DX12 hang report above (RTX 4090: 621.14 hangs, 617.70 is fine). 1) Both systems I know of that fail on 621.14 are on W...'
+  excerpt_norm_sha256: d49ec9f7bb60d2f572272eb2129e9fe06301425a2d0123332ff2ed7e08f930f6
+  title_dedup_sha256: 5ed9045128af1fb603384e902a5e090ca835b2503a4677d30f78c0aaa8a49239
+  issue_bucket: crash or driver reset
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-14-nvidia-forum-comment-3632515
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592581/62114-not-showing-wow-forever/?comment=3632515
+  parent_title: '621.14 not showing WoW: Forever'
+  report_title: '621.14 not showing WoW: Forever'
+  report_text_excerpt: '621.14 not showing WoW: Forever In theory this new controller gives compatibility with World of Warcraft: Forever, and it should be on library for optimization or/and ingame filters, but it does not appear and all in-game filters are gray. Searching by route and adding wow.exe...'
+  captured_at: '2026-11-21T20:35:34Z'
+  source_date: '2026-11-04T15:56:15Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '621.14 not showing WoW: Forever In theory this new controller gives compatibility with...'
+  excerpt_norm_sha256: b3c21085648d69dfc87b0127419a427d90aa433eef4ac649496d02194de25627
+  title_dedup_sha256: 7c55c10eafb33a793f295b7e004f98898e16368fff57920dd1cbf647b027806d
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-14-nvidia-forum-comment-3632788
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592581/62114-not-showing-wow-forever/?comment=3632788
+  parent_title: '621.14 not showing WoW: Forever'
+  report_title: '621.14 not showing WoW: Forever'
+  report_text_excerpt: Same here 621.14 Driver and is not appear on program settings [link] Also manualy adding the game i got a message that the game is allready added
+  captured_at: '2026-11-21T20:35:34Z'
+  source_date: '2026-11-05T22:34:25Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: Same here 621.14 Driver and is not appear on program settings [link] Also manualy adding the gam...
+  excerpt_norm_sha256: c5e497877ec871205234759ea1bfe35c4eb62d3fa35d5de3eca1b11b485ff4cd
+  title_dedup_sha256: 7c55c10eafb33a793f295b7e004f98898e16368fff57920dd1cbf647b027806d
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-01-nvidia-forum-comment-3633576
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.01'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3633576
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'GPU: GEFORCE RTX 4080 CPU: i7 14700KF Monitor: Asus ROG PG27AQN OS: Windows 11 Pro x64 Driver: 621.24 Game: S.T.A.L.K.E.R 2 Issue: STILL BROKEN since 621.01 ! The game loads, reaches the shader compilation stage, and then freezes without the compilation progress bar starting...'
+  captured_at: '2026-11-21T20:35:34Z'
+  source_date: '2026-11-12T19:10:58Z'
+  target_release_date: '2026-10-21'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.01'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.01'
+  matched_field: report_text
+  matched_context: '...ndows 11 Pro x64 Driver: 621.24 Game: S.T.A.L.K.E.R 2 Issue: STILL BROKEN since 621.01 ! The game loads, reaches the shader compilation stage, and then freezes withou...'
+  excerpt_norm_sha256: f8454f1490b20f38e75b9318e70947b1024f6c6f6db9bbb5c43cc79b2fb0ac65
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: crash or driver reset
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-01-nvidia-forum-comment-3633593
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.01'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3633593
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'Display calibration raises black by 1-2 levels on driver 621.24 (contrast 599:1 vs 963:1 on driver 591.74, same calibration) - still present (first reported in the 621.14 thread) TL;DR: On recent drivers (full A/B tests on 621.14 and 621.24), while a display calibration (gamma...'
+  captured_at: '2026-11-21T20:35:34Z'
+  source_date: '2026-11-12T21:29:01Z'
+  target_release_date: '2026-10-21'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.01'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: multiple_tracked_versions_named
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.01'
+  matched_field: report_text
+  matched_context: '...1.74. Bad: 621.24 and 621.14 (full A/B tests, identical results). On 610.88 and 621.01 I measured the 25-second effect after a ramp switch (the constant raise with a...'
+  excerpt_norm_sha256: d52c0696253ff08508ad9a91537afcda51000900fddeb7e396d3702b562ca4b9
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: flicker or wrong colors
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-01-nvidia-forum-comment-3633626
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.01'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3633626
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: Stalker 2 game still not working. 617.42 game works... 621.01 621.14 621.24 game not work. black screen. or shader screen frozen.
+  captured_at: '2026-11-21T20:35:34Z'
+  source_date: '2026-11-12T23:54:23Z'
+  target_release_date: '2026-10-21'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.01'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.01'
+  matched_field: report_text
+  matched_context: Stalker 2 game still not working. 617.42 game works... 621.01 621.14 621.24 game not work. black screen. or shader screen frozen.
+  excerpt_norm_sha256: 930caa1f298ca58d2a7355102456550de0b03f73572ac2ec5cd008107955ef83
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-617-42-nvidia-forum-comment-3633591
+  product_id: nvidia-geforce-game-ready
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3633591
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: Hi NVIDIA Team, NVIDIA Surround is still broken on my RTX 5090 with the latest 621.24 driver. I've tested drivers 616.92, 617.14, 617.42 and 621.24, and all of them cause my triple LG C4 4K OLED setup to lose signal when enabling Surround. **Driver 610.88 is the last version...
+  captured_at: '2026-11-21T20:35:34Z'
+  source_date: '2026-11-12T20:55:46Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: '...my RTX 5090 with the latest 621.24 driver. I''ve tested drivers 616.92, 617.14, 617.42 and 621.24, and all of them cause my triple LG C4 4K OLED setup to lose signal...'
+  excerpt_norm_sha256: e24dd372513b6610a0880de099232962fd09483d34db74433270ee5dc0d1199b
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-617-42-nvidia-forum-comment-3633626
+  product_id: nvidia-geforce-game-ready
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3633626
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: Stalker 2 game still not working. 617.42 game works... 621.01 621.14 621.24 game not work. black screen. or shader screen frozen.
+  captured_at: '2026-11-21T20:35:34Z'
+  source_date: '2026-11-12T23:54:23Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: Stalker 2 game still not working. 617.42 game works... 621.01 621.14 621.24 game not work. black screen. or shader scree...
+  excerpt_norm_sha256: 930caa1f298ca58d2a7355102456550de0b03f73572ac2ec5cd008107955ef83
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-617-14-nvidia-forum-comment-3633591
+  product_id: nvidia-geforce-game-ready
+  update_version: '617.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3633591
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: Hi NVIDIA Team, NVIDIA Surround is still broken on my RTX 5090 with the latest 621.24 driver. I've tested drivers 616.92, 617.14, 617.42 and 621.24, and all of them cause my triple LG C4 4K OLED setup to lose signal when enabling Surround. **Driver 610.88 is the last version...
+  captured_at: '2026-11-21T20:35:34Z'
+  source_date: '2026-11-12T20:55:46Z'
+  target_release_date: '2026-09-22'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.14'
+  matched_field: report_text
+  matched_context: '...oken on my RTX 5090 with the latest 621.24 driver. I''ve tested drivers 616.92, 617.14, 617.42 and 621.24, and all of them cause my triple LG C4 4K OLED setup to lose...'
+  excerpt_norm_sha256: e24dd372513b6610a0880de099232962fd09483d34db74433270ee5dc0d1199b
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-616-92-nvidia-forum-comment-3633591
+  product_id: nvidia-geforce-game-ready
+  update_version: '616.92'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3633591
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: Hi NVIDIA Team, NVIDIA Surround is still broken on my RTX 5090 with the latest 621.24 driver. I've tested drivers 616.92, 617.14, 617.42 and 621.24, and all of them cause my triple LG C4 4K OLED setup to lose signal when enabling Surround. **Driver 610.88 is the last version...
+  captured_at: '2026-11-21T20:35:34Z'
+  source_date: '2026-11-12T20:55:46Z'
+  target_release_date: '2026-09-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.92'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '616.92'
+  matched_field: report_text
+  matched_context: '...still broken on my RTX 5090 with the latest 621.24 driver. I''ve tested drivers 616.92, 617.14, 617.42 and 621.24, and all of them cause my triple LG C4 4K OLED setup...'
+  excerpt_norm_sha256: e24dd372513b6610a0880de099232962fd09483d34db74433270ee5dc0d1199b
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-616-64-nvidia-forum-comment-3633489
+  product_id: nvidia-geforce-game-ready
+  update_version: '616.64'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633489
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: '[link] Same issue as described then, but with GRD 621.14 For convenience: (edited for my system) GPU: NVIDIA GeForce RTX 4090 Monitor: BenQ XL2730Z Operating system: Windows 11 Pro 26H2, build 26300.9974 Last known-good driver: NVIDIA 610.88 First failing driver: NVIDIA 616.56...'
+  captured_at: '2026-11-21T20:35:34Z'
+  source_date: '2026-11-12T08:47:31Z'
+  target_release_date: '2026-09-03'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.64'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: multiple_tracked_versions_named
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '616.64'
+  matched_field: report_text
+  matched_context: '...nQ XL2730Z. Please investigate alongside the existing reports involving drivers 616.64, 616.92 and 617.42.'
+  excerpt_norm_sha256: ee439323bfacaaeabdd0dc8300a811c52772255409c0c77d2d7e4b1b46381a2e
+  title_dedup_sha256: 5ed9045128af1fb603384e902a5e090ca835b2503a4677d30f78c0aaa8a49239
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-616-56-nvidia-forum-comment-3633489
+  product_id: nvidia-geforce-game-ready
+  update_version: '616.56'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633489
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: '[link] Same issue as described then, but with GRD 621.14 For convenience: (edited for my system) GPU: NVIDIA GeForce RTX 4090 Monitor: BenQ XL2730Z Operating system: Windows 11 Pro 26H2, build 26300.9974 Last known-good driver: NVIDIA 610.88 First failing driver: NVIDIA 616.56...'
+  captured_at: '2026-11-21T20:35:34Z'
+  source_date: '2026-11-12T08:47:31Z'
+  target_release_date: '2026-08-26'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.56'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: multiple_tracked_versions_named
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '616.56'
+  matched_field: report_text
+  matched_context: '...d 26300.9974 Last known-good driver: NVIDIA 610.88 First failing driver: NVIDIA 616.56 Issue: With newer NVIDIA drivers, Windows becomes unresponsive and the monitor...'
+  excerpt_norm_sha256: ee439323bfacaaeabdd0dc8300a811c52772255409c0c77d2d7e4b1b46381a2e
+  title_dedup_sha256: 5ed9045128af1fb603384e902a5e090ca835b2503a4677d30f78c0aaa8a49239
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-616-56-nvidia-forum-comment-3633347
+  product_id: nvidia-geforce-game-ready
+  update_version: '616.56'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633347
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: 'Follow-up to my report in the 621.01 thread (external monitor washed out). Still present in 621.14, now narrowed down with PresentMon. System: MSI Stealth 16 AI Studio A1VFG, RTX 4060 Laptop GPU (hybrid mode), Windows 11 Pro 25H2 (26200.9711). External monitor MSI G244F E2,...'
+  captured_at: '2026-11-21T20:35:34Z'
+  source_date: '2026-11-10T23:31:59Z'
+  target_release_date: '2026-08-26'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.56'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '616.56'
+  matched_field: report_text
+  matched_context: '...Control Panel reference mode, output range/format (AVI InfoFrame identical with 616.56). Same machine with 617.42 and ACM OFF on that monitor: no washout at all, inc...'
+  excerpt_norm_sha256: c423577acee13bf2b4a88da0ae4be0ca5019eae66956d42b924ab603c32ae0b2
+  title_dedup_sha256: 5ed9045128af1fb603384e902a5e090ca835b2503a4677d30f78c0aaa8a49239
+  issue_bucket: flicker or wrong colors
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-610-88-nvidia-forum-comment-3633586
+  product_id: nvidia-geforce-game-ready
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3633586
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: The RTX 5090 Palit GameRock OC issue with black screens in the browser still hasn’t been resolved; I think I’ll stick with driver 610.88 for a while longer.
+  captured_at: '2026-11-21T20:35:34Z'
+  source_date: '2026-11-12T20:21:10Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: '...reens in the browser still hasn’t been resolved; I think I’ll stick with driver 610.88 for a while longer.'
+  excerpt_norm_sha256: 0bf96c6563c3c4b728289b0d6a40a858903de9a43fd0d6e1456378f79ba075af
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-610-88-nvidia-forum-comment-3633591
+  product_id: nvidia-geforce-game-ready
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3633591
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: Hi NVIDIA Team, NVIDIA Surround is still broken on my RTX 5090 with the latest 621.24 driver. I've tested drivers 616.92, 617.14, 617.42 and 621.24, and all of them cause my triple LG C4 4K OLED setup to lose signal when enabling Surround. **Driver 610.88 is the last version...
+  captured_at: '2026-11-21T20:35:34Z'
+  source_date: '2026-11-12T20:55:46Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: '...my triple LG C4 4K OLED setup to lose signal when enabling Surround. **Driver 610.88 is the last version that works correctly.** I''ve already submitted a report th...'
+  excerpt_norm_sha256: e24dd372513b6610a0880de099232962fd09483d34db74433270ee5dc0d1199b
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-610-88-nvidia-forum-comment-3633593
+  product_id: nvidia-geforce-game-ready
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3633593
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'Display calibration raises black by 1-2 levels on driver 621.24 (contrast 599:1 vs 963:1 on driver 591.74, same calibration) - still present (first reported in the 621.14 thread) TL;DR: On recent drivers (full A/B tests on 621.14 and 621.24), while a display calibration (gamma...'
+  captured_at: '2026-11-21T20:35:34Z'
+  source_date: '2026-11-12T21:29:01Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: multiple_tracked_versions_named
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: '...driver: 591.74. Bad: 621.24 and 621.14 (full A/B tests, identical results). On 610.88 and 621.01 I measured the 25-second effect after a ramp switch (the constant ra...'
+  excerpt_norm_sha256: d52c0696253ff08508ad9a91537afcda51000900fddeb7e396d3702b562ca4b9
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: flicker or wrong colors
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-610-88-nvidia-forum-comment-3633619
+  product_id: nvidia-geforce-game-ready
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3633619
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'Across multiple NVIDIA driver releases after 610.88, users have reported recurring display failures including: - Black screens - Display initialization / detection failures - Fullscreen failures - Incorrect resolution / forced windowed mode - HDR instability - Wake / recovery...'
+  captured_at: '2026-11-21T20:35:34Z'
+  source_date: '2026-11-12T23:25:40Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: 'Across multiple NVIDIA driver releases after 610.88, users have reported recurring display failures including: - Black screens - D...'
+  excerpt_norm_sha256: f6456b5fa564b380507d95adf411fa934d2da63c311a83c556ed6ad620463eaf
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-610-88-nvidia-forum-comment-3633670
+  product_id: nvidia-geforce-game-ready
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3633670
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: Apparently, NVIDIA has become so busy chasing the AI hype train that they've forgotten they also have a driver team. Who needs stable drivers when you can shove in another batch of AI slop, right? Flickering screens, random black screens, and a growing list of bugs? Surely...
+  captured_at: '2026-11-21T20:35:34Z'
+  source_date: '2026-11-13T07:26:21Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: '...ng list of bugs? Surely those can wait. Everything started going downhill after 610.88. Seriously, what the hell happened to NVIDIA''s driver quality?'
+  excerpt_norm_sha256: c3114ad88d4410241df9bd76156c7b83299e692f8c6b5a8cb0323c93b082fdd2
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-610-88-nvidia-forum-comment-3633489
+  product_id: nvidia-geforce-game-ready
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633489
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: '[link] Same issue as described then, but with GRD 621.14 For convenience: (edited for my system) GPU: NVIDIA GeForce RTX 4090 Monitor: BenQ XL2730Z Operating system: Windows 11 Pro 26H2, build 26300.9974 Last known-good driver: NVIDIA 610.88 First failing driver: NVIDIA 616.56...'
+  captured_at: '2026-11-21T20:35:34Z'
+  source_date: '2026-11-12T08:47:31Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: multiple_tracked_versions_named
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: '...ng system: Windows 11 Pro 26H2, build 26300.9974 Last known-good driver: NVIDIA 610.88 First failing driver: NVIDIA 616.56 Issue: With newer NVIDIA drivers, Windows...'
+  excerpt_norm_sha256: ee439323bfacaaeabdd0dc8300a811c52772255409c0c77d2d7e4b1b46381a2e
+  title_dedup_sha256: 5ed9045128af1fb603384e902a5e090ca835b2503a4677d30f78c0aaa8a49239
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-610-88-nvidia-forum-comment-3633451
+  product_id: nvidia-geforce-game-ready
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633451
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: 'GPU: Gigabyte GeForce RTX 4080 (16 GB) CPU: AMD Ryzen 7 5800X3D (Gigabyte B550 AORUS ELITE V2, BIOS F20a / AGESA 1.2.0.11), 16 GB DDR4-3333 (XMP). Issue also reproduced with Curve Optimizer disabled (stock CPU). Display Configuration: ASUS ROG Swift PG27UCDM (3840x2160, 240...'
+  captured_at: '2026-11-21T20:35:34Z'
+  source_date: '2026-11-11T22:48:39Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: '...26H2, build 26300.9974 (Insider) Driver Regression: Yes. Last working driver: 610.88. Broken: 621.14 (clean install with DDU in both cases). Rolling back to 610.88...'
+  excerpt_norm_sha256: 1d2147af99fa3ac839be74d382351c00724f2cd2f58b807a5dc7f7d8e44dc27d
+  title_dedup_sha256: 5ed9045128af1fb603384e902a5e090ca835b2503a4677d30f78c0aaa8a49239
+  issue_bucket: crash or driver reset
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-610-88-nvidia-forum-comment-3633448
+  product_id: nvidia-geforce-game-ready
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633448
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: 'Display calibration raises black by 1-2 levels on driver 621.14 (contrast 598:1 vs 963:1 on driver 591.74, same calibration) TL;DR: On drivers after 591.74, while a display calibration (gamma ramp / video LUT) is loaded, black and near-black are shown 1-2 levels too bright....'
+  captured_at: '2026-11-21T20:35:34Z'
+  source_date: '2026-11-11T22:09:35Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: multiple_tracked_versions_named
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: '...Yes. Last good driver: 591.74. Bad: 621.14 (full A/B test below); also seen on 610.88 and 621.01. Not tested: 591.86, 596.21, 596.36, 610.47. All Game Ready drivers,...'
+  excerpt_norm_sha256: 6ecce431f0169746b5f6c883dcaef85ec5d500e8c51a6e266f0fb34fffd2ee25
+  title_dedup_sha256: 5ed9045128af1fb603384e902a5e090ca835b2503a4677d30f78c0aaa8a49239
+  issue_bucket: flicker or wrong colors
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-610-88-nvidia-forum-comment-3633148
+  product_id: nvidia-geforce-game-ready
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633148
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: 'GPU: RTX 5060 Ti 16GB CPU: Core i7-11700F Display: TCL 25G64 (DisplayPort, 1920x1080, 144Hz) Operating System: Windows 11 Pro (26H2) Driver Regression: 621.14 NDIVIA Studio Driver Application: Reflections: an Unreal Engine Real-Time Ray Tracing Demonstration Issue: When...'
+  captured_at: '2026-11-21T20:35:34Z'
+  source_date: '2026-11-09T10:29:40Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: ''
+  workflow_area: ''
+  platform: windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: '...e case since the previous driver version (621.01). I am currently using version 610.88, with which the display appears correctly.'
+  excerpt_norm_sha256: 18f6d1915e83d8e01e2aeae6ebae8fbf13bb74aa937dfc76e5359684e5375727
+  title_dedup_sha256: 5ed9045128af1fb603384e902a5e090ca835b2503a4677d30f78c0aaa8a49239
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-610-88-nvidia-forum-comment-3633068
+  product_id: nvidia-geforce-game-ready
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633068
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: 'BOOT UP STILL BLACK SCREEN (CANT LOGIN) ON MY DOUGH 4K 144HZ MONITOR - TDRS ARE STILL THE CAUSE OF THIS SINCE AFTER 610.88. GPU: Zotac 5080 CPU: 7800x3d Display Configuration: Dough Spectrum 4k 144hz monitor on a display port connection. Does it on HDMI too. OS: Windows 11 64...'
+  captured_at: '2026-11-21T20:35:34Z'
+  source_date: '2026-11-08T16:14:31Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: '...IN) ON MY DOUGH 4K 144HZ MONITOR - TDRS ARE STILL THE CAUSE OF THIS SINCE AFTER 610.88. GPU: Zotac 5080 CPU: 7800x3d Display Configuration: Dough Spectrum 4k 144hz...'
+  excerpt_norm_sha256: 364555c33327d399c3def721a1ddfad069b4dbbb46ead89585d44bcff108733d
+  title_dedup_sha256: 5ed9045128af1fb603384e902a5e090ca835b2503a4677d30f78c0aaa8a49239
+  issue_bucket: crash or driver reset
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-610-88-nvidia-forum-comment-3633067
+  product_id: nvidia-geforce-game-ready
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633067
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: GPU RTX4080S CPU AMD Ryzen7 9800X3D OS Window11 621.14 make MH wilds flickering problem. I have to reversion to 610.88.
+  captured_at: '2026-11-21T20:35:34Z'
+  source_date: '2026-11-08T16:11:08Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: '...X3D OS Window11 621.14 make MH wilds flickering problem. I have to reversion to 610.88.'
+  excerpt_norm_sha256: f62941264e392db896b06ad9c7a98e62cab421234d2be740d93eb287d929ba70
+  title_dedup_sha256: 5ed9045128af1fb603384e902a5e090ca835b2503a4677d30f78c0aaa8a49239
+  issue_bucket: flicker or wrong colors
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-24-nvidia-forum-comment-3633566
+  product_id: nvidia-studio-driver
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3633566
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'Advanced Shader Delivery no longer works after installing the latest driver. Forza went through the entire compiling process instead of downloading the shaders. GPU: GEFORCE RTX 5070 TI CPU: Ryzen 5800x Monitor: Asus ROG XG279Q OS: Windows 11 Pro Driver: 621.24 Game: Forza...'
+  captured_at: '2026-11-21T20:37:22Z'
+  source_date: '2026-11-12T18:11:30Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: ''
+  workflow_area: ''
+  platform: windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...X 5070 TI CPU: Ryzen 5800x Monitor: Asus ROG XG279Q OS: Windows 11 Pro Driver: 621.24 Game: Forza Motorsport'
+  excerpt_norm_sha256: c1fe84ee830204b043c52e1130ca531a61f369c65bfde733d5818a01c2d547b2
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-24-nvidia-forum-comment-3633576
+  product_id: nvidia-studio-driver
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3633576
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'GPU: GEFORCE RTX 4080 CPU: i7 14700KF Monitor: Asus ROG PG27AQN OS: Windows 11 Pro x64 Driver: 621.24 Game: S.T.A.L.K.E.R 2 Issue: STILL BROKEN since 621.01 ! The game loads, reaches the shader compilation stage, and then freezes without the compilation progress bar starting...'
+  captured_at: '2026-11-21T20:37:22Z'
+  source_date: '2026-11-12T19:10:58Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...X 4080 CPU: i7 14700KF Monitor: Asus ROG PG27AQN OS: Windows 11 Pro x64 Driver: 621.24 Game: S.T.A.L.K.E.R 2 Issue: STILL BROKEN since 621.01 ! The game loads, reache...'
+  excerpt_norm_sha256: f8454f1490b20f38e75b9318e70947b1024f6c6f6db9bbb5c43cc79b2fb0ac65
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: crash or driver reset
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-24-nvidia-forum-comment-3633589
+  product_id: nvidia-studio-driver
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3633589
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: does anyone know if the black screens are fixed for 5070 cards? i have a QHD monitor 3440x1440 180hz asking about version 621.24
+  captured_at: '2026-11-21T20:37:22Z'
+  source_date: '2026-11-12T20:42:10Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...fixed for 5070 cards? i have a QHD monitor 3440x1440 180hz asking about version 621.24'
+  excerpt_norm_sha256: 681be55cb1b297675e58d7c8a90cf53b50b907ede69489f4b3385230a2dfc8b8
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-24-nvidia-forum-comment-3633591
+  product_id: nvidia-studio-driver
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3633591
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: Hi NVIDIA Team, NVIDIA Surround is still broken on my RTX 5090 with the latest 621.24 driver. I've tested drivers 616.92, 617.14, 617.42 and 621.24, and all of them cause my triple LG C4 4K OLED setup to lose signal when enabling Surround. **Driver 610.88 is the last version...
+  captured_at: '2026-11-21T20:37:22Z'
+  source_date: '2026-11-12T20:55:46Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: Hi NVIDIA Team, NVIDIA Surround is still broken on my RTX 5090 with the latest 621.24 driver. I've tested drivers 616.92, 617.14, 617.42 and 621.24, and all of them...
+  excerpt_norm_sha256: e24dd372513b6610a0880de099232962fd09483d34db74433270ee5dc0d1199b
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-24-nvidia-forum-comment-3633593
+  product_id: nvidia-studio-driver
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3633593
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'Display calibration raises black by 1-2 levels on driver 621.24 (contrast 599:1 vs 963:1 on driver 591.74, same calibration) - still present (first reported in the 621.14 thread) TL;DR: On recent drivers (full A/B tests on 621.14 and 621.24), while a display calibration (gamma...'
+  captured_at: '2026-11-21T20:37:22Z'
+  source_date: '2026-11-12T21:29:01Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: Display calibration raises black by 1-2 levels on driver 621.24 (contrast 599:1 vs 963:1 on driver 591.74, same calibration) - still present (f...
+  excerpt_norm_sha256: d52c0696253ff08508ad9a91537afcda51000900fddeb7e396d3702b562ca4b9
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: flicker or wrong colors
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-24-nvidia-forum-comment-3633619
+  product_id: nvidia-studio-driver
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3633619
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'Across multiple NVIDIA driver releases after 610.88, users have reported recurring display failures including: - Black screens - Display initialization / detection failures - Fullscreen failures - Incorrect resolution / forced windowed mode - HDR instability - Wake / recovery...'
+  captured_at: '2026-11-21T20:37:22Z'
+  source_date: '2026-11-12T23:25:40Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...se users who have been affected by earlier driver updates please report whether 621.24 is **better, worse, or unchanged**, along with your GPU and monitor. My config...'
+  excerpt_norm_sha256: f6456b5fa564b380507d95adf411fa934d2da63c311a83c556ed6ad620463eaf
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-24-nvidia-forum-comment-3633626
+  product_id: nvidia-studio-driver
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3633626
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: Stalker 2 game still not working. 617.42 game works... 621.01 621.14 621.24 game not work. black screen. or shader screen frozen.
+  captured_at: '2026-11-21T20:37:22Z'
+  source_date: '2026-11-12T23:54:23Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: Stalker 2 game still not working. 617.42 game works... 621.01 621.14 621.24 game not work. black screen. or shader screen frozen.
+  excerpt_norm_sha256: 930caa1f298ca58d2a7355102456550de0b03f73572ac2ec5cd008107955ef83
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-24-nvidia-forum-comment-3633646
+  product_id: nvidia-studio-driver
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3633646
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: NVIDIA staff 621.24 you already fix shader cached disabled stop create DXcache or not. Don't tell me you haven't fix it
+  captured_at: '2026-11-21T20:37:22Z'
+  source_date: '2026-11-13T01:49:03Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: NVIDIA staff 621.24 you already fix shader cached disabled stop create DXcache or not. Don't tell m...
+  excerpt_norm_sha256: 584ba5b01710ba2372729d779b7430a5de0d308e10fd93e0bb7e0c096f5c3610
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-24-nvidia-forum-comment-3635059
+  product_id: nvidia-studio-driver
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3635059
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: 'Follow-up to my Path of Exile 2 / DX12 hang report above (RTX 4090: 621.14 hangs, 617.70 is fine). 1) Both systems I know of that fail on 621.14 are on Windows 11 build 26300 (Insider) with AMD Ryzen desktop CPUs: mine (RTX 4090, Ryzen 9 5950X, 10.0.26300.10075) and the WoW:...'
+  captured_at: '2026-11-21T20:37:22Z'
+  source_date: '2026-11-21T19:48:13Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...eadlock detected" and zero pipeline failures in the game log. I have not tested 621.24 or hotfix 621.35; their release notes do not mention this issue.'
+  excerpt_norm_sha256: d49ec9f7bb60d2f572272eb2129e9fe06301425a2d0123332ff2ed7e08f930f6
+  title_dedup_sha256: 5ed9045128af1fb603384e902a5e090ca835b2503a4677d30f78c0aaa8a49239
+  issue_bucket: crash or driver reset
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-14-nvidia-forum-comment-3633593
+  product_id: nvidia-studio-driver
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3633593
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'Display calibration raises black by 1-2 levels on driver 621.24 (contrast 599:1 vs 963:1 on driver 591.74, same calibration) - still present (first reported in the 621.14 thread) TL;DR: On recent drivers (full A/B tests on 621.14 and 621.24), while a display calibration (gamma...'
+  captured_at: '2026-11-21T20:37:22Z'
+  source_date: '2026-11-12T21:29:01Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '...63:1 on driver 591.74, same calibration) - still present (first reported in the 621.14 thread) TL;DR: On recent drivers (full A/B tests on 621.14 and 621.24), while...'
+  excerpt_norm_sha256: d52c0696253ff08508ad9a91537afcda51000900fddeb7e396d3702b562ca4b9
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: flicker or wrong colors
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-14-nvidia-forum-comment-3633626
+  product_id: nvidia-studio-driver
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3633626
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: Stalker 2 game still not working. 617.42 game works... 621.01 621.14 621.24 game not work. black screen. or shader screen frozen.
+  captured_at: '2026-11-21T20:37:22Z'
+  source_date: '2026-11-12T23:54:23Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: Stalker 2 game still not working. 617.42 game works... 621.01 621.14 621.24 game not work. black screen. or shader screen frozen.
+  excerpt_norm_sha256: 930caa1f298ca58d2a7355102456550de0b03f73572ac2ec5cd008107955ef83
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-14-nvidia-forum-comment-3633654
+  product_id: nvidia-studio-driver
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3633654
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: I'd like to report a simple issue other Oled monitors have experienced. Alienware Aw2726DM experiences a pixel shift that randomly during games turns the screen black within a split second basically a blink and you could miss it but if your locked in it gets annoying. Vsync/...
+  captured_at: '2026-11-21T20:37:22Z'
+  source_date: '2026-11-13T04:33:30Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '...ed on different amd based systems with multiple different cpus. Nvidia driver 621.14. Ryzen 9 7900x, Ryzen 9 9900x am5 asus strix x870-F gaming wifi ddr5 2x16gb 64...'
+  excerpt_norm_sha256: 3364958eb05866d3be1d323d7504f283b916850042f9deb7196635c0c1cd1e00
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: flicker or wrong colors
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-14-nvidia-forum-comment-3635059
+  product_id: nvidia-studio-driver
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3635059
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: 'Follow-up to my Path of Exile 2 / DX12 hang report above (RTX 4090: 621.14 hangs, 617.70 is fine). 1) Both systems I know of that fail on 621.14 are on Windows 11 build 26300 (Insider) with AMD Ryzen desktop CPUs: mine (RTX 4090, Ryzen 9 5950X, 10.0.26300.10075) and the WoW:...'
+  captured_at: '2026-11-21T20:37:22Z'
+  source_date: '2026-11-21T19:48:13Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: 'Follow-up to my Path of Exile 2 / DX12 hang report above (RTX 4090: 621.14 hangs, 617.70 is fine). 1) Both systems I know of that fail on 621.14 are on W...'
+  excerpt_norm_sha256: d49ec9f7bb60d2f572272eb2129e9fe06301425a2d0123332ff2ed7e08f930f6
+  title_dedup_sha256: 5ed9045128af1fb603384e902a5e090ca835b2503a4677d30f78c0aaa8a49239
+  issue_bucket: crash or driver reset
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-14-nvidia-forum-comment-3632515
+  product_id: nvidia-studio-driver
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592581/62114-not-showing-wow-forever/?comment=3632515
+  parent_title: '621.14 not showing WoW: Forever'
+  report_title: '621.14 not showing WoW: Forever'
+  report_text_excerpt: '621.14 not showing WoW: Forever In theory this new controller gives compatibility with World of Warcraft: Forever, and it should be on library for optimization or/and ingame filters, but it does not appear and all in-game filters are gray. Searching by route and adding wow.exe...'
+  captured_at: '2026-11-21T20:37:22Z'
+  source_date: '2026-11-04T15:56:15Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '621.14 not showing WoW: Forever In theory this new controller gives compatibility with...'
+  excerpt_norm_sha256: b3c21085648d69dfc87b0127419a427d90aa433eef4ac649496d02194de25627
+  title_dedup_sha256: 7c55c10eafb33a793f295b7e004f98898e16368fff57920dd1cbf647b027806d
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-14-nvidia-forum-comment-3632788
+  product_id: nvidia-studio-driver
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592581/62114-not-showing-wow-forever/?comment=3632788
+  parent_title: '621.14 not showing WoW: Forever'
+  report_title: '621.14 not showing WoW: Forever'
+  report_text_excerpt: Same here 621.14 Driver and is not appear on program settings [link] Also manualy adding the game i got a message that the game is allready added
+  captured_at: '2026-11-21T20:37:22Z'
+  source_date: '2026-11-05T22:34:25Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: Same here 621.14 Driver and is not appear on program settings [link] Also manualy adding the gam...
+  excerpt_norm_sha256: c5e497877ec871205234759ea1bfe35c4eb62d3fa35d5de3eca1b11b485ff4cd
+  title_dedup_sha256: 7c55c10eafb33a793f295b7e004f98898e16368fff57920dd1cbf647b027806d
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: nvidia-studio-driver-617-42-nvidia-forum-comment-3633591
+  product_id: nvidia-studio-driver
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3633591
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: Hi NVIDIA Team, NVIDIA Surround is still broken on my RTX 5090 with the latest 621.24 driver. I've tested drivers 616.92, 617.14, 617.42 and 621.24, and all of them cause my triple LG C4 4K OLED setup to lose signal when enabling Surround. **Driver 610.88 is the last version...
+  captured_at: '2026-11-21T20:37:22Z'
+  source_date: '2026-11-12T20:55:46Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: '...my RTX 5090 with the latest 621.24 driver. I''ve tested drivers 616.92, 617.14, 617.42 and 621.24, and all of them cause my triple LG C4 4K OLED setup to lose signal...'
+  excerpt_norm_sha256: e24dd372513b6610a0880de099232962fd09483d34db74433270ee5dc0d1199b
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: nvidia-studio-driver-617-42-nvidia-forum-comment-3633626
+  product_id: nvidia-studio-driver
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3633626
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: Stalker 2 game still not working. 617.42 game works... 621.01 621.14 621.24 game not work. black screen. or shader screen frozen.
+  captured_at: '2026-11-21T20:37:22Z'
+  source_date: '2026-11-12T23:54:23Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: Stalker 2 game still not working. 617.42 game works... 621.01 621.14 621.24 game not work. black screen. or shader scree...
+  excerpt_norm_sha256: 930caa1f298ca58d2a7355102456550de0b03f73572ac2ec5cd008107955ef83
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-studio-driver-616-92-nvidia-forum-comment-3633591
+  product_id: nvidia-studio-driver
+  update_version: '616.92'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3633591
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: Hi NVIDIA Team, NVIDIA Surround is still broken on my RTX 5090 with the latest 621.24 driver. I've tested drivers 616.92, 617.14, 617.42 and 621.24, and all of them cause my triple LG C4 4K OLED setup to lose signal when enabling Surround. **Driver 610.88 is the last version...
+  captured_at: '2026-11-21T20:37:22Z'
+  source_date: '2026-11-12T20:55:46Z'
+  target_release_date: '2026-09-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.92'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '616.92'
+  matched_field: report_text
+  matched_context: '...still broken on my RTX 5090 with the latest 621.24 driver. I''ve tested drivers 616.92, 617.14, 617.42 and 621.24, and all of them cause my triple LG C4 4K OLED setup...'
+  excerpt_norm_sha256: e24dd372513b6610a0880de099232962fd09483d34db74433270ee5dc0d1199b
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: nvidia-studio-driver-610-88-nvidia-forum-comment-3633586
+  product_id: nvidia-studio-driver
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3633586
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: The RTX 5090 Palit GameRock OC issue with black screens in the browser still hasn’t been resolved; I think I’ll stick with driver 610.88 for a while longer.
+  captured_at: '2026-11-21T20:37:22Z'
+  source_date: '2026-11-12T20:21:10Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: '...reens in the browser still hasn’t been resolved; I think I’ll stick with driver 610.88 for a while longer.'
+  excerpt_norm_sha256: 0bf96c6563c3c4b728289b0d6a40a858903de9a43fd0d6e1456378f79ba075af
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-studio-driver-610-88-nvidia-forum-comment-3633591
+  product_id: nvidia-studio-driver
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3633591
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: Hi NVIDIA Team, NVIDIA Surround is still broken on my RTX 5090 with the latest 621.24 driver. I've tested drivers 616.92, 617.14, 617.42 and 621.24, and all of them cause my triple LG C4 4K OLED setup to lose signal when enabling Surround. **Driver 610.88 is the last version...
+  captured_at: '2026-11-21T20:37:22Z'
+  source_date: '2026-11-12T20:55:46Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: '...my triple LG C4 4K OLED setup to lose signal when enabling Surround. **Driver 610.88 is the last version that works correctly.** I''ve already submitted a report th...'
+  excerpt_norm_sha256: e24dd372513b6610a0880de099232962fd09483d34db74433270ee5dc0d1199b
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: nvidia-studio-driver-610-88-nvidia-forum-comment-3633593
+  product_id: nvidia-studio-driver
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3633593
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'Display calibration raises black by 1-2 levels on driver 621.24 (contrast 599:1 vs 963:1 on driver 591.74, same calibration) - still present (first reported in the 621.14 thread) TL;DR: On recent drivers (full A/B tests on 621.14 and 621.24), while a display calibration (gamma...'
+  captured_at: '2026-11-21T20:37:22Z'
+  source_date: '2026-11-12T21:29:01Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: '...driver: 591.74. Bad: 621.24 and 621.14 (full A/B tests, identical results). On 610.88 and 621.01 I measured the 25-second effect after a ramp switch (the constant ra...'
+  excerpt_norm_sha256: d52c0696253ff08508ad9a91537afcda51000900fddeb7e396d3702b562ca4b9
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: flicker or wrong colors
+  facts_rule_version: v1
+- id: nvidia-studio-driver-610-88-nvidia-forum-comment-3633619
+  product_id: nvidia-studio-driver
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3633619
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'Across multiple NVIDIA driver releases after 610.88, users have reported recurring display failures including: - Black screens - Display initialization / detection failures - Fullscreen failures - Incorrect resolution / forced windowed mode - HDR instability - Wake / recovery...'
+  captured_at: '2026-11-21T20:37:22Z'
+  source_date: '2026-11-12T23:25:40Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: 'Across multiple NVIDIA driver releases after 610.88, users have reported recurring display failures including: - Black screens - D...'
+  excerpt_norm_sha256: f6456b5fa564b380507d95adf411fa934d2da63c311a83c556ed6ad620463eaf
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-studio-driver-610-88-nvidia-forum-comment-3633670
+  product_id: nvidia-studio-driver
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3633670
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: Apparently, NVIDIA has become so busy chasing the AI hype train that they've forgotten they also have a driver team. Who needs stable drivers when you can shove in another batch of AI slop, right? Flickering screens, random black screens, and a growing list of bugs? Surely...
+  captured_at: '2026-11-21T20:37:22Z'
+  source_date: '2026-11-13T07:26:21Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: '...ng list of bugs? Surely those can wait. Everything started going downhill after 610.88. Seriously, what the hell happened to NVIDIA''s driver quality?'
+  excerpt_norm_sha256: c3114ad88d4410241df9bd76156c7b83299e692f8c6b5a8cb0323c93b082fdd2
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-studio-driver-610-47-nvidia-forum-comment-3633593
+  product_id: nvidia-studio-driver
+  update_version: '610.47'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3633593
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'Display calibration raises black by 1-2 levels on driver 621.24 (contrast 599:1 vs 963:1 on driver 591.74, same calibration) - still present (first reported in the 621.14 thread) TL;DR: On recent drivers (full A/B tests on 621.14 and 621.24), while a display calibration (gamma...'
+  captured_at: '2026-11-21T20:37:22Z'
+  source_date: '2026-11-12T21:29:01Z'
+  target_release_date: '2026-05-26'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.47'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.47'
+  matched_field: report_text
+  matched_context: '...a calibration loaded was not tested there). Not tested: 591.86, 596.21, 596.36, 610.47. All Game Ready drivers, standard package. * Affected Applications/Games: Any...'
+  excerpt_norm_sha256: d52c0696253ff08508ad9a91537afcda51000900fddeb7e396d3702b562ca4b9
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: flicker or wrong colors
+  facts_rule_version: v1
+- id: nvidia-studio-driver-610-47-nvidia-forum-comment-3633448
+  product_id: nvidia-studio-driver
+  update_version: '610.47'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633448
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: 'Display calibration raises black by 1-2 levels on driver 621.14 (contrast 598:1 vs 963:1 on driver 591.74, same calibration) TL;DR: On drivers after 591.74, while a display calibration (gamma ramp / video LUT) is loaded, black and near-black are shown 1-2 levels too bright....'
+  captured_at: '2026-11-21T20:37:22Z'
+  source_date: '2026-11-11T22:09:35Z'
+  target_release_date: '2026-05-26'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.47'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.47'
+  matched_field: report_text
+  matched_context: '...est below); also seen on 610.88 and 621.01. Not tested: 591.86, 596.21, 596.36, 610.47. All Game Ready drivers, standard package. * Affected Applications/Games: Any...'
+  excerpt_norm_sha256: 6ecce431f0169746b5f6c883dcaef85ec5d500e8c51a6e266f0fb34fffd2ee25
+  title_dedup_sha256: 5ed9045128af1fb603384e902a5e090ca835b2503a4677d30f78c0aaa8a49239
+  issue_bucket: flicker or wrong colors
+  facts_rule_version: v1
+- id: nvidia-studio-driver-596-36-nvidia-forum-comment-3633593
+  product_id: nvidia-studio-driver
+  update_version: '596.36'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3633593
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'Display calibration raises black by 1-2 levels on driver 621.24 (contrast 599:1 vs 963:1 on driver 591.74, same calibration) - still present (first reported in the 621.14 thread) TL;DR: On recent drivers (full A/B tests on 621.14 and 621.24), while a display calibration (gamma...'
+  captured_at: '2026-11-21T20:37:22Z'
+  source_date: '2026-11-12T21:29:01Z'
+  target_release_date: '2026-04-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '596.36'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '596.36'
+  matched_field: report_text
+  matched_context: '...se with a calibration loaded was not tested there). Not tested: 591.86, 596.21, 596.36, 610.47. All Game Ready drivers, standard package. * Affected Applications/Gam...'
+  excerpt_norm_sha256: d52c0696253ff08508ad9a91537afcda51000900fddeb7e396d3702b562ca4b9
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: flicker or wrong colors
+  facts_rule_version: v1
+- id: nvidia-studio-driver-596-36-nvidia-forum-comment-3633448
+  product_id: nvidia-studio-driver
+  update_version: '596.36'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633448
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: 'Display calibration raises black by 1-2 levels on driver 621.14 (contrast 598:1 vs 963:1 on driver 591.74, same calibration) TL;DR: On drivers after 591.74, while a display calibration (gamma ramp / video LUT) is loaded, black and near-black are shown 1-2 levels too bright....'
+  captured_at: '2026-11-21T20:37:22Z'
+  source_date: '2026-11-11T22:09:35Z'
+  target_release_date: '2026-04-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '596.36'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '596.36'
+  matched_field: report_text
+  matched_context: '...ll A/B test below); also seen on 610.88 and 621.01. Not tested: 591.86, 596.21, 596.36, 610.47. All Game Ready drivers, standard package. * Affected Applications/Gam...'
+  excerpt_norm_sha256: 6ecce431f0169746b5f6c883dcaef85ec5d500e8c51a6e266f0fb34fffd2ee25
+  title_dedup_sha256: 5ed9045128af1fb603384e902a5e090ca835b2503a4677d30f78c0aaa8a49239
+  issue_bucket: flicker or wrong colors
+  facts_rule_version: v1
+- id: obs-studio-33-0-2-github-issue-14238
+  product_id: obs-studio
+  update_version: 33.0.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14238
+  parent_title: '[Linux/Flatpak 33.0.2] OBS hangs on quit — orphaned CEF browser subprocesses, requires force kill'
+  report_title: '[Linux/Flatpak 33.0.2] OBS hangs on quit — orphaned CEF browser subprocesses, requires force kill'
+  report_text_excerpt: '0M. Flatpak 1.18.4, runtime org.freedesktop.Platform/x86_64/26.08. ### OBS Studio Version 33.0.2 (Flatpak `com.obsproject.Studio` from Flathub, system install, commit 1e330b0905f47f5f32725844404da917f008a0d3b9fa6ebf30813860d718a0d6, built 2026-11-20) ### OBS Studio Log URL No pub'
+  captured_at: '2026-11-21T20:41:47Z'
+  source_date: '2026-11-21'
+  patch_version_matched: true
+  matched_version: 33.0.2
+  match_basis: title
+  counted: true
+  exclusion_reason: null
+  issue_theme: freeze / hang
+  workflow_area: application stability
+  platform: linux
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  excerpt_norm_sha256: 18545df608da2bc7a1e239237eed7fa3f31db36c62f75841b4ed7741670e970a
+  title_dedup_sha256: 09c5f4907b41e551469321330728eaee7912835ebf996a5364170531e4877e0a
+  issue_bucket: crash or stability problems
+  facts_rule_version: v1
+- id: obs-studio-33-0-2-obs-forum-thread-196954
+  product_id: obs-studio
+  update_version: 33.0.2
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/33-0-2-crashes.196954/
+  parent_title: 33.0.2 crashes
+  report_title: 33.0.2 crashes
+  report_text_excerpt: ': 7FF8224611E4 (c:\program files\obs-studio\core\win-dshow\win-dshow.dll) libobs version: 33.0.2 (64-bit) Windows version: 10.0 build 19045 (release: 22H2; revision: 7846; 64-bit) CPU: Intel(R) Pentium(R) CPU G4560 @ 3.50GHz Thread AF0: (Crashed) Stack EIP Arg0 Arg1 Arg2 Arg3 Add'
+  captured_at: '2026-11-21T20:41:40Z'
+  source_date: '2026-11-21'
+  patch_version_matched: true
+  matched_version: 33.0.2
+  match_basis: title
+  counted: true
+  exclusion_reason: null
+  issue_theme: hotkey regression
+  workflow_area: keyboard shortcuts
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  excerpt_norm_sha256: 990c64a76705c6b604335b9ff063276cb068399c2f98ca9ce7cc77e973154ce0
+  title_dedup_sha256: 9383ab0d5fb3c28e2a22b055ac31f74351b5a079011043f1f89cd9db9f4432bf
+  issue_bucket: crash or stability problems
+  facts_rule_version: v1
+- id: obs-studio-33-0-1-github-issue-14236
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14236
+  parent_title: Apple's Virtual Display changing resolutions causes a frozen recording
+  report_title: Apple's Virtual Display changing resolutions causes a frozen recording
+  report_text_excerpt: '### Operating System Info macOS 27 ### Other OS VisionOS 27 ### OBS Studio Version 33.0.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/lNl5tLBuPxyuBwsB ### OBS Studio Crash Log URL _No response_ ### Expected Behavior I don'
+  captured_at: '2026-11-21T20:45:22Z'
+  source_date: '2026-11-21'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  excerpt_norm_sha256: 156688a9e1a3819a512115c16322cf0590308ab8e507ca412a17965b4b2379aa
+  title_dedup_sha256: dda69f5cf12e3fe3ba0b1714f4a412d8015e608e70591a16d0df2886b19655e1
+  issue_bucket: output or recording regressions
+  facts_rule_version: v1
+- id: obs-studio-33-0-1-github-issue-14239
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14239
+  parent_title: Check for updates button not working
+  report_title: Check for updates button not working
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 33.0.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/xo82LGeFX9P2WNaV ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Click'
+  captured_at: '2026-11-21T20:45:22Z'
+  source_date: '2026-11-21'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  excerpt_norm_sha256: 49faa6ceac55a27b5579b3ad0a0e26bab4df099abb554f1b9d155b8f226f7b57
+  title_dedup_sha256: 081910c759cee2acf70b4a83d301a229066a43275a5d798aacd9d8ab6d6d2d4b
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: obs-studio-33-0-1-github-issue-14234
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14234
+  parent_title: Again with gamepad viewer
+  report_title: Again with gamepad viewer
+  report_text_excerpt: '### Operating System Info Windows 10 ### Other OS _No response_ ### OBS Studio Version 33.0.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/OQJu7OJs76aw8Lhh ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Enter'
+  captured_at: '2026-11-21T20:45:22Z'
+  source_date: '2026-11-21'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+  excerpt_norm_sha256: 1c43b91322bceaee8931e6bddc56ae4764e2e86ffbaea511e402267620d80b67
+  title_dedup_sha256: 2bb36de37bd7873eec876f0f596f952bfcc8be0012caaa4f2932db2c362340ca
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: obs-studio-33-0-1-obs-forum-thread-196954
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/33-0-2-crashes.196954/
+  parent_title: 33.0.2 crashes
+  report_title: 33.0.2 crashes
+  report_text_excerpt: 'took a long time updating with obs 33.0.1 and after update: Code: Unhandled exception: c000001d Date/Time: 2026-11-21, 21:23:15 Fault address: 7FF8224611E4 (c:\program files\obs-studio\core\win-dshow\win-dshow.dll) libobs ver'
+  captured_at: '2026-11-21T20:43:26Z'
+  source_date: '2026-11-21'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: hotkey regression
+  workflow_area: keyboard shortcuts
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  excerpt_norm_sha256: 46faa07ced1311c89ef30a0743e513cd4b161f0efb4767e5513798b8590a1348
+  title_dedup_sha256: 9383ab0d5fb3c28e2a22b055ac31f74351b5a079011043f1f89cd9db9f4432bf
+  issue_bucket: crash or stability problems
   facts_rule_version: v1
