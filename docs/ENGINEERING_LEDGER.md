@@ -5541,10 +5541,10 @@ duration hint changed.
 **Measured** Local (Windows), three runs each, launched as `run_integrity_tests.run_one` launches a suite:
 before 416.9, 403.6 and 399.0 s (mean 406.5); after 119.0, 117.8 and 117.5 s (mean 118.1), a 71% cut.
 Before, by step: the read-only and publish-strict subprocesses 58 s and 54 s, the three corpus-wide
-in-process runs 53 s each, the four one-record runs 71 s together, the Part H parity 9 s and the lane
-command 52 s; the other 51 checks took no measurable time. After: the two subprocesses overlap (49 s of
-waiting), the first in-process run takes 8 s and each later one 1.6 s, the one-record runs and the parity
-take under a second, and the lane command is unchanged at 52 s.
+in-process runs 53 s each, the four one-record runs 71 s together, the Part H parity 9 s, the lane
+command 52 s and the Part F candidate load 2 s; no other step took measurable time. After: the two
+subprocesses overlap (49 s of waiting), the first in-process run takes 8 s and each later one 1.6 s, the
+one-record runs and the parity take under a second, and the lane command is unchanged at 52 s.
 
 **Verification** 61/61 at the governed count; `--check-manifest` OK. Every check's label, outcome and
 detail string, recorded in-process with `PYTHONHASHSEED=0`, is identical before and after (61 of 61, 25 of
