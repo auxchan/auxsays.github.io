@@ -49,6 +49,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import yaml  # noqa: E402
 
+from lib import evidence_facts as ef  # noqa: E402
 from patch_collectors import microsoft_windows as mw  # noqa: E402
 from patch_collectors.base import EVIDENCE_PATH, atomic_write_text  # noqa: E402
 
@@ -167,6 +168,9 @@ def run(write: bool, path: Path = EVIDENCE_PATH, reclassify: bool = False) -> di
                               "exclusion_reason": str(row.get("exclusion_reason") or ""),
                               "report_title": str(row.get("report_title") or "")[:100]})
         if reclassify and reclassify_stop_error(row):
+            # The issue bucket reads the theme: a row that carries structured facts (G68) keeps them
+            # equal to its own text. Derived by lib.evidence_facts, never decided here.
+            row.update(ef.derived_fact_updates(row))
             reclassified.append({"update_version": str(row.get("update_version") or ""),
                                  "target_build": str(row.get("target_build") or ""),
                                  "from": before_theme,
