@@ -339,8 +339,8 @@ def valid_assessment(record: Mapping[str, Any], rows: list[Mapping[str, Any]],
 # record list (updates/my-stack.md): every record with a release time that is not archived, newest
 # first, as [version, build, date, url, beta, ..., notes platform, verdict scope, release track]. My
 # Patch Stack caps that list at 24 per product for page weight; a patch page reads the whole list,
-# which is the same rule over a longer window. test_evidence_overview runs the shipped JavaScript over every record of the corpus and
-# requires the same answer from this port, so the two cannot part.
+# which is the same rule over a longer window. test_evidence_overview runs the shipped JavaScript over
+# every record of the corpus and requires the same answer from this port, so the two cannot part.
 
 def _date(record: Mapping[str, Any]) -> str:
     """`update_published_at | date: "%Y-%m-%d"`: Liquid parses the stored timestamp with its own offset

@@ -314,7 +314,8 @@ def run() -> int:  # noqa: PLR0915
     tracks = {rec[0]: rec[13] for rec in entry.get("recs") or [] if isinstance(rec, list) and len(rec) == 14}
     check("E1 the liquid gem renders my-stack.md, and every record carries its stored track in rec[13]",
           tracks == {v: t for v, _d, t in BASE}, rendered if isinstance(rendered, str) else tracks)
-    res = js_run([{"product": entry, "entry": {"v": v, "b": "", "d": d, "u": f"/updates/adobe/{PRO}/{v.replace('.', '-')}/"}}
+    res = js_run([{"product": entry,
+                   "entry": {"v": v, "b": "", "d": d, "u": f"/updates/adobe/{PRO}/{v.replace('.', '-')}/"}}
                   for v, d in (("20.005.30700", "2024-06-11"), ("20.005.30800", "2025-09-09"))]) \
         if node_ok and entry else None
     check("E2 on the rendered payload, a Classic reader is pointed at the newest Classic release and the newest "
@@ -349,7 +350,8 @@ def run() -> int:  # noqa: PLR0915
             pay = eo.product_payload(by_pid.get(pid, []))
             product = {"id": pid, "recs": [payload_tuple(r) for r in pay], "split": False}
             track_of = {str(r.get("permalink") or ""): eo._track(r) for r in pay}
-            cases = [{"product": product, "entry": {"v": t[0], "b": t[1], "d": t[2], "u": t[3]}} for t in product["recs"]]
+            cases = [{"product": product, "entry": {"v": t[0], "b": t[1], "d": t[2], "u": t[3]}}
+                     for t in product["recs"]]
             for c, s in zip(cases, js_run(cases) or []):
                 url = c["entry"]["u"]
                 got = s.get("url") if s.get("state") == "UPDATE AVAILABLE" else None
