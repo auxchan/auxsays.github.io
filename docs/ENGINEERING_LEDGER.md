@@ -53,6 +53,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-048 | Resolved | Security | High | A page on the public domain asked visitors for a repository-write token |
 | AUX-041 | Resolved | Evidence integrity | High | A published theme contradicted the reporter and a platform label was never earned — one shared, negation-aware classifier |
 | AUX-047 | Resolved | Deployment | High | The published-payload gate refused a licence notice and halted every deploy |
+| AUX-128 | Resolved | Deployment | Medium | Writer lanes confirmed only that Pages was asked to deploy, and a cycle lost to a mid-run merge was never re-run |
 | AUX-042 | Resolved | Evidence integrity | High | The gate guarding mature consensus demanded three fields nothing writes and the approved writer is forbidden to write |
 | AUX-038 | Resolved | Public disclosure | High | The site explained how it gathers evidence — a 1.5 MB telemetry page, and raw method ids on hundreds of patch pages |
 | AUX-043 | Resolved | Evidence integrity | Medium | Every published source asserted a patch match it never checked; now derived from the row |
@@ -4421,6 +4422,56 @@ stored DaVinci rows. The fourteen remain an audit population; this makes the nex
 
 **Reopen only if** a counted row written after this change carries `match_basis: exact_version_text`
 without a `matched_text` that appears in its `matched_context`.
+
+### AUX-128 — Writer lanes confirmed only that Pages was asked to deploy, and a cycle lost to a mid-run merge was never re-run
+
+- **Status** Resolved · **Area** Deployment · **Severity** Medium
+- **First seen** 2026-11-21 (run 44878227542) · **Resolved** 2026-11-21 (G91; live check at the first writer run after merge)
+
+**Symptom** Two gaps after a correct writeback. (1) Every writer lane dispatched the Pages build and
+stopped there. `gh workflow run` returning 0 proves the dispatch was accepted, not that the site
+deployed; the writeback already had `--pages-confirm-build` and no workflow passed it. (2) Collection
+run 44878227542 (checkout b64fa539) lost its whole cycle: a pull request that touched the evidence
+store merged while it ran, the writeback correctly refused to combine the two (`rebase_conflict`),
+pushed nothing and exited 1. The writer-queue reaper repairs runs evicted from the queue, not runs
+that failed, so the next attempt was the next scheduled cycle. No stored evidence was lost; new
+evidence waited up to a cycle.
+
+**Fix** Deployment: the four command-line writer lanes (Patch Evidence Collection, AUXSAYS Patch
+Ingestion and both DaVinci lanes) pass `--pages-confirm-build`, polling 40 times 30 s apart (19.5
+minutes; measured Pages runs take 237-612 s from creation, and one can queue behind another build). A
+build that ends without success fails the lane (`deployment_pending`, an error annotation, a summary
+section). A build that never appears, or has not finished when the wait ends, is reported as
+`deployment_unverified` (an output, an outcome token, a warning annotation and a summary section that
+says which) without failing the lane: the data commit is on main and correct, and a slow Pages queue
+is not a fault. Neither case re-pushes or reverts the data commit. Lost race: the writeback writes
+`lost_race=true` only when main moved during the run and the run ended in `rebase_conflict`,
+`validation_failed_after_rebase` or `retry_exhausted`, never for a run that pushed. Evidence
+collection's chain-ingest job then dispatches the collection workflow once, carrying `recovery_of`,
+in place of the ingestion dispatch, so the writer group never gets a third entrant; the recovery
+run's own chain-ingest dispatches ingestion. Patch ingestion re-dispatches itself once, and only when
+no writer run is already waiting for the lane. A run carrying `recovery_of` never re-dispatches, and
+nothing merges two versions of the evidence: the recovery collects the cycle again from the new main.
+
+**Evidence** `test_deploy_verification_and_lost_race.py`, 85 governed checks: the real writeback
+against a throwaway bare origin and a scripted Pages run list, the bare script's outputs and
+annotations, every writer's argument list parsed by the writeback's own parser, and both recovery
+steps' shell executed against a fake `gh`. 38 mutants, one per fix, each killed by a named check.
+Measured with no change: the last audited withdrawal merge (#265, b64fa539) was followed by Pages run
+44876328066 on that SHA (push, success). Of the 65 GitHub-release records the official notes refresh
+no longer re-reads (OBS 17, ComfyUI 48), none has current release notes that the AUX-125 grammar reads
+as declaring a known issue.
+
+**Known limits** The PowerPoint orchestration job binds its writeback in Python and still confirms
+only the dispatch. A deployment reported unverified is re-checked only by a later no-change
+deploy-recovery run, which checks main's head, or superseded by the next material push. A recovery
+run that is itself evicted from the queue is re-dispatched by the reaper without `recovery_of`, so it
+can recover once more. Official notes older than the two newest releases per product are still not
+re-read (AUX-125).
+
+**Reopen only if** a writer run pushes a site change and neither confirms its Pages build nor reports
+`deployment_unverified`, or a run whose writeback wrote `lost_race=true` is followed by neither a
+re-dispatch nor a logged reason for skipping it.
 
 ### AUX-048 — a page on the public domain asked visitors for a repository-write token
 
