@@ -5882,9 +5882,11 @@ counted one report more than it should. AUX-088 withdrew the same report's 32.1.
 
 **Scope** Only this row, and only because two fresh blind readers each found that the report does not establish
 that 31.1.2 is affected. Each read only the stored text, in a shuffled packet of this row and ten controls (five
-counted, five refused) drawn by a rule written down before the draw, and neither was told which item was under audit.
-Both said 31.1.2 appears only as a release tag the reporter compared, not a version they ran. The full-source audit
-is recorded as provenance only, not as one of the two.
+counted, five refused), and neither was told which item was under audit. The controls were drawn by a rule written
+down before the draw. When too few refused reports had text clear enough to use, the rule was widened in writing
+during the draw, before any extra candidate was read. Three of the five refused controls (the forum post below among
+them) were drawn under that change. Both said 31.1.2 appears only as a release tag the reporter compared, not a
+version they ran. The full-source audit is recorded as provenance only, not as one of the two.
 - Both readers labelled every counted control affected, including another 31.1.2 report that names several versions
   with a failure on each; it stays counted. Both labelled four of the five refused controls not affected.
 - Both labelled the fifth refused control, an OBS 32.2.2 forum post AUX-088 withdrew as not an issue report,

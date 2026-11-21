@@ -111,8 +111,8 @@ WAYA = (OBS, "32.2.2", "", "obs-studio-32-2-2-obs-forum-thread-196184",
         "https://obsproject.com/forum/threads/zoominator-wayland-mouse-follow-broken-requesting-xdg-desktop-portal-support.196184/")
 WAYA_REASON = "not_a_real_issue_report"
 WAYA_AFTER = "aef75bff49f52afc1e774b5ac5ed7a4e4013a49ab15ed201490bc02f05b54907"  # AUX-088's after-hash
-# The blind adjudication's own files, by hash (the packet, the control rule fixed before the draw, the draw, the
-# sealed key and both readers' answer sheets), and the earlier full-source audit.
+# The blind adjudication's own files, by hash (the packet, the control rule with the amendments it recorded during
+# the draw, the draw, the sealed key and both readers' answer sheets), and the earlier full-source audit.
 PACKET_HASHES = {
     "packet_sha256": "ef02985663e778674dab45b3195cab30265b34cd22daa3432d3e17f1b6b13262",
     "control_rule_sha256": "72dc9790283ad49cfcc70bf18b176647ee68004c3f7e07b42958f2c0aa80d3aa",

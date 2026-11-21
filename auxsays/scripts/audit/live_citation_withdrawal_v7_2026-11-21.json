@@ -60,7 +60,7 @@
   "microsoft-windows-11",
   "obs-studio"
  ],
- "generated_at": "2026-11-21T00:45:13Z",
+ "generated_at": "2026-11-21T03:56:33Z",
  "exclusion_reasons": [
   "duplicate_existing_evidence",
   "identity_not_the_subject",
@@ -70,7 +70,7 @@
  ],
  "store_sha256_before": "715c13b237a0d96ee39e94afce7ee0af794c4a6478ebea3ce89b9541bd21026a",
  "store_sha256_after": "f89d22ed8c1e8b509e506d3a75498891a5fb712493ad3fda45beaefefbd15ee2",
- "manifest_sha256": "a516ac7ba2a288193c67f2dbbeb0e08bded9d1b4ce5eaabd6bae47ece9af43de",
+ "manifest_sha256": "f75cefb8fcb1d5b2c3186da5c95ae6897e0847dc78422508e8f36731ebf16ba5",
  "baseline_sha256": "b378fa62c22c9e6a7e7de5e6383d799349d9fc1c1eed9ddd4059f7bfb9192248",
  "written": true,
  "writers": [
