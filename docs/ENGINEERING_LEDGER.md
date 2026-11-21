@@ -66,6 +66,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-039 | Resolved | Published claims | High | The site claimed to monitor 29 products it was not monitoring, and 27 companies with zero healthy products |
 | AUX-112 | Resolved | Published claims | Low | Two catalog products linked readers to an official source that no longer exists (Gemini replaced; no Kick platform release source found) |
 | AUX-049 | Resolved | Published claims | High | A record built from one platform's release notes did not say so, and nothing kept consensus from mixing platforms |
+| AUX-125 | Resolved | Published claims | High | A known-issue warning OBS added to its 33.0.2 release notes after publication was stored but never shown |
 | AUX-050 | Resolved | Published claims | High | My Patch Stack recommended another platform's older release as an update |
 | AUX-051 | Resolved | Published claims | Medium | Four records made just before AUX-050 could never be labelled, so their readers were stuck on UNKNOWN |
 | AUX-052 | Resolved | Evidence coverage | Low | Installer files written "7.1.0" did not count for release "7.1", so its notes were never labelled |
@@ -4674,6 +4675,78 @@ lands and older than the newest two already-seen articles are outside the per-ru
 **Reopen only if** a record built from one platform's article publishes without stating that platform,
 or a platform label appears that the article title does not support, or any Elgato record or evidence
 row counts community reports while no platform-aware acceptance rule exists.
+
+### AUX-125 — A known-issue warning OBS added to its 33.0.2 release notes after publication was stored but never shown
+
+- **Status** Resolved · **Area** Published claims · **Severity** High
+- **First seen** 2026-11-21 (owner, against the GitHub release API) · **Resolved** 2026-11-21 (G85; live at
+  the first Pages deploy after merge)
+
+**Symptom** OBS edited the 33.0.2 release notes at 02:44Z to open with a GitHub IMPORTANT alert declaring a
+known startup crash on certain older processors. The patch page's Vendor Known Issues card said AUXSAYS had
+captured no vendor issue data, and the notice sat only inside the collapsed Official Patch Notes, as raw Markdown.
+
+**Detection was not the failure.** The scheduled ingest re-read the release and stored the edited body
+(9687ad0c, 09:56Z): `write_update_record.refresh_existing_record` replaces `official_patch_notes_body` whenever
+the incoming body differs. Nothing turned the stored notice into a field a page could read.
+
+**Fix** `lib/notes_known_issue.py`, one deterministic parser shared by the writer and the migration, decides
+declared / not declared / unknown for the record's own version. Declared needs an explicit vendor declaration in
+the vendor's own structure: a NOTE/IMPORTANT/WARNING/CAUTION alert one of whose clauses opens by introducing a
+known issue ("Known issue: ...", "There is a known issue ...", "There are known issues ...", "A known issue ...",
+"Two known issues ..."), or a non-empty Known Issue(s) section. Alert markup alone is not one (OBS uses the same
+box for driver minimums and dropped OS support), and nor is an alert that only refers to known issues, as a
+pointer ("check the known issues page"), a condition ("If you run into a known issue, ...", "check whether it is a
+known issue"), an empty label ("Known issues: none") or a past one ("There was a known issue"). The rule is an
+allow-list of grammatical shapes, so a shape it does not know reads as generic.
+Attribution follows the multi-release body's headings: above the first release heading only when that heading is
+this release, under this release's heading, never under another release's; never after a plain, bold or HTML line
+naming another release, whether the body has no Markdown release headings or the line sits in this release's own
+section; a declaring sentence that names another version, or a position that cannot be attributed, is unknown,
+and unknown publishes nothing. The
+writer derives `official_notes_known_issue: declared` from the body it stores, on create and on every refresh,
+in both directions, only on change; Release Health fields (`official_*_count`, `official_known_issues_present`)
+and the user-report `known_issues_present` are untouched. A zero-network migration set the field on the one
+record whose stored body already declared a notice (2026-11-20-obs-studio-33-0-2.md). The card opens with "Vendor
+warning identified. The official release notes for this version identify a known issue. Review the details
+before installing." and links the official notes; the same notice prints directly under the verdict box. No
+count, no vendor text; Release Health and absent-field cards render byte-identical to before.
+
+**Effective refresh window (GPT Q4: documented, not widened)** The listing call reads one page of the GitHub
+releases API with no `per_page`, so GitHub's default of 30 entries; drafts and prereleases are dropped (OBS's
+last run kept 14). `patch_ingest` runs with `--limit 2` and OBS/ComfyUI set no `record_limit`, so each run
+re-reads only the TWO newest already-ingested stable releases in listing order (OBS 33.0.2 and 33.0.1 today;
+ComfyUI 0.46.0 and 0.45.0); every other record is `state-seen-outside-refresh-window`. A later edit to any older
+release (17 of 19 OBS and 48 of 50 ComfyUI records today), or to a release after two newer ones ship, is never
+captured. Latency inside the window is one chained ingest cycle (about 6 hours: 02:44Z edit, 09:48Z capture).
+
+**Consumer contract (G83)** A newer-release panel shows a caution when the newer record carries
+`official_notes_known_issue: declared` OR `official_known_issues_present: true` (Release Health).
+
+**Missing presentation capability (GPT Q3, not done)** The page says only that the notes identify a known issue,
+not what it is ("can crash on startup on certain older processors"). Issue-specific summaries need deterministic
+extraction from sufficiently structured vendor information; no phrase list or per-release hand-writing.
+
+**Known limits** A version-less notice above this release's heading that reports a FIX ("this release fixes a
+known issue") reads as declared; a notice naming two versions, even this one, is unknown, and so is one whose
+declaring sentence names any other dotted version (an OS or driver version such as "macOS 14.4" included). A Known
+Issues section whose only content is an absence statement other than "None", "N/A" or "no known issues" ("None at
+this time.") reads as declared. A known issue the vendor states in a shape outside the allow-list is not read
+(fails closed): "This release has a known issue ...", "We have identified two known issues ...", "We are aware of
+a known issue ...", "Currently, there is a known issue ...", or a sentence-opening "Known issue" with no colon or
+dash after it. A notice under an unversioned heading at the release-heading level that follows this release's
+section ("## Previous releases") is still read as this release's: nothing in the structure names another release.
+HTML-only and bold-line "headings" are not read as headings.
+
+**Reopen only if** a GitHub-release record whose stored body declares a known issue for its own version renders
+without the warning, a record shows the warning for a notice attributed to another release, or a material
+published warning is missed because of the refresh window.
+
+**Evidence** `auxsays/scripts/tests/test_official_notes_known_issue.py` (61 governed checks; the frozen OBS 33.0.2
+fixture is the stored body's masked structure, with no vendor text; 10 mutants, each
+killed by a named check: declaration, release scoping, removal, no churn, Release Health byte-identity,
+absent-field text, migration scope, writer scope on create and on refresh, the notice without the field);
+`migrate_official_notes_known_issue.py`.
 
 ### AUX-050 — My Patch Stack recommended another platform's older release as an update
 
