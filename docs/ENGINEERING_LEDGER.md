@@ -85,6 +85,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-097 | Resolved | Publication | Medium | Feed cards hid the official verdict of a withdrawn update and 17 security updates with no reports |
 | AUX-091 | Resolved | Publication | Medium | The homepage rows printed a sentiment word while the pages they open printed a verdict |
 | AUX-070 | Resolved | CI governance | Medium | The serial integrity job spent ~34 of its 45 minutes running 123 suites one after another |
+| AUX-126 | Resolved | CI governance | Medium | The live-consensus gate suite ran at the CI per-suite timeout on unchanged code |
 | AUX-066 | Resolved | Evidence integrity | Medium | Stored Teams evidence still said platform "Windows" and carried no theme, area or severity |
 | AUX-079 | Resolved | Evidence integrity | High | Fourteen stored Windows rows counted against a patch they were not about, or twice for one question |
 | AUX-088 | Resolved | Evidence integrity | High | Twenty community reports cited on the live pages were credited to an update they were not about |
@@ -5511,6 +5512,59 @@ can download the first attempt's artifacts is unmeasured (if it cannot, the re-r
 
 **Reopen only if** a sharded run can end green with a governed suite unexecuted, executed twice, or at a
 count other than its governed one, or a failed, cancelled or missing shard leaves the run `success`.
+
+---
+
+### AUX-126 — The live-consensus gate suite ran at the CI per-suite timeout on unchanged code
+
+- **Status** Resolved · **Area** CI governance · **Severity** Medium
+- **First seen** 2026-11-21 (run 44921391061, PR #269) · **Resolved** 2026-11-21 (G88; test-only)
+
+**Symptom** `test_consensus_live_gate.py` (61 governed checks) took 440-898 s in CI on unchanged code,
+against `PER_TEST_TIMEOUT = 900`. Run 44921391061 attempt 1 (PR #269) timed out at 900.1 s with no failed
+check, and the re-run passed at 521.8 s. Locally the suite took about 406 s.
+
+**Cause** About 98% of the time was PyYAML's pure-Python parser. One `qa_patch_records` run parses every
+record's front matter about six times (9,716 parses for 1,611 records) and the 5 MB evidence store four
+times, about 53 s per run. The suite made ten runs of that size: three QA subprocesses (read-only,
+read-only publish-strict, and the lane's validate command), three in-process `qa.main` runs over the
+corpus, four one-record runs that still load the store (about 17 s each), and its own corpus loads.
+
+**Fix (test only)** In the suite, `yaml.safe_load` of a string is memoized on the exact text and returns a
+pickle copy on each hit. Only the parse is cached: every function of the code under test still runs on every
+call, and a rewritten file is a new key. The two QA subprocesses Part F asserts on are launched once, when
+the run starts, on worker threads, with the same argv, cwd and environment, and read where the checks
+stand; they print nothing, and if the environment has changed they are run again inline. The lane's
+validate command stays inline. No check, governed count, check input, production file, timeout, shard or
+duration hint changed.
+
+**Measured** Local (Windows), three runs each, launched as `run_integrity_tests.run_one` launches a suite:
+before 416.9, 403.6 and 399.0 s (mean 406.5); after 119.0, 117.8 and 117.5 s (mean 118.1), a 71% cut.
+Before, by step: the read-only and publish-strict subprocesses 58 s and 54 s, the three corpus-wide
+in-process runs 53 s each, the four one-record runs 71 s together, the Part H parity 9 s and the lane
+command 52 s; the other 51 checks took no measurable time. After: the two subprocesses overlap (49 s of
+waiting), the first in-process run takes 8 s and each later one 1.6 s, the one-record runs and the parity
+take under a second, and the lane command is unchanged at 52 s.
+
+**Verification** 61/61 at the governed count; `--check-manifest` OK. Every check's label, outcome and
+detail string, recorded in-process with `PYTHONHASHSEED=0`, is identical before and after (61 of 61, 25 of
+them carrying a detail such as a QA output tail or a count). A run that compared every memoized parse,
+type-exactly, with a fresh parse of the same text found 0 mismatches in 37,493 parses (35,827 memo hits).
+One mutant per mechanism, each killed by its named check before and after with the same set of failing
+checks: the read-only subprocess no longer printing "QA scanned" ("and still reports"), `qa.main` exiting
+0 on errors outside publish-strict ("inconsistent evidence fails normal validation non-zero", over Part G's
+rewritten record), and `row_is_counted` ignoring `counted: false` ("the refactor moves NO count on the real
+corpus", fed by memo hits). A first third mutant, the Windows identity gate removed from
+`counted_evidence_rows`, survived before and after alike: removing it moves no count on today's corpus.
+
+**Residual** QA itself still re-parses the corpus (about 53 s per run; production code, out of scope), so
+three such subprocesses remain, two of them concurrent. `suite_duration_hints.json` still weights this
+suite at 386.3 s: it is scheduling only and was left alone, so shard 1 is lighter than the partition
+assumes until the table is refreshed. The early launch relies on the suite writing nothing to the
+repository before Part F reads the two results, which holds today: Parts A-F before that point only read.
+
+**Reopen only if** this suite takes more than half of `PER_TEST_TIMEOUT` in CI again, or a check's
+outcome under the memo differs from an unmemoized run.
 
 ---
 
