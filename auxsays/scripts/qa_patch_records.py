@@ -455,7 +455,8 @@ def scan_verdict_policy(files: list[Path]) -> tuple[list[dict[str, str]], list[d
                 f"{invisible}. The page key keeps it, so this page matches none of its reason entries or "
                 "counted reports and can lose its verdict silently; correct the stored value.")
         want = patch_decision.decide(data, valid_reasons=valid.get(verdict_reasons.record_identity(data), []),
-                                     lifecycle=lifecycle)
+                                     lifecycle=lifecycle,
+                                     counted_rows=groups.get(verdict_reasons.record_identity(data), []))
         got_verdict, got_scope = verdict_projection.rendered_verdict(data, rows, lifecycle)
         got_row, want_row = rows.get(key), want_rows.get(key)
         if (got_verdict, got_scope) != (want.verdict, want.scope):
@@ -513,7 +514,8 @@ def scan_verdict_policy(files: list[Path]) -> tuple[list[dict[str, str]], list[d
         if int(data.get("update_report_count") or 0) <= 0:
             continue
         decision = patch_decision.decide(
-            data, valid_reasons=valid.get(verdict_reasons.record_identity(data), []), lifecycle=lifecycle)
+            data, valid_reasons=valid.get(verdict_reasons.record_identity(data), []), lifecycle=lifecycle,
+            counted_rows=groups.get(verdict_reasons.record_identity(data), []))
         expected_phrase = patch_decision.verdict_phrase(decision)
         stored = (patch_decision.action_of(data.get("update_decision_label"))
                   or patch_decision.action_of(patch_decision.leading_decision(data.get("update_consensus_summary"))))
@@ -995,6 +997,10 @@ def scan_evidence_overview(files: list[Path], publish_strict: bool = False
       * evidence_overview_public_text -- a row would reproduce a stored report title or excerpt, carry
         an author-like field, state an acceptance rule or a threshold, or print vendor text from a
         source whose publication permission is not on record.
+      * evidence_overview_wait_without_next_action (G87, AUX-127) -- a page the deploy's verdict
+        projection prints as WAIT (any reason) whose rendered overview row carries no next action: no
+        newer-release note and no archived, newest or not-established line. It is promoted through
+        PUBLICATION_BLOCKING_CODES, so the deploy stops instead of publishing a WAIT with no way forward.
     WARNING:
       * evidence_overview_family_unlabelled -- a counted source type has no public family name, so the
         page calls it "other public reports" until it gets one.
@@ -1057,6 +1063,27 @@ def scan_evidence_overview(files: list[Path], publish_strict: bool = False
             add(errors, EVIDENCE_OVERVIEW_PATH, "evidence_overview_projection_stale",
                 f"{len(stale)} page row(s) differ from lib/evidence_overview over this tree, first "
                 f"{stale[:5]}; those pages would print an overview the rule did not write.")
+
+    # G87 (AUX-127): every page that PRINTS WAIT must print a next action, whatever its reason. Read from exactly
+    # what the page will render: the gate prints only the deploy's verdict projection (none on disk: no verdict
+    # at all), and the overview include prints only the deploy's overview projection (none, unreadable or
+    # failed: nothing). So a missing, failed or stale overview cannot leave a printed WAIT without an exit.
+    try:
+        verdict_disk = verdict_projection.load(PROJECTION_PATH)
+    except verdict_projection.ProjectionError:
+        verdict_disk = None  # scan_verdict_policy reports it; the gate then prints no verdict at all
+    printed_rows = dict((verdict_disk or {}).get("pages") or {})
+    rendered_overview = (dict(disk.get("pages") or {}) if disk is not None and not disk.get("error") else {})
+    for data in fronts:
+        printed = verdict_projection.printed_row(data, printed_rows)
+        if printed is None or str(printed.get("verdict") or "").strip() != patch_decision.WAIT:
+            continue
+        key = verdict_projection.page_key(data)
+        if not evidence_overview.has_next_action(rendered_overview.get(key)):
+            add(warnings, key, "evidence_overview_wait_without_next_action",
+                "the page prints WAIT but no next action (no newer-release note, and no archived, newest or "
+                "not-established line); every WAIT must tell the reader what to do next. Rebuild the evidence "
+                "overview projection from this tree before QA and Jekyll.")
 
     guard_bucket = errors if publish_strict else warnings
     for data in fronts:
@@ -1651,7 +1678,9 @@ PUBLICATION_BLOCKING_CODES = frozenset({"record_names_conflicting_actions",
                                         # character inside an identity field.
                                         "record_identity_invisible_character",
                                         # AUX-097: a feed card that hides its page's official verdict.
-                                        "feed_official_verdict_unprinted"})
+                                        "feed_official_verdict_unprinted",
+                                        # G87 (AUX-127): a page that prints WAIT with no next action.
+                                        "evidence_overview_wait_without_next_action"})
 
 
 def promote_for_publication(

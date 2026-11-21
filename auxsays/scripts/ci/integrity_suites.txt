@@ -556,6 +556,17 @@ auxsays/scripts/tests/test_publication_title_minimisation.py = 36
 # description. Corpus-wide properties are one check each, so evidence growth cannot change this
 # count. Needs ruby + liquid and node; fails without them.
 auxsays/scripts/tests/test_evidence_overview.py = 86
+# AUX-127 (G87): the volume-based WAIT precaution (30 accepted / 30 unique URLs, owner-approved 2026-11-21,
+# provisional) and the mandatory way forward. Pins the 29/30 report and URL boundaries, duplicate and unpublishable
+# rows, the ten promotion products, maturity / sentiment / stored count / collection health never inputs, SECURITY
+# UPDATE, official withdrawal and official security identification precedence, a reviewed TEST FIRST superseded and
+# a scoped WAIT kept visible and unrewritten, an audited withdrawal to 29 removing it, every way-forward variant
+# (archived, excluded, newer release, proven newest, not established, fixed_in), never "safer", QA's
+# WAIT-without-next-action publication error, the empty-scope rule in Python and the Liquid gate, the six decide()
+# call sites over one stale-count fixture, a valid reviewed finding kept under the WAIT, a corpus guard (among the
+# pages measured at G87 exactly the four OBS pages change; later crossings only to an eligible volume WAIT), and the
+# patch page, homepage, feed, table and My Patch Stack rendered with the shipped Liquid. Needs ruby + liquid.
+auxsays/scripts/tests/test_volume_precaution_g87.py = 51
 
 # Premiere discovery ROUTING, and the health semantics that keep it honest. The nine-method flat
 # loop cost 546.8s over 219 HTTP requests for two records; wayback alone was 408.5s and reddit

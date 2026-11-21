@@ -22,14 +22,19 @@
 
   A row is printed only when it is well formed, exactly as lib/verdict_projection.printed_row
   states it for QA: a published verdict, a non-empty line, and a scope where the verdict carries one
-  (AVOID, WAIT, TEST FIRST) and none on SECURITY UPDATE.
+  (AVOID, WAIT, TEST FIRST) and none on SECURITY UPDATE. The one exception is the volume-based
+  precaution (G87): a WAIT whose reason code is high_report_volume carries its label and no scope (it
+  applies to every setup), and the label is printed where a scope would be. A reviewed WAIT, TEST FIRST
+  or AVOID row with no scope is still refused.
 
   Input:   include.record  a patch page (page) or a site.pages item
            include.count   that record's report count, as a number
   Outputs: gate_label      the published verdict
            gate_scope      "if ..." / "when ..." qualifier for WAIT / TEST FIRST, "for new
-                           installations" for AVOID (it applies to installing it), else ''.
-                           Every surface prints it beside gate_label (review 1, D1)
+                           installations" for AVOID (it applies to installing it), the label
+                           "Volume-based precaution" for the volume-based WAIT, else ''.
+                           Every surface prints it beside gate_label (review 1, D1), so the label
+                           reaches every surface with no wording of its own there
            gate_body       the recommendation line; '' only for a zero-report page with no
                            verdict, whose existing line stays
            gate_official   true for AVOID and SECURITY UPDATE (facts, not report evidence)
@@ -65,17 +70,22 @@
 {%- assign pvg_row_verdict = pvg_row.verdict | default: '' | strip -%}
 {%- assign pvg_row_scope = pvg_row.scope | default: '' | strip -%}
 {%- assign pvg_row_body = pvg_row.body | default: '' | strip -%}
+{%- assign pvg_row_reason_code = pvg_row.reason_code | default: '' | strip -%}
+{%- assign pvg_row_label = pvg_row.label | default: '' | strip -%}
 {%- assign pvg_printed = false -%}
+{%- assign pvg_volume = false -%}
 {%- if pvg_row_body != '' -%}
   {%- if pvg_row_verdict == 'SECURITY UPDATE' -%}
     {%- if pvg_row_scope == '' -%}{%- assign pvg_printed = true -%}{%- endif -%}
   {%- elsif pvg_row_verdict == 'AVOID' or pvg_row_verdict == 'WAIT' or pvg_row_verdict == 'TEST FIRST' -%}
     {%- if pvg_row_scope != '' -%}{%- assign pvg_printed = true -%}{%- endif -%}
+    {%- if pvg_row_scope == '' and pvg_row_verdict == 'WAIT' and pvg_row_reason_code == 'high_report_volume' and pvg_row_label == 'Volume-based precaution' -%}{%- assign pvg_printed = true -%}{%- assign pvg_volume = true -%}{%- endif -%}
   {%- endif -%}
 {%- endif -%}
 {%- if pvg_printed -%}
   {%- assign gate_label = pvg_row_verdict -%}
   {%- assign gate_scope = pvg_row_scope -%}
+  {%- if pvg_volume -%}{%- assign gate_scope = pvg_row_label -%}{%- endif -%}
   {%- assign gate_body = pvg_row_body -%}
   {%- if pvg_row_verdict == 'AVOID' or pvg_row_verdict == 'SECURITY UPDATE' -%}{%- assign gate_official = true -%}{%- endif -%}
   {%- if pvg_row_verdict == 'SECURITY UPDATE' -%}

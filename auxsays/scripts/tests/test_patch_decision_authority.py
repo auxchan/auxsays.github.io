@@ -352,17 +352,20 @@ def check_wiring() -> None:
     #
     # AUX-007 removed the record-state input, so this now pins something STRONGER: the two writers
     # agree AND both answer the same whichever way `update_status` is set. GROWTH-3: with no
-    # reviewed reason and no official fact, the answer is INSUFFICIENT DATA for both, whatever the
-    # (negative) sentiment says.
+    # reviewed reason and no official fact, the answer was INSUFFICIENT DATA for both, whatever the
+    # (negative) sentiment says. G87 (AUX-127): 43 counted rows on a promotion product are a
+    # volume-based WAIT, and both writers must reach it from the SAME counted rows -- the aggregate is
+    # handed the rows the record writer counts, never a bare number.
     pairs = []
     answers = set()
     for status in ("archived", "current"):
         writer = proposed(OBS, "32.1.1", sentiment="negative", count=43, status=status)
-        aggregate = bce.recommendation_prefix(OBS, "32.1.1", "negative", 43, update_status=status)
+        rows = [evidence_row(OBS, "32.1.1", i, sentiment="negative") for i in range(43)]
+        aggregate = bce.recommendation_prefix(OBS, "32.1.1", "negative", 43, update_status=status, counted_rows=rows)
         answers |= decisions_named(writer) | {aggregate}
-        if not (decisions_named(writer) == {"INSUFFICIENT DATA"} and aggregate == "INSUFFICIENT DATA"):
+        if not (decisions_named(writer) == {"WAIT"} and aggregate == "WAIT"):
             pairs.append(f"{status}: record={sorted(decisions_named(writer))} "
-                         f"aggregate={aggregate!r} expected='INSUFFICIENT DATA'")
+                         f"aggregate={aggregate!r} expected='WAIT'")
     if len(answers) != 1:
         pairs.append(f"update_status changed the decision: {sorted(answers)}")
     check("W10 both writers agree, and update_status does not change the decision",
