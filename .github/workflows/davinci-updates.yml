@@ -128,6 +128,7 @@ jobs:
             --max-retries 5 \
             --pages-cmd 'gh workflow run pages.yml --ref main' \
             --pages-max-attempts 3 --pages-backoff 5,15 \
+            --pages-confirm-build --pages-confirm-attempts 40 --pages-confirm-interval 30 \
             --deploy-recovery \
             --recovery-site-path 'auxsays/updates/generated/*' \
             --recovery-site-path auxsays/_data/consensus_evidence.yml \

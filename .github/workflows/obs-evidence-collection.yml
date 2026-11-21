@@ -26,6 +26,12 @@ on:
           before 2025-01-01, which is older than any record AUXSAYS tracks."
         required: false
         type: string
+      recovery_of:
+        description: "Set only by this workflow's chain-ingest job when the collection writeback lost
+          its race with another push to main: the id of the run being re-run. A run carrying it is
+          never re-dispatched again. Leave empty."
+        required: false
+        type: string
   schedule:
     # Temporary bounded-recovery cadence: every 6 hours (was 4h). A run can take up to the 300-min
     # job timeout; a 6h (360-min) interval leaves 60 min after the job bound before the next slot is
@@ -50,6 +56,11 @@ jobs:
     # Pages dispatch, and the final summary. 300 min stays under the GitHub 6h default and, with the
     # every-6-hours (360-min) cadence below, leaves 60 min before the next slot -- no overlap/queue.
     timeout-minutes: 300
+    outputs:
+      # G91: `true` only when the writeback below lost its race with another push to main and pushed
+      # nothing (lib/automation_writeback.RECOVERABLE_LOST_RACE_OUTCOMES). chain-ingest reads it to
+      # re-run this cycle once instead of losing it, as run 44878227542 did.
+      writeback_lost_race: ${{ steps.writeback.outputs.lost_race }}
     env:
       GITHUB_TOKEN: ${{ github.token }}
       GH_TOKEN: ${{ github.token }}
@@ -476,6 +487,15 @@ jobs:
           # here generates it; the `rm -f` only clears a stray local copy and is invisible to git.
           rm -f auxsays/_data/source_health.yml
 
+      # DEPLOYMENT IS VERIFIED, NOT ASSUMED (G91). `gh workflow run` returning 0 confirms only that
+      # Pages was DISPATCHED. --pages-confirm-build then polls the Pages run created for the pushed
+      # revision: a build that ends without success fails this step (deployment_pending; the data
+      # commit stays on main, nothing is reverted or re-pushed, and lost_race stays false so nothing
+      # re-runs the cycle); a build that never appears or never finishes inside the bound is reported
+      # as deployment_unverified (output, annotation, step summary) without failing the lane.
+      # The bound is 39 x 30 s = 19.5 min: measured Pages runs take 237-612 s from creation, and one
+      # may queue behind another in the `pages` group. It fits the job budget: the collect step is
+      # capped at 240 of this job's 300 minutes and the steps after it measured ~22 minutes.
       - name: Commit material evidence changes (conflict-safe writeback)
         id: writeback
         if: ${{ github.event.inputs.dry_run != 'true' }}
@@ -508,6 +528,7 @@ jobs:
             --max-retries 5 \
             --pages-cmd 'gh workflow run pages.yml --ref main' \
             --pages-max-attempts 3 --pages-backoff 5,15 \
+            --pages-confirm-build --pages-confirm-attempts 40 --pages-confirm-interval 30 \
             --deploy-recovery \
             --recovery-site-path 'auxsays/updates/generated/*' \
             --recovery-site-path auxsays/_data/consensus_evidence.yml \
@@ -530,6 +551,8 @@ jobs:
           WB_PUSHED: ${{ steps.writeback.outputs.pushed }}
           WB_PENDING: ${{ steps.writeback.outputs.deployment_pending }}
           WB_OUTCOME: ${{ steps.writeback.outputs.outcome }}
+          WB_BUILD: ${{ steps.writeback.outputs.pages_build }}
+          WB_LOST_RACE: ${{ steps.writeback.outputs.lost_race }}
         run: |
           if [ "$QA" = success ] && [ "$AUDIT" = success ]; then validation="yes"; else validation="no (qa=$QA, audit=$AUDIT)"; fi
           if [ "$WRITEBACK" != success ]; then
@@ -549,7 +572,9 @@ jobs:
             echo "- reached validation (QA + audit succeeded): **${validation}**"
             echo "- writeback occurred: **${writeback}**"
             echo "- Pages dispatch: **${pages}**"
+            echo "- Pages build verification: **${WB_BUILD:-not checked}**"
             echo "- writeback outcome token: \`${WB_OUTCOME:-n/a}\`"
+            echo "- lost writeback race, nothing pushed: **${WB_LOST_RACE:-false}**"
           } >> "$GITHUB_STEP_SUMMARY"
 
   powerpoint-orchestrated:
@@ -664,18 +689,40 @@ jobs:
            github.event.inputs.update_version == '' &&
            github.event.inputs.since == '' &&
            github.event.inputs.dry_run != 'true')) }}
+    #
+    # A LOST CYCLE IS RE-RUN ONCE (G91). When the collect job's writeback lost its race with another
+    # push to main and pushed nothing (`writeback_lost_race`), this job dispatches THIS workflow again
+    # instead of ingestion, carrying `recovery_of`. That run collects the whole cycle from the new
+    # main -- nothing merges two versions of the evidence -- and its own chain-ingest then dispatches
+    # ingestion as usual. One dispatch either way, so the recovery takes the pending slot ingestion
+    # would have taken and never adds a third entrant to the writer group. A run that carries
+    # `recovery_of` never re-dispatches itself (loop guard). Before this, run 44878227542 lost its
+    # whole cycle to a mid-run merge and the reaper, which repairs evictions, not failures, left it.
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
       actions: write
     steps:
-      - name: Dispatch routine patch ingestion
+      - name: Dispatch the next routine writer
         env:
           GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          RUN_ID: ${{ github.run_id }}
+          LOST_RACE: ${{ needs.collect.outputs.writeback_lost_race }}
+          RECOVERY_OF: ${{ github.event.inputs.recovery_of }}
         run: |
           set -euo pipefail
+          if [ "${LOST_RACE}" = "true" ] && [ -z "${RECOVERY_OF}" ]; then
+            gh workflow run obs-evidence-collection.yml --ref main --repo "${REPO}" \
+              -f recovery_of="${RUN_ID}"
+            echo "- Collection writeback lost its race with another push to main; re-dispatched \`obs-evidence-collection.yml\` once (recovery of run ${RUN_ID}). Ingestion follows that run." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          if [ "${LOST_RACE}" = "true" ]; then
+            echo "::warning title=Recovery run lost its race too::This run re-ran run ${RECOVERY_OF} and lost its writeback race again. It is not re-dispatched a second time; the next scheduled cycle collects."
+            echo "- Recovery of run ${RECOVERY_OF} lost its writeback race too; not re-dispatched (loop guard)" >> "$GITHUB_STEP_SUMMARY"
+          fi
           # No inputs: that is exactly the path the deleted cron took, and every production branch
           # in patch-ingest.yml gates on the inputs being absent.
-          gh workflow run patch-ingest.yml --ref main \
-            --repo "${{ github.repository }}"
+          gh workflow run patch-ingest.yml --ref main --repo "${REPO}"
           echo "- Dispatched \`patch-ingest.yml\` (routine cycle)" >> "$GITHUB_STEP_SUMMARY"

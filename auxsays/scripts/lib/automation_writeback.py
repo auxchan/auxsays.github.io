@@ -35,15 +35,20 @@ the freshly generated changes:
     not trigger pages.yml, so a missing --pages-cmd would silently never deploy) -- never exit 0
   * OPTIONALLY (opt-in ``pages_confirm_build``) poll the just-created pages run to a terminal state
     and surface a BUILD failure, since a successful dispatch is not a successful deploy; when off,
-    build-outcome confirmation is delegated to the next deployment-recovery cycle
+    build-outcome confirmation is delegated to the next deployment-recovery cycle. A build that
+    fails fails the run; a build that never started or never finished inside the bounded wait is
+    reported as ``deployment_unverified`` (output, outcome token, annotation, step summary)
+  * classify a writeback that lost a race with another push to main and pushed nothing as
+    ``lost_race`` (output), so the calling workflow can re-run that cycle once from a fresh base
 
 It never force-pushes, never uses ``--ours``/``--theirs`` or ``-X ours``/``-X theirs``, and
 never silently resolves a conflict on a shared generated/evidence/state/catalog file.
 
 Outcome tokens are emitted one-per-line (``WRITEBACK_OUTCOME:``) plus a final
 ``WRITEBACK_SUMMARY:`` JSON line; inside GitHub Actions, outputs (outcome / changed /
-deploy_changed / pushed / pushed_sha / deployment_pending) are written to ``$GITHUB_OUTPUT``
-and a pending-deployment note to ``$GITHUB_STEP_SUMMARY``.
+deploy_changed / pushed / pushed_sha / deployment_pending / pages_build / deployment_unverified /
+lost_race) are written to ``$GITHUB_OUTPUT`` and a pending or unverified deployment note to
+``$GITHUB_STEP_SUMMARY``.
 
 CLI (workflows) and importable ``run_writeback(config)`` (tests). Pages status queries and
 sleeps are injectable so tests are deterministic and never sleep or hit the network.
@@ -97,10 +102,28 @@ VALIDATION_FAILED_PRE_COMMIT = "validation_failed_pre_commit"
 PAGES_BUILD_CONFIRMED = "pages_build_confirmed"
 PAGES_BUILD_FAILED = "pages_build_failed"
 PAGES_BUILD_UNCONFIRMED = "pages_build_unconfirmed"
+# The bounded wait ended with no terminal build for the pushed revision: either no Pages run for it
+# ever appeared, or it had not finished. The data commit is on main and stays there; the lane does
+# not fail for this (a slow Pages queue is not a fault), but it says so in an output, an annotation
+# and the step summary. The next no-change --deploy-recovery cycle re-checks whether the current
+# main revision is a completed, successful deployment and re-dispatches Pages when it is not.
+DEPLOYMENT_UNVERIFIED = "deployment_unverified"
 # a site-affecting revision was pushed but the lane configured no Pages dispatch command
 DEPLOY_CHANGED_NO_PAGES_CMD = "deploy_changed_no_pages_cmd"
 UNSTAGED_CHANGED_PATH = "unstaged_changed_path"
 EVIDENCE_LOSS_REFUSED = "evidence_loss_refused"
+
+# A LOST RACE: another push reached main after this run checked out, and this run pushed nothing
+# because of it. Run 44878227542 lost a whole collection cycle that way (a PR touching the evidence
+# store merged mid-run -> rebase_conflict), and nothing re-ran it. These three terminal outcomes are
+# the ones a fresh run from the new main can resolve, because the conflict came from the timing, not
+# from the work: the rebase was refused, the rebased tree failed validation, or main kept moving
+# until the retries ran out. A post-rebase unexpected path or a residual working-tree file is a
+# defect in this run's own output and is never classified as a lost race -- re-running would only
+# repeat it. Nothing here merges evidence; the caller re-runs the whole cycle from a fresh checkout.
+RECOVERABLE_LOST_RACE_OUTCOMES = frozenset({
+    REBASE_CONFLICT, VALIDATION_FAILED_AFTER_REBASE, RETRY_EXHAUSTED,
+})
 
 # The store the evidence-loss gate protects. Mirrors lib/evidence_loss.EVIDENCE_PATH; it is a literal
 # here rather than an import because this module is executed as a bare script by every writer
@@ -172,6 +195,11 @@ class WritebackResult:
     pages_backoff_applied: list[int] = field(default_factory=list)
     pages_dispatched: bool = False
     pages_build_outcome: str = ""   # "" (not checked) | confirmed | failed | unconfirmed
+    # True when build confirmation ran and did NOT confirm the build (failed or unconfirmed).
+    deployment_unverified: bool = False
+    # True when this run lost a race with another push to main and pushed nothing
+    # (RECOVERABLE_LOST_RACE_OUTCOMES); set once, by run_writeback, from the final state.
+    lost_race: bool = False
     evidence_losses: list[str] = field(default_factory=list)
     ok: bool = False
 
@@ -181,7 +209,7 @@ class WritebackResult:
             "checkout_sha", "origin_sha_initial", "origin_sha_latest", "local_commit_sha",
             "rebased_commit_sha", "pushed_sha", "retry_number", "conflicting_paths", "validation",
             "pages_attempts", "pages_backoff_applied", "pages_dispatched", "pages_build_outcome",
-            "evidence_losses", "ok",
+            "deployment_unverified", "lost_race", "evidence_losses", "ok",
         )}
 
 
@@ -441,36 +469,61 @@ def _confirm_pages_build(cfg: WritebackConfig, result: WritebackResult, sha: str
     this dispatch, so a stale same-SHA run can never be mistaken for the new build. Only runs whose
     id is NOT in `pre_ids` are considered. On a terminal success -> pages_build_confirmed; on a
     terminal non-success -> pages_build_failed (deployment_pending + fail visibly). Poll exhausted
-    without a terminal new run -> pages_build_unconfirmed (NOT a failure: delegated to the next
-    --deploy-recovery cycle, which re-dispatches if `sha` is still not a completed+success deploy).
-    When `pages_confirm_build` is off (default) this is a no-op and confirmation is delegated."""
+    without a terminal new run -> pages_build_unconfirmed + deployment_unverified: NOT a failure of
+    the run (the data commit is on main and correct, and a Pages run can legitimately still be
+    queued behind another build), but reported unmistakably -- an outcome token, a ::warning
+    annotation, the `deployment_unverified` output and a step-summary section that says whether no
+    run appeared at all or the run had not finished. The next no-change --deploy-recovery cycle
+    re-checks the current main revision and re-dispatches if it is not a completed+success deploy
+    (any later material push dispatches its own build). Nothing here re-pushes,
+    reverts or re-runs the writeback. When `pages_confirm_build` is off (default) this is a no-op
+    and confirmation is delegated."""
     if not cfg.pages_confirm_build:
         return
+    seen_new = False         # a run for `sha` created by this dispatch appeared in any poll
+    queried = False          # at least one poll could read the run list at all
     for attempt in range(1, cfg.pages_confirm_attempts + 1):
         runs, ok = _pages_runs(cfg)
         if ok:
-            new_completed = [
+            queried = True
+            new_runs = [
                 run for run in runs
                 if str(run.get("databaseId")) not in pre_ids
                 and str(run.get("headSha")) == sha
                 and str(run.get("headBranch")) == cfg.pages_ref
-                and str(run.get("status")) == "completed"
             ]
+            seen_new = seen_new or bool(new_runs)
+            new_completed = [run for run in new_runs if str(run.get("status")) == "completed"]
             if any(str(run.get("conclusion")) == "success" for run in new_completed):
                 result.pages_build_outcome = "confirmed"
                 _emit(result, PAGES_BUILD_CONFIRMED)
                 return
             if new_completed:  # terminal, non-success -> a dispatched-but-FAILED build
                 result.pages_build_outcome = "failed"
+                result.deployment_unverified = True
                 _emit(result, PAGES_BUILD_FAILED)
                 result.deployment_pending = True
                 result.ok = False
+                print(f"::error title=Pages build failed::The Pages build for {sha} ended without "
+                      "success; the pushed revision is on main but not deployed.", flush=True)
                 _write_build_failure_summary(cfg, sha)
                 return
         if attempt < cfg.pages_confirm_attempts:
             cfg.sleep_fn(cfg.pages_confirm_interval)
     result.pages_build_outcome = "unconfirmed"
+    result.deployment_unverified = True
     _emit(result, PAGES_BUILD_UNCONFIRMED)
+    _emit(result, DEPLOYMENT_UNVERIFIED)
+    if not queried:
+        reason = "the Pages run list could not be read"
+    elif seen_new:
+        reason = "the Pages run for this revision had not finished"
+    else:
+        reason = "no Pages run for this revision appeared"
+    waited = max(cfg.pages_confirm_attempts - 1, 0) * cfg.pages_confirm_interval
+    print(f"::warning title=Deployment unverified::{reason} within {waited}s; the pushed revision "
+          f"{sha} is on main and is not reverted or re-pushed.", flush=True)
+    _write_unverified_summary(cfg, sha, reason, waited)
 
 
 def _dispatch_pages_bounded(cfg: WritebackConfig, result: WritebackResult, pushed_sha: str) -> bool:
@@ -537,6 +590,23 @@ def _write_build_failure_summary(cfg: WritebackConfig, sha: str) -> None:
             h.write(f"- sha: `{sha}`\n- workflow: `{cfg.pages_workflow}` ref `{cfg.pages_ref}`\n")
             h.write(f"- recover: `gh workflow run {cfg.pages_workflow} --ref {cfg.pages_ref}` "
                     "(or the next scheduled recovery run will redeploy it automatically).\n")
+    except OSError:
+        pass
+
+
+def _write_unverified_summary(cfg: WritebackConfig, sha: str, reason: str, waited: int) -> None:
+    path = os.environ.get("GITHUB_STEP_SUMMARY")
+    if not path:
+        return
+    try:
+        with open(path, "a", encoding="utf-8") as h:
+            h.write("### ⚠️ Deployment unverified\n\n")
+            h.write("The content push SUCCEEDED and the Pages dispatch SUCCEEDED, but the deployment "
+                    f"could not be verified: {reason} within the bounded wait ({waited}s). The data "
+                    "commit is on main and is not reverted or re-pushed.\n\n")
+            h.write(f"- sha: `{sha}`\n- workflow: `{cfg.pages_workflow}` ref `{cfg.pages_ref}`\n")
+            h.write("- the next no-change deployment-recovery cycle re-checks the current main revision "
+                    "and re-dispatches Pages if it is not a completed, successful deployment.\n")
     except OSError:
         pass
 
@@ -637,7 +707,25 @@ def _main_head_recoverable(cfg: WritebackConfig, main_sha: str) -> bool:
     return True
 
 
+def _is_lost_race(result: WritebackResult) -> bool:
+    """True only when another push advanced main during this run AND the run ended in one of
+    RECOVERABLE_LOST_RACE_OUTCOMES. Each of those is a terminal outcome reached BEFORE any push
+    succeeds, so a run that pushed -- whatever then happened to its Pages dispatch or build, whose
+    `outcome` stays the push token -- is never a lost race, and a deployment problem can never make
+    a caller re-run the cycle and write it twice. The upstream clause matters for retry_exhausted:
+    pushes refused while main did NOT move (permissions, a hook) are not a race and re-running
+    would only repeat them."""
+    return (UPSTREAM_ADVANCED in result.outcomes
+            and result.outcome in RECOVERABLE_LOST_RACE_OUTCOMES)
+
+
 def run_writeback(cfg: WritebackConfig) -> WritebackResult:
+    result = _run_writeback(cfg)
+    result.lost_race = _is_lost_race(result)
+    return result
+
+
+def _run_writeback(cfg: WritebackConfig) -> WritebackResult:
     repo = cfg.repo
     result = WritebackResult(outcome="")
     result.checkout_sha = _sha(repo, "HEAD")
@@ -794,11 +882,16 @@ def _write_github_output(result: WritebackResult) -> None:
             handle.write(f"pushed={'true' if result.pushed else 'false'}\n")
             handle.write(f"pushed_sha={result.pushed_sha}\n")
             handle.write(f"deployment_pending={'true' if result.deployment_pending else 'false'}\n")
+            handle.write(f"pages_build={result.pages_build_outcome}\n")
+            handle.write(f"deployment_unverified={'true' if result.deployment_unverified else 'false'}\n")
+            handle.write(f"lost_race={'true' if result.lost_race else 'false'}\n")
     except OSError:
         pass
 
 
-def main(argv: list[str] | None = None) -> int:
+def build_parser() -> argparse.ArgumentParser:
+    """The CLI every writer workflow invokes. Separate from main() so a test can parse a workflow's
+    real argument list with the real parser instead of matching flag text."""
     parser = argparse.ArgumentParser(description="Conflict-safe automation writeback + deployment recovery.")
     parser.add_argument("--repo", default=".")
     parser.add_argument("--branch", default="main")
@@ -819,8 +912,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--pages-confirm-build", action="store_true",
                         help="After a successful dispatch, poll the just-created pages run to a terminal "
                              "state and fail visibly if the build did not succeed (dispatch != deploy). "
-                             "When off (default), build-outcome confirmation is delegated to the next "
-                             "--deploy-recovery cycle.")
+                             "A wait that ends with no terminal build reports deployment_unverified "
+                             "without failing. When off (default), build-outcome confirmation is "
+                             "delegated to the next --deploy-recovery cycle.")
     parser.add_argument("--pages-confirm-attempts", type=int, default=20)
     parser.add_argument("--pages-confirm-interval", type=int, default=30)
     parser.add_argument("--deploy-recovery", action="store_true")
@@ -832,6 +926,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--json-out", default=None)
     parser.add_argument("--test-hook-before-push", default=None, help=argparse.SUPPRESS)
     parser.add_argument("--test-hook-fires", type=int, default=0, help=argparse.SUPPRESS)
+    return parser
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = build_parser()
     args = parser.parse_args(argv)
     if not args.allow:
         parser.error("at least one --allow pathspec is required")
