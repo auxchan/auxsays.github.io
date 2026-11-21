@@ -2662,7 +2662,7 @@ refused. Only those template-written elements are read, never vendor notes.
 built files differ, each in exactly those two lines, all 847 zero-report pages of `absent` products, and no
 other file. Verdict, scope, maturity, count, strength, consensus, monitoring, title, description and JSON-LD
 are identical on all 1,605 patch pages. The new rule fails main's build with 1,694 errors (847 x 2) and passes
-the branch build. `test_coverage_aware_zero_report.py` (25 checks, blocking).
+the branch build. `test_coverage_aware_zero_report.py` (26 checks, blocking).
 
 **Not changed** No verdict, verdict projection, threshold, acceptance rule, count, evidence row or generated
 record. A product whose collection is retired while it keeps counted reports would still print the

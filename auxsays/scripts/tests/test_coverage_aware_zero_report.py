@@ -373,9 +373,13 @@ def section_c(out: dict) -> None:
     errs, _ = gate.patch_page_problems("p.html", reverted_word, products("absent"))
     check("C4 an absent page whose community-signal word says 'Not enough reports' is refused",
           reverted_word != absent_page and any("'not enough reports'" in e for e in errs), errs)
-    inverse = [gate.patch_page_problems("p.html", absent_page, products(c))[0] for c in ("operating", "impaired")]
-    check("C5 the inverse is refused: a page saying not monitored for a product whose collection is "
-          "operating or impaired", all(any("not monitored" in e for e in errs) for errs in inverse), inverse)
+    # Each half alone as well as both: reverted_line says not monitored only in its community-signal word,
+    # reverted_word only in its verdict line, so neither half of the inverse rule is left unpinned.
+    inverse = [gate.patch_page_problems("p.html", page, products(c))[0]
+               for page in (absent_page, reverted_line, reverted_word) for c in ("operating", "impaired")]
+    check("C5 the inverse is refused: a page saying not monitored, in its verdict line, its community-signal "
+          "word or both, for a product whose collection is operating or impaired",
+          len(inverse) == 6 and all(any("not monitored" in e for e in errs) for errs in inverse), inverse)
     vendor = absent_page.replace(
         "</body>", '<div class="official-patch-notes">Too few reports were filed; not enough reports to tell.</div></body>')
     errs, _ = gate.patch_page_problems("p.html", vendor, products("absent"))
