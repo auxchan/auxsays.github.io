@@ -27,11 +27,16 @@ possible at all.
 """
 from __future__ import annotations
 
+import os
+import pickle
 import subprocess
 import tempfile
 import sys
 import traceback
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
+
+import yaml
 
 ROOT = Path(__file__).resolve().parents[2]
 SCRIPTS = ROOT / "scripts"
@@ -40,6 +45,62 @@ if str(SCRIPTS) not in sys.path:
 
 import qa_patch_records as qa                                  # noqa: E402
 from lib import maturity, report_counts                        # noqa: E402
+
+# RUNTIME ONLY (G88). This suite ran at 440-898 s in CI against a 900 s per-suite ceiling, and once
+# timed out with no failed check. Profiled locally: ~98% of the time is PyYAML's pure-Python parser.
+# Each in-process QA run re-parses every record's front matter about six times and the 5 MB evidence
+# store four times; the suite makes seven such runs and loads the store and the corpus itself.
+#
+# So the PARSE is memoized, and nothing else. `yaml.safe_load` of a string is a pure function of
+# that string, so the memo is keyed on the exact text and hands back a fresh copy (a pickle round
+# trip, which keeps values, types, key order and alias sharing) on every hit. The caller can mutate
+# what it gets without reaching the memo. A changed file is a new key, so Part G's rewritten record
+# is parsed again. Every function in the code under test -- reading the file, splitting the front
+# matter, the fallbacks, every scan -- still runs on every call, so a mutant in any of them is
+# exercised exactly as before. Streams and other non-string input go to the parser untouched.
+# Child processes do not inherit this: the QA subprocesses and the lane command below parse for
+# themselves.
+_UNMEMOIZED_SAFE_LOAD = yaml.safe_load
+_PARSE_MEMO: dict[str, bytes] = {}
+
+
+def _memoized_safe_load(stream):
+    if not isinstance(stream, str):
+        return _UNMEMOIZED_SAFE_LOAD(stream)
+    frozen = _PARSE_MEMO.get(stream)
+    if frozen is None:
+        data = _UNMEMOIZED_SAFE_LOAD(stream)  # a parse error raises here and is never memoized
+        _PARSE_MEMO[stream] = pickle.dumps(data, protocol=pickle.HIGHEST_PROTOCOL)
+        return data
+    return pickle.loads(frozen)
+
+
+yaml.safe_load = _memoized_safe_load
+
+# The two QA subprocesses Part F asserts on, as their own argv. Each is launched ONCE, at the start
+# of the run, on a worker thread, and its result is read where the original check stood. Same argv,
+# same cwd, same tree and the same environment as the inline call: nothing in this suite writes the
+# repository, and `_PrelaunchedRun.result()` re-runs the command inline if the environment has
+# changed since the launch. They capture their output and print nothing, so they cannot interleave
+# with the check lines. The lane validation in Part G is NOT moved: `_run_validation` prints, and it
+# runs inline exactly as before.
+QA_READ_ONLY_ARGV = [sys.executable, str(SCRIPTS / "qa_patch_records.py"), "--read-only"]
+QA_PUBLISH_STRICT_ARGV = [sys.executable, str(SCRIPTS / "qa_patch_records.py"),
+                          "--read-only", "--publish-strict"]
+
+
+class _PrelaunchedRun:
+    def __init__(self, pool: ThreadPoolExecutor, argv: list[str], cwd: str) -> None:
+        self.argv, self.cwd = argv, cwd
+        self.env = dict(os.environ)
+        self.future = pool.submit(subprocess.run, argv, capture_output=True, text=True, cwd=cwd)
+
+    def result(self) -> subprocess.CompletedProcess:
+        proc = self.future.result()
+        if dict(os.environ) != self.env:
+            proc = subprocess.run(self.argv, capture_output=True, text=True, cwd=self.cwd)
+        return proc
+
 
 PASS = FAIL = 0
 FAILURES: list[str] = []
@@ -131,6 +192,13 @@ def codes(data: dict, counts: dict | None = None, urls: dict | None = None) -> s
 
 
 def run_suite() -> int:
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        read_only_run = _PrelaunchedRun(pool, QA_READ_ONLY_ARGV, str(SCRIPTS))
+        publish_strict_run = _PrelaunchedRun(pool, QA_PUBLISH_STRICT_ARGV, str(SCRIPTS))
+        return _run_checks(read_only_run, publish_strict_run)
+
+
+def _run_checks(read_only_run: _PrelaunchedRun, publish_strict_run: _PrelaunchedRun) -> int:
     print("=" * 92)
     print("PART A  a supported live claim passes; an unsupported one does not")
     print("=" * 92)
@@ -290,16 +358,13 @@ def run_suite() -> int:
     else:
         check("Part F: the real candidate record is present to promote", False, str(candidate))
 
-    proc = subprocess.run([sys.executable, str(SCRIPTS / "qa_patch_records.py"), "--read-only"],
-                          capture_output=True, text=True, cwd=str(SCRIPTS))
+    proc = read_only_run.result()  # QA_READ_ONLY_ARGV, cwd SCRIPTS, launched when the run began
     check("Part F: and still reports, so CI sees the same findings production would",
           "QA scanned" in proc.stdout, proc.stdout[-160:] or proc.stderr[-160:])
     check("Part F: the real corpus has no live claim yet, so the gate is quiet today",
           proc.returncode == 0, f"exit={proc.returncode}")
 
-    strict = subprocess.run([sys.executable, str(SCRIPTS / "qa_patch_records.py"),
-                             "--read-only", "--publish-strict"],
-                            capture_output=True, text=True, cwd=str(SCRIPTS))
+    strict = publish_strict_run.result()  # QA_PUBLISH_STRICT_ARGV, cwd SCRIPTS, likewise
     check("Part F: read-only composes with publish-strict, the mode the deploy lane uses",
           strict.returncode == 0 and "publish-strict" not in strict.stderr,
           f"exit={strict.returncode} {strict.stderr[-120:]}")
