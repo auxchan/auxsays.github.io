@@ -21,7 +21,9 @@ shipped one after -- reproduces the stored label from the retained text. Then:
   severity and workflow_area travel with a rewritten theme.
 
 NEVER WRITTEN: sentiment (verdict-bearing), counted, exclusion_reason, identity, URLs, dates,
-version-match fields and the text itself. The single write site refuses any other key.
+version-match fields and the text itself. The single write site refuses any other key. The one
+addition is DERIVED: on a row that carries the structured evidence facts (G68), the facts that a
+rewritten label changes (the issue bucket) are recomputed by lib.evidence_facts and written with it.
 
 Zero network. Stored text only: refetching would re-theme rows this defect never touched (the stored
 excerpt disagrees with the full thread on 44 of 105 rows measured).
@@ -58,6 +60,7 @@ import yaml  # noqa: E402
 
 import collect_obs_reports as obs  # noqa: E402
 from lib import evidence_classification as ec  # noqa: E402
+from lib import evidence_facts as ef  # noqa: E402
 from patch_collectors import adobe_acrobat_community as acrobat  # noqa: E402
 from patch_collectors import adobe_premiere as premiere  # noqa: E402
 from patch_collectors import davinci  # noqa: E402
@@ -67,6 +70,10 @@ ROOT = Path(__file__).resolve().parents[1]
 STORE = ROOT / "_data" / "consensus_evidence.yml"
 
 WRITABLE = frozenset({"platform", "issue_theme", "workflow_area", "severity"})
+# The structured evidence facts (G68) a row must carry once its labels move: the issue bucket reads the
+# theme and the area. They are DERIVED by lib.evidence_facts from the row as written, never decided
+# here, and only on a row that already carries facts (`ef.derived_fact_updates`).
+DERIVED_WRITABLE = frozenset(ef.STORED_FIELDS)
 
 # An id-scoped run (`--only-id`) is for correcting a NAMED handful of rows after a classifier fix
 # (AUX-062). It never writes `platform`, and it considers no row that was not named.
@@ -330,8 +337,8 @@ def apply_writes(text: str, row_ids: list[Any], writes: dict[int, dict[str, str]
     pieces, cursor = [], 0
     for index in sorted(writes):
         fields = writes[index]
-        if set(fields) - WRITABLE:
-            raise SystemExit(f"refusing row {index}: not writable: {sorted(set(fields) - WRITABLE)}")
+        if set(fields) - WRITABLE - DERIVED_WRITABLE:
+            raise SystemExit(f"refusing row {index}: not writable: {sorted(set(fields) - WRITABLE - DERIVED_WRITABLE)}")
         start = starts[index][0]
         end = starts[index + 1][0] if index + 1 < len(starts) else len(text)
         block = text[start:end]
@@ -368,6 +375,7 @@ def run(store: Path, write: bool, only_ids: tuple[str, ...] = (), product_id: st
         for _index, d in decisions:
             d["write"] = {k: v for k, v in d["write"].items() if k in ONLY_ID_WRITABLE}
     writes = {index: d["write"] for index, d in decisions if d["write"]}
+    writes = {index: {**fields, **ef.derived_fact_updates(rows[index], fields)} for index, fields in writes.items()}
     summary: dict[str, dict[str, int]] = {}
     for _index, d in decisions:
         for axis in ("platform", "theme"):
@@ -472,6 +480,7 @@ def run_corrections(store: Path, manifest: Path, write: bool) -> dict[str, Any]:
         elif current == entry["from"]:
             action = "correct"
             writes[index] = dict(entry["to"])
+            writes[index].update(ef.derived_fact_updates(row, writes[index]))
         else:
             raise SystemExit(f"refusing: correction {ident[3]!r}: the stored labels {current} are neither the "
                              f"pinned from nor to")

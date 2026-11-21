@@ -6,7 +6,6 @@ This does not scrape communities and does not modify generated update records.
 from __future__ import annotations
 
 import json
-import re
 import sys
 from collections import Counter
 from lib.patch_identity import patch_display_label, patch_key
@@ -17,7 +16,7 @@ from typing import Any
 import yaml
 
 from patch_collectors.base import load_front_matter_and_body
-from lib import live_eligibility, maturity, patch_decision, verdict_projection, verdict_reasons
+from lib import evidence_facts, live_eligibility, maturity, patch_decision, verdict_projection, verdict_reasons
 from lib.report_counts import (EvidenceStoreError, counted_evidence_rows, format_maturity_transition,
                                format_reconcile_detail, load_evidence_store, reconcile_record_counts,
                                windows_targets_from_front_matter)
@@ -91,12 +90,7 @@ def evidence_state(total: int) -> str:
     return maturity.maturity_for(max(int(total), 0)).evidence_state
 
 
-def clean_public_phrase(value: Any, *, fallback: str = "") -> str:
-    text = str(value or "").strip()
-    if not text:
-        return fallback
-    text = re.sub(r"[_-]+", " ", text)
-    return re.sub(r"\s+", " ", text).strip()
+clean_public_phrase = evidence_facts.clean_public_phrase
 
 
 def product_label(product_id: str) -> str:
@@ -131,49 +125,10 @@ def number_word(value: int) -> str:
     return words.get(value, str(value))
 
 
-def public_issue_bucket(product_id: str, item: dict[str, Any]) -> str:
-    raw_theme = clean_public_phrase(item.get("issue_theme"))
-    raw_workflow = clean_public_phrase(item.get("workflow_area"))
-    raw_title = clean_public_phrase(item.get("report_title") or item.get("source_title") or item.get("parent_title"))
-    text = " ".join([raw_theme, raw_workflow, raw_title]).lower()
-
-    if product_id == "blackmagic-davinci":
-        if "magic mask" in text:
-            return "Magic Mask crashes"
-        if "decode" in text and ("render" in text or "export" in text):
-            return "render/decode failures"
-        if "render" in text or "export" in text or "delivery" in text:
-            return "render/export failures"
-        if "crash" in text or "startup" in text or "launch" in text:
-            return "startup or application crashes"
-        if "performance" in text or "slow" in text:
-            return "performance slowdowns"
-        if "install" in text:
-            return "installation problems"
-
-    if product_id == "obs-studio":
-        if "scene list" in text or ("scene" in text and "selection" in text):
-            return "scene list workflow regressions"
-        if "audio" in text or "mixer" in text or "monitoring" in text:
-            return "audio mixer or routing issues"
-        # "window" and "hang" are word-bounded: as substrings they matched "Windows" (the OS) and
-        # "change"/"changing" (AUX-060). Mirrored in apply_consensus_to_records._public_issue_bucket.
-        if "capture" in text or "camera" in text or "xcomposite" in text or "screen" in text or re.search(r"\bwindow\b", text):
-            return "capture-source issues"
-        if "plugin" in text or "setup" in text or "profile" in text:
-            return "plugin or setup compatibility"
-        if "crash" in text or "freeze" in text or re.search(r"\bhang(?:s|ing|ed)?\b", text) or "stability" in text:
-            return "crash or stability problems"
-        if "hotkey" in text or "shortcut" in text:
-            return "keyboard shortcut regressions"
-        if "output" in text or "recording" in text or "stream" in text:
-            return "output or recording regressions"
-
-    if raw_theme and raw_theme.lower() != "unspecified issue":
-        return raw_theme.lower()
-    if raw_workflow and not raw_workflow.lower().startswith("general "):
-        return raw_workflow.lower()
-    return "general workflow reports"
+# ONE bucket function (G68): lib.evidence_facts.compute_issue_bucket, rule `issue-bucket-1`. This module
+# and apply_consensus_to_records each carried a mirrored copy, kept equal only by a test; the stored
+# `issue_bucket` fact is computed by the same function. Behaviour is unchanged.
+public_issue_bucket = evidence_facts.compute_issue_bucket
 
 
 UNSPECIFIED_SEVERITY = "unspecified"

@@ -18,7 +18,9 @@ WHAT AN ENTRY MUST SATISFY (checked here, named in the tests):
     same source_url (F1). A row that stops counting -- an audited withdrawal -- makes the entry
     UNSUPPORTED: the page falls back and QA warns; it is never a writer-blocking error;
   * at least two distinct reporters (distinct URL, and identical excerpts are one reporter), unless
-    an official confirmation is cited (F2/F3);
+    an official confirmation is cited (F2/F3). Excerpts are compared by the structured fact
+    `excerpt_norm_sha256` stored with each row (G68, lib.evidence_facts); a cited row without a
+    usable fact leaves the entry unsupported;
   * an official confirmation names a stored record whose captured official notes contain the
     statement verbatim, so it can be re-checked rather than trusted. It names the record by its FULL
     identity: product_id, update_version and, for a build-keyed record (every Windows and PowerPoint
@@ -44,7 +46,8 @@ and a deterministic source-to-record writer. `lifecycle_errors` refuses a second
 file cannot quietly become a hand-maintained list, and refuses a matching field (product_id, kb,
 relationship, a build) that is not a plain unpadded string (GROWTH-3 review 2, LOW-1).
 
-This module reads YAML and nothing else: no collector import, no network.
+This module reads YAML and nothing else (plus lib.evidence_facts, which is pure): no collector import, no
+network.
 """
 from __future__ import annotations
 
@@ -54,6 +57,8 @@ from pathlib import Path
 from typing import Any, Iterable, Mapping
 
 import yaml
+
+from . import evidence_facts
 
 ROOT = Path(__file__).resolve().parents[2]
 REASONS_PATH = ROOT / "_data" / "verdict_reasons.yml"
@@ -377,7 +382,9 @@ def _schema_errors(entries: Iterable[Any], *, machine: bool) -> list[str]:
 
 
 def _norm_excerpt(row: Mapping[str, Any]) -> str:
-    return re.sub(r"\s+", " ", _s(row.get("report_text_excerpt"))).lower()
+    """Rule `excerpt-norm-1` on the row's stored text (lib.evidence_facts.normalise_excerpt). Kept for
+    callers that hold the text; `support_problems` no longer reads it (G68)."""
+    return evidence_facts.normalise_excerpt(row.get("report_text_excerpt"))
 
 
 def _norm_ws(text: Any) -> str:
@@ -412,8 +419,22 @@ def support_problems(entry: Mapping[str, Any], counted_rows: Iterable[Mapping[st
         cited.append(row)
     # F2/F3: distinct reporters. Distinct URL, and two rows with an identical excerpt are one
     # reporter posting twice (DaVinci 20.2's only same-problem pair was exactly that).
+    #
+    # The excerpt comparison reads the STRUCTURED FACT written with the row (G68,
+    # lib.evidence_facts.duplicate_group_key), never the stored text: with the text absent, this used
+    # to see no excerpts, stop collapsing duplicates and count every URL as a reporter -- failing OPEN.
+    # A cited row whose fact is missing, malformed, of an unknown version or computed under another
+    # rule makes the entry unsupported. The reader never rebuilds the fact from the text.
     urls = {_s(r.get("source_url")) for r in cited}
-    excerpts = {_norm_excerpt(r) for r in cited if _norm_excerpt(r)}
+    excerpts: set[str] = set()
+    for r in cited:
+        try:
+            key = evidence_facts.duplicate_group_key(r)
+        except evidence_facts.FactUnavailable as exc:
+            problems.append(f"row {r.get('id')!r}: {exc}")
+            continue
+        if key is not None:
+            excerpts.add(key)
     reporters = min(len(urls), len(excerpts) if excerpts else len(urls))
     conf = entry.get("official_confirmation")
     if conf:

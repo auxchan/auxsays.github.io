@@ -103,6 +103,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-062 | Deferred | Evidence integrity | Low | Three classifier misses the sprint measured but did not fix |
 | AUX-080 | Resolved | Publication | Medium | Patch pages reprinted community thread titles as link text, and the forum test fixtures held recorded post text |
 | AUX-109 | Resolved | Evidence integrity | Medium | A new Adobe row's 280-character excerpt could leave out the version it was counted for |
+| AUX-119 | Open | Evidence integrity | Medium | Readers of stored report text would fail open if the text were absent; no row stored the facts they compare |
 | AUX-062 | Resolved | Evidence integrity | Low | DaVinci "gpu" read as a performance cue and a DaVinci-only "plugin issues" bucket; the Windows and OBS-crash misses stay deferred |
 | AUX-063 | Deferred | Evidence acceptance | Medium | The Windows authority can attribute a report to the patch whose build is only the reporter's baseline |
 | AUX-064 | Deferred | Compliance | High | Reddit collection is switched off for lack of written authorisation; 326 stored Reddit rows await a retention and publication-rights review |
@@ -7333,6 +7334,86 @@ host. These are vendor documentation pages, not Q&A threads, and they are unchan
 Learn Q&A fetch path does not go through `learn_fetch_policy.open_url`, a health row names a refusal
 for a redirect that stayed on Learn's own question, tag or search pages, or the official documentation
 residual is taken up (it needs its own item and its own per-source path list).
+
+---
+
+### AUX-119 — Readers of stored report text would fail open if the text were absent; no row stored the facts they compare
+
+- **Status** Open · **Area** Evidence integrity · **Severity** Medium
+- **First seen** 2026-11-20 (G65 G1_SPEC, class B) · **PR A** 2026-11-20 (G68) · **Remaining** PR B (below)
+
+**Symptom**
+Five scheduled modules re-read stored third-party text (G1_SPEC s4, class B). Two of them fail OPEN if that
+text is ever missing:
+1. `lib.verdict_reasons.support_problems` counts two cited rows with the same excerpt as one reporter. With
+   no excerpts it stopped collapsing them, so every URL counted as a reporter, and a reviewed TEST FIRST or
+   WAIT could stay supported on one person posting twice.
+2. The Level-3 cross-post merge (`lib.recent_reports.merge_recent_reports`) treats an empty title as nothing
+   to merge, so one cross-posted report would show as two.
+
+Two copies of the public issue bucket (`apply_consensus_to_records._public_issue_bucket`,
+`build_consensus_from_evidence.public_issue_bucket`) were kept equal only by a test. No row stored any of
+these facts, so the text could not be sealed or removed (G1) without breaking these readers.
+
+**PR A (G68)**
+1. `lib/evidence_facts.py`. Every Tier 1 row carries four public, derived facts as its last keys:
+   `excerpt_norm_sha256`, `title_dedup_sha256`, `issue_bucket` and `facts_rule_version`. The rules
+   (`excerpt-norm-1`, `title-dedup-1`, `issue-bucket-1`) are the pre-G68 normalisations, unchanged. They are
+   versioned per fact (`RULE_SETS`) and pinned by frozen vectors and by a frozen fingerprint of each rule's
+   code (A4), so a rule's code cannot change without a new version. A reader accepts a fact only under the
+   current rule for that fact, so a future rule change (G73's capture-source cues) is detected, never mixed.
+2. `compute_issue_bucket` is now the one bucket function. Both modules' names point at it (byte-identical).
+3. `base.append_evidence_rows` and `collect_obs_reports.write_evidence` compute the facts from the row's own
+   text when they write it. A stored row is never touched.
+4. `support_problems` compares the excerpt fact, never the text. A cited row whose fact is missing,
+   malformed, of an unknown version or computed under another rule leaves the entry unsupported. On the live
+   corpus it decides exactly what the text rule decided (7 of 7 entries, problem for problem). 144
+   perturbations of cited rows' facts all refuse.
+5. `migrate_evidence_facts.py --write` (zero network) backfilled 3,392 rows, four lines each, appended to
+   each row's own block. Removing those lines gives back the old store byte for byte (sha256 715c13b2...),
+   and a second run changes nothing.
+6. The replay tools that rewrite a label (`recompute_evidence_classification`, `recompute_teams_classification`,
+   `repair_windows_evidence_attribution`) rewrite the derived bucket fact with it. The audited withdrawal
+   tools' row blocks stop before the facts (`withdraw_acrobat_wrong_edition_rows._blocks`), so every block
+   hash pinned before G68 still holds.
+7. QA warns (`evidence_facts_*`) on a row whose facts are missing, outdated, malformed or differ from its own
+   text.
+
+Tests: `test_structured_evidence_facts.py` (40), including three simulated mutants: a fail-open fallback, a
+wrong-version fact accepted, and a bucket rebuilt from absent text. Fixture rows in
+`test_growth3_verdict_policy`, `test_patch_decision_authority` and `test_homepage_signals` now carry facts,
+as written rows do. The `test_obs_source_date_producer` golden, `test_version_centred_excerpt` E7 and
+`test_matched_span_retention` Part C set the derived facts aside.
+
+**Not changed** No acceptance rule, threshold, verdict, maturity, source ownership or counted population.
+No text was deleted or sealed, and no visibility changed. Records, the verdict projection and the built
+site are byte-identical before and after (G68 IMPL_RETURN_1). A hash is not a judgement: equal excerpt facts
+mean equal stored excerpts, and nothing more.
+
+**PR B must**
+1. Switch both bucket readers (`_issue_counter`, `_public_sample_issue`, `_representative_rows`,
+   `issue_counter`) to `evidence_facts.stored_issue_bucket`, with fail-closed label semantics decided there.
+   This includes the 45 test files whose fixture rows carry no facts, and a byte-identical replay over the
+   corpus.
+2. Give Level-3 rows (`recent_powerpoint_reports.yml`, `recent_acrobat_reports.yml`) a `title_dedup_sha256`
+   at write time, backfill them, and key the cross-post merge on `evidence_facts.title_key`.
+3. Make `evidence_facts_*` publication-blocking once a page reads a fact.
+4. Leave out of scope `source_title` (S1, display text, not a hash) and the shadow reason producer. The
+   producer is OFF and reads text cues that a hash cannot carry (G1_SPEC open question 8).
+
+**Review record** Two review rounds. The second found one test-only gap: nothing pinned the migration's own
+scope proof (`migrate_evidence_facts.prove`), the only guard on every later `--write`, so each of its refusals
+could be removed with every check still passing. The reviewer's exact replacement test was applied verbatim as
+the one final correction the standing review-limit exception allows (tests, documentation and explanatory
+wording only). E2 now carries a withdrawn row and reports a refused migration as a named failure; E3 feeds the
+scope proof a byte, a field and a key-order change beyond the facts and requires each to be refused. An
+independent verifier confirmed that the diff touches only that test and this ledger entry, that
+`test_structured_evidence_facts.py` stays 40/40, and that the reviewer's surviving mutants M3, M4, P1 and P2 now
+fail.
+
+**Reopen only if** a stored row lacks current facts or carries a fact that differs from its own text
+(`test_structured_evidence_facts` E1, QA `evidence_facts_*`); a writer persists a row without facts; a reader
+rebuilds a fact from text; or a reviewed reason stays supported with a cited row whose fact is unusable.
 
 ---
 

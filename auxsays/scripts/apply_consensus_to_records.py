@@ -31,7 +31,7 @@ from patch_collectors.base import (
     split_front_matter,
     atomic_write_text,
 )
-from lib import live_eligibility, maturity, monitoring_health, verdict_projection, verdict_reasons
+from lib import evidence_facts, live_eligibility, maturity, monitoring_health, verdict_projection, verdict_reasons
 from lib.log_redaction import log_safe
 from lib.report_counts import EvidenceStoreError, load_evidence_store
 
@@ -566,12 +566,7 @@ def _public_row_summary(row: dict[str, Any], *, is_candidate_mode: bool) -> dict
     }
 
 
-def _clean_public_phrase(value: Any, *, fallback: str = "") -> str:
-    text = str(value or "").strip()
-    if not text:
-        return fallback
-    text = re.sub(r"[_-]+", " ", text)
-    return re.sub(r"\s+", " ", text).strip()
+_clean_public_phrase = evidence_facts.clean_public_phrase
 
 
 def _public_date(value: Any) -> str:
@@ -622,49 +617,10 @@ def _number_word(value: int) -> str:
     return words.get(value, str(value))
 
 
-def _public_issue_bucket(pid: str, row: dict[str, Any]) -> str:
-    raw_theme = _clean_public_phrase(row.get("issue_theme"))
-    raw_workflow = _clean_public_phrase(row.get("workflow_area"))
-    raw_title = _clean_public_phrase(row.get("report_title") or row.get("source_title") or row.get("parent_title"))
-    text = " ".join([raw_theme, raw_workflow, raw_title]).lower()
-
-    if pid == "blackmagic-davinci":
-        if "magic mask" in text:
-            return "Magic Mask crashes"
-        if "decode" in text and ("render" in text or "export" in text):
-            return "render/decode failures"
-        if "render" in text or "export" in text or "delivery" in text:
-            return "render/export failures"
-        if "crash" in text or "startup" in text or "launch" in text:
-            return "startup or application crashes"
-        if "performance" in text or "slow" in text:
-            return "performance slowdowns"
-        if "install" in text:
-            return "installation problems"
-
-    if pid == "obs-studio":
-        if "scene list" in text or ("scene" in text and "selection" in text):
-            return "scene list workflow regressions"
-        if "audio" in text or "mixer" in text or "monitoring" in text:
-            return "audio mixer or routing issues"
-        # "window" and "hang" are word-bounded: as substrings they matched "Windows" (the OS) and
-        # "change"/"changing" (AUX-060). Mirrored in build_consensus_from_evidence.public_issue_bucket.
-        if "capture" in text or "camera" in text or "xcomposite" in text or "screen" in text or re.search(r"\bwindow\b", text):
-            return "capture-source issues"
-        if "plugin" in text or "setup" in text or "profile" in text:
-            return "plugin or setup compatibility"
-        if "crash" in text or "freeze" in text or re.search(r"\bhang(?:s|ing|ed)?\b", text) or "stability" in text:
-            return "crash or stability problems"
-        if "hotkey" in text or "shortcut" in text:
-            return "keyboard shortcut regressions"
-        if "output" in text or "recording" in text or "stream" in text:
-            return "output or recording regressions"
-
-    if raw_theme and raw_theme.lower() != "unspecified issue":
-        return raw_theme.lower()
-    if raw_workflow and not raw_workflow.lower().startswith("general "):
-        return raw_workflow.lower()
-    return "general workflow reports"
+# ONE bucket function (G68): lib.evidence_facts.compute_issue_bucket, rule `issue-bucket-1`. This module
+# and build_consensus_from_evidence each carried a mirrored copy, kept equal only by a test; the stored
+# `issue_bucket` fact is computed by the same function. Behaviour is unchanged.
+_public_issue_bucket = evidence_facts.compute_issue_bucket
 
 
 def _issue_counter(pid: str, rows: list[dict[str, Any]]) -> Counter:

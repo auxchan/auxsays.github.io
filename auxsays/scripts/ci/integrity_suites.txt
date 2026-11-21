@@ -725,6 +725,16 @@ auxsays/scripts/tests/test_matched_span_retention.py = 20
 # Reads the live store and records; writes only to a temporary directory.
 auxsays/scripts/tests/test_version_centred_excerpt.py = 70
 
+# AUX-119 (G68). Every stored row carries public structured facts (excerpt hash, title-dedup hash,
+# issue bucket, rule version) written with the row, and the distinct-reporter rule of a reviewed
+# verdict reason reads the excerpt fact, never the text. Pins: the three rules by frozen vectors and frozen
+# code fingerprints, ONE
+# bucket function, both persistence boundaries, the adversarial cases (a missing, malformed,
+# unknown-version or other-rule fact never adds support; the live corpus decides exactly as the text
+# rule did), the zero-network migration's hash-proven scope, the replay tools, and three simulated
+# mutants. Reads the live store and reason file; writes only to a temporary directory.
+auxsays/scripts/tests/test_structured_evidence_facts.py = 40
+
 # --- writer-lane governance and the methodology Notes render -----------------------
 # Both were added with the writer-queue repair, and both are proven non-vacuous by MEASUREMENT
 # rather than assertion. Against the pre-fix tree (HEAD workflows, no reaper, patch-ingest still

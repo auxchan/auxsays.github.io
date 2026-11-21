@@ -25,6 +25,7 @@ from typing import Any
 import yaml
 
 from lib import evidence_classification as ec
+from lib import evidence_facts
 from lib import github_api
 from lib.normalize import split_front_matter, atomic_write_text
 from lib.patch_identity import patch_key
@@ -595,6 +596,10 @@ def write_evidence(rows: list[dict[str, Any]],
         url_key = evidence_key(row, "source_url")
         if id_key in seen_ids or url_key in seen_urls:
             continue
+        # This is OBS's own persistence boundary, so the structured facts are written here (G68), from
+        # the row as it will be serialised. Existing rows keep theirs untouched.
+        facts = evidence_facts.compute_facts(normalize_row(row))
+        row = {**{k: v for k, v in row.items() if k not in evidence_facts.STORED_FIELDS}, **facts}
         existing.append(row)
         seen_ids.add(id_key)
         seen_urls.add(url_key)
