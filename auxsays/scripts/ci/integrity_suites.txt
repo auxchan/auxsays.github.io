@@ -727,6 +727,13 @@ auxsays/scripts/tests/test_writer_queue_concurrency.py = 72
 # and this repo's Windows dev setup both provide; it reports and fails if bash is absent
 # rather than passing vacuously.
 auxsays/scripts/tests/test_writer_queue_reaper_behaviour.py = 25
+# AUX-120: not monitored is not too few reports. 847 zero-report patch pages of products with no
+# community collection said "Too few reports for a verdict yet." and "Community signal: Not enough
+# reports". Real Liquid renders of the patch page over every coverage and community state the
+# authority derives (and with no projection: unchanged words), byte comparisons proving only the two
+# intended lines change and only where collection is absent, and the deploy check's PATCH rule,
+# including against the real templates with each half of the wording reverted.
+auxsays/scripts/tests/test_coverage_aware_zero_report.py = 26
 # AUX-102: AUXSAYS never claims to monitor what it does not monitor. 30 of 47 catalog products had no
 # operating official lane while the catalog said "Monitoring active" and their pages said "is tracked".
 # Pins the coverage projection (official and community capabilities, five plain labels, fail closed), the
