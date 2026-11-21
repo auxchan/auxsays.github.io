@@ -354,7 +354,10 @@ def windows_record(**extra) -> dict:
         "published_at": "2026-11-11T18:00:00Z", "target_build": "26200.9999",
         "target_os_build": "26200.9999", "target_kb": "KB5099999", "target_feature_version": "25H2",
         "source_url": "https://example.test/release-health", "official_url": "https://example.test/release-health",
-        "body": "> [!IMPORTANT]\n> There is a known issue with 25H2 on some devices.",
+        # A body the parser WOULD read as declaring (a Known Issues section in a body with no release
+        # headings), so only the GitHub-release scope keeps the field off this record.
+        "body": "> [!IMPORTANT]\n> There is a known issue with 25H2 on some devices.\n\n## Known issues\n\n"
+                "* Some devices can fail to install this update.\n",
         "source_type": "release_health", "official_source_type": "release_health",
         "official_known_issues_present": True, "official_active_issue_count": 2,
         "official_resolved_issue_count": 1, "official_safeguard_hold_count": 0,
@@ -379,9 +382,10 @@ def section_c_contract() -> None:
     check("C3 the field is derived from the body, never taken from the caller",
           nki.FIELD not in writer.build_front_matter(github_record(HOTFIX, **{nki.FIELD: "declared"})))
     win = writer.build_front_matter(windows_record())
-    check("C4 a Windows Release Health record gets no notice field, even with alert-shaped text in its body",
+    check("C4 a Windows Release Health record gets no notice field, though the parser alone would read its body as declaring",
           nki.FIELD not in win and win.get("official_active_issue_count") == 2
-          and win.get("official_known_issues_present") is True)
+          and win.get("official_known_issues_present") is True
+          and nki.assess(win.get("official_patch_notes_body"), "25H2").result == nki.DECLARED)
     with tempfile.TemporaryDirectory() as td:
         out = Path(td)
         path, _ = writer.write_record(out, windows_record())
@@ -633,7 +637,7 @@ def section_m_migration() -> None:
         check("M3 the removal deletes exactly the one line",
               made["stale"].read_text(encoding="utf-8") == stale_before.replace(line, "", 1)
               and nki.FIELD not in front_of(made["stale"]))
-        check("M4 the Windows record and an unrelated record are untouched",
+        check("M4 the Windows record (whose body alone would read as declaring) and an unrelated record are untouched",
               after[made["windows"].name] == before[made["windows"].name]
               and after[unrelated.name] == before[unrelated.name])
         rc2, report2 = _run_migration(["--records", str(corpus), "--write"])

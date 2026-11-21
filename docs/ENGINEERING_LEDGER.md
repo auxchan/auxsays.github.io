@@ -4670,8 +4670,10 @@ known issue") reads as declared; a notice naming two versions, even this one, is
 without the warning, a record shows the warning for a notice attributed to another release, or a material
 published warning is missed because of the refresh window.
 
-**Evidence** `auxsays/scripts/tests/test_official_notes_known_issue.py` (57 governed checks; 7 mutants, one per
-mechanism); `migrate_official_notes_known_issue.py`.
+**Evidence** `auxsays/scripts/tests/test_official_notes_known_issue.py` (57 governed checks; 10 mutants, each
+killed by a named check: declaration, release scoping, removal, no churn, Release Health byte-identity,
+absent-field text, migration scope, writer scope on create and on refresh, the notice without the field);
+`migrate_official_notes_known_issue.py`.
 
 ### AUX-050 — My Patch Stack recommended another platform's older release as an update
 

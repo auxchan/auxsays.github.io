@@ -36,7 +36,7 @@ refreshed from GitHub and a record migrated from its stored body cannot disagree
 from __future__ import annotations
 
 import re
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any
 
 FIELD = "official_notes_known_issue"
@@ -80,7 +80,6 @@ class _Block:
     text: str = ""
     level: int = 0                 # heading level
     alert: str = ""                # alert kind, upper-case
-    children: list = field(default_factory=list)
 
 
 def is_github_release(front: dict[str, Any] | None) -> bool:
