@@ -676,6 +676,16 @@ auxsays/scripts/tests/test_withdraw_g55_adobe_role_rows.py = 42
 # is synthetic, plus two synthetic control rows; the live store is read only for the pin, the two controls and the
 # three held rows.
 auxsays/scripts/tests/test_withdraw_g60_davinci_howto_row.py = 34
+# AUX-118: the audited withdrawal of one OBS Studio 31.1.2 report (GitHub #13995) that names 31.1.2 only as a
+# release tag the reporter diffed, through the AUX-088 tool, unchanged, with a seventh manifest under AUX-088's own
+# Windows and OBS scope. The row needs two blind INCORRECT labels from two different named readers on one packet case
+# that both support its reason (an earlier full-source audit is provenance only); the must-stay control on its page,
+# the report's 32.2.2 row and the control finding are not entries; the six earlier manifests are byte-identical to
+# their pins; exactly 2 lines, every row kept, all-or-nothing, idempotent; the OBS collector's own dedupe authority
+# and the shared append guard both refuse the report seen again; fixture-based count deltas only. Bare script on the
+# AUX-088 fixture, whose free text is synthetic, plus one synthetic control row; the live store is read only for the
+# pin, the must-stay rows and the control finding.
+auxsays/scripts/tests/test_withdraw_g75_obs_source_tag_row.py = 37
 # AUX-092: the OBS producer now stores that same day on every NEW row. source_date = the UTC day of the
 # creation stamp the release-date gate already reads (an issue's created_at, the opening post's own <time>),
 # directly after captured_at, no key when the stamp gives no UTC day; equal to every AUX-090 pin. A frozen
@@ -737,6 +747,13 @@ auxsays/scripts/tests/test_writer_queue_concurrency.py = 72
 # and this repo's Windows dev setup both provide; it reports and fails if bash is absent
 # rather than passing vacuously.
 auxsays/scripts/tests/test_writer_queue_reaper_behaviour.py = 25
+# AUX-120: not monitored is not too few reports. 847 zero-report patch pages of products with no
+# community collection said "Too few reports for a verdict yet." and "Community signal: Not enough
+# reports". Real Liquid renders of the patch page over every coverage and community state the
+# authority derives (and with no projection: unchanged words), byte comparisons proving only the two
+# intended lines change and only where collection is absent, and the deploy check's PATCH rule,
+# including against the real templates with each half of the wording reverted.
+auxsays/scripts/tests/test_coverage_aware_zero_report.py = 26
 # AUX-102: AUXSAYS never claims to monitor what it does not monitor. 30 of 47 catalog products had no
 # operating official lane while the catalog said "Monitoring active" and their pages said "is tracked".
 # Pins the coverage projection (official and community capabilities, five plain labels, fail closed), the

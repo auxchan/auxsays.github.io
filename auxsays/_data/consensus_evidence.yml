@@ -56142,8 +56142,8 @@ evidence:
   patch_version_matched: true
   matched_version: 31.1.2
   match_basis: body
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: identity_not_the_subject
   issue_theme: camera/source regression
   workflow_area: camera source workflow
   platform: macos

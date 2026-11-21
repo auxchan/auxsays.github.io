@@ -4,6 +4,19 @@ layout: aux-base
 {% assign reaction = page.update_consensus_label | default: page.community_reaction | default: page.current_consensus | default: 'Insufficient data' %}
 {% assign reaction_key = reaction | downcase %}
 {% assign report_count = page.update_report_count | default: 0 | plus: 0 %}
+{%- comment %}
+  NOT MONITORED IS NOT TOO FEW (G80, AUX-120). Whether AUXSAYS collects community reports for this
+  page's product is the coverage authority's answer (build_coverage_projection.py, AUX-102), read
+  from the deploy-time site.data.coverage_state, never decided here: `community` is operating,
+  impaired or absent. Absent means no active collection method, so a zero-report page of such a
+  product must not say its reports are too few. It says the product is not monitored, in the
+  community-signal word below and in the zero-report verdict line (patch-decision.html). Operating
+  and impaired products keep the insufficient-evidence wording. With no projection (a local render)
+  or no row, the state is unknown and the wording is unchanged. Presentation only: the verdict word,
+  the counts and every projection are untouched. The lookup is a plain loop, not a filter, so a
+  harness without Jekyll's filters still finds the right row.
+{% endcomment %}
+{%- assign page_community_coverage = 'unknown' -%}{%- for pcc_row in site.data.coverage_state.products -%}{%- if pcc_row.product_id == page.product_id -%}{%- assign page_community_coverage = pcc_row.community | default: 'unknown' -%}{%- break -%}{%- endif -%}{%- endfor %}
 {% assign evidence_metric_label = 'Not enough reports' %}
 {% assign evidence_metric_class = 'insufficient-data' %}
 {% if reaction_key contains 'negative' or reaction_key contains 'avoid' %}
@@ -18,7 +31,9 @@ layout: aux-base
 {% elsif report_count > 0 %}
   {% assign evidence_metric_label = 'Moderate' %}
   {% assign evidence_metric_class = 'moderate' %}
-{% endif %}
+{% elsif page_community_coverage == 'absent' -%}
+  {%- assign evidence_metric_label = 'Not monitored' -%}
+{%- endif %}
 {% assign reaction_class = evidence_metric_class %}
 {% if evidence_metric_class == 'negative' %}
   {% assign consensus_score_percent = 18 %}
@@ -555,7 +570,7 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
   {% if report_count > 0 %}
     {% assign decision_body = 'Review the report sources and test before updating deadline-sensitive work.' %}
   {% else %}
-    {% assign decision_body = 'Too few reports for a verdict yet.' %}
+    {% assign decision_body = zero_report_body | default: 'Too few reports for a verdict yet.' %}
   {% endif %}
 {% endif %}
 {% assign checksum_body_clean = page.official_checksums_body | default: '' | strip %}
