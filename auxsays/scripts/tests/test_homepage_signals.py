@@ -886,9 +886,12 @@ def _verdict_projection() -> dict:
     either (review 2, LOW-1)."""
     import sys
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-    from lib import verdict_projection  # noqa: PLC0415
-    rows = [{"id": "r1", "source_url": REASON_URLS[0], "report_text_excerpt": "Installing it fails at 40%."},
-            {"id": "r2", "source_url": REASON_URLS[1], "report_text_excerpt": "The installer stops with an error."}]
+    from lib import evidence_facts, verdict_projection  # noqa: PLC0415
+    # Counted rows as the persistence boundary writes them, with their structured facts (G68): the
+    # distinct-reporter rule reads the excerpt fact, never the text.
+    rows = [evidence_facts.with_facts(r) for r in (
+        {"id": "r1", "source_url": REASON_URLS[0], "report_text_excerpt": "Installing it fails at 40%."},
+        {"id": "r2", "source_url": REASON_URLS[1], "report_text_excerpt": "The installer stops with an error."})]
     pages = [{"product_id": f"v-{n}", "update_version": "1.0", "update_report_count": c,
               "permalink": f"/updates/t/v-{n}/"} for n, c in (("reasoned", 2), ("reason-withdrawn", 1))]
     pages.append({"product_id": "microsoft-windows-11", "update_type": "2026-01 B", "update_report_count": 3,
