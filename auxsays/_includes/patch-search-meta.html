@@ -102,8 +102,10 @@
     {%- endif -%}
     {%- if psm_action == 'INSUFFICIENT DATA' -%}
       {%- if psm_count > 0 -%}
+        {%- comment -%} G82-A (AUX-123): the description no longer ties the missing verdict to the number of
+          reports. No count makes a verdict here; it rests on a supported reason, and none exists yet. {%- endcomment -%}
         {%- capture psm_title -%}{{ psm_identity }}: no verdict yet, {{ psm_reports }} so far{%- endcapture -%}
-        {%- capture psm_description -%}{{ psm_reports }} matched to {{ psm_identity }} so far, not yet enough for an AUXSAYS verdict.{% if psm_released != '' %} Released {{ psm_released }}.{% endif %}{%- endcapture -%}
+        {%- capture psm_description -%}{{ psm_reports }} {% if psm_count == 1 %}is{% else %}are{% endif %} linked to {{ psm_identity }} so far. AUXSAYS has no verdict for this release yet.{% if psm_released != '' %} Released {{ psm_released }}.{% endif %}{%- endcapture -%}
       {%- elsif psm_box == 'official' -%}
         {%- capture psm_title -%}{{ psm_identity }}: official notes, no verdict yet{%- endcapture -%}
         {%- capture psm_description -%}Official release notes for {{ psm_identity }}{% if psm_released != '' %}, released {{ psm_released }}{% endif %}. No user reports have been counted for this update yet, so there is no AUXSAYS verdict.{%- endcapture -%}

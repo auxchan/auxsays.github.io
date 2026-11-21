@@ -13,6 +13,7 @@ from urllib.parse import urlparse
 import yaml
 
 from lib import maturity, patch_decision, verdict_projection, verdict_reasons
+from lib import evidence_overview  # G82-A (AUX-123)
 from lib.patch_identity import patch_display_label, patch_key
 # The dedup identity the append path itself applies (base.evidence_key uses it), imported rather
 # than re-derived. A hand-rolled canonicaliser was measured against the corpus first and was WRONG:
@@ -40,10 +41,17 @@ LIFECYCLE_PATH = ROOT / "_data" / "patch_lifecycle.yml"
 # Built at deploy by build_verdict_projection.py, never committed: the only source the verdict gate
 # publishes a WAIT / TEST FIRST from. Present, it must equal the authority over this tree.
 PROJECTION_PATH = ROOT / "_data" / verdict_projection.PROJECTION_NAME
+# G82-A (AUX-123): built at deploy by build_evidence_overview_projection.py, never committed -- the only
+# source of a patch page's evidence overview and newer-release note -- and the reviewed file that says
+# which products' labels are withheld and which page carries a reviewed finding.
+EVIDENCE_OVERVIEW_PATH = ROOT / "_data" / evidence_overview.PROJECTION_NAME
+EVIDENCE_PRESENTATION_PATH = ROOT / "_data" / evidence_overview.REVIEWED_NAME
 # The patch page's maturity rung and decision ladder live in these two includes, which aux-update.html
 # renders (and the homepage renders too). Their text is the layout's text for the public-copy scan:
-# a phrase moved into one of them is still on every patch page.
-UPDATE_LAYOUT_INCLUDES = (ROOT / "_includes" / "patch-evidence-state.html", ROOT / "_includes" / "patch-decision.html")
+# a phrase moved into one of them is still on every patch page. The evidence overview include is
+# rendered by the layout too (G82-A).
+UPDATE_LAYOUT_INCLUDES = (ROOT / "_includes" / "patch-evidence-state.html", ROOT / "_includes" / "patch-decision.html",
+                          ROOT / "_includes" / "patch-evidence-overview.html")
 
 # The maturity vocabulary is owned by lib.maturity (canonical words plus the legacy words a stored
 # record may still carry); QA reads it rather than keeping a fourth copy.
@@ -968,6 +976,100 @@ def scan_update_layout_public_copy() -> tuple[list[dict[str, str]], list[dict[st
     return errors, warnings
 
 
+def scan_evidence_overview(files: list[Path], publish_strict: bool = False
+                           ) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
+    """G82-A (AUX-123): the evidence overview each patch page prints, against lib/evidence_overview over
+    this tree, and the reviewed presentation file.
+
+    ERRORS (both modes):
+      * evidence_presentation_invalid -- _data/evidence_presentation.yml is unreadable or malformed. It
+        changes only by reviewed pull request, so this is a defect in that PR; a malformed file counts
+        for nothing (no assessment applies).
+      * evidence_overview_projection_invalid / _failed -- the projection a deploy built is unreadable, or
+        its builder could not build it: no page would print an overview.
+      * evidence_overview_projection_missing -- this deploy built the verdict projection but not this
+        one, so every overview would silently vanish.
+      * evidence_overview_projection_stale -- the projection differs from a recompute over this tree in
+        any page row: a page would print a count, a finding or a newer release the rule did not write.
+    PUBLICATION ERROR (a warning for the writeback lane, an ERROR under --publish-strict):
+      * evidence_overview_public_text -- a row would reproduce a stored report title or excerpt, carry
+        an author-like field, state an acceptance rule or a threshold, or print vendor text from a
+        source whose publication permission is not on record.
+    WARNING:
+      * evidence_overview_family_unlabelled -- a counted source type has no public family name, so the
+        page calls it "other public reports" until it gets one.
+
+    With no projection on disk and no verdict projection either (a writeback lane, PR-time CI, a local
+    run), the deploy builds both from this same tree, so the recompute is what the page will print."""
+    errors: list[dict[str, str]] = []
+    warnings: list[dict[str, str]] = []
+    try:
+        reviewed = evidence_overview.load_reviewed(EVIDENCE_PRESENTATION_PATH)
+        problems = evidence_overview.reviewed_errors(reviewed)
+    except evidence_overview.ReviewedFileError as exc:
+        reviewed, problems = {}, [str(exc)]
+    for problem in problems:
+        add(errors, EVIDENCE_PRESENTATION_PATH, "evidence_presentation_invalid",
+            f"{problem}. A malformed file counts for nothing: no reviewed finding is shown.")
+    try:
+        reasons = verdict_reasons.load_reasons(REASONS_PATH)
+        lifecycle = verdict_reasons.load_lifecycle(LIFECYCLE_PATH)
+    except verdict_reasons.FactFileError:
+        reasons, lifecycle = [], []  # scan_verdict_policy reports it; an invalid file supports nothing
+    if verdict_reasons.schema_errors(reasons):
+        reasons = []
+    if verdict_reasons.lifecycle_errors(lifecycle):
+        lifecycle = []
+    fronts = [d for d in (front_matter(path) for path in files) if d.get("update_entry") is True]
+    groups = counted_evidence_rows(load_evidence_rows(), windows_targets=windows_targets_from_front_matter(fronts))
+    verdict, _unsupported = verdict_projection.project(fronts, groups, reasons, lifecycle)
+    expected = evidence_overview.project(fronts, groups, verdict["pages"], reasons, reviewed if not problems else {},
+                                         evidence_overview.split_products_from(ROOT))
+    want = expected["pages"]
+
+    try:
+        disk = evidence_overview.load(EVIDENCE_OVERVIEW_PATH)
+    except evidence_overview.ProjectionError as exc:
+        add(errors, EVIDENCE_OVERVIEW_PATH, "evidence_overview_projection_invalid",
+            f"{exc}. No page can print its evidence overview or newer-release note.")
+        disk = {"pages": {}}
+    if disk is None and PROJECTION_PATH.is_file():
+        add(errors, EVIDENCE_OVERVIEW_PATH, "evidence_overview_projection_missing",
+            "this deploy built the verdict projection but not the evidence overview projection, so every "
+            "patch page would lose its evidence overview without a word; run "
+            "build_evidence_overview_projection.py before QA and Jekyll.")
+    if disk is not None and disk.get("error"):
+        add(errors, EVIDENCE_OVERVIEW_PATH, "evidence_overview_projection_failed",
+            f"the evidence overview builder failed ({disk.get('error')}); no page prints an overview.")
+    if disk is not None and not disk.get("error"):
+        got = dict(disk.get("pages") or {})
+        if disk.get("rule_version") != evidence_overview.RULE_VERSION:
+            add(errors, EVIDENCE_OVERVIEW_PATH, "evidence_overview_projection_stale",
+                f"written by rule {disk.get('rule_version')!r}, this tree's rule is "
+                f"{evidence_overview.RULE_VERSION!r}.")
+        stale = sorted(k for k in set(got) | set(want) if got.get(k) != want.get(k))
+        if stale:
+            add(errors, EVIDENCE_OVERVIEW_PATH, "evidence_overview_projection_stale",
+                f"{len(stale)} page row(s) differ from lib/evidence_overview over this tree, first "
+                f"{stale[:5]}; those pages would print an overview the rule did not write.")
+
+    guard_bucket = errors if publish_strict else warnings
+    for data in fronts:
+        key = verdict_projection.page_key(data)
+        rows = groups.get(verdict_reasons.record_identity(data), [])
+        row = want.get(key)
+        if row:
+            for problem in evidence_overview.public_text_problems(row, rows):
+                add(guard_bucket, key, "evidence_overview_public_text",
+                    f"{problem}; the page must not print it.")
+        unlabelled = evidence_overview.unlabelled_source_types(rows)
+        if unlabelled:
+            add(warnings, key, "evidence_overview_family_unlabelled",
+                f"source type(s) {unlabelled} have no public family name in lib/evidence_overview."
+                "FAMILY_LABELS; the page calls them 'other public reports'.")
+    return errors, warnings
+
+
 def scan_required_record_paths() -> tuple[list[dict[str, str]], list[dict[str, str]]]:
     errors: list[dict[str, str]] = []
     warnings: list[dict[str, str]] = []
@@ -1585,6 +1687,9 @@ def main(argv: list[str] | None = None) -> int:
     errors.extend(e)
     warnings.extend(w)
     e, w = scan_route_integrity()
+    errors.extend(e)
+    warnings.extend(w)
+    e, w = scan_evidence_overview(files, publish_strict=args.publish_strict)
     errors.extend(e)
     warnings.extend(w)
 

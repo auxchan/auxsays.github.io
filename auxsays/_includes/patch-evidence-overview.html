@@ -1,0 +1,67 @@
+{%- comment -%}
+  THE EVIDENCE OVERVIEW AND THE NEWER-RELEASE NOTE (G82-A, AUX-123). Prints one patch page's row of the
+  deploy-time evidence overview projection (site.data.evidence_overview_projection, written by
+  scripts/build_evidence_overview_projection.py from lib/evidence_overview.py). It decides nothing: every
+  sentence below is the projection's, character for character, and qa_patch_records compares the
+  projection with a recompute over the same tree before Jekyll builds anything.
+
+  Input:   include.record  the patch page
+           include.part    'overview' -- the count stated as a count, the source families and what the
+                           report list does and does not establish, printed at the foot of the community
+                           evidence card (it replaces the old count-only strength word);
+                           'newer' -- a newer release in the same servicing line, its own verdict exactly
+                           as its page prints it or that there is none, and its official notes link.
+
+  FAIL CLOSED. No projection (a local render, a fresh checkout) or no row for this page: nothing is
+  printed. The page keeps its verdict, its count and every source link; it only loses the overview.
+
+  VENDOR TEXT. Fix lines print only when the projection carries them, and it carries them only for a
+  source whose publication permission is on record. Today none is, so this prints the link only.
+
+  No literal Liquid tag appears in this comment on purpose: a comment block still parses tags.
+{%- endcomment -%}
+{%- assign peo_part = include.part | default: 'overview' -%}
+{%- assign peo_record = include.record -%}
+{%- assign peo_pid = peo_record.product_id | default: '' | strip -%}
+{%- assign peo_version = peo_record.update_version | append: '' | strip -%}
+{%- assign peo_build = peo_record.target_build | append: '' | strip -%}
+{%- assign peo_key = peo_pid | append: '|' | append: peo_version | append: '|' | append: peo_build -%}
+{%- assign peo_row = site.data.evidence_overview_projection.pages[peo_key] -%}
+{%- if peo_part == 'overview' -%}
+  {%- assign peo_count_line = peo_row.count_line | default: '' | strip -%}
+  {%- assign peo_sources_line = peo_row.sources_line | default: '' | strip -%}
+  {%- assign peo_limitation = peo_row.limitation | default: '' | strip -%}
+  {%- if peo_count_line != '' %}
+          <div class="update-evidence-overview" role="group" aria-label="Evidence overview">
+            <p class="update-evidence-overview__count"><strong>Evidence overview:</strong> {{ peo_count_line | escape }}</p>
+            {%- if peo_sources_line != '' %}
+            <p class="update-evidence-overview__sources">{{ peo_sources_line | escape }}</p>
+            {%- endif %}
+            {%- if peo_limitation != '' %}
+            <p class="update-evidence-overview__limitation">{{ peo_limitation | escape }} <a href="#user-reports-sources">See the report list</a>.</p>
+            {%- endif %}
+          </div>
+  {%- endif -%}
+{%- elsif peo_part == 'newer' -%}
+  {%- assign peo_newer = peo_row.newer -%}
+  {%- assign peo_newer_url = peo_newer.url | default: '' | strip -%}
+  {%- assign peo_newer_identity = peo_newer.identity | default: '' | strip -%}
+  {%- assign peo_newer_verdict = peo_newer.verdict_line | default: '' | strip -%}
+  {%- if peo_newer_url != '' and peo_newer_identity != '' and peo_newer_verdict != '' -%}
+    {%- assign peo_newer_released = peo_newer.published_at | default: '' | strip -%}
+    {%- assign peo_newer_notes = peo_newer.notes_url | default: '' | strip -%}
+    {%- assign peo_newer_match = peo_newer.match_note | default: '' | strip -%}
+    {%- assign peo_newer_fix_source = peo_newer.fix_source | default: '' | strip %}
+      <aside class="update-evidence-freshness-notice update-newer-release" role="note" aria-label="Newer release">
+        <p><strong>A newer release is available:</strong> <a href="{{ peo_newer_url | relative_url }}">{{ peo_newer_identity | escape }}</a>{% if peo_newer_released != '' %} (released {{ peo_newer_released | date: "%b %-d, %Y" }}){% endif %}. {{ peo_newer_verdict | escape }}{% if peo_newer_match != '' %} {{ peo_newer_match | escape }}{% endif %}{% if peo_newer_notes != '' %} Read its <a href="{{ peo_newer_notes | escape }}">official release notes</a>.{% endif %}</p>
+        {%- if peo_newer.fix_lines and peo_newer.fix_lines.size > 0 and peo_newer_fix_source != '' %}
+        <p>Fixes listed first in {{ peo_newer_fix_source | escape }}:</p>
+        <ul class="update-newer-release__fixes">
+          {%- for peo_fix in peo_newer.fix_lines %}
+          <li>{{ peo_fix | escape }}</li>
+          {%- endfor %}
+        </ul>
+        {%- endif %}
+      </aside>
+  {%- endif -%}
+{%- endif -%}

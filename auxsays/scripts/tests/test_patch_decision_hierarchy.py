@@ -228,6 +228,13 @@ BODY_PARTIAL = "Current reports mention audio routing."
 BODY_TWO = "Current reports mention audio routing and capture-source failures."
 
 
+# G82-A (AUX-123): the issue sentence is not printed at all for a product whose labels are withheld
+# (_data/evidence_presentation.yml, which site_payload loads like every data file -- OBS is one of
+# them). These fixtures pin the de-duplication rule, so they run on a product whose labels are shown.
+LABELS_SHOWN = {"product_id": "blackmagic-davinci", "company_id": "blackmagic-design",
+                "update_product": "DaVinci Resolve", "update_detail_title": "DaVinci Resolve 32.1.2"}
+
+
 def ev(*issues):
     """evidence_samples shaped as the layout reads them, one issue per sample."""
     return [{"issue": i, "source_url": "https://e.test/%d" % n, "source_name": "src",
@@ -236,26 +243,26 @@ def ev(*issues):
 
 DEDUP_CASES = {
     # A: every subject already in the body -> suppressed
-    "A_exact": page(update_report_count=4, update_decision_body=BODY_EXACT,
+    "A_exact": page(update_report_count=4, **LABELS_SHOWN, update_decision_body=BODY_EXACT,
                     evidence_samples=ev("audio routing", "capture-source failures")),
     # B: body names no subject -> retained
-    "B_generic": page(update_report_count=4, update_decision_body=BODY_GENERIC,
+    "B_generic": page(update_report_count=4, **LABELS_SHOWN, update_decision_body=BODY_GENERIC,
                       evidence_samples=ev("audio routing", "capture-source failures")),
     # C: body names one of two -> retained, because the second adds information
-    "C_partial": page(update_report_count=4, update_decision_body=BODY_PARTIAL,
+    "C_partial": page(update_report_count=4, **LABELS_SHOWN, update_decision_body=BODY_PARTIAL,
                       evidence_samples=ev("audio routing", "capture-source failures")),
     # D: body names two of three -> retained
-    "D_three": page(update_report_count=6, update_decision_body=BODY_TWO,
+    "D_three": page(update_report_count=6, **LABELS_SHOWN, update_decision_body=BODY_TWO,
                     evidence_samples=ev("audio routing", "capture-source failures",
                                         "render/export failures")),
     # E: same subjects, different order -> suppressed; order is not information
-    "E_order": page(update_report_count=4, update_decision_body=BODY_EXACT,
+    "E_order": page(update_report_count=4, **LABELS_SHOWN, update_decision_body=BODY_EXACT,
                     evidence_samples=ev("capture-source failures", "audio routing")),
     # F: no cluster at all -> no "Current reports mention" sentence
-    "F_empty": page(update_report_count=4, update_decision_body=BODY_GENERIC,
+    "F_empty": page(update_report_count=4, **LABELS_SHOWN, update_decision_body=BODY_GENERIC,
                     evidence_samples=[]),
     # the theme suffix the producer appends is internal taxonomy, not an added subject
-    "G_theme": page(update_report_count=4, update_decision_body=BODY_EXACT,
+    "G_theme": page(update_report_count=4, **LABELS_SHOWN, update_decision_body=BODY_EXACT,
                     evidence_samples=ev("audio routing in audio", "capture-source failures in capture")),
 }
 
@@ -403,10 +410,13 @@ def run() -> int:
           NOT_ESTABLISHED in t("zero_reports"), t("zero_reports")[:200])
     check("A6 a report-bearing page keeps the community graph",
           SCALE in out.get("high_evidence", "") if ok else False)
-    check("A7 a report-bearing page carries an explicit evidence strength",
-          "Evidence strength:" in t("high_evidence")
-          and "Evidence strength:" not in t("zero_reports"),
-          "strength is a property of a sample; with no sample there is none to state")
+    # G82-A (AUX-123): the strength word read as corroboration ("High" beside INSUFFICIENT DATA when
+    # it only counts reports), so the card states the count itself and prints no strength word.
+    check("A7 a report-bearing page states its count as a count and prints no evidence-strength word",
+          "107 user reports found" in t("high_evidence")
+          and "Evidence strength" not in t("high_evidence")
+          and "Evidence strength" not in t("zero_reports"),
+          "the count is the sample size; the strength word only restated it")
 
     # ---- A9b: Collection Health is independent of Technical Details ------------------
     #

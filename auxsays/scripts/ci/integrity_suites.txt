@@ -531,6 +531,15 @@ auxsays/scripts/tests/test_public_projection_earned_fields.py = 9
 # control puts the old link text back and must expose the titles on all three lists. The real-record
 # pass at the end is WARN-only and adds no check, so evidence growth cannot change this count.
 auxsays/scripts/tests/test_publication_title_minimisation.py = 36
+# AUX-123 (G82-A): the evidence overview and newer-release note, from a deploy-time projection. Pins
+# the count stated as a count (no strength word), the universal clause on pages with no supported
+# reason, the reviewed OBS 33.0.1 finding ONLY while its counted population is the assessed one, the
+# newer release by My Installed Versions' rule (the port run against the shipped installedState over
+# every corpus record in node), vendor fix lines off with no permission on record, the public-text
+# guard, QA's missing/failed/stale/malformed errors, and real Liquid renders of the include, the label
+# withholding (listed products only) and the search description. Corpus-wide properties are one check
+# each, so evidence growth cannot change this count. Needs ruby + liquid and node; fails without them.
+auxsays/scripts/tests/test_evidence_overview.py = 78
 
 # Premiere discovery ROUTING, and the health semantics that keep it honest. The nine-method flat
 # loop cost 546.8s over 219 HTTP requests for two records; wayback alone was 408.5s and reddit

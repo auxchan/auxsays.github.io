@@ -19,6 +19,12 @@ detail page rendered the categorical word plus the full Negative/Moderate/Optima
 with NO sample qualifier at all once report_count reached 3, because the only qualifier was gated
 on `report_count < 3`. A 3-report read and a 96-report read rendered identically.
 
+G82-A (AUX-123) took the strength WORD off the detail page: "Evidence strength: High" beside
+INSUFFICIENT DATA read as if a count were corroboration. The card now states the count as a count
+(and an evidence overview at its foot, from the deploy-time projection, says what the reports do and
+do not establish). The ladder itself is unchanged and still words the verdict box's early-evidence
+line, which is how C4 now pins it: by behaviour, at every boundary.
+
 These render the REAL shipped Liquid (auxsays/_layouts/aux-update.html) with the liquid gem, so
 they exercise the template the site actually publishes rather than a Python re-implementation.
 They SKIP the render assertions when Ruby/liquid is unavailable; CI installs the gem, so they run
@@ -257,8 +263,11 @@ def run() -> int:
             text = visible(count)
             check(f"C1.1 n={count}: consensus is explicitly NOT established",
                   text is not None and NOT_ESTABLISHED in text, (text or "")[:90])
-            check(f"C1.2 n={count}: the canonical strength {strength!r} is stated",
-                  text is not None and f"evidence strength {strength}" in text, (text or "")[:120])
+            # G82-A: the sample is stated as the count it is, never as a strength word that reads
+            # like corroboration ("Evidence strength: High" next to INSUFFICIENT DATA).
+            check(f"C1.2 n={count}: the count is stated as a count, with no strength word ({strength!r}) beside it",
+                  text is not None and f"{count} user report" in text
+                  and "evidence strength" not in text.lower(), (text or "")[:120])
         # the exact cliff that was reported: nothing may change discontinuously at 3
         two, three = visible(2), visible(3)
         check("C1.3 n=2 and n=3 both carry the not-established statement",
@@ -300,10 +309,10 @@ def run() -> int:
         # page never shows two differently-worded counts of the same thing.
         one = visible(1) or ""
         check("C2.5 singular/plural is correct at n=1",
-              "1 user report," in one and "1 user reports," not in one, one[:130])
+              "1 user report." in one and "1 user reports" not in one, one[:130])
         check("C2.6 the note and the count line describe the same number identically",
               "3 user reports found" in (visible(3) or "")
-              and "3 user reports," in (visible(3) or ""))
+              and "3 user reports." in (visible(3) or ""))
 
     print()
     print("=" * 96)
@@ -327,13 +336,13 @@ def run() -> int:
         # A LARGE sub-live sample must not be hedged as though it were tiny: over-hedging a real
         # signal is its own dishonesty.
         big = visible(96)
-        check("C3.4 a 96-report sample states High strength, not an early-evidence hedge",
-              big is not None and "evidence strength High" in big and EARLY_EVIDENCE not in big,
-              (big or "")[:130])
+        check("C3.4 a 96-report sample states its count, not an early-evidence hedge (and no strength word)",
+              big is not None and "96 user reports" in big and EARLY_EVIDENCE not in big
+              and "evidence strength" not in big.lower(), (big or "")[:130])
         small = visible(3)
         check("C3.5 and a 3-report sample is visibly DIFFERENT from the 96-report one",
               small is not None and big is not None and small != big
-              and ("evidence strength Low" in small) and ("evidence strength High" in big))
+              and ("3 user reports" in small) and EARLY_EVIDENCE in small and ("96 user reports" in big))
 
     print()
     print("=" * 96)
@@ -344,8 +353,10 @@ def run() -> int:
             if count == 0:
                 continue
             text = visible(count)
-            check(f"C4.1 n={count} -> {strength}",
-                  text is not None and f"evidence strength {strength}" in text, (text or "")[:110])
+            # G82-A: the word is no longer printed, so the ladder is pinned by what it still decides:
+            # the verdict box's early-evidence line, at Low strength only.
+            check(f"C4.1 n={count} -> {strength}: the early-evidence line follows the canonical ladder",
+                  text is not None and ((EARLY_EVIDENCE in text) == (strength == "Low")), (text or "")[:110])
     # the ladder must match the include that already owns it
     for boundary in ("33", "25", "8"):
         check(f"C4.2 the detail page uses the same {boundary} boundary as patch-table-row.html",

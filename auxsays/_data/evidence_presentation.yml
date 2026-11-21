@@ -1,0 +1,73 @@
+# REVIEWED EVIDENCE PRESENTATION (G82-A, AUX-123). Changed only by a reviewed pull request: never by a
+# collector, a lane or a script.
+#
+# Two things live here, and nothing else (lib/evidence_overview.reviewed_errors refuses any other key;
+# a file with any problem counts for nothing, and QA reports it as an ERROR):
+#
+# label_withheld_products -- products whose stored per-report issue labels, and the "Current reports
+#   mention ..." sentence built from them, the patch page does NOT print (_layouts/aux-update.html reads
+#   this list directly). A product is listed only where a binding human-read audit recorded counted
+#   labels that contradict the report they label. A difference between a stored label and what the
+#   retained 280-character excerpt alone supports is NOT such a finding (GPT, G78: truncated-text
+#   differences are "context_insufficient" until a public error is demonstrated), so products with only
+#   that signal are not listed. Every listed product keeps each report's source, date and link. Remove
+#   an entry when its reopen condition is met.
+#
+# assessments -- a reviewed finding about one page's counted reports that may replace the universal
+#   clause ("No problem-specific installation recommendation has been established.") after the count.
+#   It shows ONLY while the page's counted population is exactly the assessed one: the same number of
+#   rows and the same sha256 of their sorted ids, joined by newlines (lib/evidence_overview
+#   .population_digest). One added or withdrawn report and the universal clause returns by itself.
+#   A finding never names a number, a threshold or an acceptance rule.
+schema_version: 1
+
+label_withheld_products:
+  - product_id: obs-studio
+    measured: >-
+      G64 read 281 counted OBS rows in full: 66 labels contradicted the report. G82 read all 47 counted
+      OBS Studio 33.0.1 rows: the stored issue theme was wrong or unsupported on 15, and the printed label
+      named a different problem on 12 to 17. S4B: 12 of 16 frozen OBS fixtures carry a wrong stored label.
+    basis: >-
+      G64 AUDIT section 0 (recorded in G77 as finding C-6, blocking); G82 REPORT section 2(d) and
+      T2_DECISION_PATH section 5; G78 S4_BASELINE section 5.
+    reopen: >-
+      The audited OBS label corrections (G73) have landed and a fresh human reading of the counted rows of
+      the most-reported OBS page finds no printed label that contradicts its report.
+  - product_id: microsoft-windows-11
+    measured: >-
+      G81's frozen replay (v2.2) read all 558 counted Windows rows: 131 labels are unsupported and are
+      rewritten by the approved classifier, and 57 more are unsupported and stay unchanged. G77 RA-C1:
+      420 of 555 counted rows read "update/install failure", 152 to 155 of them with no install word in
+      the title. S4B: 9 of 13 frozen Windows fixtures carry a wrong stored label.
+    basis: >-
+      G81 S1_REPLAY_v2_2 (S1A_DONE rows=558 changed=131 unchanged_unsupported=57); G77 REPORT finding
+      RA-C1 (blocking); G78 S4_BASELINE section 5.
+    reopen: >-
+      G81 (Windows on the shared classification mechanism, with its audited label-only corrections) has
+      landed and its unchanged-unsupported rows are corrected or no longer printed.
+  - product_id: adobe-premiere-pro
+    measured: >-
+      S4B fixture P01 (Premiere Pro 26.2.2, a counted Adobe Community bug report): the stored label
+      "export/render failure" rests on "rendering seems much slower", a report of slowness and freezing
+      menus, not of a failed export. 1 of 1 frozen Premiere fixture carries a wrong stored label; it is a
+      misreading of retained text, not a truncated-text difference.
+    basis: >-
+      G78 S4_BASELINE section 5 and S4B_FIXTURES.json (P01, stored_label_ok false).
+    reopen: >-
+      P01's stored label is corrected through the audited label-only path (S4-Q1) and a human reading of
+      the counted Premiere Pro rows finds no other printed label that contradicts its report.
+
+assessments:
+  - id: obs-studio:33.0.1:no-problem-independently-corroborated
+    product_id: obs-studio
+    update_version: "33.0.1"
+    target_build: ""
+    finding: No individual problem was independently corroborated in the available evidence.
+    basis: >-
+      G82 REPORT (.claude/handoffs/2026-11-21_g82-decision-intelligence-recovery/REPORT.md), section 2(b):
+      the 47 counted reports describe about 37 different problems, and no problem has two or more
+      known-independent reporters (verifier-checked; accepted by GPT in the G82 ruling and its
+      clarification).
+    assessed_reports: 47
+    assessed_population_sha256: 873413edf42dab6a4f93623768bbc1c7dff893cd4f5b6ae901286a245a21b966
+    reviewed_at: "2026-11-21"

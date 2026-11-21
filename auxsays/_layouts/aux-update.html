@@ -144,6 +144,12 @@ layout: aux-base
   sample qualifier, so a 3-report read and a 33-report read rendered identically. Strength reflects
   SAMPLE SIZE ONLY -- it is never a statement that the patch is safe.
 
+  NOT PRINTED ON THIS PAGE ANY MORE (G82-A, AUX-123). "Evidence strength: High" beside INSUFFICIENT
+  DATA read as if 47 reports were corroboration, when the word only counts them (GPT, G82). The card
+  now states the count itself, and the evidence overview at its foot says what the reports do and do
+  not establish. The word is still computed here because the early-evidence line in the verdict box
+  is worded by it; the count shown beside it carries the sample size.
+
   consensus_established is the existing contract, not a new threshold: evidence_state_class is
   'live' only for a live claim the maturity-state include certifies. Nothing else is mature
   consensus, so nothing else may be presented as though it were.
@@ -398,6 +404,17 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
   words survives), on both inputs below. If nothing specific remains the sentence is not built and
   the truthful "User reports are present" line renders instead.
 {%- endcomment -%}
+{%- comment %}
+  LABELS WITHHELD WHERE THEY ARE MEASURED UNRELIABLE (G82-A, AUX-123). For a product listed in the
+  reviewed file _data/evidence_presentation.yml (label_withheld_products), this page prints neither
+  the "Current reports mention ..." sentence built from the stored issue labels nor any report's issue
+  label or workflow line: a binding human-read audit found counted labels there that name a different
+  problem from the report they label (G82 measured 12 to 17 of 47 on OBS Studio 33.0.1). Each report
+  keeps its source, its date and its link, and the "User reports are present" line takes the sentence's
+  place. Every other product is unchanged. The lookup is a plain loop over a tracked file, so it holds
+  on a local render too; a product leaves the list when its reopen condition is met.
+{% endcomment %}
+{%- assign labels_withheld = false -%}{%- for lw_row in site.data.evidence_presentation.label_withheld_products -%}{%- if lw_row.product_id == page.product_id -%}{%- assign labels_withheld = true -%}{%- break -%}{%- endif -%}{%- endfor %}
 {% assign issue_generic_label = 'general workflow reports' %}
 {% assign issue_cluster_text = '' %}
 {% assign issue_cluster_seen = '|' %}
@@ -726,7 +743,7 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
           {%- endif %}
         </div>
         <div class="update-decision-reasoning">
-          {% if report_count > 0 and issue_cluster_text != '' and issue_adds_nothing == false %}
+          {% if report_count > 0 and issue_cluster_text != '' and issue_adds_nothing == false and labels_withheld == false %}
           <p>Current reports mention {{ issue_cluster_text }}.</p>
           {% elsif report_count > 0 %}
           <p>User reports are present; review the source list before updating critical work.</p>
@@ -759,7 +776,6 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
            aria-label="Community evidence summary, reported separately from the AUXSAYS verdict">
         <div class="consensus-compact">
           <span class="update-evidence-summary-line"><strong>Community signal:</strong> <em class="consensus-word consensus-word--{{ evidence_metric_class }}">{{ evidence_metric_label }}</em></span>
-          {% if report_count > 0 %}<span class="update-evidence-strength-line"><strong>Evidence strength:</strong> {{ evidence_strength }}</span>{% endif %}
           <span class="update-evidence-report-count">{% if report_count > 0 %}{{ report_count }} user report{% unless report_count == 1 %}s{% endunless %} found{% else %}0 confirmed patch-specific community reports{% endif %}</span>
         </div>
         <div class="consensus-position-graph consensus-position-graph--hero consensus-position-graph--{{ evidence_metric_class }}" style="--consensus-pos: {{ consensus_score_percent }}%;">
@@ -800,14 +816,24 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
           <p class="consensus-chart-meta consensus-sample-note">Community consensus not established.</p>
           {% endif %}
           {% if consensus_established == false and report_count > 0 %}
-          <p class="consensus-chart-meta consensus-sample-note">Community consensus not established &mdash; {{ report_count }} user report{% unless report_count == 1 %}s{% endunless %}, evidence strength {{ evidence_strength }}. This is a verified report sample, not live consensus telemetry.</p>
+          <p class="consensus-chart-meta consensus-sample-note">Community consensus not established &mdash; {{ report_count }} user report{% unless report_count == 1 %}s{% endunless %}. This is a verified report sample, not live consensus telemetry.</p>
           {% endif %}
           {% if consensus_established and report_count > 0 %}
-          <p class="consensus-chart-meta consensus-live-scope-note">Based on {{ report_count }} publicly posted user report{% unless report_count == 1 %}s{% endunless %}, evidence strength {{ evidence_strength }}. This is not a measure of how many installations are affected.</p>
+          <p class="consensus-chart-meta consensus-live-scope-note">Based on {{ report_count }} publicly posted user report{% unless report_count == 1 %}s{% endunless %}. This is not a measure of how many installations are affected.</p>
           {% endif %}
           {% if report_bearing_count > 0 and evidence_capture_date_known %}<p class="consensus-chart-meta">Newest accepted report captured: {{ evidence_checked_label }}</p>{% endif %}
         </div>
+        {%- comment -%}
+          THE EVIDENCE OVERVIEW (G82-A, AUX-123), printed from the deploy-time projection by the include
+          below: the count stated as a count, the source families, and what the list of reports does and
+          does not establish. It replaces the count-only strength word this card used to print. Kept the
+          LAST thing in the card, and written as a plain include tag: several suites render this layout
+          standalone up to its first include, so everything they read stays above it. The newer-release
+          note follows the card: practical guidance, placed before the collection telemetry.
+        {%- endcomment %}
+        {% include patch-evidence-overview.html part='overview' record=page %}
       </div>
+      {% include patch-evidence-overview.html part='newer' record=page %}
 
       {% include monitoring-status.html mode='compact' product_id=page.product_id version=page.update_version target_build=page.target_build published_at=page.update_published_at report_count=page.update_report_count %}
 
@@ -948,6 +974,9 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
         {% assign source_family_tail = source_family | downcase | slice: -6, 6 %}
         {% if source_family_tail == 'report' %}{% assign source_noun = source_family %}{% else %}{% assign source_noun = source_family | append: ' report' %}{% endif %}
         {% capture source_link_text %}{{ source_noun }}, {% if source_date_clean != '' %}{{ source_date_clean | date: "%B %-d, %Y" }}{% else %}date not recorded{% endif %}: {% if source_issue != '' %}{{ source_issue }}{% else %}issue not classified{% endif %}{% endcapture %}
+        {%- comment %} G82-A: where this product's labels are withheld (see labels_withheld), the descriptor is
+          the source and the date only, and no workflow line is printed. {% endcomment %}
+        {%- if labels_withheld %}{% capture source_link_text %}{{ source_noun }}, {% if source_date_clean != '' %}{{ source_date_clean | date: "%B %-d, %Y" }}{% else %}date not recorded{% endif %}{% endcapture %}{% assign source_workflow = '' %}{% endif %}
         <li>
           <cite>{% if source_url_clean != '' %}<a href="{{ source_url_clean }}">{{ source_link_text | strip | escape }}</a>{% else %}{{ source_link_text | strip | escape }}{% endif %}.</cite>
           <span>{{ source_type_label | replace: '_', ' ' }}</span>
