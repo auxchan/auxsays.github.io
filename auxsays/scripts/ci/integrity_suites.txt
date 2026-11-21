@@ -137,6 +137,16 @@ auxsays/scripts/tests/test_reddit_access_policy.py = 86
 # records per edition per run -- so 139 of the 143 frozen identities are a standing backlog
 # that scoped dispatches clear, not a one-run lag.
 auxsays/scripts/tests/test_acrobat_retired_method_health.py = 50
+# AUX-117 (G67): DaVinci's two Blackmagic-forum methods, refused on 6,725 of 6,725 runs, are disabled in
+# davinci.py with the adapter never called and a row built outside method_status; the frozen rows of the
+# 100 archived records are reclassified by a zero-network migration proven by hash (only status /
+# blocked_reason / notes of exactly 200 rows move, last_run kept, no record touched); and the page states
+# equal the list frozen before the change, version by version (100 STALE kept, 20 DEGRADED -> INSUFFICIENT
+# COVERAGE, 3 BLOCKED -> DEGRADED, none healthy), with the method_status counterfactual measured.
+auxsays/scripts/tests/test_davinci_refused_methods_disabled.py = 46
+# AUX-117 (G67): the PowerPoint tag lane's notes carry the admitted total and the hydration-cap overflow;
+# status, counters, the 45 cap and the walk are unchanged (compared against a run with the note suppressed).
+auxsays/scripts/tests/test_powerpoint_hydration_cap_telemetry.py = 20
 
 # The two repairs AUX-027 made after a targeted collector dispatch was used to clear the AUX-026
 # health backlog. That was the wrong mechanism -- a full collector dispatch DISCOVERS EVIDENCE --

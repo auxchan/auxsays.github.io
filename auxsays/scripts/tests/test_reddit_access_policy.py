@@ -228,11 +228,20 @@ def run_suite() -> int:
             check("D.4 ...with zero counters", (rd["candidates_found"], rd["accepted_reports"], rd["rejected_reports"]) == (0, 0, 0))
             check("D.5 ...and public-safe notes", rd["notes"] == pol.POLICY_NOTE)
             check("D.6 no Reddit request via any path (JSON, OAuth, RSS, hydration)", not net.reddit, str(net.reddit))
+            # AUX-117 switched the watchlist off in the collector (the Blackmagic forum refuses
+            # automated requests), so the walk above requests nothing. The adapter is kept for a
+            # restore, so the Reddit skip is pinned on the adapter itself: it must still never
+            # request a Reddit post, while still probing the forum it was given.
+            probe_errors: list[dict] = []
+            dv.source_probe_candidates(davinci_record(), ctx(), probe_errors, dv.KNOWN_WATCHLIST)
             check("D.7 watchlist hydration skipped the Reddit post, still probed the forum",
                   not any(pol.is_reddit_url(u) for u in seen_text) and any("blackmagicdesign" in u for u in seen_text),
                   str(seen_text))
-            check("D.7b ...and the skipped Reddit probe is not recorded as a fetch failure of the watchlist row",
-                  "reddit" not in str(by["known_watchlist"]["blocked_reason"]).lower(), str(by["known_watchlist"]["blocked_reason"]))
+            check("D.7b ...and the skipped Reddit probe is not recorded as a fetch failure of the watchlist adapter",
+                  not any("reddit" in str(e.get("reason") or "").lower() or pol.is_reddit_url(str(e.get("source_url") or ""))
+                          for e in probe_errors)
+                  and any("blackmagicdesign" in str(e.get("source_url") or "") for e in probe_errors),
+                  str(probe_errors))
             check("D.8 the other methods still emit rows (nothing else switched off)",
                   {"known_watchlist", "creative_cow_forum_search", "vendor_forum_search", "web_search"} <= set(by))
             check("D.9 nothing is accepted or rejected from Reddit", accepted == [] and rejected == [])

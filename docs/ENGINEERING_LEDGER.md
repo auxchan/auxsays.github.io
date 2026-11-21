@@ -110,6 +110,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-073 | Deferred | Coverage | Low | Windows Learn opening-post hydration (L1) shelved by owner decision O1; never merged |
 | AUX-063 | Resolved | Evidence acceptance | Medium | The Windows authority can attribute a report to the patch whose build is only the reporter's baseline — closed by AUX-067 for the thread-50506 shape |
 | AUX-081 | Resolved | Collector telemetry | High | A new patch's never-run Reddit policy row had no last_run, and the validator refused every writeback for every product |
+| AUX-117 | Resolved | Collector telemetry | Medium | DaVinci kept asking a forum that refuses automated requests, and its blocked rows hid a one-source shortfall; PowerPoint's hydration cap left no trace |
 | AUX-067 | Resolved | Evidence acceptance | High | A Windows report whose title is about another update counted against the build it merely quoted |
 | AUX-068 | Resolved | Observability | Low | PowerPoint Learn Q&A health rows said `fetches=200` and nothing about the 200 ceiling, thread population or exhaustion |
 | AUX-087 | Open | Coverage | Medium | Premiere Pro releases after 26.2.2 are not discovered: the lane has no release discovery, and HelpX refuses CI |
@@ -328,6 +329,60 @@ The stored titles themselves stay in the public repository's data files (the G1 
 ingestion config naming support.microsoft.com passes validation; a printing writer's step log contains
 `"source_title"` or a stored report title after this merges; or either KB5079391 page renders its AVOID without the
 source link, or the link line carries article text.
+
+---
+
+### AUX-117 — DaVinci kept asking a forum that refuses automated requests, and its blocked rows hid a one-source shortfall; PowerPoint's hydration cap left no trace
+
+- **Status** Resolved · **Area** Collector telemetry · **Severity** Medium
+- **First seen** 2026-11-20 (G65 CH1 measurement) · **Resolved** 2026-11-20 (G67)
+
+**Symptom**
+1. DaVinci's `known_watchlist` and `vendor_forum_search` read only the Blackmagic Design forum, which refuses automated
+   requests. Over every method-health row committed from 2026-08-01 to 2026-11-19 (333 passes, 6,725 executions of
+   each), vendor_forum_search was blocked 6,725 times out of 6,725 (an AWS WAF challenge on 6,441), and known_watchlist
+   never had a Blackmagic probe answer: about 161 refused requests a pass. The `blocked` rows also hid a real
+   shortfall. DaVinci has one working community source family (Creative COW), but 20 pages read MONITORING DEGRADED,
+   because the card's degraded rule (7) comes before its coverage rule (8).
+2. Routine collection does not walk the 100 archived DaVinci records (AUX-065), so their `blocked` rows from the
+   2026-11-05 pass would never have changed.
+3. The PowerPoint Q&A tag lane hydrates at most 45 admitted questions a run. When more were admitted, the fact
+   (`hydration_cap_reached_45_of_N`) went only into an in-memory error list. Neither the status nor the notes
+   showed it, so a run that left admitted questions unread looked complete.
+
+**Fix**
+1. `davinci.py` writes a `disabled` row for both methods, with reason `blackmagic_forum_refuses_automated_requests`
+   and a note stating the refusal. The adapter is not called. The row comes from `refused_source_disabled_row`, never
+   from `method_status`, which would have written `no_results` (healthy) and made 20 pages read healthy. The adapters
+   stay, unused, so the methods can be restored.
+2. `migrate_davinci_refused_method_health.py` changes 200 rows (archived records x the two methods) from `blocked` to
+   `disabled`. It makes no network request and was run once, with its output committed. Only status,
+   blocked_reason and notes change. `last_run` is kept, so no new check is claimed. An unexpected row shape stops it.
+   Proven by hash: of 2,767 files in the tree only the store changed, and inside it only those 200 rows.
+3. The tag lane's notes now say "Admitted for hydration N (cap 45 a run)". When the cap was reached they add
+   `hydration_cap_reached_45_of_N: M admitted questions were not hydrated this run`. Only the notes change.
+
+Page states, frozen before the change at 2026-11-20T08:00Z. The migration alone changes no page state (100 COLLECTION
+STALE, 20 MONITORING DEGRADED, 3 COLLECTION BLOCKED). After the collector's first pass, the 100 stay STALE, the 20
+become INSUFFICIENT COVERAGE and the 3 become MONITORING DEGRADED. None reads healthy, and the product-level community
+state stays "operating". On archived pages the two method lines now read "Method disabled" instead of "Source request was
+blocked", with their old dates. The stored record sentence "Some community sources were unavailable during the last
+check" (`evidence_source_limitations`, which no page renders) leaves 7 archived counted records at the next scoped
+DaVinci promotion and 20 current ones after the first pass. 21.1.1 keeps it while its Creative COW row is partial.
+
+Tests: `test_davinci_refused_methods_disabled.py` (46), `test_powerpoint_hydration_cap_telemetry.py` (20).
+`test_reddit_access_policy.py` D.7 and D.7b now check the watchlist adapter itself for the Reddit skip (D.7b reads the adapter's own error list; the collector's disabled row can no longer carry an adapter error).
+
+**Not changed** No acceptance rule, threshold, verdict, ladder rule, budget, walk order, archive filter, schedule,
+hydration cap or status mapping changed, and no evidence row, count or generated record. The 100 archived records stay
+archived. The PowerPoint 20-hour elapsed-time gate stays on hold. `web_search` still calls its adapter, which makes no
+request, before it reports `disabled`.
+
+**Reopen only if** a DaVinci run requests forum.blackmagicdesign.com while these methods are disabled; a DaVinci row
+for either method is written by `method_status`, or with any status but `disabled`; an archived DaVinci record holds a
+non-disabled row for either method; a DaVinci page reads MONITORING ACTIVE or NO ACCEPTED PATCH-SPECIFIC REPORTS with
+fewer than two fresh healthy families; or a PowerPoint tag-lane row omits the admitted total, or omits the overflow
+fact on a run that hydrated fewer questions than it admitted.
 
 ---
 
