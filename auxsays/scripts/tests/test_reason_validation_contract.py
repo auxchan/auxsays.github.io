@@ -48,6 +48,7 @@ sys.path.insert(0, str(_AUX / "scripts"))
 
 import yaml  # noqa: E402
 
+from lib import evidence_facts as ef  # noqa: E402
 from lib import patch_decision as pd  # noqa: E402
 from lib import verdict_projection as vp  # noqa: E402
 from lib import verdict_reason_producer as vrp  # noqa: E402
@@ -116,9 +117,11 @@ def obs(version, notes="", count=0):
 
 
 def row(rid, url, title, excerpt, **over):
+    """A counted row as the persistence boundary writes it: with its structured evidence facts (G68), which
+    the distinct-reporter rule reads instead of the excerpt text."""
     r = {"id": rid, "source_url": url, "report_title": title, "report_text_excerpt": excerpt}
     r.update(over)
-    return r
+    return ef.with_facts(r)
 
 
 def cites(rows):
@@ -297,6 +300,7 @@ def page_supported_reasons_pre_g84(page, rows, reviewed_valid, records=()):
 
 
 def support_problems_pre_g84(entry, counted_rows, records_by_identity):
+    """verdict_reasons.support_problems as main had it just before G84 (after G68's excerpt fact)."""
     problems = []
     by_id = {vr._s(r.get("id")): r for r in counted_rows}
     cited = []
@@ -310,7 +314,15 @@ def support_problems_pre_g84(entry, counted_rows, records_by_identity):
             continue
         cited.append(r)
     urls = {vr._s(r.get("source_url")) for r in cited}
-    excerpts = {vr._norm_excerpt(r) for r in cited if vr._norm_excerpt(r)}
+    excerpts = set()
+    for r in cited:
+        try:
+            key = ef.duplicate_group_key(r)
+        except ef.FactUnavailable as exc:
+            problems.append(f"row {r.get('id')!r}: {exc}")
+            continue
+        if key is not None:
+            excerpts.add(key)
     reporters = min(len(urls), len(excerpts) if excerpts else len(urls))
     c = entry.get("official_confirmation")
     if c:

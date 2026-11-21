@@ -57,6 +57,7 @@ sys.path.insert(0, str(_AUX / "scripts"))
 
 import yaml  # noqa: E402
 
+from lib import evidence_facts  # noqa: E402
 from lib import patch_decision as pd  # noqa: E402
 from lib import verdict_projection as vp  # noqa: E402
 from lib import verdict_reason_producer as vrp  # noqa: E402
@@ -1391,8 +1392,11 @@ ACRO_PRO = {"update_entry": True, "product_id": "adobe-acrobat-pro", "update_ver
 
 
 def _acro_row(i, title, excerpt, date):
-    return wrow(i, title, excerpt, date, applicability="adobe-acrobat-reader,adobe-acrobat-pro",
-                product_id="adobe-acrobat-pro", update_version="15.099.20001", patch_version_matched=True)
+    # As the persistence boundary writes it: with its structured evidence facts (G68), which support_problems
+    # reads for the distinct-reporter rule.
+    return evidence_facts.with_facts(wrow(i, title, excerpt, date, applicability="adobe-acrobat-reader,adobe-acrobat-pro",
+                                          product_id="adobe-acrobat-pro", update_version="15.099.20001",
+                                          patch_version_matched=True))
 
 
 ACRO_ROWS = [
@@ -1606,7 +1610,7 @@ def render_gate(cases: dict, projection: dict) -> dict | None:
 def check_render_switch_on() -> None:
     recs, counted = switch_fixture()
     recs.append(dict(KBP, update_type="2026-05 B"))
-    counted[vr.record_identity(recs[-1])] = [R1, R2]
+    counted[vr.record_identity(recs[-1])] = [evidence_facts.with_facts(R1), evidence_facts.with_facts(R2)]
     with switch(True):
         projection = vp.project(recs, counted, [], [])[0]
         valid, _u = vp.supported_reasons(recs, counted, [])
