@@ -954,12 +954,20 @@ after measuring which products have it, and keep everything deterministic.
   assessed (47 rows, sha256 of the sorted ids `873413ed…`). One added or withdrawn report and the universal clause
   returns by itself.
 - A newer release, by the My Installed Versions rule (`installedState`, UPDATE AVAILABLE only; ported, and pinned
-  to the shipped JavaScript over every corpus record in node): "A newer release is available: <product> <version>
-  (released <date>)", its own verdict as its page prints it or "AUXSAYS has no verdict for it yet.", and its
-  official notes link. Never a verdict assigned, never a fix matched to a report. Changelog headlines (Figma,
-  GitHub) get none. On PowerPoint only a newer build of the same version counts; the rule reads every other
-  product as one line, so Acrobat's Classic-track pages (20.x.30xxx, 31 Pro and 31 Reader) point to the newest
-  Continuous release. Windows 11 gets no note (`NEWER_NOTE_EXCLUDED_PRODUCTS`): `_data/patch_lifecycle.yml`
+  to the shipped JavaScript over every corpus record in node), worded so that newer never reads as safer (owner
+  order and GPT G85 ruling Q2, amendment A1). In order: "Newer release: <product> <version> (released <date>)."; a
+  caution before any link: "<vendor> has documented a known issue affecting this version. Review the official
+  release notes before upgrading." when the NEWER record declares one (G85's consumer contract:
+  `official_notes_known_issue: declared`, or `official_known_issues_present: true` from Windows Release Health;
+  <vendor> is its `update_source_name`), otherwise "Newer is not necessarily safer. Check its official release
+  notes, including any known issues, before upgrading."; its verdict exactly as the verdict projection prints it
+  on its page ("AUXSAYS verdict for this release: ...") or "AUXSAYS has not established an installation verdict for
+  this release."; "AUXSAYS has not matched its changes to the reports on this page." where the page has reports;
+  then links to its AUXSAYS page and its official notes. A row without a caution prints no note. Never
+  "available", "addresses", "fixes" or "resolves" (the guard refuses them); never a verdict assigned, never a fix
+  matched to a report. Changelog headlines (Figma, GitHub) get none. On PowerPoint only a newer build of the same
+  version counts; the rule reads every other product as one line, so Acrobat's Classic-track pages (20.x.30xxx,
+  31 Pro and 31 Reader) point to the newest Continuous release. Windows 11 gets no note (`NEWER_NOTE_EXCLUDED_PRODUCTS`): `_data/patch_lifecycle.yml`
   records that the general Windows "newer update available" links are not built and wait for the Microsoft KB
   source assessment and exact KB/build applicability checks, so Windows is excluded pending that assessment (an
   owner question, not done). Its evidence overview is unchanged.
@@ -1018,7 +1026,10 @@ column; the stored `consensus_report` prose (rendered nowhere) keeps its label s
 
 **Reopen only if** a deployed patch page prints an evidence-strength word; prints the reviewed OBS 33.0.1 finding
 while its counted population differs from the assessed one; prints a newer release that `installedState` would not
-name for that record, or a verdict for it that its own page does not print; prints vendor fix text with
+name for that record, or a verdict for it that its own page does not print; prints a newer-release note without
+its caution before the links, without the vendor's caution while the newer record declares a known issue, or with
+"available", "addresses", "fixes" or "resolves"; prints a newer-release note on a Windows 11 page while the KB
+applicability hold stands; prints vendor fix text with
 `PUBLICATION_PERMITTED_HOSTS` empty; prints an issue label for a product listed in `label_withheld_products`, or
 withholds one for a product not listed; a deploy passes QA with the projection missing, failed or stale; or
 `test_evidence_overview.py` reports anything but its governed count.

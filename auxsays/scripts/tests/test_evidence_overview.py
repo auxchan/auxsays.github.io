@@ -10,8 +10,12 @@ WHAT IS PINNED, and the mechanism each section protects:
       ONLY while the counted population is exactly the assessed one (self-invalidating).
   [N] the newer release: a port of My Installed Versions' installedState (UPDATE AVAILABLE only),
       run against the SHIPPED JavaScript over every record of the corpus so the two cannot part; the
-      newer release's verdict is its page's own, or "no verdict yet"; changelog headlines get none,
-      and so does Windows 11 (patch_lifecycle.yml's recorded KB applicability hold).
+      newer release's verdict is its page's own, or "not established"; changelog headlines get none,
+      and so does Windows 11 (patch_lifecycle.yml's recorded KB applicability hold). Newer is never
+      presented as safer (amendment A1): the vendor's known-issue caution when the NEWER record
+      declares one (G85's contract: official_notes_known_issue: declared, or Release Health's
+      official_known_issues_present: true), else "Newer is not necessarily safer"; never
+      "available", "addresses", "fixes" or "resolves".
   [V] vendor fix lines: a complete mechanism, switched OFF because no source's publication permission
       is on record; forced on in memory it extracts and attributes, and the guard refuses unpermitted text.
   [G] the public-text guard: no stored report title or excerpt, no author field, no acceptance or
@@ -405,14 +409,53 @@ def run() -> int:  # noqa: PLR0915
     check("N8 a changelog headline is not a version: no newer-release note", hp == {}, hp)
     npg = project_one(recs_obs, {})
     first = npg.get(verdict_projection.page_key(recs_obs[0]), {}).get("newer") or {}
-    check("N9 the newer release with no verdict says so, and links its page and official notes",
-          first.get("verdict_line") == "AUXSAYS has no verdict for it yet." and first.get("url") == recs_obs[2]["permalink"]
+    # The approved sentences are pinned as literals (A1; GPT G85 ruling Q2), never read from the constants.
+    check("N9 the newer release with no verdict says AUXSAYS has not established one, and links its page and "
+          "official notes",
+          first.get("verdict_line") == "AUXSAYS has not established an installation verdict for this release."
+          and first.get("url") == recs_obs[2]["permalink"]
           and first.get("notes_url") == "https://vendor.test/notes" and first.get("identity") == "Tool 1.0.2", first)
     vrow = {verdict_projection.page_key(recs_obs[2]): {"verdict": "WAIT", "scope": "if you use the test dock",
                                                          "body": "Users report a crash.", "reasons": ["x"]}}
     wv = project_one(recs_obs, {}, vrow)[verdict_projection.page_key(recs_obs[0])]["newer"]
-    check("N9b a newer release WITH a verdict states exactly the verdict its own page prints",
-          wv["verdict_line"] == "AUXSAYS verdict for it: WAIT if you use the test dock.", wv["verdict_line"])
+    svrow = {verdict_projection.page_key(recs_obs[2]): {"verdict": "SECURITY UPDATE", "scope": "",
+                                                          "body": "Security update.", "reasons": []}}
+    sv = project_one(recs_obs, {}, svrow)[verdict_projection.page_key(recs_obs[0])]["newer"]
+    check("N9b the verdict sentence follows the verdict projection: a newer release WITH a printed verdict states "
+          "exactly that verdict (never a hard-coded 'no verdict')",
+          wv["verdict_line"] == "AUXSAYS verdict for this release: WAIT if you use the test dock."
+          and sv["verdict_line"] == "AUXSAYS verdict for this release: SECURITY UPDATE.", (wv["verdict_line"], sv))
+    key0 = verdict_projection.page_key(recs_obs[0])
+    declared = recs_obs[:2] + [dict(recs_obs[2], official_notes_known_issue="declared")]
+    nd = project_one(declared, {})
+    unnamed = recs_obs[:2] + [dict(recs_obs[2], official_notes_known_issue="declared", update_source_name="")]
+    nu = project_one(unnamed, {})[key0]["newer"]
+    check("N13 the NEWER record declares a known issue in its release notes (official_notes_known_issue: declared): "
+          "the vendor's caution, on every page that points to it",
+          nd[key0]["newer"]["caution"] == "Vendor has documented a known issue affecting this version. Review the "
+                                          "official release notes before upgrading."
+          and nd[key0]["newer"]["known_issue"] is True
+          and nd[verdict_projection.page_key(recs_obs[1])]["newer"]["known_issue"] is True
+          and nu["caution"] == "The vendor has documented a known issue affecting this version. Review the official "
+                               "release notes before upgrading.", (nd.get(key0), nu))
+    not_safer = ("Newer is not necessarily safer. Check its official release notes, including any known issues, "
+                 "before upgrading.")
+    plain = first
+    others = [project_one(recs_obs[:2] + [dict(recs_obs[2], official_notes_known_issue=v)], {})[key0]["newer"]
+              for v in ("not_declared", "unknown", "Declared", True, "")]
+    reader_only = project_one([dict(recs_obs[0], official_notes_known_issue="declared")] + recs_obs[1:], {})[key0]["newer"]
+    check("N14 with the field removed (or any other value, or set only on the reader's own page) the caution is "
+          "gone and the note says newer is not necessarily safer",
+          plain.get("caution") == not_safer and plain.get("known_issue") is False
+          and all(o["caution"] == not_safer and o["known_issue"] is False for o in others)
+          and reader_only["caution"] == not_safer, (plain, [o["caution"] for o in others], reader_only["caution"]))
+    rh = project_one(recs_obs[:2] + [dict(recs_obs[2], official_known_issues_present=True)], {})[key0]["newer"]
+    rh_false = project_one(recs_obs[:2] + [dict(recs_obs[2], official_known_issues_present=False)], {})[key0]["newer"]
+    check("N15 Release Health's official_known_issues_present: true on the NEWER record gives the vendor's caution "
+          "(a synthetic non-Windows record, since Windows 11 gets no note); false gives none",
+          rh["caution"] == "Vendor has documented a known issue affecting this version. Review the official release "
+                           "notes before upgrading." and rh["known_issue"] is True
+          and rh_false["caution"] == not_safer and rh_false["known_issue"] is False, (rh, rh_false))
     reports_here = project_one([rec("1.0.0", n_reports=2)] + recs_obs[1:], {ident(recs_obs[0]): [row(1), row(2)]})
     check("N10 'not matched to these reports' appears only on a page that has reports",
           (reports_here[verdict_projection.page_key(recs_obs[0])]["newer"]["match_note"]
@@ -455,6 +498,16 @@ def run() -> int:  # noqa: PLR0915
           and bool(real_win) and not any("newer" in real_newer[k] for k in real_win)
           and any(k.startswith("microsoft-powerpoint|") and "newer" in rw for k, rw in real_newer.items()),
           (sorted(win_excl), [k for k in real_win if "newer" in real_newer[k]][:3]))
+    banned = re.compile(r"\b(available|addresses|fixes|resolves)\b", re.I)
+    notes_here = [rw["newer"] for rw in real_newer.values() if "newer" in rw]
+    notes_here += [first, wv, sv, nd[key0]["newer"], nu, rh,
+                   reports_here[verdict_projection.page_key(recs_obs[0])]["newer"]]
+    said = [f"{n.get('identity')}: {m.group(0)}" for n in notes_here
+            for k in ("caution", "verdict_line", "match_note", "fix_source") for m in [banned.search(str(n.get(k) or ""))]
+            if m]
+    check(f"N16 no newer-release note says 'available', 'addresses', 'fixes' or 'resolves' ({len(notes_here)} notes: "
+          f"this tree's and the fixtures'), and every one carries a caution",
+          not said and len(notes_here) > 100 and all(str(n.get("caution") or "") for n in notes_here), said[:5])
 
     # ------------------------------------------------------------------ [V]
     section("[V] vendor fix lines: complete, and switched off")
@@ -505,6 +558,18 @@ def run() -> int:  # noqa: PLR0915
           bool(eo.public_text_problems({"count_line": "Not enough reports yet."}, [])))
     check("G5 a newer-release verdict line in any other shape is caught",
           bool(eo.public_text_problems({"newer": {"verdict_line": "Safe to install."}}, [])))
+    ok_note = {"verdict_line": eo.NO_VERDICT_YET, "known_issue": False, "caution": eo.NEWER_NOT_SAFER, "match_note": ""}
+    decl_note = dict(ok_note, known_issue=True, caution="Vendor" + eo.KNOWN_ISSUE_CAUTION)
+    check("G5b the guard refuses a newer-release note whose caution is missing, reassuring, or not the one its "
+          "known-issue flag names, or that says 'available'/'addresses'/'fixes'/'resolves'",
+          not eo.public_text_problems({"newer": ok_note}, []) and not eo.public_text_problems({"newer": decl_note}, [])
+          and bool(eo.public_text_problems({"newer": dict(ok_note, caution="")}, []))
+          and bool(eo.public_text_problems({"newer": dict(ok_note, caution="Safe to upgrade.")}, []))
+          and bool(eo.public_text_problems({"newer": dict(ok_note, known_issue=True)}, []))
+          and bool(eo.public_text_problems({"newer": dict(decl_note, known_issue=False)}, []))
+          and bool(eo.public_text_problems({"newer": dict(ok_note, match_note="Its changes address the reports; "
+                                                                               "it resolves them.")}, []))
+          and bool(eo.public_text_problems({"newer": dict(ok_note, fix_source="the fixes available")}, [])))
     shapes = all(re.fullmatch(r"\d+ accepted patch-specific reports?\.( .+\.)?", rw.get("count_line", "x"))
                  for rw in real["pages"].values() if "count_line" in rw)
     clauses = {rw["count_line"].split(". ", 1)[1] for rw in real["pages"].values()
@@ -638,12 +703,18 @@ def run() -> int:  # noqa: PLR0915
               "sources_line": "Sources: 2 GitHub issues & 1 forum thread.", "limitation": eo.LIMITATION,
               "assessment": "", "newer": {"identity": "Tool 1.0.2", "url": "/updates/v/tool/1.0.2/",
                                            "published_at": "2026-10-20T00:00:00Z", "notes_url": "https://vendor.test/n",
+                                           "known_issue": False, "caution": eo.NEWER_NOT_SAFER,
                                            "verdict_line": eo.NO_VERDICT_YET, "match_note": eo.NOT_MATCHED,
                                            "fix_lines": [], "fix_source": ""}}
     site_with = {"data": {"evidence_overview_projection": {"schema_version": 1, "pages": {"tool|1.0.0|": row_ok}}}}
     with_fix = copy.deepcopy(site_with)
     with_fix["data"]["evidence_overview_projection"]["pages"]["tool|1.0.0|"]["newer"].update(
         {"fix_lines": ["Fixed a crash."], "fix_source": "Vendor's release notes"})
+    site_decl = copy.deepcopy(site_with)
+    site_decl["data"]["evidence_overview_projection"]["pages"]["tool|1.0.0|"]["newer"].update(
+        {"known_issue": True, "caution": "OBS Project" + eo.KNOWN_ISSUE_CAUTION})
+    site_nocaution = copy.deepcopy(site_with)
+    site_nocaution["data"]["evidence_overview_projection"]["pages"]["tool|1.0.0|"]["newer"]["caution"] = ""
     ov = "{% include patch-evidence-overview.html part='overview' record=page %}"
     nw = "{% include patch-evidence-overview.html part='newer' record=page %}"
     # The reviewed page itself, with a row carrying the universal clause: the include must print the row's
@@ -659,6 +730,8 @@ def run() -> int:  # noqa: PLR0915
         "nw": {"template": nw, "site": site_with, "page": page_rec},
         "nw_none": {"template": nw, "site": {"data": {"evidence_overview_projection": {"pages": {}}}}, "page": page_rec},
         "nw_fix": {"template": nw, "site": with_fix, "page": page_rec},
+        "nw_decl": {"template": nw, "site": site_decl, "page": page_rec},
+        "nw_nocaution": {"template": nw, "site": site_nocaution, "page": page_rec},
     }
     out = render_cases(cases) or {}
     check("T0 the liquid gem renders the shipped include", bool(out) and "__error__" not in out
@@ -673,13 +746,36 @@ def run() -> int:  # noqa: PLR0915
     check("T2 FAIL CLOSED: no projection, no row -> the include prints nothing at all, not even whitespace",
           out.get("ov_none", "x") == "" and out.get("nw_none", "x") == "",
           (out.get("ov_none"), out.get("nw_none")))
-    nwt = visible(out.get("nw", ""))
-    check("T3 the newer-release note names and links the release, its date, its verdict line and its notes",
-          "A newer release is available: Tool 1.0.2 (released Oct 20, 2026). " + eo.NO_VERDICT_YET in nwt
-          and eo.NOT_MATCHED in nwt and 'href="/updates/v/tool/1.0.2/"' in out.get("nw", "")
-          and 'href="https://vendor.test/n"' in out.get("nw", "") and "Fixed" not in nwt, out.get("nw", "")[:500])
+    nw_html, decl_html = out.get("nw", ""), out.get("nw_decl", "")
+    # visible() turns every tag into a space; a full stop right after a link closes up again here
+    nwt, declt = re.sub(r"\s+\.", ".", visible(nw_html)), re.sub(r"\s+\.", ".", visible(decl_html))
+
+    def before_links(html, text):
+        at, link = html.find(text), html.find("<a ")
+        return -1 < at and (link == -1 or at < link)
+    check("T3 the newer-release note, in order: the release and its date, the caution BEFORE any link, the verdict "
+          "sentence and the not-matched note, then the links to its AUXSAYS page and its official notes; it never "
+          "says 'available', 'addresses', 'fixes' or 'resolves'",
+          nwt == ("Newer release: Tool 1.0.2 (released Oct 20, 2026). Newer is not necessarily safer. Check its "
+                  "official release notes, including any known issues, before upgrading. AUXSAYS has not "
+                  "established an installation verdict for this release. AUXSAYS has not matched its changes to "
+                  "the reports on this page. See its AUXSAYS page and its official release notes.")
+          and before_links(nw_html, "Newer is not necessarily safer.")
+          and 'href="/updates/v/tool/1.0.2/"' in nw_html and 'href="https://vendor.test/n"' in nw_html
+          and not re.search(r"\b(available|addresses|fixes|resolves)\b", nwt + " " + declt, re.I)
+          and "update-newer-release__caution--declared" not in nw_html, nw_html[:700])
+    check("T3b a newer release whose vendor documented a known issue: the vendor's caution, emphasised, BEFORE any "
+          "link or verdict sentence",
+          declt.startswith("Newer release: Tool 1.0.2 (released Oct 20, 2026). OBS Project has documented a known "
+                           "issue affecting this version. Review the official release notes before upgrading. "
+                           "AUXSAYS has not established an installation verdict for this release.")
+          and before_links(decl_html, "OBS Project has documented a known issue")
+          and 'class="update-newer-release__caution update-newer-release__caution--declared"' in decl_html,
+          decl_html[:700])
+    check("T3c FAIL CLOSED: a row with no caution prints no newer-release note at all",
+          out.get("nw_nocaution", "x") == "", out.get("nw_nocaution"))
     check("T4 fix lines, when a row carries them, print attributed under the note (the mechanism exists)",
-          "Fixes listed first in Vendor's release notes:" in visible(out.get("nw_fix", "")).replace("&#39;", "'")
+          "Listed first in Vendor's release notes:" in visible(out.get("nw_fix", "")).replace("&#39;", "'")
           and "<li>Fixed a crash.</li>" in out.get("nw_fix", ""), out.get("nw_fix", "")[:500])
     lay = layout_body()
     emitting = re.sub(r"\{%-?\s*comment\s*-?%\}.*?\{%-?\s*endcomment\s*-?%\}", "", lay, flags=re.S)

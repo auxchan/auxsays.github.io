@@ -4438,6 +4438,12 @@ html.js-reveal .reveal-up.is-visible { opacity:1; transform:none; }
   line-height: 1.5;
 }
 
+/* AUX-123 A1: a vendor-documented known issue in the newer-release note, printed before any link. */
+.update-evidence-freshness-notice .update-newer-release__caution--declared {
+  color: var(--text-0);
+  font-weight: 700;
+}
+
 /* The official statement an AVOID rests on, linked under the verdict line (G66). */
 .update-decision-source {
   margin: .35rem 0 0;
