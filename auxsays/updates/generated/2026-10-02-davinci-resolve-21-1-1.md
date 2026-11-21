@@ -19,7 +19,7 @@ update_published_at: '2026-10-02T00:00:00Z'
 update_last_checked: '2026-10-02T01:12:47Z'
 source_last_checked: '2026-11-05T09:02:46Z'
 official_body_last_checked: '2026-11-05T09:02:46Z'
-record_last_updated: '2026-11-05T08:04:13.433943Z'
+record_last_updated: '2026-11-21T21:14:16.836108Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
@@ -30,14 +30,16 @@ update_consensus_label: Negative
 update_report_count: 4
 update_consensus_confidence: Low
 quick_verdict: 'INSUFFICIENT DATA: DaVinci Resolve 21.1.1 has 4 user reports found.'
-official_summary: Blackmagic Design lists DaVinci Resolve Studio 21.1.1 Update in its official support downloads feed.
-release_summary: This software update improves trim editor support for audio clips and multiple edit points, adds USAC support
-  for Windows 11 computers and provides control over clips with multiple Fusion effects. This update also improves connection
-  stability in multi-user projects and provides general performance and stability improvements. This version requires a DaVinci
-  Resolve Studio license dongle, Blackmagic Cloud license or software activation code.
-consensus_report: '4 user reports found for DaVinci Resolve 21.1.1. Current reports mention startup or application crashes
-  and render/export failures. Current reports are Reddit-heavy, so production users should test before updating. Sources represented:
-  r/davinciresolve.'
+official_summary: Blackmagic Design lists DaVinci Resolve Studio 21.1.1 Update in its official support downloads
+  feed.
+release_summary: This software update improves trim editor support for audio clips and multiple edit points, adds
+  USAC support for Windows 11 computers and provides control over clips with multiple Fusion effects. This update
+  also improves connection stability in multi-user projects and provides general performance and stability improvements.
+  This version requires a DaVinci Resolve Studio license dongle, Blackmagic Cloud license or software activation
+  code.
+consensus_report: '4 user reports found for DaVinci Resolve 21.1.1. Current reports mention startup or application
+  crashes and render/export failures. Current reports are Reddit-heavy, so production users should test before updating.
+  Sources represented: r/davinciresolve.'
 evidence_state: pilot_sample
 evidence_state_label: Verified reports
 intelligence_stage: pilot
@@ -80,8 +82,8 @@ official_patch_notes_source_url: https://www.blackmagicdesign.com/support/family
 official_note_status: official_source_captured
 official_note_label: Official download portal entry
 official_source_type: download_portal
-official_source_classification_note: Blackmagic's support downloads API is treated as an official download-portal source.
-  It confirms version availability and summary text; community evidence remains separate.
+official_source_classification_note: Blackmagic's support downloads API is treated as an official download-portal
+  source. It confirms version availability and summary text; community evidence remains separate.
 official_sources:
 - label: Blackmagic support downloads
   url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
@@ -128,10 +130,10 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   Platforms listed: Mac OS X, Windows, Linux, Windows ARM
 
 
-  This software update improves trim editor support for audio clips and multiple edit points, adds USAC support for Windows
-  11 computers and provides control over clips with multiple Fusion effects. This update also improves connection stability
-  in multi-user projects and provides general performance and stability improvements. This version requires a DaVinci Resolve
-  Studio license dongle, Blackmagic Cloud license or software activation code.
+  This software update improves trim editor support for audio clips and multiple edit points, adds USAC support
+  for Windows 11 computers and provides control over clips with multiple Fusion effects. This update also improves
+  connection stability in multi-user projects and provides general performance and stability improvements. This
+  version requires a DaVinci Resolve Studio license dongle, Blackmagic Cloud license or software activation code.
 
 
   Official support page: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
@@ -218,7 +220,6 @@ accepted_report_sources:
   workflow_area: render/export
 evidence_source_limitations:
 - Current reports are Reddit-heavy, so production users should test before updating.
-- Some community sources were unavailable during the last check; unavailable sources were not counted as reports.
 update_decision_label: INSUFFICIENT DATA
 update_decision_body: 'No verdict yet: 4 user reports are matched to this exact update, but no problem in them is
   confirmed as reported independently by two or more users. If one matches your setup, test before relying on this

@@ -19,7 +19,7 @@ update_published_at: '2019-08-09T00:00:00Z'
 update_last_checked: '2026-08-04T13:06:52Z'
 source_last_checked: '2026-08-04T13:06:52Z'
 official_body_last_checked: '2026-08-04T13:06:52Z'
-record_last_updated: '2026-11-05T08:03:37.858619Z'
+record_last_updated: '2026-11-21T21:13:11.112366Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
@@ -160,7 +160,6 @@ accepted_report_sources:
   workflow_area: render/export
 evidence_source_limitations:
 - Too few reports for a firm verdict yet.
-- Some community sources were unavailable during the last check; unavailable sources were not counted as reports.
 update_decision_label: INSUFFICIENT DATA
 update_decision_body: 'No verdict yet: 2 user reports are matched to this exact update, but no problem in them is
   confirmed as reported independently by two or more users. If one matches your setup, test before relying on this

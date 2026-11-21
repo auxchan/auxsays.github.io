@@ -17,9 +17,9 @@ update_version: '621.14'
 update_logo_text: GRD
 update_published_at: '2026-11-04T00:00:00Z'
 update_last_checked: '2026-11-19T10:05:12Z'
-source_last_checked: '2026-11-21T09:48:44Z'
-official_body_last_checked: '2026-11-21T09:48:44Z'
-record_last_updated: '2026-11-19T22:14:37.902319Z'
+source_last_checked: '2026-11-21T22:21:34Z'
+official_body_last_checked: '2026-11-21T22:21:34Z'
+record_last_updated: '2026-11-21T21:17:45.273216Z'
 patch_file_size: 1.04 GB
 patch_file_size_note: Installer size as NVIDIA lists it for the Windows desktop DCH package.
 patch_file_size_status: captured
@@ -27,21 +27,21 @@ update_status: current
 update_feed_title: GeForce Game Ready Driver 621.14
 update_detail_title: GeForce Game Ready Driver 621.14
 update_consensus_label: Negative
-update_report_count: 7
-update_consensus_confidence: Low
+update_report_count: 8
+update_consensus_confidence: Low-Medium
 quick_verdict: GeForce Game Ready Driver 621.14 has an official AUXSAYS record. Confirmed patch-specific consensus is deferred
   until the consensus refresh pipeline is active.
 official_summary: NVIDIA published GeForce Game Ready Driver 621.14 on 2026-11-04.
 release_summary: NVIDIA lists GeForce Game Ready Driver 621.14 (branch R620) for Windows desktop, released 2026-11-04.
-consensus_report: '7 user reports found for GeForce Game Ready Driver 621.14. Current reports mention crash or driver reset,
-  black screen or display loss, and flicker or wrong colors. Small sample size; production users should test before updating.
+consensus_report: '8 user reports found for GeForce Game Ready Driver 621.14. Current reports mention crash or driver reset,
+  flicker or wrong colors, and black screen or display loss. This is a surfaced user-report sample, not a live telemetry feed.
   Sources represented: NVIDIA GeForce forum (user reports).'
 evidence_state: pilot_sample
 evidence_state_label: Verified reports
 intelligence_stage: pilot
 official_source_captured: true
-confirmed_patch_specific_report_count: 7
-evidence_last_checked: '2026-11-19T21:43:09Z'
+confirmed_patch_specific_report_count: 8
+evidence_last_checked: '2026-11-21T20:35:34Z'
 known_issues_present: null
 consensus_collection_status: pilot_initial_sample
 consensus_match_policy: confirmed_patch_specific_reports_v1
@@ -60,6 +60,9 @@ status_events:
 - at: '2026-11-19T22:14:37.902319Z'
   label: User reports found
   note: User report count updated to 7.
+- at: '2026-11-21T21:17:45.273216Z'
+  label: User reports found
+  note: User report count updated to 8.
 official_patch_notes_source_type: download_portal
 primary_official_source: https://www.nvidia.com/en-us/geforce/drivers/
 fallback_official_sources: []
@@ -82,11 +85,6 @@ official_sources:
   trust_level: official
   extraction_status: linked_not_captured
 official_source_attempts:
-- at: '2026-11-19T10:05:12Z'
-  url: https://www.nvidia.com/en-us/drivers/details/283968/
-  status: captured-from-official-nvidia-driver-listing
-  body_captured: true
-  checksums_captured: false
 - at: '2026-11-19T23:17:53Z'
   url: https://www.nvidia.com/en-us/drivers/details/283968/
   status: captured-from-official-nvidia-driver-listing
@@ -103,6 +101,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-11-21T09:48:44Z'
+  url: https://www.nvidia.com/en-us/drivers/details/283968/
+  status: captured-from-official-nvidia-driver-listing
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-21T22:21:34Z'
   url: https://www.nvidia.com/en-us/drivers/details/283968/
   status: captured-from-official-nvidia-driver-listing
   body_captured: true
@@ -149,7 +152,7 @@ release_date_precision: day
 source_origin: NVIDIA official
 collection_method: public driver-lookup endpoint
 collection_authorization: owner risk acceptance; NVIDIA permission not established
-update_consensus_summary: 'INSUFFICIENT DATA: GeForce Game Ready Driver 621.14. 7 user reports are matched to this exact update,
+update_consensus_summary: 'INSUFFICIENT DATA: GeForce Game Ready Driver 621.14. 8 user reports are matched to this exact update,
   but no problem in them is confirmed as reported independently by two or more users. If one matches your setup, test before
   relying on this update.'
 evidence_samples:
@@ -162,14 +165,6 @@ evidence_samples:
   issue: crash or driver reset in system stability
   outcome: high
 - source_name: NVIDIA GeForce forum (user reports)
-  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633489
-  source_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
-  counted: true
-  version_matched: '621.14'
-  patch_version_matched: true
-  issue: black screen or display loss in display output
-  outcome: high
-- source_name: NVIDIA GeForce forum (user reports)
   source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633448
   source_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
   counted: true
@@ -177,6 +172,14 @@ evidence_samples:
   patch_version_matched: true
   issue: flicker or wrong colors in rendering
   outcome: medium
+- source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633489
+  source_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  counted: true
+  version_matched: '621.14'
+  patch_version_matched: true
+  issue: black screen or display loss in display output
+  outcome: high
 - source_name: NVIDIA GeForce forum (user reports)
   source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633066
   source_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
@@ -258,6 +261,15 @@ accepted_report_sources:
   patch_version_matched: true
   issue: general workflow reports
   workflow_area: ''
+- source_name: NVIDIA GeForce forum (user reports)
+  source_type: nvidia forum comment
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3633593
+  source_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  source_date: '2026-11-12'
+  version_matched: '621.14'
+  patch_version_matched: true
+  issue: flicker or wrong colors in rendering
+  workflow_area: rendering
 evidence_source_limitations:
-- Small sample size; production users should test before updating.
+- This is a surfaced user-report sample, not a live telemetry feed.
 ---

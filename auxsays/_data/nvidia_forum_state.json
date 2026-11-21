@@ -1,8 +1,8 @@
 {
   "last_cycle": {
-    "at": "2026-11-20T21:28:40Z",
+    "at": "2026-11-21T20:34:50Z",
     "outcome": "ok",
-    "requests": 16
+    "requests": 12
   },
   "provenance": {
     "collection_authorization": "owner risk acceptance; NVIDIA permission not established",
@@ -11,10 +11,65 @@
   },
   "schema_version": 1,
   "seeds_read": [
-    592433
+    592433,
+    592767
   ],
   "source": "nvidia_geforce_forum",
   "threads": {
+    "586563": {
+      "community_id": 39,
+      "community_slug": "studio-drivers",
+      "created": 1779883452,
+      "deferred": {
+        "first_deferred_at": "2026-11-21T20:34:50Z",
+        "queued_at": "2026-11-21T20:34:50Z",
+        "reason": "thread_cap",
+        "times_deferred": 1
+      },
+      "last_activity": null,
+      "staff": false,
+      "title": "latest 610.47 Studio driver.",
+      "title_versions": [
+        "610.47"
+      ],
+      "window": []
+    },
+    "588913": {
+      "community_id": 39,
+      "community_slug": "studio-drivers",
+      "created": 1785317555,
+      "deferred": {
+        "first_deferred_at": "2026-11-21T20:34:50Z",
+        "queued_at": "2026-11-21T20:34:50Z",
+        "reason": "thread_cap",
+        "times_deferred": 1
+      },
+      "last_activity": null,
+      "staff": false,
+      "title": "BSOD 0x7F double-fault — kernel-stack overflow from unbounded recursion in nvlddmkm.sys (610.62) on",
+      "title_versions": [
+        "610.62"
+      ],
+      "window": []
+    },
+    "590188": {
+      "community_id": 39,
+      "community_slug": "studio-drivers",
+      "created": 1788183673,
+      "deferred": {
+        "first_deferred_at": "2026-11-21T20:34:50Z",
+        "queued_at": "2026-11-21T20:34:50Z",
+        "reason": "thread_cap",
+        "times_deferred": 1
+      },
+      "last_activity": null,
+      "staff": false,
+      "title": "RTX 50-series + HAGS + Remote Desktop = black screen, dxgkrnl 0x193 LiveKernelEvent (driver 616.56)",
+      "title_versions": [
+        "616.56"
+      ],
+      "window": []
+    },
     "590373": {
       "community_id": 13,
       "community_slug": "game-ready-drivers",
@@ -135,6 +190,42 @@
           1789761076
         ]
       ]
+    },
+    "590622": {
+      "community_id": 39,
+      "community_slug": "studio-drivers",
+      "created": 1789060987,
+      "deferred": {
+        "first_deferred_at": "2026-11-21T20:34:50Z",
+        "queued_at": "2026-11-21T20:34:50Z",
+        "reason": "thread_cap",
+        "times_deferred": 1
+      },
+      "last_activity": null,
+      "staff": false,
+      "title": "Studio Driver 616.92 Broke DP Output on my 4060",
+      "title_versions": [
+        "616.92"
+      ],
+      "window": []
+    },
+    "590759": {
+      "community_id": 39,
+      "community_slug": "studio-drivers",
+      "created": 1789403037,
+      "deferred": {
+        "first_deferred_at": "2026-11-21T20:34:50Z",
+        "queued_at": "2026-11-21T20:34:50Z",
+        "reason": "thread_cap",
+        "times_deferred": 1
+      },
+      "last_activity": null,
+      "staff": false,
+      "title": "DisplayPort No Signal / Black Screen after Sleep Mode (NVIDIA Driver 616.92)",
+      "title_versions": [
+        "616.92"
+      ],
+      "window": []
     },
     "591981": {
       "community_id": 13,
@@ -261,21 +352,24 @@
       "community_id": 13,
       "community_slug": "game-ready-drivers",
       "coverage": [
-        "older_comments_outside_window",
-        "replies_not_embedded"
+        "older_comments_outside_window"
       ],
       "created": 1793800802,
       "first_read_at": "2026-11-19T21:42:45Z",
       "gap_reasons": [],
-      "last_activity": 1795178872,
-      "last_read_at": "2026-11-20T21:29:17Z",
+      "last_activity": 1795290493,
+      "last_read_at": "2026-11-21T20:35:26Z",
       "staff": true,
       "title": "GeForce GRD 621.14 Feedback Thread (Released 11/4/26)",
       "title_versions": [
         "621.14"
       ],
-      "total_rows": 98,
+      "total_rows": 99,
       "window": [
+        [
+          3635059,
+          1795290493
+        ],
         [
           3634833,
           1795178872
@@ -371,10 +465,56 @@
         [
           3633066,
           1794154118
+        ]
+      ]
+    },
+    "592581": {
+      "community_id": 13,
+      "community_slug": "game-ready-drivers",
+      "coverage": [],
+      "created": 1793807775,
+      "first_read_at": "2026-11-21T20:35:34Z",
+      "gap_reasons": [],
+      "last_activity": 1795265450,
+      "last_read_at": "2026-11-21T20:35:34Z",
+      "staff": false,
+      "title": "621.14 not showing WoW: Forever",
+      "title_versions": [
+        "621.14"
+      ],
+      "total_rows": 8,
+      "window": [
+        [
+          3633544,
+          1794500034
         ],
         [
-          3633062,
-          1794153267
+          3633069,
+          1794154719
+        ],
+        [
+          3633021,
+          1794125835
+        ],
+        [
+          3632894,
+          1793985929
+        ],
+        [
+          3632863,
+          1793969191
+        ],
+        [
+          3632792,
+          1793924667
+        ],
+        [
+          3632788,
+          1793918065
+        ],
+        [
+          3632541,
+          1793814949
         ]
       ]
     },
@@ -387,115 +527,117 @@
       ],
       "created": 1794493802,
       "first_read_at": "2026-11-19T21:42:37Z",
-      "gap_reasons": [],
-      "last_activity": 1795204577,
-      "last_read_at": "2026-11-20T21:29:09Z",
+      "gap_reasons": [
+        "no_overlap_and_previous_newest_gone"
+      ],
+      "last_activity": 1795266283,
+      "last_read_at": "2026-11-21T20:35:18Z",
       "staff": true,
       "title": "GeForce GRD 621.24 Feedback Thread (Released 11/12/26)",
       "title_versions": [
         "621.24"
       ],
-      "total_rows": 93,
+      "total_rows": 98,
       "window": [
         [
-          3634862,
-          1795193127
+          3633676,
+          1794557420
         ],
         [
-          3634850,
-          1795188237
+          3633675,
+          1794555912
         ],
         [
-          3634849,
-          1795187815
+          3633670,
+          1794554781
         ],
         [
-          3634848,
-          1795187740
+          3633654,
+          1794544410
         ],
         [
-          3634841,
-          1795186753
+          3633646,
+          1794534543
         ],
         [
-          3634838,
-          1795180741
+          3633626,
+          1794527663
         ],
         [
-          3634835,
-          1795180051
+          3633619,
+          1794525940
         ],
         [
-          3634834,
-          1795178992
+          3633617,
+          1794525139
         ],
         [
-          3634822,
-          1795171904
+          3633593,
+          1794518941
         ],
         [
-          3634799,
-          1795161183
+          3633591,
+          1794516946
         ],
         [
-          3634767,
-          1795132584
+          3633590,
+          1794516388
         ],
         [
-          3634731,
-          1795100264
+          3633589,
+          1794516130
         ],
         [
-          3634718,
-          1795091808
+          3633586,
+          1794514870
         ],
         [
-          3634701,
-          1795081975
+          3633578,
+          1794511618
         ],
         [
-          3634689,
-          1795077228
+          3633576,
+          1794510658
         ],
         [
-          3634683,
-          1795068913
+          3633573,
+          1794509769
         ],
         [
-          3634662,
-          1795053302
+          3633566,
+          1794507090
         ],
         [
-          3634646,
-          1795047492
+          3633563,
+          1794506727
         ],
         [
-          3634633,
-          1795040707
+          3633551,
+          1794501569
         ],
         [
-          3634627,
-          1795039337
+          3633548,
+          1794500914
         ],
         [
-          3634606,
-          1795033174
+          3633542,
+          1794499740
         ],
         [
-          3634585,
-          1795022896
+          3633533,
+          1794494870
         ],
         [
-          3634580,
-          1795019833
+          3633531,
+          1794494419
         ],
         [
-          3634576,
-          1795019132
+          3633529,
+          1794494072
         ],
         [
-          3634572,
-          1795016611
+          3633429,
+          1794424252
         ]
       ]
     },
@@ -506,6 +648,12 @@
         "replies_not_embedded"
       ],
       "created": 1794605793,
+      "deferred": {
+        "first_deferred_at": "2026-11-21T20:34:50Z",
+        "queued_at": "2026-11-21T20:34:50Z",
+        "reason": "thread_cap",
+        "times_deferred": 1
+      },
       "first_read_at": "2026-11-19T21:42:53Z",
       "gap_reasons": [],
       "last_activity": 1795198499,
@@ -628,6 +776,24 @@
         "621.24"
       ],
       "total_rows": 0,
+      "window": []
+    },
+    "593198": {
+      "community_id": 13,
+      "community_slug": "game-ready-drivers",
+      "created": 1795265025,
+      "deferred": {
+        "first_deferred_at": "2026-11-21T20:34:50Z",
+        "queued_at": "2026-11-21T20:34:50Z",
+        "reason": "thread_cap",
+        "times_deferred": 1
+      },
+      "last_activity": null,
+      "staff": false,
+      "title": "Frame Generation Tearing in 600 series Drivers but fixed in 596.36. Also another thing I found.",
+      "title_versions": [
+        "596.36"
+      ],
       "window": []
     }
   }

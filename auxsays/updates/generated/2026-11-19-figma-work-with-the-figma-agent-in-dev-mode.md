@@ -17,8 +17,8 @@ update_version: Work with the Figma agent in dev mode
 update_logo_text: FIG
 update_published_at: '2026-11-19T00:00:00.000Z'
 update_last_checked: '2026-11-19T23:17:43Z'
-source_last_checked: '2026-11-21T09:48:41Z'
-official_body_last_checked: '2026-11-21T09:48:41Z'
+source_last_checked: '2026-11-21T22:21:31Z'
+official_body_last_checked: '2026-11-21T22:21:31Z'
 record_last_updated: '2026-11-19T23:17:43Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -85,6 +85,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-11-21T09:48:41Z'
+  url: https://www.figma.com/release-notes/?title=work-with-the-figma-agent-in-dev-mode
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-21T22:21:31Z'
   url: https://www.figma.com/release-notes/?title=work-with-the-figma-agent-in-dev-mode
   status: captured-from-rss-feed
   body_captured: true

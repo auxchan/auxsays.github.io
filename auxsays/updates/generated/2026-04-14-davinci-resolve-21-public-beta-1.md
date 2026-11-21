@@ -162,16 +162,11 @@ legacy_manual_report_count_note: Previous 7-report value appears to be a pre-evi
 known_issues_present: true
 official_checksums_body: ''
 intelligence_stage: pilot
-source_last_checked: '2026-11-21T09:50:53Z'
-official_body_last_checked: '2026-11-21T09:50:53Z'
+source_last_checked: '2026-11-21T22:23:16Z'
+official_body_last_checked: '2026-11-21T22:23:16Z'
 primary_official_source: https://www.blackmagicdesign.com/media/release/20260414-01
 fallback_official_sources: []
 official_source_attempts:
-- at: '2026-11-19T10:07:10Z'
-  url: https://www.blackmagicdesign.com/media/release/20260414-01
-  status: official-source-parser-failed
-  body_captured: false
-  checksums_captured: false
 - at: '2026-11-19T23:19:30Z'
   url: https://www.blackmagicdesign.com/media/release/20260414-01
   status: official-source-parser-failed
@@ -192,8 +187,13 @@ official_source_attempts:
   status: official-source-parser-failed
   body_captured: false
   checksums_captured: false
+- at: '2026-11-21T22:23:16Z'
+  url: https://www.blackmagicdesign.com/media/release/20260414-01
+  status: official-source-parser-failed
+  body_captured: false
+  checksums_captured: false
 evidence_last_checked: '2026-06-14T06:05:56Z'
-record_last_updated: '2026-11-05T08:04:04.063122Z'
+record_last_updated: '2026-11-21T21:13:59.870773Z'
 evidence_samples:
 - source_name: Blackmagic Design Community Forum
   source_url: https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235117
@@ -376,5 +376,4 @@ accepted_report_sources:
   workflow_area: application stability
 evidence_source_limitations:
 - Current reports are Reddit-heavy, so production users should test before updating.
-- Some community sources were unavailable during the last check; unavailable sources were not counted as reports.
 ---
