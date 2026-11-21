@@ -497,24 +497,30 @@ def part_e() -> None:
     order = [i for i, r in enumerate(rows) if list(r)[-4:] != list(ef.STORED_FIELDS)]
     check(f"E1 every stored row carries current facts equal to its own text, as its last four keys ({len(rows)} rows)",
           len(rows) > 0 and not problems and not order, f"{ {k: len(v) for k, v in problems.items()} } order={order[:3]}")
+    # m1 is a withdrawn row (counted: false), so a migration that touched any field but the facts shows here.
     plain = [{"id": f"m{i}", "product_id": OBS, "update_version": "99.0.0", "source_url": f"https://m.test/{i}",
               "report_title": f"Title {i}", "report_text_excerpt": f"Excerpt {i}", "source_date": None,
-              "issue_theme": "", "counted": True} for i in range(3)]
+              "issue_theme": "", "counted": i != 1} for i in range(3)]
     mixed = [ef.with_facts(plain[0])] + plain[1:]
     with tempfile.TemporaryDirectory() as tmp:
         path = Path(tmp) / "store.yml"
         path.write_text(_store_text(mixed), encoding="utf-8", newline="")
         before = path.read_text(encoding="utf-8")
-        report = mig.run(path, write=True)
-        after = path.read_text(encoding="utf-8")
-        again = mig.run(path, write=True)
+        try:
+            report = mig.run(path, write=True)
+            after = path.read_text(encoding="utf-8")
+            again = mig.run(path, write=True)
+            refused = ""
+        except mig.ProofFailed as exc:  # the migration refused its own edit: a named failure here, not a crash
+            report, after, again, refused = {}, before, {}, str(exc)
         unchanged = path.read_text(encoding="utf-8") == after
     check("E2 the migration backfills only the rows without facts, keeps every other byte (hash proof), keeps "
-          "null fields, and a second run changes nothing",
-          report["backfilled"] == 2 and report["unchanged"] == 1 and report["written"] is True
+          "null fields and a withdrawn row's counted: false, and a second run changes nothing",
+          not refused and report.get("backfilled") == 2 and report.get("unchanged") == 1
+          and report.get("written") is True
           and ef.strip_fact_lines(after) == ef.strip_fact_lines(before) and "source_date: null" in after
-          and again["proof"] == {"no_change": True} and unchanged
-          and not ef.store_fact_problems(yaml.safe_load(after)["evidence"]), str(report.get("proof")))
+          and "  counted: false\n" in after and again.get("proof") == {"no_change": True} and unchanged
+          and not ef.store_fact_problems(yaml.safe_load(after)["evidence"]), refused or str(report.get("proof")))
     partial = [dict(plain[0], issue_bucket="general workflow reports"), plain[1]]
     with tempfile.TemporaryDirectory() as tmp:
         path = Path(tmp) / "store.yml"
@@ -524,8 +530,36 @@ def part_e() -> None:
         with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(err):
             rc = mig.main(["--store", str(path), "--write"])
         refused_untouched = path.read_bytes() == before
-    check("E3 a partial fact set refuses the whole run and writes nothing", rc == 2 and refused_untouched
-          and "partial fact set" in err.getvalue(), err.getvalue())
+    # The scope proof itself (migrate_evidence_facts.prove), the only guard on every later --write (the PR asks
+    # for a re-run on the merged tree). It accepts the facts-only edit, and refuses one that also changes one
+    # other byte while the parsed rows stay equal (byte proof), one other field, or the key order (row proof;
+    # checked as a refresh run, where the byte proof does not apply).
+    plain_text = _store_text(plain)
+    good, good_stats = ef.backfill_store_text(plain_text)
+    refresh = dict(good_stats, refreshed=1)
+    version_line = ef.fact_line(ef.VERSION_FIELD, ef.CURRENT_VERSION)
+    tampered = {
+        "byte": (good.replace("  report_title: Title 0\n", "  report_title: 'Title 0'\n", 1), good_stats),
+        "field": (good.replace("  counted: false\n", "  counted: true\n", 1), refresh),
+        "order": (good.replace(version_line, "", 1).replace("- id: m0\n", "- id: m0\n" + version_line, 1), refresh),
+    }
+    let_through = []
+    for label, (text, stats) in tampered.items():
+        try:
+            mig.prove(plain_text, text, stats)
+            let_through.append(label)
+        except mig.ProofFailed:
+            pass
+    try:
+        mig.prove(plain_text, good, good_stats)
+        good_passes = True
+    except mig.ProofFailed:
+        good_passes = False
+    check("E3 a partial fact set refuses the whole run and writes nothing, and the scope proof refuses an edit "
+          "that changes one byte, one field or the key order beyond the facts",
+          rc == 2 and refused_untouched and "partial fact set" in err.getvalue() and good_passes
+          and not let_through and all(text != good for text, _stats in tampered.values()),
+          f"{err.getvalue()} let_through={let_through}")
     stale = [ef.with_facts(plain[0]), dict(ef.with_facts(plain[1]), issue_theme="Display Regression")]
     with tempfile.TemporaryDirectory() as tmp:
         path = Path(tmp) / "store.yml"

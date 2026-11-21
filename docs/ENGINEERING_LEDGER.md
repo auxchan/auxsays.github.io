@@ -7230,6 +7230,16 @@ mean equal stored excerpts, and nothing more.
 4. Leave out of scope `source_title` (S1, display text, not a hash) and the shadow reason producer. The
    producer is OFF and reads text cues that a hash cannot carry (G1_SPEC open question 8).
 
+**Review record** Two review rounds. The second found one test-only gap: nothing pinned the migration's own
+scope proof (`migrate_evidence_facts.prove`), the only guard on every later `--write`, so each of its refusals
+could be removed with every check still passing. The reviewer's exact replacement test was applied verbatim as
+the one final correction the standing review-limit exception allows (tests, documentation and explanatory
+wording only). E2 now carries a withdrawn row and reports a refused migration as a named failure; E3 feeds the
+scope proof a byte, a field and a key-order change beyond the facts and requires each to be refused. An
+independent verifier confirmed that the diff touches only that test and this ledger entry, that
+`test_structured_evidence_facts.py` stays 40/40, and that the reviewer's surviving mutants M3, M4, P1 and P2 now
+fail.
+
 **Reopen only if** a stored row lacks current facts or carries a fact that differs from its own text
 (`test_structured_evidence_facts` E1, QA `evidence_facts_*`); a writer persists a row without facts; a reader
 rebuilds a fact from text; or a reviewed reason stays supported with a cited row whose fact is unusable.
