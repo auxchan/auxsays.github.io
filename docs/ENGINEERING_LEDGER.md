@@ -953,11 +953,13 @@ after measuring which products have it, and keep everything deterministic.
   independently corroborated in the available evidence." only while its counted population is the one G82
   assessed (47 rows, sha256 of the sorted ids `873413ed…`). One added or withdrawn report and the universal clause
   returns by itself.
-- A newer release in the same servicing line, by the My Installed Versions rule (`installedState`, UPDATE
-  AVAILABLE only; ported, and pinned to the shipped JavaScript over every corpus record in node): "A newer release
-  is available: <product> <version> (released <date>)", its own verdict as its page prints it or "AUXSAYS has no
-  verdict for it yet.", and its official notes link. Never a verdict assigned, never a fix matched to a report.
-  Changelog headlines (Figma, GitHub) get none.
+- A newer release, by the My Installed Versions rule (`installedState`, UPDATE AVAILABLE only; ported, and pinned
+  to the shipped JavaScript over every corpus record in node): "A newer release is available: <product> <version>
+  (released <date>)", its own verdict as its page prints it or "AUXSAYS has no verdict for it yet.", and its
+  official notes link. Never a verdict assigned, never a fix matched to a report. Changelog headlines (Figma,
+  GitHub) get none. On Windows 11 and PowerPoint only a newer build of the same version counts; the rule reads
+  every other product as one line, so Acrobat's Classic-track pages (20.x.30xxx, 31 Pro and 31 Reader) point to
+  the newest Continuous release.
 - Vendor fix lines: built and switched OFF. `PUBLICATION_PERMITTED_HOSTS` is empty because no source records a
   publication permission (the acquisition registry knows only `rights_status: unresolved`); every page shows the
   official-notes link only, and no "N fixes" total is printed.
@@ -985,17 +987,27 @@ after measuring which products have it, and keep everything deterministic.
   no author field, no threshold or acceptance wording, no unpermitted vendor text) warns without `--publish-strict`
   and is an error under it. With no deploy projection on disk it checks the reviewed file only.
 
-**Measured** Local builds of main (e1220296) and the branch from the same projections and build time: 1,919
-files each; 748 patch pages differ, exactly the pages with an overview or a newer-release row, plus the
+**Measured** Local builds of main (9687ad0c) and the branch from the same projections and build time: 1,925
+files each; 752 patch pages differ, exactly the pages with an overview or a newer-release row, plus the
 stylesheet, and every changed line is one of the intended blocks (0 unexplained). Pages per product: Acrobat Pro
 198, Acrobat Reader 198, Windows 11 101, ComfyUI 49, Stream Deck 38, Wave Link 31, DaVinci Resolve 29, Camera
-Hub 23, 4K Capture Utility 19, OBS Studio 18, PowerPoint 15, GeForce Game Ready 8, Teams 7, Studio Driver 7,
+Hub 23, 4K Capture Utility 19, OBS Studio 18, PowerPoint 15, GeForce Game Ready 10, Studio Driver 9, Teams 7,
 Microsoft 365 Apps 5, Premiere Pro 2; Figma and GitHub unchanged; a page with no row is byte-identical. The
-projection: 256 pages with an overview, 734 with a newer release, the reviewed finding on OBS Studio 33.0.1
+projection: 256 pages with an overview, 738 with a newer release, the reviewed finding on OBS Studio 33.0.1
 only. Verdict projection byte-identical (sha256 562014d6...). `test_evidence_overview.py` (78 checks,
 blocking); 19 mutants, one per mechanism, each killed by its named check. The QA recompute (one more full read
 of the records and the store) runs only where a deploy projection is on disk; a writeback lane or PR CI checks
 the reviewed file alone, and the suite runs the guard over the tree in PR CI.
+
+**Review-limit exception (GPT 2026-11-21, Q1b)** Review 2 found six reviewer mutants the suite did not kill: the
+universal clause, the no-verdict sentence or the not-matched note reworded in its constant; the OBS Studio 33.0.1
+finding hard-coded for that page in the projection or in the include; and a malformed reviewed file whose
+assessment still applied in the projection. It also found stale figures in this entry and in the PR body. One
+test-and-docs-only correction, supplied verbatim by the reviewer, pins the approved sentences as literals (C1, C1b,
+N9, N10), projects OBS Studio 33.0.1 with one counted row changed (G8), renders the include for that page (T1),
+hardens R4e, and refreshes the figures; no production file changes and the governed count stays 78. Reviewer
+verification: 78/78 on the unchanged production code; the six mutants die on C1, N9, N10, G8, T1 and R4e; the
+governed blocking suite passes 123/123 suites (8,496 checks, every governed count matched, tree clean).
 
 **Not changed** No verdict, verdict projection, reason candidate, threshold, acceptance rule, count, evidence row,
 generated record or collector. PUBLIC_AUTO_ACTIVATION stays off. The product and vendor tables keep their Evidence

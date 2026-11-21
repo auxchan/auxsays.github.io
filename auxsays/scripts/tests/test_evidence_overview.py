@@ -278,9 +278,11 @@ def run() -> int:  # noqa: PLR0915
     bad_rule = copy.deepcopy(good)
     bad_rule["assessments"][0]["finding"] = "No problem has at least two reporters."
     check("R4d a finding that states an acceptance rule or threshold is refused", bool(eo.reviewed_errors(bad_rule)))
-    dup = reviewed_with(withheld=("x", "x"))
-    check("R4e a product listed twice is refused, and a refused file withholds nothing",
-          bool(eo.reviewed_errors(dup)) and eo.label_withheld_products(dup) == [])
+    dup = reviewed_with([assessment_for(rec("1.0"), [row(1)])], withheld=("x", "x"))
+    dup_row = project_one([rec("1.0", n_reports=1)], {ident(rec("1.0")): [row(1)]}, reviewed=dup)
+    check("R4e a product listed twice is refused, and a refused file withholds nothing and applies no finding",
+          bool(eo.reviewed_errors(dup)) and eo.label_withheld_products(dup) == []
+          and dup_row[verdict_projection.page_key(rec("1.0"))]["count_line"].endswith(eo.UNIVERSAL_CLAUSE))
     check("R5 no source's publication permission is on record, so vendor fix lines are OFF everywhere",
           eo.PUBLICATION_PERMITTED_HOSTS == frozenset() and not eo.publication_permitted(
               "https://github.com/obsproject/obs-studio/releases/tag/33.0.2"))
@@ -291,9 +293,13 @@ def run() -> int:  # noqa: PLR0915
     rows3 = [row(1), row(2), row(3, source_type="obs_forum_thread")]
     groups = {ident(page): rows3}
     p = project_one([page], groups)[verdict_projection.page_key(page)]
+    # The approved sentences are pinned as literals (GPT G82 clarification 2): a reworded constant fails
+    # here instead of passing because the test reads the same constant.
     check("C1 no supported reason: the count, then the universal clause",
-          p["count_line"] == "3 accepted patch-specific reports. " + eo.UNIVERSAL_CLAUSE, p["count_line"])
-    check("C1b and the list is described as not grouped by problem", p["limitation"] == eo.LIMITATION)
+          p["count_line"] == "3 accepted patch-specific reports. No problem-specific installation "
+                             "recommendation has been established.", p["count_line"])
+    check("C1b and the list is described as not grouped by problem",
+          p["limitation"] == "Each report is listed separately below; AUXSAYS has not grouped them by problem.")
     reason = {"id": "tool:1.0:r", "evidence": [{"id": rows3[0]["id"]}, {"id": rows3[1]["id"]}]}
     vrows = {verdict_projection.page_key(page): {"verdict": "TEST FIRST", "scope": "if you use X",
                                                  "body": "line", "reasons": ["tool:1.0:r"]}}
@@ -399,7 +405,7 @@ def run() -> int:  # noqa: PLR0915
     npg = project_one(recs_obs, {})
     first = npg.get(verdict_projection.page_key(recs_obs[0]), {}).get("newer") or {}
     check("N9 the newer release with no verdict says so, and links its page and official notes",
-          first.get("verdict_line") == eo.NO_VERDICT_YET and first.get("url") == recs_obs[2]["permalink"]
+          first.get("verdict_line") == "AUXSAYS has no verdict for it yet." and first.get("url") == recs_obs[2]["permalink"]
           and first.get("notes_url") == "https://vendor.test/notes" and first.get("identity") == "Tool 1.0.2", first)
     vrow = {verdict_projection.page_key(recs_obs[2]): {"verdict": "WAIT", "scope": "if you use the test dock",
                                                          "body": "Users report a crash.", "reasons": ["x"]}}
@@ -408,7 +414,8 @@ def run() -> int:  # noqa: PLR0915
           wv["verdict_line"] == "AUXSAYS verdict for it: WAIT if you use the test dock.", wv["verdict_line"])
     reports_here = project_one([rec("1.0.0", n_reports=2)] + recs_obs[1:], {ident(recs_obs[0]): [row(1), row(2)]})
     check("N10 'not matched to these reports' appears only on a page that has reports",
-          (reports_here[verdict_projection.page_key(recs_obs[0])]["newer"]["match_note"] == eo.NOT_MATCHED)
+          (reports_here[verdict_projection.page_key(recs_obs[0])]["newer"]["match_note"]
+           == "AUXSAYS has not matched its changes to the reports on this page.")
           and npg[verdict_projection.page_key(recs_obs[0])]["newer"]["match_note"] == "")
     real_records, real_groups = verdict_projection.load_inputs(_AUX)
     split = set(eo.split_products_from(_AUX))
@@ -501,8 +508,19 @@ def run() -> int:  # noqa: PLR0915
     obs = real["pages"].get("obs-studio|33.0.1|", {})
     obs_rows = real_groups.get(("obs-studio", "33.0.1", ""), [])
     expect = FINDING if eo.population_digest(obs_rows) == OBS_SHA and len(obs_rows) == 47 else eo.UNIVERSAL_CLAUSE
+    # The same tree with one counted row's id changed (same size, different population): only the reviewed
+    # entry and the population may decide the clause, so a special case keyed on the page cannot pass this.
+    moved_groups = dict(real_groups)
+    moved_groups[("obs-studio", "33.0.1", "")] = ([dict(obs_rows[0], id=f"{obs_rows[0].get('id')}-moved")]
+                                                  + list(obs_rows[1:])) if obs_rows else []
+    moved = eo.project(real_records, moved_groups, real_verdict["pages"], real_reasons, reviewed, split)
+    moved_row = moved["pages"].get("obs-studio|33.0.1|", {})
     check("G8 OBS Studio 33.0.1 shows the reviewed finding exactly while its population is G82's, else the "
-          "universal clause", obs.get("count_line", "").endswith(expect), obs.get("count_line"))
+          "universal clause (also with one of its counted rows changed in this tree)",
+          obs.get("count_line", "").endswith(expect)
+          and (not obs_rows or (bool(moved_row.get("count_line")) and not moved_row["count_line"].endswith(FINDING)
+                                and not moved_row.get("assessment"))),
+          (obs.get("count_line"), moved_row.get("count_line")))
 
     # ------------------------------------------------------------------ [F]
     section("[F] fail closed: the builder and QA")
@@ -611,8 +629,15 @@ def run() -> int:  # noqa: PLR0915
         {"fix_lines": ["Fixed a crash."], "fix_source": "Vendor's release notes"})
     ov = "{% include patch-evidence-overview.html part='overview' record=page %}"
     nw = "{% include patch-evidence-overview.html part='newer' record=page %}"
+    # The reviewed page itself, with a row carrying the universal clause: the include must print the row's
+    # line there too, so no special case keyed on that page can live in the template.
+    obs_page = {"product_id": "obs-studio", "update_version": "33.0.1", "url": "/updates/obs-project/obs-studio/33-0-1/"}
+    obs_line = "46 accepted patch-specific reports. " + eo.UNIVERSAL_CLAUSE
+    site_obs = {"data": {"evidence_overview_projection": {"schema_version": 1, "pages": {
+        "obs-studio|33.0.1|": dict(row_ok, count_line=obs_line)}}}}
     cases = {
         "ov": {"template": ov, "site": site_with, "page": page_rec},
+        "ov_obs": {"template": ov, "site": site_obs, "page": obs_page},
         "ov_none": {"template": ov, "site": {}, "page": page_rec},
         "nw": {"template": nw, "site": site_with, "page": page_rec},
         "nw_none": {"template": nw, "site": {"data": {"evidence_overview_projection": {"pages": {}}}}, "page": page_rec},
@@ -622,9 +647,12 @@ def run() -> int:  # noqa: PLR0915
     check("T0 the liquid gem renders the shipped include", bool(out) and "__error__" not in out
           and not any(str(v).startswith("<<ERR") for v in out.values()), str(out)[:300])
     ovt = visible(out.get("ov", ""))
-    check("T1 the overview prints the row's count line, families and limitation, escaped, with a jump to the list",
+    check("T1 the overview prints the row's count line, families and limitation, escaped, with a jump to the list "
+          "(on the reviewed OBS Studio 33.0.1 page too)",
           f"Evidence overview: {row_ok['count_line']}" in ovt and "Sources: 2 GitHub issues &amp; 1 forum thread." in out.get("ov", "")
-          and eo.LIMITATION in ovt and 'href="#user-reports-sources"' in out.get("ov", ""), out.get("ov", "")[:400])
+          and eo.LIMITATION in ovt and 'href="#user-reports-sources"' in out.get("ov", "")
+          and f"Evidence overview: {obs_line}" in visible(out.get("ov_obs", "")) and FINDING not in out.get("ov_obs", ""),
+          (out.get("ov", "")[:400], out.get("ov_obs", "")[:400]))
     check("T2 FAIL CLOSED: no projection, no row -> the include prints nothing at all, not even whitespace",
           out.get("ov_none", "x") == "" and out.get("nw_none", "x") == "",
           (out.get("ov_none"), out.get("nw_none")))
