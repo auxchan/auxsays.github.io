@@ -999,16 +999,19 @@ after measuring which products have it, and keep everything deterministic.
   and is an error under it. With no deploy projection on disk it checks the reviewed file only.
 
 **Measured** Local builds of main (9687ad0c) and the branch from the same projections and build time: 1,925
-files each; 752 patch pages differ, exactly the pages with an overview or a newer-release row, plus the
+files each; 708 patch pages differ, exactly the pages with an overview or a newer-release row, plus the
 stylesheet, and every changed line is one of the intended blocks (0 unexplained). Pages per product: Acrobat Pro
-198, Acrobat Reader 198, Windows 11 101, ComfyUI 49, Stream Deck 38, Wave Link 31, DaVinci Resolve 29, Camera
+198, Acrobat Reader 198, Windows 11 57, ComfyUI 49, Stream Deck 38, Wave Link 31, DaVinci Resolve 29, Camera
 Hub 23, 4K Capture Utility 19, OBS Studio 18, PowerPoint 15, GeForce Game Ready 10, Studio Driver 9, Teams 7,
 Microsoft 365 Apps 5, Premiere Pro 2; Figma and GitHub unchanged; a page with no row is byte-identical. The
-projection: 256 pages with an overview, 738 with a newer release, the reviewed finding on OBS Studio 33.0.1
-only. Verdict projection byte-identical (sha256 562014d6...). `test_evidence_overview.py` (78 checks,
-blocking); 19 mutants, one per mechanism, each killed by its named check. The QA recompute (one more full read
-of the records and the store) runs only where a deploy projection is on disk; a writeback lane or PR CI checks
-the reviewed file alone, and the suite runs the guard over the tree in PR CI.
+projection: 256 pages with an overview, 638 with a newer release (every one with its caution before any link),
+the reviewed finding on OBS Studio 33.0.1 only. Against review 2's build of the previous head, the Windows
+exclusion and amendment A1 change exactly the 738 pages that carried a note (638 reworded, 100 Windows 11 notes
+removed) and the stylesheet. Verdict projection and reason candidates byte-identical (sha256 562014d6...,
+a20f2b28...). `test_evidence_overview.py` (86 checks, blocking); 19 mutants in the first implementation, 3 for
+the Windows exclusion and 12 for amendment A1, each killed by its named check. The QA recompute (one more full
+read of the records and the store) runs only where a deploy projection is on disk; a writeback lane or PR CI
+checks the reviewed file alone, and the suite runs the guard over the tree in PR CI.
 
 **Review-limit exception (GPT 2026-11-21, Q1b)** Review 2 found six reviewer mutants the suite did not kill: the
 universal clause, the no-verdict sentence or the not-matched note reworded in its constant; the OBS Studio 33.0.1
