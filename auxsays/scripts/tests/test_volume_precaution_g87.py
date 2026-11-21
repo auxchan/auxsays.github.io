@@ -450,8 +450,10 @@ def check_way_forward() -> None:
     section("[F] the way forward on every WAIT")
     records, groups, entries, verdict, overview = way_forward_tree()
     pages, vrows = overview["pages"], verdict["pages"]
-    nxt = Missing({k: (v.get("next_action") or {}) for k, v in pages.items()})
-    pages, vrows = Missing(pages), Missing(vrows)
+    nxt = Missing({k: Missing(v.get("next_action") or {}) for k, v in pages.items()})
+    raw = dict(pages)  # the projection rows as written: what production functions are handed
+    pages = Missing({k: Missing(v) for k, v in pages.items()})
+    vrows = Missing({k: Missing(v) for k, v in vrows.items()})
     check("F1 archived: 'This release is archived.' then no better-supported alternative -- never 'no newer release'",
           nxt["obs-studio|89.0.0|"] == {"kind": "archived", "lines": [eo.ARCHIVED_LINE, eo.NO_BETTER_ALTERNATIVE],
                                         "fixed": []}, str(nxt.get("obs-studio|89.0.0|")))
@@ -467,7 +469,7 @@ def check_way_forward() -> None:
           and p90["newer"]["caution"] == "OBS Project" + eo.KNOWN_ISSUE_CAUTION
           and nxt["obs-studio|90.0.0|"]["fixed"]
           == ["The reviewed problem that applies if you use the test setup was fixed in OBS Studio 90.0.5."]
-          and eo.has_next_action(p90), json.dumps(nxt.get("obs-studio|90.0.0|")))
+          and eo.has_next_action(raw.get("obs-studio|90.0.0|")), json.dumps(nxt.get("obs-studio|90.0.0|")))
     check("F4 proven newest (the first stable entry of the product's list, nothing released at or after it): no "
           "record of a newer release",
           nxt["obs-studio|90.1.0|"] == {"kind": "newest", "lines": [eo.NEWEST_LINE], "fixed": []})
@@ -481,14 +483,14 @@ def check_way_forward() -> None:
           == ["The reviewed problem that applies if you use the other test setup was fixed in OBS Studio 88.0.1."]
           and vrows["obs-studio|87.0.0|"]["verdict"] == "TEST FIRST" and "next_action" not in pages["obs-studio|87.0.0|"])
     strings = []
-    for row in pages.values():
+    for row in raw.values():
         n = row.get("next_action") or {}
         strings += list(n.get("lines") or []) + list(n.get("fixed") or [])
         newer = row.get("newer") or {}
         strings += [str(newer.get(k) or "") for k in ("caution", "verdict_line", "match_note", "fix_source")]
     safer = [s for s in strings if re.search(r"\bsafer\b", s) and "not necessarily safer" not in s]
-    guarded = [k for k, row in pages.items() if eo.public_text_problems(row, groups.get(tuple(k.split("|")), []))]
-    in_note = [k for k, row in pages.items() for f in ("caution", "match_note", "fix_source", "verdict_line")
+    guarded = [k for k, row in raw.items() if eo.public_text_problems(row, groups.get(tuple(k.split("|")), []))]
+    in_note = [k for k, row in raw.items() for f in ("caution", "match_note", "fix_source", "verdict_line")
                if any(s in str((row.get("newer") or {}).get(f) or "") for s in
                       (eo.ARCHIVED_LINE, eo.NO_BETTER_ALTERNATIVE, eo.NEWEST_LINE, "was fixed in"))]
     check("F7 'safer' is never asserted for a newer release; every row passes the public-text guard; no way-forward "
