@@ -609,10 +609,22 @@ def check_qa_rejects(tmp: Path) -> None:
           and "verdict_render_disagrees" not in e_honest, f"forged={e_forged} honest={e_honest}")
 
 
+_CORPUS: dict = {}
+
+
+def corpus() -> dict:
+    """The shipped tree's records, counted rows and fact files, read once."""
+    if not _CORPUS:
+        records, groups = vp.load_inputs(_AUX)
+        reasons, lifecycle, problems = vp.load_fact_files(_AUX)
+        _CORPUS.update(records=records, groups=groups, reasons=reasons, lifecycle=lifecycle, problems=problems,
+                       by_ident={vr.record_identity(r): r for r in records})
+    return _CORPUS
+
+
 def check_corpus() -> None:
-    records, groups = vp.load_inputs(_AUX)
-    reasons, lifecycle, problems = vp.load_fact_files(_AUX)
-    by_ident = {vr.record_identity(r): r for r in records}
+    c = corpus()
+    records, groups, reasons, problems, by_ident = c["records"], c["groups"], c["reasons"], c["problems"], c["by_ident"]
     reviewed_valid, reviewed_unsupported = vr.valid_reasons_by_identity(reasons, groups, by_ident)
     off_valid, off_unsupported = vp.supported_reasons(records, groups, reasons)
     with switch(True):
@@ -751,12 +763,17 @@ def check_d1_blank_build_unchanged() -> None:
     differ = [(c.get("official_confirmation"), vr.support_problems(c, OBS_ROWS, D1_BY_IDENT),
                support_problems_pre_g84(c, OBS_ROWS, D1_BY_IDENT)) for c in cases
               if vr.support_problems(c, OBS_ROWS, D1_BY_IDENT) != support_problems_pre_g84(c, OBS_ROWS, D1_BY_IDENT)]
-    shipped = vr.load_reasons(_AUX / "_data" / "verdict_reasons.yml")
-    named_builds = [e["id"] for e in shipped if (e.get("official_confirmation") or {}).get("target_build")]
+    # The shipped entries too: every one whose confirmation names no build (or that cites none) gets exactly the
+    # pre-G84 result on the live counted rows.
+    c = corpus()
+    shipped = [e for e in c["reasons"] if not (e.get("official_confirmation") or {}).get("target_build")]
+    shipped_differ = [e["id"] for e in shipped
+                      if vr.support_problems(e, c["groups"].get(vr.reason_identity(e), []), c["by_ident"])
+                      != support_problems_pre_g84(e, c["groups"].get(vr.reason_identity(e), []), c["by_ident"])]
     check(f"RVC-D1d blank-build products behave exactly as before: on {len(cases)} OBS cases (one or two reporters; "
-          "no confirmation, a true one with no build or a blank build, a wrong statement, a missing record) "
-          "support_problems equals the pre-G84 function; no shipped entry's confirmation names a build",
-          not differ and not named_builds, f"{differ[:2]} {named_builds}")
+          "no confirmation, a true one with no build or a blank build, a wrong statement, a missing record) and on "
+          f"the {len(shipped)} shipped entries whose confirmation names no build, support_problems equals the pre-G84 "
+          "function", not differ and shipped and not shipped_differ, f"{differ[:2]} {shipped_differ}")
 
 
 def check_d1_schema() -> None:
