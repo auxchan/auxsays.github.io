@@ -387,9 +387,16 @@ def section_c(out: dict) -> None:
     unreadable = re.sub(r'<p class="update-decision-recommendation">.*?</p>', "", absent_page, flags=re.S)
     no_signal = re.sub(r"<strong>Community signal:</strong>", "<strong>Signal:</strong>", absent_page)
     no_pid = absent_page.replace('data-watch-product="', 'data-watch-thing="')
-    refused = [gate.patch_page_problems("p.html", t, products("absent"))[0] for t in (unreadable, no_signal, no_pid)]
-    check("C7 a patch page whose verdict line, community-signal word or product identity cannot be read is "
-          "refused, never read as clean", all(len(e) == 1 and "cannot be read" in e[0] for e in refused), refused)
+    # Two of an element is as unreadable as none: the check cannot tell which one is the page's own.
+    two_lines = absent_page.replace(
+        "</body>", f'<p class="update-decision-recommendation">{TOO_FEW_LINE}</p></body>')
+    two_signals = absent_page.replace(
+        "</body>", f'<strong>Community signal:</strong> <em class="consensus-word">{TOO_FEW_WORD}</em></body>')
+    refused = [gate.patch_page_problems("p.html", t, products("absent"))[0]
+               for t in (unreadable, no_signal, no_pid, two_lines, two_signals)]
+    check("C7 a patch page whose verdict line, community-signal word or product identity cannot be read, "
+          "or whose verdict line or community-signal word appears twice, is refused, never read as clean",
+          len(refused) == 5 and all(len(e) == 1 and "cannot be read" in e[0] for e in refused), refused)
     errs, _ = gate.patch_page_problems("p.html", absent_page, products(None))
     check("C8 a patch page whose product has no projection row is refused", any("no community state" in e for e in errs), errs)
 

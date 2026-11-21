@@ -2669,6 +2669,12 @@ record. A product whose collection is retired while it keeps counted reports wou
 low-sample line under the verdict (0 such pages; out of the zero-report scope). The "0 confirmed
 patch-specific community reports" line stays, because it is true.
 
+**Review record** Two review rounds. The second found one test-only gap: the PATCH rule refuses a page with two
+verdict lines or two community-signal words, but no test fed such a page. The reviewer's exact replacement test was
+applied verbatim as the one final correction the standing review-limit exception allows (tests, documentation and
+explanatory wording only). An independent verifier confirmed that the diff touches only that test and this ledger
+entry, that `test_coverage_aware_zero_report.py` stays 26/26, and that the reviewer's three surviving mutants now fail.
+
 **Reopen only if** a deployed patch page of a product whose projection row reads `community: absent` says
 "Too few reports" or "Not enough reports" under its verdict or as its community signal; a page of a product
 whose collection is operating or impaired says it is not monitored; the PATCH rule passes a build in which
