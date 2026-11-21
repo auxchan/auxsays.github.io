@@ -12,7 +12,8 @@
                                  that is 0
   Outputs: decision_label        the published verdict: a word from _data/patch_verdicts.yml
            decision_body, security_sensitive, official_only_zero_reports, show_test_first_context,
-           verdict_text, verdict_action, verdict_known, decision_label_key
+           verdict_text, verdict_action, verdict_known, decision_label_key, zero_report_body (the
+           zero-report line, coverage-aware: G80)
 
   WHITESPACE. The lines below keep the line structure they had inside aux-update.html, so the patch
   page emits exactly the bytes it emitted before (proved over every patch page when this moved).
@@ -72,12 +73,23 @@
 {% assign decision_label_key = decision_label | downcase %}
 {% assign show_test_first_context = false %}
 {% if report_bearing_count > 0 and decision_label_key contains 'test first' %}{% assign show_test_first_context = true %}{% endif %}
+{%- comment %}
+  THE ZERO-REPORT LINE KNOWS WHETHER ANYONE IS LOOKING (G80, AUX-120). "Too few reports" says
+  collection exists and has not found enough. For a product the coverage authority marks with no
+  community collection (site.data.coverage_state, `community` absent; build_coverage_projection.py,
+  AUX-102) that is false: nothing is collected, so the line says so instead. Operating, impaired,
+  unknown (no projection, no row) keep the existing line. Output: zero_report_body, which the
+  patch page also uses for its own zero-report fallback. The verdict word is not touched. The
+  record's own product_id is looked up here, so the homepage gets the same answer for the same
+  record.
+{% endcomment %}
+{%- assign pd_community_coverage = 'unknown' -%}{%- for pd_cov_row in site.data.coverage_state.products -%}{%- if pd_cov_row.product_id == pd_record.product_id -%}{%- assign pd_community_coverage = pd_cov_row.community | default: 'unknown' -%}{%- break -%}{%- endif -%}{%- endfor -%}{%- assign zero_report_body = 'Too few reports for a verdict yet.' -%}{%- if pd_community_coverage == 'absent' -%}{%- assign zero_report_body = 'AUXSAYS is not monitoring community reports for this product.' -%}{%- endif %}
 {% if official_only_zero_reports %}
   {% assign decision_label = 'INSUFFICIENT DATA' %}
   {% if security_sensitive %}
     {% assign decision_body = 'Security-sensitive update. Test first if your workflow is fragile, but do not ignore security exposure.' %}
   {% else %}
-    {% assign decision_body = 'Too few reports for a verdict yet.' %}
+    {% assign decision_body = zero_report_body %}
   {% endif %}
 {% endif %}
 {%- comment -%}
