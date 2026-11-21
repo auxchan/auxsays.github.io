@@ -20,9 +20,10 @@ only on explicit contradictory language. Silence keeps today's behaviour.
 THE CONTRACT, and the real false positive that forced each rule:
 
   R1  A target the reporter DECLARED running is never vetoed. Their own structured self-report
-      outranks ambient prose. Without R1, obs #13495 / #13518 / #13562 were wrongly dropped: each
-      declares 32.1.2 in the template and says "cannot reproduce" about the REPRODUCER, not the
-      version.
+      outranks ambient prose. Without R1, obs #13495 / #13562 were wrongly dropped: each declares
+      32.1.2 in the template and says "cannot reproduce" about the REPRODUCER, not the version. So
+      was obs #13518, which declares 32.1.2 and reports that it cannot be installed: its hope that
+      32.1.2 "will work" read as a working claim (no longer, see _HYPOTHESIS_SENSITIVE; AUX-129).
   R2  A cue may not bind across another identity. In "fails ... in 32.2.0, works in 32.1.2",
       `works` must not reach 32.2.0 nor `fails` reach 32.1.2. Applied symmetrically to affected and
       excluding cues so it cannot bias the outcome. Without R2, obs #13708's 32.2.0 -- the version
@@ -226,6 +227,67 @@ _POLARITY_SENSITIVE = frozenset({"works_on_target", "target_works", "target_succ
 _POLARITY_INVERTER = re.compile(
     r"\b(?:stopped|no\s+longer|never|not|n't|ceased|quit|fail(?:s|ed|ing)?\s+to)\b", re.I)
 
+# The two cues built on the verb "work", in its two directions. A hoped-for, expected, conditional
+# or requested outcome is not a claim that the version works. Real: obs #13518's Expected Behavior
+# field says "I hope this (obs 32.1.2) will work with Ubuntu", and its Current Behavior field says it
+# cannot be installed on Ubuntu 26.04 -- an install FAILURE that target_works read as "the version
+# works". Only these two cues are guarded; no other cue changes.
+_HYPOTHESIS_SENSITIVE = frozenset({"works_on_target", "target_works"})
+
+_WORK_VERB = re.compile(r"\bwork(?:s|ed|ing)?\b", re.I)
+
+# A modal or expectation frame directly in front of the verb: "32.1.2 should work", "it will work
+# on 32.1.2", "32.1.2 is supposed to work", "it'll hopefully work with 32.1.2". At most one adverb
+# may sit between the frame and the verb. Bare "to" is deliberately absent: "I got 32.1.2 to work"
+# is a genuine working claim.
+_HYPOTHETICAL_FRAME = re.compile(
+    r"(?:\b(?:will|would|should|could|might|may|shall|ought\s+to"
+    r"|(?:expected|supposed|meant|going|likely)\s+to|hopefully)|['\u2019]ll)"
+    r"(?:\s+(?:also|still|hopefully|probably|definitely|just|then|now|really))?\s+$", re.I)
+
+# A hypothetical lead directly in front of the clause's subject: "I hope 32.1.2 works", "if it
+# works on 32.1.2", "expecting 32.1.2 to work", "whether it works with 32.1.2", "please make it
+# work on 32.1.2". Only closed-class filler (a determiner, a pronoun, the product's own name, an
+# opening bracket) may sit between the lead and what it governs, so a lead that belongs to a
+# DIFFERENT clause -- "If you need a stable build, 32.1.2 works fine" -- leaves the claim standing.
+_LEAD_WORD = (r"(?:hope[sd]?|hoping|hopefully|expect(?:s|ed|ing)?|if|whether|wish(?:es|ed)?"
+              r"|want(?:s|ed)?|need(?:s|ed)?|please\s+(?:make|let|get))")
+# An auxiliary that opens a question by inversion: "would 32.1.2 work", "will it work with 32.1.2".
+_LEAD_AUX = r"(?:will|would|should|could|can|does|do|did)"
+_LEAD_FILLER = (r"\s*\(?\s*(?:this|that|the|it|everything|new|newer|latest|current|next|version"
+                r"|obs|studio|v)\b")
+# Before the TARGET (target_works): the target itself is the subject, so the lead may touch it.
+_LEAD_BEFORE_TARGET = re.compile(
+    rf"\b(?:{_LEAD_WORD}|{_LEAD_AUX})(?:{_LEAD_FILLER})*\s*\(?\s*$", re.I)
+# ...and only when the verb follows the target directly ("hoping 32.1.2 works", "expecting 32.1.2 to
+# work"). Otherwise the lead governs a different verb: in "I hoped 32.1.2 would fix it, and it works
+# now" the hope is about the fix and "it works now" is a genuine claim.
+_TIGHT_GAP = re.compile(
+    r"^[\s)\]\"'\u2019]*(?:to\s+)?(?:(?:also|still|really|actually|just|even|ever|properly)\s+)?$",
+    re.I)
+# Before the VERB (works_on_target): an inverted auxiliary needs a subject between it and the
+# verb, so "it does work on 32.1.2" -- emphatic, and a genuine claim -- is not read as a question.
+_LEAD_BEFORE_VERB = re.compile(
+    rf"\b(?:{_LEAD_WORD}(?:{_LEAD_FILLER})*|{_LEAD_AUX}(?:{_LEAD_FILLER})+)\s*$", re.I)
+
+
+def _is_hypothetical(text: str, match: re.Match, basis: str, target: str) -> bool:
+    """Does this working-claim match describe a hoped-for, expected, conditional or requested
+    outcome rather than a present or past one? Read only within the match's own clause."""
+    left = max((m.end() for m in _SENTENCE_BREAK.finditer(text, 0, match.start())), default=0)
+    lead = text[left:match.start()]
+    if basis == "target_works":
+        # The match opens with the target and closes with the verb.
+        verbs = list(_WORK_VERB.finditer(text, match.start(), match.end()))
+        if not verbs:
+            return False
+        gap = text[match.start() + len(target):verbs[-1].start()]
+        if _HYPOTHETICAL_FRAME.search(gap):
+            return True
+        return bool(_TIGHT_GAP.match(gap) and _LEAD_BEFORE_TARGET.search(lead))
+    # works_on_target: the match opens with the verb.
+    return bool(_HYPOTHETICAL_FRAME.search(lead) or _LEAD_BEFORE_VERB.search(lead))
+
 
 @dataclass(frozen=True)
 class Outcome:
@@ -310,6 +372,9 @@ def _first_hit(text: str, target: str, cues: list[tuple[str, str]]) -> tuple[str
                 # say so. Read as an assertion it vetoes a legitimately affected row, and R3 cannot
                 # rescue it because a question rarely carries a failure verb of its own. This
                 # phrasing is native to Microsoft Q&A, where the sentence appears verbatim.
+                continue
+            if basis in _HYPOTHESIS_SENSITIVE and _is_hypothetical(scanned, match, basis, target):
+                # "I hope this (obs 32.1.2) will work" hopes; it does not report.
                 continue
             if basis in _POLARITY_SENSITIVE:
                 lead = scanned[max(0, match.start() - _POLARITY_LOOKBACK):match.start()]

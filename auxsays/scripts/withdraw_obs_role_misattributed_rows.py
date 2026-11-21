@@ -20,10 +20,23 @@ The block-scoped text edit is IMPORTED from the Acrobat withdrawal tool rather t
 selector is the one that had to learn that locating a row by URL alone takes whichever block
 comes first in the file -- which withdrew a correctly accepted report in AUX-027. Two copies of
 a selector are two predicates waiting to drift, so there is one.
+
+FIELD AND LINE BOUNDARIES (AUX-129). The stored text is rebuilt the way the collector read it at
+acceptance: the title, a line break, then the body -- never every field run together with spaces.
+Joined with spaces, a cue could bind across two fields, and rule R1 (a version the reporter
+DECLARED is never vetoed) could not apply, because the issue template's version answer is found by
+the line break after its heading. Stored OBS excerpts are whitespace-collapsed, so that line break
+is gone from every one of them. When the authority would refuse a row whose stored text holds the
+template's version heading but not that line break, the row is reported as UNDETERMINABLE -- the
+stored text cannot say whether R1 protects it -- and it is never withdrawn, even when its URL is
+named. obs #13518 was reported as refused only because of this loss and a hoped-for "will work"
+read as a working claim (lib/target_outcome.py): the issue declares 32.1.2 and reports that it
+cannot be installed. It is an install-failure report and it stays counted.
 """
 from __future__ import annotations
 
 import argparse
+import re
 import sys
 from pathlib import Path
 
@@ -35,15 +48,56 @@ from withdraw_acrobat_wrong_edition_rows import withdraw  # noqa: E402
 
 OBS = "obs-studio"
 
+# The issue template's version heading, with or without the line break that delimits its answer.
+# legacy_obs.DECLARED_VERSION_FIELDS finds the answer only when that line break survives; the
+# difference between the two counts is the number of declarations the stored text has lost.
+_DECLARED_VERSION_HEADING = re.compile(r"###\s*OBS Studio Version(?:\s*\(Other\))?", re.I)
 
-def refused_rows(rows: list[dict]) -> list[tuple[dict, str]]:
-    """Stored OBS rows the repaired role authority now refuses, with the reason it gives.
+
+def _distinct_lines(row: dict, keys: tuple[str, ...]) -> str:
+    """The non-empty values of `keys`, each once, one per line: a field never runs into the next."""
+    out: list[str] = []
+    for key in keys:
+        value = str(row.get(key) or "").strip()
+        if value and value not in out:
+            out.append(value)
+    return "\n".join(out)
+
+
+def stored_issue(row: dict) -> dict:
+    """The issue as the collector read it, rebuilt from the stored row with its boundaries kept.
+
+    `contradiction_reason` joins title and body with a line break, as at acceptance. The body is
+    the stored report text with its own line breaks; only without it, the excerpt, which is a
+    whitespace-collapsed window of that same text (OBS rows store only the excerpt).
+    """
+    body = str(row.get("report_text") or "").strip() or str(row.get("report_text_excerpt") or "").strip()
+    return {"title": _distinct_lines(row, ("report_title", "parent_title")), "body": body}
+
+
+def declaration_lost(issue: dict) -> bool:
+    """Does the stored text carry a template version heading whose answer it can no longer read?
+
+    Then R1 cannot be evaluated from storage. A row with no heading at all is decidable: its
+    excerpt is centred on the version's FIRST mention, and a declared version is first mentioned
+    in the template's version field, so a declaration of the target would have kept its heading.
+    """
+    body = str(issue.get("body") or "")
+    headings = len(_DECLARED_VERSION_HEADING.findall(body))
+    readable = len(legacy_obs.DECLARED_VERSION_FIELDS.findall(body))
+    return headings > readable
+
+
+def assess_rows(rows: list[dict]) -> tuple[list[tuple[dict, str]], list[tuple[dict, str]]]:
+    """(refused, undeterminable): stored OBS rows the role authority refuses, with its reason,
+    and rows it would refuse only because the stored text lost the declaration R1 reads.
 
     Re-evaluated from the row's own stored text through `contradiction_reason`, the same
     predicate the collector consults at acceptance time. A row already withdrawn is skipped, so
     a second run reports nothing left to do.
     """
-    out: list[tuple[dict, str]] = []
+    refused: list[tuple[dict, str]] = []
+    undeterminable: list[tuple[dict, str]] = []
     for row in rows:
         if str(row.get("product_id") or "") != OBS:
             continue
@@ -52,12 +106,18 @@ def refused_rows(rows: list[dict]) -> list[tuple[dict, str]]:
         version = str(row.get("update_version") or "").strip()
         if not version:
             continue
-        text = " ".join(str(row.get(key) or "") for key in
-                        ("report_title", "parent_title", "report_text", "report_text_excerpt"))
-        reason = legacy_obs.contradiction_reason({"title": "", "body": text}, version)
-        if reason:
-            out.append((row, reason))
-    return out
+        issue = stored_issue(row)
+        reason = legacy_obs.contradiction_reason(issue, version)
+        if not reason:
+            continue
+        (undeterminable if declaration_lost(issue) else refused).append((row, reason))
+    return refused, undeterminable
+
+
+def refused_rows(rows: list[dict]) -> list[tuple[dict, str]]:
+    """Stored OBS rows the repaired role authority refuses, with the reason it gives. Never a row
+    whose refusal depends on a declaration the stored text lost (see `assess_rows`)."""
+    return assess_rows(rows)[0]
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -72,7 +132,7 @@ def main(argv: list[str] | None = None) -> int:
     text = path.read_text(encoding="utf-8")
     rows = load_evidence(path)
     obs_rows = [r for r in rows if str(r.get("product_id") or "") == OBS]
-    refused = refused_rows(rows)
+    refused, undeterminable = assess_rows(rows)
     targeted = set(args.only_url)
 
     print("stored OBS rows: " + str(len(obs_rows)))
@@ -83,6 +143,12 @@ def main(argv: list[str] | None = None) -> int:
         print("  [" + mark + "] " + str(row.get("update_version")) + "  " + reason)
         print("                 " + str(row.get("id")))
         print("                 " + url)
+    print("rows UNDETERMINABLE from stored text (declared version lost its line break; "
+          "never withdrawn): " + str(len(undeterminable)))
+    for row, reason in undeterminable:
+        print("  [undeterminable] " + str(row.get("update_version")) + "  would be " + reason)
+        print("                 " + str(row.get("id")))
+        print("                 " + str(row.get("source_url") or ""))
 
     if not targeted:
         print("no --only-url given: reporting only, nothing withdrawn")

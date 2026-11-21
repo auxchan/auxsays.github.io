@@ -95,6 +95,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-111 | Resolved | Evidence integrity | Medium | Two Adobe reports counted against a version they were not about: the Premiere Pro version a project was made in, the Acrobat Reader version an update started from |
 | AUX-114 | Resolved | Evidence integrity | Low | A DaVinci Resolve 21.0.4 how-to question was counted as a report of a problem with 21.0.4 |
 | AUX-118 | Resolved | Evidence integrity | Low | An OBS Studio 31.1.2 report was counted for a version it names only as a release tag the reporter compared |
+| AUX-129 | Resolved | Evidence integrity | Low | An OBS Studio 32.1.2 install-failure report was labelled "the version works" by the withdrawal tool's validator; it stays counted |
 | AUX-092 | Resolved | Publication | Medium | Every new OBS report would again read "date not recorded": the collector never stored the date it checks |
 | AUX-093 | Resolved | Verdict policy | High | 234 of 236 pages with user reports said WAIT because of their product or a negative tone |
 | AUX-094 | Resolved | Verdict policy | Low | The page could print an official verdict the decision code did not give, and QA could not see it |
@@ -6278,6 +6279,61 @@ the new suite on this manifest.
 **Reopen only if** the row counts again; the must-stay #13989 row or the report's 32.2.2 row stops counting without
 its own audited withdrawal; the control finding is re-admitted without its own audited change; or an earlier
 withdrawal manifest changes.
+
+---
+### AUX-129 — An OBS Studio 32.1.2 install-failure report was labelled "the version works" by the withdrawal tool's validator; it stays counted
+
+- **Status** Resolved · **Area** Evidence integrity · **Severity** Low
+- **First seen** 2026-11-21 (a report-mode run of `withdraw_obs_role_misattributed_rows.py`) · **Resolved** 2026-11-21
+
+**Correcting the record** GitHub issue #13518, counted on OBS Studio 32.1.2, is an install-failure report. The
+reporter declares 32.1.2 in the issue template and says it cannot be installed on Ubuntu 26.04 (the issue's
+Current Behavior field; the stored excerpt ends before it). The report stays counted. The earlier label
+`version_reported_working`, which the audited-withdrawal tool printed for it in report mode and which a review
+then repeated as a report "describing a successful installation", was a validator artefact, not a finding about
+the report. No evidence was withdrawn, and no stored row, count, verdict or page changed.
+
+**Cause** Two validator defects, both met when a stored row is checked again:
+- The two working cues built on the verb "work" (`target_works`, `works_on_target` in `lib/target_outcome.py`)
+  read a hope as a claim. The issue's Expected Behavior field hopes that 32.1.2 "will work".
+- The tool ran every stored field together with spaces. A cue could then bind across two fields, and rule R1 (a
+  version the reporter declared is never vetoed) could not apply: the template's version answer is found by the
+  line break after its heading, and every stored OBS excerpt is whitespace-collapsed. In the issue's own layout
+  the collector's authority does not refuse it, which is why the collector counted it.
+
+**Fix (code; owner ruling 2026-11-21: narrow validator fixes, regression fixtures, no evidence withdrawal)**
+- `lib/target_outcome.py`: the two "work" cues skip a hoped-for, expected, conditional or requested outcome. That
+  is a modal or expectation directly before the verb ("should work", "will work", "is supposed to work"), or a
+  hypothetical lead directly before the subject (hope, if, whether, expect, want, need, "please make", or an
+  inverted auxiliary as in "would 32.1.2 work"), with only closed-class filler between. A present or past claim
+  ("32.1.2 works fine", "it worked on 32.1.2", "rolled back to 32.1.2 and it works") still vetoes. No other cue
+  changed. The R1 note there no longer says #13518 was about "cannot reproduce".
+- `withdraw_obs_role_misattributed_rows.py`: a stored row is rebuilt the way the collector read it: the title, a
+  line break, then the body, with each distinct title once. When the authority would refuse a row whose stored text
+  holds the template's version heading without its line break, the tool reports the row as UNDETERMINABLE. It
+  never withdraws that row, even when its URL is named.
+
+**Measured** (stored rows only, old against new actions; nothing rewritten)
+- Shared predicate, all 3,482 stored rows of 11 products under three text builds: 1 outcome change (#13518,
+  working to no outcome language) and 0 rows newly vetoed.
+- OBS tool, 343 stored rows (317 counted): #13518 moves from refused to kept, and no counted row is newly refused.
+  The one already-withdrawn row (forum thread 190590) is refused before and after. Either fix alone also clears
+  #13518: the wording fix keeps it, and the boundary fix makes it undeterminable.
+- `consensus_evidence.yml`, every generated record and every `_data` file are byte-identical.
+- `test_obs_validator_boundaries.py` (51 checks, blocking): #13518's stored fields read from the live store, its
+  template layout, hypothetical phrasings in both directions, genuine claims, inverse probes, a field-boundary
+  fixture with its control, and the CLI on a temporary store. 13 mutants, one per fix clause, each killed by its
+  named checks.
+
+**Residual** Hypothetical wording still reads as a claim in the other cues: "I hope 32.1.2 is stable"
+(`target_said_fine`) and "I hope to downgrade to 32.1.2" (rollback). These were left out of the narrow fix. A lead
+word outside the closed filler list, a curly opening quote, or an "Expected Behavior: 32.1.2 works" heading still
+leaves the old veto in place, which is the earlier behaviour. "I tested whether 32.1.2 works and it does" and
+"32.1.2 will work fine, I tested it" are read as hypothetical.
+
+**Reopen only if** #13518 stops counting without its own audited change; a hoped-for "will work" or "should
+work" vetoes again; a genuine "works" or "worked" claim stops vetoing; or the tool refuses or withdraws a row
+whose stored text lost its declared-version line break.
 
 ---
 ### AUX-092 — Every new OBS report would again read "date not recorded": the collector never stored the date it checks
