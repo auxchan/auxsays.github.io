@@ -150,6 +150,13 @@ layout: aux-base
   not establish. The word is still computed here because the early-evidence line in the verdict box
   is worded by it; the count shown beside it carries the sample size.
 
+  The overview is printed by patch-evidence-overview.html from the deploy-time projection, as the LAST
+  thing in the evidence card, and its newer-release note right after the card (practical guidance,
+  before the collection telemetry). Both include tags are plain and share a line with an existing
+  closing tag, for two reasons: several suites render this layout standalone up to the first line that
+  holds an include, so everything they read stays above it; and a page with no projection row renders
+  byte-identical to the page before this change.
+
   consensus_established is the existing contract, not a new threshold: evidence_state_class is
   'live' only for a live claim the maturity-state include certifies. Nothing else is mature
   consensus, so nothing else may be presented as though it were.
@@ -414,7 +421,7 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
   place. Every other product is unchanged. The lookup is a plain loop over a tracked file, so it holds
   on a local render too; a product leaves the list when its reopen condition is met.
 {% endcomment %}
-{%- assign labels_withheld = false -%}{%- for lw_row in site.data.evidence_presentation.label_withheld_products -%}{%- if lw_row.product_id == page.product_id -%}{%- assign labels_withheld = true -%}{%- break -%}{%- endif -%}{%- endfor %}
+{%- assign labels_withheld = false -%}{%- for lw_row in site.data.evidence_presentation.label_withheld_products -%}{%- if lw_row.product_id == page.product_id -%}{%- assign labels_withheld = true -%}{%- break -%}{%- endif -%}{%- endfor -%}
 {% assign issue_generic_label = 'general workflow reports' %}
 {% assign issue_cluster_text = '' %}
 {% assign issue_cluster_seen = '|' %}
@@ -776,6 +783,7 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
            aria-label="Community evidence summary, reported separately from the AUXSAYS verdict">
         <div class="consensus-compact">
           <span class="update-evidence-summary-line"><strong>Community signal:</strong> <em class="consensus-word consensus-word--{{ evidence_metric_class }}">{{ evidence_metric_label }}</em></span>
+          {% comment %}G82-A (AUX-123): the count-only strength word stood here; see the note where it is computed.{% endcomment %}
           <span class="update-evidence-report-count">{% if report_count > 0 %}{{ report_count }} user report{% unless report_count == 1 %}s{% endunless %} found{% else %}0 confirmed patch-specific community reports{% endif %}</span>
         </div>
         <div class="consensus-position-graph consensus-position-graph--hero consensus-position-graph--{{ evidence_metric_class }}" style="--consensus-pos: {{ consensus_score_percent }}%;">
@@ -822,18 +830,8 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
           <p class="consensus-chart-meta consensus-live-scope-note">Based on {{ report_count }} publicly posted user report{% unless report_count == 1 %}s{% endunless %}. This is not a measure of how many installations are affected.</p>
           {% endif %}
           {% if report_bearing_count > 0 and evidence_capture_date_known %}<p class="consensus-chart-meta">Newest accepted report captured: {{ evidence_checked_label }}</p>{% endif %}
-        </div>
-        {%- comment -%}
-          THE EVIDENCE OVERVIEW (G82-A, AUX-123), printed from the deploy-time projection by the include
-          below: the count stated as a count, the source families, and what the list of reports does and
-          does not establish. It replaces the count-only strength word this card used to print. Kept the
-          LAST thing in the card, and written as a plain include tag: several suites render this layout
-          standalone up to its first include, so everything they read stays above it. The newer-release
-          note follows the card: practical guidance, placed before the collection telemetry.
-        {%- endcomment %}
-        {% include patch-evidence-overview.html part='overview' record=page %}
-      </div>
-      {% include patch-evidence-overview.html part='newer' record=page %}
+        </div>{% include patch-evidence-overview.html part='overview' record=page %}
+      </div>{% include patch-evidence-overview.html part='newer' record=page %}
 
       {% include monitoring-status.html mode='compact' product_id=page.product_id version=page.update_version target_build=page.target_build published_at=page.update_published_at report_count=page.update_report_count %}
 

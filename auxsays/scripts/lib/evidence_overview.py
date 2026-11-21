@@ -284,13 +284,16 @@ def cited_counted(reason_ids: Iterable[str], reasons_by_id: Mapping[str, Mapping
     return len(cited)
 
 
-def limitation_sentence(n: int, cited: int, reasoned: bool) -> str:
+def limitation_sentence(n: int, cited: int, reasoned: bool, reasons: int = 1) -> str:
+    """What the report list is. `reasons`: how many supported reasons the verdict line states (a page
+    can print a WAIT and an "Also TEST FIRST" together)."""
     if not reasoned:
         return LIMITATION
+    subject = "The reasons above cite" if reasons > 1 else "The reason above cites"
     if cited >= n:
-        return "The reason above cites this report." if n == 1 else "The reason above cites every one of them."
-    return (f"The reason above cites {cited} of them; the others are listed separately below, and AUXSAYS "
-            "has not grouped them by problem.")
+        return f"{subject} this report." if n == 1 else f"{subject} every one of them."
+    return (f"{subject} {cited} of them; the others are listed separately below, and AUXSAYS has not grouped "
+            "them by problem.")
 
 
 def valid_assessment(record: Mapping[str, Any], rows: list[Mapping[str, Any]],
@@ -524,7 +527,8 @@ def project(records: Iterable[Mapping[str, Any]],
                 "reports": n,
                 "count_line": f"{count_sentence(n)} {clause}".strip(),
                 "sources_line": sources_sentence(families(rows)),
-                "limitation": limitation_sentence(n, cited_counted(reason_ids, reasons_by_id, rows), reasoned),
+                "limitation": limitation_sentence(n, cited_counted(reason_ids, reasons_by_id, rows), reasoned,
+                                                  len(reason_ids)),
                 "assessment": _text(assessment.get("id")) if assessment else "",
             })
         pid = _text(rec.get("product_id"))

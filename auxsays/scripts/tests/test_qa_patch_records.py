@@ -268,8 +268,10 @@ def run() -> int:
     # 'Verified reports' literal is no longer "in the layout" and the deploy gate fails on a correct
     # page; and a forbidden phrase written into an include would reach every patch page unscanned.
     _real_includes = qa.UPDATE_LAYOUT_INCLUDES
-    check("the layout scan reads the two includes the patch page renders its verdict from",
-          sorted(p.name for p in _real_includes) == ["patch-decision.html", "patch-evidence-state.html"]
+    # G82-A (AUX-123) added the evidence overview include, which the layout renders on every patch page.
+    check("the layout scan reads the includes the patch page renders its verdict and evidence overview from",
+          sorted(p.name for p in _real_includes) == ["patch-decision.html", "patch-evidence-overview.html",
+                                                     "patch-evidence-state.html"]
           and all(p.exists() for p in _real_includes), str(_real_includes))
     _inc_tmp = Path(tempfile.mkdtemp(prefix="auxsays-qa-include-"))
     _inc_mutants = []

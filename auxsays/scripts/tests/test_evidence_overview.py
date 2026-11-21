@@ -334,9 +334,10 @@ def run() -> int:  # noqa: PLR0915
           p["sources_line"])
     zero = project_one([rec("1.0")], {})
     check("C9 a zero-report page with no newer release gets no row at all", zero == {}, zero)
-    check("C10 the limitation when the reason cites every report, and for a single report",
+    check("C10 the limitation when the reason cites every report, for a single report, and for two reasons",
           eo.limitation_sentence(3, 3, True) == "The reason above cites every one of them."
-          and eo.limitation_sentence(1, 1, True) == "The reason above cites this report.")
+          and eo.limitation_sentence(1, 1, True) == "The reason above cites this report."
+          and eo.limitation_sentence(56, 3, True, 2).startswith("The reasons above cite 3 of them;"))
 
     # ------------------------------------------------------------------ [N]
     section("[N] the newer release (My Installed Versions' rule, UPDATE AVAILABLE only)")
@@ -614,8 +615,8 @@ def run() -> int:  # noqa: PLR0915
     check("T1 the overview prints the row's count line, families and limitation, escaped, with a jump to the list",
           f"Evidence overview: {row_ok['count_line']}" in ovt and "Sources: 2 GitHub issues &amp; 1 forum thread." in out.get("ov", "")
           and eo.LIMITATION in ovt and 'href="#user-reports-sources"' in out.get("ov", ""), out.get("ov", "")[:400])
-    check("T2 FAIL CLOSED: no projection, no row -> the include prints nothing at all",
-          out.get("ov_none", "x").strip() == "" and out.get("nw_none", "x").strip() == "",
+    check("T2 FAIL CLOSED: no projection, no row -> the include prints nothing at all, not even whitespace",
+          out.get("ov_none", "x") == "" and out.get("nw_none", "x") == "",
           (out.get("ov_none"), out.get("nw_none")))
     nwt = visible(out.get("nw", ""))
     check("T3 the newer-release note names and links the release, its date, its verdict line and its notes",
@@ -633,10 +634,14 @@ def run() -> int:  # noqa: PLR0915
     i_ov, i_card_end = emitting.find(ov), emitting.find("{% include monitoring-status.html mode='compact'")
     i_nw = emitting.find(nw)
     i_cap = emitting.find("Newest accepted report captured:")
-    check("T6 both include tags are plain (the standalone harnesses cut at the first one), the overview is the "
-          "last thing in the evidence card and the newer note sits before the compact monitoring line",
+    inc_lines = [ln.strip() for ln in lay.splitlines() if "patch-evidence-overview.html" in ln and "{%" in ln]
+    check("T6 both include tags are plain (the standalone harnesses cut at the first one) and share a line with "
+          "an existing closing tag (a page with no row renders byte-identical); the overview is the last thing in "
+          "the evidence card and the newer note sits before the compact monitoring line",
           -1 < i_cap < i_ov < i_nw < i_card_end and "{%- include patch-evidence-overview" not in lay
-          and "{% include patch-evidence-overview.html" in lay, (i_cap, i_ov, i_nw, i_card_end))
+          and len(inc_lines) == 2 and all(ln.startswith("</div>{% include patch-evidence-overview.html")
+                                          and ln.endswith("%}") for ln in inc_lines),
+          (i_cap, i_ov, i_nw, i_card_end, inc_lines))
     # labels withheld, rendered through the real layout
     lab_page = {"product_id": "obs-studio", "company_id": "obs-project", "update_product": "OBS Studio",
                 "update_version": "98.0", "update_detail_title": "OBS Studio 98.0",

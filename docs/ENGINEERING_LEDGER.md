@@ -31,6 +31,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-013 | Resolved | CI governance | Medium | CI runs but does not gate merges — server-side enforcement measured and refused, gate is repo-owned |
 | AUX-014 | Deferred | Presentation | Low | Security-advisory branch is dead by key-path mismatch |
 | AUX-015 | Resolved | Presentation | Medium | Parallel servicing lines are detected structurally, not declared |
+| AUX-123 | Resolved | Public truthfulness | Medium | "Evidence strength: High" read as corroboration, and a patch page gave no practical next step when its verdict was INSUFFICIENT DATA |
 | AUX-016 | Deferred | Patch decision presentation | Low | Two verdict-chain branches are indistinguishable on this corpus |
 | AUX-017 | Deferred | Official ingestion | Medium | Photoshop activation blocker is an edge filter, not an egress failure |
 | AUX-018 | Resolved | Official ingestion | Medium | Microsoft Teams official ingestion activated, forward-only |
@@ -922,6 +923,89 @@ lines, or Windows' servicing-line structure no longer matches the deterministic 
 shows up as `UP6`, `UP7` or `UP8` failing against the corpus.
 
 ---
+
+### AUX-123 — "Evidence strength: High" read as corroboration, and a patch page gave no practical next step when its verdict was INSUFFICIENT DATA
+
+- **Status** Resolved · **Area** Public truthfulness · **Severity** Medium
+- **First seen** 2026-11-20 (G82, OBS Studio 33.0.1) · **Resolved** 2026-11-21 (G83; live at the first Pages
+  deploy after merge)
+
+**Symptom** OBS Studio 33.0.1 showed 47 counted reports, "Evidence strength: High" and the verdict INSUFFICIENT
+DATA side by side. "High" meant 33 or more reports and nothing else, so the page read as if quantity were
+corroboration. G82 established that the 47 reports describe about 37 different problems and that none of them
+has two known-independent reporters. The page also printed a "Current reports mention ..." sentence and a
+per-report issue label built from stored labels that G82 found wrong on 12 to 17 of the 47 rows, and it never
+mentioned that OBS Studio 33.0.2 was already out. GPT (G82 ruling and clarification): replace the strength
+presentation, show volume, sources and limitations, link the newer release, remove unsupported category wording
+after measuring which products have it, and keep everything deterministic.
+
+**Fix** An evidence-and-hotfix improvement; no verdict, count, evidence or record changes.
+- A deploy-time projection, `lib/evidence_overview.py` + `build_evidence_overview_projection.py`, written to the
+  git-ignored `_data/evidence_overview_projection.yml` after the verdict projection and before QA and Jekyll
+  (pages.yml, and the DaVinci archive build check). `_includes/patch-evidence-overview.html` prints it and decides
+  nothing.
+- The evidence card no longer prints the strength word. Its foot carries the evidence overview: "<n> accepted
+  patch-specific reports." plus, on a page whose verdict rests on no supported reason, "No problem-specific
+  installation recommendation has been established."; the source families ("34 GitHub issues and 13 OBS forum
+  threads"); and what the list is ("Each report is listed separately below; AUXSAYS has not grouped them by
+  problem.", or how many reports a supported reason cites). No platform counts.
+- One reviewed finding, in `_data/evidence_presentation.yml`: OBS Studio 33.0.1 prints "No individual problem was
+  independently corroborated in the available evidence." only while its counted population is the one G82
+  assessed (47 rows, sha256 of the sorted ids `873413ed…`). One added or withdrawn report and the universal clause
+  returns by itself.
+- A newer release in the same servicing line, by the My Installed Versions rule (`installedState`, UPDATE
+  AVAILABLE only; ported, and pinned to the shipped JavaScript over every corpus record in node): "A newer release
+  is available: <product> <version> (released <date>)", its own verdict as its page prints it or "AUXSAYS has no
+  verdict for it yet.", and its official notes link. Never a verdict assigned, never a fix matched to a report.
+  Changelog headlines (Figma, GitHub) get none.
+- Vendor fix lines: built and switched OFF. `PUBLICATION_PERMITTED_HOSTS` is empty because no source records a
+  publication permission (the acquisition registry knows only `rights_status: unresolved`); every page shows the
+  official-notes link only, and no "N fixes" total is printed.
+- Labels withheld, measured per product: the label sentence, issue labels and workflow lines are not printed for
+  products where a binding human-read audit recorded counted labels that contradict their reports. Each report
+  keeps its source, date and link.
+
+  | product | counted rows | human-read audit | contradicting labels found | retained-text difference (S4, not a defect finding) | page change |
+  |---|---|---|---|---|---|
+  | OBS Studio | 311 | G64 (281 rows), G82 (33.0.1, 47 rows), S4B (16 fixtures) | 66 of 281; 15 of 47 themes, 12-17 of 47 printed labels; 12 of 16 fixtures | 111 | withheld |
+  | Windows 11 | 558 | G81 S1 v2.2 (558 rows), G77 RA-C1, S4B (13) | 131 rewritten + 57 unchanged unsupported of 558; 9 of 13 fixtures | 123 | withheld until G81 lands |
+  | Premiere Pro | 27 | S4B (1, P01) | 1 of 1 (a misreading of retained text) | 16 | withheld |
+  | ComfyUI | 56 | S4B (3) | 0 demonstrated: P10 is a truncated-text difference, "context_insufficient" (GPT G78) | 9 | unchanged |
+  | DaVinci Resolve | 330 | S4B (1, P03) | 0 of 1 | 106 | unchanged |
+  | Acrobat Reader | 167 | S4B (1, P04) | 0 of 1 | 28 | unchanged |
+  | Acrobat Pro | 115 | none | none recorded | 16 | unchanged |
+  | PowerPoint | 9 | S4B (1, P05) | 0 of 1 | 2 | unchanged |
+  | Teams | 7 | S4B (2, P06/P07) | 0 of 2 | 0 | unchanged |
+  | GeForce Game Ready | 16 | none | none recorded | 5 | unchanged |
+
+- The search description of a report-bearing page with no verdict now reads "<n> user reports are linked to
+  <identity> so far. AUXSAYS has no verdict for this release yet." instead of tying the missing verdict to quantity.
+- QA (`scan_evidence_overview`): errors on a malformed reviewed file, a malformed, failed or stale projection, and a
+  deploy that built the verdict projection but not this one; the public-text guard (no stored title or excerpt run,
+  no author field, no threshold or acceptance wording, no unpermitted vendor text) warns in a writeback lane and is
+  an error under `--publish-strict`.
+
+**Measured** Local builds of main (e1220296) and the branch from the same projections and build time: 1,919
+files each; 748 patch pages differ, exactly the pages with an overview or a newer-release row, plus the
+stylesheet, and every changed line is one of the intended blocks (0 unexplained). Pages per product: Acrobat Pro
+198, Acrobat Reader 198, Windows 11 101, ComfyUI 49, Stream Deck 38, Wave Link 31, DaVinci Resolve 29, Camera
+Hub 23, 4K Capture Utility 19, OBS Studio 18, PowerPoint 15, GeForce Game Ready 8, Teams 7, Studio Driver 7,
+Microsoft 365 Apps 5, Premiere Pro 2; Figma and GitHub unchanged; a page with no row is byte-identical. The
+projection: 256 pages with an overview, 734 with a newer release, the reviewed finding on OBS Studio 33.0.1
+only. Verdict projection byte-identical (sha256 562014d6...). `test_evidence_overview.py` (78 checks,
+blocking); 17 mutants, one per mechanism, each killed by its named check. QA adds one full read of the records
+and the store per run (about 13 s on the Windows dev box).
+
+**Not changed** No verdict, verdict projection, reason candidate, threshold, acceptance rule, count, evidence row,
+generated record or collector. PUBLIC_AUTO_ACTIVATION stays off. The product and vendor tables keep their Evidence
+column; the stored `consensus_report` prose (rendered nowhere) keeps its label sentence.
+
+**Reopen only if** a deployed patch page prints an evidence-strength word; prints the reviewed OBS 33.0.1 finding
+while its counted population differs from the assessed one; prints a newer release that `installedState` would not
+name for that record, or a verdict for it that its own page does not print; prints vendor fix text with
+`PUBLICATION_PERMITTED_HOSTS` empty; prints an issue label for a product listed in `label_withheld_products`, or
+withholds one for a product not listed; a deploy passes QA with the projection missing, failed or stale; or
+`test_evidence_overview.py` reports anything but its governed count.
 
 ### AUX-016 — Two verdict-chain branches are indistinguishable on this corpus
 
