@@ -501,7 +501,7 @@ def check_way_forward() -> None:
           "line that reads as a recommendation",
           bool(eo.next_action_problems(forged)) and bool(eo.next_action_problems({"kind": "upgrade", "lines": []}))
           and bool(eo.next_action_problems({"kind": "newest", "lines": ["Install the newest one."], "fixed": []}))
-          and not eo.next_action_problems(nxt["obs-studio|90.0.0|"]))
+          and not eo.next_action_problems((raw.get("obs-studio|90.0.0|") or {}).get("next_action") or {"kind": "none"}))
 
 
 # ------------------------------------------------------------------------------------------------ [Q]
