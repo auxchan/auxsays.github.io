@@ -97,6 +97,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-094 | Resolved | Verdict policy | Low | The page could print an official verdict the decision code did not give, and QA could not see it |
 | AUX-095 | Deferred | Verdict policy | Medium | A vendor-confirmed serious defect or a corroborated install failure gave no caution unless someone hand-wrote a reason (producer built; public activation OFF, temporary) |
 | AUX-099 | Deferred | Verdict policy | Medium | The reason producer counted unknown accounts as independent reporters and had no record of what it would have published (repaired; shadow operation; public activation OFF) |
+| AUX-124 | Resolved | Verdict policy | Medium | Automatically drafted verdict reasons skipped the checks a reviewed reason meets, and a true official confirmation could take away a Windows entry's support |
 | AUX-065 | Resolved | Coverage | Medium | DaVinci Resolve versions never archived, so routine collection spent its whole budget on releases nobody installs |
 | AUX-075 | Resolved | CI governance | Medium | The DaVinci archive build check asserted the one-time migration, so it failed on every pull request after it ran |
 | AUX-062 | Deferred | Evidence integrity | Low | Three classifier misses the sprint measured but did not fix |
@@ -452,6 +453,63 @@ current main with `--expected-store-sha256`.
 **Reopen only if** either row stops counting without its own audited withdrawal, a row is re-admitted without two
 CORRECT labels from two adjudicators, 25.001.21111 counts before its context is recovered through an authorised
 procedure, or a replay of the veto over stored rows flags a counted row this manifest does not name.
+
+---
+
+### AUX-124 — Automatically drafted verdict reasons skipped the checks a reviewed reason meets, and a true official confirmation could take away a Windows entry's support
+
+- **Status** Resolved · **Area** Verdict policy · **Severity** Medium
+- **First seen** 2026-11-20 (G78 D1 shadow; G82 T2 section 3 and section 6: H-1, H-2, D-1) · **Resolved** 2026-11-21
+  (G84, GPT G82 ruling Q2 "B1: GO")
+
+**Symptom** Three defects in the verdict-reason path. None shows on a page today.
+1. With the reason producer's activation switch on (it is off), its candidates were merged beside the reviewed
+   entries after only the producer's own gate: no schema, no WAIT facts, no check that the cited reports are
+   counted on the page. `decide` assumes every reason it reads is already supported. Measured in memory on this
+   tree: the projection grew from 56 to 63 rows (WAIT 1 -> 7), and a Windows vendor WAIT that cites none of its
+   page's 12 counted reports reached 25H2 26200.9550.
+2. A user-corroboration candidate (the class later work is to fill) would have been worded as a vendor
+   confirmation, and the reporter minimum applied to the install class only.
+3. An official confirmation named its record by product and version only, so the lookup asked for the blank-build
+   record. Every Windows and PowerPoint record carries a build, so adding a TRUE confirmation to a supported Windows
+   entry made it unsupported (the G82 T2 repro: TEST FIRST -> INSUFFICIENT DATA). The two entries that cite a
+   confirmation today are both OBS, so no page was affected.
+
+**Fix**
+1. One contract for every reason. `verdict_reasons.machine_schema_errors` is the reviewed schema with one
+   difference: a machine entry has no review date, and its basis is `automatic:<rule version>`, read from its own
+   producer block. `verdict_projection.validated_candidates` runs it, then `support_problems` on the candidate's own
+   page. `supported_reasons` (the projection, and QA through it) and `page_supported_reasons` (the record writers)
+   merge only what passes; a refused candidate is listed with the unsupported entries. The reviewed path is
+   unchanged word for word.
+2. `_candidate` maps each producer class to its reason class (`REASON_CLASS_BY_CLASS`: the user class to
+   `corroborated_issue`, an unknown class to none), and `candidate_problems` holds every user class to the reporter
+   minimum (`USER_CLASSES`).
+3. `official_confirmation` accepts `target_build` (quoted text; a YAML number is a schema error). `support_problems`
+   and `apply_consensus_to_records._confirmation_records` look the record up by its full identity
+   (`verdict_reasons.confirmation_identity`). A confirmation that names no build looks up the blank-build record,
+   exactly as before.
+
+**Measured** Switch off: the verdict projection and the reason-candidate artifact are byte-identical to base
+b64fa539, and all 7 reviewed entries are still supported. Switch forced on in memory: all 14 candidates are refused
+(each fails both the machine schema and `support_problems`), the projection stays at the switch-off projection's 56
+rows, and the Windows 26200.9550 vendor WAIT is refused. The T2 repro with the confirmation naming the build keeps
+TEST FIRST. Tests: `test_reason_validation_contract.py` (31 checks; RX1..RX10, one mutant per fix site;
+`bypass_fixture()` for G79's bypass fixture) and `test_verdict_reason_producer.py` S2..S4, S6, S7 restated (113).
+
+**Not changed** PUBLIC_AUTO_ACTIVATION stays off. No acceptance rule, threshold, verdict, label, template, collector
+or stored evidence. Vendor-class candidates carry a reason class the reviewed schema does not list, so the contract
+refuses every one of them; whether that class may ever publish is an owner decision (AUX-095, AUX-099). Reporter
+facts and an independence validator (G82 B2, B3) are not part of this.
+
+**Residual** With the switch on, QA's `verdict_reason_unsupported` warning names a refused candidate with the tail
+"No record carries this page identity": QA maps entry ids to pages from the reviewed file only. A warning, never an
+error; reachable only with the switch on.
+
+**Reopen only if** with the switch on, a candidate that fails `machine_schema_errors` or `support_problems` reaches
+a page's merged reasons, the writer path or the projection; a reviewed entry's schema or support result differs from
+the pre-G84 function; a true confirmation that names its record's full identity makes a supported entry unsupported;
+or a user-corroboration candidate is drafted with the vendor class or without the reporter minimum.
 
 ---
 

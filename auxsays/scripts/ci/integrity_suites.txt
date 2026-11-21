@@ -386,7 +386,20 @@ auxsays/scripts/tests/test_growth3_verdict_policy.py = 156
 # Acrobat rows about another version or product are refused (I19); explicit copy declarations (I20); a stage
 # never joins two codes (I21); codes only in install-error context (I22); the writers add candidates beside a
 # reviewed entry (S7). 62 mutants, VX52..VX62 one change each.
+# G84 (AUX-124; 113 unchanged): with the switch ON only the candidates that pass the reviewed entries' own checks
+# reach the projection, the real gate, QA and the record writers; the named fixture's vendor candidates cite no
+# counted row and are refused, an Acrobat install candidate on two counted reports passes, and a projection carrying
+# a refused candidate is a QA error (S2..S4, S6, S7 restated).
 auxsays/scripts/tests/test_verdict_reason_producer.py = 113
+# G84 (AUX-124), one validation contract for every verdict reason: with the activation switch forced ON in memory a
+# producer candidate meets the reviewed schema and every WAIT fact (basis automatic:<rule version>) and
+# support_problems on its own page's counted rows before decide may read it, at the projection site and the writer
+# site, and a refused one is listed as unsupported (the bypass fixture G79 reuses); the reviewed path is unchanged
+# word for word; QA errors on a projection carrying a refused candidate (H1a..H1k). A user-corroboration candidate
+# is worded as the user class and held to the reporter minimum (H2a..H2c). An official confirmation names its
+# record by product, version and build: a true one keeps a Windows entry supported, blank-build products are
+# unchanged, the writer path too (D1a..D1f). 10 mutants, RX1..RX10, one per fix site; the switch stays OFF (N1).
+auxsays/scripts/tests/test_reason_validation_contract.py = 31
 # AUX-099, shadow operation of the reason producer (switch OFF): the deploy ledger tells a first-seen
 # candidate from a repeat appearance by stable identity -- a baseline first deploy, 0 new over unchanged
 # evidence, exactly the expected new candidate after one added row, a repeat after one more report, a

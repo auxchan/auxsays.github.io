@@ -84,8 +84,11 @@ public automatic activation needs the owner's approval of that transition (AUTH_
 the decision authority reads only the reviewed `_data/verdict_reasons.yml`, so nothing published
 changes; the producer still runs at deploy -- SHADOW operation -- and its candidates are written to the
 git-ignored `_data/verdict_reason_candidates.yml`, which lib/producer_shadow turns into bounded,
-public-safe diagnostics. ON, lib/verdict_projection merges the candidates into the supported reasons,
-so the projection, the gate, every surface and QA carry them.
+public-safe diagnostics. ON, lib/verdict_projection merges into the supported reasons ONLY the candidates
+that pass the reviewed entries' own checks (G84, H-1: `verdict_reasons.machine_schema_errors`, then
+`verdict_reasons.support_problems` on the page's counted rows), so the projection, the gate, every surface and
+QA carry those; a candidate that fails is reported with the unsupported entries and never merged.
+`candidate_problems` below is this producer's own gate and comes first; it is not that contract.
 
 NEVER A SECOND WRITER. The producer runs only where reasons are gathered for a decision and writes
 nothing; build_verdict_projection.py writes its derived, git-ignored artifact. No collector imports it.
@@ -124,6 +127,17 @@ PUBLIC_AUTO_ACTIVATION = False
 VENDOR_CLASS = "vendor_confirmed_serious"
 INSTALL_CLASS = "user_corroborated_install_failure"
 INSTALL_REASON_CLASS = "corroborated_install_problem"   # the existing reason class decide words
+# The non-install user-corroboration class the placeholder `corroboration_candidates` specifies (later work).
+USER_CLASS = "user_corroborated_issue"
+USER_REASON_CLASS = "corroborated_issue"
+# Every class whose candidate rests on USER reports: each needs MIN_INDEPENDENT_REPORTERS cited rows
+# (`candidate_problems`). G84 (H-2): the minimum used to apply to the install class only.
+USER_CLASSES = (INSTALL_CLASS, USER_CLASS)
+# The reason class each producer class drafts -- the class decide words and verdict_reasons accepts. G84 (H-2):
+# `_candidate` gave every non-install class the VENDOR class, so a user-corroboration candidate would have
+# been worded as a vendor confirmation. A class not listed here drafts no reason class at all (fails closed).
+REASON_CLASS_BY_CLASS = {VENDOR_CLASS: VENDOR_CLASS, INSTALL_CLASS: INSTALL_REASON_CLASS,
+                         USER_CLASS: USER_REASON_CLASS}
 SEVERITY_BASES = ("data_loss", "critical_install_failure", "substantial_workflow_breakage",
                   "crash_on_launch", "crash_in_core_flow")
 EXCLUSION_REASONS = ("minor_lag", "recoverable_preference_or_profile", "narrow_cosmetic",
@@ -1712,8 +1726,10 @@ def corroboration_candidates(page: Mapping[str, Any], counted_rows: Iterable[Map
         behind two URLs (AUTH_V2_35 D-A). "uncertain" counts as not independent.
       * a candidate needs MIN_INDEPENDENT_REPORTERS rows that are pairwise "independent" AND describe
         the same concrete problem on this exact version, with the affected workflow identified.
-      * it returns entries in the same shape `_candidate` builds, class
-        "user_corroborated_issue", verdict TEST FIRST only (no automatic WAIT; A1).
+      * it returns entries in the same shape `_candidate` builds, class USER_CLASS
+        ("user_corroborated_issue"), verdict TEST FIRST only (no automatic WAIT; A1). `_candidate` words
+        that class as the user reason class `corroborated_issue`, and `candidate_problems` holds it to
+        MIN_INDEPENDENT_REPORTERS cited rows like the install class (G84, H-2).
     With no verifier (the only state today) nothing can be shown independent, so nothing is proposed;
     those pages stay with the reviewed entries and the review queue."""
     del page, counted_rows, incident_independence
@@ -1749,7 +1765,7 @@ def _candidate(cls: str, page: Mapping[str, Any], *, verdict: str, scope: str, r
         "candidate_key": key,
         "product_id": ident[0], "update_version": ident[1],
         "verdict": verdict,
-        "reason_class": INSTALL_REASON_CLASS if cls == INSTALL_CLASS else VENDOR_CLASS,
+        "reason_class": REASON_CLASS_BY_CLASS.get(cls, ""),
         "scope": scope, "reason": reason,
         "severity_basis": severity, "failure": failure, "problem_key": problem_key,
         "evidence": list(evidence or []),
@@ -1896,7 +1912,7 @@ def candidate_problems(entry: Mapping[str, Any]) -> list[str]:
     if cls == VENDOR_CLASS and not (_s((entry.get("citation") or {}).get("statement"))
                                     and _s((entry.get("citation") or {}).get("record"))):
         problems.append("no stored official statement is cited")
-    if cls == INSTALL_CLASS and len(entry.get("evidence") or []) < MIN_INDEPENDENT_REPORTERS:
+    if cls in USER_CLASSES and len(entry.get("evidence") or []) < MIN_INDEPENDENT_REPORTERS:
         problems.append("fewer independent reporters than MIN_INDEPENDENT_REPORTERS")
     if entry.get("verdict") == "WAIT" and (cls != VENDOR_CLASS or entry.get("new_in_this_version") is not True):
         problems.append("WAIT needs a vendor-confirmed defect that starts in this version")
@@ -1994,7 +2010,10 @@ def produce(records: Iterable[Mapping[str, Any]],
 def merge(valid_by_identity: Mapping[tuple[str, str, str], list[dict[str, Any]]],
           candidates: Iterable[Mapping[str, Any]]) -> dict[tuple[str, str, str], list[dict[str, Any]]]:
     """The reviewed entries with the candidates added behind them. A candidate that repeats a
-    reviewed entry's verdict and scope on the same page adds nothing: the reviewed one stands."""
+    reviewed entry's verdict and scope on the same page adds nothing: the reviewed one stands.
+
+    `candidates` must already have passed the reviewed contract (lib/verdict_projection.validated_candidates,
+    G84): this only places them; it checks nothing."""
     merged = {k: list(v) for k, v in valid_by_identity.items()}
     for cand in candidates:
         ident = verdict_reasons.reason_identity(cand)
