@@ -45,6 +45,15 @@ WHAT IT CHECKS. ERROR blocks the deploy; WARN is printed and never blocks.
                     whose coverage is not operating, and of the hub, carry none of the retired claim
                     phrases ("is tracked by AUXSAYS", "is tracked for", "Monitoring active", "official
                     source mapped", ...).
+  PATCH      ERROR  (AUX-120) a patch page of a product with no community collection (projection
+                    `community` absent) says its reports are too few ("Too few reports", "Not enough
+                    reports") in its verdict line or its community-signal word. Not monitored and
+                    insufficient evidence are different statements. The inverse is refused too: a
+                    patch page of a product whose collection is operating or impaired says the product
+                    is not monitored. Only those two template-written elements are read, by their
+                    markup, never the vendor notes or report text on the page; a patch page whose two
+                    elements or product identity can no longer be read is refused, never read as clean,
+                    and so is a build that read no patch page while the source holds patch records.
 
 Run:  python auxsays/scripts/ci/verify_coverage_claims.py --site auxsays/_site [--source auxsays]
 Exit: 0 clean (warnings allowed), 1 an error, 2 the site directory is unusable.
@@ -76,6 +85,19 @@ CLAIM_PHRASES = ("is tracked by AUXSAYS", "is tracked for", "is tracked because"
 HUB_PHRASES = ("is tracked by AUXSAYS", "is tracked because", "is tracked as part of", "tracking focuses on",
                "Monitoring active", "tracked companies", "tracked software")
 NOT_OPERATING = ("impaired", "planned", "not_monitored")
+
+# AUX-120 (G80). A patch page (_layouts/aux-update.html) and the two elements whose words depend on
+# whether the product's community reports are collected: the verdict line under "AUXSAYS verdict" and
+# the community-signal word. The product identity is the page's own watch control, which carries the
+# record's product_id. Phrases are matched case-insensitively.
+_PATCH_BODY = re.compile(r'<body class="aux-page aux-update"')
+_PATCH_PRODUCT = re.compile(r'class="patch-watch-toggle patch-watch-toggle--inline" data-watch-product="([^"]*)"')
+_PATCH_LINE = re.compile(r'<p class="update-decision-recommendation">(.*?)</p>', re.S)
+_PATCH_SIGNAL = re.compile(r'<strong>Community signal:</strong>\s*<em class="consensus-word[^"]*">(.*?)</em>', re.S)
+_PATCH_ZERO = '<span class="update-evidence-report-count">0 confirmed'
+TOO_FEW_PHRASES = ("too few reports", "not enough reports")
+NOT_MONITORED_LINE = "not monitoring community reports"
+NOT_MONITORED_WORD = "not monitored"
 
 _PILL = re.compile(r"<span\b([^>]*\bdata-coverage-(product|company)=\"([^\"]*)\"[^>]*)>([^<]*)</span>", re.I)
 _STATE_CLASS = re.compile(r"patch-coverage-pill--coverage-([a-z_]+)")
@@ -248,10 +270,48 @@ def check_projection(catalog_ids: set[str], company_ids: set[str], products: dic
     return errors
 
 
+def _visible(fragment: str) -> str:
+    return " ".join(html.unescape(_TAG.sub(" ", fragment)).split())
+
+
+def patch_page_problems(rel: str, text: str, products: dict) -> tuple[list[str], dict]:
+    """AUX-120: one built patch page's coverage wording against its product's community state.
+
+    -> (errors, info). info: the community state read, whether the page has zero counted reports, and
+    whether it says the product is not monitored."""
+    info = {"community": "", "zero": _PATCH_ZERO in text, "not_monitored": False}
+    found = _PATCH_PRODUCT.search(text)
+    lines = _PATCH_LINE.findall(text)
+    signals = _PATCH_SIGNAL.findall(text)
+    if found is None or len(lines) != 1 or len(signals) != 1:
+        return [f"PATCH {rel}: its product identity, verdict line or community-signal word cannot be read "
+                f"(found {int(found is not None)}, {len(lines)}, {len(signals)}), so its coverage wording "
+                f"cannot be checked"], info
+    pid = found.group(1)
+    community = str((products.get(pid) or {}).get("community") or "")
+    if community not in cov.COMMUNITY_STATES:
+        return [f"PATCH {rel}: product {pid!r} has no community state in the projection ({community!r}), "
+                f"so its coverage wording cannot be checked"], info
+    info["community"] = community
+    line, word = _visible(lines[0]), _visible(signals[0])
+    info["not_monitored"] = NOT_MONITORED_LINE in line.lower() or word.lower() == NOT_MONITORED_WORD
+    errors = []
+    if community == "absent":
+        for phrase in TOO_FEW_PHRASES:
+            if phrase in line.lower() or phrase in word.lower():
+                errors.append(f"PATCH {rel}: {pid} has no community collection (community absent) but the "
+                              f"page says {phrase!r}: not monitored is not too few reports")
+    elif info["not_monitored"]:
+        errors.append(f"PATCH {rel}: {pid}'s community collection is {community} but the page says it is "
+                      f"not monitored")
+    return errors, info
+
+
 def check_site(site: Path, catalog: list[dict], companies_cat: list[dict], products: dict,
                companies: dict) -> tuple[list[str], dict]:
     errors: list[str] = []
-    stats = {"pages": 0, "pills": 0, "product_pages": 0, "company_pages": 0, "prose_regions": 0}
+    stats = {"pages": 0, "pills": 0, "product_pages": 0, "company_pages": 0, "prose_regions": 0,
+             "patch_pages": 0, "patch_pages_absent": 0, "patch_pages_not_monitored": 0}
     product_pages: dict[Path, str] = {}
     company_pages: dict[Path, str] = {}
     for product in catalog:
@@ -279,6 +339,12 @@ def check_site(site: Path, catalog: list[dict], companies_cat: list[dict], produ
         if fallback:
             errors.append(f"PILLS {rel} shows the '{cov.UNKNOWN_LABEL}' fallback: the coverage "
                           f"projection was missing or incomplete when it was built")
+        if _PATCH_BODY.search(text):
+            patch_errors, info = patch_page_problems(rel, text, products)
+            errors += patch_errors
+            stats["patch_pages"] += 1
+            stats["patch_pages_absent"] += info["community"] == "absent"
+            stats["patch_pages_not_monitored"] += info["not_monitored"]
         pid = product_pages.get(path)
         cid = company_pages.get(path)
         if pid is None and cid is None and path != hub:
@@ -344,7 +410,22 @@ def verify(site: Path, source: Path, projection_path: Path | None = None) -> tup
                                    {str(c.get("id")) for c in companies_cat}, products, companies)
         site_errors, stats = check_site(site, catalog, companies_cat, products, companies)
         errors += site_errors
+        records = patch_record_count(source)
+        if records and not stats.get("patch_pages"):
+            errors.append(f"PATCH the source holds {records} patch records but no built patch page was read, so "
+                          f"no patch page's coverage wording was checked")
     return errors, warnings, stats
+
+
+def patch_record_count(source: Path) -> int:
+    """How many source records render as patch pages (front matter `layout: aux-update`)."""
+    count = 0
+    for path in (source / "updates").rglob("*.md") if (source / "updates").is_dir() else ():
+        with open(path, "rb") as fh:
+            head = fh.read(512)
+        if head.startswith(b"---") and re.search(rb"^layout:\s*aux-update\s*$", head, re.M):
+            count += 1
+    return count
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -365,7 +446,9 @@ def main(argv: list[str] | None = None) -> int:
     if stats:
         print(f"pages {stats['pages']}; coverage pills {stats['pills']}; product pages "
               f"{stats['product_pages']}; company pages {stats['company_pages']}; coverage prose "
-              f"regions {stats['prose_regions']}")
+              f"regions {stats['prose_regions']}; patch pages {stats['patch_pages']} "
+              f"({stats['patch_pages_absent']} of products without community collection, "
+              f"{stats['patch_pages_not_monitored']} saying not monitored)")
     for w in warnings:
         print(f"WARN  {w}")
     for e in errors:
