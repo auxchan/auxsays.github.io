@@ -581,6 +581,16 @@ auxsays/scripts/tests/test_official_notes_platform.py = 68
 # the record's own stored notes prove it, with the shipped classifier, and changes no other byte of
 # any file; zero network, idempotent, and its scope proof refuses a concurrent change (AUX-051).
 auxsays/scripts/tests/test_official_notes_platform_backlog.py = 10
+# AUX-125 (G85): a known issue the vendor declares in its GitHub release notes reaches the patch page.
+# The parser takes an explicit declaration only (alert markup alone is not one) for the release being
+# assessed, ambiguous = unknown (P, incl. the real stored OBS 33.0.2 body's structure, masked so it holds
+# no vendor text, frozen); end to end through
+# patch_ingest.run_source, a release's notes gain and then lose a notice and the field and rendered card
+# follow, with no churn on an unchanged body and the documented refresh window pinned (W); Release
+# Health and absent-field cards byte-identical to the pre-change card in real Liquid (R); the migration
+# is zero-network, one line per demonstrated change, idempotent, refusing, with nothing left pending in
+# the corpus (M); bare-script imports run (B). Needs ruby + liquid.
+auxsays/scripts/tests/test_official_notes_known_issue.py = 61
 # The one-time transcoding repair (G39): text a 2026-05-02 local pass read as cp1252 is restored only
 # where undoing the misreading is exact; correct UTF-8, ASCII, mixed fields (reported), text misread
 # twice (M10) and nested evidence copies are never changed; zero network, idempotent, and its scope proof refuses a concurrent change.

@@ -770,6 +770,19 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
           {% if record_note_text != '' %}<p>{{ record_note_text }}</p>{% endif %}
         </div>
       </div>
+      {%- comment -%}
+        VENDOR WARNING (AUX-125). When the vendor's own GitHub release notes for THIS version declare a
+        known issue, the page says so directly under the decision, where a reader deciding whether to
+        install will see it; the Vendor Known Issues card further down carries the same notice. It is
+        official vendor context, not part of the verdict and not a community report, and it prints no
+        count and no vendor text. Without the field it renders nothing, byte for byte.
+      {%- endcomment -%}
+      {%- if page.official_notes_known_issue == 'declared' %}
+      {%- assign notes_warning_url = page.update_source_url | default: page.official_patch_notes_source_url | default: page.primary_official_source | default: '' %}
+      <aside class="update-evidence-freshness-notice update-official-notes-warning" role="note" aria-label="Vendor warning from the official release notes">
+        <p><strong>Vendor warning identified.</strong> The official release notes for this version identify a known issue. Review the details before installing.{% if notes_warning_url != '' %} <a href="{{ notes_warning_url | escape }}">Official release notes ↗</a>{% endif %}</p>
+      </aside>
+      {%- endif %}
 
 
       {%- comment -%}
@@ -841,7 +854,7 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
       {% assign vki_has_data = false %}
       {% if page.official_known_issues_present == true or page.official_known_issues_present == false or page.official_active_issue_count or page.official_resolved_issue_count or page.official_safeguard_hold_count %}{% assign vki_has_data = true %}{% endif %}
       {% assign vki_source = page.update_source_url | default: page.official_patch_notes_source_url | default: page.primary_official_source %}
-      {% include aux-vendor-known-issues.html active=official_active resolved=official_resolved safeguard=official_safeguard has_data=vki_has_data source_url=vki_source scope='patch' %}
+      {% include aux-vendor-known-issues.html active=official_active resolved=official_resolved safeguard=official_safeguard has_data=vki_has_data source_url=vki_source scope='patch' notes_notice=page.official_notes_known_issue %}
     </div>
   </section>
 
