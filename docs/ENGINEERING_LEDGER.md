@@ -945,7 +945,7 @@ after measuring which products have it, and keep everything deterministic.
   (pages.yml, and the DaVinci archive build check). `_includes/patch-evidence-overview.html` prints it and decides
   nothing.
 - The evidence card no longer prints the strength word. Its foot carries the evidence overview: "<n> accepted
-  patch-specific reports." plus, on a page whose verdict rests on no supported reason, "No problem-specific
+  patch-specific reports." plus, on a page that prints no verdict (INSUFFICIENT DATA), "No problem-specific
   installation recommendation has been established."; the source families ("34 GitHub issues and 13 OBS forum
   threads"); and what the list is ("Each report is listed separately below; AUXSAYS has not grouped them by
   problem.", or how many reports a supported reason cites). No platform counts.
@@ -970,7 +970,7 @@ after measuring which products have it, and keep everything deterministic.
   | OBS Studio | 311 | G64 (281 rows), G82 (33.0.1, 47 rows), S4B (16 fixtures) | 66 of 281; 15 of 47 themes, 12-17 of 47 printed labels; 12 of 16 fixtures | 111 | withheld |
   | Windows 11 | 558 | G81 S1 v2.2 (558 rows), G77 RA-C1, S4B (13) | 131 rewritten + 57 unchanged unsupported of 558; 9 of 13 fixtures | 123 | withheld until G81 lands |
   | Premiere Pro | 27 | S4B (1, P01) | 1 of 1 (a misreading of retained text) | 16 | withheld |
-  | ComfyUI | 56 | S4B (3) | 0 demonstrated: P10 is a truncated-text difference, "context_insufficient" (GPT G78) | 9 | unchanged |
+  | ComfyUI | 56 | S4B (3) | 1 of 3 (P10: the stored label names a different problem from the report's complete title; S4 files it as wrong with P01) | 9 | withheld |
   | DaVinci Resolve | 330 | S4B (1, P03) | 0 of 1 | 106 | unchanged |
   | Acrobat Reader | 167 | S4B (1, P04) | 0 of 1 | 28 | unchanged |
   | Acrobat Pro | 115 | none | none recorded | 16 | unchanged |

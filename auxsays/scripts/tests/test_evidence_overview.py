@@ -5,8 +5,8 @@ WHAT IS PINNED, and the mechanism each section protects:
 
   [R] the reviewed file (_data/evidence_presentation.yml): exactly which products' labels are withheld
       and which page carries a reviewed finding; a malformed entry counts for nothing.
-  [C] the count line: "<n> accepted patch-specific reports." plus the universal clause on a page whose
-      verdict rests on no supported reason, no clause on a page that has one, and the reviewed finding
+  [C] the count line: "<n> accepted patch-specific reports." plus the universal clause on a page that
+      prints no verdict, no clause on a page that prints one, and the reviewed finding
       ONLY while the counted population is exactly the assessed one (self-invalidating).
   [N] the newer release: a port of My Installed Versions' installedState (UPDATE AVAILABLE only),
       run against the SHIPPED JavaScript over every record of the corpus so the two cannot part; the
@@ -254,8 +254,9 @@ def run() -> int:  # noqa: PLR0915
     reviewed = eo.load_reviewed(REVIEWED)
     check("R1 the shipped reviewed file is valid", eo.reviewed_errors(reviewed) == [],
           eo.reviewed_errors(reviewed))
-    check("R2 labels are withheld for exactly the measured products: OBS Studio, Windows 11, Premiere Pro",
-          eo.label_withheld_products(reviewed) == ["obs-studio", "microsoft-windows-11", "adobe-premiere-pro"],
+    check("R2 labels are withheld for exactly the measured products: OBS Studio, Windows 11, Premiere Pro, ComfyUI",
+          eo.label_withheld_products(reviewed) == ["obs-studio", "microsoft-windows-11", "adobe-premiere-pro",
+                                                   "comfyui"],
           eo.label_withheld_products(reviewed))
     assessments = reviewed.get("assessments") or []
     a0 = assessments[0] if assessments else {}
@@ -297,8 +298,14 @@ def run() -> int:  # noqa: PLR0915
     vrows = {verdict_projection.page_key(page): {"verdict": "TEST FIRST", "scope": "if you use X",
                                                  "body": "line", "reasons": ["tool:1.0:r"]}}
     pr = project_one([page], groups, vrows, [reason])[verdict_projection.page_key(page)]
-    check("C2 a supported reason: the count line carries no clause",
-          pr["count_line"] == "3 accepted patch-specific reports.", pr["count_line"])
+    orow = {verdict_projection.page_key(page): {"verdict": "AVOID", "scope": "for new installations",
+                                                "body": "The vendor withdrew this update.", "reasons": []}}
+    po = project_one([page], groups, orow, [], reviewed=reviewed_with([assessment_for(page, rows3)]))[
+        verdict_projection.page_key(page)]
+    check("C2 a supported reason, or an official verdict, prints no clause and no reviewed finding",
+          pr["count_line"] == "3 accepted patch-specific reports."
+          and po["count_line"] == "3 accepted patch-specific reports." and not po["assessment"]
+          and po["limitation"] == eo.LIMITATION, (pr["count_line"], po))
     check("C2b and the limitation says how many reports the reason cites",
           pr["limitation"].startswith("The reason above cites 2 of them;"), pr["limitation"])
     rev = reviewed_with([assessment_for(page, rows3)])
@@ -487,10 +494,9 @@ def run() -> int:  # noqa: PLR0915
         if "count_line" not in rw:
             continue
         printed = verdict_projection.printed_row(r, real_verdict["pages"])
-        has_reason = bool((printed or {}).get("reasons"))
-        if has_reason == rw["count_line"].endswith((eo.UNIVERSAL_CLAUSE, FINDING)):
+        if (printed is not None) == rw["count_line"].endswith((eo.UNIVERSAL_CLAUSE, FINDING)):
             unreasoned_bad.append(k)
-    check("G7 in this tree a clause appears exactly on the pages whose verdict rests on no supported reason",
+    check("G7 in this tree a clause appears exactly on the pages that print no verdict (INSUFFICIENT DATA)",
           not unreasoned_bad, unreasoned_bad[:5])
     obs = real["pages"].get("obs-studio|33.0.1|", {})
     obs_rows = real_groups.get(("obs-studio", "33.0.1", ""), [])

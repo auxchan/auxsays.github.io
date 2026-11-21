@@ -13,8 +13,8 @@ grouping of reports and no corroboration of any problem.
 WHAT A ROW HOLDS (keyed like the verdict projection: product_id|update_version|target_build):
   * reports       the page's counted population -- the SAME rows the verdict reads
                   (lib.report_counts.counted_evidence_rows, through verdict_projection.load_inputs).
-  * count_line    "<n> accepted patch-specific reports." plus, on a page whose verdict rests on no
-                  supported reason, a clause. The universal clause (GPT clarification 2) is
+  * count_line    "<n> accepted patch-specific reports." plus, on a page that prints no verdict
+                  (INSUFFICIENT DATA), a clause. The universal clause (GPT clarification 2) is
                   UNIVERSAL_CLAUSE. A page may carry a stronger reviewed finding instead, only from
                   `_data/evidence_presentation.yml` `assessments`, and only while the page's counted
                   population still equals the one that was assessed (same size, same sha256 of the
@@ -521,8 +521,13 @@ def project(records: Iterable[Mapping[str, Any]],
             printed = verdict_projection.printed_row(rec, verdict_rows)
             reason_ids = [str(x) for x in (printed or {}).get("reasons") or []]
             reasoned = bool(reason_ids)
-            assessment = None if reasoned else valid_assessment(rec, rows, assessments)
-            clause = "" if reasoned else (_text(assessment.get("finding")) if assessment else UNIVERSAL_CLAUSE)
+            # The clause, or a reviewed finding in its place, belongs only to a page that prints NO verdict
+            # (INSUFFICIENT DATA). An official AVOID or SECURITY UPDATE is itself an installation
+            # recommendation, so "No problem-specific installation recommendation has been established."
+            # beside it would contradict the verdict box.
+            verdict_printed = printed is not None
+            assessment = None if verdict_printed else valid_assessment(rec, rows, assessments)
+            clause = "" if verdict_printed else (_text(assessment.get("finding")) if assessment else UNIVERSAL_CLAUSE)
             row.update({
                 "reports": n,
                 "count_line": f"{count_sentence(n)} {clause}".strip(),

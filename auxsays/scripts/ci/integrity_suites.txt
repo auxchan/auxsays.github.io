@@ -532,8 +532,8 @@ auxsays/scripts/tests/test_public_projection_earned_fields.py = 9
 # pass at the end is WARN-only and adds no check, so evidence growth cannot change this count.
 auxsays/scripts/tests/test_publication_title_minimisation.py = 36
 # AUX-123 (G82-A): the evidence overview and newer-release note, from a deploy-time projection. Pins
-# the count stated as a count (no strength word), the universal clause on pages with no supported
-# reason, the reviewed OBS 33.0.1 finding ONLY while its counted population is the assessed one, the
+# the count stated as a count (no strength word), the universal clause on pages that print no
+# verdict, the reviewed OBS 33.0.1 finding ONLY while its counted population is the assessed one, the
 # newer release by My Installed Versions' rule (the port run against the shipped installedState over
 # every corpus record in node), vendor fix lines off with no permission on record, the public-text
 # guard, QA's missing/failed/stale/malformed errors, and real Liquid renders of the include, the label

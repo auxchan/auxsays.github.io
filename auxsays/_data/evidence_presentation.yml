@@ -56,6 +56,18 @@ label_withheld_products:
     reopen: >-
       P01's stored label is corrected through the audited label-only path (S4-Q1) and a human reading of
       the counted Premiere Pro rows finds no other printed label that contradicts its report.
+  - product_id: comfyui
+    measured: >-
+      S4B fixture P10 (ComfyUI 0.42.1, counted GitHub issue 17326): the stored label "performance
+      regression" names a different problem from the report's complete title, which reports workflows that
+      MP4 files carry and MKV files cannot. 1 of 3 frozen ComfyUI fixtures carries a wrong stored label, and
+      it is the only label behind the 0.42.1 page's "Current reports mention ..." sentence.
+    basis: >-
+      G78 S4_BASELINE section 5 (P10 listed as KNOWN_STORED_WRONG together with P01) and S4B_FIXTURES.json
+      (P10, stored_label_ok false); G83 review 1.
+    reopen: >-
+      P10's stored label is corrected through the audited label-only path (S4-Q1) and a human reading of
+      the counted ComfyUI rows finds no other printed label that contradicts its report.
 
 assessments:
   - id: obs-studio:33.0.1:no-problem-independently-corroborated
