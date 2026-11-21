@@ -241,12 +241,16 @@ def run_suite() -> int:
           "Counter(severity_summary_key(item) for item in items)" in builder_src)
 
     # --- the three COUNTING/VALIDITY predicates keep their fallback (acceptance, not summary) ----
-    for label, rel in (("C1 apply_consensus_to_records", "apply_consensus_to_records.py"),
-                       ("C2 qa_patch_records", "qa_patch_records.py"),
-                       ("C3 lib.live_eligibility", "lib/live_eligibility.py")):
+    # G87 (AUX-127): the live gate's per-row condition (e) moved, unchanged, to lib.patch_decision.publishable_row (one
+    # copy, shared with the volume-based precaution); lib.live_eligibility delegates to it, so C3 reads it there.
+    live_src = (SCRIPTS / "lib" / "live_eligibility.py").read_text(encoding="utf-8")
+    for label, rel, extra in (("C1 apply_consensus_to_records", "apply_consensus_to_records.py", True),
+                              ("C2 qa_patch_records", "qa_patch_records.py", True),
+                              ("C3 lib.live_eligibility (its condition (e), lib.patch_decision.publishable_row)",
+                               "lib/patch_decision.py", "patch_decision.publishable_row(" in live_src)):
         text = (SCRIPTS / rel).read_text(encoding="utf-8")
         check(f"{label} still treats an empty severity as valid (`or \"low\"` untouched)",
-              re.search(r'strip\(\)\.lower\(\) or "low"\)', text) is not None)
+              re.search(r'strip\(\)\.lower\(\) or "low"\)', text) is not None and extra)
 
     print("=" * 92)
     print(f"Results: {PASS}/{PASS + FAIL} passed, {FAIL} failed")
