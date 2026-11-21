@@ -43,6 +43,12 @@ instead, so the two could part where QA could not see it: lifecycle builds writt
 as a security update in Liquid only. Now the gate re-derives nothing, and a page with no row is
 INSUFFICIENT DATA.
 
+ONE CONTRACT FOR EVERY REASON (G84, H-1). With the reason producer's switch on, its candidates join the
+reviewed entries only after the same checks (`validated_candidates`: the reviewed schema and WAIT facts,
+then `support_problems` on the page's counted rows); a candidate that fails is listed with the unsupported
+entries and never reaches `decide`. QA computes its view of `decide` through these same functions, so a
+projection carrying a refused candidate is a `verdict_render_disagrees` error.
+
 Reads YAML and the evidence store; no network, no collector run.
 """
 from __future__ import annotations
@@ -104,12 +110,53 @@ def row_for(decision: patch_decision.Decision, record: Mapping[str, Any]) -> dic
     }
 
 
+def validated_candidates(candidates: Iterable[Any],
+                         counted_by_identity: Mapping[tuple[str, str, str], list[Mapping[str, Any]]],
+                         records_by_identity: Mapping[tuple[str, str, str], Mapping[str, Any]],
+                         ) -> tuple[list[dict[str, Any]], dict[str, list[str]]]:
+    """(accepted, refused): the producer's candidates that meet the SAME contract as a reviewed entry, and
+    why each other one does not (G84, H-1).
+
+    `decide` reads `valid_reasons` on the promise that they are "the entries SUPPORTED by the page's counted
+    rows" (patch_decision.decide). Until G84 the candidates were merged behind the reviewed entries with only
+    the producer's own `candidate_problems`, which has no evidence, reporter or regression check: with the
+    switch on, a vendor WAIT citing 0 counted rows reached Windows 25H2 26200.9550, a page with 12 counted
+    reports it did not cite (G78 D1 shadow, G82 T2 section 3). Now each
+    candidate meets, in order, `verdict_reasons.machine_schema_errors` (the reviewed schema and every WAIT
+    fact, with basis automatic:<rule version>) and then `verdict_reasons.support_problems` against the
+    counted rows of ITS OWN page. Any problem refuses it: it is never merged, and `refused` names it by id
+    with its problems, as `valid_reasons_by_identity` names an unsupported reviewed entry. A candidate that
+    is not a mapping is refused, never read."""
+    accepted: list[dict[str, Any]] = []
+    refused: dict[str, list[str]] = {}
+    for index, cand in enumerate(candidates or ()):
+        if not isinstance(cand, Mapping):
+            refused[f"candidates[{index}]"] = ["not a mapping"]
+            continue
+        name = str(cand.get("id") if cand.get("id") is not None else "").strip()
+        label = name or f"candidates[{index}]"
+        # The schema names the entry it checks; the refusal is keyed by that name already, so drop it from the text.
+        prefix = f"{name or 'entries[0]'}: "
+        problems = [p[len(prefix):] if p.startswith(prefix) else p
+                    for p in verdict_reasons.machine_schema_errors([cand])]
+        if not problems:
+            ident = verdict_reasons.reason_identity(cand)
+            problems = verdict_reasons.support_problems(cand, counted_by_identity.get(ident, []),
+                                                        records_by_identity)
+        if problems:
+            refused[label] = list(problems)
+        else:
+            accepted.append(dict(cand))
+    return accepted, refused
+
+
 def supported_reasons(records: Iterable[Mapping[str, Any]],
                       counted_by_identity: Mapping[tuple[str, str, str], list[Mapping[str, Any]]],
                       reasons: Iterable[Mapping[str, Any]],
                       ) -> tuple[dict[tuple[str, str, str], list[dict[str, Any]]], dict[str, list[str]]]:
     """The reasons decide reads per page: the SUPPORTED reviewed entries, plus -- only while
-    lib.verdict_reason_producer.PUBLIC_AUTO_ACTIVATION is on -- the producer's candidates behind them.
+    lib.verdict_reason_producer.PUBLIC_AUTO_ACTIVATION is on -- the producer's candidates that pass the same
+    contract (`validated_candidates`) behind them. A refused candidate joins the unsupported entries.
 
     ONE place, so the projection the gate prints and QA's own view of decide can never read different
     reasons. The switch is OFF (TEMPORARY, pending the owner's approval of public auto-activation):
@@ -120,7 +167,10 @@ def supported_reasons(records: Iterable[Mapping[str, Any]],
                                                                    by_identity)
     if verdict_reason_producer.PUBLIC_AUTO_ACTIVATION:
         produced = verdict_reason_producer.produce(records, counted_by_identity)
-        valid = verdict_reason_producer.merge(valid, produced.candidates)
+        accepted, refused = validated_candidates(produced.candidates, counted_by_identity, by_identity)
+        valid = verdict_reason_producer.merge(valid, accepted)
+        for key, problems in refused.items():
+            unsupported.setdefault(key, problems)
     return valid, unsupported
 
 
@@ -128,7 +178,8 @@ def page_supported_reasons(page: Mapping[str, Any], rows: Iterable[Mapping[str, 
                            reviewed_valid: Iterable[Mapping[str, Any]], records: Any = ()) -> list[dict[str, Any]]:
     """The reasons decide reads for ONE page, as the record writers gather them: `reviewed_valid` (the
     page's supported reviewed entries) plus -- only while PUBLIC_AUTO_ACTIVATION is on -- the producer's
-    candidates for this exact page, merged exactly as `supported_reasons` merges them.
+    candidates for this exact page that pass `validated_candidates` against `rows`, merged exactly as
+    `supported_reasons` merges them (G84: the writers refuse what the projection refuses).
 
     WHY (AUX-099, AUTH_V2_38 WS2 item 8). The record writers (apply_consensus_to_records,
     build_consensus_from_evidence) gathered reviewed reasons only, so with the switch on the prose they
@@ -148,9 +199,12 @@ def page_supported_reasons(page: Mapping[str, Any], rows: Iterable[Mapping[str, 
     ident = verdict_reasons.record_identity(page)
     if not any(verdict_reasons.record_identity(r) == ident for r in pool):
         pool.append(dict(page))
-    produced = verdict_reason_producer.produce(pool, {ident: list(rows or ())})
+    counted = {ident: list(rows or ())}
+    produced = verdict_reason_producer.produce(pool, counted)
     mine = [c for c in produced.candidates if verdict_reasons.reason_identity(c) == ident]
-    return verdict_reason_producer.merge({ident: reviewed}, mine).get(ident, [])
+    accepted, _refused = validated_candidates(mine, counted,
+                                              {verdict_reasons.record_identity(r): r for r in pool})
+    return verdict_reason_producer.merge({ident: reviewed}, accepted).get(ident, [])
 
 
 def project(records: Iterable[Mapping[str, Any]],
