@@ -23,6 +23,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[0]))
 
+from lib import evidence_facts  # noqa: E402
 from patch_collectors.adobe_acrobat_community import acrobat_edition_attribution  # noqa: E402
 from patch_collectors.base import EVIDENCE_PATH, load_evidence  # noqa: E402
 
@@ -55,12 +56,18 @@ def refused_rows(rows: list[dict]) -> list[tuple[dict, str]]:
 
 
 def _blocks(text: str) -> list[tuple[int, int]]:
-    """(start, end) of every row block in the store, in file order."""
+    """(start, end) of every row block in the store, in file order.
+
+    The end stops before the row's trailing structured-fact lines (G68, lib.evidence_facts): those
+    are derived from the row's own text, recomputed by the writer, and never audited content. So an
+    audited block, and every block hash a withdrawal manifest pins, is exactly the row's bytes as they
+    stood before the facts existed, and an edit spliced into [start, end) keeps the facts after it."""
     spans = []
     i = text.find(NEW_ROW)
     while i != -1:
         nxt = text.find(NEW_ROW, i + 1)
-        spans.append((i + 1, (nxt + 1) if nxt != -1 else len(text)))
+        lo, hi = i + 1, (nxt + 1) if nxt != -1 else len(text)
+        spans.append((lo, evidence_facts.audited_block_end(text, lo, hi)))
         i = nxt
     return spans
 

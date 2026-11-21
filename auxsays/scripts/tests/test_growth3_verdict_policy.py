@@ -59,6 +59,7 @@ sys.path.insert(0, str(_AUX / "scripts"))
 
 import yaml  # noqa: E402
 
+from lib import evidence_facts as ef  # noqa: E402
 from lib import patch_decision as pd  # noqa: E402
 from lib import verdict_projection as vp  # noqa: E402
 from lib import verdict_reasons as vr  # noqa: E402
@@ -154,9 +155,11 @@ URLS = [f"https://reports.test/{i}" for i in range(1, 7)]
 
 
 def row(i: int, excerpt: str | None = None) -> dict:
-    return {"id": f"row-{i}", "source_url": URLS[i - 1],
-            "report_text_excerpt": excerpt if excerpt is not None else f"Report number {i}.",
-            "issue_theme": "audio mixer regression", "severity": "high", "sentiment": "negative"}
+    # A row as the persistence boundary writes it: with its structured evidence facts (G68), which the
+    # distinct-reporter rule reads instead of the excerpt text.
+    return ef.with_facts({"id": f"row-{i}", "source_url": URLS[i - 1],
+                          "report_text_excerpt": excerpt if excerpt is not None else f"Report number {i}.",
+                          "issue_theme": "audio mixer regression", "severity": "high", "sentiment": "negative"})
 
 
 def entry(eid: str, verdict: str = "TEST FIRST", rclass: str = "corroborated_issue", *,

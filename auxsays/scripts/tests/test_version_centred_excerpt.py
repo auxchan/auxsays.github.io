@@ -484,9 +484,16 @@ def part_e(store_rows: list[dict]) -> None:
     check("E6 counts, labels, themes, summary, verdict and maturity are identical, head versus centred",
           a_head == a_cent, str([k for k in (next(iter(a_head.values())) if a_head else {}) if a_head and a_cent
                                  and next(iter(a_head.values()))[k] != next(iter(a_cent.values()))[k]]))
-    diff = [(x.get("id"), k) for x, y in zip(loaded["head"], loaded["centred"]) for k in set(x) | set(y) if x.get(k) != y.get(k)]
+    # The excerpt's structured fact (G68, lib.evidence_facts) is derived from the excerpt by the persistence
+    # boundary, so it moves with it and is not a second difference.
+    derived = set(base.evidence_facts.STORED_FIELDS)
+    diff = [(x.get("id"), k) for x, y in zip(loaded["head"], loaded["centred"]) for k in set(x) | set(y)
+            if k not in derived and x.get(k) != y.get(k)]
+    facts_follow = all(y.get(k) == base.evidence_facts.compute_facts(y)[k]
+                       for y in loaded["centred"] for k in derived if base.evidence_facts.carries_facts(y))
     check("E7 the only difference between the two stores is the new rows' excerpt",
-          len(diff) == len(centred) and all(k == "report_text_excerpt" for _i, k in diff), str(diff[:4]))
+          len(diff) == len(centred) and all(k == "report_text_excerpt" for _i, k in diff) and facts_follow,
+          str(diff[:4]))
 
 
 def part_f() -> None:

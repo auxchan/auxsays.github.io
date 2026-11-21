@@ -1345,14 +1345,16 @@ def with_projection(cases: dict) -> dict:
     prints WAIT / TEST FIRST only from that (GROWTH-3 review 1, D2). The page's accepted sources
     stand for its COUNTED rows, one row per cited source, so the authority -- not a template rule --
     decides which entry the page's evidence supports."""
-    from lib import verdict_projection, verdict_reasons  # noqa: PLC0415
+    from lib import evidence_facts, verdict_projection, verdict_reasons  # noqa: PLC0415
     for case in cases.values():
         page = case["page"]
         if page.get("update_entry") is not True:
             continue
         urls = {str(s.get("source_url") or "") for s in page.get("accepted_report_sources") or []}
-        rows = [{"id": item["id"], "source_url": item["source_url"],
-                 "report_text_excerpt": f"Report at {item['source_url']}"}
+        # Rows as the persistence boundary writes them, with their structured evidence facts (G68): the
+        # distinct-reporter rule reads the excerpt fact, never the text.
+        rows = [evidence_facts.with_facts({"id": item["id"], "source_url": item["source_url"],
+                                           "report_text_excerpt": f"Report at {item['source_url']}"})
                 for e in SEARCH_REASONS["entries"] for item in e["evidence"] if item["source_url"] in urls]
         case["site"]["data"]["verdict_projection"] = verdict_projection.project(
             [page], {verdict_reasons.record_identity(page): rows}, SEARCH_REASONS["entries"], [])[0]

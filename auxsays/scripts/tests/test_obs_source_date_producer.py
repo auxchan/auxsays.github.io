@@ -45,7 +45,7 @@ SCRIPTS = _REPO / "auxsays" / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
 import collect_obs_reports as obs  # noqa: E402
-from lib import live_eligibility, maturity, monitoring_health  # noqa: E402
+from lib import evidence_facts, live_eligibility, maturity, monitoring_health  # noqa: E402
 from lib.patch_identity import patch_key  # noqa: E402
 from lib.report_counts import counted_evidence_rows  # noqa: E402
 from patch_collectors import obs as obs_lane  # noqa: E402
@@ -181,8 +181,12 @@ def run_corpus(corpus: dict) -> dict:
             out["texts"][mode] = text
             listing = []
             for row in stored:
-                bare = {k: v for k, v in row.items() if k != FIELD}
-                listing.append([row["update_version"], row["id"], sha(bare), [k for k in row if k != FIELD]])
+                # The golden predates the structured evidence facts (G68): they are derived from the row's
+                # own fields by the persistence boundary, so they are set aside here like source_date, and
+                # test_structured_evidence_facts pins that every stored row carries the right ones.
+                derived = {FIELD, *evidence_facts.STORED_FIELDS}
+                bare = {k: v for k, v in row.items() if k not in derived}
+                listing.append([row["update_version"], row["id"], sha(bare), [k for k in row if k not in derived]])
                 out["expected"][f"{mode}|{row['update_version']}|{row['id']}"] = (
                     expected_by_row.get((row["update_version"], row["source_url"])), row)
             out["stored"][mode] = listing

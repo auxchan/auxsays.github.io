@@ -12,7 +12,7 @@ from urllib.parse import urlparse
 
 import yaml
 
-from lib import maturity, patch_decision, verdict_projection, verdict_reasons
+from lib import evidence_facts, maturity, patch_decision, verdict_projection, verdict_reasons
 from lib import evidence_overview  # G82-A (AUX-123)
 from lib.patch_identity import patch_display_label, patch_key
 # The dedup identity the append path itself applies (base.evidence_key uses it), imported rather
@@ -1386,6 +1386,38 @@ def scan_counted_row_classification(rows: list[Any]) -> list[dict[str, str]]:
     return warnings
 
 
+EVIDENCE_FACT_PROBLEMS = {
+    evidence_facts.MISSING: "carry no structured evidence facts",
+    evidence_facts.PARTIAL: "carry only part of the structured evidence facts",
+    evidence_facts.UNKNOWN_VERSION: "carry structured evidence facts of an unknown rule version",
+    evidence_facts.MALFORMED: "carry a malformed structured evidence fact",
+    evidence_facts.OUTDATED: "carry structured evidence facts computed under an earlier rule",
+    evidence_facts.STALE: "carry a structured evidence fact that differs from the value their own text gives",
+}
+
+
+def scan_evidence_facts(rows: list[Any]) -> list[dict[str, str]]:
+    """G68: every stored row carries current structured evidence facts (lib.evidence_facts) that equal
+    what its own text gives under the current rules. One warning per problem kind, with the count and
+    the first rows; the remedy is the zero-network migration (migrate_evidence_facts.py --write).
+
+    A WARNING, not an error. No page reads a fact directly yet. The one reader, the distinct-reporter
+    rule of a reviewed verdict reason (lib.verdict_reasons), already refuses a cited row without a
+    usable fact, so a reasoned verdict falls back instead of resting on it, and `verdict_reason_unsupported`
+    names that entry. This finding names the rows."""
+    warnings: list[dict[str, str]] = []
+    found = evidence_facts.store_fact_problems(rows)
+    for code in sorted(found):
+        indices = found[code]
+        sample = "; ".join(
+            f"{rows[i].get('product_id')} {rows[i].get('update_version')} {rows[i].get('id')}"
+            for i in indices[:3] if isinstance(rows[i], dict))
+        add(warnings, Path(str(EVIDENCE_PATH)), f"evidence_facts_{code}",
+            f"{len(indices)} evidence row(s) {EVIDENCE_FACT_PROBLEMS.get(code, code)} (first: {sample}). "
+            "Run migrate_evidence_facts.py --write; a reviewed reason citing such a row is unsupported.")
+    return warnings
+
+
 def scan_evidence_count_alignment(files: list[Path]) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
     errors: list[dict[str, str]] = []
     warnings: list[dict[str, str]] = []
@@ -1670,7 +1702,9 @@ def main(argv: list[str] | None = None) -> int:
     e, w = scan_evidence_count_alignment(files)
     errors.extend(e)
     warnings.extend(w)
-    warnings.extend(scan_counted_row_classification(load_evidence_rows()))
+    evidence_rows = load_evidence_rows()
+    warnings.extend(scan_counted_row_classification(evidence_rows))
+    warnings.extend(scan_evidence_facts(evidence_rows))
     e, w = scan_verdict_policy(files)
     errors.extend(e)
     warnings.extend(w)

@@ -153,8 +153,11 @@ def run_suite() -> int:
     # must not do is ADD a key, which would churn every existing row on the next re-serialisation.
     check("Part C: and the normaliser adds no key to it",
           set(normalized) <= set(sample), str(set(normalized) - set(sample)))
+    # Last but for the structured evidence facts (G68), which came after them and are optional too.
+    facts = len(base.evidence_facts.STORED_FIELDS)
     check("Part C: the new fields are optional and appended last in the schema",
-          base.EVIDENCE_FIELDS[-3:] == ("matched_text", "matched_field", "matched_context")
+          base.EVIDENCE_FIELDS[-3 - facts:-facts] == ("matched_text", "matched_field", "matched_context")
+          and base.EVIDENCE_FIELDS[-facts:] == base.evidence_facts.STORED_FIELDS
           and {"matched_text", "matched_field", "matched_context"} <= base.OPTIONAL_EVIDENCE_FIELDS)
 
     print()
