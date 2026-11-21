@@ -1,0 +1,101 @@
+{
+ "entries": [
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "31.1.2",
+   "target_build": "",
+   "id": "obs-studio-31-1-2-github-issue-13995",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/13995",
+   "block_sha256_before_run": "00c0992c44ef55d4554bfa32c1add83d2be3999561b9c08c2d58e599499342f9",
+   "counted_before_run": true,
+   "action": "withdraw",
+   "exclusion_reason": "identity_not_the_subject"
+  }
+ ],
+ "withdrawn_now": 1,
+ "counted_population": {
+  "microsoft-windows-11": [
+   558,
+   558
+  ],
+  "obs-studio": [
+   312,
+   311
+  ]
+ },
+ "per_patch": [
+  {
+   "product_id": "obs-studio",
+   "update_version": "31.1.2",
+   "target_build": "",
+   "before": 3,
+   "after": 2
+  }
+ ],
+ "newly_counted_rows": [],
+ "same_report_rows_on_other_identities": [
+  {
+   "product_id": "obs-studio",
+   "update_version": "32.1.2",
+   "target_build": "",
+   "id": "obs-studio-32-1-2-github-issue-13995",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/13995",
+   "counted": false,
+   "exclusion_reason": "identity_not_the_subject",
+   "unchanged": true
+  },
+  {
+   "product_id": "obs-studio",
+   "update_version": "32.2.2",
+   "target_build": "",
+   "id": "obs-studio-32-2-2-github-issue-13995",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/13995",
+   "counted": true,
+   "exclusion_reason": null,
+   "unchanged": true
+  }
+ ],
+ "product_scope": [
+  "microsoft-windows-11",
+  "obs-studio"
+ ],
+ "generated_at": "2026-11-21T00:45:13Z",
+ "exclusion_reasons": [
+  "duplicate_existing_evidence",
+  "identity_not_the_subject",
+  "not_a_real_issue_report",
+  "version_is_rollback_target",
+  "version_named_but_working"
+ ],
+ "store_sha256_before": "715c13b237a0d96ee39e94afce7ee0af794c4a6478ebea3ce89b9541bd21026a",
+ "store_sha256_after": "f89d22ed8c1e8b509e506d3a75498891a5fb712493ad3fda45beaefefbd15ee2",
+ "manifest_sha256": "a516ac7ba2a288193c67f2dbbeb0e08bded9d1b4ce5eaabd6bae47ece9af43de",
+ "baseline_sha256": "b378fa62c22c9e6a7e7de5e6383d799349d9fc1c1eed9ddd4059f7bfb9192248",
+ "written": true,
+ "writers": [
+  {
+   "command": "build_consensus_from_evidence.py --product-id microsoft-windows-11 --product-id obs-studio --reconcile-only",
+   "returncode": 0,
+   "output": [
+    "Reconciled report counts on 1 record(s) to final counted evidence (scoped to microsoft-windows-11, obs-studio).",
+    "  2025-07-28-obs-studio-31-1-2.md: obs-studio 31.1.2 3 -> 2"
+   ]
+  },
+  {
+   "command": "apply_consensus_to_records.py --product-id microsoft-windows-11 --write-all --confirm-write",
+   "returncode": 0,
+   "output": [
+    "[apply_consensus_to_records] write_back: 60 group(s); 60 would write; 0 blocked; 558 included; 60 excluded."
+   ]
+  },
+  {
+   "command": "apply_consensus_to_records.py --product-id obs-studio --write-all --confirm-write",
+   "returncode": 0,
+   "output": [
+    "[apply_consensus_to_records] write_back: 14 group(s); 14 would write; 0 blocked; 311 included; 26 excluded."
+   ]
+  }
+ ],
+ "parent_commit": "e2cfca68c09ad5035b5e8dad0999147b128a5028"
+}

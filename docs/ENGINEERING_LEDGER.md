@@ -90,6 +90,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-108 | Deferred | Evidence integrity | Medium | Five reports counted against a version they were not about: the build a device fell back to, the version an author upgraded from, a version only asked about (rows withdrawn; the attribution fix deferred behind named triggers) |
 | AUX-111 | Resolved | Evidence integrity | Medium | Two Adobe reports counted against a version they were not about: the Premiere Pro version a project was made in, the Acrobat Reader version an update started from |
 | AUX-114 | Resolved | Evidence integrity | Low | A DaVinci Resolve 21.0.4 how-to question was counted as a report of a problem with 21.0.4 |
+| AUX-118 | Resolved | Evidence integrity | Low | An OBS Studio 31.1.2 report was counted for a version it names only as a release tag the reporter compared |
 | AUX-092 | Resolved | Publication | Medium | Every new OBS report would again read "date not recorded": the collector never stored the date it checks |
 | AUX-093 | Resolved | Verdict policy | High | 234 of 236 pages with user reports said WAIT because of their product or a negative tone |
 | AUX-094 | Resolved | Verdict policy | Low | The page could print an official verdict the decision code did not give, and QA could not see it |
@@ -5865,6 +5866,66 @@ which refuses a report the store already holds, counted or not.
 
 **Reopen only if** the row counts again; either control or any of the three held candidates stops counting without
 its own audited withdrawal; or an earlier withdrawal manifest changes.
+
+---
+### AUX-118 — An OBS Studio 31.1.2 report was counted for a version it names only as a release tag the reporter compared
+
+- **Status** Resolved · **Area** Evidence integrity · **Severity** Low
+- **First seen** 2026-11-20 (a full-source audit of GitHub issue #13995) · **Resolved** 2026-11-21
+
+**Symptom** One counted OBS Studio 31.1.2 report, GitHub issue #13995, is about the virtual camera failing on macOS
+26.7 with the version the reporter ran, 32.2.2. It names 31.1.2 once, in a sentence saying the signing and packaging
+logic is unchanged across three release tags, checked by diffing build files. The stored text holds that sentence,
+and an audit of the full report found no other mention of 31.1.2 and no problem reported with it, so the 31.1.2 page
+counted one report more than it should. AUX-088 withdrew the same report's 32.1.2 row for the same sentence; the
+31.1.2 row was outside that audit's six live pages and stayed counted.
+
+**Scope** Only this row, and only because two fresh blind readers each found that the report does not establish
+that 31.1.2 is affected. Each read only the stored text, in a shuffled packet of this row and ten controls (five
+counted, five refused) drawn by a rule written down before the draw, and neither was told which item was under audit.
+Both said 31.1.2 appears only as a release tag the reporter compared, not a version they ran. The full-source audit
+is recorded as provenance only, not as one of the two.
+- Both readers labelled every counted control affected, including another 31.1.2 report that names several versions
+  with a failure on each; it stays counted. Both labelled four of the five refused controls not affected.
+- Both labelled the fifth refused control, an OBS 32.2.2 forum post AUX-088 withdrew as not an issue report,
+  affected. It is recorded in the manifest and stays withdrawn; re-admitting it would be its own audited change.
+- The report's 32.2.2 row stays counted, and its 32.1.2 row stays withdrawn under AUX-088.
+- No acceptance rule, threshold or vocabulary changed.
+
+**Fix (data)** `withdraw_live_citation_rows.py` (AUX-088, unchanged) withdraws the row from a seventh pinned manifest,
+`scripts/audit/live_citation_withdrawal_v7.json`, under AUX-088's own Windows and OBS scope. The manifest records both
+readers' labels and one-line reasons, the full-source audit as provenance, the two rows that must stay counted, the
+control finding, and the sha256 of each adjudication file (the packet, the control rule, the draw, the sealed key,
+both readers' answer sheets and the audit), which are kept outside the repository. The rest is AUX-088's:
+- a five-field identity and a pinned block hash;
+- a two-line edit: `counted: false` and `exclusion_reason: identity_not_the_subject`, the reason both readers'
+  findings support and the one AUX-088 gave the same sentence;
+- the row kept, all or nothing, idempotent.
+
+The six earlier manifests are unchanged. The run audit is `scripts/audit/live_citation_withdrawal_v7_2026-11-21.json`.
+The record was regenerated only by the tool's own scoped writers: the reconcile scoped to Windows and OBS, then each
+product's own scoped promotion. The next scheduled OBS collection does not re-admit the report: the collector builds
+the same id and URL for #13995 on 31.1.2, and its dedupe authority, like the shared append guard, refuses a report
+the store already holds for that version, counted or not. For OBS the tool itself checks only one blind label beside
+the earlier audit; the second blind label, the distinct readers and the audit's provenance-only role are enforced by
+the new suite on this manifest.
+
+**Measured**
+- Store: 2 lines changed; every row kept, and no row starts counting. No evidence loss.
+- Counted rows: OBS 312 -> 311; Windows unchanged.
+- Page: OBS Studio 31.1.2 3 -> 2. The record loses exactly this source from its sources and samples and gains one
+  "User report count updated to 2." event; its sample-size note changes wording. Its newest accepted report is now
+  the one captured on 2026-10-03, so its staleness notice, already shown, gives that date instead of 2026-10-05.
+- Unchanged: label (Negative), evidence strength (Low), the decision (INSUFFICIENT DATA), the theme sentence,
+  maturity (pilot) and the live set.
+- A second run changes nothing.
+- `test_withdraw_g75_obs_source_tag_row.py` pins it with 37 checks, fixture counts only. It also pins the six earlier
+  manifests byte for byte, checks that the must-stay rows still count and that the control finding stays withdrawn,
+  and proves the re-admission refusal through the OBS collector's own row builder and dedupe authority.
+
+**Reopen only if** the row counts again; the must-stay #13989 row or the report's 32.2.2 row stops counting without
+its own audited withdrawal; the control finding is re-admitted without its own audited change; or an earlier
+withdrawal manifest changes.
 
 ---
 ### AUX-092 — Every new OBS report would again read "date not recorded": the collector never stored the date it checks
