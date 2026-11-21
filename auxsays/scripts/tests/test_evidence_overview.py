@@ -569,7 +569,11 @@ def run() -> int:  # noqa: PLR0915
           and bool(eo.public_text_problems({"newer": dict(decl_note, known_issue=False)}, []))
           and bool(eo.public_text_problems({"newer": dict(ok_note, match_note="Its changes address the reports; "
                                                                                "it resolves them.")}, []))
-          and bool(eo.public_text_problems({"newer": dict(ok_note, fix_source="the fixes available")}, [])))
+          and bool(eo.public_text_problems({"newer": dict(ok_note, fix_source="the fixes available")}, []))
+          # each word alone, written out here (not read from the module's list), so dropping one is caught
+          and all(bool(eo.public_text_problems({"newer": dict(ok_note, match_note=s)}, []))
+                  for s in ("It is available now.", "It addresses these reports.", "It fixes these reports.",
+                            "It resolves these reports.")))
     shapes = all(re.fullmatch(r"\d+ accepted patch-specific reports?\.( .+\.)?", rw.get("count_line", "x"))
                  for rw in real["pages"].values() if "count_line" in rw)
     clauses = {rw["count_line"].split(". ", 1)[1] for rw in real["pages"].values()
@@ -715,6 +719,11 @@ def run() -> int:  # noqa: PLR0915
         {"known_issue": True, "caution": "OBS Project" + eo.KNOWN_ISSUE_CAUTION})
     site_nocaution = copy.deepcopy(site_with)
     site_nocaution["data"]["evidence_overview_projection"]["pages"]["tool|1.0.0|"]["newer"]["caution"] = ""
+    # A newer release WITH a printed verdict: the include prints the row's verdict sentence, so a template that
+    # hard-codes "not established" fails here (the real tree has no such row outside Windows 11).
+    site_verdict = copy.deepcopy(site_with)
+    site_verdict["data"]["evidence_overview_projection"]["pages"]["tool|1.0.0|"]["newer"]["verdict_line"] = (
+        "AUXSAYS verdict for this release: WAIT if you use the test dock.")
     ov = "{% include patch-evidence-overview.html part='overview' record=page %}"
     nw = "{% include patch-evidence-overview.html part='newer' record=page %}"
     # The reviewed page itself, with a row carrying the universal clause: the include must print the row's
@@ -732,6 +741,7 @@ def run() -> int:  # noqa: PLR0915
         "nw_fix": {"template": nw, "site": with_fix, "page": page_rec},
         "nw_decl": {"template": nw, "site": site_decl, "page": page_rec},
         "nw_nocaution": {"template": nw, "site": site_nocaution, "page": page_rec},
+        "nw_verdict": {"template": nw, "site": site_verdict, "page": page_rec},
     }
     out = render_cases(cases) or {}
     check("T0 the liquid gem renders the shipped include", bool(out) and "__error__" not in out
@@ -763,7 +773,14 @@ def run() -> int:  # noqa: PLR0915
           and before_links(nw_html, "Newer is not necessarily safer.")
           and 'href="/updates/v/tool/1.0.2/"' in nw_html and 'href="https://vendor.test/n"' in nw_html
           and not re.search(r"\b(available|addresses|fixes|resolves)\b", nwt + " " + declt, re.I)
-          and "update-newer-release__caution--declared" not in nw_html, nw_html[:700])
+          and "update-newer-release__caution--declared" not in nw_html
+          # a printed verdict is printed as the row states it, never as "not established"
+          and re.sub(r"\s+\.", ".", visible(out.get("nw_verdict", ""))) == (
+              "Newer release: Tool 1.0.2 (released Oct 20, 2026). Newer is not necessarily safer. Check its "
+              "official release notes, including any known issues, before upgrading. AUXSAYS verdict for this "
+              "release: WAIT if you use the test dock. AUXSAYS has not matched its changes to the reports on this "
+              "page. See its AUXSAYS page and its official release notes."),
+          (nw_html[:700], out.get("nw_verdict", "")[:700]))
     check("T3b a newer release whose vendor documented a known issue: the vendor's caution, emphasised, BEFORE any "
           "link or verdict sentence",
           declt.startswith("Newer release: Tool 1.0.2 (released Oct 20, 2026). OBS Project has documented a known "
