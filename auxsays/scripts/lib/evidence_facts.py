@@ -38,9 +38,9 @@ edited after it ships. A rule change (G73 will change the capture-source bucket 
 version naming the new rule, and the zero-network migration (`migrate_evidence_facts.py --write`)
 rewrites the facts that changed. A reader accepts a fact only when the row's version names the
 CURRENT rule for that fact (`require_fact`). A missing, malformed or unknown-version value, or a value
-computed under a different rule, raises FactUnavailable. Frozen vectors in
-tests/test_structured_evidence_facts.py pin every rule's output, so changing a rule's behaviour
-without a new version fails CI.
+computed under a different rule, raises FactUnavailable. tests/test_structured_evidence_facts.py pins
+every rule twice: frozen vectors pin sample outputs, and A4 pins a fingerprint of the rule's code (its
+functions plus compute_facts and sha256_text), so changing a rule's code without a new version fails CI.
 
 A HASH IS NOT A JUDGEMENT (P3 critical safeguard). Equal excerpt hashes mean equal stored excerpts.
 That is exactly what the distinct-reporter rule compared before, and no more: they do not show that

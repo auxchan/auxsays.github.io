@@ -7,8 +7,9 @@ finding that justified it: `lib.verdict_reasons.support_problems` counts two cit
 excerpt as ONE reporter, and when the excerpt is absent it stopped collapsing them -- every URL became a
 reporter, which fails OPEN. Pinned here:
 
-  A  the three rules, by frozen vectors (a behaviour change without a new rule version fails here); the
-     pre-G68 normalisations are the same functions; ONE issue-bucket function;
+  A  the three rules, by frozen vectors and by a frozen fingerprint of each rule's code (a code change
+     without a new rule version fails here); the pre-G68 normalisations are the same functions; ONE
+     issue-bucket function;
   B  the persistence boundaries write the facts (base.append_evidence_rows, collect_obs_reports);
   C  ADVERSARIAL: a missing, malformed, unknown-version or other-rule fact can never make a reviewed
      verdict reason supported; on the live corpus the fact-based rule decides exactly what the text rule
@@ -30,9 +31,12 @@ from __future__ import annotations
 import ast
 import contextlib
 import copy
+import hashlib
+import inspect
 import io
 import sys
 import tempfile
+import textwrap
 import traceback
 from pathlib import Path
 
@@ -140,6 +144,36 @@ BUCKET_VECTORS = [
 ]
 FROZEN_RULE_SETS = {"v1": {"excerpt_norm_sha256": "excerpt-norm-1", "title_dedup_sha256": "title-dedup-1",
                            "issue_bucket": "issue-bucket-1"}}
+# The CODE of each rule, frozen under the rule's name (ast.unparse, docstrings and comments set aside). The
+# vectors above pin sample outputs only: dropping the OBS "xcomposite", "monitoring" or "stability" cue, or
+# the "general " fallback prefix, changed issue-bucket-1 and still passed every vector and the live-store
+# check (G68 review 1). A rule's code may change only together with a NEW rule name in a NEW RULE_SETS
+# version, which gets its own entry here; an existing entry is never edited. compute_facts and sha256_text
+# (which field feeds which rule, and how it is hashed) are part of every rule.
+FROZEN_RULE_CODE = {
+    "excerpt-norm-1": "08acf7b77d7536835d59233bb693d798f4f10f39ac70d309b50dc3e6e746bde1",
+    "title-dedup-1": "6fe0eb12f1ce4e3e75eb479b0dd64dbf6b4ac9fafd2ed1793d8541c78c0a207d",
+    "issue-bucket-1": "8bdee77a4982552bfac0b6f9c03be7578e97f68e1c3acf9b3a6869ecb5cba4a7",
+}
+
+
+def rule_code(fact: str) -> tuple:
+    """The functions that implement the CURRENT rule of one fact."""
+    own = {ef.EXCERPT_FACT: (ef.normalise_excerpt,), ef.TITLE_FACT: (ef.title_dedup_key,),
+           ef.BUCKET_FACT: (ef.clean_public_phrase, ef.compute_issue_bucket)}[fact]
+    return own + (ef.sha256_text, ef.compute_facts)
+
+
+def code_fingerprint(*functions) -> str:
+    parts = []
+    for function in functions:
+        node = ast.parse(textwrap.dedent(inspect.getsource(function))).body[0]
+        body = node.body
+        if body and isinstance(body[0], ast.Expr) and isinstance(body[0].value, ast.Constant) \
+                and isinstance(body[0].value.value, str):
+            node.body = body[1:] or [ast.Pass()]
+        parts.append(ast.unparse(node))
+    return hashlib.sha256("\n".join(parts).encode("utf-8")).hexdigest()
 
 
 # ------------------------------------------------------------------------------- fixtures
@@ -258,10 +292,13 @@ def part_a() -> None:
            or ef.compute_facts({"product_id": p, "issue_theme": th, "workflow_area": wa,
                                 "report_title": ti})[ef.BUCKET_FACT] != want]
     check(f"A3 issue-bucket-1 gives the frozen bucket for all {len(BUCKET_VECTORS)} branch vectors", not bad, str(bad))
-    check("A4 the rule sets are frozen: v1 names exactly these three rules, and v1 is current",
+    code = {rule: code_fingerprint(*rule_code(fact)) for fact, rule in ef.RULE_SETS[ef.CURRENT_VERSION].items()}
+    check("A4 the rule sets are frozen: v1 names exactly these three rules, v1 is current, and each current "
+          "rule's code is the code frozen under its name (a code change needs a new rule version)",
           ef.RULE_SETS == FROZEN_RULE_SETS and ef.CURRENT_VERSION == "v1" and ef.EMPTY_SHA256 == EMPTY
-          and ef.STORED_FIELDS == ("excerpt_norm_sha256", "title_dedup_sha256", "issue_bucket", "facts_rule_version"),
-          str(ef.RULE_SETS))
+          and ef.STORED_FIELDS == ("excerpt_norm_sha256", "title_dedup_sha256", "issue_bucket", "facts_rule_version")
+          and all(FROZEN_RULE_CODE.get(rule) == value for rule, value in code.items()),
+          f"{ef.RULE_SETS} {code}")
     excerpt_same = all(vr._norm_excerpt({"report_text_excerpt": v}) == ef.normalise_excerpt(v)
                        for v, _n, _h in EXCERPT_VECTORS)
     titles = ["Foo  Bar", "foo bar", "FOO BAR ", "Foo Baz", "x" * 81, "x" * 80 + "y"]

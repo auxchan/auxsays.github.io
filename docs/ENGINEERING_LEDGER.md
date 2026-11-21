@@ -7188,7 +7188,8 @@ these facts, so the text could not be sealed or removed (G1) without breaking th
 1. `lib/evidence_facts.py`. Every Tier 1 row carries four public, derived facts as its last keys:
    `excerpt_norm_sha256`, `title_dedup_sha256`, `issue_bucket` and `facts_rule_version`. The rules
    (`excerpt-norm-1`, `title-dedup-1`, `issue-bucket-1`) are the pre-G68 normalisations, unchanged. They are
-   versioned per fact (`RULE_SETS`) and pinned by frozen vectors. A reader accepts a fact only under the
+   versioned per fact (`RULE_SETS`) and pinned by frozen vectors and by a frozen fingerprint of each rule's
+   code (A4), so a rule's code cannot change without a new version. A reader accepts a fact only under the
    current rule for that fact, so a future rule change (G73's capture-source cues) is detected, never mixed.
 2. `compute_issue_bucket` is now the one bucket function. Both modules' names point at it (byte-identical).
 3. `base.append_evidence_rows` and `collect_obs_reports.write_evidence` compute the facts from the row's own
@@ -7209,8 +7210,9 @@ these facts, so the text could not be sealed or removed (G1) without breaking th
 
 Tests: `test_structured_evidence_facts.py` (40), including three simulated mutants: a fail-open fallback, a
 wrong-version fact accepted, and a bucket rebuilt from absent text. Fixture rows in
-`test_growth3_verdict_policy` and `test_patch_decision_authority` now carry facts, as written rows do. The
-`test_obs_source_date_producer` golden and `test_version_centred_excerpt` E7 set the derived facts aside.
+`test_growth3_verdict_policy`, `test_patch_decision_authority` and `test_homepage_signals` now carry facts,
+as written rows do. The `test_obs_source_date_producer` golden, `test_version_centred_excerpt` E7 and
+`test_matched_span_retention` Part C set the derived facts aside.
 
 **Not changed** No acceptance rule, threshold, verdict, maturity, source ownership or counted population.
 No text was deleted or sealed, and no visibility changed. Records, the verdict projection and the built
