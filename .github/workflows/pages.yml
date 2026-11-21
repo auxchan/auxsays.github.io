@@ -146,6 +146,15 @@ jobs:
       - name: Build the verdict projection
         run: python auxsays/scripts/build_verdict_projection.py
 
+      # G82-A (AUX-123). Also AFTER the verdict projection and BEFORE QA and `jekyll build`:
+      # `_includes/patch-evidence-overview.html` prints each patch page's evidence overview (the counted
+      # reports as a count, their source families, what the list does and does not establish) and its
+      # newer-release note only from this file. On any failure it writes an empty projection and exits 0
+      # with a ::warning::, so pages print no overview -- and QA below then errors, as it does if this step
+      # is missing while the verdict projection exists.
+      - name: Build the evidence overview projection
+        run: python auxsays/scripts/build_evidence_overview_projection.py
+
       # SHADOW OPERATION of the verdict-reason producer (AUX-099). The step above also wrote the producer's
       # candidates and review queue to the git-ignored auxsays/_data/verdict_reason_candidates.yml; its
       # activation switch is OFF, so no page, search metadata, evidence, maturity or live claim reads them.

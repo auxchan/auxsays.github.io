@@ -4421,6 +4421,29 @@ html.js-reveal .reveal-up.is-visible { opacity:1; transform:none; }
   font-weight: 700;
 }
 
+/* G82-A (AUX-123): the evidence overview at the foot of the community evidence card. Whole sentences,
+   so ordinary case and left alignment, unlike the card's short uppercase meta lines. */
+.update-evidence-overview {
+  display: grid;
+  gap: .3rem;
+  margin-top: .7rem;
+  padding-top: .65rem;
+  border-top: 1px solid rgba(240, 202, 103, .18);
+}
+
+.update-evidence-overview p {
+  margin: 0;
+  color: var(--text-1);
+  font-size: .88rem;
+  line-height: 1.5;
+}
+
+/* AUX-123 A1: a vendor-documented known issue in the newer-release note, printed before any link. */
+.update-evidence-freshness-notice .update-newer-release__caution--declared {
+  color: var(--text-0);
+  font-weight: 700;
+}
+
 /* The official statement an AVOID rests on, linked under the verdict line (G66). */
 .update-decision-source {
   margin: .35rem 0 0;

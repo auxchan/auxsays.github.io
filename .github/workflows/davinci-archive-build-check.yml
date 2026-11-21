@@ -126,6 +126,9 @@ jobs:
       - name: Build the verdict projection
         run: python auxsays/scripts/build_verdict_projection.py
 
+      - name: Build the evidence overview projection
+        run: python auxsays/scripts/build_evidence_overview_projection.py
+
       - name: Validate logo assets
         run: python auxsays/scripts/validate_logo_assets.py
 
