@@ -20,9 +20,22 @@ WHAT AN ENTRY MUST SATISFY (checked here, named in the tests):
   * at least two distinct reporters (distinct URL, and identical excerpts are one reporter), unless
     an official confirmation is cited (F2/F3);
   * an official confirmation names a stored record whose captured official notes contain the
-    statement verbatim, so it can be re-checked rather than trusted;
+    statement verbatim, so it can be re-checked rather than trusted. It names the record by its FULL
+    identity: product_id, update_version and, for a build-keyed record (every Windows and PowerPoint
+    record), target_build (G84, D-1). Without the build the lookup asked for a blank-build record no
+    such product has, so a true confirmation made a supported entry unsupported. A confirmation that
+    names no build looks up the blank-build record, exactly as before;
   * WAIT needs reason_class `regression`, the version transition, a written material impact and
     `new_in_this_version: true` (F4/F5). A persistent problem is never a regression.
+
+ONE CONTRACT FOR EVERY REASON (G84, H-1). A reason the producer drafted (lib/verdict_reason_producer;
+no person reviewed it) meets these same checks before `decide` may read it: `machine_schema_errors`
+is `schema_errors` with one difference -- in place of a person's `reviewed_at` and `basis`, its basis
+is `automatic:<rule version>`, the producer version named in its own `producer` block, and it may
+carry the producer's provenance keys -- and then `support_problems` against the counted rows of its
+own page. lib/verdict_projection refuses a candidate that fails either one and reports it with the
+unsupported entries. Until G84 the candidates skipped both, so with the activation switch on a WAIT
+citing no counted row reached the page.
 
 THE LIFECYCLE FILE holds exactly ONE entry today: KB5079391, which Microsoft withdrew for new
 installations, replaced by KB5086672. It is a single verified exception, NOT the lifecycle
@@ -71,6 +84,18 @@ REQUIRED_REASON_KEYS = ("id", "product_id", "update_version", "verdict", "reason
                         "evidence", "reason", "new_in_this_version", "reviewed_at", "basis")
 ALLOWED_REASON_KEYS = frozenset(REQUIRED_REASON_KEYS + (
     "target_build", "official_confirmation", "fixed_in", "transition", "material"))
+# THE MACHINE SCHEMA (G84, H-1): what a producer candidate must carry to be read like a reviewed entry. The
+# reviewed keys, except that nobody reviewed it: no `reviewed_at` (it may not claim one), and its basis is
+# `automatic:<rule version>`, taken from the `producer` block every candidate carries (`machine_basis`). The
+# provenance keys below are what lib/verdict_reason_producer._candidate writes beside them; no decision reads
+# them, and they are allowed so a candidate is checked exactly as produced, never reshaped first.
+MACHINE_BASIS_PREFIX = "automatic:"
+MACHINE_BASIS_RE = re.compile(r"^automatic:[0-9A-Za-z][0-9A-Za-z._-]*$", re.ASCII)
+MACHINE_PROVENANCE_KEYS = frozenset({"candidate_key", "citation", "failure", "page", "problem_key", "producer",
+                                     "severity_basis", "independence_basis"})
+MACHINE_REQUIRED_REASON_KEYS = tuple(k for k in REQUIRED_REASON_KEYS if k not in ("reviewed_at", "basis")) + (
+    "producer",)
+MACHINE_ALLOWED_REASON_KEYS = (ALLOWED_REASON_KEYS - {"reviewed_at"}) | MACHINE_PROVENANCE_KEYS
 REQUIRED_LIFECYCLE_KEYS = ("id", "product_id", "kb", "builds", "relationship", "replacement_kb",
                            "released", "replacement_released", "official_url", "verified_at")
 # PROVENANCE (G66). Which copy of the official statement the entry was verified from, so a later
@@ -251,15 +276,43 @@ def identity_invisible_problems(record: Mapping[str, Any]) -> list[str]:
 
 def schema_errors(entries: Iterable[Mapping[str, Any]]) -> list[str]:
     """Structural problems in the reasons file. Static: independent of the evidence store."""
+    return _schema_errors(entries, machine=False)
+
+
+def machine_basis(entry: Mapping[str, Any]) -> str:
+    """The basis of a reason no person reviewed: `automatic:<rule version>`, the producer version its own
+    `producer` block names, or "" when it names none (then `machine_schema_errors` refuses it)."""
+    producer = entry.get("producer")
+    version = producer.get("version") if isinstance(producer, Mapping) else None
+    return f"{MACHINE_BASIS_PREFIX}{version.strip()}" if isinstance(version, str) and version.strip() else ""
+
+
+def machine_schema_errors(entries: Iterable[Any]) -> list[str]:
+    """Structural problems in automatically drafted reasons (producer candidates), checked as produced.
+
+    THE SAME CHECKS AS `schema_errors` (G84, H-1): the same verdicts, reason classes, scope rule, one-line
+    reason, cited evidence rows, official-confirmation shape and every WAIT fact (regression, transition,
+    material impact, new in this version). Only the review fields differ: a machine entry carries no
+    `reviewed_at`, and its basis is `machine_basis` -- `automatic:<rule version>` -- which must be well formed
+    (and equal to `basis` if it states one). A value that is not a mapping is refused, never read."""
+    return _schema_errors(entries, machine=True)
+
+
+def _schema_errors(entries: Iterable[Any], *, machine: bool) -> list[str]:
     errors: list[str] = []
     seen: set[str] = set()
+    required = MACHINE_REQUIRED_REASON_KEYS if machine else REQUIRED_REASON_KEYS
+    allowed = MACHINE_ALLOWED_REASON_KEYS if machine else ALLOWED_REASON_KEYS
     for index, entry in enumerate(entries):
+        if machine and not isinstance(entry, Mapping):
+            errors.append(f"entries[{index}]: not a mapping")
+            continue
         label = _s(entry.get("id")) or f"entries[{index}]"
-        missing = [k for k in REQUIRED_REASON_KEYS if k not in entry]
+        missing = [k for k in required if k not in entry]
         if missing:
             errors.append(f"{label}: missing {missing}")
             continue
-        unknown = sorted(set(entry) - ALLOWED_REASON_KEYS)
+        unknown = sorted(set(entry) - allowed)
         if unknown:
             errors.append(f"{label}: unknown keys {unknown}")
         if label in seen:
@@ -278,10 +331,18 @@ def schema_errors(entries: Iterable[Mapping[str, Any]]) -> list[str]:
             errors.append(f"{label}: reason must be one public line (1-320 characters)")
         if not isinstance(entry.get("new_in_this_version"), bool):
             errors.append(f"{label}: new_in_this_version must be true or false")
-        for field in ("product_id", "update_version", "reviewed_at", "basis"):
+        for field in ("product_id", "update_version") + (() if machine else ("reviewed_at", "basis")):
             if not _s(entry.get(field)):
                 errors.append(f"{label}: {field} is empty")
-        if not DATE_RE.fullmatch(_s(entry.get("reviewed_at"))):
+        if machine:
+            basis = machine_basis(entry)
+            if not MACHINE_BASIS_RE.fullmatch(basis):
+                errors.append(f"{label}: an automatic reason must name the rule version that drafted it "
+                              "(basis automatic:<rule version>, from its producer block)")
+            elif "basis" in entry and _s(entry.get("basis")) != basis:
+                errors.append(f"{label}: basis {_s(entry.get('basis'))!r} is not {basis!r}, the rule version "
+                              "that drafted it")
+        elif not DATE_RE.fullmatch(_s(entry.get("reviewed_at"))):
             errors.append(f"{label}: reviewed_at must be YYYY-MM-DD")
         evidence = entry.get("evidence")
         if not isinstance(evidence, list) or not evidence:
@@ -294,6 +355,11 @@ def schema_errors(entries: Iterable[Mapping[str, Any]]) -> list[str]:
         if conf is not None:
             if not isinstance(conf, dict) or not all(_s(conf.get(k)) for k in ("product_id", "update_version", "statement")):
                 errors.append(f"{label}: official_confirmation needs product_id, update_version, statement")
+            elif "target_build" in conf and not isinstance(conf.get("target_build"), str):
+                # G84 (D-1): the build names the confirming record, so it is compared as text. Unquoted, YAML
+                # reads 26200.8110 as the number 26200.811 and the lookup would quietly miss (lifecycle N1).
+                errors.append(f"{label}: official_confirmation target_build must be a quoted string, "
+                              f"not a {type(conf.get('target_build')).__name__}")
         # F4/F5: WAIT is a regression -- transition, materiality, and genuinely new in this version.
         if verdict == "WAIT":
             transition = entry.get("transition")
@@ -316,6 +382,13 @@ def _norm_excerpt(row: Mapping[str, Any]) -> str:
 
 def _norm_ws(text: Any) -> str:
     return re.sub(r"\s+", " ", _s(text).replace("\\r", " ").replace("\\n", " "))
+
+
+def confirmation_identity(conf: Mapping[str, Any]) -> tuple[str, str, str]:
+    """The record an official confirmation names: (product_id, update_version, target_build), the build ""
+    when it names none (G84, D-1). ONE copy: `support_problems` and the record writer that fetches the
+    confirming records (apply_consensus_to_records._confirmation_records) both key on it."""
+    return (_s(conf.get("product_id")), _s(conf.get("update_version")), _s(conf.get("target_build")))
 
 
 def support_problems(entry: Mapping[str, Any], counted_rows: Iterable[Mapping[str, Any]],
@@ -344,7 +417,9 @@ def support_problems(entry: Mapping[str, Any], counted_rows: Iterable[Mapping[st
     reporters = min(len(urls), len(excerpts) if excerpts else len(urls))
     conf = entry.get("official_confirmation")
     if conf:
-        rec = records_by_identity.get((_s(conf.get("product_id")), _s(conf.get("update_version")), ""))
+        # The FULL identity (G84, D-1): keyed on (product, version, "") a build-keyed record was never found,
+        # so a true confirmation on a Windows or PowerPoint entry REMOVED its support.
+        rec = records_by_identity.get(confirmation_identity(conf))
         body = _norm_ws((rec or {}).get("official_patch_notes_body"))
         if not rec or _norm_ws(conf.get("statement")) not in body:
             problems.append("official confirmation is not found in the named record's captured official notes")

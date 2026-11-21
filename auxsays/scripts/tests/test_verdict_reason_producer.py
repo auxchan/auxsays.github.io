@@ -10,7 +10,8 @@ lib/verdict_reason_producer derives reason candidates from STORED data only:
     wording, Acrobat installer Exit Code 7 with a product check, the I11 independence gate, at least
     MIN_INDEPENDENT_REPORTERS reporters; TEST FIRST "when installing it", never WAIT.
 PUBLIC_AUTO_ACTIVATION (TEMPORARY: OFF, owner approval pending) is the only way a candidate reaches
-the decision authority.
+the decision authority, and since G84 only a candidate that passes the reviewed entries' own checks
+(lib/verdict_projection.validated_candidates) does; test_reason_validation_contract pins that contract.
 
 SECTIONS. [V] the vendor class on frozen copies of the stored statements -- the 6 named pages
 (VRP-V1..V7); review 1's probes: a scope must name a SETUP (V8, V9: "a small number of devices",
@@ -25,8 +26,10 @@ DUPLICATES.md pairs the near-identical-text cue must collapse (I9); AUX-099: ind
 copy), the install verb's subject and object (I11), strict grouping (I12), Acrobat rows -- this product,
 not denied, grouped on the specific installer error (I13) -- and copy clusters (I15). [P] the corroboration
 placeholder fails closed (VRP-P1). [N] purity: no network, no file, no clock, deterministic (VRP-N1,
-N2). [S] the switch: ships OFF and changes nothing; ON, the projection, QA and the real gate carry the
-candidates; the builder writes the git-ignored artifact (VRP-S0..S6). [C] the shipped corpus
+N2). [S] the switch: ships OFF and changes nothing; ON, the projection, QA, the real gate and the record
+writers carry the candidates that pass the reviewed checks and refuse the rest (G84: the named fixture's
+vendor candidates cite no counted row and are refused; an Acrobat install candidate on two counted reports
+passes); the builder writes the git-ignored artifact (VRP-S0..S7). [C] the shipped corpus
 (VRP-C1..C3). [X] mutants, one change each, each caught by a named check.
 
 Needs ruby + the liquid gem for VRP-S3. Offline; writes only in a temp dir.
@@ -1377,6 +1380,36 @@ def check_purity() -> None:
           first == second == third)
 
 
+# ------------------------------------------------------------------------ a candidate that PASSES (G84)
+# Since G84 a candidate reaches decide only when it passes the reviewed entries' own checks (the machine schema,
+# then support_problems on its page's counted rows). Every vendor candidate in the named fixture cites no counted
+# row, so it is refused; the switch-ON integration checks below therefore also carry this page, whose install
+# candidate rests on two counted reports of one installer error from two different machines (VRP-I3's Pro rows),
+# and so passes. Each row carries the fields the evidence store's counted predicate reads.
+ACRO_PRO = {"update_entry": True, "product_id": "adobe-acrobat-pro", "update_version": "15.099.20001",
+            "permalink": "/updates/adobe/adobe-acrobat-pro/15-099-20001/", "update_report_count": 2}
+
+
+def _acro_row(i, title, excerpt, date):
+    return wrow(i, title, excerpt, date, applicability="adobe-acrobat-reader,adobe-acrobat-pro",
+                product_id="adobe-acrobat-pro", update_version="15.099.20001", patch_version_matched=True)
+
+
+ACRO_ROWS = [
+    _acro_row(11, "Acrobat DC install fails on my Mac", "Acrobat DC install fails with Exit Code: 7 on El Capitan "
+              "10.11.3, the Creative Cloud app shows an error. ERROR: DW003", "2026-05-01"),
+    _acro_row(12, "Cannot install Acrobat Pro DC on Windows 10", "I'm on Windows 10. The installer stops with Exit "
+              "Code: 7 after the extraction step. For example, ERROR: DW003", "2026-05-02"),
+]
+
+
+def switch_fixture() -> tuple[list[dict], dict]:
+    """(records, counted rows): the named fixture (vendor candidates only, refused) plus ACRO_PRO (one passing
+    install candidate)."""
+    recs = named_fixture() + [dict(ACRO_PRO)]
+    return recs, {vr.record_identity(ACRO_PRO): [dict(r) for r in ACRO_ROWS]}
+
+
 # ------------------------------------------------------------------------ corpus (shared)
 
 _CORPUS: dict = {}
@@ -1434,18 +1467,29 @@ def check_switch(tmp: Path) -> None:
                                           {vr.record_identity(r): r for r in c["records"]})[0])
     with switch(True):
         on = vp.project(c["records"], c["groups"], c["reasons"], c["lifecycle"])[0]
-        valid_on, _u = vp.supported_reasons(c["records"], c["groups"], c["reasons"])
+        valid_on, unsupported_on = vp.supported_reasons(c["records"], c["groups"], c["reasons"])
     changed = sorted(k for k in set(on["pages"]) | set(reviewed["pages"]) if on["pages"].get(k) != reviewed["pages"].get(k))
-    cand_pages = {"|".join(vr.reason_identity(x)) for x in c["produced"].candidates}
+    candidates = c["produced"].candidates
+    accepted, refused = vp.validated_candidates(candidates, c["groups"],
+                                                {vr.record_identity(r): r for r in c["records"]})
+    accepted_ids, all_ids = {x["id"] for x in accepted}, {x["id"] for x in candidates}
+    accepted_pages = {"|".join(vr.reason_identity(x)) for x in accepted}
+    merged_ids = {str(e.get("id")) for es in valid_on.values() for e in es}
+    printed_ids = {i for row in on["pages"].values() for i in row["reasons"]}
     by_key = {vp.page_key(r): r for r in c["records"]}
     rows_are_decide = all(on["pages"][k] == vp.row_for(pd.decide(dict(by_key[k]), valid_reasons=valid_on.get(
         vr.record_identity(by_key[k]), []), lifecycle=c["lifecycle"]), by_key[k]) for k in changed if k in on["pages"])
     kept_reviewed = all(set(reviewed["pages"][k]["reasons"]) <= set(on["pages"][k]["reasons"])
                         for k in reviewed["pages"] if reviewed["pages"][k]["reasons"])
-    check(f"VRP-S2 switch ON: the projection changes on candidate pages only ({len(changed)} rows), every changed "
-          "row is exactly decide's over the merged reasons, and every reviewed entry stays on its page",
-          changed and set(changed) <= cand_pages and rows_are_decide and kept_reviewed,
-          f"{len(changed)} {sorted(set(changed) - cand_pages)[:3]}")
+    check(f"VRP-S2 switch ON (G84: one contract for every reason): each of the corpus's {len(candidates)} candidates "
+          f"meets the reviewed entries' checks or is refused -- {len(accepted)} pass, {len(refused)} are refused, listed "
+          "with the unsupported entries and in no page's reasons; the projection changes only on pages of a passing "
+          f"candidate ({len(changed)} rows), every changed row is exactly decide's over the merged reasons, and every "
+          "reviewed entry stays on its page",
+          candidates and accepted_ids | set(refused) == all_ids and not accepted_ids & set(refused)
+          and set(refused) <= set(unsupported_on) and not set(refused) & (merged_ids | printed_ids)
+          and set(changed) <= accepted_pages and rows_are_decide and kept_reviewed,
+          f"{len(changed)} {sorted(set(changed) - accepted_pages)[:3]} {sorted(set(refused) - set(unsupported_on))[:2]}")
     check_render_switch_on()
     check_qa_switch(tmp / "qa")
     check_builder(tmp / "builder")
@@ -1457,14 +1501,15 @@ def check_writers(tmp: Path) -> None:
     with the switch ON the prose they store is the page's verdict and verdict_policy_drift clears."""
     import apply_consensus_to_records as acr  # noqa: PLC0415 - the writer itself, offline
     import build_consensus_from_evidence as bce  # noqa: PLC0415
-    recs = named_fixture()
+    recs, counted = switch_fixture()
     gen = tmp / "generated"
     gen.mkdir(parents=True, exist_ok=True)
     for i, r in enumerate(recs):
         (gen / f"r{i:02d}.md").write_text("---\n" + yaml.safe_dump(r, allow_unicode=True) + "---\nbody\n",
                                           encoding="utf-8")
     index = {(r["product_id"], r["update_version"], r.get("target_build", "")): r for r in recs}
-    page = recs[0]   # OBS 31.1.0: three vendor WAITs, no report
+    vendor_page = recs[0]   # OBS 31.1.0: three vendor WAITs citing no counted row -- refused since G84
+    rows = counted[vr.record_identity(ACRO_PRO)]
     got = {}
     saved_dir, saved_cache = acr.GENERATED_DIR, list(acr._ALL_ENTRY_RECORDS)
     try:
@@ -1472,48 +1517,55 @@ def check_writers(tmp: Path) -> None:
         for on in (False, True):
             acr._ALL_ENTRY_RECORDS.clear()
             with switch(on):
-                a = acr._policy_decision(OBS, "31.1.0", "", [], dict(page))[0]
-                b = bce.policy_decision(OBS, "31.1.0", "", [], dict(page), index)[0]
-                valid, _u = vp.supported_reasons(recs, {}, [])
-                want = pd.decide(dict(page), valid_reasons=valid.get(vr.record_identity(page), []))
-            got[on] = ((a.verdict, a.scope), (b.verdict, b.scope), (want.verdict, want.scope))
+                valid, _u = vp.supported_reasons(recs, counted, [])
+                for name, page, page_rows in (("acrobat", ACRO_PRO, rows), ("vendor", vendor_page, [])):
+                    pid, ver = page["product_id"], page["update_version"]
+                    a = acr._policy_decision(pid, ver, "", [dict(r) for r in page_rows], dict(page))[0]
+                    b = bce.policy_decision(pid, ver, "", [dict(r) for r in page_rows], dict(page), index)[0]
+                    want = pd.decide(dict(page), valid_reasons=valid.get(vr.record_identity(page), []))
+                    got[(on, name)] = ((a.verdict, a.scope), (b.verdict, b.scope), (want.verdict, want.scope))
     finally:
         acr.GENERATED_DIR = saved_dir
         acr._ALL_ENTRY_RECORDS[:] = saved_cache
+    nothing = (("INSUFFICIENT DATA", ""),) * 3
     check("VRP-S6 the record writers (apply_consensus_to_records, build_consensus_from_evidence) gather a page's "
-          "reasons as the projection does: switch OFF they store INSUFFICIENT DATA for OBS 31.1.0, exactly as before; "
-          "switch ON they store decide's verdict over the producer's candidates, so the stored prose never lags the "
-          "page (the drift that never cleared)",
-          got[False] == (("INSUFFICIENT DATA", ""),) * 3 and got[True][0] == got[True][1] == got[True][2]
-          and got[True][0][0] == "WAIT", str(got))
+          "reasons as the projection does: switch OFF they store INSUFFICIENT DATA, exactly as before; switch ON they "
+          "store decide's verdict over the candidates that pass the reviewed checks (TEST FIRST when installing it on "
+          "the Acrobat page), so the stored prose never lags the page, and they refuse what the projection refuses "
+          "(G84: OBS 31.1.0's vendor WAITs, citing no counted row, stay INSUFFICIENT DATA in all three)",
+          got.get((False, "acrobat")) == nothing and got.get((False, "vendor")) == nothing
+          and got.get((True, "acrobat")) == (("TEST FIRST", "when installing it"),) * 3
+          and got.get((True, "vendor")) == nothing, str(got))
     # G38 WS2 review 2, LOW-7 (reviewer mutant MM24): beside a SUPPORTED reviewed entry the writers still add the
-    # candidates -- never "the reviewed entries, or else the candidates".
-    reviewed = {"id": "obs-studio:31.1.0:writer-probe", "product_id": OBS, "update_version": "31.1.0",
-                "verdict": "TEST FIRST", "reason_class": "corroborated_issue", "scope": "if you use Studio Mode",
-                "reason": "Two users report that Studio Mode stops responding in OBS 31.1.0.",
-                "evidence": [{"id": "probe-1", "source_url": "https://example.test/1"},
-                             {"id": "probe-2", "source_url": "https://example.test/2"}],
+    # candidates -- never "the reviewed entries, or else the candidates". The probe entry cites the page's own two
+    # counted rows, so it is supported by the real support_problems (since G84 that function also judges the
+    # candidates, so it is no longer stubbed here).
+    reviewed = {"id": "adobe-acrobat-pro:15.099.20001:writer-probe", "product_id": "adobe-acrobat-pro",
+                "update_version": "15.099.20001", "verdict": "TEST FIRST", "reason_class": "corroborated_issue",
+                "scope": "if you use the Creative Cloud installer",
+                "reason": "Two users report that the Creative Cloud installer stops with error DW003.",
+                "evidence": [{"id": r["id"], "source_url": r["source_url"]} for r in rows],
                 "new_in_this_version": False, "reviewed_at": "2026-11-13", "basis": "VRP-S7 probe"}
-    saved_reasons = (vr.load_reasons, vr.support_problems)
+    saved_reasons = vr.load_reasons
     both = {}
     try:
         vr.load_reasons = lambda *a, **k: [dict(reviewed)]
-        vr.support_problems = lambda entry, rows, confirmations=None: []
         acr.GENERATED_DIR = gen
         acr._ALL_ENTRY_RECORDS.clear()
         with switch(True):
-            a = acr._policy_decision(OBS, "31.1.0", "", [], dict(page))[0]
-            b = bce.policy_decision(OBS, "31.1.0", "", [], dict(page), index)[0]
-            want = vp.page_supported_reasons(dict(page), [], [dict(reviewed)], recs)
+            a = acr._policy_decision("adobe-acrobat-pro", "15.099.20001", "", [dict(r) for r in rows], dict(ACRO_PRO))[0]
+            b = bce.policy_decision("adobe-acrobat-pro", "15.099.20001", "", [dict(r) for r in rows], dict(ACRO_PRO),
+                                    index)[0]
+            want = vp.page_supported_reasons(dict(ACRO_PRO), rows, [dict(reviewed)], recs)
         both = {"apply": sorted(str(r.get("id")) for r in a.reasons),
                 "build": sorted(str(r.get("id")) for r in b.reasons), "want": sorted(str(r.get("id")) for r in want)}
     finally:
-        vr.load_reasons, vr.support_problems = saved_reasons
+        vr.load_reasons = saved_reasons
         acr.GENERATED_DIR = saved_dir
         acr._ALL_ENTRY_RECORDS[:] = saved_cache
-    check("VRP-S7 beside a supported REVIEWED entry, both record writers still gather the producer's candidates with "
-          "the switch ON, exactly as the projection does (G38 WS2 review 2, LOW-7: reviewer mutant MM24, 'candidates "
-          "only when the page has no reviewed reason', is caught here)",
+    check("VRP-S7 beside a supported REVIEWED entry, both record writers still gather the producer's (passing) "
+          "candidates with the switch ON, exactly as the projection does (G38 WS2 review 2, LOW-7: reviewer mutant "
+          "MM24, 'candidates only when the page has no reviewed reason', is caught here)",
           both and both["apply"] == both["build"] == both["want"] and reviewed["id"] in both["want"]
           and any(i.startswith("auto:") for i in both["want"]), str(both))
 
@@ -1552,13 +1604,14 @@ def render_gate(cases: dict, projection: dict) -> dict | None:
 
 
 def check_render_switch_on() -> None:
-    recs = named_fixture() + [dict(KBP, update_type="2026-05 B")]
-    counted = {vr.record_identity(recs[-1]): [R1, R2]}
+    recs, counted = switch_fixture()
+    recs.append(dict(KBP, update_type="2026-05 B"))
+    counted[vr.record_identity(recs[-1])] = [R1, R2]
     with switch(True):
         projection = vp.project(recs, counted, [], [])[0]
         valid, _u = vp.supported_reasons(recs, counted, [])
     targets = {"obs 31.1.0": recs[0], "obs 31.1.1": recs[1], "win 26100.9550": recs[7], "win 28000.2804": recs[9],
-               "security install": recs[-1], "obs 32.0.3": recs[3]}
+               "security install": recs[-1], "acrobat install": recs[-2], "obs 32.0.3": recs[3]}
     cases = {k: {"rec": {f: r.get(f) for f in ("product_id", "update_version", "target_build")},
                  "cnt": int(r.get("update_report_count") or 0)} for k, r in targets.items()}
     out = render_gate(cases, projection)
@@ -1574,13 +1627,16 @@ def check_render_switch_on() -> None:
         d = pd.decide(dict(r), valid_reasons=valid.get(vr.record_identity(r), []))
         want[k] = (d.verdict, d.scope, pd.public_body(d, r, int(r.get("update_report_count") or 0)),
                    pd.PANEL_HEADING.get(d.panel_kind, ""), pd.panel_text(d))
-    check("VRP-S3 switch ON, the REAL gate prints each candidate's scoped verdict exactly as decide gives it: OBS "
-          "31.1.0 WAIT, 31.1.1 TEST FIRST, the two named Windows pages WAIT, a security update keeps SECURITY "
-          "UPDATE with the affected-configuration panel, and OBS 32.0.3 stays INSUFFICIENT DATA",
-          got == want and [got[k][0] for k in targets] == ["WAIT", "TEST FIRST", "WAIT", "WAIT", "SECURITY UPDATE",
-                                                           "INSUFFICIENT DATA"]
-          and got["security install"][3] == "Affected configuration"
-          and "Other setups: no problem is confirmed for them yet." in got["obs 31.1.0"][2],
+    check("VRP-S3 switch ON, the REAL gate prints exactly what decide gives over the candidates that pass the "
+          "reviewed checks: a security update keeps SECURITY UPDATE with the affected-configuration panel and the "
+          "Acrobat page reads TEST FIRST when installing it (both install candidates rest on two counted reports); "
+          "OBS 31.1.0 and 31.1.1 and the two named Windows pages stay INSUFFICIENT DATA, because their vendor "
+          "candidates cite no counted row and are refused (G84; the gate printed WAIT / TEST FIRST there before), "
+          "and OBS 32.0.3 stays INSUFFICIENT DATA",
+          got == want and [got[k][0] for k in targets] == ["INSUFFICIENT DATA"] * 4 + [
+              "SECURITY UPDATE", "TEST FIRST", "INSUFFICIENT DATA"]
+          and got["security install"][3] == "Affected configuration" and got["acrobat install"][1] == "when installing it"
+          and not any("Other setups: no problem is confirmed for them yet." in (got[k] or ("", "", ""))[2] for k in targets),
           str({k: (got[k] or ("",))[:2] for k in targets})[:400])
 
 
@@ -1596,11 +1652,22 @@ def _write_tree(root: Path, recs: list, rows: list) -> None:
     (data / "patch_lifecycle.yml").write_text(yaml.safe_dump({"schema_version": 1, "entries": []}), encoding="utf-8")
 
 
+def bypass_projection(recs: list, counted: dict) -> dict:
+    """What the projection was before G84 with the switch on: every candidate merged with no reviewed check."""
+    merged = vrp.merge({}, vrp.produce(recs, counted).candidates)
+    pages = {}
+    for rec in recs:
+        d = pd.decide(dict(rec), valid_reasons=merged.get(vr.record_identity(rec), []))
+        if d.verdict != pd.INSUFFICIENT_DATA:
+            pages[vp.page_key(rec)] = vp.row_for(d, rec)
+    return {"schema_version": vp.SCHEMA_VERSION, "pages": dict(sorted(pages.items()))}
+
+
 def check_qa_switch(tmp: Path) -> None:
     import qa_patch_records as qa
-    recs = named_fixture()
+    recs, counted = switch_fixture()
     tmp.mkdir(parents=True, exist_ok=True)
-    _write_tree(tmp, recs, [])
+    _write_tree(tmp, recs, [dict(r) for r in ACRO_ROWS])
     files = sorted((tmp / "updates" / "generated").glob("*.md"))
     saved = (qa.REASONS_PATH, qa.LIFECYCLE_PATH, qa.EVIDENCE_PATH, qa.PROJECTION_PATH)
     proj_path = tmp / "_data" / vp.PROJECTION_NAME
@@ -1615,24 +1682,32 @@ def check_qa_switch(tmp: Path) -> None:
         finally:
             qa.REASONS_PATH, qa.LIFECYCLE_PATH, qa.EVIDENCE_PATH, qa.PROJECTION_PATH = saved
     codes = lambda es: {e["code"] for e in es}  # noqa: E731
-    off_projection = vp.project(recs, {}, [], [])[0]
+    off_projection = vp.project(recs, counted, [], [])[0]
+    bypass = bypass_projection(recs, counted)
     with switch(True):
-        on_projection = vp.project(recs, {}, [], [])[0]
+        on_projection = vp.project(recs, counted, [], [])[0]
         proj_path.write_text(vp.render(on_projection), encoding="utf-8")
         e_on, _w = scan()
         proj_path.write_text(vp.render(off_projection), encoding="utf-8")
         e_stale, _w = scan()
+        proj_path.write_text(vp.render(bypass), encoding="utf-8")
+        e_bypass, _w = scan()
     proj_path.write_text(vp.render(on_projection), encoding="utf-8")
     e_forged, _w = scan()
     proj_path.write_text(vp.render(off_projection), encoding="utf-8")
     e_off, _w = scan()
+    acro_key = vp.page_key(ACRO_PRO)
     check("VRP-S4 QA reads the same switch: ON, the deploy's candidate projection is clean and a projection built "
           "without the candidates is an ERROR; OFF, a projection carrying candidates is an ERROR (a forged or "
-          "stale activation cannot publish) and the reviewed-only one is clean",
-          on_projection["pages"] and not off_projection["pages"]
+          "stale activation cannot publish) and the reviewed-only one is clean; and ON, a projection carrying the "
+          "candidates the reviewed checks refuse -- what the activation path built before G84 -- is an ERROR",
+          list(on_projection["pages"]) == [acro_key] and not off_projection["pages"]
+          and len(bypass["pages"]) > len(on_projection["pages"])
           and "verdict_render_disagrees" not in codes(e_on) and "verdict_render_disagrees" in codes(e_stale)
-          and "verdict_render_disagrees" in codes(e_forged) and "verdict_render_disagrees" not in codes(e_off),
-          f"on={codes(e_on)} stale={codes(e_stale)} forged={codes(e_forged)} off={codes(e_off)}")
+          and "verdict_render_disagrees" in codes(e_forged) and "verdict_render_disagrees" not in codes(e_off)
+          and "verdict_render_disagrees" in codes(e_bypass),
+          f"on={codes(e_on)} stale={codes(e_stale)} forged={codes(e_forged)} off={codes(e_off)} "
+          f"bypass={codes(e_bypass)} pages={list(on_projection['pages'])}")
 
 
 def check_builder(tmp: Path) -> None:

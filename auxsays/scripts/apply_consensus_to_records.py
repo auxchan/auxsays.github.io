@@ -1076,9 +1076,10 @@ def _all_entry_records() -> list[dict[str, Any]]:
 
 def _confirmation_records(entries: list[dict[str, Any]]) -> dict[tuple[str, str, str], dict[str, Any]]:
     """Front matter of the records an entry's official confirmation names -- read only when this
-    page has such an entry (two pages today), never a scan per group."""
-    wanted = {(str((e.get("official_confirmation") or {}).get("product_id") or "").strip(),
-               str((e.get("official_confirmation") or {}).get("update_version") or "").strip(), "")
+    page has such an entry (two pages today), never a scan per group. Keyed on the confirmation's FULL
+    identity, build included, exactly as verdict_reasons.support_problems looks it up (G84, D-1): keyed on
+    (product, version, "") a Windows or PowerPoint confirming record was never fetched."""
+    wanted = {verdict_reasons.confirmation_identity(e.get("official_confirmation"))
               for e in entries if e.get("official_confirmation")}
     found: dict[tuple[str, str, str], dict[str, Any]] = {}
     if not wanted:

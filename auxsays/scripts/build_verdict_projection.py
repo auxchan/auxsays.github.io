@@ -25,8 +25,10 @@ review queue, to `_data/verdict_reason_candidates.yml` beside the projection. Ru
 deploy, into a derived git-ignored file, is what keeps it from ever being a second writer of
 tracked data. Its PUBLIC_AUTO_ACTIVATION switch is OFF (TEMPORARY, pending the owner's approval), so
 the projection above does not read the candidates and nothing published changes; ON, the projection
-carries them. A producer failure writes the error into the candidates file and never touches the
-projection.
+carries only the candidates that pass the reviewed entries' own checks (G84:
+lib/verdict_projection.validated_candidates), and each refused one is printed below as "not supported"
+with the unsupported entries. A producer failure writes the error into the candidates file and never
+touches the projection; a failure while deciding empties the projection (FAILURE above).
 
 GENERATED AT DEPLOY, NEVER COMMITTED (both files are git-ignored).
 
