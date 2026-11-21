@@ -999,8 +999,11 @@ def scan_evidence_overview(files: list[Path], publish_strict: bool = False
       * evidence_overview_family_unlabelled -- a counted source type has no public family name, so the
         page calls it "other public reports" until it gets one.
 
-    With no projection on disk and no verdict projection either (a writeback lane, PR-time CI, a local
-    run), the deploy builds both from this same tree, so the recompute is what the page will print."""
+    With neither this projection nor the verdict projection on disk (a writeback lane, PR-time CI, a
+    local run) only the reviewed file is checked: the deploy builds both projections from this same tree
+    before it runs this scan, and the recompute below -- one more full read of the records and the
+    evidence store -- would only repeat what test_evidence_overview already asserts over the tree in PR
+    CI (the guard over every row included). It runs wherever a deploy projection exists."""
     errors: list[dict[str, str]] = []
     warnings: list[dict[str, str]] = []
     try:
@@ -1011,6 +1014,8 @@ def scan_evidence_overview(files: list[Path], publish_strict: bool = False
     for problem in problems:
         add(errors, EVIDENCE_PRESENTATION_PATH, "evidence_presentation_invalid",
             f"{problem}. A malformed file counts for nothing: no reviewed finding is shown.")
+    if not EVIDENCE_OVERVIEW_PATH.is_file() and not PROJECTION_PATH.is_file():
+        return errors, warnings
     try:
         reasons = verdict_reasons.load_reasons(REASONS_PATH)
         lifecycle = verdict_reasons.load_lifecycle(LIFECYCLE_PATH)

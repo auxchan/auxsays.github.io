@@ -982,8 +982,8 @@ after measuring which products have it, and keep everything deterministic.
   <identity> so far. AUXSAYS has no verdict for this release yet." instead of tying the missing verdict to quantity.
 - QA (`scan_evidence_overview`): errors on a malformed reviewed file, a malformed, failed or stale projection, and a
   deploy that built the verdict projection but not this one; the public-text guard (no stored title or excerpt run,
-  no author field, no threshold or acceptance wording, no unpermitted vendor text) warns in a writeback lane and is
-  an error under `--publish-strict`.
+  no author field, no threshold or acceptance wording, no unpermitted vendor text) warns without `--publish-strict`
+  and is an error under it. With no deploy projection on disk it checks the reviewed file only.
 
 **Measured** Local builds of main (e1220296) and the branch from the same projections and build time: 1,919
 files each; 748 patch pages differ, exactly the pages with an overview or a newer-release row, plus the
@@ -993,8 +993,9 @@ Hub 23, 4K Capture Utility 19, OBS Studio 18, PowerPoint 15, GeForce Game Ready 
 Microsoft 365 Apps 5, Premiere Pro 2; Figma and GitHub unchanged; a page with no row is byte-identical. The
 projection: 256 pages with an overview, 734 with a newer release, the reviewed finding on OBS Studio 33.0.1
 only. Verdict projection byte-identical (sha256 562014d6...). `test_evidence_overview.py` (78 checks,
-blocking); 17 mutants, one per mechanism, each killed by its named check. QA adds one full read of the records
-and the store per run (about 13 s on the Windows dev box).
+blocking); 19 mutants, one per mechanism, each killed by its named check. The QA recompute (one more full read
+of the records and the store) runs only where a deploy projection is on disk; a writeback lane or PR CI checks
+the reviewed file alone, and the suite runs the guard over the tree in PR CI.
 
 **Not changed** No verdict, verdict projection, reason candidate, threshold, acceptance rule, count, evidence row,
 generated record or collector. PUBLIC_AUTO_ACTIVATION stays off. The product and vendor tables keep their Evidence

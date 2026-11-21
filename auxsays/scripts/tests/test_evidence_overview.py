@@ -573,11 +573,15 @@ def run() -> int:  # noqa: PLR0915
             leak_rows = [row(1, version="1.0.0", title="Each report is listed separately below on my machine"),
                          row(2, version="1.0.0"), row(3, version="1.0.0")]
             (tdp / "ev.yml").write_text(yaml.safe_dump({"evidence": leak_rows}), encoding="utf-8")
+            en, wn = codes(strict=True)  # nothing on disk: a lane or PR CI reads only the reviewed file
+            leak_proj = eo.project(fx_records, {ident(fx_records[0]): leak_rows}, {}, [], reviewed_with(), [])
+            qa.EVIDENCE_OVERVIEW_PATH.write_text(eo.render(leak_proj), encoding="utf-8")
             el, wl = codes(strict=False)
             es, _ws = codes(strict=True)
-            check("F9 a guard finding warns in a writeback lane and is an ERROR under --publish-strict",
+            check("F9 with a deploy projection on disk a guard finding warns without --publish-strict and is an "
+                  "ERROR under it; with none on disk the run reads only the reviewed file",
                   "evidence_overview_public_text" in wl and "evidence_overview_public_text" not in el
-                  and "evidence_overview_public_text" in es, (el, wl, es))
+                  and "evidence_overview_public_text" in es and not en and not wn, (el, wl, es, en, wn))
         finally:
             (qa.EVIDENCE_PATH, qa.REASONS_PATH, qa.LIFECYCLE_PATH, qa.EVIDENCE_PRESENTATION_PATH,
              qa.EVIDENCE_OVERVIEW_PATH, qa.PROJECTION_PATH) = saved_paths
