@@ -565,8 +565,9 @@ auxsays/scripts/tests/test_evidence_overview.py = 86
 # WAIT-without-next-action publication error, the empty-scope rule in Python and the Liquid gate, the six decide()
 # call sites over one stale-count fixture, a valid reviewed finding kept under the WAIT, a corpus guard (among the
 # pages measured at G87 exactly the four OBS pages change; later crossings only to an eligible volume WAIT), and the
-# patch page, homepage, feed, table and My Patch Stack rendered with the shipped Liquid. Needs ruby + liquid.
-auxsays/scripts/tests/test_volume_precaution_g87.py = 51
+# patch page, homepage, feed, table and My Patch Stack rendered with the shipped Liquid, and QA's own verdict scan
+# clean on the four regenerated records. Needs ruby + liquid.
+auxsays/scripts/tests/test_volume_precaution_g87.py = 52
 
 # Premiere discovery ROUTING, and the health semantics that keep it honest. The nine-method flat
 # loop cost 546.8s over 219 HTTP requests for two records; wayback alone was 408.5s and reddit

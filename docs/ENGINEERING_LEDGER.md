@@ -556,7 +556,7 @@ investigated line is NOT shown today on main or here: four reports captured on 2
 from the 47 G82 assessed, so the reviewed entry stops applying by its own rule; replayed on the assessed 47 it
 stands under the volume WAIT (pinned by test). A new assessment is a separate reviewed change.
 
-**Tests** `test_withdraw_g87_obs_prerelease_row.py` (43 checks, blocking); `test_volume_precaution_g87.py` (51
+**Tests** `test_withdraw_g87_obs_prerelease_row.py` (43 checks, blocking); `test_volume_precaution_g87.py` (52
 checks, blocking). Updated for the owner's amendment, same governed counts: `test_growth3_verdict_policy.py`
 (decide takes counted_rows; probe A1's 32.2.2 now prints the volume WAIT with only the still-supported TEST FIRST
 beneath), `test_patch_decision_authority.py` (both writers reach the volume WAIT from the same rows),
