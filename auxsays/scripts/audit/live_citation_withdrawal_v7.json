@@ -1,0 +1,134 @@
+{
+ "schema": 1,
+ "ledger": "AUX-118",
+ "version": 7,
+ "supplements": "auxsays/scripts/audit/live_citation_withdrawal.json (AUX-088), live_citation_withdrawal_v2.json (AUX-090), live_citation_withdrawal_v3.json (AUX-098), live_citation_withdrawal_v4.json (AUX-108), live_citation_withdrawal_v5.json (AUX-111) and live_citation_withdrawal_v6.json (AUX-114), which stay unchanged",
+ "purpose": "Pinned audited withdrawal of one stored OBS Studio report counted against 31.1.2: a macOS virtual-camera report whose only mention of 31.1.2 is a source tag the reporter compared by diffing build files, not a version the reporter ran or saw the failure on. The same report's 32.1.2 row was withdrawn under AUX-088 for the same clause; its 32.2.2 row (the version the reporter ran) stays counted. The row is kept; only counted and exclusion_reason change.",
+ "selector": [
+  "product_id",
+  "update_version",
+  "target_build",
+  "id",
+  "source_url"
+ ],
+ "products": [
+  "microsoft-windows-11",
+  "obs-studio"
+ ],
+ "exclusion_reasons": [
+  "duplicate_existing_evidence",
+  "identity_not_the_subject",
+  "not_a_real_issue_report",
+  "version_is_rollback_target",
+  "version_named_but_working"
+ ],
+ "edit": {
+  "counted": false,
+  "exclusion_reason": "per entry (closed vocabulary)",
+  "evidence_valid_for_current_patch": "not present on OBS rows; a block carrying it refuses",
+  "row_retained": true
+ },
+ "parent_commit": "e2cfca68c09ad5035b5e8dad0999147b128a5028",
+ "store_path": "auxsays/_data/consensus_evidence.yml",
+ "store_sha256_at_pin": "715c13b237a0d96ee39e94afce7ee0af794c4a6478ebea3ce89b9541bd21026a",
+ "adjudication_packet": {
+  "packet_sha256": "ef02985663e778674dab45b3195cab30265b34cd22daa3432d3e17f1b6b13262",
+  "brief": "embedded in the packet (its 'How to use this packet' and 'About the text' sections); no separate brief file",
+  "control_rule_sha256": "72dc9790283ad49cfcc70bf18b176647ee68004c3f7e07b42958f2c0aa80d3aa",
+  "draw_sha256": "ada61b6cb692de01dfa1fb38d1f7be1502f88059976642fe712cff3d005b6104",
+  "key_sha256": "65ea8412fbf34f297cec942cb22eb538bbff64d9bb13e92d33086c063caca2bc",
+  "reader_1_sha256": "268db420d84a7aa1b96333f8bdb69b95ae66f974030dc30045069a63b6de3244",
+  "reader_2_sha256": "c1417d0dbd22fc6297cdfe3350e776a0f4f7bacd1bcc7a20aa1e41afde8fa98e",
+  "items": 11,
+  "targets": 1,
+  "controls": 10,
+  "question": "Does this report establish that the exact version on this page is affected?",
+  "labels": ["AFFECTED", "NOT_AFFECTED", "INSUFFICIENT_CONTEXT"],
+  "label_mapping": "A reader's NOT_AFFECTED (the text held is enough to answer, and the report does not establish that the page's version is affected) is recorded as the tool's INCORRECT; AFFECTED would be CORRECT and INSUFFICIENT_CONTEXT would be UNSURE. The packet asked for no closed reason: each reason_class below is the proposal's mapping of the reader's verbatim reason onto the closed vocabulary, and the verbatim reason is kept beside it.",
+  "note": "A label-free shuffled packet of stored text: the one candidate row among ten controls (five counted, five refused). The controls were drawn by a rule fixed before the draw. When too few refusals had text clear enough to use, the rule was widened in writing during the draw, before any supplementary candidate was read (its amendments A1 and A2, pinned by control_rule_sha256). Three of the five refused controls, WAYA among them, were drawn under that change. The readers were not told which item was under audit or what outcome was expected, and read only the packet. Both readers gave the same label on all eleven items. Both labelled the candidate NOT_AFFECTED; both labelled every counted control AFFECTED and four of the five refused controls NOT_AFFECTED; both labelled the fifth refused control AFFECTED (recorded under control_findings_no_action)."
+ },
+ "basis": "A row is here only when TWO independent blind adjudications, each made from the stored text alone without the key or each other's labels, found that the report does not establish the credited version is affected: second_blind and third_blind. first_audit records the earlier full-source audit of the same row as provenance; it is not one of the two determinations. The row takes the closed reason both blind reasons support, the reason AUX-088 gave the same clause on the same report's 32.1.2 row.",
+ "note": "The entry must match exactly one stored block whose sha256 equals block_sha256_before (to withdraw) or block_sha256_after (already withdrawn). No retain entries: it is not a duplicate.",
+ "entries": [
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "31.1.2",
+   "target_build": "",
+   "id": "obs-studio-31-1-2-github-issue-13995",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/13995",
+   "record_file": "auxsays/updates/generated/2025-07-28-obs-studio-31-1-2.md",
+   "block_sha256_before": "00c0992c44ef55d4554bfa32c1add83d2be3999561b9c08c2d58e599499342f9",
+   "exclusion_reason": "identity_not_the_subject",
+   "block_sha256_after": "45cddacf83866d9e991b7517cd755585fffcfdb209f8605c1b05183206317e57",
+   "captured_at": "2026-10-05T16:13:13Z",
+   "case": "WPCV",
+   "adjudication": {
+    "first_audit": {
+     "by": "G74 OBS auditor (2026-11-20_g74-readonly-bundle/OBS_AUDIT.md section 1; full issue body read)",
+     "label": "INCORRECT",
+     "reason": "identity_not_the_subject: 31.1.2 occurs once in the report, in a clause naming it as a git tag the reporter diffed; the reporter ran 32.2.2 only; the same clause was AUX-088's basis for withdrawing the 32.1.2 row.",
+     "obs_audit_sha256": "11951d76df6ae15cb4841fde37753a08c36943cfca1691f7cd1a75ef42c56195",
+     "counts_toward_the_two": false
+    },
+    "second_blind": {
+     "by": "G75 OBSW blind reader 1 (2026-11-20_g75-governance-bundle/OBSW_READER_1.md; packet only; no key, control rule or other reader's output read)",
+     "case": "WPCV",
+     "label": "INCORRECT",
+     "label_as_given": "NOT_AFFECTED",
+     "reason_class": "identity_not_the_subject",
+     "reason": "31.1.2 appears only as a source tag the poster compared by diffing build files. The held text never says the poster ran 31.1.2 or saw the failure on it."
+    },
+    "third_blind": {
+     "by": "G75 OBSW blind reader 2 (2026-11-20_g75-governance-bundle/OBSW_READER_2.md; packet only; no key, control rule or other reader's output read)",
+     "case": "WPCV",
+     "label": "INCORRECT",
+     "label_as_given": "NOT_AFFECTED",
+     "reason_class": "identity_not_the_subject",
+     "reason": "31.1.2 appears only as a source tag the poster compared by diffing build files, not as a version they ran. The held text attributes no experienced failure to 31.1.2."
+    }
+   },
+   "basis": "The report is about the virtual camera failing on macOS 26.7 with the version the reporter ran (32.2.2, counted on its own page). 31.1.2 appears once, in a sentence saying the signing and packaging logic is unchanged across three release tags, verified by diffing build files; no problem with 31.1.2 is reported."
+  }
+ ],
+ "held_out": [],
+ "must_stay_counted": [
+  {
+   "product_id": "obs-studio",
+   "update_version": "31.1.2",
+   "target_build": "",
+   "id": "obs-studio-31-1-2-github-issue-13989",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/13989",
+   "packet_case": "WYT4",
+   "control_role": "must-stay control on the withdrawn row's own page (several versions named, a failure on each; both readers AFFECTED)",
+   "block_sha256": "57e0d921276d5130c9909913930108acc91fe6773d019fd5460b2377b4a77d55"
+  },
+  {
+   "product_id": "obs-studio",
+   "update_version": "32.2.2",
+   "target_build": "",
+   "id": "obs-studio-32-2-2-github-issue-13995",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/13995",
+   "packet_case": "",
+   "control_role": "the same report's row on the version the reporter ran; not a packet item; must stay byte-identical and counted",
+   "block_sha256": "79ee83557f059a88230e44ea36d9dd87e149c41a235e4c78a3468801b724baca"
+  }
+ ],
+ "findings_not_withdrawn": [],
+ "control_findings_no_action": [
+  {
+   "group": "control WAYA",
+   "page": "obs-studio|32.2.2|",
+   "rows": [
+    {
+     "product_id": "obs-studio",
+     "update_version": "32.2.2",
+     "target_build": "",
+     "id": "obs-studio-32-2-2-obs-forum-thread-196184",
+     "source_url": "https://obsproject.com/forum/threads/zoominator-wayland-mouse-follow-broken-requesting-xdg-desktop-portal-support.196184/"
+    }
+   ],
+   "why": "A refused row (not_a_real_issue_report, withdrawn under AUX-088) that both blind readers labelled AFFECTED (a third-party plugin's mouse-follow broken on Wayland, with OBS 32.2.2 in the poster's system line); the packet builder expected INSUFFICIENT_CONTEXT or NOT_AFFECTED. Recorded only: it is not re-admitted here, and any re-admission is its own audited route."
+  }
+ ]
+}
