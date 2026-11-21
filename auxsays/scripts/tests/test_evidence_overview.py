@@ -10,7 +10,8 @@ WHAT IS PINNED, and the mechanism each section protects:
       ONLY while the counted population is exactly the assessed one (self-invalidating).
   [N] the newer release: a port of My Installed Versions' installedState (UPDATE AVAILABLE only),
       run against the SHIPPED JavaScript over every record of the corpus so the two cannot part; the
-      newer release's verdict is its page's own, or "no verdict yet"; changelog headlines get none.
+      newer release's verdict is its page's own, or "no verdict yet"; changelog headlines get none,
+      and so does Windows 11 (patch_lifecycle.yml's recorded KB applicability hold).
   [V] vendor fix lines: a complete mechanism, switched OFF because no source's publication permission
       is on record; forced on in memory it extracts and attributes, and the guard refuses unpermitted text.
   [G] the public-text guard: no stored report title or excerpt, no author field, no acceptance or
@@ -438,6 +439,22 @@ def run() -> int:  # noqa: PLR0915
           f"the corpus's {len(py)} dated, unarchived records",
           isinstance(js, dict) and "__error__" not in js and not diff and len(py) > 100,
           (js or {}).get("__error__") if isinstance(js, dict) else diff[:5])
+    # Windows 11 is excluded from the note: patch_lifecycle.yml records that the general Windows "newer update
+    # available" links wait for the Microsoft KB source assessment and exact KB/build applicability checks.
+    win11 = [dict(r, product_id="microsoft-windows-11") for r in win]
+    win_tool = project_one(win, {})
+    win_excl = project_one(win11, {ident(win11[0]): [row(1, pid="microsoft-windows-11", version="25H2")]})
+    real_newer = eo.project(real_records, real_groups, {}, [], reviewed, split)["pages"]
+    real_win = [k for k, rw in real_newer.items() if k.startswith("microsoft-windows-11|")]
+    check("N12 Windows 11 gets no newer-release note (the recorded KB applicability hold): not in this tree, and "
+          "not for a build line that gets one under another product; its overview stays, PowerPoint keeps the note",
+          eo.NEWER_NOTE_EXCLUDED_PRODUCTS == frozenset({"microsoft-windows-11"})
+          and "newer" in win_tool.get(verdict_projection.page_key(win[0]), {})
+          and not any("newer" in rw for rw in win_excl.values())
+          and "count_line" in win_excl.get(verdict_projection.page_key(win11[0]), {})
+          and bool(real_win) and not any("newer" in real_newer[k] for k in real_win)
+          and any(k.startswith("microsoft-powerpoint|") and "newer" in rw for k, rw in real_newer.items()),
+          (sorted(win_excl), [k for k in real_win if "newer" in real_newer[k]][:3]))
 
     # ------------------------------------------------------------------ [V]
     section("[V] vendor fix lines: complete, and switched off")

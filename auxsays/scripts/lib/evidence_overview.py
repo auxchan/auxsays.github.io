@@ -108,6 +108,12 @@ OTHER_FAMILY = ("other public report", "other public reports")
 PUBLICATION_PERMITTED_HOSTS: frozenset[str] = frozenset()
 MAX_FIX_LINES = 5
 
+# Products that get no newer-release note. Windows 11: auxsays/_data/patch_lifecycle.yml records that the
+# general Windows "newer update available" links are not built and wait for the Microsoft KB source
+# assessment and exact KB/build applicability checks, and this note must not contradict that recorded hold
+# (an owner question, not done). Its overview is unchanged.
+NEWER_NOTE_EXCLUDED_PRODUCTS: frozenset[str] = frozenset({"microsoft-windows-11"})
+
 # Phrases the AUXSAYS-authored strings must never carry: an acceptance rule or a threshold stated to the
 # reader (the page describes evidence; it does not explain how much would be enough).
 FORBIDDEN_WORDING = ("threshold", "at least", "minimum", "two or more", "enough", "more reports",
@@ -537,7 +543,7 @@ def project(records: Iterable[Mapping[str, Any]],
                 "assessment": _text(assessment.get("id")) if assessment else "",
             })
         pid = _text(rec.get("product_id"))
-        if version_shaped(rec):
+        if version_shaped(rec) and pid not in NEWER_NOTE_EXCLUDED_PRODUCTS:
             target = update_available(rec, payloads.get(pid, []), split=pid in split)
             if target is not None and version_shaped(target) and _text(target.get("permalink") or target.get("url")):
                 row["newer"] = newer_row(rec, target, verdict_rows, n)

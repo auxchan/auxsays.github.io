@@ -535,11 +535,12 @@ auxsays/scripts/tests/test_publication_title_minimisation.py = 36
 # the count stated as a count (no strength word), the universal clause on pages that print no
 # verdict, the reviewed OBS 33.0.1 finding ONLY while its counted population is the assessed one, the
 # newer release by My Installed Versions' rule (the port run against the shipped installedState over
-# every corpus record in node), vendor fix lines off with no permission on record, the public-text
-# guard, QA's missing/failed/stale/malformed errors, and real Liquid renders of the include, the label
+# every corpus record in node; none for Windows 11, which waits for the KB applicability checks),
+# vendor fix lines off with no permission on record, the public-text guard, QA's
+# missing/failed/stale/malformed errors, and real Liquid renders of the include, the label
 # withholding (listed products only) and the search description. Corpus-wide properties are one check
 # each, so evidence growth cannot change this count. Needs ruby + liquid and node; fails without them.
-auxsays/scripts/tests/test_evidence_overview.py = 78
+auxsays/scripts/tests/test_evidence_overview.py = 79
 
 # Premiere discovery ROUTING, and the health semantics that keep it honest. The nine-method flat
 # loop cost 546.8s over 219 HTTP requests for two records; wayback alone was 408.5s and reddit

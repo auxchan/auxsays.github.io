@@ -957,9 +957,12 @@ after measuring which products have it, and keep everything deterministic.
   to the shipped JavaScript over every corpus record in node): "A newer release is available: <product> <version>
   (released <date>)", its own verdict as its page prints it or "AUXSAYS has no verdict for it yet.", and its
   official notes link. Never a verdict assigned, never a fix matched to a report. Changelog headlines (Figma,
-  GitHub) get none. On Windows 11 and PowerPoint only a newer build of the same version counts; the rule reads
-  every other product as one line, so Acrobat's Classic-track pages (20.x.30xxx, 31 Pro and 31 Reader) point to
-  the newest Continuous release.
+  GitHub) get none. On PowerPoint only a newer build of the same version counts; the rule reads every other
+  product as one line, so Acrobat's Classic-track pages (20.x.30xxx, 31 Pro and 31 Reader) point to the newest
+  Continuous release. Windows 11 gets no note (`NEWER_NOTE_EXCLUDED_PRODUCTS`): `_data/patch_lifecycle.yml`
+  records that the general Windows "newer update available" links are not built and wait for the Microsoft KB
+  source assessment and exact KB/build applicability checks, so Windows is excluded pending that assessment (an
+  owner question, not done). Its evidence overview is unchanged.
 - Vendor fix lines: built and switched OFF. `PUBLICATION_PERMITTED_HOSTS` is empty because no source records a
   publication permission (the acquisition registry knows only `rights_status: unresolved`); every page shows the
   official-notes link only, and no "N fixes" total is printed.
