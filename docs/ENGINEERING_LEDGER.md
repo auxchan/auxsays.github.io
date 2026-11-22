@@ -53,7 +53,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-048 | Resolved | Security | High | A page on the public domain asked visitors for a repository-write token |
 | AUX-041 | Resolved | Evidence integrity | High | A published theme contradicted the reporter and a platform label was never earned — one shared, negation-aware classifier |
 | AUX-047 | Resolved | Deployment | High | The published-payload gate refused a licence notice and halted every deploy |
-| AUX-128 | Resolved | Deployment | Medium | Writer lanes confirmed only that Pages was asked to deploy, and a cycle lost to a mid-run merge was never re-run |
+| AUX-128 | Resolved | Deployment | Medium | Writer lanes confirmed only that Pages was asked to deploy, and a cycle that never reached main was never re-run |
 | AUX-042 | Resolved | Evidence integrity | High | The gate guarding mature consensus demanded three fields nothing writes and the approved writer is forbidden to write |
 | AUX-038 | Resolved | Public disclosure | High | The site explained how it gathers evidence — a 1.5 MB telemetry page, and raw method ids on hundreds of patch pages |
 | AUX-043 | Resolved | Evidence integrity | Medium | Every published source asserted a patch match it never checked; now derived from the row |
@@ -4423,55 +4423,73 @@ stored DaVinci rows. The fourteen remain an audit population; this makes the nex
 **Reopen only if** a counted row written after this change carries `match_basis: exact_version_text`
 without a `matched_text` that appears in its `matched_context`.
 
-### AUX-128 — Writer lanes confirmed only that Pages was asked to deploy, and a cycle lost to a mid-run merge was never re-run
+### AUX-128 — Writer lanes confirmed only that Pages was asked to deploy, and a cycle that never reached main was never re-run
 
 - **Status** Resolved · **Area** Deployment · **Severity** Medium
-- **First seen** 2026-11-21 (run 44878227542) · **Resolved** 2026-11-21 (G91; live check at the first writer run after merge)
+- **First seen** 2026-11-21 (run 44878227542) · **Resolved** 2026-11-21 (G91; live check at the first writer runs after merge)
 
-**Symptom** Two gaps after a correct writeback. (1) Every writer lane dispatched the Pages build and
+**Symptom** Three gaps after a correct writeback. (1) Every writer lane dispatched the Pages build and
 stopped there. `gh workflow run` returning 0 proves the dispatch was accepted, not that the site
-deployed; the writeback already had `--pages-confirm-build` and no workflow passed it. (2) Collection
-run 44878227542 (checkout b64fa539) lost its whole cycle: a pull request that touched the evidence
-store merged while it ran, the writeback correctly refused to combine the two (`rebase_conflict`),
-pushed nothing and exited 1. The writer-queue reaper repairs runs evicted from the queue, not runs
-that failed, so the next attempt was the next scheduled cycle. No stored evidence was lost; new
-evidence waited up to a cycle.
+deployed; the writeback already had `--pages-confirm-build`, no workflow passed it, and the PowerPoint
+graph's Python binding had no way to. (2) Collection run 44878227542 (checkout b64fa539) lost its
+whole cycle: a pull request that touched the evidence store merged while it ran, the writeback
+correctly refused to combine the two (`rebase_conflict`), pushed nothing and exited 1. The
+writer-queue reaper repaired only runs evicted from the queue (zero jobs), so nothing re-ran a cycle
+that ran and failed -- a lost race, a refused writeback, a failure after collection, or a job that hit
+its time limit (which GitHub reports as `cancelled`, like an operator's cancel; runs 33810979002 and
+33753609648). (3) Nothing durable said when a cycle stayed lost or a deployment failed; it was visible
+only inside Actions. No stored evidence was lost; new evidence waited up to a cycle.
 
-**Fix** Deployment: the four command-line writer lanes (Patch Evidence Collection, AUXSAYS Patch
-Ingestion and both DaVinci lanes) pass `--pages-confirm-build`, polling 40 times 30 s apart (19.5
-minutes; measured Pages runs take 237-612 s from creation, and one can queue behind another build). A
-build that ends without success fails the lane (`deployment_pending`, an error annotation, a summary
-section). A build that never appears, or has not finished when the wait ends, is reported as
-`deployment_unverified` (an output, an outcome token, a warning annotation and a summary section that
-says which) without failing the lane: the data commit is on main and correct, and a slow Pages queue
-is not a fault. Neither case re-pushes or reverts the data commit. Lost race: the writeback writes
-`lost_race=true` only when main moved during the run and the run ended in `rebase_conflict`,
-`validation_failed_after_rebase` or `retry_exhausted`, never for a run that pushed. Evidence
-collection's chain-ingest job then dispatches the collection workflow once, carrying `recovery_of`,
-in place of the ingestion dispatch, so the writer group never gets a third entrant; the recovery
-run's own chain-ingest dispatches ingestion. Patch ingestion re-dispatches itself once, and only when
-no writer run is already waiting for the lane. A run carrying `recovery_of` never re-dispatches, and
-nothing merges two versions of the evidence: the recovery collects the cycle again from the new main.
+**Fix** Deployment: every writer lane that pushes confirms its build, 40 polls 30 s apart (19.5
+minutes): the four command-line lanes pass `--pages-confirm-build`, and the PowerPoint graph's binding
+sets the same bound and writes the writeback's outputs to `$GITHUB_OUTPUT`. A build this dispatch
+created that ends `failure`, `timed_out` or `startup_failure` fails the lane (the PowerPoint job gets
+a step that turns it red, since its graph step takes `tee`'s exit status). A run CANCELLED is not a
+failure: `pages.yml` has one concurrency group, so a waiting run is cancelled when a newer one
+arrives, and the newer build -- of the same commit, or of a later one, which the writeback recognises
+by ancestry after fetching -- deploys this content; the poll keeps watching for it. No verdict within
+the bound is `deployment_unverified` (output, outcome token, warning annotation, summary section with
+the reason) without failing the lane. If the pre-dispatch run list could not be read, a failed run
+for the SHA is not attributed to the dispatch. The data commit is never reverted or re-pushed.
+Recovery: each routine writer run executes a step named `Cycle reached main` only when its writebacks
+pushed or had nothing to push (collection: chain-ingest's first step, over both writer jobs; ingestion:
+after its writeback, `always()`). The reaper's new step (`writer_cycle_recovery.py`) re-runs, once and
+on main, the newest routine run of each lane that ran without that step -- including a time-limit
+cancel, told apart from an operator's by GitHub's annotation -- but only when the eviction step found
+the whole writer group free and dispatched nothing, and the same check repeated just before the
+dispatch still finds it free: one entrant per tick, never a third entrant. Every automatic re-run
+carries `recovery_of`, which the writer workflows put in their `run-name`, so it survives an eviction:
+a recovery that loses again is never re-run, and the eviction step re-dispatches an evicted recovery
+with the same `recovery_of`. After a recovery has lost, later losses of that lane pause until a run
+reaches main again (no retry storm). The in-lane re-dispatch steps of the first draft are gone.
+Visibility: a lost recovery, a paused lane, a loss too old to re-run, or a latest Pages build on main
+that genuinely failed opens ONE tracking issue (`Automated writer recovery needs attention`), its body
+rewritten when the problems change and closed when all are healthy; run ids, workflow names,
+conclusions and failed step names only.
 
-**Evidence** `test_deploy_verification_and_lost_race.py`, 85 governed checks: the real writeback
-against a throwaway bare origin and a scripted Pages run list, the bare script's outputs and
-annotations, every writer's argument list parsed by the writeback's own parser, and both recovery
-steps' shell executed against a fake `gh`. 38 mutants, one per fix, each killed by a named check.
-Measured with no change: the last audited withdrawal merge (#265, b64fa539) was followed by Pages run
-44876328066 on that SHA (push, success). Of the 65 GitHub-release records the official notes refresh
-no longer re-reads (OBS 17, ComfyUI 48), none has current release notes that the AUX-125 grammar reads
-as declaring a known issue.
+**Evidence** `test_deploy_verification_and_lost_race.py`, 151 governed checks: the real writeback
+against a throwaway bare origin and a scripted Pages run list (superseded, descendant, ancestor,
+unattributable cases), the bare script's outputs, every writer's argument list parsed by the
+writeback's own parser, the `Cycle reached main` conditions and run names evaluated per context and
+read back by the reaper module, chain-ingest's and the eviction step's shell executed against a fake
+`gh`, and `writer_cycle_recovery.py` as functions and as a bare script against a fake `gh` serving raw
+API JSON. Its reads were also run read-only against the live API: run 44878227542 judges lost, run
+33810979002 (PowerPoint time limit) lost, run 31111379736 (operator cancel) left alone, run
+30669290854 an eviction. Mutants, one per fix, each killed by a named check. Measured with no change:
+the last audited withdrawal merge (#265, b64fa539) was followed by Pages run 44876328066 on that SHA
+(push, success); of the 65 GitHub-release records the official notes refresh no longer re-reads (OBS
+17, ComfyUI 48), none has current notes the AUX-125 grammar reads as declaring a known issue.
 
-**Known limits** The PowerPoint orchestration job binds its writeback in Python and still confirms
-only the dispatch. A deployment reported unverified is re-checked only by a later no-change
-deploy-recovery run, which checks main's head, or superseded by the next material push. A recovery
-run that is itself evicted from the queue is re-dispatched by the reaper without `recovery_of`, so it
-can recover once more. Official notes older than the two newest releases per product are still not
-re-read (AUX-125).
+**Known limits** A recovery waits for a free lane and a reaper tick (every two hours). Pre-merge runs
+carry no `Cycle reached main` step, so a pre-merge run that failed after reaching main and is still a
+lane's newest routine run would be re-run once. A failed chain-ingest dispatch still leaves that
+cycle's ingestion undispatched (the run's own cycle reached main). Official notes older than the two
+newest releases per product are still not re-read (AUX-125).
 
 **Reopen only if** a writer run pushes a site change and neither confirms its Pages build nor reports
-`deployment_unverified`, or a run whose writeback wrote `lost_race=true` is followed by neither a
-re-dispatch nor a logged reason for skipping it.
+`deployment_unverified`; a superseded Pages run fails a lane; or a routine run without a successful
+`Cycle reached main` step is, two reaper ticks after the lane frees, neither re-run nor listed in the
+tracking issue.
 
 ### AUX-048 — a page on the public domain asked visitors for a repository-write token
 
