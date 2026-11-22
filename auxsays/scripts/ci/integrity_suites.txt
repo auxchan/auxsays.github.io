@@ -40,6 +40,21 @@
 auxsays/scripts/tests/test_acrobat_vendor_authority.py = 49
 auxsays/scripts/tests/test_audit_consensus_evidence.py = 18
 auxsays/scripts/tests/test_automation_writeback.py = 152
+# G91: every writer lane that pushes verifies its Pages DEPLOYMENT, not just the dispatch (a run
+# superseded in the `pages` group is not a failed build), and a routine cycle that ran but never
+# reached main is re-run once by the writer-queue reaper instead of being lost (run 44878227542),
+# with ONE tracking issue that stays open until every lane's newest run reached main and main's
+# newest commit -- not merely the latest Pages run -- was deployed; a push left undeployed past a
+# 2-hour grace is a problem line. One monotonic deadline bounds the whole build wait. Drives the
+# real writeback against a throwaway bare origin and a scripted run list (including a later push
+# whose build supersedes ours) and on a fake clock, runs it as the bare script, parses every
+# writer's argument list with the writeback's own parser, evaluates the `Cycle reached main`
+# conditions and run names per context, executes chain-ingest's, the reaper's eviction and
+# lost-cycle shell against a fake gh, and runs writer_cycle_recovery.py as functions, as a bare
+# script against a fake gh serving raw API JSON, and tick by tick through a six- and a fifteen-day
+# outage. At most one recovery dispatch per lost cycle: the eviction step treats an evicted run as
+# covered once a recovery naming its cycle has started, ticked through 7- and 30-day simulations.
+auxsays/scripts/tests/test_deploy_verification_and_lost_race.py = 218
 # A stored evidence row may not disappear, and may stop being accepted only by an audited in-place
 # withdrawal. Every in-tree gate compares the records against the SAME store a purge rewrote, so a
 # coherent 98% DaVinci deletion passed QA, the audit and this whole manifest, and the real writeback

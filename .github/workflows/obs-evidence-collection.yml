@@ -1,4 +1,9 @@
 name: Patch Evidence Collection
+# The writer-queue reaper reads this title through the API, even for a run evicted before any job
+# ran: a run it dispatched to re-run a lost cycle says "(recovery of run N)", and a recovery that
+# loses its cycle again is never re-run (writer_cycle_recovery.py; the reaper's eviction step passes
+# the same recovery_of on). Every other run keeps the workflow's name, as before.
+run-name: ${{ inputs.recovery_of && format('Patch Evidence Collection (recovery of run {0})', inputs.recovery_of) || 'Patch Evidence Collection' }}
 
 on:
   workflow_dispatch:
@@ -26,6 +31,12 @@ on:
           before 2025-01-01, which is older than any record AUXSAYS tracks."
         required: false
         type: string
+      recovery_of:
+        description: "Set only by the writer-queue reaper when it re-runs a routine cycle that did not
+          reach main: the id of the run being re-run. It only names the run (see run-name); the run
+          itself is an ordinary routine cycle. Leave empty."
+        required: false
+        type: string
   schedule:
     # Temporary bounded-recovery cadence: every 6 hours (was 4h). A run can take up to the 300-min
     # job timeout; a 6h (360-min) interval leaves 60 min after the job bound before the next slot is
@@ -50,6 +61,12 @@ jobs:
     # Pages dispatch, and the final summary. 300 min stays under the GitHub 6h default and, with the
     # every-6-hours (360-min) cadence below, leaves 60 min before the next slot -- no overlap/queue.
     timeout-minutes: 300
+    outputs:
+      # G91: chain-ingest's `Cycle reached main` step reads these. This lane's cycle reached main
+      # only when its writeback pushed or had nothing to push; empty (a skipped writeback after a
+      # failed or timed-out step) means it did not.
+      writeback_pushed: ${{ steps.writeback.outputs.pushed }}
+      writeback_outcome: ${{ steps.writeback.outputs.outcome }}
     env:
       GITHUB_TOKEN: ${{ github.token }}
       GH_TOKEN: ${{ github.token }}
@@ -476,6 +493,22 @@ jobs:
           # here generates it; the `rm -f` only clears a stray local copy and is invisible to git.
           rm -f auxsays/_data/source_health.yml
 
+      # DEPLOYMENT IS VERIFIED, NOT ASSUMED (G91). `gh workflow run` returning 0 confirms only that
+      # Pages was DISPATCHED. --pages-confirm-build then polls the Pages runs that would deploy the
+      # pushed revision: one this dispatch created, or one for a later commit (a run waiting in the
+      # one-deep `pages` group is cancelled when a newer run arrives, and the newer run deploys this
+      # content too, so a cancelled run is NOT a failure). A build created by this dispatch that ends
+      # failure / timed_out / startup_failure fails this step (deployment_pending; the data commit
+      # stays on main, nothing is reverted or re-pushed, and the cycle still counts as reached main,
+      # so nothing re-runs it); no verdict inside the bound is reported as deployment_unverified
+      # (output, annotation, step summary) without failing the lane; the writer-queue reaper then
+      # keeps it in view until a successful Pages run deploys main's newest commit.
+      # The bound is 39 x 30 s of polls plus one 60 s status query = 20.5 min, and it is a HARD bound:
+      # one monotonic deadline cuts every status query, every git fetch and every sleep in the wait
+      # (automation_writeback.confirm_wait_bound). The last 100 Pages runs took 237-612 s from
+      # creation (the slowest of the last 300, 1402 s, would read as unverified), and one may queue
+      # behind another. Job budget, worst case: the collect step's 240-minute cap, the steps after it
+      # (measured up to 25.3 minutes, run 44939561794) and this wait leave about 14 of the job's 300.
       - name: Commit material evidence changes (conflict-safe writeback)
         id: writeback
         if: ${{ github.event.inputs.dry_run != 'true' }}
@@ -508,6 +541,7 @@ jobs:
             --max-retries 5 \
             --pages-cmd 'gh workflow run pages.yml --ref main' \
             --pages-max-attempts 3 --pages-backoff 5,15 \
+            --pages-confirm-build --pages-confirm-attempts 40 --pages-confirm-interval 30 \
             --deploy-recovery \
             --recovery-site-path 'auxsays/updates/generated/*' \
             --recovery-site-path auxsays/_data/consensus_evidence.yml \
@@ -530,9 +564,15 @@ jobs:
           WB_PUSHED: ${{ steps.writeback.outputs.pushed }}
           WB_PENDING: ${{ steps.writeback.outputs.deployment_pending }}
           WB_OUTCOME: ${{ steps.writeback.outputs.outcome }}
+          WB_BUILD: ${{ steps.writeback.outputs.pages_build }}
+          WB_LOST_RACE: ${{ steps.writeback.outputs.lost_race }}
         run: |
           if [ "$QA" = success ] && [ "$AUDIT" = success ]; then validation="yes"; else validation="no (qa=$QA, audit=$AUDIT)"; fi
-          if [ "$WRITEBACK" != success ]; then
+          if [ "$WRITEBACK" != success ] && [ "$WB_PUSHED" = true ]; then
+            # The push landed but the step failed afterwards: a Pages dispatch or build failure.
+            writeback="yes (pushed; changed=${WB_CHANGED}; the step failed after the push)"
+            pages="attempted, FAILED (deployment_pending=${WB_PENDING:-unknown})"
+          elif [ "$WRITEBACK" != success ]; then
             writeback="no (writeback step: ${WRITEBACK:-did-not-run})"
             pages="n/a (writeback step: ${WRITEBACK:-did-not-run})"
           else
@@ -549,7 +589,9 @@ jobs:
             echo "- reached validation (QA + audit succeeded): **${validation}**"
             echo "- writeback occurred: **${writeback}**"
             echo "- Pages dispatch: **${pages}**"
+            echo "- Pages build verification: **${WB_BUILD:-not checked}**"
             echo "- writeback outcome token: \`${WB_OUTCOME:-n/a}\`"
+            echo "- lost writeback race, nothing pushed: **${WB_LOST_RACE:-false}**"
           } >> "$GITHUB_STEP_SUMMARY"
 
   powerpoint-orchestrated:
@@ -569,7 +611,15 @@ jobs:
     needs: collect
     if: ${{ always() && needs.collect.result != 'cancelled' }}
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    # 90 -> 110 (G91): the graph's writeback now confirms its Pages build, a hard 20.5 minutes at
+    # most after the dispatch (confirm_wait_bound). The last 60 runs of this job took 51-59 minutes
+    # (one outlier, 112); at 90 the job hit its limit on 2026-09-03 (runs 33810979002, 33753609648).
+    timeout-minutes: 110
+    outputs:
+      # Read by chain-ingest's `Cycle reached main` step, like the collect job's. The graph's
+      # writeback writes them itself (orchestrate_evidence_run.default_writeback, github_output).
+      writeback_pushed: ${{ steps.graph.outputs.pushed }}
+      writeback_outcome: ${{ steps.graph.outputs.outcome }}
     env:
       GITHUB_TOKEN: ${{ github.token }}
       GH_TOKEN: ${{ github.token }}
@@ -605,6 +655,26 @@ jobs:
             --message "Update automated patch evidence (PowerPoint)" \
             --since-days 45 --max-pages 5 \
             "${mode[@]}" | tee "$RUNNER_TEMP/graph-summary.json"
+
+      # DEPLOYMENT IS VERIFIED ON THIS LANE TOO (G91). The graph's writeback confirms the Pages build
+      # it dispatched (40 x 30 s, as on the command-line lanes) and reports deployment_pending=true
+      # when that build genuinely failed or the dispatch did -- after its own push, or on the
+      # no-change --deploy-recovery path, where nothing was pushed and it re-dispatched Pages for an
+      # undeployed main. The graph still ends DONE then, and the step above takes tee's exit status,
+      # so this step is what turns the lane red -- as the command-line lanes do. It says which of
+      # the two happened. An unverified deployment does not fail the lane.
+      - name: Fail when the PowerPoint lane's Pages deployment failed
+        if: ${{ steps.graph.outputs.deployment_pending == 'true' }}
+        env:
+          PAGES_BUILD: ${{ steps.graph.outputs.pages_build }}
+          PUSHED: ${{ steps.graph.outputs.pushed }}
+        run: |
+          if [ "${PUSHED}" = "true" ]; then
+            echo "::error title=PowerPoint deployment failed::the push landed on main but its Pages deployment failed (pages_build=${PAGES_BUILD:-dispatch failed}); the data commit is not reverted or re-pushed"
+          else
+            echo "::error title=PowerPoint deployment failed::nothing was pushed; the deployment-recovery re-dispatch of Pages for main failed (pages_build=${PAGES_BUILD:-dispatch failed})"
+          fi
+          exit 1
 
       - name: Graph summary
         if: ${{ always() }}
@@ -664,11 +734,29 @@ jobs:
            github.event.inputs.update_version == '' &&
            github.event.inputs.since == '' &&
            github.event.inputs.dry_run != 'true')) }}
+    #
+    # THE CYCLE'S RECORD (G91). The first step below runs ONLY when both writer jobs' writebacks
+    # pushed or had nothing to push -- this run's cycle reached main. The writer-queue reaper reads
+    # whether a step with exactly this name succeeded (writer_cycle_recovery.CYCLE_MARKER_STEP) and
+    # re-runs, once and only into a free lane, a routine run whose cycle did not reach main: a lost
+    # writeback race (run 44878227542), a refused writeback, a failure or a time limit after
+    # collection -- and a GREEN run whose record was skipped: the PowerPoint graph's step takes
+    # `tee`'s exit status, so its writeback can lose a race while the run concludes `success`. It is
+    # the first step so a failed ingestion dispatch cannot hide it. This job no longer dispatches
+    # anything but ingestion.
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
       actions: write
     steps:
+      - name: Cycle reached main
+        if: >-
+          ${{ (needs.collect.outputs.writeback_pushed == 'true' ||
+               needs.collect.outputs.writeback_outcome == 'no_changes') &&
+              (needs.powerpoint-orchestrated.outputs.writeback_pushed == 'true' ||
+               needs.powerpoint-orchestrated.outputs.writeback_outcome == 'no_changes') }}
+        run: echo "Both writer jobs' writebacks reached main (pushed, or nothing to push)."
+
       - name: Dispatch routine patch ingestion
         env:
           GH_TOKEN: ${{ github.token }}
