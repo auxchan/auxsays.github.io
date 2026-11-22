@@ -88,6 +88,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-091 | Resolved | Publication | Medium | The homepage rows printed a sentiment word while the pages they open printed a verdict |
 | AUX-070 | Resolved | CI governance | Medium | The serial integrity job spent ~34 of its 45 minutes running 123 suites one after another |
 | AUX-126 | Resolved | CI governance | Medium | The live-consensus gate suite ran at the CI per-suite timeout on unchanged code |
+| AUX-133 | Resolved | CI governance | Medium | Main went red when the bot ingested OBS 33.0.3: a G87 check named the newer release instead of deriving it |
 | AUX-066 | Resolved | Evidence integrity | Medium | Stored Teams evidence still said platform "Windows" and carried no theme, area or severity |
 | AUX-079 | Resolved | Evidence integrity | High | Fourteen stored Windows rows counted against a patch they were not about, or twice for one question |
 | AUX-088 | Resolved | Evidence integrity | High | Twenty community reports cited on the live pages were credited to an update they were not about |
@@ -97,6 +98,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-111 | Resolved | Evidence integrity | Medium | Two Adobe reports counted against a version they were not about: the Premiere Pro version a project was made in, the Acrobat Reader version an update started from |
 | AUX-114 | Resolved | Evidence integrity | Low | A DaVinci Resolve 21.0.4 how-to question was counted as a report of a problem with 21.0.4 |
 | AUX-118 | Resolved | Evidence integrity | Low | An OBS Studio 31.1.2 report was counted for a version it names only as a release tag the reporter compared |
+| AUX-129 | Resolved | Evidence integrity | Low | An OBS Studio 32.1.2 install-failure report was labelled "the version works" by the withdrawal tool's validator; it stays counted |
 | AUX-092 | Resolved | Publication | Medium | Every new OBS report would again read "date not recorded": the collector never stored the date it checks |
 | AUX-093 | Resolved | Verdict policy | High | 234 of 236 pages with user reports said WAIT because of their product or a negative tone |
 | AUX-094 | Resolved | Verdict policy | Low | The page could print an official verdict the decision code did not give, and QA could not see it |
@@ -5809,6 +5811,41 @@ count other than its governed one, or a failed, cancelled or missing shard leave
 
 ---
 
+### AUX-133 — Main went red when the bot ingested OBS 33.0.3: a G87 check named the newer release instead of deriving it
+
+- **Status** Resolved · **Area** CI governance · **Severity** Medium
+- **First seen** 2026-11-22 (main 9128bbf1; PR #273 CI run 45009350593) · **Resolved** 2026-11-22 (G96; test-only)
+
+**Symptom** `test_volume_precaution_g87.py` failed R6 on main (55/56), so every pull request's CI failed too.
+
+**Cause** Data, not code. R6 required OBS 33.0.1's newer-release note to name 33.0.2 and print the vendor's
+known-issue caution. The patch-ingest lane then stored OBS 33.0.3, which declares no known issue, so the note
+now correctly names 33.0.3 and says "Newer is not necessarily safer". Since #272 (44e6cc7e..9128bbf1) only
+`_data/` and `updates/generated/` changed, and with the 33.0.3 record removed the old R6 passes 56/56. This is
+the AUX-071 pattern again: a suite that reads the live corpus pinned what the corpus held that day.
+
+**Fix (test only)** R6 now derives each page's way forward from the facts the rule reads: the printed verdict
+and whether its box already advises keeping, the archived flag, the release `update_available` selects,
+whether THAT release declares a known issue, and the reviewed `fixed_in` on the printed reasons. It then
+asserts the rendered order and content, with G87's copy written out literally: the archived line; the
+vendor caution before the links exactly when the named release declares an issue (otherwise "Newer is not
+necessarily safer"); then the verdict, then the links; nothing after the note except the fix lines. The same
+comparison runs over a synthetic corpus: the [F] tree plus a newer release that declares no issue. That run
+must see all five variants, both cautions, a fix line, and the keep line both present and absent. No
+production, template, data or workflow file changed, and the governed count is still 56.
+
+**Verification** 56/56 on today's tree and on the tree without 33.0.3. Ten single-site mutants, each killed by
+R6: caution after the links; an extra line after the note (production and template); archived line dropped;
+archived branch skipped; fixed line dropped (production and template); vendor caution never chosen; vendor
+caution claimed for an undeclared release; keep line dropped. Four of the ten are killed by R6 alone. The
+remaining live-corpus checks name no bot-ingested release. C3 still pins the reviewed `fixed_in` releases
+(32.2.0, 33.0.0), which are reviewed data, and was left alone.
+
+**Reopen only if** a G87 check fails because the corpus gained or lost a release, rather than because a
+rendered way forward differs from what its facts give.
+
+---
+
 ### AUX-126 — The live-consensus gate suite ran at the CI per-suite timeout on unchanged code
 
 - **Status** Resolved · **Area** CI governance · **Severity** Medium
@@ -6572,6 +6609,118 @@ the new suite on this manifest.
 **Reopen only if** the row counts again; the must-stay #13989 row or the report's 32.2.2 row stops counting without
 its own audited withdrawal; the control finding is re-admitted without its own audited change; or an earlier
 withdrawal manifest changes.
+
+---
+### AUX-129 — An OBS Studio 32.1.2 install-failure report was labelled "the version works" by the withdrawal tool's validator; it stays counted
+
+- **Status** Resolved · **Area** Evidence integrity · **Severity** Low
+- **First seen** 2026-11-21 (a report-mode run of `withdraw_obs_role_misattributed_rows.py`) · **Resolved** 2026-11-21
+
+**Correcting the record** GitHub issue #13518, counted on OBS Studio 32.1.2, is an install-failure report. The
+reporter declares 32.1.2 in the issue template and says it cannot be installed on Ubuntu 26.04 (the issue's
+Current Behavior field; the stored excerpt ends before it). The report stays counted. The earlier label
+`version_reported_working`, which the audited-withdrawal tool printed for it in report mode and which a review
+then repeated as a report "describing a successful installation", was a validator artefact, not a finding about
+the report. No evidence was withdrawn, and no stored row, count, verdict or page changed.
+
+**Cause** Two validator defects, both met when a stored row is checked again:
+- The two working cues built on the verb "work" (`target_works`, `works_on_target` in `lib/target_outcome.py`)
+  read a hope as a claim. The issue's Expected Behavior field hopes that 32.1.2 "will work".
+- The tool ran every stored field together with spaces. A cue could then bind across two fields, and rule R1 (a
+  version the reporter declared is never vetoed) could not apply: the template's version answer is found by the
+  line break after its heading, and every stored OBS excerpt is whitespace-collapsed. In the issue's own layout
+  the collector's authority does not refuse it, which is why the collector counted it.
+
+**Fix (code; owner ruling 2026-11-21: narrow validator fixes, regression fixtures, no evidence withdrawal)**
+- `lib/target_outcome.py`: the two "work" cues skip a hoped-for, expected, conditional or requested outcome. That
+  is a modal or expectation directly before the verb ("should work", "will work", "is supposed to work"), or a
+  hypothetical lead directly before the subject (hope, if, whether, expect, want, need, "please make", or an
+  inverted auxiliary as in "would 32.1.2 work"), with only closed-class filler between. A present or past claim
+  ("32.1.2 works fine", "it worked on 32.1.2", "rolled back to 32.1.2 and it works") still vetoes. No other cue
+  changed. The R1 note there no longer says #13518 was about "cannot reproduce".
+- Same module, after independent review:
+  - The verb judged is the one bound to the target. In the mirror direction that is the last verb from which the
+    cue still reaches the target, so "Hope it works for you, it works on 32.1.2 for me" still vetoes.
+  - A later verb that target_works reaches keeps the claim unless it is hoped for or negated, so "32.1.2 should
+    work and it does work" still vetoes.
+  - A hope word that is the object of "as", "like", "what", "when", "if" or "than" is a comment, not a hope. So
+    "As expected 32.1.2 works fine" and "If needed 32.1.2 works" still veto without a comma.
+  - In the mirror direction a lead word may take "to": "I want it to work on 32.1.2" is no claim, while "I got it
+    to work on 32.1.2" still vetoes.
+  - Leads are read within the clause and at most 160 characters back, and the optional bracket can no longer
+    split a whitespace run several ways. A 10,000-space run used to take 6 to 13 s and now takes about 0.01 s.
+    A hoped-for match is skipped before the unbounded question scan.
+- Same module, after the second review (GPT ruling 2026-11-22: one bounded correction): a want or need that
+  touches the work verb closes a relative clause and is not a lead. So "Everything I need works with OBS 32.1.2"
+  and "The features I need work on 32.1.2" still veto, as on main. "I want it to work on 32.1.2", "I need it
+  working on 32.1.2" and "I want 32.1.2 to work" are still no claim.
+- `withdraw_obs_role_misattributed_rows.py`: a stored row is rebuilt the way the collector read it: the title, a
+  line break, then the body, with each distinct title once. When the authority would refuse a row whose stored text
+  holds the template's version heading without its line break, the tool reports the row as UNDETERMINABLE. It
+  never withdraws that row, even when its URL is named.
+
+**Measured** (stored rows only, old against new actions; nothing rewritten)
+- Shared predicate, all 3,482 stored rows of 11 products under three text builds: 1 outcome change (#13518,
+  working to no outcome language) and 0 rows newly vetoed.
+- OBS tool, 343 stored rows (317 counted): #13518 moves from refused to kept, and no counted row is newly refused.
+  The one already-withdrawn row (forum thread 190590) is refused before and after. Either fix alone also clears
+  #13518: the wording fix keeps it, and the boundary fix makes it undeterminable.
+- `consensus_evidence.yml`, every generated record and every `_data` file are byte-identical.
+- `test_obs_validator_boundaries.py` (119 checks, blocking) covers:
+  - #13518's stored fields read from the live store, and its template layout;
+  - hypothetical phrasings in both directions, genuine claims and inverse probes;
+  - the bound verb, governed and ungoverned hope words, and "to" in the mirror direction;
+  - a title/body line break as a clause boundary;
+  - timing checks on whitespace runs, on each lead pattern alone, and on a body of 2,000 hoped-for matches;
+  - a field-boundary fixture with its control, and the CLI on a temporary store;
+  - 17 want/need relative clauses that must veto, with four controls that must not.
+- 28 mutants, one per fix clause, each killed by its named checks. Three more from the second review are
+  killed too: removing the relative-clause correction (F1.130-F1.146), dropping "flow" from the not-a-verb guard
+  (F1.72) and dropping "hopefully" from the modal frame (F1.14).
+- About 250 reviewer and own phrasings, compared with main: 0 newly vetoed.
+
+**Residual** These are left out of the narrow fix. Each one behaves as main does, except where marked "read as
+hypothetical".
+- Other cues still read hypothetical wording as a claim: "I hope 32.1.2 is stable" (`target_said_fine`) and "I
+  hope to downgrade to 32.1.2" (rollback).
+- These keep the old veto:
+  - a word outside the closed filler list between the lead and the subject, as in "Please make the plugin work
+    with 32.1.2";
+  - a curly opening quote, or an "Expected Behavior: 32.1.2 works" heading;
+  - "32.1.2 must work", "32.1.2 has to work", "assuming 32.1.2 works", "Supposedly 32.1.2 works";
+  - "Try 32.1.2 and see if it works", "Is it working on 32.1.2" with no question mark;
+  - "I would like 32.1.2 to work";
+  - "if you want 32.1.2 to work, ...", because the governor rule keeps a governed hope word as a comment;
+  - "32.1.2 should be working now" and "It should be working on 32.1.2" (a "be" after the modal);
+  - the counterfactuals "32.1.2 should have worked", "It should've worked on 32.1.2" and "It would have worked
+    on 32.1.2 if ...", which mean it did not work;
+  - "32.1.2 (hopefully) works", because the bracket stops the frame from matching;
+  - "I hope 32.1.2 finally works", because "finally" is not in the tight-gap list;
+  - "Hoping to get it working on 32.1.2".
+- "Needs work on 32.1.2" vetoes, as on main: "work" is read as the verb. It can instead mean that something in
+  32.1.2 is defective or unfinished. Keeping main's behaviour is not proof that this reading is right, so it is
+  not pinned as a success fixture.
+- Read as hypothetical:
+  - "Everything I expected works on 32.1.2" and "Everything I hoped works on 32.1.2", which main vetoes. Both
+    are ambiguous: the expectation or the hope may have come true;
+  - "I tested whether 32.1.2 works and it does", "32.1.2 will work fine, I tested it";
+  - "Back then 32.1.2 would work every time", "It could work on 32.1.2 when I tried yesterday", "Only after a
+    reboot did it work on 32.1.2";
+  - a later verb beyond target_works' 25-character reach ("32.1.2 should work and indeed it works") or left
+    out ("32.1.2 should work, and it does").
+- Pre-existing, not changed here; each needs its own ticket:
+  - `_POLARITY_INVERTER`'s `\bn't\b` cannot match inside a contraction, so "32.1.2 won't work on Wayland" and
+    "32.1.2 isn't working" read as working claims, on main too.
+  - `_is_question` scans from the start of the text for every match it tests. A crafted 66,000-character body
+    of 2,000 negated claims takes about 2 s on main and on this branch.
+  - `target_works` can bind the verb of a later clause whose preposition names another version, because R2
+    inspects only the matched span. "I hope it works on 32.2.0 like it works on 32.1.2" still vetoes 32.2.0, and
+    "I hope it works on 32.1.2, it works on 32.1.1" still vetoes 32.1.2. Main vetoes both too (through
+    `works_on_target`).
+
+**Reopen only if** #13518 stops counting without its own audited change; a hoped-for "will work" or "should
+work" vetoes again; a genuine "works" or "worked" claim stops vetoing; or the tool refuses or withdraws a row
+whose stored text lost its declared-version line break.
 
 ---
 ### AUX-092 — Every new OBS report would again read "date not recorded": the collector never stored the date it checks

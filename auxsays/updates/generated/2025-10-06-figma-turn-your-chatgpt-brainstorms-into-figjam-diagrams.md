@@ -17,8 +17,8 @@ update_version: Turn your ChatGPT brainstorms into FigJam diagrams
 update_logo_text: FIG
 update_published_at: '2025-10-06T00:00:00.000Z'
 update_last_checked: '2026-08-04T18:04:09Z'
-source_last_checked: '2026-10-14T01:25:13Z'
-official_body_last_checked: '2026-10-14T01:25:13Z'
+source_last_checked: '2026-11-22T09:44:16Z'
+official_body_last_checked: '2026-11-22T09:44:16Z'
 record_last_updated: '2026-08-04T18:04:09Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -81,6 +81,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-10-14T01:25:13Z'
+  url: https://www.figma.com/release-notes/?title=chatgpt-figjam-diagrams
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-22T09:44:16Z'
   url: https://www.figma.com/release-notes/?title=chatgpt-figjam-diagrams
   status: captured-from-rss-feed
   body_captured: true
