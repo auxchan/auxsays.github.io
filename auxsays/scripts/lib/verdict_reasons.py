@@ -1,5 +1,5 @@
-"""The two committed fact files the verdict authority reads: reviewed verdict reasons and the one
-verified lifecycle exception (GROWTH-3).
+"""The two committed fact files the verdict authority reads: reviewed verdict reasons and the
+verified official withdrawals (GROWTH-3; G94).
 
 WHY A FILE. Owner decision 1 (2026-11-06) allows TEST FIRST and WAIT only with an evidence-backed
 reason: the same concrete problem from independent incidents, or "worked before, broke after
@@ -39,12 +39,21 @@ own page. lib/verdict_projection refuses a candidate that fails either one and r
 unsupported entries. Until G84 the candidates skipped both, so with the activation switch on a WAIT
 citing no counted row reached the page.
 
-THE LIFECYCLE FILE holds exactly ONE entry today: KB5079391, which Microsoft withdrew for new
-installations, replaced by KB5086672. It is a single verified exception, NOT the lifecycle
-mechanism: the general "newer update available" links wait for the Microsoft KB source assessment
-and a deterministic source-to-record writer. `lifecycle_errors` refuses a second entry so this
-file cannot quietly become a hand-maintained list, and refuses a matching field (product_id, kb,
-relationship, a build) that is not a plain unpadded string (GROWTH-3 review 2, LOW-1).
+THE LIFECYCLE FILE holds one entry today: KB5079391, which Microsoft withdrew for new installations,
+replaced by KB5086672. It is NOT the lifecycle mechanism: the general "newer update available" links
+wait for the Microsoft KB source assessment and a deterministic source-to-record writer.
+`lifecycle_errors` refuses a matching field (product_id, kb, relationship, a build) that is not a plain
+unpadded string (GROWTH-3 review 2, LOW-1), and any malformed entry refuses the whole file (fail closed,
+a QA error).
+
+EVERY WITHDRAWAL IS KEPT (G94, AUX-131). Until G94 `lifecycle_errors` also refused a SECOND entry
+(`MAX_LIFECYCLE_ENTRIES = 1`) -- any second entry, valid or not, on another release or the same one. A
+refused file supports nothing, so recording a second official withdrawal took the first one's AVOID off
+both KB5079391 pages in the projection and in both record writers, and QA's patch_lifecycle_invalid
+blocked every deploy and every writeback lane until it was removed: a later withdrawal could never be
+recorded. The cap is gone; every entry still passes every per-entry check, and adding one is still a
+reviewed pull request. Which entry a page rests on when two withdraw the same release is
+lib/patch_decision.lifecycle_for's (the earliest verified; file order decides nothing).
 
 This module reads YAML and nothing else (plus lib.evidence_facts, which is pure): no collector import, no
 network.
@@ -78,7 +87,6 @@ LIFECYCLE_RELATIONSHIPS = ("withdrawn_for_new_installs",)
 KB_RE = re.compile(r"^KB[0-9]{7}$", re.ASCII)
 DATE_RE = re.compile(r"^[0-9]{4}-[0-9]{2}-[0-9]{2}$", re.ASCII)
 LIFECYCLE_BUILD_RE = re.compile(r"^[0-9]{5}\.[0-9]{1,5}$", re.ASCII)
-MAX_LIFECYCLE_ENTRIES = 1
 # Exactly what Liquid's `| strip` removes (Ruby String#strip): ASCII whitespace and NUL, nothing else.
 # Python's str.strip() also removes Unicode spaces (U+00A0, U+2009, U+3000, U+0085, U+001C..U+001F),
 # which is how QA once modelled a page key the gate never builds (PR-A2 review, LOW-1).
@@ -472,10 +480,9 @@ def _strict_string_problem(value: Any) -> str:
 
 
 def lifecycle_errors(entries: list[Mapping[str, Any]]) -> list[str]:
+    # No entry count (G94): each official withdrawal is checked on its own, and a later one is never
+    # refused for being later -- that refusal emptied the file and took the earlier withdrawal with it.
     errors: list[str] = []
-    if len(entries) > MAX_LIFECYCLE_ENTRIES:
-        errors.append(f"{len(entries)} lifecycle entries; this file holds the single verified KB5079391 "
-                      "exception only. More need the KB source assessment and a deterministic writer.")
     for index, entry in enumerate(entries):
         label = _s(entry.get("id")) or f"entries[{index}]"
         missing = [k for k in REQUIRED_LIFECYCLE_KEYS if k not in entry]

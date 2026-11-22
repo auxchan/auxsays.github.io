@@ -2,8 +2,8 @@
 """GROWTH-3: every verdict comes from the owner's policy, decided once, rendered everywhere alike.
 
 THE POLICY (owner decisions 1-3, 2026-11-06), implemented in lib/patch_decision.decide:
-  R1 AVOID            an official withdrawal for new installations (_data/patch_lifecycle.yml: ONE
-                      verified exception, KB5079391 -> KB5086672)
+  R1 AVOID            an official withdrawal for new installations (_data/patch_lifecycle.yml: one
+                      verified entry today, KB5079391 -> KB5086672; a second is kept, never refused, G94)
   R2 SECURITY UPDATE  Microsoft's stored monthly-security classification (release type "YYYY-MM B");
                       reports never override it, a supported reason only adds a warning panel
   R3 WAIT             a reviewed `regression` entry in _data/verdict_reasons.yml, still supported
@@ -379,9 +379,10 @@ def check_reason_audits() -> None:
 
 def check_lifecycle() -> None:
     entries = LIFECYCLE["entries"]
-    check("G3-L1 the lifecycle file holds exactly ONE verified exception, and a second is refused",
+    check("G3-L1 the lifecycle file holds the verified KB5079391 exception, and a second entry is kept, never "
+          "refused for being a second (G94: that refusal emptied the file)",
           len(entries) == 1 and entries[0]["kb"] == "KB5079391" and entries[0]["replacement_kb"] == "KB5086672"
-          and not vr.lifecycle_errors(entries) and bool(vr.lifecycle_errors(entries + [dict(entries[0], id="x")])))
+          and not vr.lifecycle_errors(entries) and not vr.lifecycle_errors(entries + [dict(entries[0], id="x")]))
     exact = win_record(update_type="2026-03 D", kb="KB5000002", build="26200.2000")
     near = [win_record(update_type="2026-03 D", kb="KB5000002", build="26200.2001"),
             win_record(update_type="2026-03 D", kb="KB5000003", build="26200.2000"),
@@ -1938,6 +1939,7 @@ def check_mutations(tmp: Path) -> None:
     real_add = qa.add
     real_summary = pd.summary_line
     real_strict = vr._strict_string_problem
+    real_lifecycle = vr.lifecycle_errors
     real_project = vp.project
 
     def reasoned_only(records, groups, reasons, lifecycle):
@@ -2002,8 +2004,9 @@ def check_mutations(tmp: Path) -> None:
                                                               if "distinct counted reporter" not in p])),
         ("X12 a critical severity makes a WAIT", check_decisions,
          wrap_decide(lambda d, r, rs: D("WAIT", "R3") if r.get("severity") == "critical" else d)),
-        ("X13 a second lifecycle entry is accepted", check_lifecycle,
-         swap(vr, "MAX_LIFECYCLE_ENTRIES", 2)),
+        ("X13 (G94) a second lifecycle entry is refused again (the one-entry cap)", check_lifecycle,
+         swap(vr, "lifecycle_errors", lambda entries: real_lifecycle(entries) + (
+             [f"{len(entries)} lifecycle entries"] if len(entries) > 1 else []))),
         ("X14 the gate trusts a stored label when the page has no projected row", check_render_matrix,
          tpl("{%- assign gate_label = 'INSUFFICIENT DATA' -%}",
              "{%- assign gate_label = pvg_record.update_decision_label | default: 'INSUFFICIENT DATA' -%}")),
