@@ -6497,6 +6497,10 @@ the report. No evidence was withdrawn, and no stored row, count, verdict or page
   - Leads are read within the clause and at most 160 characters back, and the optional bracket can no longer
     split a whitespace run several ways. A 10,000-space run used to take 6 to 13 s and now takes about 0.01 s.
     A hoped-for match is skipped before the unbounded question scan.
+- Same module, after the second review (GPT ruling 2026-11-22: one bounded correction): a want or need that
+  touches the work verb closes a relative clause and is not a lead. So "Everything I need works with OBS 32.1.2"
+  and "The features I need work on 32.1.2" still veto, as on main. "I want it to work on 32.1.2", "I need it
+  working on 32.1.2" and "I want 32.1.2 to work" are still no claim.
 - `withdraw_obs_role_misattributed_rows.py`: a stored row is rebuilt the way the collector read it: the title, a
   line break, then the body, with each distinct title once. When the authority would refuse a row whose stored text
   holds the template's version heading without its line break, the tool reports the row as UNDETERMINABLE. It
@@ -6509,14 +6513,17 @@ the report. No evidence was withdrawn, and no stored row, count, verdict or page
   The one already-withdrawn row (forum thread 190590) is refused before and after. Either fix alone also clears
   #13518: the wording fix keeps it, and the boundary fix makes it undeterminable.
 - `consensus_evidence.yml`, every generated record and every `_data` file are byte-identical.
-- `test_obs_validator_boundaries.py` (96 checks, blocking) covers:
+- `test_obs_validator_boundaries.py` (119 checks, blocking) covers:
   - #13518's stored fields read from the live store, and its template layout;
   - hypothetical phrasings in both directions, genuine claims and inverse probes;
   - the bound verb, governed and ungoverned hope words, and "to" in the mirror direction;
   - a title/body line break as a clause boundary;
   - timing checks on whitespace runs, on each lead pattern alone, and on a body of 2,000 hoped-for matches;
-  - a field-boundary fixture with its control, and the CLI on a temporary store.
-- 28 mutants, one per fix clause, each killed by its named checks.
+  - a field-boundary fixture with its control, and the CLI on a temporary store;
+  - 17 want/need relative clauses that must veto, with four controls that must not.
+- 28 mutants, one per fix clause, each killed by its named checks. Three more from the second review are
+  killed too: removing the relative-clause correction (F1.130-F1.146), dropping "flow" from the not-a-verb guard
+  (F1.72) and dropping "hopefully" from the modal frame (F1.14).
 - About 250 reviewer and own phrasings, compared with main: 0 newly vetoed.
 
 **Residual** These are left out of the narrow fix. Each one behaves as main does, except where marked "read as
@@ -6530,8 +6537,19 @@ hypothetical".
   - "32.1.2 must work", "32.1.2 has to work", "assuming 32.1.2 works", "Supposedly 32.1.2 works";
   - "Try 32.1.2 and see if it works", "Is it working on 32.1.2" with no question mark;
   - "I would like 32.1.2 to work";
-  - "if you want 32.1.2 to work, ...", because the governor rule keeps a governed hope word as a comment.
+  - "if you want 32.1.2 to work, ...", because the governor rule keeps a governed hope word as a comment;
+  - "32.1.2 should be working now" and "It should be working on 32.1.2" (a "be" after the modal);
+  - the counterfactuals "32.1.2 should have worked", "It should've worked on 32.1.2" and "It would have worked
+    on 32.1.2 if ...", which mean it did not work;
+  - "32.1.2 (hopefully) works", because the bracket stops the frame from matching;
+  - "I hope 32.1.2 finally works", because "finally" is not in the tight-gap list;
+  - "Hoping to get it working on 32.1.2".
+- "Needs work on 32.1.2" vetoes, as on main: "work" is read as the verb. It can instead mean that something in
+  32.1.2 is defective or unfinished. Keeping main's behaviour is not proof that this reading is right, so it is
+  not pinned as a success fixture.
 - Read as hypothetical:
+  - "Everything I expected works on 32.1.2" and "Everything I hoped works on 32.1.2", which main vetoes. Both
+    are ambiguous: the expectation or the hope may have come true;
   - "I tested whether 32.1.2 works and it does", "32.1.2 will work fine, I tested it";
   - "Back then 32.1.2 would work every time", "It could work on 32.1.2 when I tried yesterday", "Only after a
     reboot did it work on 32.1.2";
@@ -6542,6 +6560,10 @@ hypothetical".
     "32.1.2 isn't working" read as working claims, on main too.
   - `_is_question` scans from the start of the text for every match it tests. A crafted 66,000-character body
     of 2,000 negated claims takes about 2 s on main and on this branch.
+  - `target_works` can bind the verb of a later clause whose preposition names another version, because R2
+    inspects only the matched span. "I hope it works on 32.2.0 like it works on 32.1.2" still vetoes 32.2.0, and
+    "I hope it works on 32.1.2, it works on 32.1.1" still vetoes 32.1.2. Main vetoes both too (through
+    `works_on_target`).
 
 **Reopen only if** #13518 stops counting without its own audited change; a hoped-for "will work" or "should
 work" vetoes again; a genuine "works" or "worked" claim stops vetoing; or the tool refuses or withdraws a row

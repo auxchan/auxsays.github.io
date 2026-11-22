@@ -310,6 +310,12 @@ def _led(pattern: re.Pattern, text: str, pos: int) -> bool:
     if hit is None:
         return False
     verb = hit.start("verb")
+    # A want/need lead touching the work verb closes a relative clause, not a hope: in "Everything I
+    # need works with 32.1.2" the verb's subject is "everything". "I want 32.1.2 to work" keeps it.
+    if (pattern is _LEAD_BEFORE_VERB and verb >= 0
+            and hit.group("verb").lower().startswith(("want", "need"))
+            and not text[hit.end("verb"):pos].strip()):
+        return False
     return not (verb >= 0 and _LEAD_GOVERNOR.search(text, _lead_start(text, verb), verb))
 
 

@@ -10,7 +10,8 @@ Two validator defects produced the label, and each is fixed and pinned here:
       expected, conditional or requested outcome as a claim. The issue's Expected Behavior field
       hopes 32.1.2 "will work"; that is a hope, not a report. The guard judges the verb actually
       bound to the target, lets a hope word that is the object of "as"/"what"/"if" stand as a
-      comment, reads a lead only inside its own clause, and stays linear on untrusted text.
+      comment, reads a lead only inside its own clause, and stays linear on untrusted text. A want or
+      need touching the verb closes a relative clause ("Everything I need works with 32.1.2"): a claim.
   F2  The tool ran every stored field together with spaces. A cue could then bind across two
       fields, and R1 (a version the reporter DECLARED is never vetoed) could not apply, because the
       template's version answer is found by the line break after its heading. Stored OBS excerpts
@@ -130,6 +131,7 @@ def run() -> int:  # noqa: PLR0915
         "F1.11 mirror direction, hope: 'I hope it works with 32.1.2'": "I hope it works with 32.1.2 this time",
         "F1.12 mirror direction, question: 'will it work with 32.1.2'": "will it work with 32.1.2 on older GPUs",
         "F1.13 mirror direction, conditional: 'if it works in 32.1.2'": "if it works in 32.1.2 we can drop the patch",
+        "F1.14 hoped-for adverb alone: '32.1.2 hopefully works'": "32.1.2 hopefully works on my laptop",
     }
     for label, text in hypothetical.items():
         check(label, not vetoes(text), str(outcome(text)))
@@ -195,6 +197,7 @@ def run() -> int:  # noqa: PLR0915
         "F1.70 a later 'work around' is not a verb": "32.1.2 should work, try the work around",
         "F1.71 a later 'working' that does not reach the target is not the bound verb": (
             "I hope it works on a working 32.1.2 install"),
+        "F1.72 a later 'work flow' (a workflow phrase) is not a verb": "32.1.2 should work, the work flow is unchanged",
     }
     for label, text in unbound.items():
         check(label, not vetoes(text), str(outcome(text)))
@@ -293,6 +296,39 @@ def run() -> int:  # noqa: PLR0915
         pattern.search(text)
         elapsed = time.monotonic() - started
         check(label + " scans a long whitespace run in under 1 s", elapsed < 1.0, f"{elapsed:.3f}s")
+
+    print(NL + "[F1] a want or need touching the verb closes a relative clause: a claim, as on main")
+    # Review 2's 17 probe sentences are 14 distinct phrasings (three repeat across its two probe files);
+    # F1.130-F1.143 are those 14 verbatim and F1.144-F1.146 are three more in the same shape.
+    relative = (
+        "Everything I wanted works on 32.1.2",
+        "Everything I want works on 32.1.2",
+        "Everything I need works with OBS 32.1.2",
+        "Everything I needed worked on 32.1.2",
+        "All the plugins I want work with 32.1.2",
+        "The features I need work on 32.1.2",
+        "The one feature I need works in 32.1.2",
+        "Every source I wanted works fine with 32.1.2",
+        "Everything that I wanted works on 32.1.2",
+        "The filters we need work under 32.1.2",
+        "The capture card I wanted works with 32.1.2",
+        "Anything you need works on 32.1.2",
+        "The scenes they wanted worked on 32.1.2",
+        "The stuff people want works with 32.1.2",
+        "Every overlay we wanted works on OBS 32.1.2",
+        "All the codecs you need work in 32.1.2",
+        "The two scenes I needed worked fine with 32.1.2",
+    )
+    for number, text in enumerate(relative, start=130):
+        got = outcome(text)
+        check(f"F1.{number} relative clause: {text!r}", got.vetoes and got.outcome == to.WORKING, str(got))
+    for label, text in {
+        "F1.147 control, mirror 'to': 'I want it to work on 32.1.2'": "I want it to work on 32.1.2",
+        "F1.148 control, a subject between the need and the verb": "I need it working on 32.1.2",
+        "F1.149 control, target direction: 'I want 32.1.2 to work'": "I want 32.1.2 to work",
+        "F1.150 control, a wish is not a want or need": "The one thing I wish worked on 32.1.2",
+    }.items():
+        check(label, not vetoes(text), str(outcome(text)))
 
     # ------------------------------------------------------------------ F2
     print(NL + "[F2] the stored #13518 row: an install failure, still counted, never refused")

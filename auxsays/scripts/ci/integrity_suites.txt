@@ -261,7 +261,7 @@ auxsays/scripts/tests/test_obs_consensus_projection.py = 50
 # target is the one judged), that the guard stays linear on long whitespace runs, that the tool rebuilds a
 # stored row with its field boundaries, and that a row whose stored text lost the declared-version line
 # break is UNDETERMINABLE and never withdrawn (CLI on a temporary store). The live store is read only.
-auxsays/scripts/tests/test_obs_validator_boundaries.py = 96
+auxsays/scripts/tests/test_obs_validator_boundaries.py = 119
 # OBS forum health (AUX-100): one embed-only opening post made every OBS forum row partial and
 # revoked live on three patches whose evidence had not changed. Pins the empty-body split by cause
 # (textless vs missing wrapper / extraction failure / unexplained empty wrapper, the last three
