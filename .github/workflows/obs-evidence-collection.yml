@@ -501,11 +501,14 @@ jobs:
       # failure / timed_out / startup_failure fails this step (deployment_pending; the data commit
       # stays on main, nothing is reverted or re-pushed, and the cycle still counts as reached main,
       # so nothing re-runs it); no verdict inside the bound is reported as deployment_unverified
-      # (output, annotation, step summary) without failing the lane.
-      # The bound is 39 x 30 s = 19.5 min: the last 100 Pages runs took 237-612 s from creation (the
-      # slowest of the last 300, 1402 s, would read as unverified), and one may queue behind another.
-      # Job budget, worst case: the collect step's 240-minute cap, the steps after it (measured up to
-      # 25.3 minutes, run 44939561794) and this wait leave about 15 of the job's 300 minutes.
+      # (output, annotation, step summary) without failing the lane; the writer-queue reaper then
+      # keeps it in view until a successful Pages run deploys main's newest commit.
+      # The bound is 39 x 30 s of polls plus one 60 s status query = 20.5 min, and it is a HARD bound:
+      # one monotonic deadline cuts every status query, every git fetch and every sleep in the wait
+      # (automation_writeback.confirm_wait_bound). The last 100 Pages runs took 237-612 s from
+      # creation (the slowest of the last 300, 1402 s, would read as unverified), and one may queue
+      # behind another. Job budget, worst case: the collect step's 240-minute cap, the steps after it
+      # (measured up to 25.3 minutes, run 44939561794) and this wait leave about 14 of the job's 300.
       - name: Commit material evidence changes (conflict-safe writeback)
         id: writeback
         if: ${{ github.event.inputs.dry_run != 'true' }}
@@ -608,9 +611,9 @@ jobs:
     needs: collect
     if: ${{ always() && needs.collect.result != 'cancelled' }}
     runs-on: ubuntu-latest
-    # 90 -> 110 (G91): the graph's writeback now confirms its Pages build, up to 19.5 minutes after
-    # the push. The last 60 runs of this job took 51-59 minutes (one outlier, 112); at 90 the job hit
-    # its limit on 2026-09-03 (runs 33810979002, 33753609648).
+    # 90 -> 110 (G91): the graph's writeback now confirms its Pages build, a hard 20.5 minutes at
+    # most after the dispatch (confirm_wait_bound). The last 60 runs of this job took 51-59 minutes
+    # (one outlier, 112); at 90 the job hit its limit on 2026-09-03 (runs 33810979002, 33753609648).
     timeout-minutes: 110
     outputs:
       # Read by chain-ingest's `Cycle reached main` step, like the collect job's. The graph's
@@ -654,16 +657,23 @@ jobs:
             "${mode[@]}" | tee "$RUNNER_TEMP/graph-summary.json"
 
       # DEPLOYMENT IS VERIFIED ON THIS LANE TOO (G91). The graph's writeback confirms the Pages build
-      # its push dispatched (40 x 30 s, as on the command-line lanes) and reports
-      # deployment_pending=true when that build genuinely failed or the dispatch did. The graph still
-      # ends DONE then, and the step above takes tee's exit status, so this step is what turns the
-      # lane red -- as the command-line lanes do. An unverified deployment does not fail the lane.
-      - name: Fail when the PowerPoint push was not deployed
+      # it dispatched (40 x 30 s, as on the command-line lanes) and reports deployment_pending=true
+      # when that build genuinely failed or the dispatch did -- after its own push, or on the
+      # no-change --deploy-recovery path, where nothing was pushed and it re-dispatched Pages for an
+      # undeployed main. The graph still ends DONE then, and the step above takes tee's exit status,
+      # so this step is what turns the lane red -- as the command-line lanes do. It says which of
+      # the two happened. An unverified deployment does not fail the lane.
+      - name: Fail when the PowerPoint lane's Pages deployment failed
         if: ${{ steps.graph.outputs.deployment_pending == 'true' }}
         env:
           PAGES_BUILD: ${{ steps.graph.outputs.pages_build }}
+          PUSHED: ${{ steps.graph.outputs.pushed }}
         run: |
-          echo "::error title=PowerPoint deployment failed::the push landed on main but its Pages deployment failed (pages_build=${PAGES_BUILD:-dispatch failed}); the data commit is not reverted or re-pushed"
+          if [ "${PUSHED}" = "true" ]; then
+            echo "::error title=PowerPoint deployment failed::the push landed on main but its Pages deployment failed (pages_build=${PAGES_BUILD:-dispatch failed}); the data commit is not reverted or re-pushed"
+          else
+            echo "::error title=PowerPoint deployment failed::nothing was pushed; the deployment-recovery re-dispatch of Pages for main failed (pages_build=${PAGES_BUILD:-dispatch failed})"
+          fi
           exit 1
 
       - name: Graph summary

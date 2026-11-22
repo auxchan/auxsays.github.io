@@ -22,6 +22,10 @@ WHAT IS PINNED, AND HOW
     a same-SHA or descendant run) / a descendant that fails / an ancestor that must not count /
     a pre-dispatch snapshot that could not be read / a status query that hangs. No outcome
     re-pushes or reverts the data commit.
+[A''] ONE monotonic deadline bounds the whole wait -- every status query, every fetch and every
+    sleep -- on a fake clock where each query and fetch takes all the time it is allowed; a real
+    fetch from a remote whose upload-pack hangs is killed at the deadline; a failed build of the SHA
+    already listed before a deploy-recovery re-dispatch is stale, never the new build's failure.
 [B] the `lost_race` diagnostic (a hook's refusal after a clean rebase is not a race), and that a
     run whose checkout went stale never pushes a stale tree.
 [C] the same contract through the BARE SCRIPT, the way every workflow runs it.
@@ -32,13 +36,20 @@ WHAT IS PINNED, AND HOW
     every writer job of a re-run checks out main as it is when the job starts.
 [E] shell EXECUTED under bash against a fake `gh`: chain-ingest dispatches ingestion only, on main;
     the reaper's eviction step re-dispatches on main, passes `recovery_of` on and reports whether
-    the lane was free.
+    the lane was free; the PowerPoint failure step says which path failed; and the reaper's
+    lost-cycle step runs as production runs it, its repository, lanes and writer group resolved
+    from the JOB env (E4).
 [F] writer_cycle_recovery's decisions over scripted run histories: reached / lost / loop guard /
-    pause after a lost recovery / time limit vs operator cancel / one entrant per tick / Pages /
-    a GREEN run whose cycle record was skipped (the PowerPoint graph's writeback lost its race).
+    pause after a lost recovery, with NO age limit / fail closed when the deciding history is out
+    of view / time limit vs operator cancel / one entrant per tick / Pages / a GREEN run whose cycle
+    record was skipped (the PowerPoint graph's writeback lost its race) / deployment commit by
+    commit from main's fast-forward chain.
 [G] the same module as a BARE SCRIPT against a fake `gh` serving raw API JSON: the dispatch it
     issues, the writer states that hold it back, and the ONE tracking issue it opens, updates,
-    closes or leaves alone.
+    closes only when every lane reached main and main's newest commit was deployed, or leaves alone.
+[P] a persistent outage longer than 72 hours, tick by tick with the module's own plan_tick and
+    keep_issue: one re-run, one issue, never closed -- past the API's page too -- and one close
+    once a run reaches main and its push is deployed.
 [H] the PowerPoint graph's writeback binding confirms its build and writes its outputs.
 
 Deterministic, offline, writes nothing outside its temporary directories.
@@ -55,6 +66,7 @@ import stat
 import subprocess
 import sys
 import tempfile
+import time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -450,8 +462,10 @@ def section_confirmation() -> None:
 
     # A15 a status query that hangs: each query is cut at pages_status_timeout and reads as
     # unreadable, so a hung `gh` can never stretch the bounded wait into the job's time limit. The
-    # stand-in WOULD answer (a successful build of this very revision) if it were waited for.
-    with tempfile.TemporaryDirectory() as td:
+    # stand-in WOULD answer (a successful build of this very revision) if it were waited for. Nothing
+    # waits for a killed query's own children (a shell that does not exec its command leaves one), so
+    # on such a platform the stand-in may still hold the directory for a moment after the check.
+    with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as td:
         tmp = Path(td)
         origin, work = setup(tmp)
         slow = tmp / "slow_status.py"
@@ -543,6 +557,93 @@ def section_superseded() -> None:
             tmp, origin, [[run("SELF", db=7)]], "a14c")), origin_head(origin))
     check("A14 an unreadable snapshot is None, never an empty set that claims no run existed",
           unreadable is None and readable == {"7"}, f"{unreadable!r} {readable!r}")
+
+
+def section_deadline() -> None:
+    print(NEWLINE + "[A''] one monotonic deadline bounds the whole build wait; a stale failed build is not ours")
+    bound = aw.confirm_wait_bound(40, 30, aw.WritebackConfig(repo=Path("."), message="m", allow=["x"]).pages_status_timeout)
+    check("A16 the production bound is 39 polls 30 s apart plus one 60 s status query: 20.5 minutes",
+          bound == 1230, str(bound))
+
+    # A16 every status query answers only at the last moment it is allowed, every poll sees a commit
+    # this clone does not know (so every poll fetches), and every fetch hangs until it is killed. On a
+    # fake clock, the whole wait -- queries, fetches and sleeps -- must still end inside the deadline.
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td)
+        origin, work = setup(tmp)
+        write(work, "records/rec-a.md", "A16\n")
+        clock = {"t": 1000.0}
+        log: list = []
+        unknown = "f" * 40
+
+        def fake_bounded(cmd, *, cwd, timeout, shell=False, capture=True):
+            kind = "fetch" if isinstance(cmd, list) and "fetch" in cmd else "query"
+            log.append((kind, timeout, clock["t"]))
+            if timeout <= 0:
+                return None, "", ""
+            clock["t"] += timeout
+            if kind == "fetch":
+                return None, "", ""
+            return 0, json.dumps([{"databaseId": 7, "headSha": unknown, "headBranch": "main",
+                                   "status": "in_progress", "conclusion": None}]), ""
+
+        real_bounded = aw._bounded
+        aw._bounded = fake_bounded
+        try:
+            with StepSummary(tmp, "a16.md"):
+                r = aw.run_writeback(cfg(work, pages_cmd=PY_OK, pages_confirm_build=True, pages_status_cmd="status",
+                                         pages_confirm_attempts=40, pages_confirm_interval=30,
+                                         clock_fn=lambda: clock["t"],
+                                         sleep_fn=lambda s: clock.__setitem__("t", clock["t"] + s)))
+        finally:
+            aw._bounded = real_bounded
+        queries = [e for e in log if e[0] == "query"]
+        fetches = [e for e in log if e[0] == "fetch" and e[1] > 0]
+        start = queries[1][2] if len(queries) > 1 else None      # queries[0] is the pre-dispatch snapshot
+        spent = (clock["t"] - start) if start is not None else None
+        check("A16 one deadline bounds the whole wait: every status query, every fetch and every sleep is cut "
+              "to the time left, and the wait ends inside the bound",
+              spent is not None and spent <= bound + 1e-6 and r.ok and r.pushed and r.deployment_unverified
+              and len(queries) - 1 < 40 and any(q[1] < aw.WritebackConfig(repo=Path("."), message="m",
+                                                                           allow=["x"]).pages_status_timeout
+                                                for q in queries[1:] if q[1] > 0) and len(fetches) >= 2,
+              f"spent={spent} bound={bound} polls={len(queries) - 1} fetches={len(fetches)} {r.outcomes}")
+
+    # A17 the fetch inside the wait is a real process: a remote whose upload-pack hangs is cut off at
+    # the deadline, and nothing waits for the processes the fetch started.
+    with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as td:
+        tmp = Path(td)
+        origin, work = setup(tmp)
+        g(work, "config", "remote.origin.uploadpack", "sleep 20; git-upload-pack")
+        c = cfg(work)
+        t0 = time.monotonic()
+        got = aw._descendants_of(c, origin_head(origin), {"e" * 40}, {}, deadline=c.clock_fn() + 2)
+        elapsed = time.monotonic() - t0
+        check("A17 a fetch from a remote that hangs is killed at the deadline (bounded fetch)",
+              elapsed < 10 and got == set(), f"elapsed={elapsed:.1f}s got={got}")
+
+    # A18 round-2 finding 3: a deploy-recovery re-dispatch of a SHA whose EARLIER build failed. That
+    # failed run is in the snapshot taken before the dispatch; it is stale, never this dispatch's build.
+    stale = run("SELF", conclusion="failure", db=300)
+    for tag, post, reason in (("a18", [stale], "no Pages run for this revision appeared"),
+                              ("a18b", [stale, run("SELF", status="in_progress", conclusion=None, db=301)],
+                               "had not finished")):
+        with tempfile.TemporaryDirectory() as td:
+            tmp = Path(td)
+            origin, work = setup(tmp)
+            pusher = clone(tmp, origin, "pusher")
+            push_change(pusher, "records/rec-other.md", "site change\n", "Update automated patch evidence")
+            status, _ = seq_status(tmp, origin, [stale], post, tag, pre_calls=2)
+            with StepSummary(tmp, f"{tag}.md") as summ:
+                r = aw.run_writeback(cfg(work, pages_cmd=PY_OK, pages_confirm_build=True, pages_status_cmd=status,
+                                         pages_confirm_attempts=3, pages_confirm_interval=30,
+                                         deploy_recovery=True, recovery_site_paths=["records/*.md"]))
+            check(f"A18 a failed build of this SHA listed before the re-dispatch is stale: unverified, never this "
+                  f"dispatch's failure ({'a new build still running' if tag == 'a18b' else 'nothing new'})",
+                  aw.DEPLOYMENT_MISSING in r.outcomes and r.ok and not r.deployment_pending
+                  and r.pages_build_outcome == "unconfirmed" and r.deployment_unverified
+                  and aw.PAGES_BUILD_FAILED not in r.outcomes and reason in summ.text(),
+                  f"{r.outcomes} {summ.text()[:200]}")
 
 # --------------------------------------------------------------------------------------------------
 # [B] lost-race classification
@@ -1026,6 +1127,8 @@ def marker_step(steps: list, reads: str) -> tuple[int, dict]:
 # 60 runs (run 44939561794, 25.3 min) and the slowest PowerPoint job outside one outlier (59.1 min).
 MEASURED_POST_COLLECT_MIN = 25.3
 MEASURED_PPT_JOB_MIN = 59.1
+# The one status query the deadline allows the last poll: every writer lane uses the default.
+STATUS_TIMEOUT = aw.WritebackConfig(repo=Path("."), message="m", allow=["x"]).pages_status_timeout
 
 
 def section_wiring() -> None:
@@ -1048,7 +1151,9 @@ def section_wiring() -> None:
                 collect_args = args
             check(f"D1 {name} confirms its Pages build", bool(args.pages_cmd) and args.pages_confirm_build,
                   f"pages_cmd={args.pages_cmd!r} confirm={args.pages_confirm_build}")
-            bound = max(args.pages_confirm_attempts - 1, 0) * args.pages_confirm_interval
+            # The whole wait, as its one monotonic deadline enforces it: the poll schedule plus the
+            # final status query (automation_writeback.confirm_wait_bound; A16 proves the deadline).
+            bound = aw.confirm_wait_bound(args.pages_confirm_attempts, args.pages_confirm_interval, STATUS_TIMEOUT)
             # The last 100 Pages runs took 237-612 s from creation; one may queue behind another build
             # in the `pages` concurrency group. 900 s covers that; 1500 s keeps the writer lane short.
             check(f"D2 {name} waits long enough for a queued build, and no longer than the lane can afford",
@@ -1227,8 +1332,16 @@ def section_wiring() -> None:
              for v in ("true", "false", "")}
     check("D12 a step after the graph fails the PowerPoint lane exactly when its deployment failed",
           0 <= g_idx < f_idx and fires == {"true": True, "false": False, "": False}, f"{g_idx} {f_idx} {fires}")
+    fenv = fstep.get("env") or {}
+    try:
+        fresolved = {k: eval_ref(str(fenv.get(k, "")), {"steps": {"graph": {"outputs": {
+            "pushed": "PUSHED", "pages_build": "BUILD"}}}}) for k in ("PUSHED", "PAGES_BUILD")}
+    except ValueError as exc:
+        fresolved = {"error": str(exc)}
+    check("D14 the PowerPoint failure step is told whether the graph pushed, so its message can say which "
+          "path failed", fresolved == {"PUSHED": "PUSHED", "PAGES_BUILD": "BUILD"}, str(fresolved))
     import orchestrate_evidence_run as orch
-    ppt_bound = max(0, orch.PAGES_CONFIRM_ATTEMPTS - 1) * orch.PAGES_CONFIRM_INTERVAL / 60.0
+    ppt_bound = aw.confirm_wait_bound(orch.PAGES_CONFIRM_ATTEMPTS, orch.PAGES_CONFIRM_INTERVAL, STATUS_TIMEOUT) / 60.0
     ppt_headroom = float(ppt.get("timeout-minutes") or 360) - MEASURED_PPT_JOB_MIN - ppt_bound
     check("D12 the PowerPoint job's time limit leaves 30 minutes after its slowest measured run and the "
           "confirm wait", ppt_headroom >= 30, f"headroom={ppt_headroom:.1f} (bound {ppt_bound:.1f} min)")
@@ -1386,8 +1499,15 @@ def section_executed() -> None:
 
     ppt = load_wf(EVIDENCE_WF)["jobs"]["powerpoint-orchestrated"]["steps"]
     _, fstep = marker_step(ppt, "steps.graph.outputs.deployment_pending")
-    rc, ds, out, _ = run_shell(str(fstep.get("run") or "exit 0"), {"PAGES_BUILD": "failed"})
+    rc, ds, out, _ = run_shell(str(fstep.get("run") or "exit 0"), {"PAGES_BUILD": "failed", "PUSHED": "true"})
     check("E3 the PowerPoint failure step fails the lane and says why", rc != 0 and "::error" in out, f"rc={rc}")
+    check("E3 after a push it says the push landed and its deployment failed",
+          rc != 0 and "the push landed on main" in out, out[-300:])
+    rc, ds, out, _ = run_shell(str(fstep.get("run") or "exit 0"), {"PAGES_BUILD": "failed", "PUSHED": "false"})
+    check("E3 on the no-change deploy-recovery path it never says a push landed: nothing was pushed",
+          rc != 0 and "::error" in out and "push landed" not in out and "nothing was pushed" in out, out[-300:])
+
+    section_reaper_step_env()
 
 
 # --------------------------------------------------------------------------------------------------
@@ -1465,10 +1585,11 @@ class FakeGhObj:
     """plan_tick's view of the API, from dicts. A missing entry reads as unreadable."""
 
     def __init__(self, runs: dict, jobs: dict | None = None, notes: dict | None = None,
-                 pages: list | None = None, active: dict | None = None) -> None:
+                 pages: list | None = None, active: dict | None = None, activity: list | None = None) -> None:
         self._runs, self._jobs, self._notes = runs, with_green_jobs(runs, jobs), notes or {}
         self._pages = [] if pages is None else pages
         self._active = active or {}
+        self._activity = activity
 
     def active(self, wf):
         return self._active.get(wf, 0)
@@ -1485,10 +1606,33 @@ class FakeGhObj:
     def pages_runs(self):
         return self._pages
 
+    def activity(self):
+        return self._activity
 
-def prun(rid: int, hours_ago: float, conclusion: str = "success", branch: str = "main") -> dict:
+
+def sha(n: int) -> str:
+    """A 40-hex commit id whose first seven characters differ for every n the tests use."""
+    return (f"{n:x}" + "c" * 40)[:40]
+
+
+def prun(rid: int, hours_ago: float, conclusion: str = "success", branch: str = "main",
+         commit: int | None = None) -> dict:
+    """A Pages run; it built commit sha(commit), by default sha(rid)."""
     return {"id": rid, "created_at": at(hours_ago), "status": "completed", "conclusion": conclusion,
-            "head_branch": branch, "head_sha": f"{rid:07d}abcdef", "html_url": f"https://github.com/o/r/actions/runs/{rid}"}
+            "head_branch": branch, "head_sha": sha(rid if commit is None else commit),
+            "html_url": f"https://github.com/o/r/actions/runs/{rid}"}
+
+
+def push(after: int, before: int, hours_ago: float, kind: str = "push", aid: int | None = None) -> dict:
+    """One entry of the repository activity API for main: `before` -> `after`."""
+    return {"id": aid if aid is not None else after, "ref": "refs/heads/main", "activity_type": kind,
+            "before": sha(before), "after": sha(after), "timestamp": at(hours_ago),
+            "actor": {"login": BOT}}
+
+
+# main's history in the G scenarios: commit 3 is main's newest, pushed 1.5 hours ago on top of 2;
+# Pages run 3 (prun(3, 1)) built it. The chain reaches back 30 hours, before every lane's newest run.
+MAIN_DEPLOYED = [push(3, 2, 1.5), push(2, 1, 30)]
 
 
 def section_decisions() -> None:
@@ -1513,9 +1657,10 @@ def section_decisions() -> None:
                {"9": jobs_of(), "6": jobs_of()})
     check("F6 a run that reached main since then lifts the pause: the new loss is re-run",
           d.dispatch_recovery_of == "9" and not d.problem, d.note)
-    d = decide([wrun(5, 20, "failure")], {"5": jobs_of()})
+    d = decide([wrun(5, 20, "failure"), wrun(4, 30)], {"5": jobs_of()})
     check("F7 a lost cycle older than the re-run window is reported, not re-run",
-          not d.dispatch_recovery_of and "not re-run automatically" in d.problem, d.problem)
+          not d.dispatch_recovery_of and "not re-run automatically" in d.problem and "14 hours" in d.problem,
+          d.problem)
     d = decide([wrun(5, 2, "cancelled"), wrun(4, 8)], {"5": jobs_of(failed=False, cancelled_job=77)},
                {"77": TIMEOUT_NOTES})
     check("F8 a run whose job hit its time limit (cancelled, with GitHub's timeout annotation) is lost: re-run",
@@ -1527,7 +1672,7 @@ def section_decisions() -> None:
                {"77": CANCEL_NOTES})
     check("F9 an operator's cancel of a started run is left alone, as the eviction step leaves it",
           not d.dispatch_recovery_of and not d.problem and d.decided, d.note)
-    d = decide([wrun(5, 1, "cancelled"), wrun(4, 4, "failure")],
+    d = decide([wrun(5, 1, "cancelled"), wrun(4, 4, "failure"), wrun(3, 10)],
                {"5": jobs_of(failed=False, cancelled_job=77), "4": jobs_of()}, {"77": CANCEL_NOTES})
     check("F9 and does not hide an older lost cycle behind it", d.dispatch_recovery_of == "4", d.note)
     d = decide([wrun(5, 1, "cancelled"), wrun(4, 6)], {"5": jobs_of(evicted=True)})
@@ -1541,22 +1686,27 @@ def section_decisions() -> None:
           not d.decided and not d.dispatch_recovery_of and not d.problem, d.note)
     d = decide([wrun(5, 1, "cancelled")], {"5": jobs_of(failed=False, cancelled_job=77)}, {})
     check("F12 nor do unreadable annotations", not d.decided and not d.dispatch_recovery_of, d.note)
-    d = decide([recovery_run(6, 1, of="5", conclusion="cancelled"), wrun(5, 4, "failure")],
+    d = decide([recovery_run(6, 1, of="5", conclusion="cancelled"), wrun(5, 4, "failure"), wrun(4, 10)],
                {"6": jobs_of(failed=False, cancelled_job=78), "5": jobs_of()}, {"78": CANCEL_NOTES})
     check("F13 a recovery an operator cancelled after it started is not attempted again",
           not d.dispatch_recovery_of and not d.problem, d.note)
+    check("F13 but the loss stays unresolved: the lane is not reconciled, and it is listed",
+          not d.reached and "re-run was cancelled" in d.pending, d.pending)
     frees = {(b, x): wcr.lane_free(b, x) for b, x in (("0", "0"), ("", "0"), ("0", ""), ("1", "0"),
                                                        ("0", "1"), ("x", "0"))}
     check("F14 only a positively free lane with no entrant this tick may take one; anything else is occupied",
           frees == {("0", "0"): True, ("", "0"): False, ("0", ""): False, ("1", "0"): False,
                     ("0", "1"): False, ("x", "0"): False}, str(frees))
-    both_lost = {EVIDENCE_WF: [wrun(5, 2, "failure")], INGEST_WF: [wrun(15, 1, "failure", name="AUXSAYS Patch Ingestion")]}
+    both_lost = {EVIDENCE_WF: [wrun(5, 2, "failure"), wrun(4, 8)],
+                 INGEST_WF: [wrun(15, 1, "failure", name="AUXSAYS Patch Ingestion"),
+                             wrun(14, 7, name="AUXSAYS Patch Ingestion")]}
     lost_jobs = {"5": jobs_of(), "15": jobs_of()}
     members = sorted(writer_group_members())
     plan = wcr.plan_tick(FakeGhObj(both_lost, lost_jobs), [EVIDENCE_WF, INGEST_WF], "0", "0", NOW, members)
     check("F15 two lanes with lost cycles still get exactly one entrant per tick, group-wide",
           plan.dispatch == (EVIDENCE_WF, "5"), str(plan.dispatch))
-    plan = wcr.plan_tick(FakeGhObj({EVIDENCE_WF: [recovery_run(6, 1, of="5")], INGEST_WF: [wrun(15, 1, "failure")]},
+    plan = wcr.plan_tick(FakeGhObj({EVIDENCE_WF: [recovery_run(6, 1, of="5")],
+                                    INGEST_WF: [wrun(15, 1, "failure"), wrun(14, 7)]},
                                    {"6": jobs_of(), "15": jobs_of()}), [EVIDENCE_WF, INGEST_WF], "2", "0", NOW, members)
     check("F15 an occupied lane gets no entrant, but persistent failures are still reported",
           plan.dispatch is None and len(plan.problems) == 1 and EVIDENCE_WF in plan.problems[0], str(plan.problems))
@@ -1598,6 +1748,47 @@ def section_decisions() -> None:
     d = decide([wrun(5, 2)], {"5": None})
     check("F21 a green run whose jobs cannot be read decides nothing (its record is unknown)",
           not d.decided and not d.dispatch_recovery_of and not d.problem, d.note)
+
+    # F22-F24 (amendment A4.2): no age limit on the recovery state, and fail closed when the history
+    # that decides is not in view.
+    d = decide([wrun(5, 2, "failure"), wrun(4, 8, "failure")], {"5": jobs_of(), "4": jobs_of()})
+    check("F22 neither a run that reached main nor a lost recovery in view: fail closed -- reported, never re-run",
+          not d.dispatch_recovery_of and "cannot be established" in d.problem and not d.reached, d.problem)
+    d = decide([wrun(9, 1, "failure"), wrun(8, 50, "failure"), recovery_run(7, 80, of="6"),
+                wrun(6, 82, "failure"), wrun(5, 100)],
+               {"9": jobs_of(), "8": jobs_of(), "7": jobs_of(), "6": jobs_of()})
+    check("F23 a recovery that lost more than 72 hours ago still pauses the lane: no second re-run",
+          not d.dispatch_recovery_of and "paused" in d.problem and "recovery run 7" in d.problem, d.problem)
+    d = decide([wrun(9, 1, "failure"), wrun(8, 80)], {"9": jobs_of()})
+    check("F24 a loss whose last run that reached main is more than 72 hours old is still re-run once",
+          d.dispatch_recovery_of == "9" and not d.problem and "re-run is pending" in d.pending, d.note)
+    d = decide([wrun(5, 2), wrun(4, 8, "failure")])
+    check("F24 only a lane whose newest routine run reached main is reconciled",
+          d.reached and d.head_created == wcr.parse_time(at(2)) and not d.pending, d.note)
+
+    # F25 deployment, commit by commit (amendments A4.A and A4.B)
+    st = wcr.deployment_state(MAIN_DEPLOYED, [prun(3, 1)], NOW)
+    check("F25 a successful Pages run of main's newest commit deploys it",
+          st.readable and st.deployed and st.deployed_by == "3" and st.head == sha(3) and not st.problem
+          and not st.pending and st.spine_from == wcr.parse_time(at(30)), str(st))
+    st = wcr.deployment_state(MAIN_DEPLOYED, [prun(9, 0.2, commit=2)], NOW)
+    check("F25 a NEWER successful run of an OLDER commit does not deploy main's newest commit (within the "
+          "grace: pending, not a problem)", st.readable and not st.deployed and not st.problem
+          and sha(3)[:7] in st.pending, str(st))
+    st = wcr.deployment_state([push(3, 2, 3), push(2, 1, 30)], [prun(9, 0.2, commit=2)], NOW)
+    check("F25 past the grace it is a problem naming the oldest undeployed commit",
+          st.readable and not st.deployed and sha(3)[:7] in st.problem and "2 hours" in st.problem, str(st))
+    st = wcr.deployment_state([push(4, 3, 0.5), push(3, 2, 5), push(2, 1, 30)], [prun(9, 0.2, commit=2)], NOW)
+    check("F25 the clock starts at the OLDEST undeployed commit, not main's newest",
+          sha(3)[:7] in st.problem and sha(4)[:7] not in st.problem, str(st))
+    st = wcr.deployment_state([push(4, 3, 0.5), push(3, 2, 5), push(2, 1, 30)], [prun(9, 0.2, commit=3)], NOW)
+    check("F25 a deployed later commit clears the earlier ones: only commit-specific success clears a line",
+          not st.problem and sha(4)[:7] in st.pending, str(st))
+    st = wcr.deployment_state(None, [prun(3, 1)], NOW)
+    st2 = wcr.deployment_state(MAIN_DEPLOYED, None, NOW)
+    st3 = wcr.deployment_state([push(3, 2, 1, kind="force_push")], [prun(3, 1)], NOW)
+    check("F25 main's history or the Pages runs unreadable, or no fast-forward in view: nothing established",
+          not st.readable and not st2.readable and not st3.readable and not st3.deployed, f"{st} {st2} {st3}")
 
 
 # --------------------------------------------------------------------------------------------------
@@ -1646,6 +1837,8 @@ if args and args[0] == "api":
         serve(scn.get("annotations", {}).get(m.group(1)))
     if re.match(r"repos/[^/]+/[^/]+/issues\?", path):
         serve(scn.get("issues", []))
+    if re.match(r"repos/[^/]+/[^/]+/activity\?ref=refs/heads/main", path):
+        serve(scn.get("activity", []))
 sys.exit(2)
 '''
 
@@ -1684,8 +1877,10 @@ def writes(entries: list) -> list:
 
 def section_cli() -> None:
     print(NEWLINE + "[G] writer_cycle_recovery as a bare script: its dispatch and its one tracking issue")
-    healthy = {"runs": {EVIDENCE_WF: [wrun(5, 2)], INGEST_WF: [wrun(15, 1, name="AUXSAYS Patch Ingestion")]},
-               "pages": [prun(3, 1)], "issues": []}
+    healthy = {"runs": {EVIDENCE_WF: [wrun(5, 2), wrun(4, 8)],
+                        INGEST_WF: [wrun(15, 1, name="AUXSAYS Patch Ingestion"),
+                                    wrun(14, 7, name="AUXSAYS Patch Ingestion")]},
+               "pages": [prun(3, 1)], "activity": MAIN_DEPLOYED, "issues": []}
     rc, out, entries, summary = run_cli(healthy)
     job_reads = sorted(e["path"] for e in entries if "/jobs" in e.get("path", ""))
     check("G0 a healthy tick writes nothing, reads only each lane's newest run's record, and exits 0",
@@ -1697,7 +1892,7 @@ def section_cli() -> None:
     check("G12 a green run whose cycle record was skipped is re-run once, as its recovery",
           rc == 0 and [e.get("args") for e in w] == [["workflow", "run", EVIDENCE_WF, "--ref", "main", "--repo",
                                                         "o/r", "-f", "recovery_of=5"]], f"rc={rc} {w} {out[-300:]}")
-    lost = dict(healthy, runs={EVIDENCE_WF: [wrun(5, 2, "failure")], INGEST_WF: healthy["runs"][INGEST_WF]},
+    lost = dict(healthy, runs={EVIDENCE_WF: [wrun(5, 2, "failure"), wrun(4, 8)], INGEST_WF: healthy["runs"][INGEST_WF]},
                 jobs={"5": jobs_of()})
     rc, out, entries, summary = run_cli(lost)
     w = writes(entries)
@@ -1752,6 +1947,9 @@ def section_cli() -> None:
           [(e["method"], e["path"]) for e in w] == [("POST", "repos/o/r/issues/12/comments"),
                                                      ("PATCH", "repos/o/r/issues/12")]
           and w[-1]["fields"].get("state") == "closed", str(w))
+    check("G5 and the comment names the deployment that resolved it: the Pages run and main's newest commit",
+          bool(w) and "Pages run 3" in w[0]["fields"].get("body", "") and sha(3)[:7] in w[0]["fields"].get("body", ""),
+          str(w[:1]))
     half = dict(clear, runs={EVIDENCE_WF: [wrun(5, 2)], INGEST_WF: "FAIL"})
     rc, out, entries, _ = run_cli(half)
     check("G6 a lane that could not be read keeps the issue open: closing needs the whole state",
@@ -1774,6 +1972,356 @@ def section_cli() -> None:
           len(w) == 1 and w[0]["method"] == "POST" and "Pages" in w[0]["fields"].get("body", "")
           and "`failure`" in w[0]["fields"].get("body", ""), str(w))
 
+    def resolved_comments(entries: list) -> list:
+        return [e for e in writes(entries) if e["kind"] == "write" and e["path"].endswith("/comments")]
+
+    def closed(entries: list) -> bool:
+        return any(e["kind"] == "write" and e["fields"].get("state") == "closed" for e in writes(entries))
+
+    # G13 (amendment A4.1) an issue is open, no problem is listed any more, but a lane's newest run lost
+    # its cycle and its one re-run is pending: the issue stays open and says so -- no "Resolved".
+    pending_rerun = dict(lost, issues=same["issues"])
+    rc, out, entries, _ = run_cli(pending_rerun)
+    w = writes(entries)
+    patched = [e for e in w if e["kind"] == "write" and e["method"] == "PATCH"]
+    check("G13 a lost cycle whose re-run is pending keeps the issue open: never closed, no Resolved comment",
+          rc == 0 and not resolved_comments(entries) and not closed(entries), str(w))
+    check("G13 and its body is rewritten to list the pending re-run (the old problem is gone)",
+          len(patched) == 1 and "re-run is pending" in patched[0]["fields"].get("body", "")
+          and "run [5]" in patched[0]["fields"].get("body", ""), str(patched))
+    rc, out, entries, _ = run_cli(dict(pending_rerun, runs=dict(lost["runs"], **{"davinci-updates.yml": [
+        {"id": 900, "status": "pending", "conclusion": None, "created_at": at(0.1), "event": "workflow_dispatch",
+         "triggering_actor": {"login": "auxchan"}, "display_title": "DaVinci"}]})))
+    check("G13 a re-run held back by a writer that entered the lane keeps it open too",
+          not resolved_comments(entries) and not closed(entries)
+          and not any(e["kind"] == "dispatch" for e in writes(entries)), str(writes(entries)))
+
+    # G14 (amendment A4.A) lanes healthy, the newest Pages run is green -- but it built an OLDER commit
+    # than main's newest: an unrelated green deployment never closes the incident.
+    older_green = dict(clear, pages=[prun(9, 0.2, commit=2), prun(3, 1, "cancelled")])
+    rc, out, entries, _ = run_cli(older_green)
+    w = writes(entries)
+    check("G14 a successful Pages run of an older commit never closes the issue (commit-specific deployment)",
+          rc == 0 and not resolved_comments(entries) and not closed(entries), str(w))
+    check("G14 and the body says main's newest commit is not deployed yet",
+          any(sha(3)[:7] in e["fields"].get("body", "") for e in w if e["kind"] == "write"), str(w))
+
+    # G15 (amendment A4.B) a pushed commit whose deployment never started: no Pages run for it at all.
+    never = dict(healthy, activity=[push(3, 2, 3), push(2, 1, 30)], pages=[prun(9, 4, commit=2)])
+    rc, out, entries, _ = run_cli(never)
+    w = writes(entries)
+    created = [e for e in w if e["kind"] == "write" and e["method"] == "POST"]
+    check("G15 a pushed commit with no successful deployment past the 2-hour grace opens the issue, naming it",
+          len(created) == 1 and sha(3)[:7] in created[0]["fields"].get("body", "")
+          and "no successful Pages deployment" in created[0]["fields"].get("body", ""), str(w))
+    rc, out, entries, _ = run_cli(dict(never, activity=[push(3, 2, 1), push(2, 1, 30)]))
+    check("G15 within the grace it opens nothing (a slow queue is not a problem)", writes(entries) == [],
+          str(writes(entries)))
+    rc, out, entries, _ = run_cli(dict(never, issues=same["issues"], pages=[prun(10, 0.5, commit=3),
+                                                                            prun(9, 4, commit=2)]))
+    w = writes(entries)
+    check("G15 a successful run of exactly that commit clears it, and with every lane reconciled the issue closes",
+          [(e["method"], e["path"]) for e in w] == [("POST", "repos/o/r/issues/12/comments"),
+                                                     ("PATCH", "repos/o/r/issues/12")], str(w))
+
+    # G16 main's history unreadable: nothing about the deployment is established, so nothing closes
+    rc, out, entries, _ = run_cli(dict(clear, activity="FAIL"))
+    check("G16 main's history unreadable: the issue is left exactly as it is", writes(entries) == []
+          and "::warning" in out, str(writes(entries)))
+
+    # G17 the chain of main's history must reach back before every lane's newest run: after a force
+    # push or a gap, whether main's newest commit contains a lane's push cannot be established.
+    forced = dict(clear, activity=[push(3, 2, 0.5), push(2, 1, 1.2, kind="force_push"), push(1, 0, 30)])
+    gap = dict(clear, activity=[push(3, 2, 0.5), push(7, 6, 30)])
+    got17 = {}
+    for label, scn in (("force push", forced), ("gap", gap)):
+        rc, out, entries, _ = run_cli(scn)
+        got17[label] = rc == 0 and not resolved_comments(entries) and not closed(entries)
+    check("G17 a force push or a gap in main's history after a lane's run started keeps the issue open",
+          all(got17.values()), str(got17))
+
+    # G18 never a second issue: a full page of open issues without ours proves nothing
+    full = dict(persistent, issues=[{"number": n, "title": f"other {n}", "user": {"login": "someone"},
+                                     "body": ""} for n in range(1, wcr.ISSUE_PAGE + 1)])
+    rc, out, entries, _ = run_cli(full)
+    check("G18 a full page of open issues without the tracking issue: nothing is opened (it may be on page 2)",
+          writes(entries) == [] and "::warning" in out, str(writes(entries)))
+
+
+
+# --------------------------------------------------------------------------------------------------
+# [E4] the reaper's lost-cycle step exactly as production runs it (round-2 finding 2)
+# --------------------------------------------------------------------------------------------------
+def _shift(rows: list, field_name: str, delta: timedelta) -> list:
+    out = []
+    for r in rows:
+        r = dict(r)
+        r[field_name] = (wcr.parse_time(r[field_name]) + delta).strftime("%Y-%m-%dT%H:%M:%SZ")
+        out.append(r)
+    return out
+
+
+def section_reaper_step_env() -> None:
+    """The step passes no --repo, --reapable or --group-members: production resolves all three from
+    the JOB env through the parser's defaults. Execute the step's own `run:` under bash -e with exactly
+    that env and a fake `gh` first on PATH, the way the runner does -- no flag the step does not pass."""
+    reaper = load_wf(REAPER_WF)
+    rjob = reaper["jobs"]["reap"]
+    inv = script_invocations(reaper, "writer_cycle_recovery.py")
+    if not inv:
+        check("E4 the reaper's lost-cycle step is found", False)
+        return
+    _, _, rstep, _ = inv[0]
+    jenv = {k: str(v) for k, v in (rjob.get("env") or {}).items()}
+    try:
+        jenv["REPO"] = eval_ref(jenv.get("REPO", ""), {"github": {"repository": "o/r"}})
+    except ValueError as exc:
+        check("E4 the job's REPO is the repository", False, str(exc))
+        return
+    jenv["GH_TOKEN"] = "fake"
+    # A lost cycle on the collection lane 2 hours ago (the run before it reached main), ingestion
+    # healthy, main deployed -- relative to the real clock, since the step passes no --now.
+    delta = datetime.now(timezone.utc) - NOW
+    runs = {EVIDENCE_WF: _shift([wrun(5, 2, "failure"), wrun(4, 8)], "created_at", delta),
+            INGEST_WF: _shift([wrun(15, 1, name="AUXSAYS Patch Ingestion")], "created_at", delta)}
+    scn = {"runs": runs, "jobs": with_green_jobs(runs, {"5": jobs_of()}),
+           "pages": _shift([prun(3, 1)], "created_at", delta),
+           "activity": _shift(MAIN_DEPLOYED, "timestamp", delta), "issues": []}
+    tmp = tempfile.mkdtemp()
+    try:
+        fake = Path(tmp, "fake_gh.py")
+        fake.write_text(FAKE_GH_PY, encoding="utf-8")
+        # `python` first on PATH: the step's own argument list, unchanged, plus ONLY the hidden
+        # --gh-argv that points the module's `gh` at the fake (a bare `gh` script on PATH is not
+        # found by a Windows CreateProcess; this is). It passes no --repo, --reapable or
+        # --group-members, so those resolve from the job env exactly as in production.
+        py = Path(sys.executable).as_posix()
+        gh_argv = json.dumps([py, fake.as_posix()])
+        shim = Path(tmp, "python")
+        shim.write_text(f"#!/usr/bin/env bash\nexec \"{py}\" \"$@\" --gh-argv '{gh_argv}'\n", newline="\n")
+        shim.chmod(shim.stat().st_mode | stat.S_IEXEC)
+        scn_f = Path(tmp, "scenario.json")
+        scn_f.write_text(json.dumps(scn), encoding="utf-8")
+        log = Path(tmp, "log.jsonl")
+        log.write_text("", encoding="utf-8")
+        sh = Path(tmp, "step.sh")
+        sh.write_text(str(rstep.get("run") or ""), newline="\n")
+        env = {k: v for k, v in os.environ.items() if k not in ("REPO", "REAPABLE", "GROUP_MEMBERS", "GITHUB_OUTPUT")}
+        env.update(jenv)
+        env.update({"LANE_BUSY": "0", "DISPATCHED": "0", "PATH": tmp + os.pathsep + os.environ.get("PATH", ""),
+                    "FAKE_GH_SCENARIO": str(scn_f), "FAKE_GH_LOG": str(log), "PYTHONIOENCODING": "utf-8",
+                    "PYTHONDONTWRITEBYTECODE": "1", "GITHUB_STEP_SUMMARY": str(Path(tmp, "summary.md"))})
+        proc = subprocess.run([shutil.which("bash") or "bash", "--noprofile", "--norc", "-e", str(sh)],
+                              capture_output=True, text=True, env=env, cwd=str(_REPO), encoding="utf-8",
+                              errors="replace")
+        entries = [json.loads(ln) for ln in log.read_text(encoding="utf-8").splitlines() if ln.strip()]
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+    dispatches = [e["args"] for e in entries if e["kind"] == "dispatch"]
+    rechecked = set()
+    for e in entries:
+        m = re.match(r"repos/o/r/actions/workflows/([^/?]+)/runs\?per_page=20$", e.get("path", ""))
+        if m:
+            rechecked.add(m.group(1))
+    check("E4 the step as production runs it -- job env, no extra flags: the writer group comes from "
+          "GROUP_MEMBERS, every member is re-checked, and the lost cycle is re-run once, on main",
+          proc.returncode == 0 and rechecked == writer_group_members()
+          and dispatches == [["workflow", "run", EVIDENCE_WF, "--ref", "main", "--repo", "o/r",
+                              "-f", "recovery_of=5"]],
+          f"rc={proc.returncode} rechecked={sorted(rechecked)} dispatches={dispatches} "
+          f"{(proc.stdout + proc.stderr)[-400:]}")
+
+
+# --------------------------------------------------------------------------------------------------
+# [P] a persistent outage, longer than 72 hours, tick by tick (amendment A4.1-A4.3)
+# --------------------------------------------------------------------------------------------------
+class OutageWorld:
+    """The API as plan_tick and keep_issue see it, with state: runs appear as they complete, the run
+    list is capped at the API's page (50 newest completed runs), and the tracking issue lives here."""
+
+    PAGE = 50
+    LOST = {"total_count": 2, "jobs": [
+        {"id": 1, "name": "collect", "conclusion": "failure",
+         "steps": [{"name": "Run generated record QA", "conclusion": "failure"}]},
+        {"id": 3, "name": "chain-ingest", "conclusion": "success",
+         "steps": [{"name": wcr.CYCLE_MARKER_STEP, "conclusion": "skipped"}]}]}
+    OK = {"total_count": 1, "jobs": [{"id": 4, "name": "ingest", "conclusion": "success",
+                                      "steps": [{"name": wcr.CYCLE_MARKER_STEP, "conclusion": "success"}]}]}
+
+    def __init__(self, t0: datetime) -> None:
+        self.now = t0
+        self.runs = {EVIDENCE_WF: [], INGEST_WF: []}
+        self.jobs_map: dict = {}
+        self.next_id = 7000
+        self.issues: list = []
+        self.events: list = []
+        self.dispatches: list = []
+        iso = lambda t: t.strftime("%Y-%m-%dT%H:%M:%SZ")  # noqa: E731
+        self.iso = iso
+        # main: commit 3 deployed long before the outage; the chain reaches back 30 days
+        self.activity = [dict(push(3, 2, 0), timestamp=iso(t0 - timedelta(days=1))),
+                         dict(push(2, 1, 0), timestamp=iso(t0 - timedelta(days=30)))]
+        self.pages = [dict(prun(3, 0), created_at=iso(t0 - timedelta(days=1)))]
+
+    def add(self, wf: str, t: datetime, lost: bool, of: str = "") -> str:
+        self.next_id += 1
+        rid = self.next_id
+        name = "Patch Evidence Collection" if wf == EVIDENCE_WF else "AUXSAYS Patch Ingestion"
+        self.runs[wf].insert(0, {
+            "id": rid, "created_at": self.iso(t), "status": "completed",
+            "conclusion": "failure" if lost else "success",
+            "event": "schedule" if (wf == EVIDENCE_WF and not of) else "workflow_dispatch",
+            "triggering_actor": {"login": BOT}, "html_url": "",
+            "display_title": name + (f" (recovery of run {of})" if of else "")})
+        self.jobs_map[str(rid)] = self.LOST if lost else self.OK
+        return str(rid)
+
+    # plan_tick's API
+    def runs_fn(self, wf):
+        return list(self.runs[wf][:self.PAGE])
+
+    def jobs(self, rid):
+        return self.jobs_map.get(str(rid))
+
+    def annotations(self, jid):
+        return []
+
+    def active(self, wf):
+        return 0
+
+    def pages_runs(self):
+        return list(self.pages)
+
+    def activity_fn(self):
+        return list(self.activity)
+
+    # keep_issue's API
+    def open_issue(self):
+        op = [i for i in self.issues if i["state"] == "open"]
+        return True, (op[0] if op else None)
+
+    def create_issue(self, body):
+        self.issues.append({"number": len(self.issues) + 1, "title": wcr.ISSUE_TITLE, "body": body,
+                            "state": "open", "user": {"login": BOT}})
+        self.events.append((self.now, "open"))
+        return True
+
+    def update_issue(self, number, body):
+        self.issues[number - 1]["body"] = body
+        self.events.append((self.now, "update"))
+        return True
+
+    def close_issue(self, number, comment):
+        self.issues[number - 1]["state"] = "closed"
+        self.events.append((self.now, "close", comment))
+        return True
+
+
+def _outage(days: int, recover: bool) -> OutageWorld:
+    """Every 6-hourly collection run loses its cycle, and so does the one re-run; ingestion stays
+    healthy; the reaper ticks every 2 hours with the module's own plan_tick and keep_issue. With
+    `recover`, a collection run reaches main at the end and Pages deploys its push 40 minutes later."""
+    t0 = datetime(2026, 11, 1, 0, 0, tzinfo=timezone.utc)
+    w = OutageWorld(t0)
+    # before the outage both lanes' runs reached main
+    w.add(EVIDENCE_WF, t0 - timedelta(hours=6), lost=False)
+    w.add(INGEST_WF, t0 - timedelta(hours=6) + timedelta(minutes=5), lost=False)
+    t, end = t0, t0 + timedelta(days=days)
+    pending: list = []
+    while t <= end:
+        w.now = t
+        for item in list(pending):
+            if item[0] <= t:
+                w.add(EVIDENCE_WF, item[0], lost=True, of=item[1])
+                pending.remove(item)
+        if t.hour % 6 == 0:
+            w.add(EVIDENCE_WF, t, lost=True)
+            w.add(INGEST_WF, t + timedelta(minutes=5), lost=False)
+        if t.hour % 2 == 1:
+            gh = _OutageGh(w)
+            plan = wcr.plan_tick(gh, [EVIDENCE_WF, INGEST_WF], "0", "0", t, sorted(writer_group_members()))
+            if plan.dispatch:
+                w.dispatches.append((t, plan.dispatch))
+                pending.append((t + timedelta(hours=1), plan.dispatch[1]))
+            wcr.keep_issue(gh, plan, dry_run=False)
+        t += timedelta(hours=1)
+    if recover:
+        w.now = t
+        w.add(EVIDENCE_WF, t, lost=False)
+        w.add(INGEST_WF, t + timedelta(minutes=5), lost=False)
+        w.activity.insert(0, dict(push(4, 3, 0), timestamp=w.iso(t + timedelta(minutes=30))))
+        for tick, deployed in ((t + timedelta(minutes=50), False), (t + timedelta(hours=3), True)):
+            if deployed:
+                w.pages.insert(0, dict(prun(11, 0, commit=4), created_at=w.iso(t + timedelta(minutes=40))))
+            w.now = tick
+            gh = _OutageGh(w)
+            wcr.keep_issue(gh, wcr.plan_tick(gh, [EVIDENCE_WF, INGEST_WF], "0", "0", tick,
+                                             sorted(writer_group_members())), dry_run=False)
+            w.events.append((tick, "tick-deployed" if deployed else "tick-undeployed"))
+    return w
+
+
+class _OutageGh:
+    def __init__(self, w: OutageWorld) -> None:
+        self.w = w
+
+    def runs(self, wf):
+        return self.w.runs_fn(wf)
+
+    def jobs(self, rid):
+        return self.w.jobs(rid)
+
+    def annotations(self, jid):
+        return []
+
+    def active(self, wf):
+        return 0
+
+    def pages_runs(self):
+        return self.w.pages_runs()
+
+    def activity(self):
+        return self.w.activity_fn()
+
+    def open_issue(self):
+        return self.w.open_issue()
+
+    def create_issue(self, body):
+        return self.w.create_issue(body)
+
+    def update_issue(self, number, body):
+        return self.w.update_issue(number, body)
+
+    def close_issue(self, number, comment):
+        return self.w.close_issue(number, comment)
+
+
+def section_persistent_outage() -> None:
+    print(NEWLINE + "[P] a persistent outage longer than 72 hours, tick by tick")
+    w = _outage(days=6, recover=False)
+    opens = [e for e in w.events if e[1] == "open"]
+    closes = [e for e in w.events if e[1] == "close"]
+    body = w.issues[0]["body"] if w.issues else ""
+    check("P1 a six-day outage: exactly ONE re-run, ONE tracking issue, never closed, no Resolved comment",
+          len(w.dispatches) == 1 and len(opens) == 1 and not closes and len(w.issues) == 1
+          and w.issues[0]["state"] == "open", f"dispatches={w.dispatches} events={[e[:2] for e in w.events]}")
+    check("P1 and after 72 hours the issue still names the lost re-run that pauses the lane",
+          "paused" in body and "also lost its cycle" in body, body[:400])
+    w = _outage(days=15, recover=False)
+    opens = [e for e in w.events if e[1] == "open"]
+    closes = [e for e in w.events if e[1] == "close"]
+    body = w.issues[0]["body"] if w.issues else ""
+    check("P1 fifteen days, past the API's page of 50 runs: the lost re-run leaves view and the lane FAILS "
+          "CLOSED -- still one re-run, one issue, never closed",
+          len(w.dispatches) == 1 and len(opens) == 1 and not closes and len(w.issues) == 1
+          and w.issues[0]["state"] == "open" and "cannot be established" in body,
+          f"dispatches={len(w.dispatches)} events={[e[1] for e in w.events if e[1] != 'update']} {body[:300]}")
+    w = _outage(days=6, recover=True)
+    closes = [e for e in w.events if e[1] == "close"]
+    order = [e[1] for e in w.events if e[1] in ("close", "tick-undeployed", "tick-deployed")]
+    check("P2 when a run reaches main again the issue closes once -- only after Pages deployed that run's push",
+          len(closes) == 1 and order == ["tick-undeployed", "close", "tick-deployed"]
+          and sha(4)[:7] in closes[0][2] and "Pages run 11" in closes[0][2], f"{order} {closes}")
 
 # --------------------------------------------------------------------------------------------------
 # [H] the PowerPoint graph's writeback binding
@@ -1847,6 +2395,7 @@ def main() -> int:
     print("=" * 74)
     section_confirmation()
     section_superseded()
+    section_deadline()
     section_lost_race()
     section_stale_tree()
     section_bare_script()
@@ -1855,6 +2404,7 @@ def main() -> int:
     section_executed()
     section_decisions()
     section_cli()
+    section_persistent_outage()
     section_powerpoint_binding()
     print(NEWLINE + "=" * 74)
     print(f"Results: {_PASS}/{_PASS + _FAIL} passed, {_FAIL} failed")

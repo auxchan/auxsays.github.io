@@ -44,8 +44,13 @@ name: Writer Queue Reaper
 # pushed or had nothing to push. Every automatic re-run carries `recovery_of`, which the writer
 # workflows put in their run name ("... (recovery of run N)"), so the record survives even an
 # eviction: a recovery that loses again is never re-run, and an evicted recovery is re-dispatched
-# with the same `recovery_of`. When the one re-run also loses, or the latest Pages build on main
-# failed, the step opens (or updates) ONE tracking issue, and closes it when both are healthy again.
+# with the same `recovery_of`. After a recovery has lost, re-runs of that lane pause until a run
+# reaches main, with no age limit; a loss whose history is out of view is reported, never re-run.
+# When the one re-run also loses, the latest Pages build on main failed, or main has gone undeployed
+# past a 2-hour grace (judged commit by commit from main's push history: only a successful Pages
+# run of main's newest commit counts), the step opens ONE tracking issue. It stays open while any
+# lane is unresolved and is closed only when every lane's newest routine run reached main AND main's
+# newest commit, which contains them, was deployed.
 # Both steps dispatch only into a free lane and at most one entrant per tick, group-wide.
 
 on:

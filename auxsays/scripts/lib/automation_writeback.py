@@ -39,7 +39,10 @@ the freshly generated changes:
     deployment-recovery cycle. A build created by this dispatch that genuinely fails fails the run;
     a run cancelled because a newer build superseded it is not a failure (the newer build, of a
     descendant, deploys this content); a wait that ends with no verdict is reported as
-    ``deployment_unverified`` (output, outcome token, annotation, step summary)
+    ``deployment_unverified`` (output, outcome token, annotation, step summary). ONE monotonic
+    deadline bounds the whole wait (``confirm_wait_bound``): every status query, every git fetch
+    and every sleep is cut to the time left before it, and a query or fetch still running at its
+    limit is killed without waiting for the processes it started
   * classify a writeback that lost a race with another push to main and pushed nothing as
     ``lost_race`` (output, summary line). Diagnostic only: the writer-queue reaper re-runs EVERY
     routine cycle that did not reach main, whatever the reason, from the workflows' own record
@@ -53,8 +56,8 @@ deploy_changed / pushed / pushed_sha / deployment_pending / pages_build / deploy
 lost_race) are written to ``$GITHUB_OUTPUT`` and a pending or unverified deployment note to
 ``$GITHUB_STEP_SUMMARY``.
 
-CLI (workflows) and importable ``run_writeback(config)`` (tests). Pages status queries and
-sleeps are injectable so tests are deterministic and never sleep or hit the network.
+CLI (workflows) and importable ``run_writeback(config)`` (tests). Pages status queries, sleeps
+and the clock are injectable so tests are deterministic and never sleep or hit the network.
 """
 from __future__ import annotations
 
@@ -64,6 +67,7 @@ import json
 import os
 import subprocess
 import sys
+import tempfile
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -111,7 +115,10 @@ PAGES_BUILD_UNCONFIRMED = "pages_build_unconfirmed"
 # slow or superseded Pages queue is not a fault of this lane), but it says so in an output, an
 # annotation and the step summary. The next no-change --deploy-recovery cycle re-checks whether the
 # current main revision is a completed, successful deployment and re-dispatches Pages when it is
-# not, and the writer-queue reaper opens a tracking issue when the latest Pages build on main fails.
+# not. The writer-queue reaper carries it from there: until a successful Pages run deploys main's
+# newest commit -- which contains this push -- the incident stays open, and once main has gone
+# undeployed longer than its grace period it is a problem line on the one tracking issue
+# (writer_cycle_recovery.deployment_state).
 DEPLOYMENT_UNVERIFIED = "deployment_unverified"
 # a site-affecting revision was pushed but the lane configured no Pages dispatch command
 DEPLOY_CHANGED_NO_PAGES_CMD = "deploy_changed_no_pages_cmd"
@@ -173,14 +180,16 @@ class WritebackConfig:
     recovery_commit_grep: str | None = None                        # ... and its message must contain this
     pages_status_cmd: str = DEFAULT_PAGES_STATUS_CMD
     # Seconds one Pages status query may take. A query that has not answered by then reads as
-    # unreadable, exactly like a failed one, so a hung `gh` can never stretch the bounded build wait
-    # (attempts x interval) into the job's own time limit.
+    # unreadable, exactly like a failed one. Inside the build wait every query is also cut to the
+    # time left before the wait's one deadline (confirm_wait_bound), so neither a hung `gh` nor a
+    # hung fetch can stretch the wait into the job's own time limit.
     pages_status_timeout: float = 60.0
     # The evidence store the loss gate protects. Repo-relative. Never disabled in production; tests
     # point it at their own fixture store.
     evidence_path: str = EVIDENCE_PATH
     # injectables (tests)
     sleep_fn: Callable[[float], None] = time.sleep
+    clock_fn: Callable[[], float] = time.monotonic
     test_hook_before_push: str | None = None
     test_hook_fires: int = 0
 
@@ -432,22 +441,67 @@ def _run_validation(repo: Path, commands: list[str], result: WritebackResult) ->
 
 # --- Pages status query + bounded dispatch -----------------------------------
 
-def _pages_runs(cfg: WritebackConfig) -> tuple[list[dict], bool]:
+# The longest one git fetch inside the build wait may take, before the wait's deadline cuts it shorter.
+PAGES_FETCH_TIMEOUT = 60.0
+
+
+def confirm_wait_bound(attempts: int, interval: float, status_timeout: float) -> float:
+    """Seconds the whole build wait may last: the poll schedule, (attempts - 1) x interval, plus
+    one status query for the last poll. ONE monotonic deadline at this distance from the start of
+    the wait cuts every status query, every git fetch and every sleep inside it. The workflows'
+    job budgets are computed from this number (test_deploy_verification_and_lost_race D4, D12)."""
+    return max(attempts - 1, 0) * interval + status_timeout
+
+
+def _bounded(cmd, *, cwd: str, timeout: float, shell: bool = False,
+             capture: bool = True) -> tuple[int | None, str, str]:
+    """(returncode, stdout, stderr) of `cmd`, or (None, "", "") when it ran out of `timeout`.
+
+    A hard wall-clock limit. Output goes to temporary files, not pipes, and on timeout only the
+    direct child is killed and nothing waits for the processes it started: `subprocess.run(...,
+    capture_output=True, timeout=...)` kills the child and then waits for EOF on its pipes, which a
+    grandchild still holding them -- `git fetch`'s transport helper or upload-pack, or the command
+    under a shell that does not exec it -- keeps open for as long as it runs (measured: a 1.5 s
+    limit on a fetch from a remote whose upload-pack hangs returned after 20 s)."""
+    if timeout <= 0:
+        return None, "", ""
+    with tempfile.TemporaryFile() as out, tempfile.TemporaryFile() as err:
+        sink_out = out if capture else subprocess.DEVNULL
+        sink_err = err if capture else subprocess.DEVNULL
+        proc = subprocess.Popen(cmd, shell=shell, cwd=cwd, stdin=subprocess.DEVNULL,
+                                stdout=sink_out, stderr=sink_err)
+        try:
+            rc = proc.wait(timeout=timeout)
+        except subprocess.TimeoutExpired:
+            proc.kill()
+            try:
+                proc.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                pass
+            return None, "", ""
+        out.seek(0)
+        err.seek(0)
+        return (rc, out.read().decode("utf-8", errors="replace"),
+                err.read().decode("utf-8", errors="replace"))
+
+
+def _pages_runs(cfg: WritebackConfig, timeout: float | None = None) -> tuple[list[dict], bool]:
     """Return (runs, query_ok). query_ok is False when the status command itself failed
-    (e.g. missing token) -- callers must NOT treat that as 'deployed'."""
+    (e.g. missing token) or did not answer in time -- callers must NOT treat that as 'deployed'.
+    `timeout`, when given, cuts the query shorter than pages_status_timeout (the build wait passes
+    the time left before its deadline)."""
     if not cfg.pages_status_cmd:
         return [], False
-    try:
-        proc = subprocess.run(cfg.pages_status_cmd, shell=True, cwd=str(cfg.repo), capture_output=True,
-                              text=True, timeout=cfg.pages_status_timeout)
-    except subprocess.TimeoutExpired:
-        sys.stderr.write(f"pages status query did not answer within {cfg.pages_status_timeout}s\n")
+    limit = cfg.pages_status_timeout if timeout is None else min(timeout, cfg.pages_status_timeout)
+    rc, stdout, stderr = _bounded(cfg.pages_status_cmd, cwd=str(cfg.repo), timeout=limit, shell=True)
+    if rc is None:
+        sys.stderr.write(f"pages status query did not answer within {limit:.0f}s\n")
         return [], False
-    if proc.returncode != 0:
-        sys.stderr.write(f"pages status query failed rc={proc.returncode}: {proc.stderr.strip()}\n")
+    if rc != 0:
+        sys.stderr.write(f"pages status query failed rc={rc}: {stderr.strip()}\n")
         return [], False
     try:
-        data = json.loads(proc.stdout or "[]")
+        data = json.loads(stdout or "[]")
     except json.JSONDecodeError:
         return [], False
     return (data, True) if isinstance(data, list) else ([], True)
@@ -498,15 +552,27 @@ def _commit_known(repo: Path, sha: str) -> bool:
     return _git(repo, "cat-file", "-e", f"{sha}^{{commit}}", check=False).returncode == 0
 
 
-def _descendants_of(cfg: WritebackConfig, sha: str, others: set[str], cache: dict[str, bool]) -> set[str]:
+def _fetch_bounded(cfg: WritebackConfig, timeout: float) -> bool:
+    """`git fetch <remote> <branch>`, killed when it has not finished within `timeout` (see
+    _bounded). True when it finished with rc 0. A fetch cut short leaves the run list's unknown
+    SHAs unknown, which only means they are not counted as descendants."""
+    rc, _out, _err = _bounded(["git", "-C", str(cfg.repo), "fetch", cfg.remote, cfg.branch],
+                              cwd=str(cfg.repo), timeout=timeout, capture=False)
+    return rc == 0
+
+
+def _descendants_of(cfg: WritebackConfig, sha: str, others: set[str], cache: dict[str, bool],
+                    deadline: float | None = None) -> set[str]:
     """The subset of `others` that are strict descendants of `sha` -- a build of one of them deploys
     `sha`'s content. Read-only. A commit this clone has not seen (a push that landed after ours) is
-    fetched, at most once per call; writer checkouts are shallow, so older SHAs in the run list
+    fetched, at most once per call, for at most PAGES_FETCH_TIMEOUT and never past `deadline` (the
+    build wait's, on cfg.clock_fn); writer checkouts are shallow, so older SHAs in the run list
     stay unknown and are simply not descendants. A definite answer is cached; an unknown SHA is not,
     so a descendant that lands later is still recognised."""
     pending = {o for o in others if o and o != sha and o not in cache}
     if any(not _commit_known(cfg.repo, o) for o in pending):
-        _git(cfg.repo, "fetch", cfg.remote, cfg.branch, check=False)
+        limit = PAGES_FETCH_TIMEOUT if deadline is None else min(PAGES_FETCH_TIMEOUT, deadline - cfg.clock_fn())
+        _fetch_bounded(cfg, limit)
     for o in pending:
         if _commit_known(cfg.repo, o):
             cache[o] = _git(cfg.repo, "merge-base", "--is-ancestor", sha, o, check=False).returncode == 0
@@ -535,8 +601,14 @@ def _confirm_pages_build(cfg: WritebackConfig, result: WritebackResult, sha: str
       * the wait ends with no verdict -> pages_build_unconfirmed + deployment_unverified: NOT a
         failure of the run (the data commit is on main and correct), but reported unmistakably --
         an outcome token, a ::warning annotation, the `deployment_unverified` output and a
-        step-summary section saying why. The writer-queue reaper re-judges the eventual Pages
-        outcome on main and opens a tracking issue if the deployment fails.
+        step-summary section saying why. The writer-queue reaper keeps the incident open until a
+        successful Pages run deploys main's newest commit, and lists main as undeployed on its
+        tracking issue once that has lasted longer than its grace period.
+
+    How long: ONE monotonic deadline, confirm_wait_bound() from the start of the wait (19.5 min of
+    polls 30 s apart plus one 60 s query = 20.5 min in production). Every status query and every
+    git fetch is given at most the time left before it, every sleep is cut to it, and no poll
+    starts after it -- so the documented bound holds however slowly `gh` or the remote answer.
 
     `pre_ids` None means the pre-dispatch snapshot could not be read. A failed run for `sha` then
     cannot be attributed to this dispatch -- it may be the stale build the dispatch was meant to
@@ -551,15 +623,18 @@ def _confirm_pages_build(cfg: WritebackConfig, result: WritebackResult, sha: str
     unattributed_failure = False # a failed run for `sha` that pre_ids None leaves unattributable
     pending_own = False          # in the last readable poll, a run for `sha` was still open
     descendants: dict[str, bool] = {}
+    deadline = cfg.clock_fn() + confirm_wait_bound(cfg.pages_confirm_attempts, cfg.pages_confirm_interval,
+                                                   cfg.pages_status_timeout)
     for attempt in range(1, cfg.pages_confirm_attempts + 1):
-        runs, ok = _pages_runs(cfg)
+        # A query with no time left does not run at all (_bounded), and reads as unreadable.
+        runs, ok = _pages_runs(cfg, timeout=deadline - cfg.clock_fn())
         if ok:
             queried = True
             on_branch = [run for run in runs if str(run.get("headBranch")) == cfg.pages_ref]
             own = [run for run in on_branch if str(run.get("headSha")) == sha
                    and (pre_ids is None or str(run.get("databaseId")) not in pre_ids)]
             later = _descendants_of(cfg, sha, {str(run.get("headSha") or "") for run in on_branch},
-                                    descendants)
+                                    descendants, deadline)
             newer = [run for run in on_branch if str(run.get("headSha") or "") in later]
             seen_new = seen_new or bool(own)
             done_own = [run for run in own if str(run.get("status")) == "completed"]
@@ -588,7 +663,10 @@ def _confirm_pages_build(cfg: WritebackConfig, result: WritebackResult, sha: str
             newer_failed = newer_failed or any(str(run.get("conclusion")) in GENUINE_BUILD_FAILURES
                                                for run in done_newer)
         if attempt < cfg.pages_confirm_attempts:
-            cfg.sleep_fn(cfg.pages_confirm_interval)
+            pause = min(cfg.pages_confirm_interval, deadline - cfg.clock_fn())
+            if pause <= 0:
+                break
+            cfg.sleep_fn(pause)
     result.pages_build_outcome = "unconfirmed"
     result.deployment_unverified = True
     _emit(result, PAGES_BUILD_UNCONFIRMED)
@@ -697,8 +775,9 @@ def _write_unverified_summary(cfg: WritebackConfig, sha: str, reason: str, waite
             h.write(f"- sha: `{sha}`\n- workflow: `{cfg.pages_workflow}` ref `{cfg.pages_ref}`\n")
             h.write("- the next no-change deployment-recovery cycle re-checks the current main revision "
                     "and re-dispatches Pages if it is not a completed, successful deployment; the "
-                    "writer-queue reaper opens a tracking issue if the latest Pages build on main "
-                    "fails.\n")
+                    "writer-queue reaper lists main as undeployed on its tracking issue if no "
+                    "successful Pages run has deployed this commit or a later one within its grace "
+                    "period, and clears that line only when one has.\n")
     except OSError:
         pass
 

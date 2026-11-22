@@ -110,8 +110,9 @@ PRODUCTION_VALIDATE = [
 
 
 # Pages BUILD confirmation for this lane, the same bound the command-line writer lanes pass
-# (`--pages-confirm-attempts 40 --pages-confirm-interval 30`, 19.5 minutes): a dispatch accepted
-# by GitHub is not a deployment. G91 enabled it on every writer lane that pushes.
+# (`--pages-confirm-attempts 40 --pages-confirm-interval 30`; with the final 60 s status query a
+# hard 20.5 minutes, automation_writeback.confirm_wait_bound): a dispatch accepted by GitHub is not
+# a deployment. G91 enabled it on every writer lane that pushes.
 PAGES_CONFIRM_ATTEMPTS = 40
 PAGES_CONFIRM_INTERVAL = 30
 
