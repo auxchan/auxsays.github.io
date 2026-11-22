@@ -4602,7 +4602,7 @@ that genuinely failed opens ONE tracking issue (`Automated writer recovery needs
 rewritten when the problems change and closed when all are healthy; run ids, workflow names,
 conclusions and failed step names only.
 
-**Evidence** `test_deploy_verification_and_lost_race.py`, 160 governed checks: the real writeback
+**Evidence** `test_deploy_verification_and_lost_race.py`, 161 governed checks: the real writeback
 against a throwaway bare origin and a scripted Pages run list (superseded, descendant, ancestor,
 unattributable and hung-query cases), the bare script's outputs, every writer's argument list parsed
 by the writeback's own parser, the `Cycle reached main` conditions, run names and re-run checkout

@@ -677,6 +677,21 @@ def section_lost_race() -> None:
               r.outcome == aw.UNSTAGED_CHANGED_PATH and aw.UPSTREAM_ADVANCED in r.outcomes
               and not r.lost_race, f"{r.outcome} {r.outcomes}")
 
+    def refusal(stderr: str) -> subprocess.CompletedProcess:
+        return subprocess.CompletedProcess(["git", "push"], 1, "", stderr)
+
+    words = {
+        "fetch first": aw._refused_by_race(refusal(
+            " ! [rejected]        HEAD -> main (fetch first)\nerror: failed to push some refs")),
+        "non-fast-forward": aw._refused_by_race(refusal(
+            " ! [rejected]        HEAD -> main (non-fast-forward)\nerror: failed to push some refs")),
+        "hook": not aw._refused_by_race(refusal(
+            " ! [remote rejected] HEAD -> main (pre-receive hook declined)\nerror: failed to push some refs")),
+        "network": not aw._refused_by_race(refusal("fatal: unable to access: Could not resolve host")),
+    }
+    check("B12 a push refused because main moved is told apart, in both of git's words, from a hook or "
+          "network refusal", all(words.values()), str(words))
+
     check("B9 the recoverable set is exactly the three race outcomes",
           aw.RECOVERABLE_LOST_RACE_OUTCOMES == {aw.REBASE_CONFLICT, aw.VALIDATION_FAILED_AFTER_REBASE,
                                                 aw.RETRY_EXHAUSTED},
