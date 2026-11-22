@@ -728,10 +728,18 @@ observed automatically: that needs the KB source assessment and a deterministic 
 
 **Residual** One malformed entry still empties the whole file in memory. QA errors on it in every mode, so it can
 never publish silently. Two entries for one release that name different replacements raise no warning; the page
-shows the one verified earlier (a QA warning for that case is the follow-up).
+shows the one verified earlier (verified the same day: the smaller id) (a QA warning for that case is the follow-up).
 
 **Reopen only if** a valid second entry is refused or empties the file; a page's lifecycle details change with file
 order; or a release with any valid entry naming its build is not AVOID.
+
+Review-limit exception (GPT standing rule Q1b, 2026-11-21). Round 2 confirmed the production fix and found one test
+gap: neither the earliest-verified rule nor the id tie-break was pinned (dropping the tie-break, ordering by the
+whole entry only, or reversing the tie-break all survived). The reviewer's exact test change was applied verbatim:
+E1B now covers both builds, a same-day entry E1T, two whole-entry invariants, and mutant G94-X4 (the tie-break
+dropped). The suite goes from 11 to 12 checks. No production code changed. Measured at the corrected head: 12/12
+passing; the tie-dropped, whole-entry-only and tie-reversed mutants are killed (W2, X3 and X4 fail under each:
+9/12). One independent verifier confirmed the diff before merge.
 
 ---
 

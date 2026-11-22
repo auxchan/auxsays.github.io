@@ -24,7 +24,7 @@ entry, so a further withdrawal fails both blocking suites until the same reviewe
 them -- and it still needs the owner's approval and the Microsoft source/terms decision first.
 
   W1  two withdrawals on different releases are both kept, through the deploy's own loader
-  W2  a second entry for the SAME release, verified later: still AVOID on the earlier verified entry's
+  W2  a second entry for the SAME release, verified later or the same day: still AVOID on the earlier verified entry's
       details, in either file order, whether the later entry's id sorts before or after the earlier one's
   W3  reordering the file changes nothing in the projection (every permutation)
   W4  re-ingesting the same fact (an exact duplicate, or the same file twice) changes nothing
@@ -120,14 +120,28 @@ def win(version: str, kb: str, build: str, update_type: str = "2026-03 D", **ove
 # earliest VERIFIED entry, never on whichever id happens to sort first or last.
 E1 = entry("KB5000002", ["26200.2000", "26100.2000"], "KB5000003", "2026-11-06")
 E2 = entry("KB5000012", ["26200.3000"], "KB5000013", "2026-12-06")
-E1B = entry("KB5000002", ["26200.2000"], "KB5000099", "2026-12-10",
+E1B = entry("KB5000002", ["26100.2000", "26200.2000"], "KB5000099", "2026-12-10",
             id=f"{WIN}:KB5000002:restated",
             official_url="https://support.microsoft.com/en-us/test/kb5000002-restated")
 E1C = entry("KB5000002", ["26200.2000"], "KB5000098", "2026-12-12",
             id=f"{WIN}:KB5000002:withdrawn-for-new-installs:restated",
             official_url="https://support.microsoft.com/en-us/test/kb5000002-restated-again")
+# Verified the SAME day as E1: only the id tie-break decides, and E1's id sorts first while E1T's whole
+# entry sorts first -- so neither file order nor whole-entry order can stand in for the id tie-break.
+E1T = entry("KB5000002", ["26100.2000", "26200.2000"], "KB5000097", "2026-11-06",
+            id=f"{WIN}:KB5000002:x-same-day",
+            official_url="https://support.microsoft.com/en-us/test/kb5000002-same-day")
+
+
+def _whole(e: dict) -> str:
+    return repr(sorted((str(k), repr(v)) for k, v in e.items()))
+
+
 assert E1B["id"] < E1["id"] < E1C["id"] and E1["verified_at"] < E1B["verified_at"] < E1C["verified_at"], \
     "W2's fixture must keep the later-verified ids on both sides of E1's"
+assert _whole(E1B) < _whole(E1) < _whole(E1C), "W2's later-verified entries must straddle E1's whole-entry order"
+assert E1T["verified_at"] == E1["verified_at"] and E1["id"] < E1T["id"] and _whole(E1T) < _whole(E1), \
+    "W2's same-day entry must lose on id and win on whole-entry order"
 P25 = win("25H2", "KB5000002", "26200.2000")
 P24 = win("24H2", "KB5000002", "26100.2000")
 P2 = win("25H2", "KB5000012", "26200.3000")
@@ -176,15 +190,15 @@ def check_same_release() -> None:
     earlier = ("AVOID", "KB5000003", E1["official_url"])
     seen: dict[str, tuple] = {}
     errs: list[str] = []
-    for name, later in (("E1B", E1B), ("E1C", E1C)):
+    for name, later in (("E1B", E1B), ("E1C", E1C), ("E1T", E1T)):
         errs += vr.lifecycle_errors([E1, later])
         forward, backward = loaded([E1, later])[0], loaded([later, E1])[0]
         seen[name] = (len(forward), len(backward), shown(P25, forward), shown(P25, backward),
                       shown(P24, forward), shown(P24, backward))
     alone = (shown(P25, [E1B]), shown(P25, [E1C]), shown(P25, [E1]))
-    check("G94-W2 a second entry for the SAME release, verified later, is kept: the page stays AVOID and rests "
-          "on the earlier VERIFIED entry (its replacement and article) in either file order, whether the later "
-          "entry's id sorts before E1's (E1B) or after it (E1C); each entry alone still withdraws it",
+    check("G94-W2 a second entry for the SAME release, verified later or the same day, is kept: the page stays AVOID and rests "
+          "on the earlier VERIFIED entry (its replacement and article) in either file order, whether a later "
+          "entry's id sorts before E1's (E1B) or after it (E1C), or a same-day entry loses on id (E1T); each entry alone still withdraws it",
           not errs and all(s[:2] == (2, 2) and s[2:] == (earlier,) * 4 for s in seen.values())
           and [a[0] for a in alone] == ["AVOID"] * 3 and (alone[0][1], alone[1][1]) == ("KB5000099", "KB5000098"),
           f"errors={errs} seen={seen} alone={alone}")
@@ -336,6 +350,9 @@ def check_mutations(tmp: Path) -> None:
          lambda: (check_same_release(), check_reordering()), pd, "lifecycle_for", first_match_lifecycle_for),
         ("G94-X3 the entry order led by id instead of verified_at (a later-verified entry can win)",
          lambda: (check_same_release(), check_reordering()), pd, "_lifecycle_order", id_first),
+        ("G94-X4 the id tie-break dropped (file order decides between entries verified the same day)",
+         lambda: (check_same_release(), check_reordering()), pd, "_lifecycle_order",
+         lambda e: (pd._text(e.get("verified_at")),)),
     ]
     for label, body, owner, name, replacement in cases:
         if not hasattr(owner, name):

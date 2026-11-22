@@ -362,7 +362,7 @@ auxsays/scripts/tests/test_growth3_verdict_policy.py = 156
 # entries (W6), the shipped file pinned to the owner-approved entry (C1) and the corpus with a further
 # withdrawal appended, unchanged (C2); one mutant per fix (X1 the cap, X2 first match), and X3 an entry
 # order led by id instead of verified_at (G94 review: it survived every suite before W2's E1B id sorted first).
-auxsays/scripts/tests/test_official_withdrawal_completeness.py = 11
+auxsays/scripts/tests/test_official_withdrawal_completeness.py = 12
 # G35-04, the deterministic verdict-reason producer (lib/verdict_reason_producer): the vendor-
 # confirmed-serious class on frozen copies of the stored statements, the six named pages (VRP-V1..V7);
 # the user-corroborated install-failure class and its mandatory independence gate (VRP-I1..I6); the
