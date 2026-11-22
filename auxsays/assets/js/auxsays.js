@@ -523,10 +523,20 @@ document.addEventListener('DOMContentLoaded', () => {
     };
   };
 
+  // PARALLEL RELEASE TRACKS (G93). Adobe services Acrobat and Acrobat Reader on two tracks at the
+  // same time, Continuous (26.003.22110) and Classic (20.005.30838); rec[13] carries the record's
+  // `target_track`. A Continuous release is not an update to a Classic installation, so for these
+  // products UPDATE AVAILABLE needs a newer stable release on the SAME non-empty track. A Classic
+  // reader with no newer Classic release gets no target, and a track missing on either side names
+  // nothing. Only these products, by id: no other product's comparison changes. The Python port
+  // (lib/evidence_overview.TRACK_SCOPED_PRODUCTS) holds the same list; test_acrobat_track_scope pins
+  // the two equal and runs one fixture set through both.
+  const TRACK_SCOPED_PRODUCTS = new Set(['adobe-acrobat-pro', 'adobe-acrobat-reader']);
+
   const installedState = (entry, product) => {
     const recs = Array.isArray(product && product.recs) ? product.recs : [];
     if (!entry) return { state: '' };
-    // rec shape: [version, build, date, url, beta, ..., notes platform (11)]
+    // rec shape: [version, build, date, url, beta, ..., notes platform (11), scope (12), track (13)]
     // Nothing tracked means nothing to compare against. Reporting "newer releases exist" here
     // would be an assertion about records that do not exist.
     if (!recs.length) return { state: '' };
@@ -631,7 +641,18 @@ document.addEventListener('DOMContentLoaded', () => {
     // The applicable run is the SAME list the target is drawn from, so the path cannot end anywhere
     // other than the release this state already named. Betas are not steps on it; they are counted
     // so the panel can say so instead of silently dropping them.
-    const applicable = buildAware ? sameTrain : newerStable;
+    // On a track-scoped product only the reader's own track is a run at all: a newer release on the
+    // other track is newer, but it is not an update to theirs (G93).
+    const trackScoped = TRACK_SCOPED_PRODUCTS.has(String((product && product.id) || '').trim().toLowerCase());
+    const myTrack = String(recs[index][13] || '').trim();
+    const onMyTrack = (r) => !trackScoped || (myTrack !== '' && String(r[13] || '').trim() === myTrack);
+    const applicable = (buildAware ? sameTrain : newerStable).filter(onMyTrack);
+    if (!applicable.length) {
+      return Object.assign(
+        { state: 'NEWER TRACKED VERSION EXISTS', latest: recs[0], mine: recs[index] },
+        newerView(newer, recs, entry.d, false)
+      );
+    }
     const hidden = Math.max(0, applicable.length - PATH_LIMIT);
     return {
       state: 'UPDATE AVAILABLE',
@@ -640,8 +661,11 @@ document.addEventListener('DOMContentLoaded', () => {
       // other row carries instead of re-deriving identity from the stored entry.
       mine: recs[index],
       // Only a train-scoped target needs the narrower label: it is the newest on the reader's line,
-      // not the newest tracked, and on Windows those are different records.
-      latestScope: buildAware ? 'line' : '',
+      // not the newest tracked, and on Windows those are different records. A track-scoped target
+      // needs it only when a release is dated after it (a Classic reader while Continuous moves on);
+      // the newest release of all keeps the plain label.
+      latestScope: (buildAware || (trackScoped && recs.some((r) => dateOf(r) > dateOf(applicable[0]))))
+        ? 'line' : '',
       pathKind: 'upgrade',
       parallel: false,
       lines: [],

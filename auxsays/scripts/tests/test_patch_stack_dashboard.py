@@ -348,7 +348,9 @@ def run() -> int:
     # passed over nothing at all. An exact width is what turned that into a visible failure.
     # 11 -> 12: rec[11] says whose release notes a record holds, for platform-split products (AUX-050).
     # 12 -> 13: rec[12] is the verdict's scope, printed beside rec[5] (GROWTH-3 review 1, D1).
-    REC_WIDTH = 13
+    # 13 -> 14: rec[13] is the record's release track (Acrobat Continuous / Classic), so the update
+    # comparison stays on the reader's own track (G93).
+    REC_WIDTH = 14
     bad_shape, unsorted, over_cap, bad_more = [], [], [], []
     build_aware, beta_flagged = [], []
     for entry in entries:
@@ -364,7 +366,8 @@ def run() -> int:
                     and isinstance(rec[5], str) and rec[5]
                     and isinstance(rec[6], int) and isinstance(rec[7], int)
                     and isinstance(rec[8], str) and isinstance(rec[9], int)
-                    and rec[10] in (0, 1) and isinstance(rec[12], str)):
+                    and rec[10] in (0, 1) and isinstance(rec[12], str)
+                    and isinstance(rec[13], str)):
                 bad_shape.append(f"{entry.get('id')}: {rec!r}")
                 break
         well_formed = [r for r in recs if isinstance(r, list) and len(r) == REC_WIDTH]
