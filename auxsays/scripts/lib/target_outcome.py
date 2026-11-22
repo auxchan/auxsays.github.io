@@ -20,9 +20,10 @@ only on explicit contradictory language. Silence keeps today's behaviour.
 THE CONTRACT, and the real false positive that forced each rule:
 
   R1  A target the reporter DECLARED running is never vetoed. Their own structured self-report
-      outranks ambient prose. Without R1, obs #13495 / #13518 / #13562 were wrongly dropped: each
-      declares 32.1.2 in the template and says "cannot reproduce" about the REPRODUCER, not the
-      version.
+      outranks ambient prose. Without R1, obs #13495 / #13562 were wrongly dropped: each declares
+      32.1.2 in the template and says "cannot reproduce" about the REPRODUCER, not the version. So
+      was obs #13518, which declares 32.1.2 and reports that it cannot be installed: its hope that
+      32.1.2 "will work" read as a working claim (no longer, see _HYPOTHESIS_SENSITIVE; AUX-129).
   R2  A cue may not bind across another identity. In "fails ... in 32.2.0, works in 32.1.2",
       `works` must not reach 32.2.0 nor `fails` reach 32.1.2. Applied symmetrically to affected and
       excluding cues so it cannot bias the outcome. Without R2, obs #13708's 32.2.0 -- the version
@@ -226,6 +227,142 @@ _POLARITY_SENSITIVE = frozenset({"works_on_target", "target_works", "target_succ
 _POLARITY_INVERTER = re.compile(
     r"\b(?:stopped|no\s+longer|never|not|n't|ceased|quit|fail(?:s|ed|ing)?\s+to)\b", re.I)
 
+# The two cues built on the verb "work", in its two directions. A hoped-for, expected, conditional
+# or requested outcome is not a claim that the version works. Real: obs #13518's Expected Behavior
+# field says "I hope this (obs 32.1.2) will work with Ubuntu", and its Current Behavior field says it
+# cannot be installed on Ubuntu 26.04 -- an install FAILURE that target_works read as "the version
+# works". Only these two cues are guarded; no other cue changes.
+_HYPOTHESIS_SENSITIVE = frozenset({"works_on_target", "target_works"})
+
+_WORK_VERB = re.compile(r"\bwork(?:s|ed|ing)?\b", re.I)
+# What target_works' own pattern refuses directly after its verb: "work around", "work flow".
+_NOT_A_WORK_VERB = re.compile(r"\s*(?:around|flow)", re.I)
+
+# A modal or expectation frame directly in front of the verb: "32.1.2 should work", "it will work
+# on 32.1.2", "32.1.2 is supposed to work", "it'll hopefully work with 32.1.2". At most one adverb
+# may sit between the frame and the verb. Bare "to" is deliberately absent: "I got 32.1.2 to work"
+# is a genuine working claim.
+_HYPOTHETICAL_FRAME = re.compile(
+    r"(?:\b(?:will|would|should|could|might|may|shall|ought\s+to"
+    r"|(?:expected|supposed|meant|going|likely)\s+to|hopefully)|['\u2019]ll)"
+    r"(?:\s+(?:also|still|hopefully|probably|definitely|just|then|now|really))?\s+$", re.I)
+
+# A hypothetical lead directly in front of the clause's subject: "I hope 32.1.2 works", "if it
+# works on 32.1.2", "expecting 32.1.2 to work", "whether it works with 32.1.2", "please make it
+# work on 32.1.2". Only closed-class filler (a determiner, a pronoun, the product's own name, an
+# opening bracket) may sit between the lead and what it governs, so a lead that belongs to a
+# DIFFERENT clause -- "If you need a stable build, 32.1.2 works fine" -- leaves the claim standing.
+# The verb leads (hope, expect, wish, want, need) are captured as `verb`: only they can be the
+# object of "as", "what" and the like (see _LEAD_GOVERNOR).
+_LEAD_WORD = (r"(?:(?P<verb>hope[sd]?|hoping|expect(?:s|ed|ing)?|wish(?:es|ed)?|want(?:s|ed)?"
+              r"|need(?:s|ed)?)|hopefully|if|whether|please\s+(?:make|let|get))")
+# An auxiliary that opens a question by inversion: "would 32.1.2 work", "will it work with 32.1.2".
+_LEAD_AUX = r"(?:will|would|should|could|can|does|do|did)"
+# The optional bracket is a group of its own, so a run of whitespace can be split only one way.
+# Written as "\s*\(?\s*", two \s* could split the same run in n ways, and a lead word followed by a
+# long run of spaces cost time quadratic in the run on untrusted public text.
+_LEAD_FILLER = (r"\s*(?:\(\s*)?(?:this|that|the|it|everything|new|newer|latest|current|next"
+                r"|version|obs|studio|v)\b")
+# Before the TARGET (target_works): the target itself is the subject, so the lead may touch it.
+_LEAD_BEFORE_TARGET = re.compile(
+    rf"\b(?:{_LEAD_WORD}|{_LEAD_AUX})(?:{_LEAD_FILLER})*\s*(?:\(\s*)?$", re.I)
+# ...and only when the verb follows the target directly ("hoping 32.1.2 works", "expecting 32.1.2 to
+# work"). Otherwise the lead governs a different verb: in "I hoped 32.1.2 would fix it, and it works
+# now" the hope is about the fix and "it works now" is a genuine claim.
+_TIGHT_GAP = re.compile(
+    r"^[\s)\]\"'\u2019]*(?:to\s+)?(?:(?:also|still|really|actually|just|even|ever|properly)\s+)?$",
+    re.I)
+# Before the VERB (works_on_target, and a later verb of target_works): an inverted auxiliary needs
+# a subject between it and the verb, so "it does work on 32.1.2" -- emphatic, and a genuine claim --
+# is not read as a question. A lead word may take "to" before the verb ("I want it to work on
+# 32.1.2", "it needs to work with 32.1.2"); an auxiliary and the frame may not, because "I got it to
+# work on 32.1.2" and "I managed to make it work with 32.1.2" report an outcome achieved.
+_LEAD_BEFORE_VERB = re.compile(
+    rf"\b(?:{_LEAD_WORD}(?:{_LEAD_FILLER})*(?:\s+to)?|{_LEAD_AUX}(?:{_LEAD_FILLER})+)\s*$", re.I)
+# A verb lead that is itself the object of "as", "like", "what", "when", "if" or "than" comments on
+# the claim instead of hoping for it: "As expected 32.1.2 works fine", "Just what I needed the new
+# 32.1.2 works great", "If needed it works on 32.1.2". The governor may carry a subject, an
+# auxiliary and one adverb ("as I had hoped", "as you'd expect", "exactly as originally expected").
+_LEAD_GOVERNOR = re.compile(
+    r"\b(?:as|like|what|when|whenever|if|than)\s+"
+    r"(?:(?:i|we|you|they|he|she|one|anyone|everyone|people)(?:['\u2019](?:d|ve|ll|m|re))?\s+)?"
+    r"(?:(?:had|have|has|was|were|is|are|am|did|do|does|would|could|might|may|can|will|should)\s+)?"
+    r"(?:(?:originally|initially|always|really|first|previously|all)\s+)?$", re.I)
+
+# Frames, leads and governors sit directly in front of what they govern, so each is read in a
+# bounded stretch before it. The bound keeps every read linear on untrusted bodies of up to 65,536
+# characters (GitHub's issue-body limit). Only an absurd run of whitespace or filler can push one
+# further away, and then it is not read.
+_LEAD_REACH = 160
+
+
+def _lead_start(text: str, pos: int) -> int:
+    """Where the stretch read for a frame or lead before ``pos`` begins: pos's own clause, at most
+    _LEAD_REACH characters back. A full stop, ';', '!', '?' or a line break -- the break between a
+    title and a body -- ends a clause, so a lead never reaches across one."""
+    floor = max(0, pos - _LEAD_REACH)
+    return max([floor] + [text.rfind(mark, floor, pos) + 1 for mark in ".;!?\n"])
+
+
+def _led(pattern: re.Pattern, text: str, pos: int) -> bool:
+    """Does ``pattern`` find, directly before ``pos``, a hypothetical lead that governs what follows?"""
+    hit = pattern.search(text, _lead_start(text, pos), pos)
+    if hit is None:
+        return False
+    verb = hit.start("verb")
+    # A want/need lead touching the work verb closes a relative clause, not a hope: in "Everything I
+    # need works with 32.1.2" the verb's subject is "everything". "I want 32.1.2 to work" keeps it.
+    if (pattern is _LEAD_BEFORE_VERB and verb >= 0
+            and hit.group("verb").lower().startswith(("want", "need"))
+            and not text[hit.end("verb"):pos].strip()):
+        return False
+    return not (verb >= 0 and _LEAD_GOVERNOR.search(text, _lead_start(text, verb), verb))
+
+
+def _verb_is_hypothetical(text: str, pos: int) -> bool:
+    """Is the work verb at ``pos`` framed or led as an outcome hoped for rather than reported?"""
+    return (bool(_HYPOTHETICAL_FRAME.search(text, _lead_start(text, pos), pos))
+            or _led(_LEAD_BEFORE_VERB, text, pos))
+
+
+def _is_hypothetical(text: str, match: re.Match, basis: str, target: str) -> bool:
+    """Does this working-claim match describe a hoped-for, expected, conditional or requested
+    outcome rather than a present or past one? Read only within the match's own clause."""
+    if basis == "works_on_target":
+        # The match opens with a work verb and closes with the target. Judge the verb the
+        # preposition binds to the target -- the LAST one from which the cue still reaches that same
+        # target -- never simply the first: in "Hope it works for you, it works on 32.1.2 for me"
+        # the hope is about the reader, and "it works on 32.1.2" is a genuine claim.
+        anchor = match.start()
+        for verb in _WORK_VERB.finditer(text, match.start() + 1, match.end()):
+            again = match.re.match(text, verb.start())
+            if again is not None and again.end() == match.end():
+                anchor = verb.start()
+        return _verb_is_hypothetical(text, anchor)
+    # target_works: the match opens with the target and closes with the FIRST work verb after it.
+    verbs = list(_WORK_VERB.finditer(text, match.start(), match.end()))
+    if not verbs:
+        return False
+    gap = text[match.start() + len(target):verbs[-1].start()]
+    if not (_HYPOTHETICAL_FRAME.search(gap)
+            or (_TIGHT_GAP.match(gap) and _led(_LEAD_BEFORE_TARGET, text, match.start()))):
+        return False
+    # The cue's lazy match stops at that first verb, so a later work verb the cue also reaches
+    # ("32.1.2 should work, and it does work") was never judged. It keeps the claim unless it is
+    # hypothetical in its own right or negated ("... but it never works"). The cue's own gap admits
+    # no full stop, so a later verb can never reach across another dotted version identity.
+    previous = verbs[-1]
+    for verb in _WORK_VERB.finditer(text, previous.end()):
+        if match.re.fullmatch(text, match.start(), verb.end()) is None:
+            break
+        if _NOT_A_WORK_VERB.match(text, verb.end()):
+            continue
+        negated = _POLARITY_INVERTER.search(text, previous.end(), verb.start())
+        if not (negated or _verb_is_hypothetical(text, verb.start())):
+            return False
+        previous = verb
+    return True
+
 
 @dataclass(frozen=True)
 class Outcome:
@@ -304,6 +441,11 @@ def _first_hit(text: str, target: str, cues: list[tuple[str, str]]) -> tuple[str
     for pattern, basis in cues:
         for match in re.finditer(pattern.replace(_T, escaped), scanned, re.I):
             if _spans_another_identity(match.group(0), target):
+                continue
+            if basis in _HYPOTHESIS_SENSITIVE and _is_hypothetical(scanned, match, basis, target):
+                # "I hope this (obs 32.1.2) will work" hopes; it does not report. Read before the
+                # question test, whose clause scan is unbounded: both skip, and this one is
+                # bounded, so a body of many hoped-for matches stays linear.
                 continue
             if basis in _POLARITY_SENSITIVE and _is_question(scanned, match.start(), match.end()):
                 # "Was this fixed in KB5121003?" ASKS whether the target is healthy; it does not
