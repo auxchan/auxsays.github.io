@@ -718,30 +718,61 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
         way to the verdict. AUXSAYS answers "should I install this update, wait, test it, or avoid
         it?", so the decision leads and its evidence follows.
       {%- endcomment -%}
+      {%- comment -%}
+        THE REVIEWED FIX (G95, AUX-132). A reviewed reason that names the version the vendor fixed its
+        problem in gets one line, "The reviewed problem that applies (its scope) was fixed in (product)
+        (version).", with the vendor's credit only where the reason's official confirmation names that
+        very version. It is printed in the verdict box DIRECTLY AFTER the clause of the verdict line that
+        states that reviewed finding, and only under a printed WAIT. The verdict line joins every reviewed
+        reason into one paragraph, so a line printed after the whole paragraph sat after whichever finding
+        came last: on OBS 32.2.2 the macOS 27.2 fix line followed the menu-bar crash. So the paragraph is
+        split just after the line's own finding: the paragraph up to and including that finding, the fixed
+        line, then the rest of the paragraph, word for word, under the same styling (its class keeps the
+        verdict line the only paragraph whose class attribute is exactly update-decision-recommendation,
+        which the search metadata and the deploy checks read). The split point is the finding's own stored
+        wording, next_action.fixed_after, which lib/evidence_overview.fixed_placements produces only where it
+        ends a clause exactly once in the line the gate prints; a line whose finding is not found here is not
+        printed. Until G95 the fixed line sat in the way forward, straight after the newer-release note,
+        which names a different and newer release: there it read as a recommendation of that release. Every
+        word is the projections'; this decides nothing. No projection, no row, no fixed line or a verdict other
+        than WAIT: nothing changes, byte for byte. Kept free of include tags, so the standalone render
+        harnesses that cut at the first include still read it.
+      {%- endcomment -%}
+      {%- assign dfx_tail = '' -%}
+      {%- if decision_label == 'WAIT' -%}
+        {%- assign dfx_version = page.update_version | append: '' | strip -%}
+        {%- assign dfx_build = page.target_build | append: '' | strip -%}
+        {%- assign dfx_key = page.product_id | default: '' | strip | append: '|' | append: dfx_version | append: '|' | append: dfx_build -%}
+        {%- assign dfx_next = site.data.evidence_overview_projection.pages[dfx_key].next_action -%}
+        {%- assign dfx_lines = dfx_next.fixed | default: empty -%}
+        {%- assign dfx_after = dfx_next.fixed_after | default: empty -%}
+        {%- assign dfx_rest = decision_body -%}
+        {%- assign dfx_first = '' -%}
+        {%- capture dfx_tail -%}
+          {%- for dfx_line in dfx_lines -%}
+            {%- assign dfx_anchor = dfx_after[forloop.index0] | default: '' | strip -%}
+            {%- if dfx_anchor != '' and dfx_rest contains dfx_anchor -%}
+              {%- assign dfx_head = dfx_rest | split: dfx_anchor | first | default: '' | append: dfx_anchor -%}
+              {%- assign dfx_rest = dfx_rest | remove_first: dfx_head | strip -%}
+              {%- if dfx_first == '' -%}
+                {%- assign dfx_first = dfx_head | strip -%}
+              {%- else %}
+          <p class="update-decision-recommendation update-decision-continued">{{ dfx_head | strip }}</p>
+              {%- endif %}
+          <p class="update-decision-fixed">{{ dfx_line | escape }}</p>
+            {%- endif -%}
+          {%- endfor -%}
+          {%- if dfx_first != '' and dfx_rest != '' %}
+          <p class="update-decision-recommendation update-decision-continued">{{ dfx_rest }}</p>
+          {%- endif -%}
+        {%- endcapture -%}
+        {%- if dfx_first != '' -%}{%- assign decision_body = dfx_first -%}{%- endif -%}
+      {%- endif -%}
       <div id="verdict" class="update-decision-box update-decision-box--{{ evidence_state_class }}">
         <div class="update-decision-box__header">
           <span class="update-decision-eyebrow">AUXSAYS verdict</span>
           <strong>{{ decision_label }}</strong>{% if decision_scope != '' %} <span class="update-decision-scope">{{ decision_scope }}</span>{% endif %}
-          <p class="update-decision-recommendation">{{ decision_body }}</p>
-          {%- comment -%}
-            THE REVIEWED FIX (G95, AUX-132). A reviewed reason that names the version the vendor fixed its
-            problem in gets one line, "The reviewed problem that applies (its scope) was fixed in (product)
-            (version).", with the vendor's credit only where the reason's official confirmation names that
-            very version. It is printed HERE, directly beneath the line that states that reviewed finding
-            in its own scope, and only under a printed WAIT. Until G95 it sat in the way forward, straight
-            after the newer-release note, which names a different and newer release: there it read as a
-            recommendation of that release. Every word is the evidence overview projection's
-            (next_action.fixed, lib/evidence_overview.fixed_lines, the one producer); this decides nothing.
-            No projection or no row: nothing prints, byte for byte. Kept free of include tags, so the
-            standalone render harnesses that cut at the first include still read the whole verdict box.
-          {%- endcomment -%}
-          {%- assign dfx_version = page.update_version | append: '' | strip -%}
-          {%- assign dfx_build = page.target_build | append: '' | strip -%}
-          {%- assign dfx_key = page.product_id | default: '' | strip | append: '|' | append: dfx_version | append: '|' | append: dfx_build -%}
-          {%- assign dfx_lines = site.data.evidence_overview_projection.pages[dfx_key].next_action.fixed | default: empty -%}
-          {%- if decision_label == 'WAIT' %}{% for dfx_line in dfx_lines %}
-          <p class="update-decision-fixed">{{ dfx_line | escape }}</p>
-          {%- endfor %}{% endif %}
+          <p class="update-decision-recommendation">{{ decision_body }}</p>{{ dfx_tail }}
           {%- comment -%}
             PROVENANCE (G66). An AVOID rests on an official statement; the line above restates it in
             AUXSAYS words, and this links the statement itself so a reader can check it: a plain deep

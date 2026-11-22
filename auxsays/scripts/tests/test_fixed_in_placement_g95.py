@@ -9,9 +9,13 @@ not matched its changes to the reports on this page."). There it read as a recom
 contradiction of the note, and it did not say where the fact came from. Pinned here:
 
   [P] placement, rendered with the shipped Liquid through the real patch page (the layout from its top to the compact
-      monitoring line, every include resolved): the line prints once, in the verdict box, directly beneath the line
-      that states the reviewed finding in the same scope words; never in or after the newer-release note or the way
-      forward; nothing where there is no fixed_in; byte for byte nothing without a projection row; only under WAIT
+      monitoring line, every include resolved): the line prints once, in the verdict box, DIRECTLY AFTER the clause
+      of the verdict line that states its own reviewed finding (the verdict line joins every reviewed reason into one
+      paragraph; on 32.2.2 a line printed after the whole paragraph sat after the menu-bar crash, another finding),
+      and the rest of the verdict line continues beneath it word for word; never in or after the newer-release note
+      or the way forward; nothing where there is no fixed_in; byte for byte nothing without a projection row, or
+      where the finding cannot be found; only under WAIT; the producer places a line only where its finding ends a
+      clause exactly once
   [C] the vendor credit ("<vendor>'s release notes for <fixed_in> record a fix for this problem.") appears ONLY where
       the stored reason carries an official confirmation that names this product and exactly the fixed_in version;
       otherwise the plain G87 sentence; the guard refuses a credit for another version
@@ -45,6 +49,7 @@ import yaml  # noqa: E402
 
 from lib import evidence_facts as ef  # noqa: E402
 from lib import evidence_overview as eo  # noqa: E402
+from lib import patch_decision as pd  # noqa: E402
 from lib import verdict_projection as vp  # noqa: E402
 from lib import verdict_reasons as vr  # noqa: E402
 
@@ -61,8 +66,14 @@ NEWER_NOTE = ("Newer release: OBS Studio 33.0.2 (released Nov 20, 2026). OBS Pro
               "affecting this version. Review the official release notes before upgrading. AUXSAYS has not established "
               "an installation verdict for this release. AUXSAYS has not matched its changes to the reports on this "
               "page. See its AUXSAYS page and its official release notes.")
-G95_BLOCK = re.compile(r"\n[ \t]*\{%- comment -%\}\n[ \t]*THE REVIEWED FIX \(G95.*?\{%- endfor %\}\{% endif %\}", re.S)
+G95_BLOCK = re.compile(r"\n[ \t]*\{%- comment -%\}\n[ \t]*THE REVIEWED FIX \(G95.*?\{%- endif -%\}(?=\n[ \t]*<div id=\"verdict\")",
+                       re.S)
+G95_TAIL = '<p class="update-decision-recommendation">{{ decision_body }}</p>{{ dfx_tail }}'
 CUT = "{% include monitoring-status.html mode='compact'"
+REASON_3212 = "obs-studio:32.1.2:macos-accounts-and-docks-lost"
+REASON_3222 = "obs-studio:32.2.2:macos-27-2-launch-crash"
+REASON_MENU = "obs-studio:32.2.2:macos-27-menu-bar-icon-crash"
+VERDICT_LINE = "update-decision-recommendation"
 
 PASS = FAIL = 0
 FAILURES: list[str] = []
@@ -183,6 +194,37 @@ def paragraphs(html: str) -> list[tuple[str, str]]:
             for m in re.finditer(r'<p(?: class="([^"]*)")?[^>]*>(.*?)</p>', html, re.S)]
 
 
+def without_g95(head: str) -> str:
+    """The page head with the G95 block and its output removed: what the layout printed before G95."""
+    out = G95_BLOCK.sub("", head, count=1)
+    return out.replace(G95_TAIL, '<p class="update-decision-recommendation">{{ decision_body }}</p>', 1)
+
+
+def clause(entry: dict) -> str:
+    """The clause of a volume-based verdict line that states a reviewed finding (patch_decision.public_body)."""
+    return text_of(f"Also {entry.get('verdict')} {entry.get('scope')}: {entry.get('reason')}")
+
+
+def verdict_paras(box: str) -> list[tuple[str, str]]:
+    """The verdict line's paragraphs and the fixed lines between them, in order (the provenance, panel and actions
+    that follow are not part of it)."""
+    return [(c, s) for c, s in paragraphs(box) if c.startswith(VERDICT_LINE) or c == "update-decision-fixed"]
+
+
+def own_finding_problems(box: str, findings: dict[str, str]) -> list[str]:
+    """Every fixed paragraph must come directly after a verdict-line paragraph that ENDS with its own finding
+    (`findings`: fixed line -> the text that states its finding), with nothing between them."""
+    problems, paras = [], verdict_paras(box)
+    for i, (cls, text) in enumerate(paras):
+        if cls != "update-decision-fixed":
+            continue
+        before = paras[i - 1] if i else ("", "")
+        want = findings.get(text)
+        if not want or not before[0].startswith(VERDICT_LINE) or not before[1].endswith(want):
+            problems.append(f"{text[:70]!r} follows {before[1][-90:]!r}")
+    return problems
+
+
 # ------------------------------------------------------------------------------------------------ fixtures
 
 def vrow(i: int, *, version: str, pid: str = OBS) -> dict:
@@ -276,24 +318,47 @@ def run() -> int:
     print("=" * 78)
     records, groups, reasons, verdict, overview, problems = corpus()
     by_key = {vp.page_key(r): r for r in records}
+    by_id = {str(e.get("id")): e for e in reasons}
     layout = (_AUX / "_layouts" / "aux-update.html").read_text(encoding="utf-8")
     head = page_head(layout)
-    head_without = G95_BLOCK.sub("", head, count=1)
+    head_without = without_g95(head)
     sites = {"full": site_for(verdict, overview), "none": site_for(verdict, None)}
-    forged = json.loads(json.dumps(overview))
+
+    def forge(edits: dict) -> dict:
+        doc = json.loads(json.dumps(overview))
+        for key, nxt in edits.items():
+            doc["pages"].setdefault(key, {"url": ""})["next_action"] = nxt
+        return doc
+
     # A row that prints TEST FIRST (32.2.2's menu-bar page is not one; use a reviewed TEST FIRST page) given a fixed
-    # line by hand: the box must not print it, because no WAIT is printed above it.
+    # line by hand, placed after that page's own finding: only the WAIT gate keeps it out of the verdict box.
     tf_key = next((k for k, row in verdict["pages"].items()
                    if row.get("verdict") == "TEST FIRST" and k in by_key), "")
-    forged["pages"].setdefault(tf_key, {"url": ""})["next_action"] = {"kind": "newest", "lines": [eo.NEWEST_LINE],
-                                                                        "fixed": [FIX_3212]}
-    only_fixed = json.loads(json.dumps(overview))
-    only_fixed["pages"][P3211]["next_action"] = {"kind": "newer_release", "lines": [], "fixed": [FIX_3212]}
-    sites["forged"] = site_for(verdict, forged)
-    sites["only_fixed"] = site_for(verdict, only_fixed)
+    tf_reason = str((by_id.get(str(((verdict["pages"].get(tf_key) or {}).get("reasons") or [""])[0])) or {})
+                    .get("reason") or "")
+    sites["forged"] = site_for(verdict, forge({tf_key: {"kind": "newest", "lines": [eo.NEWEST_LINE],
+                                                        "fixed": [FIX_3212], "fixed_after": [tf_reason]}}))
+    sites["only_fixed"] = site_for(verdict, forge({P3211: {"kind": "newer_release", "lines": [], "fixed": [FIX_3212],
+                                                           "fixed_after": [tf_reason]}}))
+    # 32.2.2 with a fixed line for EACH of its two findings (the menu-bar one invented here), in verdict-line order and
+    # reversed; and a line whose finding the verdict line does not state, or that names no finding at all.
+    reason_a, reason_b = str(by_id[REASON_3222]["reason"]), str(by_id[REASON_MENU]["reason"])
+    line_a = f"{FIX_3222} {CREDIT_3222}"
+    line_b = "The reviewed problem that applies if you use the menu-bar icon on macOS 27 was fixed in OBS Studio 99.0.0."
+    base = {"kind": "newer_release", "lines": []}
+    sites["two"] = site_for(verdict, forge({P3222: dict(base, fixed=[line_a, line_b], fixed_after=[reason_a, reason_b])}))
+    sites["reversed"] = site_for(verdict, forge({P3222: dict(base, fixed=[line_b, line_a],
+                                                             fixed_after=[reason_b, reason_a])}))
+    sites["lost"] = site_for(verdict, forge({P3222: dict(base, fixed=[line_a],
+                                                         fixed_after=["A finding this verdict line does not state."])}))
+    sites["unnamed"] = site_for(verdict, forge({P3222: dict(base, fixed=[line_a])}))
+    # A reviewed (not volume-based) WAIT whose HEAD reason names fixed_in: the synthetic credit tree's 80.0.0.
+    c_records, entries, c_verdict, c_overview, unsupported = credit_tree()
+    sites["credit"] = site_for(c_verdict, c_overview)
 
-    def page(key: str) -> dict:
-        return dict(by_key.get(key) or {}, url=(by_key.get(key) or {}).get("permalink"))
+    def page(key: str, recs: dict | None = None) -> dict:
+        src = (recs if recs is not None else by_key).get(key) or {}
+        return dict(src, url=src.get("permalink"))
 
     cases = {}
     for key in (P3212, P3222, P3301, P3211):
@@ -304,42 +369,65 @@ def run() -> int:
     cases["norow:with"] = {"template": head, "page": page(P3212), "site": "none"}
     cases["norow:without"] = {"template": head_without, "page": page(P3212), "site": "none"}
     cases["forged:tf"] = {"template": head, "page": page(tf_key), "site": "forged"}
+    cases["forged:tf:without"] = {"template": head_without, "page": page(tf_key), "site": "forged"}
     cases["only_fixed:next"] = {"template": "{% include patch-evidence-overview.html part='next' record=page %}",
                                 "page": page(P3211), "site": "only_fixed"}
+    for name in ("two", "reversed", "lost", "unnamed"):
+        cases[f"{name}:{P3222}"] = {"template": head, "page": page(P3222), "site": name}
+    c_by_key = {vp.page_key(r): r for r in c_records}
+    cases["credit:80"] = {"template": head, "page": page(f"{OBS}|80.0.0|", c_by_key), "site": "credit"}
     out = render(cases, sites)
 
     section("[P] placement, rendered through the real patch page")
     errs = [k for k, v in out.items() if str(v).startswith("<<ERR")]
     check("P0 the liquid gem renders every case through the shipped layout and includes, and the corpus loads",
           "__error__" not in out and not errs and not problems and len(out) == len(cases)
-          and G95_BLOCK.search(head) is not None,
+          and G95_BLOCK.search(head) is not None and head.count(G95_TAIL) == 1,
           str(out.get("__error__") or [out[k][:160] for k in errs[:2]] or problems))
     heads = {k: out.get(f"head:{k}", "") for k in (P3212, P3222, P3301, P3211)}
     want = {P3212: (FIX_3212, CREDIT_3212, FINDING_3212), P3222: (FIX_3222, CREDIT_3222, FINDING_3222)}
     once = {k: (text_of(heads[k]).count(fix), text_of(box_of(heads[k])).count(fix)) for k, (fix, _c, _f) in want.items()}
     check("P1 32.1.2 and 32.2.2: the fixed-in sentence prints exactly once on the page, and that once is in the "
           "verdict box", all(v == (1, 1) for v in once.values()), str(once))
-    attached = {}
+    own = {P3212: clause(by_id[REASON_3212]), P3222: clause(by_id[REASON_3222])}
+    placed = {}
     for k, (fix, credit, finding) in want.items():
-        paras = paragraphs(box_of(heads[k]))
-        i = next((n for n, (cls, _t) in enumerate(paras) if cls == "update-decision-recommendation"), -1)
-        nxt = paras[i + 1] if 0 <= i < len(paras) - 1 else ("", "")
-        scope = finding[len("Also WAIT "):] if finding.startswith("Also WAIT ") else finding[len("Also TEST FIRST "):]
-        scope = scope.rstrip(": ")
-        attached[k] = (i >= 0 and finding in paras[i][1], nxt[0], nxt[1].startswith(fix),
-                       f"applies {scope} was fixed in" in nxt[1])
-    check("P2 it is the paragraph directly beneath the verdict line, and that line states the reviewed finding it "
-          "belongs to in the same scope words ('Also TEST FIRST if you use connected accounts or service docks on "
-          "macOS: ...', 'Also WAIT if you use macOS 27.2: ...')",
-          all(v == (True, "update-decision-fixed", True, True) for v in attached.values()), str(attached))
+        paras = verdict_paras(box_of(heads[k]))
+        i = next((n for n, (cls, _t) in enumerate(paras) if cls == "update-decision-fixed"), -1)
+        before = paras[i - 1] if i > 0 else ("", "")
+        after = paras[i + 1] if 0 <= i < len(paras) - 1 else ("", "")
+        scope = finding.split(" if ", 1)[-1].rstrip(": ")
+        placed[k] = (before[0] == VERDICT_LINE and before[1].endswith(own[k]) and own[k].startswith(finding.strip()),
+                     paras[i][1] if i >= 0 else "", f"applies if {scope} was fixed in" in (paras[i][1] if i >= 0 else ""),
+                     after)
+    check("P2 the text directly before the fixed line is its OWN finding, the whole clause ('Also TEST FIRST if you use "
+          "connected accounts or service docks on macOS: ...', 'Also WAIT if you use macOS 27.2: ...'), with nothing "
+          "between them and the same scope words; on 32.2.2 the rest of the verdict line, the menu-bar crash ('Also "
+          "TEST FIRST if you use the menu-bar icon on macOS 27: ...'), continues BENEATH the line, never before it; "
+          "on 32.1.2 the finding ends the verdict line and nothing follows the fixed line",
+          placed[P3212][:3] == (True, f"{FIX_3212} {CREDIT_3212}", True) and placed[P3212][3] == ("", "")
+          and placed[P3222][:3] == (True, f"{FIX_3222} {CREDIT_3222}", True)
+          and placed[P3222][3] == (f"{VERDICT_LINE} update-decision-continued", clause(by_id[REASON_MENU]))
+          and not own_finding_problems(box_of(heads[P3222]), {f"{FIX_3222} {CREDIT_3222}": own[P3222]}),
+          json.dumps(placed)[:900])
+    words = {}
+    for k in want:
+        line_paras = [t for c, t in paragraphs(box_of(heads[k])) if c.startswith(VERDICT_LINE)]
+        exact = [c for c, _t in paragraphs(heads[k]) if c == VERDICT_LINE]
+        old = [t for c, t in paragraphs(box_of(out.get(f"without:{k}", ""))) if c.startswith(VERDICT_LINE)]
+        words[k] = (" ".join(line_paras) == text_of(verdict["pages"][k]["body"]), len(exact), old == [" ".join(line_paras)])
+    check("P3 word for word: the verdict line's paragraphs, read in order, are exactly the verdict projection's line, "
+          "the same words the page printed in one paragraph before G95; exactly one paragraph carries the class "
+          "attribute 'update-decision-recommendation' alone (the search metadata and the deploy checks read it)",
+          all(v == (True, 1, True) for v in words.values()), str(words))
     away = {k: ("was fixed in" in text_of(after_newer(heads[k])), "update-way-forward" in heads[k],
                 bool(after_newer(heads[k]))) for k in want}
-    check("P3 never in or after the newer-release note: nothing from the note to the compact monitoring line says "
+    check("P4 never in or after the newer-release note: nothing from the note to the compact monitoring line says "
           "'was fixed in', and no way-forward block prints (the note is the way forward and has no lines)",
           all(v == (False, False, True) for v in away.values()), str(away))
     none_311 = heads[P3301]
     archived = aside(heads[P3211], "update-way-forward")
-    check("P4 a page with no fixed_in prints no fixed line: 33.0.1 (volume WAIT, newer note) has none anywhere; 32.1.1 "
+    check("P5 a page with no fixed_in prints no fixed line: 33.0.1 (volume WAIT, newer note) has none anywhere; 32.1.1 "
           "(archived) keeps its G87 way forward 'Other versions: This release is archived. AUXSAYS has not established "
           "a better-supported alternative.' and no fixed line",
           "was fixed in" not in none_311 and "update-decision-fixed" not in none_311 and bool(after_newer(none_311))
@@ -347,19 +435,73 @@ def run() -> int:
                                     "better-supported alternative.")
           and "was fixed in" not in heads[P3211], text_of(archived)[:200])
     same = {k: out.get(f"head:{k}") == out.get(f"without:{k}") for k in (P3301, P3211)}
-    check("P5 fail closed, byte for byte: with no projection the page renders identically with and without the G95 "
+    check("P6 fail closed, byte for byte: with no projection the page renders identically with and without the G95 "
           "block, and so does every page with no fixed line (33.0.1, 32.1.1)",
           out.get("norow:with") == out.get("norow:without") and "update-decision-fixed" not in out.get("norow:with", "x")
           and all(same.values()) and out.get("norow:with", "") != "", str(same))
     tf_html = out.get("forged:tf", "")
-    check("P6 only under a printed WAIT: a forged overview row that carries a fixed line on a TEST FIRST page prints "
-          "nothing in its verdict box",
-          bool(tf_key) and "TEST FIRST" in text_of(box_of(tf_html)) and "update-decision-fixed" not in tf_html
-          and FIX_3212 not in text_of(tf_html), tf_key)
+    check("P7 only under a printed WAIT: a forged overview row on a TEST FIRST page whose fixed line names that page's "
+          "own finding prints nothing, byte for byte the page without the G95 block",
+          bool(tf_key) and bool(tf_reason) and tf_reason in str(verdict["pages"][tf_key].get("body"))
+          and "TEST FIRST" in text_of(box_of(tf_html)) and "update-decision-fixed" not in tf_html
+          and FIX_3212 not in text_of(tf_html) and tf_html == out.get("forged:tf:without"), tf_key)
+    two, rev = box_of(out.get(f"two:{P3222}", "")), box_of(out.get(f"reversed:{P3222}", ""))
+    findings = {line_a: clause(by_id[REASON_3222]), line_b: clause(by_id[REASON_MENU])}
+    two_fixed = [t for c, t in verdict_paras(two) if c == "update-decision-fixed"]
+    rev_fixed = [t for c, t in verdict_paras(rev) if c == "update-decision-fixed"]
+    check("P8 two fixed lines on one page each print directly after their OWN finding (32.2.2 with a line invented for "
+          "the menu-bar finding), the verdict line still word for word; given in the wrong order, the line whose "
+          "finding is already behind it is not printed at all rather than after another finding",
+          two_fixed == [line_a, line_b] and not own_finding_problems(two, findings)
+          and verdict_paras(two)[-1] == ("update-decision-fixed", line_b)
+          and " ".join(t for c, t in verdict_paras(two) if c.startswith(VERDICT_LINE))
+          == text_of(verdict["pages"][P3222]["body"])
+          and rev_fixed == [line_b] and not own_finding_problems(rev, findings),
+          json.dumps({"two": verdict_paras(two), "reversed": verdict_paras(rev)})[:900])
+    check("P9 a fixed line whose finding the verdict line does not state, or that names no finding (a projection from "
+          "before this rule), prints nothing: the page is byte for byte the page without the G95 block",
+          out.get(f"lost:{P3222}") == out.get(f"without:{P3222}") == out.get(f"unnamed:{P3222}")
+          and "update-decision-fixed" not in out.get(f"lost:{P3222}", "x"), "")
+    c80 = verdict_paras(box_of(out.get("credit:80", "")))
+    c80_line = (fixed_of(c_overview, f"{OBS}|80.0.0|") or [""])[0]
+    c80_reason = str(entries[0]["reason"])
+    check("P10 a reviewed WAIT whose HEAD reason names fixed_in (not volume-based; synthetic, rendered through the real "
+          "page): the line prints directly after that reason and before 'Other setups: ...', which continues beneath it",
+          c80 == [(VERDICT_LINE, c80_reason), ("update-decision-fixed", c80_line),
+                  (f"{VERDICT_LINE} update-decision-continued", text_of(pd.OTHER_SETUPS))]
+          and c80_line.startswith("The reviewed problem that applies if you use the equal setup was fixed in"),
+          json.dumps(c80)[:600])
+    by_identity = {vr.record_identity(r): r for r in c_records}
+    e_equal, e_noconf = entries[0], entries[2]
+    rec80 = c_by_key[f"{OBS}|80.0.0|"]
+    reasons_two = {str(e["id"]): e for e in (e_equal, e_noconf)}
+    ra, rb = str(e_equal["reason"]), str(e_noconf["reason"])
+
+    def places(body: str, order=(e_equal, e_noconf)) -> list:
+        producer = getattr(eo, "fixed_placements", None)  # absent before G95 round 2: the check fails, not the run
+        return producer(rec80, {"reasons": [str(e["id"]) for e in order], "body": body}, reasons_two,
+                        by_identity) if producer else [("", "(no fixed_placements)")]
+    expected_pairs = {(k, str(by_id[r]["reason"])) for k, row in verdict["pages"].items() if k in by_key
+                      if (vp.printed_row(by_key[k], verdict["pages"]) or {}).get("verdict") == "WAIT"
+                      for r in row.get("reasons") or [] if (by_id.get(r) or {}).get("fixed_in")}
+    got_pairs = {(k, a) for k, row in overview["pages"].items()
+                 for a in ((row.get("next_action") or {}).get("fixed_after") or [])}
+    check("P11 the producer places a line only where its finding ends a clause exactly once in the verdict line the "
+          "gate prints: none when the wording is absent, appears twice, or runs on into other words; in verdict-line "
+          "order whatever the reason order; and corpus-wide every supported reviewed fixed_in on a printed WAIT page is "
+          "placed after its own finding, none lost",
+          [a for _l, a in places(f"{ra} Also WAIT x: {rb}")] == [ra, rb]
+          and [a for _l, a in places(f"{ra} Also WAIT x: {rb}", order=(e_noconf, e_equal))] == [ra, rb]
+          and [a for _l, a in places(f"Lead. {rb}")] == [rb]
+          and [a for _l, a in places(f"{ra} {ra} {rb}")] == [rb]
+          and [a for _l, a in places(f"{ra}Also {rb}")] == [rb]
+          and eo.fixed_lines(rec80, {"reasons": [str(e_equal["id"])], "body": ra}, reasons_two, by_identity)
+          == fixed_of(c_overview, f"{OBS}|80.0.0|")
+          and expected_pairs == got_pairs and len(got_pairs) >= 2,
+          json.dumps({"want": sorted(expected_pairs), "got": sorted(got_pairs)})[:600])
 
     section("[C] the vendor credit, only where the official confirmation names fixed_in")
     lines = {k: fixed_of(overview, k) for k in (P3212, P3222)}
-    by_id = {str(e.get("id")): e for e in reasons}
     confs = {eid: ((by_id.get(eid) or {}).get("official_confirmation") or {}).get("update_version") ==
              (by_id.get(eid) or {}).get("fixed_in")
              for eid in ("obs-studio:32.1.2:macos-accounts-and-docks-lost", "obs-studio:32.2.2:macos-27-2-launch-crash")}
@@ -370,7 +512,6 @@ def run() -> int:
           and lines == {P3212: [f"{FIX_3212} {CREDIT_3212}"], P3222: [f"{FIX_3222} {CREDIT_3222}"]}
           and rendered == {P3212: [f"{FIX_3212} {CREDIT_3212}"], P3222: [f"{FIX_3222} {CREDIT_3222}"]},
           json.dumps({"confs": confs, "lines": lines, "rendered": rendered})[:600])
-    c_records, entries, c_verdict, c_overview, unsupported = credit_tree()
     plain = {v: eo.FIXED_LINE.format(scope=f"if you use the {eid} setup", product="OBS Studio", fixed_in=f)
              for v, eid, f in (("80.0.0", "equal", "80.0.5"), ("81.0.0", "otherver", "80.0.5"),
                                ("82.0.0", "noconf", "80.0.5"), ("83.0.0", "otherprod", "1.0.0"),
@@ -393,15 +534,32 @@ def run() -> int:
           and fixed_of(c_overview, f"{OBS}|84.0.0|")
           == [f"{plain['84.0.0']} The vendor's release notes for 84.0.5 record a fix for this problem."],
           str([fixed_of(c_overview, f"{OBS}|{v}|") for v in ("80.0.0", "84.0.0")]))
-    other = {"kind": "newer_release", "lines": [],
+    other = {"kind": "newer_release", "lines": [], "fixed_after": ["Its finding."],
              "fixed": [f"{FIX_3212} OBS Project's release notes for 33.0.2 record a fix for this problem."]}
-    clean = [eo.next_action_problems({"kind": "newer_release", "lines": [], "fixed": [line]})
+    clean = [eo.next_action_problems({"kind": "newer_release", "lines": [], "fixed": [line],
+                                      "fixed_after": ["Its finding."]})
              for line in (FIX_3212, f"{FIX_3212} {CREDIT_3212}", f"{FIX_3222} {CREDIT_3222}")]
     check("C6 the guard refuses a credit that names another version than the line's fixed_in (here the newer "
           "release, 33.0.2), and accepts the plain and the credited shapes this module writes",
           bool(eo.next_action_problems(other)) and not any(clean)
           and not any(eo.public_text_problems(overview["pages"][k], groups.get(tuple(k.split("|")), []))
                       for k in (P3212, P3222)), str(clean))
+
+    def refused(fixed: list, after) -> bool:
+        nxt = {"kind": "newer_release", "lines": [], "fixed": fixed}
+        if after is not None:
+            nxt["fixed_after"] = after
+        return bool(eo.next_action_problems(nxt))
+    spaced = f"{FIX_3212} OBS Project's release notes for 27.0 Update 2 record a fix for this problem."
+    malformed = f"{FIX_3212} OBS Project release notes for 32.2.0 record a fix for this problem."
+    good = f"{FIX_3212} {CREDIT_3212}"
+    check("C7 the guard also refuses a credit for another version that has spaces in it ('27.0 Update 2'), a credit "
+          "in a shape this module does not write, and a fixed line that names no finding to print it after (none, "
+          "an empty one, or a count that differs); the same line with its finding passes",
+          refused([spaced], ["Its finding."]) and refused([malformed], ["Its finding."]) and refused([good], None)
+          and refused([good], [""]) and refused([good], ["One.", "Two."]) and refused([], ["Stray."])
+          and not refused([good], ["Its finding."]) and not refused([], []) and not refused([], None),
+          "")
 
     section("[N] no implication about the newer release; nothing recommended")
     notes = {k: text_of(aside(heads[k], "update-newer-release")) for k in want}

@@ -61,8 +61,13 @@ WHAT A ROW HOLDS (keyed like the verdict projection: product_id|update_version|t
                   credits the vendor: "<vendor>'s release notes for <fixed_in> record a fix for this problem."
                   (FIX_CREDIT, fix_credit); otherwise it carries no credit. A `fixed` line is NOT part of the way
                   forward and is not printed with it (G95, AUX-132): the patch page prints it in the verdict box,
-                  directly beneath the line that states the reviewed finding it belongs to, so it never stands
-                  beside the newer-release note, which names another release. None of these
+                  directly after the clause of the verdict line that states the reviewed finding it belongs to,
+                  so it never stands beside the newer-release note, which names another release, nor after
+                  another finding. `fixed_after` (present only beside `fixed` lines) holds, for each of them in
+                  the same order, that finding's own stored wording (the reason text, which ends its clause in the
+                  verdict line): the page splits the verdict line just after it. A line whose finding is not
+                  found exactly once at the end of a clause in the verdict line the gate prints is not produced
+                  at all (fixed_placements), because it could not be printed beneath its own finding. None of these
                   strings goes into the newer-release note's own fields. A page that prints WAIT and has no
                   next action is a publication error in QA (qa_patch_records), so the exit never depends
                   silently on this git-ignored projection; so is one whose rendered way forward is not the
@@ -193,7 +198,7 @@ FIXED_LINE = "The reviewed problem that applies {scope} was fixed in {product} {
 # exactly the fixed_in version (G95, AUX-132). <vendor> is the confirming record's update_source_name.
 FIX_CREDIT = "{vendor}'s release notes for {fixed_in} record a fix for this problem."
 _FIXED_RE = re.compile(r"^The reviewed problem that applies (?:if|when|for) .+ was fixed in (?P<fixed>.+?)\."
-                       r"(?: (?P<vendor>.+?)'s release notes for (?P<credited>\S+) record a fix for this problem\.)?$")
+                       r"(?: (?P<vendor>.+?)'s release notes for (?P<credited>.+?) record a fix for this problem\.)?$")
 
 # Phrases the AUXSAYS-authored strings must never carry: an acceptance rule or a threshold stated to the
 # reader (the page describes evidence; it does not explain how much would be enough).
@@ -654,24 +659,53 @@ def fix_credit(record: Mapping[str, Any], entry: Mapping[str, Any],
     return FIX_CREDIT.format(vendor=_text(confirming.get("update_source_name")) or "The vendor", fixed_in=fixed)
 
 
-def fixed_lines(record: Mapping[str, Any], printed: Mapping[str, Any],
-                reasons_by_id: Mapping[str, Mapping[str, Any]],
-                records_by_identity: Mapping[tuple[str, str, str], Mapping[str, Any]] | None = None) -> list[str]:
-    """One line per supported reviewed reason on the page that names fixed_in, in its reviewed scope, with the
-    vendor credit where fix_credit allows it. THE one producer of the fixed sentence."""
-    out: list[str] = []
+def finding_end(body: str, finding: str) -> int:
+    """Where `finding` (a reviewed reason's stored wording) ends its clause in the verdict line `body`, or -1. Found
+    ONLY when it occurs exactly once and ends there or right before a space: patch_decision.public_body ends each
+    reason's clause with its wording ("Also <verdict> <scope>: <reason>", or the head reason alone) and joins the
+    clauses with single spaces, so that is where the clause stating this finding ends."""
+    if not finding or body.count(finding) != 1:
+        return -1
+    end = body.index(finding) + len(finding)
+    return end if end == len(body) or body[end] == " " else -1
+
+
+def fixed_placements(record: Mapping[str, Any], printed: Mapping[str, Any],
+                     reasons_by_id: Mapping[str, Mapping[str, Any]],
+                     records_by_identity: Mapping[tuple[str, str, str], Mapping[str, Any]] | None = None
+                     ) -> list[tuple[str, str]]:
+    """THE one producer of the fixed sentence: (line, after) per supported reviewed reason on the page that names
+    fixed_in. `line` is the sentence in its reviewed scope, with the vendor credit where fix_credit allows it;
+    `after` is that reason's own stored wording, which ends the clause of the verdict line stating the finding, so
+    the page prints the line directly after it (G95, AUX-132). A reason whose wording finding_end cannot place in
+    the verdict line the gate prints gives no line at all: printed anywhere else it could sit after another
+    finding. In verdict-line order; a line already produced is not repeated."""
+    body = _text(printed.get("body"))
+    placed: list[tuple[int, str, str]] = []
     product = _text(record.get("update_product")) or _text(record.get("product_id"))
     for rid in printed.get("reasons") or []:
         entry = reasons_by_id.get(_text(rid)) or {}
         fixed, scope = _text(entry.get("fixed_in")), _text(entry.get("scope"))
-        if fixed and scope:
-            line = FIXED_LINE.format(scope=scope, product=product, fixed_in=fixed)
-            credit = fix_credit(record, entry, records_by_identity or {})
-            if credit:
-                line = f"{line} {credit}"
-            if line not in out:
-                out.append(line)
-    return out
+        if not (fixed and scope):
+            continue
+        after = _text(entry.get("reason"))
+        end = finding_end(body, after)
+        if end < 0:
+            continue
+        line = FIXED_LINE.format(scope=scope, product=product, fixed_in=fixed)
+        credit = fix_credit(record, entry, records_by_identity or {})
+        if credit:
+            line = f"{line} {credit}"
+        if all(line != have for _end, have, _after in placed):
+            placed.append((end, line, after))
+    return [(line, after) for _end, line, after in sorted(placed, key=lambda p: p[0])]
+
+
+def fixed_lines(record: Mapping[str, Any], printed: Mapping[str, Any],
+                reasons_by_id: Mapping[str, Mapping[str, Any]],
+                records_by_identity: Mapping[tuple[str, str, str], Mapping[str, Any]] | None = None) -> list[str]:
+    """The fixed sentences alone, in verdict-line order (fixed_placements, their one producer)."""
+    return [line for line, _after in fixed_placements(record, printed, reasons_by_id, records_by_identity)]
 
 
 def keep_advice_printed(printed: Mapping[str, Any] | None) -> bool:
@@ -684,9 +718,10 @@ def next_action(record: Mapping[str, Any], row: Mapping[str, Any], recs: list[Ma
                 printed: Mapping[str, Any], reasons_by_id: Mapping[str, Mapping[str, Any]],
                 records_by_identity: Mapping[tuple[str, str, str], Mapping[str, Any]] | None = None) -> dict[str, Any]:
     """The way forward for a page that prints WAIT: archived -> excluded product -> a newer-release note ->
-    proven newest -> not established, plus any reviewed fixed_in line in `fixed` (module docstring), which the
-    page prints in its verdict box, never with the way forward (G95). A variant that says no better-supported
-    alternative is established ends with KEEP_LINE unless the verdict box already says it."""
+    proven newest -> not established, plus any reviewed fixed_in line in `fixed`, with the finding each one
+    follows in `fixed_after` (module docstring), which the page prints in its verdict box directly after that
+    finding, never with the way forward (G95). A variant that says no better-supported alternative is
+    established ends with KEEP_LINE unless the verdict box already says it."""
     pid = _text(record.get("product_id"))
     if _text(record.get("update_status")) == "archived":
         kind = NEXT_ARCHIVED
@@ -701,7 +736,12 @@ def next_action(record: Mapping[str, Any], row: Mapping[str, Any], recs: list[Ma
     lines = list(NEXT_LINES[kind])
     if kind in KEEP_KINDS and not keep_advice_printed(printed):
         lines.append(KEEP_LINE)
-    return {"kind": kind, "lines": lines, "fixed": fixed_lines(record, printed, reasons_by_id, records_by_identity)}
+    placed = fixed_placements(record, printed, reasons_by_id, records_by_identity)
+    out: dict[str, Any] = {"kind": kind, "lines": lines, "fixed": [line for line, _after in placed]}
+    if placed:
+        # Only beside fixed lines, so a row with none keeps exactly its G87 shape.
+        out["fixed_after"] = [after for _line, after in placed]
+    return out
 
 
 def newer_printable(newer: Any) -> bool:
@@ -722,10 +762,11 @@ def has_next_action(row: Mapping[str, Any] | None) -> bool:
     return nxt.get("kind") in NEXT_LINES and any(_text(s) for s in nxt.get("lines") or [])
 
 
-def _variant(row: Mapping[str, Any] | None) -> tuple[Any, list[str], list[str]]:
+def _variant(row: Mapping[str, Any] | None) -> tuple[Any, list[str], list[str], list[str]]:
     nxt = row.get("next_action") if isinstance(row, Mapping) else None
     nxt = nxt if isinstance(nxt, Mapping) else {}
-    return (nxt.get("kind"), [_text(s) for s in nxt.get("lines") or []], [_text(s) for s in nxt.get("fixed") or []])
+    return (nxt.get("kind"), [_text(s) for s in nxt.get("lines") or []], [_text(s) for s in nxt.get("fixed") or []],
+            [_text(s) for s in nxt.get("fixed_after") or []])
 
 
 def _release(row: Mapping[str, Any] | None) -> dict[str, Any]:
@@ -738,14 +779,18 @@ def next_action_mismatch(rendered: Mapping[str, Any] | None, expected: Mapping[s
     """Why the way forward a page RENDERS (its row in the deploy's overview projection) is not the one a recompute
     from the source facts gives (`expected`: the row `project` writes over the same tree, from the archived flag,
     NEWER_NOTE_EXCLUDED_PRODUCTS, the newer-release note, the first-stable proof and the reviewed fixed_in): another
-    variant -- its kind, its lines or its fixed_in lines -- or, where either side's way forward is a newer
-    release, a note naming another release, date, link, caution or verdict. [] when they agree."""
+    variant -- its kind, its lines, its fixed_in lines or the findings they are printed after (G95) -- or, where
+    either side's way forward is a newer release, a note naming another release, date, link, caution or verdict.
+    [] when they agree."""
     problems: list[str] = []
-    got_kind, got_lines, got_fixed = _variant(rendered)
-    want_kind, want_lines, want_fixed = _variant(expected)
+    got_kind, got_lines, got_fixed, got_after = _variant(rendered)
+    want_kind, want_lines, want_fixed, want_after = _variant(expected)
     if (got_kind, got_lines, got_fixed) != (want_kind, want_lines, want_fixed):
         problems.append(f"renders the {got_kind or 'missing'} way forward {got_lines + got_fixed}, but the source "
                         f"facts give {want_kind or 'none'} {want_lines + want_fixed}")
+    elif got_after != want_after:
+        problems.append(f"prints its fixed_in lines after {[s[:60] for s in got_after]}, but the source facts place "
+                        f"them after {[s[:60] for s in want_after]}")
     if NEXT_NEWER in (got_kind, want_kind):
         got, want = _release(rendered), _release(expected)
         differs = [k for k in NEWER_IDENTITY_KEYS if got[k] != want[k]]
@@ -763,7 +808,8 @@ _RECOMMENDING_RE = re.compile(r"\b(?:upgrade|update to|install|recommend|safer|a
 def next_action_problems(nxt: Mapping[str, Any]) -> list[str]:
     """A next action must be one this module writes: a known kind, exactly that kind's lines, and fixed lines of
     the one shape (a fact in the reviewed scope, never an upgrade instruction), whose vendor credit, if any,
-    names the very version the line says the problem was fixed in (G95)."""
+    names the very version the line says the problem was fixed in, each with the finding it is printed after
+    (G95)."""
     problems: list[str] = []
     kind = nxt.get("kind")
     if kind not in NEXT_LINES:
@@ -777,8 +823,14 @@ def next_action_problems(nxt: Mapping[str, Any]) -> list[str]:
             problems.append(f"a fixed_in line is not the shape this module writes: {_text(line)[:80]!r}")
         elif shape.group("credited") and not shape.group("fixed").endswith(f" {shape.group('credited')}"):
             problems.append(f"a fixed_in line credits a fix in another version: {_text(line)[:120]!r}")
+        elif not shape.group("credited") and ("release notes" in _text(line) or "record a fix" in _text(line)):
+            problems.append(f"a fixed_in line carries a credit this module does not write: {_text(line)[:120]!r}")
         if _RECOMMENDING_RE.search(_text(line)):
             problems.append(f"a fixed_in line reads as a recommendation: {_text(line)[:80]!r}")
+    fixed, after = list(nxt.get("fixed") or []), nxt.get("fixed_after")
+    if (fixed or after) and not (isinstance(after, list) and len(after) == len(fixed)
+                                 and all(isinstance(s, str) and _text(s) for s in after)):
+        problems.append("a fixed_in line does not name the finding it is printed after (fixed_after)")
     return problems
 
 
