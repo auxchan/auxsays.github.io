@@ -2426,9 +2426,15 @@ def section_eviction_checks() -> None:
                                    recovery_line(912, "800") + recovery_line(905, "800", "completed", "cancelled")))
     check("E5 an evicted RECOVERY whose re-dispatch started and lost is covered by it: nothing re-dispatched",
           none_dispatched(rc, summ, outs) and "recovery run 912" in out, f"rc={rc} {summ} {out[-300:]}")
-    rc, summ, out, outs = step(SIM_EVICTED_OBS=EVICTED_903, SIM_JOBS_911="0", SIM_PAGE_OBS=(
-        recovery_line(911, "903", "completed", "cancelled") + CRON_903))
-    check("E5 a recovery that was itself evicted (zero jobs) never started: the cycle is re-dispatched once",
+    # Two recoveries of the cycle, both evicted before any job ran; the step lists them as evictions
+    # too (cancelled routine runs in its window), exactly as its jq would.
+    rc, summ, out, outs = step(
+        SIM_EVICTED_OBS=(EVICTED_903 + "911 2026-11-22T05:00:00Z Patch Evidence Collection (recovery of run 903)\n"
+                         + "912 2026-11-22T07:00:00Z Patch Evidence Collection (recovery of run 903)\n"),
+        SIM_JOBS_911="0", SIM_JOBS_912="0", SIM_PAGE_OBS=(
+            recovery_line(912, "903", "completed", "cancelled") + recovery_line(911, "903", "completed", "cancelled")
+            + CRON_903))
+    check("E5 recoveries that were themselves evicted (zero jobs) never started: the cycle is re-dispatched once",
           rc == 0 and summ == [(EVIDENCE_WF, {"recovery_of": "903"})] and outs.get("dispatched") == "1",
           f"rc={rc} {summ} {outs} {out[-300:]}")
     similar = [("Patch Evidence Collection (recovery of run 9031)", 921),
@@ -2714,9 +2720,9 @@ def _eviction_sim(days: int, step0: str, base: dict) -> EvictionWorld:
     """A persistent collection outage (every run that starts loses its cycle; ingestion healthy) with
     evicted cycles of both kinds -- an evicted cron (then its recovery runs and loses), and an evicted
     RECOVERY -- whose one started recovery fails, is cancelled after it started, or hits its time limit.
-    The reaper ticks every two hours at :43. Over 30 days one re-dispatch is itself evicted first, and
-    the outage ends: a cron reaches main, Pages deploys its push, then a fresh cron is evicted and
-    another loses. The eviction step is EXECUTED on every tick with an eviction in its 14-hour window
+    The reaper ticks every two hours at :43. Over 30 days two re-dispatches of one cycle are
+    themselves evicted first, and the outage ends: a cron reaches main, Pages deploys its push, then a
+    fresh cron is evicted and another loses. The eviction step is EXECUTED on every tick with an eviction in its 14-hour window
     (the only ticks on which it can dispatch); on the others only its occupancy output matters."""
     t0 = datetime(2026, 11, 1, 0, 0, tzinfo=timezone.utc)
     w = EvictionWorld(t0)
@@ -2729,7 +2735,7 @@ def _eviction_sim(days: int, step0: str, base: dict) -> EvictionWorld:
         recover_at = None
     else:
         script = {(0, 3): ("evicted", ["lost"]), (4, 3): ("inject", ["cancelled"]), (8, 15): ("evicted", ["timed_out"]),
-                  (12, 3): ("inject", ["lost"]), (16, 3): ("evicted", ["evicted", "lost"]),
+                  (12, 3): ("inject", ["lost"]), (16, 3): ("evicted", ["evicted", "evicted", "lost"]),
                   (20, 3): ("inject", ["timed_out"]), (24, 15): ("evicted", ["cancelled"]),
                   (28, 9): ("fresh-evicted", []), (29, 3): ("fresh-lost", [])}
         recover_at = (27, 3)
