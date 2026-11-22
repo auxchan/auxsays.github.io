@@ -784,8 +784,9 @@ WF_LINKS = "See its AUXSAYS page"
 
 
 def expected_next_text(lines: list[str], fixed: list[str]) -> str:
-    """The 'next' part as text: "Other versions:" and the way-forward lines, then each reviewed fixed_in line."""
-    return " ".join(([f"Other versions: {' '.join(lines)}"] if lines else []) + list(fixed))
+    """The 'next' part as text: "Other versions:" and the way-forward lines. The reviewed fixed_in lines print in
+    the verdict box, beneath their own finding, never here (G95, AUX-132)."""
+    return f"Other versions: {' '.join(lines)}" if lines else ""
 
 
 def released_day(record: dict) -> str:
@@ -1087,7 +1088,8 @@ def check_corpus_and_surfaces() -> None:
           "better-supported alternative.' (the keep line only where the verdict box lacks it), excluded / not "
           "established / newest their own lines, and a newer release the note naming the release the rule selects, "
           "the vendor's known-issue caution before its links exactly when THAT release declares one (else 'Newer is "
-          "not necessarily safer'), then its verdict, then its links, and nothing after it but the reviewed fix lines",
+          "not necessarily safer'), then its verdict, then its links, and nothing after it -- its reviewed fix lines "
+          "print in the verdict box (G95, AUX-132)",
           not live and len(live_seen) == len(FOUR) and not synthetic and covered,
           json.dumps({"live": live[:3], "synthetic": synthetic[:3], "covered": covered,
                       "four": [s[:4] for s in live_seen]})[:900])
