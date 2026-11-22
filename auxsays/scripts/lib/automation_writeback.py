@@ -33,13 +33,16 @@ the freshly generated changes:
     while preserving pushed / pushed_sha (a deployment-dispatch failure is NOT a push failure)
   * a site-affecting push with NO configured Pages command fails loudly (a github.token push does
     not trigger pages.yml, so a missing --pages-cmd would silently never deploy) -- never exit 0
-  * OPTIONALLY (opt-in ``pages_confirm_build``) poll the just-created pages run to a terminal state
-    and surface a BUILD failure, since a successful dispatch is not a successful deploy; when off,
-    build-outcome confirmation is delegated to the next deployment-recovery cycle. A build that
-    fails fails the run; a build that never started or never finished inside the bounded wait is
-    reported as ``deployment_unverified`` (output, outcome token, annotation, step summary)
+  * OPTIONALLY (opt-in ``pages_confirm_build``) poll the Pages runs that would deploy the pushed
+    revision to a terminal state and surface a BUILD failure, since a successful dispatch is not a
+    successful deploy; when off, build-outcome confirmation is delegated to the next
+    deployment-recovery cycle. A build created by this dispatch that genuinely fails fails the run;
+    a run cancelled because a newer build superseded it is not a failure (the newer build, of a
+    descendant, deploys this content); a wait that ends with no verdict is reported as
+    ``deployment_unverified`` (output, outcome token, annotation, step summary)
   * classify a writeback that lost a race with another push to main and pushed nothing as
-    ``lost_race`` (output), so the calling workflow can re-run that cycle once from a fresh base
+    ``lost_race`` (output, summary line). Diagnostic only: the writer-queue reaper re-runs EVERY
+    routine cycle that did not reach main, whatever the reason, from the workflows' own record
 
 It never force-pushes, never uses ``--ours``/``--theirs`` or ``-X ours``/``-X theirs``, and
 never silently resolves a conflict on a shared generated/evidence/state/catalog file.
@@ -102,11 +105,13 @@ VALIDATION_FAILED_PRE_COMMIT = "validation_failed_pre_commit"
 PAGES_BUILD_CONFIRMED = "pages_build_confirmed"
 PAGES_BUILD_FAILED = "pages_build_failed"
 PAGES_BUILD_UNCONFIRMED = "pages_build_unconfirmed"
-# The bounded wait ended with no terminal build for the pushed revision: either no Pages run for it
-# ever appeared, or it had not finished. The data commit is on main and stays there; the lane does
-# not fail for this (a slow Pages queue is not a fault), but it says so in an output, an annotation
-# and the step summary. The next no-change --deploy-recovery cycle re-checks whether the current
-# main revision is a completed, successful deployment and re-dispatches Pages when it is not.
+# The bounded wait ended with no verdict for the pushed revision: no Pages run for it appeared, it
+# had not finished, or it was superseded by a newer build that had not finished (or that failed on
+# a later revision). The data commit is on main and stays there; the lane does not fail for this (a
+# slow or superseded Pages queue is not a fault of this lane), but it says so in an output, an
+# annotation and the step summary. The next no-change --deploy-recovery cycle re-checks whether the
+# current main revision is a completed, successful deployment and re-dispatches Pages when it is
+# not, and the writer-queue reaper opens a tracking issue when the latest Pages build on main fails.
 DEPLOYMENT_UNVERIFIED = "deployment_unverified"
 # a site-affecting revision was pushed but the lane configured no Pages dispatch command
 DEPLOY_CHANGED_NO_PAGES_CMD = "deploy_changed_no_pages_cmd"
@@ -115,12 +120,14 @@ EVIDENCE_LOSS_REFUSED = "evidence_loss_refused"
 
 # A LOST RACE: another push reached main after this run checked out, and this run pushed nothing
 # because of it. Run 44878227542 lost a whole collection cycle that way (a PR touching the evidence
-# store merged mid-run -> rebase_conflict), and nothing re-ran it. These three terminal outcomes are
-# the ones a fresh run from the new main can resolve, because the conflict came from the timing, not
-# from the work: the rebase was refused, the rebased tree failed validation, or main kept moving
-# until the retries ran out. A post-rebase unexpected path or a residual working-tree file is a
-# defect in this run's own output and is never classified as a lost race -- re-running would only
-# repeat it. Nothing here merges evidence; the caller re-runs the whole cycle from a fresh checkout.
+# store merged mid-run -> rebase_conflict). These three terminal outcomes are the ones caused by the
+# timing rather than by the work: the rebase was refused, the rebased tree failed validation, or main
+# kept moving until the retries ran out. A post-rebase unexpected path or a residual working-tree
+# file is a defect in this run's own output and is never classified as a lost race. The
+# classification is a DIAGNOSTIC (the `lost_race` output and the run summary): recovery does not key
+# on it. The writer-queue reaper re-runs, once, every routine cycle whose writeback did not reach
+# main -- a lost race, a refusal, a failure or timeout after collection -- and nothing merges two
+# versions of the evidence: the re-run collects the whole cycle again from a fresh checkout of main.
 RECOVERABLE_LOST_RACE_OUTCOMES = frozenset({
     REBASE_CONFLICT, VALIDATION_FAILED_AFTER_REBASE, RETRY_EXHAUSTED,
 })
@@ -452,62 +459,124 @@ def _sha_deployed(cfg: WritebackConfig, sha: str) -> bool:
     return False
 
 
-def _run_ids_for_sha(cfg: WritebackConfig, sha: str) -> set[str]:
+def _run_ids_for_sha(cfg: WritebackConfig, sha: str) -> set[str] | None:
     """databaseIds of the pages runs already recorded for this exact SHA on the target branch.
     Snapshotted BEFORE a dispatch so build confirmation can isolate the NEWLY created run from a
-    stale same-SHA run (e.g. an earlier FAILED build for a SHA that --deploy-recovery re-dispatches)."""
+    stale same-SHA run (e.g. an earlier FAILED build for a SHA that --deploy-recovery re-dispatches).
+
+    None -- not an empty set -- when the run list could not be read. An empty set would claim that
+    no run for this SHA existed, and a stale failed run would then be read as the new build's
+    result: a false "build failed" on exactly the deploy-recovery path this snapshot exists for."""
     runs, ok = _pages_runs(cfg)
     if not ok:
-        return set()
+        return None
     return {str(run.get("databaseId")) for run in runs
             if str(run.get("headSha")) == sha and str(run.get("headBranch")) == cfg.pages_ref}
 
 
-def _confirm_pages_build(cfg: WritebackConfig, result: WritebackResult, sha: str, pre_ids: set[str]) -> None:
-    """After a confirmed dispatch, optionally poll the just-created pages run to a terminal state
-    and surface a BUILD failure. `pre_ids` are the run ids that already existed for `sha` before
-    this dispatch, so a stale same-SHA run can never be mistaken for the new build. Only runs whose
-    id is NOT in `pre_ids` are considered. On a terminal success -> pages_build_confirmed; on a
-    terminal non-success -> pages_build_failed (deployment_pending + fail visibly). Poll exhausted
-    without a terminal new run -> pages_build_unconfirmed + deployment_unverified: NOT a failure of
-    the run (the data commit is on main and correct, and a Pages run can legitimately still be
-    queued behind another build), but reported unmistakably -- an outcome token, a ::warning
-    annotation, the `deployment_unverified` output and a step-summary section that says whether no
-    run appeared at all or the run had not finished. The next no-change --deploy-recovery cycle
-    re-checks the current main revision and re-dispatches if it is not a completed+success deploy
-    (any later material push dispatches its own build). Nothing here re-pushes,
-    reverts or re-runs the writeback. When `pages_confirm_build` is off (default) this is a no-op
-    and confirmation is delegated."""
+# A Pages run that ended in one of these failed to build or deploy. Anything else that is not
+# `success` -- above all `cancelled` -- is NOT a build failure: pages.yml shares one concurrency
+# group (`pages`, cancel-in-progress false), so a run still waiting in that group is cancelled the
+# moment a newer run enters it (a merge's push build, the daily cron, another lane's dispatch). The
+# newer run builds a descendant of the pushed revision, so it deploys the pushed content too.
+GENUINE_BUILD_FAILURES = frozenset({"failure", "timed_out", "startup_failure"})
+
+
+def _commit_known(repo: Path, sha: str) -> bool:
+    return _git(repo, "cat-file", "-e", f"{sha}^{{commit}}", check=False).returncode == 0
+
+
+def _descendants_of(cfg: WritebackConfig, sha: str, others: set[str], cache: dict[str, bool]) -> set[str]:
+    """The subset of `others` that are strict descendants of `sha` -- a build of one of them deploys
+    `sha`'s content. Read-only. A commit this clone has not seen (a push that landed after ours) is
+    fetched, at most once per call; writer checkouts are shallow, so older SHAs in the run list
+    stay unknown and are simply not descendants. A definite answer is cached; an unknown SHA is not,
+    so a descendant that lands later is still recognised."""
+    pending = {o for o in others if o and o != sha and o not in cache}
+    if any(not _commit_known(cfg.repo, o) for o in pending):
+        _git(cfg.repo, "fetch", cfg.remote, cfg.branch, check=False)
+    for o in pending:
+        if _commit_known(cfg.repo, o):
+            cache[o] = _git(cfg.repo, "merge-base", "--is-ancestor", sha, o, check=False).returncode == 0
+    return {o for o in others if cache.get(o)}
+
+
+def _confirm_pages_build(cfg: WritebackConfig, result: WritebackResult, sha: str,
+                         pre_ids: set[str] | None) -> None:
+    """After a confirmed dispatch, optionally poll the Pages runs that would deploy `sha` to a
+    terminal state and surface a BUILD failure. Nothing here re-pushes, reverts or re-runs the
+    writeback. When `pages_confirm_build` is off (default) this is a no-op and confirmation is
+    delegated to the next --deploy-recovery cycle.
+
+    Which runs count:
+      * the runs for exactly `sha` that this dispatch created -- id not in `pre_ids`, the ids that
+        already existed for `sha` before the dispatch, so a stale same-SHA run is never mistaken
+        for the new build;
+      * any run for a DESCENDANT of `sha` on the target branch: it deploys this revision's content.
+
+    Verdicts:
+      * any counted run completed with success -> pages_build_confirmed;
+      * a run this dispatch created ended in GENUINE_BUILD_FAILURES -> pages_build_failed,
+        deployment_pending, ok False (the lane fails, as a failed dispatch already did);
+      * a run that was cancelled (superseded in the one-deep `pages` group) is not a failure: the
+        poll keeps watching for the newer build that superseded it;
+      * the wait ends with no verdict -> pages_build_unconfirmed + deployment_unverified: NOT a
+        failure of the run (the data commit is on main and correct), but reported unmistakably --
+        an outcome token, a ::warning annotation, the `deployment_unverified` output and a
+        step-summary section saying why. The writer-queue reaper re-judges the eventual Pages
+        outcome on main and opens a tracking issue if the deployment fails.
+
+    `pre_ids` None means the pre-dispatch snapshot could not be read. A failed run for `sha` then
+    cannot be attributed to this dispatch -- it may be the stale build the dispatch was meant to
+    replace -- so it never fails the lane; only a success confirms, and otherwise the deployment is
+    reported unverified with that reason."""
     if not cfg.pages_confirm_build:
         return
-    seen_new = False         # a run for `sha` created by this dispatch appeared in any poll
-    queried = False          # at least one poll could read the run list at all
+    seen_new = False             # a run for `sha` created by this dispatch appeared in any poll
+    queried = False              # at least one poll could read the run list at all
+    superseded = False           # a run for `sha` was cancelled (or otherwise ended neutrally)
+    newer_failed = False         # a descendant's build ended in a genuine failure
+    unattributed_failure = False # a failed run for `sha` that pre_ids None leaves unattributable
+    pending_own = False          # in the last readable poll, a run for `sha` was still open
+    pending_newer = False        # ... or a descendant's run was
+    descendants: dict[str, bool] = {}
     for attempt in range(1, cfg.pages_confirm_attempts + 1):
         runs, ok = _pages_runs(cfg)
         if ok:
             queried = True
-            new_runs = [
-                run for run in runs
-                if str(run.get("databaseId")) not in pre_ids
-                and str(run.get("headSha")) == sha
-                and str(run.get("headBranch")) == cfg.pages_ref
-            ]
-            seen_new = seen_new or bool(new_runs)
-            new_completed = [run for run in new_runs if str(run.get("status")) == "completed"]
-            if any(str(run.get("conclusion")) == "success" for run in new_completed):
+            on_branch = [run for run in runs if str(run.get("headBranch")) == cfg.pages_ref]
+            own = [run for run in on_branch if str(run.get("headSha")) == sha
+                   and (pre_ids is None or str(run.get("databaseId")) not in pre_ids)]
+            later = _descendants_of(cfg, sha, {str(run.get("headSha") or "") for run in on_branch},
+                                    descendants)
+            newer = [run for run in on_branch if str(run.get("headSha") or "") in later]
+            seen_new = seen_new or bool(own)
+            done_own = [run for run in own if str(run.get("status")) == "completed"]
+            done_newer = [run for run in newer if str(run.get("status")) == "completed"]
+            pending_own = len(done_own) < len(own)
+            pending_newer = len(done_newer) < len(newer)
+            if any(str(run.get("conclusion")) == "success" for run in done_own + done_newer):
                 result.pages_build_outcome = "confirmed"
                 _emit(result, PAGES_BUILD_CONFIRMED)
                 return
-            if new_completed:  # terminal, non-success -> a dispatched-but-FAILED build
+            own_failed = [run for run in done_own if str(run.get("conclusion")) in GENUINE_BUILD_FAILURES]
+            if own_failed and pre_ids is not None:
+                # terminal, genuinely failed build created by THIS dispatch
                 result.pages_build_outcome = "failed"
                 result.deployment_unverified = True
                 _emit(result, PAGES_BUILD_FAILED)
                 result.deployment_pending = True
                 result.ok = False
-                print(f"::error title=Pages build failed::The Pages build for {sha} ended without "
-                      "success; the pushed revision is on main but not deployed.", flush=True)
+                print(f"::error title=Pages build failed::The Pages build for {sha} ended "
+                      f"`{own_failed[0].get('conclusion')}`; the pushed revision is on main but not "
+                      "deployed.", flush=True)
                 _write_build_failure_summary(cfg, sha)
                 return
+            unattributed_failure = unattributed_failure or bool(own_failed)
+            superseded = superseded or any(str(run.get("conclusion")) not in GENUINE_BUILD_FAILURES
+                                           for run in done_own)
+            newer_failed = newer_failed or any(str(run.get("conclusion")) in GENUINE_BUILD_FAILURES
+                                               for run in done_newer)
         if attempt < cfg.pages_confirm_attempts:
             cfg.sleep_fn(cfg.pages_confirm_interval)
     result.pages_build_outcome = "unconfirmed"
@@ -516,6 +585,17 @@ def _confirm_pages_build(cfg: WritebackConfig, result: WritebackResult, sha: str
     _emit(result, DEPLOYMENT_UNVERIFIED)
     if not queried:
         reason = "the Pages run list could not be read"
+    elif pending_own:
+        reason = "the Pages run for this revision had not finished"
+    elif newer_failed:
+        reason = ("the Pages run for this revision was superseded and the newer build that would "
+                  "deploy it failed")
+    elif pending_newer or superseded:
+        reason = ("the Pages run for this revision was superseded (cancelled in the `pages` group) "
+                  "and the newer build had not finished")
+    elif unattributed_failure:
+        reason = ("a failed Pages run for this revision could not be attributed to this dispatch, "
+                  "because the run list before the dispatch could not be read")
     elif seen_new:
         reason = "the Pages run for this revision had not finished"
     else:
@@ -606,7 +686,9 @@ def _write_unverified_summary(cfg: WritebackConfig, sha: str, reason: str, waite
                     "commit is on main and is not reverted or re-pushed.\n\n")
             h.write(f"- sha: `{sha}`\n- workflow: `{cfg.pages_workflow}` ref `{cfg.pages_ref}`\n")
             h.write("- the next no-change deployment-recovery cycle re-checks the current main revision "
-                    "and re-dispatches Pages if it is not a completed, successful deployment.\n")
+                    "and re-dispatches Pages if it is not a completed, successful deployment; the "
+                    "writer-queue reaper opens a tracking issue if the latest Pages build on main "
+                    "fails.\n")
     except OSError:
         pass
 
@@ -711,10 +793,9 @@ def _is_lost_race(result: WritebackResult) -> bool:
     """True only when another push advanced main during this run AND the run ended in one of
     RECOVERABLE_LOST_RACE_OUTCOMES. Each of those is a terminal outcome reached BEFORE any push
     succeeds, so a run that pushed -- whatever then happened to its Pages dispatch or build, whose
-    `outcome` stays the push token -- is never a lost race, and a deployment problem can never make
-    a caller re-run the cycle and write it twice. The upstream clause matters for retry_exhausted:
-    pushes refused while main did NOT move (permissions, a hook) are not a race and re-running
-    would only repeat them."""
+    `outcome` stays the push token -- is never a lost race. The upstream clause matters for
+    retry_exhausted: pushes refused while main did NOT move (permissions, a hook) are not a race.
+    Diagnostic only; see RECOVERABLE_LOST_RACE_OUTCOMES."""
     return (UPSTREAM_ADVANCED in result.outcomes
             and result.outcome in RECOVERABLE_LOST_RACE_OUTCOMES)
 

@@ -1,4 +1,8 @@
 name: AUXSAYS Patch Ingestion
+# The writer-queue reaper reads this title through the API, even for a run evicted before any job
+# ran: a run it dispatched to re-run a lost cycle says "(recovery of run N)", and a recovery that
+# loses its cycle again is never re-run. Every other run keeps the workflow's name, as before.
+run-name: ${{ inputs.recovery_of && format('AUXSAYS Patch Ingestion (recovery of run {0})', inputs.recovery_of) || 'AUXSAYS Patch Ingestion' }}
 
 on:
   workflow_dispatch:
@@ -13,9 +17,9 @@ on:
         default: false
         type: boolean
       recovery_of:
-        description: "Set only by this workflow when a writeback lost its race with another push to
-          main: the id of the run being re-run. A run carrying it is never re-dispatched again.
-          Leave empty."
+        description: "Set only by the writer-queue reaper when it re-runs a routine cycle that did not
+          reach main: the id of the run being re-run. It only names the run (see run-name); the run
+          itself is an ordinary routine cycle. Leave empty."
         required: false
         type: string
   # NO `schedule:` HERE, DELIBERATELY -- this lane is chained, not independently scheduled.
@@ -261,70 +265,15 @@ jobs:
             --recovery-site-path 'auxsays/updates/microsoft/microsoft-windows-11/*/index.md' \
             --recovery-commit-grep 'Ingest official patch records'
 
-      # A WRITEBACK THAT LOST ITS RACE IS RE-RUN ONCE, FROM A FRESH BASE (G91).
-      #
-      # When another push reaches main while this run is working, the writeback refuses to merge the
-      # two (rebase_conflict, or the rebased tree failing validation, or main moving until the retries
-      # run out), pushes nothing and exits 1. Its output `lost_race=true` says exactly that; a run
-      # that pushed is never a lost race, whatever happened to its Pages build. Nothing merges the
-      # two versions -- the only safe recovery is to run the whole cycle again from the new main, so
-      # this step dispatches this workflow once, carrying `recovery_of`. A run that carries it never
-      # dispatches again (loop guard), and neither does a dispatch scoped to one source, which an
-      # operator started and can see.
-      #
-      # It never adds the third entrant that destroys a queued writer (writer-queue-depth-one): this
-      # run holds the writer group, so the recovery takes the pending slot, and if any member of the
-      # group already has a run waiting there the recovery is skipped -- that waiting run, or the next
-      # routine cycle, ingests instead. GROUP_MEMBERS must equal the parsed membership of the group;
-      # a test asserts it, as it does for the reaper's copy.
-      - name: Re-run a cycle whose writeback lost its race (once)
-        if: ${{ !cancelled() }}
-        env:
-          GH_TOKEN: ${{ github.token }}
-          REPO: ${{ github.repository }}
-          RUN_ID: ${{ github.run_id }}
-          LOST_RACE: ${{ steps.commit.outputs.lost_race }}
-          RECOVERY_OF: ${{ github.event.inputs.recovery_of }}
-          SOURCE: ${{ github.event.inputs.source }}
-          GROUP_MEMBERS: >-
-            obs-evidence-collection.yml patch-ingest.yml
-            davinci-updates.yml promote-davinci-verified-reports.yml
-        run: |
-          set -uo pipefail
-          if [ "${LOST_RACE}" != "true" ]; then
-            echo "The writeback did not lose a race; nothing to re-run."
-            exit 0
-          fi
-          if [ -n "${RECOVERY_OF}" ]; then
-            echo "::warning title=Recovery run lost its race too::This run re-ran run ${RECOVERY_OF} and lost its writeback race again. It is not re-dispatched a second time; the next routine cycle ingests."
-            echo "- writeback lost its race again while re-running run ${RECOVERY_OF}; not re-dispatched (loop guard)" >> "$GITHUB_STEP_SUMMARY"
-            exit 0
-          fi
-          if [ -n "${SOURCE}" ]; then
-            echo "::warning title=Targeted run lost its race::A dispatch scoped to ${SOURCE} lost its writeback race and is not re-run automatically."
-            exit 0
-          fi
-          waiting=0
-          for wf in ${GROUP_MEMBERS}; do
-            n="$(gh api "repos/${REPO}/actions/workflows/${wf}/runs?per_page=20" --jq \
-              '[.workflow_runs[] | select(.status == "pending" or .status == "queued" or .status == "waiting" or .status == "requested")] | length' 2>/dev/null)" || n=""
-            if [ -z "${n}" ]; then
-              echo "::warning title=Lost race recovery::could not read runs for ${wf}; treating its pending slot as taken"
-              waiting=$((waiting + 1))
-              continue
-            fi
-            waiting=$((waiting + n))
-          done
-          if [ "${waiting}" -gt 0 ]; then
-            echo "::warning title=Lost race not re-run::A writer run is already waiting for the lane (${waiting}); re-dispatching now would cancel it. That run or the next routine cycle ingests."
-            echo "- writeback lost its race; a waiting writer run holds the pending slot, so no re-dispatch" >> "$GITHUB_STEP_SUMMARY"
-            exit 0
-          fi
-          if ! gh workflow run patch-ingest.yml --ref main --repo "${REPO}" -f recovery_of="${RUN_ID}"; then
-            echo "::error title=Lost race recovery::re-dispatch of patch-ingest.yml failed"
-            exit 1
-          fi
-          echo "- writeback lost its race with another push to main; re-dispatched \`patch-ingest.yml\` once (recovery of run ${RUN_ID})" >> "$GITHUB_STEP_SUMMARY"
+      # THE CYCLE'S RECORD (G91). Runs ONLY when the writeback above pushed or had nothing to push --
+      # this run's cycle reached main. The writer-queue reaper reads whether a step with exactly this
+      # name succeeded (writer_cycle_recovery.CYCLE_MARKER_STEP) and re-runs, once and only into a
+      # free lane, a routine run whose cycle did not reach main: a lost writeback race, a refused
+      # writeback, or an ingestion that failed before committing. `always()` so it is still recorded
+      # when a later step fails or the run is cancelled after the push.
+      - name: Cycle reached main
+        if: ${{ always() && (steps.commit.outputs.pushed == 'true' || steps.commit.outputs.outcome == 'no_changes') }}
+        run: echo "The writeback reached main (pushed, or nothing to push)."
 
       - name: Mark dry run as unchanged
         if: ${{ github.event.inputs.dry_run == 'true' }}
