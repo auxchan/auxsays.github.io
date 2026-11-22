@@ -257,10 +257,11 @@ auxsays/scripts/tests/test_obs_consensus_acceptance.py = 27
 auxsays/scripts/tests/test_obs_consensus_projection.py = 50
 # AUX-129: the audited-withdrawal tool labelled OBS #13518 (an install failure, still counted) "version
 # works". Pins that a hoped-for, expected, conditional or requested outcome is not a working claim for
-# the two "work" cues, that genuine claims and inverse phrasings still veto, that the tool rebuilds a
+# the two "work" cues, that genuine claims and inverse phrasings still veto (the verb bound to the
+# target is the one judged), that the guard stays linear on long whitespace runs, that the tool rebuilds a
 # stored row with its field boundaries, and that a row whose stored text lost the declared-version line
 # break is UNDETERMINABLE and never withdrawn (CLI on a temporary store). The live store is read only.
-auxsays/scripts/tests/test_obs_validator_boundaries.py = 51
+auxsays/scripts/tests/test_obs_validator_boundaries.py = 96
 # OBS forum health (AUX-100): one embed-only opening post made every OBS forum row partial and
 # revoked live on three patches whose evidence had not changed. Pins the empty-body split by cause
 # (textless vs missing wrapper / extraction failure / unexplained empty wrapper, the last three

@@ -8,7 +8,9 @@ Two validator defects produced the label, and each is fixed and pinned here:
 
   F1  The working cues built on the verb "work" (`target_works`, `works_on_target`) read a hoped-for,
       expected, conditional or requested outcome as a claim. The issue's Expected Behavior field
-      hopes 32.1.2 "will work"; that is a hope, not a report.
+      hopes 32.1.2 "will work"; that is a hope, not a report. The guard judges the verb actually
+      bound to the target, lets a hope word that is the object of "as"/"what"/"if" stand as a
+      comment, reads a lead only inside its own clause, and stays linear on untrusted text.
   F2  The tool ran every stored field together with spaces. A cue could then bind across two
       fields, and R1 (a version the reporter DECLARED is never vetoed) could not apply, because the
       template's version answer is found by the line break after its heading. Stored OBS excerpts
@@ -29,6 +31,7 @@ import re
 import subprocess
 import sys
 import tempfile
+import time
 import traceback
 from pathlib import Path
 
@@ -171,6 +174,126 @@ def run() -> int:  # noqa: PLR0915
     check("F1.52 the rollback cue is untouched, even under a hope (out of this fix's scope)",
           roll.outcome == to.ROLLBACK, str(roll))
 
+    print(NL + "[F1] the verb that is judged is the one bound to the target, not the first in the match")
+    bound = {
+        "F1.60 a hope about the reader, then a claim (mirror)": "Hope it works for you, it works on 32.1.2 for me",
+        "F1.61 an expectation, then a claim (mirror)": "I thought it would work, and it works on 32.1.2",
+        "F1.62 a modal, then an emphatic claim (mirror)": "It should work, and it does work on 32.1.2",
+        "F1.63 a condition, then a claim (mirror)": "If it works, great: it works on 32.1.2",
+        "F1.64 a doubt, then a claim (mirror)": "I wondered if it would work but it works on 32.1.2",
+        "F1.65 a later verb the cue reaches keeps the claim": "32.1.2 should work and it does work",
+        "F1.66 a later verb after a comma keeps the claim": "32.1.2 should work, and it works",
+    }
+    for label, text in bound.items():
+        got = outcome(text)
+        check(label, got.vetoes and got.outcome == to.WORKING, str(got))
+    unbound = {
+        "F1.67 a claim about something else, then a hope bound to the target": (
+            "It works for me, I hope it works on 32.1.2 too"),
+        "F1.68 a later verb that is negated is no claim": "32.1.2 should work, but never works",
+        "F1.69 a later verb that is itself hoped is no claim": "32.1.2 should work, I hope it works",
+        "F1.70 a later 'work around' is not a verb": "32.1.2 should work, try the work around",
+        "F1.71 a later 'working' that does not reach the target is not the bound verb": (
+            "I hope it works on a working 32.1.2 install"),
+    }
+    for label, text in unbound.items():
+        check(label, not vetoes(text), str(outcome(text)))
+
+    print(NL + "[F1] a hope word that is the object of 'as', 'what', 'if' ... is a comment, not a hope")
+    governed = {
+        "F1.80 'As expected' with no comma": "As expected 32.1.2 works fine",
+        "F1.81 'As hoped' with no comma": "As hoped 32.1.2 works",
+        "F1.82 'what I wanted' with no comma": "Exactly what I wanted 32.1.2 works",
+        "F1.83 'what I needed' with filler before the target": "Just what I needed the new 32.1.2 works great",
+        "F1.84 'If needed'": "If needed 32.1.2 works",
+        "F1.85 'When needed'": "When needed 32.1.2 works fine",
+        "F1.86 'As I had hoped'": "As I had hoped 32.1.2 works",
+        "F1.87 mirror: 'As expected it works on'": "As expected it works on 32.1.2",
+        "F1.88 mirror: 'When needed it works with'": "When needed it works with 32.1.2",
+        "F1.89 mirror: 'if you need it, it works on' with no comma": "if you need it it works on 32.1.2",
+    }
+    for label, text in governed.items():
+        got = outcome(text)
+        check(label, got.vetoes and got.outcome == to.WORKING, str(got))
+    ungoverned = {
+        "F1.90 'as if' is still a conditional": "It behaves as if 32.1.2 works",
+        "F1.91 'what if' is still a conditional": "what if it works on 32.1.2 after all",
+        "F1.92 a hope with no governor is still a hope": "I really hope 32.1.2 works",
+    }
+    for label, text in ungoverned.items():
+        check(label, not vetoes(text), str(outcome(text)))
+
+    print(NL + "[F1] mirror direction: an expectation or request that takes 'to' is no claim")
+    for label, text in {
+        "F1.100 'I expect it to work in'": "I expect it to work in 32.1.2",
+        "F1.101 'I was expecting it to work on'": "I was expecting it to work on 32.1.2",
+        "F1.102 'I want it to work on'": "I want it to work on 32.1.2",
+        "F1.103 'I need it to work with'": "I need it to work with 32.1.2",
+        "F1.104 'it needs to work on'": "It needs to work on 32.1.2",
+    }.items():
+        check(label, not vetoes(text), str(outcome(text)))
+    for label, text in {
+        "F1.105 'got it to work on' is achieved": "I got it to work on 32.1.2",
+        "F1.106 'managed to make it work with' is achieved": "I managed to make it work with 32.1.2",
+        "F1.107 a lead word whose 'to' governs a different verb": "I wanted to say it works on 32.1.2",
+    }.items():
+        got = outcome(text)
+        check(label, got.vetoes and got.outcome == to.WORKING, str(got))
+
+    print(NL + "[F1] a lead is read only in its own clause: a title's last word never reaches the body")
+    for label, text in {
+        "F1.110 title 'Help needed', body '32.1.2 works fine'": "Help needed" + NL + "32.1.2 works fine on my PC",
+        "F1.111 title 'Upgrade needed', body 'it works on 32.1.2'": "Upgrade needed" + NL + "it works on 32.1.2",
+    }.items():
+        got = outcome(text)
+        check(label, got.vetoes and got.outcome == to.WORKING, str(got))
+    joined = obs.contradiction_reason({"title": "Help needed", "body": "32.1.2 works fine on my PC"}, V)
+    check("F1.112 and the collector's authority, which joins title and body with a line break, refuses it",
+          joined == "version_reported_working", str(joined))
+
+    print(NL + "[F1] the guard stays linear on untrusted public text")
+    spaced_runs = {
+        "F1.120 a lead word, then 10,000 spaces": "if" + " " * 10000 + "foo 32.1.2 works",
+        "F1.121 a lead word, then 10,000 non-breaking spaces": "if" + chr(0xA0) * 10000 + "foo 32.1.2 works",
+        "F1.122 mirror: a lead and filler, then 10,000 spaces": "I hope it" + " " * 10000 + "x it works on 32.1.2",
+    }
+    for label, text in spaced_runs.items():
+        started = time.monotonic()
+        got = outcome(text)
+        elapsed = time.monotonic() - started
+        # Before the fix these took 6 to 13 s; they now take about 0.01 s. One second is far from both.
+        check(label + " classifies in under 1 s, and the claim still vetoes",
+              elapsed < 1.0 and got.vetoes, f"{elapsed:.3f}s {got}")
+    # A dotless identity (a KB number) never breaks a clause, so only the reach bound keeps each lead
+    # read short: ~0.1 s with it, ~7 s without.
+    many = "I hope KB5050009 works and " * 2000
+    started = time.monotonic()
+    got = to.classify_target_outcome(many, "KB5050009")
+    elapsed = time.monotonic() - started
+    check("F1.123 a 54,000-character body of 2,000 hoped-for matches on a dotless identity classifies in "
+          "under 1 s", elapsed < 1.0 and not got.vetoes, f"{elapsed:.3f}s {got}")
+    calls = []
+    real_question = to._is_question
+    try:
+        to._is_question = lambda *a: calls.append(a) or real_question(*a)
+        outcome("32.1.2 should work and " * 5 + "32.1.2 works")
+    finally:
+        to._is_question = real_question
+    check("F1.124 a hoped-for match is skipped before the unbounded question scan (1 call, the claim)",
+          len(calls) == 1, str(len(calls)))
+    # Each lead pattern is linear on its own, without relying on the reach bound (F1.123).
+    for label, pattern, text in (
+            ("F1.125 the lead pattern before the target", to._LEAD_BEFORE_TARGET, "if" + " " * 10000 + "foo"),
+            ("F1.126 the lead pattern before the verb", to._LEAD_BEFORE_VERB, "I hope it" + " " * 10000 + "x"),
+            # The ambiguous END alone ("\s*\(?\s*$") is quadratic with a small constant: ~0.4 s at
+            # 10,000 spaces and ~3.3 s at 30,000. The fixed pattern takes ~0.01 s at 30,000.
+            ("F1.127 the end of the lead pattern before the target", to._LEAD_BEFORE_TARGET,
+             "if" + " " * 30000 + "foo")):
+        started = time.monotonic()
+        pattern.search(text)
+        elapsed = time.monotonic() - started
+        check(label + " scans a long whitespace run in under 1 s", elapsed < 1.0, f"{elapsed:.3f}s")
+
     # ------------------------------------------------------------------ F2
     print(NL + "[F2] the stored #13518 row: an install failure, still counted, never refused")
     check("F2.0 the live #13518 row exists, is counted and has no exclusion reason",
@@ -212,6 +335,14 @@ def run() -> int:  # noqa: PLR0915
           "the report text with its line breaks (the excerpt only without it)",
           rebuilt == {"title": "Title A" + NL + "Parent B", "body": "first line" + NL + "second line"}
           and wd.stored_issue(cross)["title"].count("Everything works") == 1, repr(rebuilt))
+
+    helped = row("obs-fixture-title-boundary", "Help needed", "32.1.2 works fine on my PC",
+                 source_type="obs_forum_thread")
+    r5, u5 = wd.assess_rows([helped])
+    check("F2.14 the title's line break is a clause boundary: a body claim under a 'Help needed' title is "
+          "still refused on its own words",
+          ids(r5) == [helped["id"]] and u5 == [] and r5[0][1] == "version_reported_working",
+          f"{ids(r5)} {ids(u5)}")
 
     print(NL + "[F2] a declaration the stored text lost: UNDETERMINABLE, never refused")
     flat = ("### Operating System Info Windows 11 ### OBS Studio Version 32.1.2 ### OBS Studio Version "

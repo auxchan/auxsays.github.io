@@ -78,9 +78,16 @@ def stored_issue(row: dict) -> dict:
 def declaration_lost(issue: dict) -> bool:
     """Does the stored text carry a template version heading whose answer it can no longer read?
 
-    Then R1 cannot be evaluated from storage. A row with no heading at all is decidable: its
-    excerpt is centred on the version's FIRST mention, and a declared version is first mentioned
-    in the template's version field, so a declaration of the target would have kept its heading.
+    Then R1 cannot be evaluated from storage. Any such heading counts, including one whose answer
+    is a different version; that errs towards UNDETERMINABLE, which is never withdrawn.
+
+    A row with no heading at all is treated as decidable, and that is an ASSUMPTION, not a
+    guarantee. The collector's excerpt opens about 90 characters before the version's first
+    mention, and a declared version is normally first mentioned in the template's version field,
+    so the heading normally falls inside the excerpt. A long answer to the "(Other)" field can
+    push the heading out of it; such a row reads as decidable and can be refused even though R1
+    would protect it. When this was written, no stored GitHub OBS row without a heading was
+    refused, and the only cut heading fragment sat in one uncounted forum row.
     """
     body = str(issue.get("body") or "")
     headings = len(_DECLARED_VERSION_HEADING.findall(body))

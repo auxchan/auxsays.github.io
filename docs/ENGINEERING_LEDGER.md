@@ -6308,6 +6308,18 @@ the report. No evidence was withdrawn, and no stored row, count, verdict or page
   inverted auxiliary as in "would 32.1.2 work"), with only closed-class filler between. A present or past claim
   ("32.1.2 works fine", "it worked on 32.1.2", "rolled back to 32.1.2 and it works") still vetoes. No other cue
   changed. The R1 note there no longer says #13518 was about "cannot reproduce".
+- Same module, after independent review:
+  - The verb judged is the one bound to the target. In the mirror direction that is the last verb from which the
+    cue still reaches the target, so "Hope it works for you, it works on 32.1.2 for me" still vetoes.
+  - A later verb that target_works reaches keeps the claim unless it is hoped for or negated, so "32.1.2 should
+    work and it does work" still vetoes.
+  - A hope word that is the object of "as", "like", "what", "when", "if" or "than" is a comment, not a hope. So
+    "As expected 32.1.2 works fine" and "If needed 32.1.2 works" still veto without a comma.
+  - In the mirror direction a lead word may take "to": "I want it to work on 32.1.2" is no claim, while "I got it
+    to work on 32.1.2" still vetoes.
+  - Leads are read within the clause and at most 160 characters back, and the optional bracket can no longer
+    split a whitespace run several ways. A 10,000-space run used to take 6 to 13 s and now takes about 0.01 s.
+    A hoped-for match is skipped before the unbounded question scan.
 - `withdraw_obs_role_misattributed_rows.py`: a stored row is rebuilt the way the collector read it: the title, a
   line break, then the body, with each distinct title once. When the authority would refuse a row whose stored text
   holds the template's version heading without its line break, the tool reports the row as UNDETERMINABLE. It
@@ -6320,16 +6332,39 @@ the report. No evidence was withdrawn, and no stored row, count, verdict or page
   The one already-withdrawn row (forum thread 190590) is refused before and after. Either fix alone also clears
   #13518: the wording fix keeps it, and the boundary fix makes it undeterminable.
 - `consensus_evidence.yml`, every generated record and every `_data` file are byte-identical.
-- `test_obs_validator_boundaries.py` (51 checks, blocking): #13518's stored fields read from the live store, its
-  template layout, hypothetical phrasings in both directions, genuine claims, inverse probes, a field-boundary
-  fixture with its control, and the CLI on a temporary store. 13 mutants, one per fix clause, each killed by its
-  named checks.
+- `test_obs_validator_boundaries.py` (96 checks, blocking) covers:
+  - #13518's stored fields read from the live store, and its template layout;
+  - hypothetical phrasings in both directions, genuine claims and inverse probes;
+  - the bound verb, governed and ungoverned hope words, and "to" in the mirror direction;
+  - a title/body line break as a clause boundary;
+  - timing checks on whitespace runs, on each lead pattern alone, and on a body of 2,000 hoped-for matches;
+  - a field-boundary fixture with its control, and the CLI on a temporary store.
+- 28 mutants, one per fix clause, each killed by its named checks.
+- About 250 reviewer and own phrasings, compared with main: 0 newly vetoed.
 
-**Residual** Hypothetical wording still reads as a claim in the other cues: "I hope 32.1.2 is stable"
-(`target_said_fine`) and "I hope to downgrade to 32.1.2" (rollback). These were left out of the narrow fix. A lead
-word outside the closed filler list, a curly opening quote, or an "Expected Behavior: 32.1.2 works" heading still
-leaves the old veto in place, which is the earlier behaviour. "I tested whether 32.1.2 works and it does" and
-"32.1.2 will work fine, I tested it" are read as hypothetical.
+**Residual** These are left out of the narrow fix. Each one behaves as main does, except where marked "read as
+hypothetical".
+- Other cues still read hypothetical wording as a claim: "I hope 32.1.2 is stable" (`target_said_fine`) and "I
+  hope to downgrade to 32.1.2" (rollback).
+- These keep the old veto:
+  - a word outside the closed filler list between the lead and the subject, as in "Please make the plugin work
+    with 32.1.2";
+  - a curly opening quote, or an "Expected Behavior: 32.1.2 works" heading;
+  - "32.1.2 must work", "32.1.2 has to work", "assuming 32.1.2 works", "Supposedly 32.1.2 works";
+  - "Try 32.1.2 and see if it works", "Is it working on 32.1.2" with no question mark;
+  - "I would like 32.1.2 to work";
+  - "if you want 32.1.2 to work, ...", because the governor rule keeps a governed hope word as a comment.
+- Read as hypothetical:
+  - "I tested whether 32.1.2 works and it does", "32.1.2 will work fine, I tested it";
+  - "Back then 32.1.2 would work every time", "It could work on 32.1.2 when I tried yesterday", "Only after a
+    reboot did it work on 32.1.2";
+  - a later verb beyond target_works' 25-character reach ("32.1.2 should work and indeed it works") or left
+    out ("32.1.2 should work, and it does").
+- Pre-existing, not changed here; each needs its own ticket:
+  - `_POLARITY_INVERTER`'s `\bn't\b` cannot match inside a contraction, so "32.1.2 won't work on Wayland" and
+    "32.1.2 isn't working" read as working claims, on main too.
+  - `_is_question` scans from the start of the text for every match it tests. A crafted 66,000-character body
+    of 2,000 negated claims takes about 2 s on main and on this branch.
 
 **Reopen only if** #13518 stops counting without its own audited change; a hoped-for "will work" or "should
 work" vetoes again; a genuine "works" or "worked" claim stops vetoing; or the tool refuses or withdraws a row
