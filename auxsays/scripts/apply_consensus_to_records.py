@@ -252,7 +252,7 @@ def _scan_generated_records() -> tuple[dict[tuple[str, str, str], dict[str, Any]
                 "target_os_build": str(data.get("target_os_build") or "").strip(),
                 "target_release_date": str(data.get("target_release_date") or "").strip(),
                 # GROWTH-3 policy facts: Microsoft's release type (security classification) and the
-                # exact build (the one lifecycle exception is keyed on KB + build).
+                # exact build (a lifecycle withdrawal is keyed on KB + build).
                 "update_type": str(data.get("update_type") or "").strip(),
                 "target_build": str(data.get("target_build") or "").strip(),
             }

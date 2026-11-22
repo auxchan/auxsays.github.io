@@ -1,5 +1,5 @@
-"""The two committed fact files the verdict authority reads: reviewed verdict reasons and the one
-verified lifecycle exception (GROWTH-3).
+"""The two committed fact files the verdict authority reads: reviewed verdict reasons and the
+verified official withdrawals (GROWTH-3; G94).
 
 WHY A FILE. Owner decision 1 (2026-11-06) allows TEST FIRST and WAIT only with an evidence-backed
 reason: the same concrete problem from independent incidents, or "worked before, broke after

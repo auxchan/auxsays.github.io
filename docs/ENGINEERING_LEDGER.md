@@ -703,14 +703,24 @@ the replacement KB and the article the page printed depended on the order of the
 1. The count check is removed. Every entry still passes every per-entry check, and a malformed entry still refuses
    the whole file, with a QA error (GROWTH-3 review 2, unchanged). An entry is still added only by reviewed pull request.
 2. `lifecycle_for` reads every matching entry and rests the page on the earliest verified one (`verified_at`, then
-   `id`, then the whole entry). A later entry never replaces an earlier one, and file order decides nothing.
-   decide's precedence is unchanged.
+   `id`, then the whole entry). An entry verified later never replaces one verified earlier, and file order decides
+   nothing. "Earlier" is by `verified_at`, not by when an entry is added: a newly added entry with an earlier
+   `verified_at` does take over the page's replacement and article (the page stays AVOID). decide's precedence is
+   unchanged.
+
+**The cap's second job** The cap also held the shipped file, mechanically, to the one entry the owner approved
+(decision 2, KB5079391). That job now rests on review plus two blocking checks that pin the shipped file to exactly
+that entry (G94-C1 by id, G3-L1 by count and KB): a further withdrawal fails both until the same reviewed pull
+request changes them. Each new withdrawal still needs the owner's approval and the Microsoft source/terms decision
+(K1; no support.microsoft.com fetch until then) before it is added.
 
 **Measured** Origin/main 44e6cc7e (after G87) against this branch: the verdict projection (58 rows, 2 AVOID), the reason
-candidates and the evidence-overview projection are byte-identical. QA `--read-only --publish-strict` gives 0 errors
-on both, PR-time and in deploy order. `test_official_withdrawal_completeness.py` (10 checks; W1..W6, C1, C2, one
-mutant per fix) fails 9 of 10 on main. `test_growth3_verdict_policy.py` stays at 156: G3-L1 restated, and X13 now
-restores the cap.
+candidates, the evidence-overview projection and live eligibility are byte-identical. QA `--read-only --publish-strict`
+gives 0 errors on both, PR-time and in deploy order. `test_official_withdrawal_completeness.py` (11 checks; W1..W6,
+C1, C2, one mutant per fix, and X3) passes 1 of 11 on main's code. `test_growth3_verdict_policy.py` stays at 156:
+G3-L1 restated, and X13 now restores the cap. Review round 1 found an order led by `id` survived every suite (W2's
+later entry happened to sort after the earlier one by id too); W2 now uses two later-verified entries whose ids sort
+before and after the earlier one's, and mutant X3 pins it.
 
 **Not changed** No withdrawal added, no source, fetch, acceptance rule, threshold, verdict or template. The schema
 is still Microsoft-only (`official_url` on support.microsoft.com, one relationship). Withdrawals are still not
@@ -718,7 +728,7 @@ observed automatically: that needs the KB source assessment and a deterministic 
 
 **Residual** One malformed entry still empties the whole file in memory. QA errors on it in every mode, so it can
 never publish silently. Two entries for one release that name different replacements raise no warning; the page
-shows the earlier one.
+shows the one verified earlier (a QA warning for that case is the follow-up).
 
 **Reopen only if** a valid second entry is refused or empties the file; a page's lifecycle details change with file
 order; or a release with any valid entry naming its build is not AVOID.

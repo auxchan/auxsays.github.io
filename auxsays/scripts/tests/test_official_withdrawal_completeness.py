@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""G94 (AUX-131): every official withdrawal is kept; a later one never drops or replaces an earlier one.
+"""G94 (AUX-131): every official withdrawal is kept; none drops another, and one verified later never
+replaces one verified earlier.
 
 THE DEFECT. `_data/patch_lifecycle.yml` is the only record of an official withdrawal (decide's R1,
 AVOID). `lib/verdict_reasons.lifecycle_errors` refused any SECOND entry (`MAX_LIFECYCLE_ENTRIES = 1`),
@@ -13,17 +14,26 @@ on the order of the file.
 
 THE FIX. The count check is gone (each entry still passes every per-entry check, and a malformed entry
 still refuses the whole file, a QA error), and `lifecycle_for` rests a page on the EARLIEST verified
-matching entry. decide's precedence is unchanged: a withdrawal is AVOID before anything else.
+matching entry (`verified_at` first; `id` only breaks a tie). decide's precedence is unchanged: a
+withdrawal is AVOID before anything else. "Earlier" means verified earlier, not added earlier: an entry
+added later with an earlier `verified_at` does take over the page's details (the page stays AVOID).
+
+THE CAP'S SECOND JOB. The cap also held the shipped file to the one entry the owner approved (decision 2,
+KB5079391). C1 here and G3-L1 in test_growth3_verdict_policy.py still pin the shipped file to exactly that
+entry, so a further withdrawal fails both blocking suites until the same reviewed pull request changes
+them -- and it still needs the owner's approval and the Microsoft source/terms decision first.
 
   W1  two withdrawals on different releases are both kept, through the deploy's own loader
-  W2  a second entry for the SAME release: still AVOID, the earlier entry's details, in either order
+  W2  a second entry for the SAME release, verified later: still AVOID on the earlier verified entry's
+      details, in either file order, whether the later entry's id sorts before or after the earlier one's
   W3  reordering the file changes nothing in the projection (every permutation)
   W4  re-ingesting the same fact (an exact duplicate, or the same file twice) changes nothing
   W5  a malformed entry fails closed: it is named, the file supports nothing, and QA errors (never silent)
   W6  decide's precedence with several entries: AVOID before SECURITY UPDATE and before a WAIT reason
-  C1  the shipped corpus: exactly the two KB5079391 pages are AVOID
+  C1  the shipped file is exactly the owner-approved KB5079391 entry, and exactly its two pages are AVOID
   C2  the shipped corpus with a further valid withdrawal appended: no verdict anywhere changes
   X1/X2  one mutant per fix, each caught by a named check above
+  X3  the order led by `id` instead of `verified_at` (a later-verified entry whose id sorts first wins)
 
 Offline; reads the shipped tree, writes only in a temp dir.
 Run: PYTHONDONTWRITEBYTECODE=1 python auxsays/scripts/tests/test_official_withdrawal_completeness.py
@@ -50,6 +60,8 @@ from lib import verdict_reasons as vr  # noqa: E402
 
 WIN = "microsoft-windows-11"
 SHIPPED = vr.load_lifecycle(_AUX / "_data" / "patch_lifecycle.yml")
+# The only withdrawal the owner has approved for display (decision 2, 2026-11-06).
+APPROVED_IDS = ["microsoft-windows-11:KB5079391:withdrawn-for-new-installs"]
 KB5079391_PAGES = {"microsoft-windows-11|24H2|26100.8116", "microsoft-windows-11|25H2|26200.8116"}
 
 _PASS = 0
@@ -102,13 +114,20 @@ def win(version: str, kb: str, build: str, update_type: str = "2026-03 D", **ove
     return r
 
 
-# E1 withdraws one update on two OS builds; E2 another update; E1B is a LATER statement about the same
-# release as E1 (one of its builds), naming a different replacement and article.
+# E1 withdraws one update on two OS builds; E2 another update. E1B and E1C are LATER-verified statements
+# about the same release as E1 (one of its builds), each naming a different replacement and article. Their
+# ids straddle E1's -- E1B's sorts BEFORE it, E1C's after -- so a page that rests on E1 is resting on the
+# earliest VERIFIED entry, never on whichever id happens to sort first or last.
 E1 = entry("KB5000002", ["26200.2000", "26100.2000"], "KB5000003", "2026-11-06")
 E2 = entry("KB5000012", ["26200.3000"], "KB5000013", "2026-12-06")
 E1B = entry("KB5000002", ["26200.2000"], "KB5000099", "2026-12-10",
-            id=f"{WIN}:KB5000002:withdrawn-for-new-installs:restated",
+            id=f"{WIN}:KB5000002:restated",
             official_url="https://support.microsoft.com/en-us/test/kb5000002-restated")
+E1C = entry("KB5000002", ["26200.2000"], "KB5000098", "2026-12-12",
+            id=f"{WIN}:KB5000002:withdrawn-for-new-installs:restated",
+            official_url="https://support.microsoft.com/en-us/test/kb5000002-restated-again")
+assert E1B["id"] < E1["id"] < E1C["id"] and E1["verified_at"] < E1B["verified_at"] < E1C["verified_at"], \
+    "W2's fixture must keep the later-verified ids on both sides of E1's"
 P25 = win("25H2", "KB5000002", "26200.2000")
 P24 = win("24H2", "KB5000002", "26100.2000")
 P2 = win("25H2", "KB5000012", "26200.3000")
@@ -154,18 +173,21 @@ def check_completeness() -> None:
 
 
 def check_same_release() -> None:
-    errs = vr.lifecycle_errors([E1, E1B])
-    forward, backward = loaded([E1, E1B])[0], loaded([E1B, E1])[0]
-    first = (shown(P25, forward), shown(P25, backward), shown(P24, forward), shown(P24, backward))
-    alone_late, alone_early = shown(P25, [E1B]), shown(P25, [E1])
-    e1_url = E1["official_url"]
-    check("G94-W2 a second entry for the SAME release is kept: the page stays AVOID and rests on the earlier "
-          "verified entry (its replacement and article) in either file order; either entry alone still withdraws it",
-          not errs and len(forward) == len(backward) == 2
-          and first[0] == first[1] == ("AVOID", "KB5000003", e1_url)
-          and first[2] == first[3] == ("AVOID", "KB5000003", e1_url)
-          and alone_late[0] == alone_early[0] == "AVOID" and alone_late[1] == "KB5000099",
-          f"errors={errs} first={first} alone={alone_late, alone_early}")
+    earlier = ("AVOID", "KB5000003", E1["official_url"])
+    seen: dict[str, tuple] = {}
+    errs: list[str] = []
+    for name, later in (("E1B", E1B), ("E1C", E1C)):
+        errs += vr.lifecycle_errors([E1, later])
+        forward, backward = loaded([E1, later])[0], loaded([later, E1])[0]
+        seen[name] = (len(forward), len(backward), shown(P25, forward), shown(P25, backward),
+                      shown(P24, forward), shown(P24, backward))
+    alone = (shown(P25, [E1B]), shown(P25, [E1C]), shown(P25, [E1]))
+    check("G94-W2 a second entry for the SAME release, verified later, is kept: the page stays AVOID and rests "
+          "on the earlier VERIFIED entry (its replacement and article) in either file order, whether the later "
+          "entry's id sorts before E1's (E1B) or after it (E1C); each entry alone still withdraws it",
+          not errs and all(s[:2] == (2, 2) and s[2:] == (earlier,) * 4 for s in seen.values())
+          and [a[0] for a in alone] == ["AVOID"] * 3 and (alone[0][1], alone[1][1]) == ("KB5000099", "KB5000098"),
+          f"errors={errs} seen={seen} alone={alone}")
 
 
 def check_reordering() -> None:
@@ -260,11 +282,14 @@ def corpus_projection(life: list[dict]) -> dict:
 def check_corpus() -> None:
     shipped = corpus_projection(SHIPPED)
     avoid = {k: row for k, row in shipped["pages"].items() if row["verdict"] == "AVOID"}
-    check("G94-C1 the shipped file passes and, over the shipped records and counted evidence, exactly the two "
-          "KB5079391 pages are AVOID, each naming KB5086672",
-          not vr.lifecycle_errors(SHIPPED) and len(SHIPPED) == 1 and set(avoid) == KB5079391_PAGES
+    check("G94-C1 the shipped file passes and holds exactly the owner-approved KB5079391 entry (the cap's second "
+          "job: a further withdrawal needs the owner's approval and the Microsoft source/terms decision, then "
+          "this check changed in the same reviewed PR), and over the shipped records and counted evidence exactly "
+          "its two pages are AVOID, each naming KB5086672",
+          not vr.lifecycle_errors(SHIPPED) and [e.get("id") for e in SHIPPED] == APPROVED_IDS
+          and set(avoid) == KB5079391_PAGES
           and all("Replacement: KB5086672." in row["body"] for row in avoid.values()),
-          f"avoid={sorted(avoid)}")
+          f"ids={[e.get('id') for e in SHIPPED]} avoid={sorted(avoid)}")
     further = entry("KB5099991", ["26100.9001", "26200.9001"], "KB5099992", "2026-12-06")
     life, problems = loaded(SHIPPED + [further])
     grown = corpus_projection(life)
@@ -299,13 +324,23 @@ def check_mutations(tmp: Path) -> None:
         """lib/verdict_reasons.lifecycle_errors before G94: a second entry is refused."""
         return real_errors(entries) + ([f"{len(entries)} lifecycle entries"] if len(entries) > 1 else [])
 
+    def id_first(e):
+        """The order with `id` ahead of `verified_at`: still total, so file order still decides nothing, but
+        a later-verified entry whose id sorts first replaces the earlier one."""
+        return (pd._text(e.get("id")), pd._text(e.get("verified_at")))
+
     cases = [
         ("G94-X1 the one-entry cap restored (a second withdrawal refuses the whole file)",
          lambda: (check_completeness(), check_corpus()), vr, "lifecycle_errors", capped),
         ("G94-X2 first match in file order restored (a later entry for the same release can win)",
          lambda: (check_same_release(), check_reordering()), pd, "lifecycle_for", first_match_lifecycle_for),
+        ("G94-X3 the entry order led by id instead of verified_at (a later-verified entry can win)",
+         lambda: (check_same_release(), check_reordering()), pd, "_lifecycle_order", id_first),
     ]
     for label, body, owner, name, replacement in cases:
+        if not hasattr(owner, name):
+            check(f"{label} -> caught", False, f"{owner.__name__}.{name} does not exist: nothing to mutate")
+            continue
         original = getattr(owner, name)
         with captured() as baseline:
             body()
