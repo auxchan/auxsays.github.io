@@ -591,7 +591,7 @@ auxsays/scripts/tests/test_volume_precaution_g87.py = 56
 # malformed credit, or a line with no finding to follow. No implication: the note exactly G87's, the line never
 # names the newer release, nothing safer or recommended, nothing in the note's four checked fields, no third
 # caution. The way forward keeps its G87 variants. Corpus-wide properties are one check each. Needs ruby + liquid.
-auxsays/scripts/tests/test_fixed_in_placement_g95.py = 25
+auxsays/scripts/tests/test_fixed_in_placement_g95.py = 26
 
 # Premiere discovery ROUTING, and the health semantics that keep it honest. The nine-method flat
 # loop cost 546.8s over 219 HTTP requests for two records; wayback alone was 408.5s and reddit

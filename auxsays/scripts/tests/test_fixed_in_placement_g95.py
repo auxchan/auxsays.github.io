@@ -561,6 +561,18 @@ def run() -> int:
           and not refused([good], ["Its finding."]) and not refused([], []) and not refused([], None),
           "")
 
+    built = overview["pages"][P3222]
+    moved = json.loads(json.dumps(built))
+    moved["next_action"]["fixed_after"] = [str(by_id[REASON_MENU]["reason"])]
+    stale = json.loads(json.dumps(built))
+    stale["next_action"].pop("fixed_after", None)
+    check("C8 QA's recompute comparison (next_action_mismatch) refuses a rendered row whose fixed line would print "
+          "after another finding (32.2.2's line moved to the menu-bar finding) or names none (a projection from "
+          "before G95), and accepts the row as built",
+          bool(eo.next_action_mismatch(moved, built)) and bool(eo.next_action_mismatch(stale, built))
+          and not eo.next_action_mismatch(built, built),
+          str([eo.next_action_mismatch(moved, built), eo.next_action_mismatch(stale, built)]))
+
     section("[N] no implication about the newer release; nothing recommended")
     notes = {k: text_of(aside(heads[k], "update-newer-release")) for k in want}
     fixed_paras = {k: " ".join(rendered[k]) for k in want}

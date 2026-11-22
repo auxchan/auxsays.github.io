@@ -641,7 +641,7 @@ passed because it asked only whether the finding appeared somewhere in the parag
 - Publish-strict QA: 0 errors and the same single pre-existing warning on both trees. The four deploy-time site
   checks are clean on both builds.
 
-**Tests** `test_fixed_in_placement_g95.py` (25 checks, blocking) renders the real patch page with the shipped Liquid.
+**Tests** `test_fixed_in_placement_g95.py` (26 checks, blocking) renders the real patch page with the shipped Liquid.
 - P2: the text directly before the fixed line is its own whole finding clause.
 - P3: the verdict text is unchanged word for word.
 - P8-P11 cover two lines, a misordered pair, a line that cannot be placed, a head reason and the placement rule.
@@ -653,6 +653,14 @@ passed because it asked only whether the finding appeared somewhere in the parag
 **Reopen only if** a fixed line prints in or after a newer-release note or in the way forward, prints after anything
 but its own finding's clause, changes or reorders a word of the verdict line, prints under a verdict other than WAIT,
 names the newer release, or credits the vendor without an official confirmation of exactly that version.
+
+**Review-limit exception (GPT ruling Q1b, 2026-11-21)** Review 2 confirmed the production fix and found one QA branch
+that no test reached: `next_action_mismatch` comparing `fixed_after` (`elif got_after != want_after:`). That branch is
+how publish-strict QA refuses a deployed overview row whose fixed line would print after another finding, or that
+names no finding at all. With it replaced by `elif False:`, every suite still passed. The reviewer's exact test, C8,
+was applied verbatim, and the governed count moved from 25 to 26. No production code changed. Measured: the suite
+passes 26/26; with that mutant it fails 25/26, at C8; the eight earlier G95 mutants are each still killed. Merge waits
+on one independent verifier confirming that the diff holds only these changes.
 
 ---
 
