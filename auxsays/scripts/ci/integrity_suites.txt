@@ -40,6 +40,17 @@
 auxsays/scripts/tests/test_acrobat_vendor_authority.py = 49
 auxsays/scripts/tests/test_audit_consensus_evidence.py = 18
 auxsays/scripts/tests/test_automation_writeback.py = 152
+# G91: every writer lane that pushes verifies its Pages DEPLOYMENT, not just the dispatch (a run
+# superseded in the `pages` group is not a failed build), and a routine cycle that ran but never
+# reached main is re-run once by the writer-queue reaper instead of being lost (run 44878227542),
+# with ONE tracking issue when it stays lost or the Pages build on main fails. Drives the real
+# writeback against a throwaway bare origin and a scripted run list (including a later push whose
+# build supersedes ours), runs it as the bare script, parses every writer's argument list with the
+# writeback's own parser, evaluates the `Cycle reached main` conditions and run names per context,
+# executes chain-ingest's and the reaper's eviction shell against a fake gh, and runs
+# writer_cycle_recovery.py both as functions and as a bare script against a fake gh serving raw API
+# JSON.
+auxsays/scripts/tests/test_deploy_verification_and_lost_race.py = 151
 # A stored evidence row may not disappear, and may stop being accepted only by an audited in-place
 # withdrawal. Every in-tree gate compares the records against the SAME store a purge rewrote, so a
 # coherent 98% DaVinci deletion passed QA, the audit and this whole manifest, and the real writeback
@@ -782,17 +793,6 @@ auxsays/scripts/tests/test_writer_queue_concurrency.py = 72
 # and this repo's Windows dev setup both provide; it reports and fails if bash is absent
 # rather than passing vacuously.
 auxsays/scripts/tests/test_writer_queue_reaper_behaviour.py = 25
-# G91: every writer lane that pushes verifies its Pages DEPLOYMENT, not just the dispatch (a run
-# superseded in the `pages` group is not a failed build), and a routine cycle that ran but never
-# reached main is re-run once by the writer-queue reaper instead of being lost (run 44878227542),
-# with ONE tracking issue when it stays lost or the Pages build on main fails. Drives the real
-# writeback against a throwaway bare origin and a scripted run list (including a later push whose
-# build supersedes ours), runs it as the bare script, parses every writer's argument list with the
-# writeback's own parser, evaluates the `Cycle reached main` conditions and run names per context,
-# executes chain-ingest's and the reaper's eviction shell against a fake gh, and runs
-# writer_cycle_recovery.py both as functions and as a bare script against a fake gh serving raw API
-# JSON.
-auxsays/scripts/tests/test_deploy_verification_and_lost_race.py = 151
 # AUX-120: not monitored is not too few reports. 847 zero-report patch pages of products with no
 # community collection said "Too few reports for a verdict yet." and "Community signal: Not enough
 # reports". Real Liquid renders of the patch page over every coverage and community state the
