@@ -1,6 +1,6 @@
-# OFFICIAL UPDATE LIFECYCLE: ONE VERIFIED EXCEPTION, NOT THE LIFECYCLE MECHANISM (GROWTH-3).
+# OFFICIAL UPDATE WITHDRAWALS, NOT THE LIFECYCLE MECHANISM (GROWTH-3; G94).
 #
-# This file holds exactly one record: Microsoft withdrew KB5079391 for new installations and named
+# This file holds one record today: Microsoft withdrew KB5079391 for new installations and named
 # KB5086672 as its replacement. The owner approved showing "AVOID - Microsoft withdrew this update
 # for new installations. Replacement: KB5086672" on its pages (decision 2, 2026-11-06). It applies
 # to INSTALLING the withdrawn update, not to devices that already installed it.
@@ -8,8 +8,9 @@
 # It is NOT how lifecycle facts will be maintained. The general "newer update available" links (74
 # Windows pages) are not built: they wait for the Microsoft KB source assessment (rights and
 # production reachability), exact KB/build applicability checks and a deterministic
-# source-to-record writer. lib/verdict_reasons.lifecycle_errors refuses a second entry here, so this file
-# cannot grow into a hand-maintained list.
+# source-to-record writer. Every entry must pass lib/verdict_reasons.lifecycle_errors and is added only
+# by a reviewed pull request. A further withdrawal is kept beside this one: until G94 (AUX-131) a second
+# entry was refused, which emptied the file and took this AVOID with it.
 #
 # Stored: KB ids, the exact OS builds, dates, the official article URL and the relationship type.
 # No Microsoft text. Verified 2026-11-06 from the article's own withdrawal note (GROWTH-3 spec v1

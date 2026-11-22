@@ -350,7 +350,17 @@ auxsays/scripts/tests/test_patch_decision_authority.py = 213
 # 148 -> 156 (G66): the KB5079391 entry carries the K3 provenance (file and statement sha256, UTC retrieval
 # time) as optional, validated, text-free fields (G66-L1..L4); both AVOID pages link the official statement
 # from the projection through the gate to the shipped page template, and no other verdict does (G66-S1..S4).
+# 156 unchanged (G94, AUX-131): G3-L1 now asserts a second lifecycle entry is kept, never refused for being a
+# second, and mutant X13 restores the one-entry cap (it was "a second entry is accepted").
 auxsays/scripts/tests/test_growth3_verdict_policy.py = 156
+# G94 (AUX-131): every official withdrawal is kept. The one-entry cap refused any second lifecycle entry, the
+# refused file supported nothing, so a second withdrawal took KB5079391's AVOID off both pages and QA blocked
+# every deploy and lane; and the first match in file order decided which entry a page rested on. Two
+# withdrawals on different releases (W1), a second entry for the same release in either order (W2), all six
+# orders of three entries (W3), an exact duplicate and a re-read (W4), a malformed entry failing closed with a
+# QA error (W5), decide's precedence with several entries (W6), the shipped corpus (C1) and the corpus with a
+# further withdrawal appended, unchanged (C2); one mutant per fix (X1 the cap, X2 first match).
+auxsays/scripts/tests/test_official_withdrawal_completeness.py = 10
 # G35-04, the deterministic verdict-reason producer (lib/verdict_reason_producer): the vendor-
 # confirmed-serious class on frozen copies of the stored statements, the six named pages (VRP-V1..V7);
 # the user-corroborated install-failure class and its mandatory independence gate (VRP-I1..I6); the

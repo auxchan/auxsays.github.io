@@ -527,21 +527,33 @@ def _release_context(record: dict[str, Any]) -> str:
     return ""
 
 
+def _lifecycle_order(entry: dict[str, Any]) -> tuple[str, str, str]:
+    """Earliest verified first, then id, then the entry's whole content: a total order that file
+    order never enters."""
+    return (_text(entry.get("verified_at")), _text(entry.get("id")),
+            repr(sorted((str(k), repr(v)) for k, v in entry.items())))
+
+
 def lifecycle_for(record: dict[str, Any] | None, lifecycle: Any = ()) -> dict[str, Any] | None:
     """The applicable official withdrawal for this exact record, or None. Exact identity only: same
-    product, same KB, and this record's own OS build listed. Never inferred from a newer number."""
+    product, same KB, and this record's own OS build listed. Never inferred from a newer number.
+
+    EVERY MATCHING ENTRY IS READ (G94, AUX-131). The first match in file order used to win, so with a
+    second entry for the same release (a later official statement about the same update) reordering
+    the file changed the replacement KB and the source the page printed. Now the page rests on the
+    EARLIEST verified matching entry: a later entry never replaces an earlier one, file order decides
+    nothing, and the release stays withdrawn while any entry for it stands."""
     rec = record or {}
     kb = _text(rec.get("target_kb"))
     build = _text(rec.get("target_build"))
     if not kb or not build:
         return None
-    for entry in lifecycle or ():
-        if (_text(entry.get("product_id")) == _text(rec.get("product_id"))
-                and _text(entry.get("kb")) == kb
-                and _text(entry.get("relationship")) == "withdrawn_for_new_installs"
-                and build in [_text(b) for b in entry.get("builds") or []]):
-            return dict(entry)
-    return None
+    matches = [entry for entry in lifecycle or ()
+               if (_text(entry.get("product_id")) == _text(rec.get("product_id"))
+                   and _text(entry.get("kb")) == kb
+                   and _text(entry.get("relationship")) == "withdrawn_for_new_installs"
+                   and build in [_text(b) for b in entry.get("builds") or []])]
+    return dict(min(matches, key=_lifecycle_order)) if matches else None
 
 
 class Decision:

@@ -19,6 +19,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-003 | Resolved | Ingestion health | High | A dead source reported healthy |
 | AUX-004 | Resolved | Presentation | Medium | Patch headings invisible in OS light mode |
 | AUX-005 | Deferred | Patch decision | Medium | Official hard-stop AVOID path (partially built) |
+| AUX-131 | Resolved | Patch decision | Medium | A second official withdrawal could not be recorded, and adding one took the first withdrawal's AVOID away |
 | AUX-006 | Deferred | Patch decision | Medium | Community-triggered AVOID |
 | AUX-007 | Resolved | Patch decision | Medium | OBS verdict keys on a dead `update_status` axis — closed by AUX-029 |
 | AUX-008 | Resolved | Vocabulary | Low | Verdict vocabulary declared five ways — closed by AUX-029 |
@@ -677,6 +678,50 @@ store bytes, all eight decisions and every figure above were unchanged
 
 **Reopen only if** any of the eight counts again, row 51 stops counting, or `identity_not_the_subject` refuses a
 counted Windows row (that is a new candidate and needs its own audited manifest, never a widened run of this one).
+
+---
+
+### AUX-131 — A second official withdrawal could not be recorded, and adding one took the first withdrawal's AVOID away
+
+- **Status** Resolved · **Area** Patch decision · **Severity** Medium
+- **First seen** 2026-11-21 (G89 design: "`MAX_LIFECYCLE_ENTRIES = 1`") · **Resolved** 2026-11-22 (G94; GPT G89
+  decisions, owner-relayed: "A subsequent withdrawal must not be missed.")
+
+**Symptom** `_data/patch_lifecycle.yml` is the only record of an official withdrawal (decide's R1, AVOID). It could
+hold one entry for the whole site, not one per release. Measured on this tree with the real loader: appending any
+second entry (another update, a second statement about KB5079391, an exact duplicate) made both KB5079391 pages
+AVOID -> INSUFFICIENT DATA in the deploy projection. QA then reported `patch_lifecycle_invalid`, which blocks
+`pages.yml` (`--publish-strict`) and every writeback lane's validate step. So no second withdrawal could ever be
+recorded. Nothing was published wrong: the file has only ever held one entry.
+
+**Cause** `verdict_reasons.lifecycle_errors` refused more than `MAX_LIFECYCLE_ENTRIES = 1` entries. Every consumer
+treats a refused file as empty: the projection, both record writers (silently) and QA. Separately,
+`patch_decision.lifecycle_for` returned the first matching entry in file order. With two entries for one release,
+the replacement KB and the article the page printed depended on the order of the file.
+
+**Fix**
+1. The count check is removed. Every entry still passes every per-entry check, and a malformed entry still refuses
+   the whole file, with a QA error (GROWTH-3 review 2, unchanged). An entry is still added only by reviewed pull request.
+2. `lifecycle_for` reads every matching entry and rests the page on the earliest verified one (`verified_at`, then
+   `id`, then the whole entry). A later entry never replaces an earlier one, and file order decides nothing.
+   decide's precedence is unchanged.
+
+**Measured** Origin/main 44e6cc7e (after G87) against this branch: the verdict projection (58 rows, 2 AVOID), the reason
+candidates and the evidence-overview projection are byte-identical. QA `--read-only --publish-strict` gives 0 errors
+on both, PR-time and in deploy order. `test_official_withdrawal_completeness.py` (10 checks; W1..W6, C1, C2, one
+mutant per fix) fails 9 of 10 on main. `test_growth3_verdict_policy.py` stays at 156: G3-L1 restated, and X13 now
+restores the cap.
+
+**Not changed** No withdrawal added, no source, fetch, acceptance rule, threshold, verdict or template. The schema
+is still Microsoft-only (`official_url` on support.microsoft.com, one relationship). Withdrawals are still not
+observed automatically: that needs the KB source assessment and a deterministic writer.
+
+**Residual** One malformed entry still empties the whole file in memory. QA errors on it in every mode, so it can
+never publish silently. Two entries for one release that name different replacements raise no warning; the page
+shows the earlier one.
+
+**Reopen only if** a valid second entry is refused or empties the file; a page's lifecycle details change with file
+order; or a release with any valid entry naming its build is not AVOID.
 
 ---
 
