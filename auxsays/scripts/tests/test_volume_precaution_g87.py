@@ -806,14 +806,16 @@ def check_corpus_and_surfaces() -> None:
     kinds = {k: (v, (((overview["pages"].get(k) or {}).get("next_action") or {}).get("fixed"))) for k, v in kinds.items()}
     check("C3 every page that prints WAIT in this tree has a next action; the four: 33.0.1 the newer release, 32.1.1 "
           "archived, 32.1.2 the newer release plus its reviewed fix in 32.2.0, 32.2.2 the newer release plus its "
-          "reviewed fix in 33.0.0",
+          "reviewed fix in 33.0.0 (each credited to OBS Project's release notes for that version, whose official "
+          "confirmation the reason cites: G95, AUX-132)",
           printed_wait and not no_exit and kinds["obs-studio|32.1.1|"] == ("archived", [])
           and kinds["obs-studio|33.0.1|"][0] == "newer_release"
           and kinds["obs-studio|32.1.2|"] == ("newer_release", [
               "The reviewed problem that applies if you use connected accounts or service docks on macOS was fixed in "
-              "OBS Studio 32.2.0."])
+              "OBS Studio 32.2.0. OBS Project's release notes for 32.2.0 record a fix for this problem."])
           and kinds["obs-studio|32.2.2|"] == ("newer_release", [
-              "The reviewed problem that applies if you use macOS 27.2 was fixed in OBS Studio 33.0.0."]),
+              "The reviewed problem that applies if you use macOS 27.2 was fixed in OBS Studio 33.0.0. OBS Project's "
+              "release notes for 33.0.0 record a fix for this problem."]),
           f"{no_exit[:3]} {kinds}")
     safer = [k for k, row in overview["pages"].items()
              for s in ([str((row.get("newer") or {}).get(f) or "") for f in ("caution", "verdict_line", "match_note")]
@@ -934,13 +936,14 @@ def check_corpus_and_surfaces() -> None:
     newer = n311[1] if len(n311) > 1 else ""
     check("R6 the way forward renders: 32.1.1 'Other versions: This release is archived. AUXSAYS has not established a "
           "better-supported alternative.'; 33.0.1 the newer-release note with the vendor caution before its links and "
-          "nothing else; 32.2.2 the newer note then its reviewed fix line",
+          "nothing else; 32.2.2 the newer note and nothing after it -- its reviewed fix line is printed in the verdict "
+          "box, beneath the finding it belongs to, never after a note that names another release (G95, AUX-132)",
           len(n312) == 3 and n312[2] == ("Other versions: This release is archived. AUXSAYS has not established a "
                                          "better-supported alternative.") and n312[1] == ""
           and newer.startswith("Newer release: OBS Studio 33.0.2") and n311[2] == ""
           and newer.index("has documented a known issue") < newer.index("See its AUXSAYS page")
-          and len(n322) == 3 and n322[2] == "The reviewed problem that applies if you use macOS 27.2 was fixed in OBS "
-                                            "Studio 33.0.0." and n322[1].startswith("Newer release:"),
+          and len(n322) == 3 and n322[2] == "" and n322[1].startswith("Newer release:")
+          and "was fixed in" not in n322[1],
           json.dumps(way)[:600])
 
 

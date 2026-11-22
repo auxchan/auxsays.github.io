@@ -4452,6 +4452,14 @@ html.js-reveal .reveal-up.is-visible { opacity:1; transform:none; }
   font-size: .82rem;
 }
 
+/* G95 (AUX-132): the version a reviewed problem was fixed in, beneath the finding it belongs to. */
+.update-decision-fixed {
+  margin: .35rem 0 0;
+  padding-left: .75rem;
+  color: var(--text-1);
+  font-size: .88rem;
+}
+
 .update-decision-reasoning {
   display: grid;
   gap: .4rem;

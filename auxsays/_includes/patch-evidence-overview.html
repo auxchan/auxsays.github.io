@@ -18,10 +18,13 @@
                            'next' -- the way forward on a page whose printed verdict is WAIT (G87,
                            AUX-127): the projection's way-forward lines (archived, no better-supported
                            alternative established, or no newer release on record, and the advice to
-                           keep a working installation where the verdict box does not already give it),
-                           then any reviewed fixed_in line. Where a newer-release note is the way forward
-                           it has no lines of its own, so only a fixed_in line can print here. QA refuses
-                           a deploy whose WAIT page prints no next action, or one other than a recompute
+                           keep a working installation where the verdict box does not already give it).
+                           Where a newer-release note is the way forward it has no lines of its own, so
+                           nothing prints here. The row's reviewed fixed_in lines are NOT printed here
+                           (G95, AUX-132): directly after a note that names another, newer release they
+                           read as a recommendation of it, so the verdict box prints them beneath the
+                           reviewed finding they belong to (_layouts/aux-update.html). QA refuses a
+                           deploy whose WAIT page prints no next action, or one other than a recompute
                            from the source facts gives (evidence_overview.has_next_action and
                            next_action_mismatch).
 
@@ -84,15 +87,9 @@
 {%- elsif peo_part == 'next' -%}
   {%- assign peo_next = peo_row.next_action -%}
   {%- assign peo_next_lines = peo_next.lines | default: empty -%}
-  {%- assign peo_next_fixed = peo_next.fixed | default: empty -%}
-  {%- if peo_next_lines.size > 0 or peo_next_fixed.size > 0 %}
+  {%- if peo_next_lines.size > 0 %}
       <aside class="update-evidence-freshness-notice update-way-forward" role="note" aria-label="Other versions">
-        {%- if peo_next_lines.size > 0 %}
         <p><strong>Other versions:</strong>{% for peo_line in peo_next_lines %} {{ peo_line | escape }}{% endfor %}</p>
-        {%- endif %}
-        {%- for peo_fixed in peo_next_fixed %}
-        <p>{{ peo_fixed | escape }}</p>
-        {%- endfor %}
       </aside>
   {%- endif -%}
 {%- endif -%}
