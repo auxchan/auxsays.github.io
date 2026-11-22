@@ -19,8 +19,10 @@ contradiction of the note, and it did not say where the fact came from. Pinned h
   [C] the vendor credit ("<vendor>'s release notes for <fixed_in> record a fix for this problem.") appears ONLY where
       the stored reason carries an official confirmation that names this product and exactly the fixed_in version;
       otherwise the plain G87 sentence; the guard refuses a credit for another version
-  [N] no implication: the line never names the newer release, the newer-release note is exactly G87's, nothing calls
-      a version safer or recommends one, no fixed string reaches the note's four checked fields, no third caution
+  [N] no implication: the line never names the newer release, the newer-release note is exactly G87's for the
+      release the data selects (never a pinned release: a synthetic newer release, with and without a vendor known
+      issue, keeps this check and G87's R6 correct), nothing calls a version safer or recommends one, no fixed
+      string reaches the note's four checked fields, no third caution
   [W] the way forward keeps exactly its G87 variants, and every WAIT page still has one
 
 Offline: synthetic trees, and the shipped corpus read once. The liquid gem renders the real templates.
@@ -52,6 +54,7 @@ from lib import evidence_overview as eo  # noqa: E402
 from lib import patch_decision as pd  # noqa: E402
 from lib import verdict_projection as vp  # noqa: E402
 from lib import verdict_reasons as vr  # noqa: E402
+from tests import test_volume_precaution_g87 as g87  # noqa: E402  (G96's way-forward derivation, reused)
 
 OBS = "obs-studio"
 P3212, P3222, P3301, P3211 = "obs-studio|32.1.2|", "obs-studio|32.2.2|", "obs-studio|33.0.1|", "obs-studio|32.1.1|"
@@ -62,10 +65,21 @@ CREDIT_3212 = "OBS Project's release notes for 32.2.0 record a fix for this prob
 CREDIT_3222 = "OBS Project's release notes for 33.0.0 record a fix for this problem."
 FINDING_3212 = "Also TEST FIRST if you use connected accounts or service docks on macOS: "
 FINDING_3222 = "Also WAIT if you use macOS 27.2: "
-NEWER_NOTE = ("Newer release: OBS Studio 33.0.2 (released Nov 20, 2026). OBS Project has documented a known issue "
-              "affecting this version. Review the official release notes before upgrading. AUXSAYS has not established "
-              "an installation verdict for this release. AUXSAYS has not matched its changes to the reports on this "
-              "page. See its AUXSAYS page and its official release notes.")
+# G87's newer-release note, its copy written out literally, so a production change to it fails N1 instead of moving
+# the expectation with it. WHICH release it names, that release's date, vendor and known-issue status, its verdict
+# and whether this page has reports are read from the data, as G96 derives G87's R6 (AUX-133): the bot ingests new
+# releases and the note follows them (OBS 33.0.3 moved it off 33.0.2), so no release is named here.
+NOTE_DECLARED = ("{vendor} has documented a known issue affecting this version. Review the official release notes "
+                 "before upgrading.")
+NOTE_NOT_SAFER = ("Newer is not necessarily safer. Check its official release notes, including any known issues, "
+                  "before upgrading.")
+NOTE_NO_VERDICT = "AUXSAYS has not established an installation verdict for this release."
+NOTE_VERDICT = "AUXSAYS verdict for this release: {phrase}."
+NOTE_NOT_MATCHED = "AUXSAYS has not matched its changes to the reports on this page."
+NOTE_LINKS = "See its AUXSAYS page{notes}."
+NOTE_NOTES = " and its official release notes"
+# A newer OBS release introduced for N5, dated after anything the bot can ingest.
+SYN_VERSION, SYN_DATE = "90.0.0", "2099-06-15T12:00:00Z"
 G95_BLOCK = re.compile(r"\n[ \t]*\{%- comment -%\}\n[ \t]*THE REVIEWED FIX \(G95.*?\{%- endif -%\}(?=\n[ \t]*<div id=\"verdict\")",
                        re.S)
 G95_TAIL = '<p class="update-decision-recommendation">{{ decision_body }}</p>{{ dfx_tail }}'
@@ -225,6 +239,93 @@ def own_finding_problems(box: str, findings: dict[str, str]) -> list[str]:
     return problems
 
 
+# ------------------------------------------------------------------------------------------------ the newer note
+
+def newer_note(record: dict, records: list[dict], verdict_pages: dict, groups: dict) -> tuple[dict | None, str]:
+    """The release the newer-release note must name for a reader on `record` (My Installed Versions' rule over the
+    product's records, selected as G96's R6 selects it) and the note exactly as G87 prints it for that release."""
+    pid = str(record.get("product_id") or "")
+    payload = eo.product_payload([r for r in records if str(r.get("product_id") or "") == pid])
+    target = eo.update_available(record, payload, split=pid in set(eo.split_products_from(_AUX)))
+    if target is None:
+        return None, ""
+    declared = (str(target.get("official_notes_known_issue") or "").strip() == "declared"
+                or target.get("official_known_issues_present") is True)
+    vendor = str(target.get("update_source_name") or "").strip() or "The vendor"
+    printed = vp.printed_row(target, verdict_pages)
+    day = g87.released_day(target)
+    parts = [f"Newer release: {eo.identity_text(target)}" + (f" (released {day})" if day else "") + ".",
+             NOTE_DECLARED.format(vendor=vendor) if declared else NOTE_NOT_SAFER,
+             NOTE_NO_VERDICT if printed is None else
+             NOTE_VERDICT.format(phrase=vp.phrase(str(printed.get("verdict")), vp.printed_qualifier(printed))),
+             NOTE_NOT_MATCHED if groups.get(vr.record_identity(record)) else "",
+             NOTE_LINKS.format(notes=NOTE_NOTES if eo.notes_url(target) else "")]
+    return target, " ".join(p for p in parts if p)
+
+
+def newest_release(records: list[dict], pid: str) -> str:
+    """The newest stable release on record for the product, read straight from the records (dated, not archived,
+    not a beta or preview), independently of the rule that selects the note's release; "" on a tie."""
+    dated = [r for r in records if str(r.get("product_id") or "") == pid and str(r.get("update_published_at") or "")
+             and str(r.get("update_status") or "").strip() != "archived" and not eo._beta(r)]
+    top = max((str(r.get("update_published_at")) for r in dated), default="")
+    versions = {str(r.get("update_version") or "") for r in dated if str(r.get("update_published_at")) == top}
+    return versions.pop() if len(versions) == 1 else ""
+
+
+def names_version(text: str, version: str) -> bool:
+    """Whether `text` names `version` as a whole version (33.0.3, not inside 33.0.30 or 133.0.3)."""
+    return bool(version) and re.search(rf"(?<![\w.]){re.escape(version)}(?!\.?\d|\w)", text) is not None
+
+
+def n1_problems(heads: dict, records: list[dict], verdict: dict, overview: dict, groups: dict,
+                by_id: dict) -> tuple[list[str], dict]:
+    """N1 over the rendered page heads of 32.1.2 and 32.2.2: the newer-release note exactly as G87 prints it for the
+    release the data selects, which is the newest stable release on record, with no fixed text; each reviewed fixed
+    line in the verdict box directly after its own finding, naming its own reason's scope and fixed_in, and never in
+    or after the note; the fixed version never named as, or confused with, that newest release. Returns the problems
+    and, per page, (the release the note names, the fixed_in versions)."""
+    by_key = {vp.page_key(r): r for r in records}
+    problems: list[str] = []
+    seen: dict[str, tuple] = {}
+    for k in (P3212, P3222):
+        html = heads.get(k, "")
+        target, want = newer_note(by_key[k], records, verdict["pages"], groups)
+        newest = str((target or {}).get("update_version") or "")
+        note = text_of(aside(html, "update-newer-release"))
+        if target is None or note != want:
+            problems.append(f"{k}: the note reads {note!r}; for {newest or 'no newer release'} G87 prints {want!r}")
+        on_record = newest_release(records, str(by_key[k].get("product_id") or ""))
+        if not newest or newest != on_record:
+            problems.append(f"{k}: the note names {newest!r}; the newest stable release on record is {on_record!r}")
+        if "fix" in note.lower():
+            problems.append(f"{k}: the note carries fixed text: {note!r}")
+        nxt = (overview["pages"].get(k) or {}).get("next_action") or {}
+        lines, after = list(nxt.get("fixed") or []), list(nxt.get("fixed_after") or [])
+        own = {str(by_id[r].get("reason")): by_id[r] for r in (verdict["pages"].get(k) or {}).get("reasons") or []
+               if r in by_id}
+        rendered = [t for c, t in paragraphs(box_of(html)) if c == "update-decision-fixed"]
+        if not lines or rendered != lines or len(after) != len(lines):
+            problems.append(f"{k}: the verdict box prints the fixed lines {rendered!r}, the row carries {lines!r}")
+        findings, versions = {}, []
+        for line, wording in zip(lines, after):
+            e = own.get(wording) or {}
+            fixed_in = str(e.get("fixed_in") or "").strip()
+            versions.append(fixed_in)
+            plain = g87.WF_FIXED.format(scope=e.get("scope"), product=by_key[k].get("update_product"), fixed_in=fixed_in)
+            if not e or not fixed_in or not line.startswith(plain):
+                problems.append(f"{k}: {line[:90]!r} is not its own reason's line {plain[:90]!r}")
+            findings[line] = clause(e) if e else "(no finding)"
+            if not newest or newest == fixed_in or names_version(line, newest) or names_version(note, fixed_in):
+                problems.append(f"{k}: the fixed version {fixed_in} and the newest release {newest} are confused: "
+                                f"{line[:90]!r} / {note[:90]!r}")
+            if line in text_of(after_newer(html)):
+                problems.append(f"{k}: {line[:70]!r} prints in or after the newer-release note")
+        problems += [f"{k}: {p}" for p in own_finding_problems(box_of(html), findings)]
+        seen[k] = (newest, versions)
+    return problems, seen
+
+
 # ------------------------------------------------------------------------------------------------ fixtures
 
 def vrow(i: int, *, version: str, pid: str = OBS) -> dict:
@@ -292,13 +393,18 @@ def fixed_of(overview: dict, key: str) -> list[str]:
 
 # ------------------------------------------------------------------------------------------------ the corpus
 
-def corpus():
-    records, groups = vp.load_inputs(_AUX)
-    reasons, lifecycle, problems = vp.load_fact_files(_AUX)
+def project_tree(records: list[dict], groups: dict, reasons: list[dict], lifecycle: list) -> tuple[dict, dict]:
     verdict, _unsupported = vp.project(records, groups, reasons, lifecycle)
     reviewed = eo.load_reviewed(_AUX / "_data" / eo.REVIEWED_NAME)
     overview = eo.project(records, groups, verdict["pages"], reasons, reviewed, eo.split_products_from(_AUX))
-    return records, groups, reasons, verdict, overview, problems
+    return verdict, overview
+
+
+def corpus():
+    records, groups = vp.load_inputs(_AUX)
+    reasons, lifecycle, problems = vp.load_fact_files(_AUX)
+    verdict, overview = project_tree(records, groups, reasons, lifecycle)
+    return records, groups, reasons, lifecycle, verdict, overview, problems
 
 
 def site_for(verdict: dict, overview: dict | None) -> dict:
@@ -316,7 +422,7 @@ def run() -> int:
     print("=" * 78)
     print("Where a reviewed problem's fixed-in line is printed, and its vendor credit (G95, AUX-132)")
     print("=" * 78)
-    records, groups, reasons, verdict, overview, problems = corpus()
+    records, groups, reasons, lifecycle, verdict, overview, problems = corpus()
     by_key = {vp.page_key(r): r for r in records}
     by_id = {str(e.get("id")): e for e in reasons}
     layout = (_AUX / "_layouts" / "aux-update.html").read_text(encoding="utf-8")
@@ -376,6 +482,22 @@ def run() -> int:
         cases[f"{name}:{P3222}"] = {"template": head, "page": page(P3222), "site": name}
     c_by_key = {vp.page_key(r): r for r in c_records}
     cases["credit:80"] = {"template": head, "page": page(f"{OBS}|80.0.0|", c_by_key), "site": "credit"}
+    # N5: the corpus with a newer OBS release introduced, first with no vendor known issue, then with one declared.
+    syn_url = f"https://github.com/obsproject/obs-studio/releases/tag/{SYN_VERSION}"
+    syn_release = rec(SYN_VERSION, update_published_at=SYN_DATE, update_report_count=0, update_source_url=syn_url,
+                      official_patch_notes_source_url=syn_url,
+                      permalink=f"/updates/obs-project/obs-studio/{SYN_VERSION.replace('.', '-')}/")
+    syn = {}
+    for name, extra in (("syn", {}), ("syn_declared", {"official_notes_known_issue": "declared"})):
+        s_records = records + [dict(syn_release, **extra)]
+        s_verdict, s_overview = project_tree(s_records, groups, reasons, lifecycle)
+        syn[name] = (s_records, s_verdict, s_overview)
+        sites[name] = site_for(s_verdict, s_overview)
+    for name in ("full", "syn", "syn_declared"):
+        for key in sorted(g87.FOUR):
+            cases[f"{name}:way:{key}"] = {"template": g87.WAY_TEMPLATE, "page": page(key), "site": name}
+        for key in ((P3212, P3222) if name != "full" else ()):
+            cases[f"{name}:head:{key}"] = {"template": head, "page": page(key), "site": name}
     out = render(cases, sites)
 
     section("[P] placement, rendered through the real patch page")
@@ -574,13 +696,15 @@ def run() -> int:
           str([eo.next_action_mismatch(moved, built), eo.next_action_mismatch(stale, built)]))
 
     section("[N] no implication about the newer release; nothing recommended")
-    notes = {k: text_of(aside(heads[k], "update-newer-release")) for k in want}
-    fixed_paras = {k: " ".join(rendered[k]) for k in want}
-    check("N1 the newer-release note is exactly G87's (33.0.2, its date, the vendor's caution, no verdict, not matched, "
-          "links), carries no fixed text, and the fixed line names neither OBS Studio 33.0.2 nor 33.0.2",
-          all(n == NEWER_NOTE for n in notes.values())
-          and all("33.0.2" not in t and "fix" not in notes[k].lower() for k, t in fixed_paras.items()),
-          json.dumps({"notes": notes, "fixed": fixed_paras})[:700])
+    n1, n1_seen = n1_problems(heads, records, verdict, overview, groups, by_id)
+    check("N1 the newer-release note is exactly G87's for the release the data selects (My Installed Versions' rule "
+          "over the product's records, never a pinned release), which is the newest stable release on record: its "
+          "date, the vendor's known-issue caution exactly when THAT release declares one, else 'Newer is not "
+          "necessarily safer', its verdict, not matched, links; it carries no fixed text; each reviewed fixed line "
+          "stays in the verdict box directly after its own finding, with its own reason's scope and fixed_in; the "
+          "fixed version is never named as, or confused with, that newest release",
+          not n1 and all(v[0] and v[1] for v in n1_seen.values()) and len(n1_seen) == 2,
+          json.dumps({"problems": n1[:3], "seen": n1_seen})[:900])
     all_fixed = [s for row in overview["pages"].values() for s in ((row.get("next_action") or {}).get("fixed") or [])]
     recommending = [s for s in all_fixed if eo._RECOMMENDING_RE.search(s)]
     safer = {k: [m.start() for m in re.finditer(r"\bsafer\b", text_of(heads[k]))
@@ -607,6 +731,50 @@ def run() -> int:
                 crossed.append((k, s[:120]))
     check("N4 corpus-wide, a fixed line never names the version its page's newer-release note names (unless that is "
           "the very version the problem was fixed in)", not crossed and all_fixed, str(crossed[:3]))
+    split, four = eo.split_products_from(_AUX), sorted(g87.FOUR)
+
+    def ways(name: str) -> dict:
+        return {f"way:{k}": out.get(f"{name}:way:{k}", "") for k in four}
+
+    def syn_heads(name: str) -> dict:
+        return {k: out.get(f"{name}:head:{k}", "") for k in (P3212, P3222)}
+
+    def r6(tree: tuple, name: str) -> tuple[list[str], list[tuple]]:
+        return g87.way_forward_problems(tree[0], tree[1]["pages"], reasons, ways(name), four, split)
+
+    def n1_on(tree: tuple, rendered: dict) -> list[str]:
+        return n1_problems(rendered, tree[0], tree[1], tree[2], groups, by_id)[0]
+    live_tree = (records, verdict, overview)
+    live_r6, live_seen = r6(live_tree, "full")
+    live_variant = {k: v for k, v, *_ in live_seen}
+    n5 = {}
+    for name, declared in (("syn", False), ("syn_declared", True)):
+        tree = syn[name]
+        s_r6, s_seen = r6(tree, name)
+        s_n1, s_n1_seen = n1_problems(syn_heads(name), *tree, groups, by_id)
+        variant = {k: (v, d) for k, v, d, *_ in s_seen}
+        n5[name] = {"r6": s_r6[:2], "n1": s_n1[:2], "names": {k: v[0] for k, v in s_n1_seen.items()},
+                    "variants": variant == {k: (("newer", declared) if v == "newer" else (v, None))
+                                            for k, v in live_variant.items()}
+                    and variant.get(P3212) == variant.get(P3222) == ("newer", declared),
+                    "unchanged": all(fixed_of(tree[2], k) == fixed_of(overview, k) for k in (P3212, P3222))
+                    and all(tree[1]["pages"].get(k) == verdict["pages"].get(k) for k in four)}
+    refused = {"r6 declared/undeclared": r6(syn["syn_declared"], "syn")[0],
+               "r6 undeclared/declared": r6(syn["syn"], "syn_declared")[0],
+               "r6 synthetic/live": r6(syn["syn"], "full")[0],
+               "n1 declared/undeclared": n1_on(syn["syn_declared"], syn_heads("syn")),
+               "n1 undeclared/declared": n1_on(syn["syn"], syn_heads("syn_declared")),
+               "n1 synthetic/live": n1_on(syn["syn"], heads)}
+    check("N5 a newer OBS release introduced (synthetic, dated after anything the bot can ingest, rendered with the "
+          "shipped Liquid), first with no vendor known issue and then with one declared: N1 and G87's R6 (G96's "
+          "way_forward_problems, reused) both hold, the note naming the new release with the caution its status gives "
+          "on every page whose way forward it was, each fixed line and verdict unchanged; each refuses the rendering "
+          "made for the other status and the live corpus's (and R6 holds on this harness's live render)",
+          not live_r6 and len(live_variant) == len(four)
+          and all(not v["r6"] and not v["n1"] and v["variants"] and v["unchanged"]
+                  and v["names"] == {P3212: SYN_VERSION, P3222: SYN_VERSION} for v in n5.values())
+          and all(refused.values()),
+          json.dumps({"live_r6": live_r6[:2], "n5": n5, "refused": {k: bool(v) for k, v in refused.items()}})[:900])
 
     section("[W] the way forward keeps its G87 variants")
     kinds = {k: (((overview["pages"].get(k) or {}).get("next_action") or {}).get("kind"),

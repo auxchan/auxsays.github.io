@@ -588,10 +588,12 @@ auxsays/scripts/tests/test_volume_precaution_g87.py = 56
 # than WAIT. The producer places a line only where its finding ends a clause exactly once. The vendor credit only
 # where the reason's official confirmation names this product and exactly fixed_in (equal, another version, none,
 # another product, no vendor name), and the guard refusing a credit for another version (spaced versions too), a
-# malformed credit, or a line with no finding to follow. No implication: the note exactly G87's, the line never
-# names the newer release, nothing safer or recommended, nothing in the note's four checked fields, no third
-# caution. The way forward keeps its G87 variants. Corpus-wide properties are one check each. Needs ruby + liquid.
-auxsays/scripts/tests/test_fixed_in_placement_g95.py = 26
+# malformed credit, or a line with no finding to follow. No implication: the note exactly G87's for the release the
+# data selects, the newest stable one on record (never a pinned release: a synthetic newer release, with and
+# without a vendor known issue, keeps this check and G87's R6 correct), the line never names the newer release,
+# nothing safer or recommended, nothing in the note's four checked fields, no third caution. The way forward keeps
+# its G87 variants. Corpus-wide properties are one check each. Needs ruby + liquid.
+auxsays/scripts/tests/test_fixed_in_placement_g95.py = 27
 
 # Premiere discovery ROUTING, and the health semantics that keep it honest. The nine-method flat
 # loop cost 546.8s over 219 HTTP requests for two records; wayback alone was 408.5s and reddit
