@@ -449,7 +449,8 @@ def section_superseded() -> None:
                                        run("SELF", status="queued", conclusion=None, db=201)]], "a7b")
     check("A7 and when that run has not finished by the deadline: unverified, the lane stays green",
           r.ok and r.deployment_unverified and r.pages_build_outcome == "unconfirmed"
-          and not r.deployment_pending and "had not finished" in text, f"{r.outcomes} {text[:200]}")
+          and not r.deployment_pending and "the Pages run for this revision had not finished" in text,
+          f"{r.outcomes} {text[:200]}")
 
     # A8 cancelled, and no other run for this revision or a later one ever shows up
     r, text, _, _ = confirm_case([[], [run("SELF", conclusion="cancelled", db=200)]], "a8")
@@ -1460,6 +1461,7 @@ def section_decisions() -> None:
         "latest failed": ([prun(3, 1, "failure"), prun(2, 5)], True),
         "latest timed out": ([prun(3, 1, "timed_out")], True),
         "latest cancelled, the one before succeeded": ([prun(3, 1, "cancelled"), prun(2, 5)], False),
+        "latest cancelled, the one before failed": ([prun(3, 1, "cancelled"), prun(2, 5, "failure")], True),
         "latest succeeded after a failure": ([prun(3, 1), prun(2, 5, "failure")], False),
         "another branch failed": ([prun(3, 1, "failure", branch="feature"), prun(2, 5)], False),
     }

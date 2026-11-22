@@ -538,7 +538,6 @@ def _confirm_pages_build(cfg: WritebackConfig, result: WritebackResult, sha: str
     newer_failed = False         # a descendant's build ended in a genuine failure
     unattributed_failure = False # a failed run for `sha` that pre_ids None leaves unattributable
     pending_own = False          # in the last readable poll, a run for `sha` was still open
-    pending_newer = False        # ... or a descendant's run was
     descendants: dict[str, bool] = {}
     for attempt in range(1, cfg.pages_confirm_attempts + 1):
         runs, ok = _pages_runs(cfg)
@@ -554,7 +553,6 @@ def _confirm_pages_build(cfg: WritebackConfig, result: WritebackResult, sha: str
             done_own = [run for run in own if str(run.get("status")) == "completed"]
             done_newer = [run for run in newer if str(run.get("status")) == "completed"]
             pending_own = len(done_own) < len(own)
-            pending_newer = len(done_newer) < len(newer)
             if any(str(run.get("conclusion")) == "success" for run in done_own + done_newer):
                 result.pages_build_outcome = "confirmed"
                 _emit(result, PAGES_BUILD_CONFIRMED)
@@ -590,7 +588,7 @@ def _confirm_pages_build(cfg: WritebackConfig, result: WritebackResult, sha: str
     elif newer_failed:
         reason = ("the Pages run for this revision was superseded and the newer build that would "
                   "deploy it failed")
-    elif pending_newer or superseded:
+    elif superseded:
         reason = ("the Pages run for this revision was superseded (cancelled in the `pages` group) "
                   "and the newer build had not finished")
     elif unattributed_failure:
