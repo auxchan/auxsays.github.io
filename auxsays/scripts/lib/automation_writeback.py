@@ -172,6 +172,10 @@ class WritebackConfig:
     recovery_site_paths: list[str] = field(default_factory=list)   # main HEAD must touch one of these
     recovery_commit_grep: str | None = None                        # ... and its message must contain this
     pages_status_cmd: str = DEFAULT_PAGES_STATUS_CMD
+    # Seconds one Pages status query may take. A query that has not answered by then reads as
+    # unreadable, exactly like a failed one, so a hung `gh` can never stretch the bounded build wait
+    # (attempts x interval) into the job's own time limit.
+    pages_status_timeout: float = 60.0
     # The evidence store the loss gate protects. Repo-relative. Never disabled in production; tests
     # point it at their own fixture store.
     evidence_path: str = EVIDENCE_PATH
@@ -207,6 +211,9 @@ class WritebackResult:
     # True when this run lost a race with another push to main and pushed nothing
     # (RECOVERABLE_LOST_RACE_OUTCOMES); set once, by run_writeback, from the final state.
     lost_race: bool = False
+    # The last refused push was refused because main had moved (git: non-fast-forward / fetch
+    # first), not by a hook, a branch rule or the network. Read only by _is_lost_race.
+    last_push_refused_by_race: bool = False
     evidence_losses: list[str] = field(default_factory=list)
     ok: bool = False
 
@@ -430,7 +437,12 @@ def _pages_runs(cfg: WritebackConfig) -> tuple[list[dict], bool]:
     (e.g. missing token) -- callers must NOT treat that as 'deployed'."""
     if not cfg.pages_status_cmd:
         return [], False
-    proc = subprocess.run(cfg.pages_status_cmd, shell=True, cwd=str(cfg.repo), capture_output=True, text=True)
+    try:
+        proc = subprocess.run(cfg.pages_status_cmd, shell=True, cwd=str(cfg.repo), capture_output=True,
+                              text=True, timeout=cfg.pages_status_timeout)
+    except subprocess.TimeoutExpired:
+        sys.stderr.write(f"pages status query did not answer within {cfg.pages_status_timeout}s\n")
+        return [], False
     if proc.returncode != 0:
         sys.stderr.write(f"pages status query failed rc={proc.returncode}: {proc.stderr.strip()}\n")
         return [], False
@@ -791,11 +803,21 @@ def _is_lost_race(result: WritebackResult) -> bool:
     """True only when another push advanced main during this run AND the run ended in one of
     RECOVERABLE_LOST_RACE_OUTCOMES. Each of those is a terminal outcome reached BEFORE any push
     succeeds, so a run that pushed -- whatever then happened to its Pages dispatch or build, whose
-    `outcome` stays the push token -- is never a lost race. The upstream clause matters for
-    retry_exhausted: pushes refused while main did NOT move (permissions, a hook) are not a race.
+    `outcome` stays the push token -- is never a lost race. retry_exhausted is a race only when the
+    LAST push was refused because main had moved: pushes refused by a hook, a branch rule or the
+    network are not, even when main moved once earlier in the run and was rebased onto cleanly.
     Diagnostic only; see RECOVERABLE_LOST_RACE_OUTCOMES."""
+    if result.outcome == RETRY_EXHAUSTED:
+        return result.last_push_refused_by_race
     return (UPSTREAM_ADVANCED in result.outcomes
             and result.outcome in RECOVERABLE_LOST_RACE_OUTCOMES)
+
+
+def _refused_by_race(push: subprocess.CompletedProcess) -> bool:
+    """git's own words for a push refused because the remote branch moved on: `! [rejected] ...
+    (fetch first)` or `(non-fast-forward)`. A hook's refusal reads `! [remote rejected] ...`."""
+    text = f"{push.stdout or ''}\n{push.stderr or ''}"
+    return "(fetch first)" in text or "(non-fast-forward)" in text
 
 
 def run_writeback(cfg: WritebackConfig) -> WritebackResult:
@@ -940,6 +962,7 @@ def _run_writeback(cfg: WritebackConfig) -> WritebackResult:
                 _emit(result, PAGES_DISPATCH_SKIPPED_NO_CHANGES)
             return result
 
+        result.last_push_refused_by_race = _refused_by_race(push)
         attempt += 1
         if attempt > cfg.max_retries:
             _emit(result, RETRY_EXHAUSTED)

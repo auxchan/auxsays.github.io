@@ -730,8 +730,10 @@ jobs:
     # whether a step with exactly this name succeeded (writer_cycle_recovery.CYCLE_MARKER_STEP) and
     # re-runs, once and only into a free lane, a routine run whose cycle did not reach main: a lost
     # writeback race (run 44878227542), a refused writeback, a failure or a time limit after
-    # collection. It is the first step so a failed ingestion dispatch cannot hide it. This job no
-    # longer dispatches anything but ingestion.
+    # collection -- and a GREEN run whose record was skipped: the PowerPoint graph's step takes
+    # `tee`'s exit status, so its writeback can lose a race while the run concludes `success`. It is
+    # the first step so a failed ingestion dispatch cannot hide it. This job no longer dispatches
+    # anything but ingestion.
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:

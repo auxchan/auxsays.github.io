@@ -17,14 +17,20 @@ WHAT COUNTS AS "REACHED MAIN"
 Read from the run itself, never inferred from the conclusion alone. Each routine writer run
 executes a step named exactly CYCLE_MARKER_STEP only when every writeback in it pushed or had
 nothing to push (obs-evidence-collection.yml: its chain-ingest job, over both writer jobs;
-patch-ingest.yml: its ingest job). So:
-  * conclusion `success`                          -> reached (every step, the writeback included,
+patch-ingest.yml: its ingest job); when it did not, the step is listed as `skipped`. So:
+  * marker step succeeded, any conclusion         -> reached (a run that failed AFTER main had the
+                                                      cycle, e.g. a failed Pages build, is never
+                                                      re-run, so a deployment problem can never make
+                                                      a cycle run twice);
+  * marker step listed but not succeeded          -> LOST, even when the run concluded `success`:
+                                                      the PowerPoint graph's step takes `tee`'s exit
+                                                      status, and its writeback can lose a race or
+                                                      the graph can stop before writing back while
+                                                      the run stays green;
+  * no marker step at all, conclusion `success`   -> reached: a run from before the record existed
+                                                      (its every step, the writeback included,
                                                       succeeded);
-  * any other conclusion, marker step succeeded   -> reached (it failed AFTER main had the cycle,
-                                                      e.g. a failed Pages build -- never re-run, so
-                                                      a deployment problem can never make a cycle
-                                                      run twice);
-  * any other conclusion, no marker               -> LOST;
+  * no marker step, any other conclusion          -> LOST;
   * `cancelled` with zero jobs                    -> an eviction: the reaper's first step owns it;
   * `cancelled` with jobs                         -> an operator's cancel is LEFT ALONE, exactly as
                                                       the eviction step does; a job that hit its
@@ -39,6 +45,7 @@ Only routine runs are considered: a cron run, or one this repository's own autom
 THE DECISION, PER LANE
 ----------------------
 Walk that lane's completed routine runs newest first, skipping cancellations. The newest is HEAD.
+Each run's jobs are read, a green one's too, because the record decides (above).
   * HEAD reached main                      -> nothing to do.
   * HEAD is lost and is itself a recovery  -> never re-run (the loop guard). Its title carries
     ("... (recovery of run N)", from the workflow's run-name) so the record survives an eviction.
@@ -50,7 +57,10 @@ Walk that lane's completed routine runs newest first, skipping cancellations. Th
 A dispatch happens only when the reaper's first step found the whole writer group free (no run
 pending, queued or in progress in ANY member) and dispatched nothing itself, AND the same
 group-wide check, repeated immediately before the dispatch, still finds it free: one entrant per
-tick, never a third entrant that would cancel a queued writer, never two writers at once. The re-run
+tick, into a lane with no queued writer to cancel. (The re-check and the dispatch are two API calls;
+a writer that arrives in the moment between them is the one exposure left, and a run it evicts is
+the eviction step's to re-dispatch.) The writer group's own concurrency keeps two writers from ever
+running at once. The re-run
 checks out main when it starts, and its writeback fetches main again before every push, rebases
 its single commit, re-validates the rebased tree and refuses any path both sides touched -- so a
 recovered run can never push a stale tree. Nothing here merges evidence.
@@ -123,6 +133,13 @@ def marker_reached(jobs: dict) -> bool:
                for job in jobs.get("jobs") or [] for step in job.get("steps") or [])
 
 
+def marker_listed(jobs: dict) -> bool:
+    """True when the run carries the cycle record at all, run or skipped. Runs from before the
+    record existed do not, and only for them is a `success` conclusion taken as the record."""
+    return any(step.get("name") == CYCLE_MARKER_STEP
+               for job in jobs.get("jobs") or [] for step in job.get("steps") or [])
+
+
 def failed_steps(jobs: dict) -> list[str]:
     out = []
     for job in jobs.get("jobs") or []:
@@ -152,11 +169,15 @@ def judge(run: dict, jobs_for: Callable[[str], dict | None],
           annotations_for: Callable[[str], list | None]) -> Judged | None:
     """One completed routine run. None when the API could not be read for it."""
     conclusion = str(run.get("conclusion") or "")
-    if conclusion == "success":
-        return Judged(run, "reached")
     jobs = jobs_for(str(run.get("id")))
     if jobs is None:
         return None
+    if conclusion == "success":
+        if marker_reached(jobs) or not marker_listed(jobs):
+            return Judged(run, "reached")
+        # Green, but a writer job's writeback did not reach main (see the module docstring).
+        return Judged(run, "lost", f"`success`, but `{CYCLE_MARKER_STEP}` was skipped: a writer job's "
+                                   "writeback did not reach main")
     if conclusion == "cancelled":
         if int(jobs.get("total_count") or 0) == 0:
             return Judged(run, "skip", "evicted")          # the eviction step's case
