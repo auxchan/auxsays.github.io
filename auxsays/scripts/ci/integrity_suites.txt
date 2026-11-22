@@ -444,6 +444,15 @@ auxsays/scripts/tests/test_patch_watchlist.py = 35
 # 113 -> 116 (GROWTH-3 review 1): the card, every upgrade-path release (rec[12]) and the attention
 # reason carry the verdict's scope (UP2b, PS-21, PS-22), against the authority's projection.
 auxsays/scripts/tests/test_patch_stack_dashboard.py = 116
+# G93: Acrobat's Continuous and Classic tracks are serviced side by side, and both newer-release selectors
+# (the patch page's note, lib/evidence_overview.update_available, and My Patch Stack's installedState)
+# pointed all 62 Classic pages that had a target at a Continuous release. One fixture set drives the
+# Python port and the shipped JavaScript in node: Classic -> newest Classic, newest Classic -> none,
+# Continuous -> newest Continuous, a missing track on either side -> none, Pro and Reader both, an
+# unlisted product unchanged; the shipped my-stack.md rendered with liquid carries the track in
+# rec[13]; over this tree no Acrobat target is on another track (one check per corpus property, so
+# corpus growth cannot drift the count). Needs node and ruby + liquid; fails without them.
+auxsays/scripts/tests/test_acrobat_track_scope.py = 27
 # The paged Patch Feed (G36-02). /updates/ was one 4.3 MB page with 819 of its patch links past the
 # 2 MB Googlebot reads. Runs the deploy gate (verify_feed_discovery.py) over synthetic built sites,
 # one failing case per way the catalogue can be lost; renders the SHIPPED paging block with Liquid
