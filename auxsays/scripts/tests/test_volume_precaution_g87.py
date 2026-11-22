@@ -32,7 +32,9 @@ projections the lanes maintain, every row publishable, and no higher-precedence 
       (to the volume WAIT) and every other verdict is identical; a page that crosses the minimum later may change
       only to an eligible volume WAIT; the four pages' scoped findings, ways forward and regenerated records
   [R] surfaces, rendered with the shipped Liquid: patch page, homepage row, feed card, table row and My Patch Stack
-      print the same verdict, label and count; the way forward renders
+      print the same verdict, label and count; the way forward renders as the facts it reads give it (which
+      release the note names and whether THAT release declares a known issue are derived, never pinned: the bot
+      ingests new releases), on the four pages and on a synthetic corpus that exercises every variant (G96)
 
 Offline: synthetic rows, and the shipped corpus read once. The liquid gem renders the real includes.
 
@@ -49,6 +51,7 @@ import sys
 import tempfile
 import traceback
 from datetime import datetime, timezone
+from html import unescape as html_unescape
 from pathlib import Path
 
 _REPO = Path(__file__).resolve().parents[3]
@@ -758,6 +761,150 @@ def check_assessment() -> None:
           f"{kept.get('count_line')} | {moved.get('count_line')}")
 
 
+# ------------------------------------------------------------------------------------------------ R6
+
+# The way forward as it must render, derived from the facts the rule reads (G96): the page's printed verdict and
+# whether its box already advises keeping a working installation, its archived flag, the release the newer-release
+# note names (My Installed Versions' rule over the product's records), whether THAT release declares a vendor known
+# issue, and the reviewed fixed_in on the page's printed reasons. G87's copy is written out here, so a production
+# change to it fails R6 instead of moving the expectation with it. No release is named: the bot ingests new ones
+# and the note follows them (OBS 33.0.3 moved it off 33.0.2 and turned main red).
+WAY_TEMPLATE = ("@@{% include patch-evidence-overview.html part='overview' record=item %}@@"
+                "{% include patch-evidence-overview.html part='newer' record=item %}@@"
+                "{% include patch-evidence-overview.html part='next' record=item %}@@")
+WF_ARCHIVED = "This release is archived."
+WF_NO_BETTER = "AUXSAYS has not established a better-supported alternative."
+WF_NEWEST = ("AUXSAYS has no record of a newer release. If your current version works, consider keeping it until "
+             "one is.")
+WF_KEEP = "If your current version works, consider keeping it."
+WF_FIXED = "The reviewed problem that applies {scope} was fixed in {product} {fixed_in}."
+WF_DECLARED = " has documented a known issue affecting this version."
+WF_NOT_SAFER = "Newer is not necessarily safer."
+WF_LINKS = "See its AUXSAYS page"
+
+
+def expected_next_text(lines: list[str], fixed: list[str]) -> str:
+    """The 'next' part as text: "Other versions:" and the way-forward lines, then each reviewed fixed_in line."""
+    return " ".join(([f"Other versions: {' '.join(lines)}"] if lines else []) + list(fixed))
+
+
+def released_day(record: dict) -> str:
+    """`update_published_at | date: "%b %-d, %Y"` for a stored timestamp: the date as written."""
+    value = record.get("update_published_at")
+    text = (value.isoformat() if hasattr(value, "isoformat") else str(value or "")).strip()
+    if not re.match(r"^\d{4}-\d{2}-\d{2}", text):
+        return ""
+    day = datetime.strptime(text[:10], "%Y-%m-%d")
+    return f"{day:%b} {day.day}, {day.year}"
+
+
+def way_forward_problems(records: list[dict], verdict_pages: dict, reasons: list[dict], rendered: dict,
+                         keys, split=()) -> tuple[list[str], list[tuple]]:
+    """Each page's rendered 'newer' and 'next' parts (WAY_TEMPLATE) against what its facts give. Returns the
+    problems and, per page that prints WAIT, (key, variant, declared, fixed lines, keep line expected)."""
+    by_key = {vp.page_key(r): r for r in records}
+    by_pid: dict[str, list[dict]] = {}
+    for r in records:
+        by_pid.setdefault(str(r.get("product_id") or ""), []).append(r)
+    reasons_by_id = {str(e.get("id")): e for e in reasons if isinstance(e, dict)}
+    problems: list[str] = []
+    seen: list[tuple] = []
+    for k in keys:
+        r = by_key[k]
+        pid = str(r.get("product_id") or "")
+        parts = [html_unescape(text_of(p)) for p in str(rendered.get(f"way:{k}") or "").split("@@")[1:4]]
+        if len(parts) != 3:
+            problems.append(f"{k}: not rendered")
+            continue
+        newer, nxt = parts[1], parts[2]
+        printed = vp.printed_row(r, verdict_pages)
+        if not printed or str(printed.get("verdict")) != "WAIT":
+            if nxt:
+                problems.append(f"{k}: prints no WAIT but a way forward {nxt!r}")
+            continue
+        payload = eo.product_payload(by_pid[pid])
+        target = None
+        if eo.version_shaped(r) and pid not in eo.NEWER_NOTE_EXCLUDED_PRODUCTS:
+            t = eo.update_available(r, payload, split=pid in set(split))
+            if t is not None and eo.version_shaped(t) and str(t.get("permalink") or t.get("url") or "").strip():
+                target = t
+        keep = [] if WF_KEEP.rstrip(".") in str(printed.get("body") or "") else [WF_KEEP]
+        if str(r.get("update_status") or "").strip() == "archived":
+            variant, lines = "archived", [WF_ARCHIVED, WF_NO_BETTER] + keep
+        elif pid in eo.NEWER_NOTE_EXCLUDED_PRODUCTS:
+            variant, lines = "excluded", [WF_NO_BETTER] + keep
+        elif target is not None:
+            variant, lines = "newer", []
+        elif eo.proven_newest(r, payload):
+            variant, lines = "newest", [WF_NEWEST]
+        else:
+            variant, lines = "not established", [WF_NO_BETTER] + keep
+        product = str(r.get("update_product") or pid)
+        fixed: list[str] = []
+        for rid in printed.get("reasons") or []:
+            e = reasons_by_id.get(str(rid)) or {}
+            fixed_in, scope = str(e.get("fixed_in") or "").strip(), str(e.get("scope") or "").strip()
+            line = WF_FIXED.format(scope=scope, product=product, fixed_in=fixed_in)
+            if fixed_in and scope and line not in fixed:
+                fixed.append(line)
+        want_next = expected_next_text(lines, fixed)
+        if nxt != want_next:
+            problems.append(f"{k}: the way forward renders {nxt!r}, the facts give {want_next!r}")
+        declared = None
+        if target is None or variant != "newer":
+            if newer:
+                problems.append(f"{k}: a {variant} page prints a newer-release note {newer[:90]!r}")
+        else:
+            declared = (str(target.get("official_notes_known_issue") or "").strip() == "declared"
+                        or target.get("official_known_issues_present") is True)
+            vendor = str(target.get("update_source_name") or "").strip() or "The vendor"
+            caution = f"{vendor}{eo.KNOWN_ISSUE_CAUTION}" if declared else eo.NEWER_NOT_SAFER
+            day = released_day(target)
+            head = f"Newer release: {eo.identity_text(target)}" + (f" (released {day})" if day else "") + "."
+            tp = vp.printed_row(target, verdict_pages)
+            verdict_line = (eo.NO_VERDICT_YET if tp is None else
+                            f"{eo.VERDICT_PREFIX}{vp.phrase(str(tp.get('verdict')), vp.printed_qualifier(tp))}.")
+            links = WF_LINKS + (" and its official release notes" if eo.notes_url(target) else "") + " ."
+            at = [newer.find(s) for s in (head, caution, verdict_line, links)]
+            tail = newer[newer.find(links):] if links in newer else ""
+            if not newer.startswith(head):
+                problems.append(f"{k}: the note does not open {head!r}: {newer[:120]!r}")
+            if -1 in at or at != sorted(at):
+                problems.append(f"{k}: the note is not release, caution, verdict, then links {at}: {newer!r}")
+            if (WF_DECLARED in newer) != declared or (WF_NOT_SAFER in newer) == declared:
+                problems.append(f"{k}: the caution does not follow whether {head!r} declares a known issue "
+                                f"(declared={declared}): {newer!r}")
+            if tail != links and not eo.publication_permitted(eo.notes_url(target)):
+                problems.append(f"{k}: something follows the note's links: {tail!r}")
+            stray = [s for s in (WF_ARCHIVED, WF_NO_BETTER, "has no record of a newer release", "was fixed in",
+                                 "Other versions") if s in newer]
+            if stray:
+                problems.append(f"{k}: the note carries way-forward text {stray}")
+        seen.append((k, variant, declared, len(fixed), WF_KEEP in lines))
+    return problems, seen
+
+
+def way_forward_fixture() -> tuple[list[str], list[tuple]]:
+    """The [F] tree plus a release whose newer release declares NO known issue, rendered with the shipped Liquid,
+    so every way-forward variant stays covered whatever the live corpus happens to exercise."""
+    records, groups, entries, _verdict, _overview = way_forward_tree()
+    pp = "adobe-premiere-pro"
+    records = records + [rec("40.0.0", pid=pp, update_published_at="2026-04-01T00:00:00Z"),
+                         rec("40.1.0", pid=pp, update_published_at="2026-05-01T00:00:00Z")]
+    groups = dict(groups)
+    groups[(pp, "40.0.0", "")] = rows(30, pid=pp, version="40.0.0")
+    verdict = vp.project(records, groups, entries, [])[0]
+    overview = eo.project(records, groups, verdict["pages"], entries, {}, [])
+    keys = sorted(vp.page_key(r) for r in records)
+    by_key = {vp.page_key(r): r for r in records}
+    out = render_includes({f"way:{k}": {"template": WAY_TEMPLATE, "item": dict(by_key[k], url=by_key[k].get("permalink")),
+                                        "summary": ""} for k in keys},
+                          {"data": {"verdict_projection": verdict, "evidence_overview_projection": overview}})
+    if "__error__" in out:
+        return [f"render failed: {out['__error__']}"], []
+    return way_forward_problems(records, verdict["pages"], entries, out, keys)
+
+
 # ------------------------------------------------------------------------------------------------ [C] + [R]
 
 def check_corpus_and_surfaces() -> None:
@@ -885,10 +1032,7 @@ def check_corpus_and_surfaces() -> None:
                                           "@@{{ feed_summary_line }}@@", "item": item,
                               "summary": str(by_key[k].get("update_consensus_summary") or "")}
         cases[f"row:{k}"] = {"template": "{% include patch-table-row.html item=item %}", "item": item, "summary": ""}
-        cases[f"way:{k}"] = {"template": "@@{% include patch-evidence-overview.html part='overview' record=item %}@@"
-                                         "{% include patch-evidence-overview.html part='newer' record=item %}@@"
-                                         "{% include patch-evidence-overview.html part='next' record=item %}@@",
-                             "item": item, "summary": ""}
+        cases[f"way:{k}"] = {"template": WAY_TEMPLATE, "item": item, "summary": ""}
     out = render_includes(cases, site)
     check("R0 the liquid gem renders every case", "__error__" not in out
           and not any(str(v).startswith("<<ERR") for v in out.values()), str(out.get("__error__") or
@@ -931,20 +1075,22 @@ def check_corpus_and_surfaces() -> None:
           "in no stack list, as for every archived release)",
           stack == {v: ("WAIT", LABEL, want[f"obs-studio|{v}|"][1]) for v in ("33.0.1", "32.1.2", "32.2.2")}
           and "32.1.1" not in recs, str(stack)[:300] or html[:200])
-    way = {k: [text_of(p) for p in out.get(f"way:{k}", "").split("@@")[1:4]] for k in sorted(FOUR)}
-    n311, n312, n322 = way["obs-studio|33.0.1|"], way["obs-studio|32.1.1|"], way["obs-studio|32.2.2|"]
-    newer = n311[1] if len(n311) > 1 else ""
-    check("R6 the way forward renders: 32.1.1 'Other versions: This release is archived. AUXSAYS has not established a "
-          "better-supported alternative.'; 33.0.1 the newer-release note with the vendor caution before its links and "
-          "nothing else; 32.2.2 the newer note and nothing after it -- its reviewed fix line is printed in the verdict "
-          "box, beneath the finding it belongs to, never after a note that names another release (G95, AUX-132)",
-          len(n312) == 3 and n312[2] == ("Other versions: This release is archived. AUXSAYS has not established a "
-                                         "better-supported alternative.") and n312[1] == ""
-          and newer.startswith("Newer release: OBS Studio 33.0.2") and n311[2] == ""
-          and newer.index("has documented a known issue") < newer.index("See its AUXSAYS page")
-          and len(n322) == 3 and n322[2] == "" and n322[1].startswith("Newer release:")
-          and "was fixed in" not in n322[1],
-          json.dumps(way)[:600])
+    live, live_seen = way_forward_problems(records, projection["pages"], reasons, out, sorted(FOUR),
+                                           eo.split_products_from(_AUX))
+    synthetic, f_seen = way_forward_fixture()
+    covered = ({v for _k, v, *_ in f_seen} == {"archived", "excluded", "newer", "newest", "not established"}
+               and {d for _k, v, d, *_ in f_seen if v == "newer"} == {True, False}
+               and any(v == "newer" and n for _k, v, _d, n, _kp in f_seen)
+               and {kp for *_, kp in f_seen} == {True, False})
+    check("R6 the way forward renders as the facts it reads give it -- on the four pages and on a synthetic corpus that "
+          "exercises every variant: archived 'Other versions: This release is archived. AUXSAYS has not established a "
+          "better-supported alternative.' (the keep line only where the verdict box lacks it), excluded / not "
+          "established / newest their own lines, and a newer release the note naming the release the rule selects, "
+          "the vendor's known-issue caution before its links exactly when THAT release declares one (else 'Newer is "
+          "not necessarily safer'), then its verdict, then its links, and nothing after it but the reviewed fix lines",
+          not live and len(live_seen) == len(FOUR) and not synthetic and covered,
+          json.dumps({"live": live[:3], "synthetic": synthetic[:3], "covered": covered,
+                      "four": [s[:4] for s in live_seen]})[:900])
 
 
 class Missing(dict):

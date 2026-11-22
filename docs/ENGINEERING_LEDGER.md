@@ -87,6 +87,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-091 | Resolved | Publication | Medium | The homepage rows printed a sentiment word while the pages they open printed a verdict |
 | AUX-070 | Resolved | CI governance | Medium | The serial integrity job spent ~34 of its 45 minutes running 123 suites one after another |
 | AUX-126 | Resolved | CI governance | Medium | The live-consensus gate suite ran at the CI per-suite timeout on unchanged code |
+| AUX-133 | Resolved | CI governance | Medium | Main went red when the bot ingested OBS 33.0.3: a G87 check named the newer release instead of deriving it |
 | AUX-066 | Resolved | Evidence integrity | Medium | Stored Teams evidence still said platform "Windows" and carried no theme, area or severity |
 | AUX-079 | Resolved | Evidence integrity | High | Fourteen stored Windows rows counted against a patch they were not about, or twice for one question |
 | AUX-088 | Resolved | Evidence integrity | High | Twenty community reports cited on the live pages were credited to an update they were not about |
@@ -5767,6 +5768,41 @@ can download the first attempt's artifacts is unmeasured (if it cannot, the re-r
 
 **Reopen only if** a sharded run can end green with a governed suite unexecuted, executed twice, or at a
 count other than its governed one, or a failed, cancelled or missing shard leaves the run `success`.
+
+---
+
+### AUX-133 — Main went red when the bot ingested OBS 33.0.3: a G87 check named the newer release instead of deriving it
+
+- **Status** Resolved · **Area** CI governance · **Severity** Medium
+- **First seen** 2026-11-22 (main 9128bbf1; PR #273 CI run 45009350593) · **Resolved** 2026-11-22 (G96; test-only)
+
+**Symptom** `test_volume_precaution_g87.py` failed R6 on main (55/56), so every pull request's CI failed too.
+
+**Cause** Data, not code. R6 required OBS 33.0.1's newer-release note to name 33.0.2 and print the vendor's
+known-issue caution. The patch-ingest lane then stored OBS 33.0.3, which declares no known issue, so the note
+now correctly names 33.0.3 and says "Newer is not necessarily safer". Since #272 (44e6cc7e..9128bbf1) only
+`_data/` and `updates/generated/` changed, and with the 33.0.3 record removed the old R6 passes 56/56. This is
+the AUX-071 pattern again: a suite that reads the live corpus pinned what the corpus held that day.
+
+**Fix (test only)** R6 now derives each page's way forward from the facts the rule reads: the printed verdict
+and whether its box already advises keeping, the archived flag, the release `update_available` selects,
+whether THAT release declares a known issue, and the reviewed `fixed_in` on the printed reasons. It then
+asserts the rendered order and content, with G87's copy written out literally: the archived line; the
+vendor caution before the links exactly when the named release declares an issue (otherwise "Newer is not
+necessarily safer"); then the verdict, then the links; nothing after the note except the fix lines. The same
+comparison runs over a synthetic corpus: the [F] tree plus a newer release that declares no issue. That run
+must see all five variants, both cautions, a fix line, and the keep line both present and absent. No
+production, template, data or workflow file changed, and the governed count is still 56.
+
+**Verification** 56/56 on today's tree and on the tree without 33.0.3. Ten single-site mutants, each killed by
+R6: caution after the links; an extra line after the note (production and template); archived line dropped;
+archived branch skipped; fixed line dropped (production and template); vendor caution never chosen; vendor
+caution claimed for an undeclared release; keep line dropped. Four of the ten are killed by R6 alone. The
+remaining live-corpus checks name no bot-ingested release. C3 still pins the reviewed `fixed_in` releases
+(32.2.0, 33.0.0), which are reviewed data, and was left alone.
+
+**Reopen only if** a G87 check fails because the corpus gained or lost a release, rather than because a
+rendered way forward differs from what its facts give.
 
 ---
 
