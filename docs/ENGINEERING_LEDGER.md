@@ -486,9 +486,13 @@ and nothing else:
   `source_date_pass` stays as stored (null); the row is kept.
 
 The eighth manifest is `scripts/audit/live_citation_withdrawal_v8.json`; the run audit,
-`scripts/audit/live_citation_withdrawal_v8_2026-11-21.json`, states the derived basis (the gate, the pinned post time
-2026-04-01T12:05:03Z, the release time 2026-04-02T19:54:40Z). The record was regenerated only by the tool's own scoped
-writers (the reconcile scoped to Windows and OBS, then each product's scoped promotion). No resolver, tier or
+`scripts/audit/live_citation_withdrawal_v8_2026-11-22.json`, states the derived basis: the gate and its result, the
+pinned post time 2026-04-01T12:05:03Z with its source (`scripts/audit/obs_report_dates.json` by path and hash, and
+that entry's record of the GitHub REST read), and the release time 2026-04-02T19:54:40Z with its source (the record's
+`update_published_at` and the official release it names). The tool now writes both sources into every derived
+basis. The run is the one at the branch base (b3a8193a), whose store is byte-identical to the one the manifest
+pinned; the record was regenerated only by the tool's own scoped writers (the reconcile scoped to Windows and OBS,
+then each product's scoped promotion), and the result equals the earlier run's except for the writers' timestamps. No resolver, tier or
 re-admission lane can promote the reason back: `context_resolution.RESOLVABLE_REASONS`,
 `tier2_evidence.PROMOTABLE_REJECTIONS`, `acrobat_tiering.ACROBAT_TIERABLE_REJECTIONS` and
 `readmit_adjudicated_rows.FROM_REASONS` are positive lists without it, and the OBS collector's dedupe holds the
@@ -501,10 +505,9 @@ counted, 42 unique report URLs; no counted 32.1.1 row is posted before the relea
 touched (it needs its own adjudicated withdrawal).
 
 **Symptom (verdict)** OBS Studio 33.0.1 carried 51 accepted patch-specific reports and the verdict INSUFFICIENT
-DATA; the owner read "51 reports, insufficient data" as a product failure ("this still shows insufficient data").
-The 2026-11-06 policy let no count decide a verdict. After GPT's calibration (11 pages, verifier-checked) and two
-rulings, the owner rejected a volume TEST FIRST as too weak and warned against endless WAITs; GPT ruled "AMEND / GO
-with Proposal A": a volume WAIT that always carries a way forward. The owner's 2026-11-21 order is the final yes.
+DATA, which told a reader nothing about a page with dozens of accepted problem reports. The 2026-11-06 policy let no
+count decide a verdict. After a calibration over 11 pages (verifier-checked), a volume TEST FIRST was rejected as too
+weak and an endless WAIT with no exit was rejected too: the rule is a volume WAIT that always carries a way forward.
 
 **Fix (policy)** A volume-based WAIT precaution at 30 accepted / 30 unique URLs, with a mandatory way forward;
 owner-approved 2026-11-21; provisional policy constant, not a statistical claim. In `lib/patch_decision.decide`
@@ -528,7 +531,10 @@ owner-approved 2026-11-21; provisional policy constant, not a statistical claim.
   page, homepage, feed, tables and My Patch Stack print "WAIT Volume-based precaution" with no wording of their own.
   `leading_decision` reads that lead as WAIT. The OBS writer drops its "if your setup matches" step under it.
 - all six `decide()` call sites pass the counted rows (the projection, QA twice, both record writers,
-  `decision_label`).
+  `decision_label`);
+- a newer-release note that points at a volume-WAIT page prints that page's verdict as its gate does, with the
+  label ("AUXSAYS verdict for this release: WAIT Volume-based precaution."), never a bare WAIT
+  (`evidence_overview.newer_row` reads `printed_qualifier`, as the feed line does).
 
 **Fix (way forward)** Every page that prints WAIT (any reason) carries a deterministic next action, from
 `lib/evidence_overview` (rule `evidence-overview-v2`), chosen in order: archived ("This release is archived."
@@ -536,15 +542,21 @@ then "AUXSAYS has not established a better-supported alternative."); a product w
 11: no better-supported alternative); a G83 newer-release note (unchanged, vendor caution before its links); proven
 newest (the first stable entry of the product's record list with nothing released at or after it; a tie is not
 proof): "AUXSAYS has no record of a newer release. If your current version works, consider keeping it until one
-is."; otherwise no better-supported alternative. A supported reviewed reason with `fixed_in` adds "The reviewed
-problem that applies <scope> was fixed in <product> <version>." These print in an "Other versions" note after the
-newer-release note; none goes into the note's own four checked fields; the guard refuses any other shape and any
-recommending word. QA: `evidence_overview_wait_without_next_action` (publication-blocking) when a page the deploy's
-verdict projection prints as WAIT has no next action in the deploy's overview projection, so the exit never
-depends silently on that git-ignored file. Under a volume WAIT a still-valid reviewed finding (OBS 33.0.1's
-investigated line) keeps its place; the universal clause never stands beside a printed verdict.
+is."; otherwise no better-supported alternative. Each variant that says no better-supported alternative is
+established (archived, excluded, not established) ends with "If your current version works, consider keeping it."
+unless the page's verdict box already gives that advice, as the volume WAIT's "Next step" does, so it is never said
+twice. A supported reviewed reason with `fixed_in` adds "The reviewed problem that applies <scope> was fixed in
+<product> <version>." The way-forward lines print after the newer-release note under the heading "Other versions:",
+and a fixed_in line after them; none goes into the note's own four checked fields; the guard refuses any other shape
+and any recommending word. QA, both publication-blocking: `evidence_overview_wait_without_next_action` when a page
+the deploy's verdict projection prints as WAIT has no next action in the deploy's overview projection, so the exit
+never depends silently on that git-ignored file; and `evidence_overview_wait_next_action_mismatch` when the next
+action it renders is not the one a recompute from the source facts gives (the archived flag, the excluded products,
+the newer-release note, the first-stable proof, the reviewed fixed_in) -- another variant, or a newer-release note
+naming another release, date, link, caution or verdict. Under a volume WAIT a still-valid reviewed finding (OBS
+33.0.1's investigated line) keeps its place; the universal clause never stands beside a printed verdict.
 
-**Measured (verdict)** Over all 1,611 pages, main (4a559ed9) against this branch: exactly four change, all OBS, all
+**Measured (verdict)** Over all 1,615 pages, main (b3a8193a) against this branch: exactly four change, all OBS, all
 to the volume WAIT. 33.0.1 INSUFFICIENT DATA -> WAIT (51 counted / 51 unique URLs; way forward: 33.0.2 with OBS's
 documented known issue first); 32.1.1 INSUFFICIENT DATA -> WAIT (42 / 42; archived); 32.1.2 TEST FIRST (connected
 accounts on macOS) -> WAIT, the TEST FIRST kept beneath (101 / 101; 33.0.2, plus the reviewed fix in 32.2.0); 32.2.2
@@ -556,7 +568,7 @@ investigated line is NOT shown today on main or here: four reports captured on 2
 from the 47 G82 assessed, so the reviewed entry stops applying by its own rule; replayed on the assessed 47 it
 stands under the volume WAIT (pinned by test). A new assessment is a separate reviewed change.
 
-**Tests** `test_withdraw_g87_obs_prerelease_row.py` (43 checks, blocking); `test_volume_precaution_g87.py` (52
+**Tests** `test_withdraw_g87_obs_prerelease_row.py` (43 checks, blocking); `test_volume_precaution_g87.py` (56
 checks, blocking). Updated for the owner's amendment, same governed counts: `test_growth3_verdict_policy.py`
 (decide takes counted_rows; probe A1's 32.2.2 now prints the volume WAIT with only the still-supported TEST FIRST
 beneath), `test_patch_decision_authority.py` (both writers reach the volume WAIT from the same rows),
@@ -568,7 +580,8 @@ beneath), `test_patch_decision_authority.py` (both writers reach the volume WAIT
 own grant); any resolver, tier or re-admission lane adds `before_release_date` to the set it promotes from; a page
 prints the volume WAIT below 30 counted rows or 30 unique report URLs, on a product outside the promotion set, over
 a SECURITY UPDATE, an AVOID or an official security identification, or because collection health changed; a reviewed
-scoped finding disappears from beneath it; or a page prints WAIT with no next action.
+scoped finding disappears from beneath it; a page prints WAIT with no next action or with one the source facts do not
+give; or any surface, the newer-release note included, prints the volume WAIT without its label.
 
 ---
 
@@ -6507,7 +6520,8 @@ update and an official security identification always win; a reviewed TEST FIRST
 beneath it with its own scope. Collection health, sentiment, themes, severity, maturity and the clock are still not
 inputs, and every other count rule here still stands. Every page that prints WAIT carries a way forward (a newer
 release with its vendor caution first, the release being archived, no newer release on record, or no
-better-supported alternative established), and QA blocks a deploy where one does not.
+better-supported alternative established, with the advice to keep a working installation where the verdict box
+does not already give it), and QA blocks a deploy where one is missing or is not the one the source facts give.
 
 **Reopen only if** a page prints WAIT or TEST FIRST without a supported reason entry (other than the AUX-127
 volume-based precaution), any surface prints a WAIT, TEST FIRST or AVOID without its scope (or, for the volume-based
