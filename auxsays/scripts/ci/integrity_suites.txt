@@ -52,8 +52,9 @@ auxsays/scripts/tests/test_automation_writeback.py = 152
 # conditions and run names per context, executes chain-ingest's, the reaper's eviction and
 # lost-cycle shell against a fake gh, and runs writer_cycle_recovery.py as functions, as a bare
 # script against a fake gh serving raw API JSON, and tick by tick through a six- and a fifteen-day
-# outage.
-auxsays/scripts/tests/test_deploy_verification_and_lost_race.py = 197
+# outage. At most one recovery dispatch per lost cycle: the eviction step treats an evicted run as
+# covered once a recovery naming its cycle has started, ticked through 7- and 30-day simulations.
+auxsays/scripts/tests/test_deploy_verification_and_lost_race.py = 218
 # A stored evidence row may not disappear, and may stop being accepted only by an audited in-place
 # withdrawal. Every in-tree gate compares the records against the SAME store a purge rewrote, so a
 # coherent 98% DaVinci deletion passed QA, the audit and this whole manifest, and the real writeback

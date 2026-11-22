@@ -50,6 +50,14 @@ WHAT IS PINNED, AND HOW
 [P] a persistent outage longer than 72 hours, tick by tick with the module's own plan_tick and
     keep_issue: one re-run, one issue, never closed -- past the API's page too -- and one close
     once a run reaches main and its push is deployed.
+[V] the eviction step keeps it to AT MOST ONE RECOVERY DISPATCH PER LOST CYCLE: an evicted run is
+    covered once a recovery whose strictly parsed marker names its cycle has started, whatever that
+    recovery's outcome; a recovery evicted before it started is no attempt; a similar title or an
+    operator's dispatch never covers; an uncertain history dispatches nothing and says so. Then both
+    reaper steps tick by tick over 7 and 30 simulated days (the eviction step executed, the
+    lost-cycle step through the module): one dispatch per evicted cycle, no second started
+    recovery, one issue closed only after a routine run reached main and was deployed, and fresh
+    routine runs still recovered.
 [H] the PowerPoint graph's writeback binding confirms its build and writes its outputs.
 
 Deterministic, offline, writes nothing outside its temporary directories.
@@ -1380,15 +1388,42 @@ if [ "$1" = "workflow" ]; then
 fi
 q="$*"
 case "$q" in
+  # the eviction step's recovery check: the run page the evicted run came from, exactly as its jq
+  # prints it -- every run on the page when the queried id is on it, else `unlisted`. Unset: nothing.
+  *'"unlisted"'*)
+    [ "${SIM_PAGE_RC:-0}" = "0" ] || exit "${SIM_PAGE_RC}"
+    re='\.id == ([0-9]+)\)'
+    [[ "$q" =~ $re ]] && id="${BASH_REMATCH[1]}" || id="none"
+    case "$q" in
+      *obs-evidence-collection*) page="${SIM_PAGE_OBS-__unset__}" ;;
+      *) page="${SIM_PAGE_ING-__unset__}" ;;
+    esac
+    [ "$page" = "__unset__" ] && exit 0
+    nl=$'\n'
+    if [[ "${nl}${page}" == *"${nl}${id} "* ]]; then printf '%s' "$page"; else echo unlisted; fi ;;
   # the reaper's eviction step: occupancy, covering run, evicted runs (with titles), jobs
   *'.status == "pending"'*) echo "${SIM_BUSY:-0}" ;;
-  *'conclusion == "success"'*) echo "${SIM_COVERING:-}" ;;
+  *'conclusion == "success"'*)
+    case "$q" in
+      *obs-evidence-collection*) echo "${SIM_COVERING_OBS-${SIM_COVERING:-}}" ;;
+      *) echo "${SIM_COVERING_ING-${SIM_COVERING:-}}" ;;
+    esac ;;
   *'conclusion == "cancelled"'*)
     case "$q" in
       *obs-evidence-collection*) printf '%b' "${SIM_EVICTED_OBS:-}" ;;
       *patch-ingest*) printf '%b' "${SIM_EVICTED_ING:-}" ;;
     esac ;;
-  */jobs*) echo "${SIM_JOBS:-0}" ;;
+  # jobs: SIM_JOBS_<run id> when set (FAIL = an unreadable read), else SIM_JOBS
+  */jobs*)
+    re='/runs/([0-9]+)/jobs'
+    v=""
+    [[ "$q" =~ $re ]] && v="SIM_JOBS_${BASH_REMATCH[1]}"
+    if [ -n "$v" ] && [ -n "${!v+set}" ]; then
+      [ "${!v}" = "FAIL" ] && exit 1
+      echo "${!v}"
+    else
+      echo "${SIM_JOBS:-0}"
+    fi ;;
   *) echo 0 ;;
 esac
 exit 0
@@ -2330,6 +2365,432 @@ def section_persistent_outage() -> None:
           len(closes) == 1 and order == ["tick-undeployed", "close", "tick-deployed"]
           and sha(4)[:7] in closes[0][2] and "Pages run 11" in closes[0][2], f"{order} {closes}")
 
+
+# --------------------------------------------------------------------------------------------------
+# [V] the eviction step: at most one recovery dispatch per lost cycle (amendment A5)
+# --------------------------------------------------------------------------------------------------
+EVICTED_903 = "903 2026-11-22T03:00:00Z Patch Evidence Collection\n"
+
+
+def page_line(rid: int, status: str, conclusion: str | None, event: str, actor: str, title: str) -> str:
+    """One line of the run page exactly as the eviction step's recovery-check jq prints it."""
+    return f"{rid} {status} {conclusion if conclusion is not None else 'null'} {event} {actor} {title}\n"
+
+
+def recovery_line(rid: int, of: str, status: str = "completed", conclusion: str | None = "failure",
+                  actor: str = BOT, name: str = "Patch Evidence Collection") -> str:
+    return page_line(rid, status, conclusion, "workflow_dispatch", actor, f"{name} (recovery of run {of})")
+
+
+CRON_903 = page_line(903, "completed", "cancelled", "schedule", "auxchan", "Patch Evidence Collection")
+CRON_890 = page_line(890, "completed", "success", "schedule", "auxchan", "Patch Evidence Collection")
+
+
+def _eviction_step() -> tuple[str, dict] | None:
+    """The eviction step's `run:` and the job env it reads, or None (after a failed check) without bash."""
+    if shutil.which("bash") is None:
+        check("V bash is available to execute the eviction step", False, "bash not found")
+        return None
+    reaper = load_wf(REAPER_WF)["jobs"]["reap"]
+    renv = reaper.get("env") or {}
+    return reaper["steps"][0]["run"], {"GROUP_MEMBERS": " ".join(str(renv.get("GROUP_MEMBERS", "")).split()),
+                                       "REAPABLE": str(renv.get("REAPABLE", ""))}
+
+
+def section_eviction_checks() -> None:
+    print(NEWLINE + "[V] the eviction step: at most one recovery dispatch per lost cycle")
+    found = _eviction_step()
+    if found is None:
+        return
+    step0, base = found[0], dict(found[1], SIM_JOBS_903="0")
+
+    def step(**sim):
+        rc, ds, out, output = run_shell(step0, dict(base, **sim))
+        outs = dict(ln.split("=", 1) for ln in output.splitlines() if "=" in ln)
+        return rc, [dispatch_summary(d) for d in ds], out, outs
+
+    def none_dispatched(rc, summ, outs) -> bool:
+        return rc == 0 and summ == [] and outs.get("busy") == "0" and outs.get("dispatched") == "0"
+
+    # E5: a recovery of the evicted cycle that STARTED is its one attempt, whatever its outcome
+    for conclusion, status in (("failure", "completed"), ("cancelled", "completed"), ("timed_out", "completed"),
+                               (None, "in_progress")):
+        rc, summ, out, outs = step(SIM_EVICTED_OBS=EVICTED_903, SIM_JOBS_911="2", SIM_PAGE_OBS=(
+            recovery_line(911, "903", status, conclusion) + CRON_903 + CRON_890))
+        check(f"E5 an evicted cycle whose recovery started and is `{status}/{conclusion}` is covered: nothing "
+              "is re-dispatched (at most one recovery dispatch per lost cycle)",
+              none_dispatched(rc, summ, outs) and "recovery run 911" in out and "already started" in out,
+              f"rc={rc} {summ} {outs} {out[-300:]}")
+    rc, summ, out, outs = step(SIM_EVICTED_OBS="905 2026-11-22T05:00:00Z Patch Evidence Collection (recovery of run 800)\n",
+                               SIM_JOBS_905="0", SIM_JOBS_912="2", SIM_PAGE_OBS=(
+                                   recovery_line(912, "800") + recovery_line(905, "800", "completed", "cancelled")))
+    check("E5 an evicted RECOVERY whose re-dispatch started and lost is covered by it: nothing re-dispatched",
+          none_dispatched(rc, summ, outs) and "recovery run 912" in out, f"rc={rc} {summ} {out[-300:]}")
+    rc, summ, out, outs = step(SIM_EVICTED_OBS=EVICTED_903, SIM_JOBS_911="0", SIM_PAGE_OBS=(
+        recovery_line(911, "903", "completed", "cancelled") + CRON_903))
+    check("E5 a recovery that was itself evicted (zero jobs) never started: the cycle is re-dispatched once",
+          rc == 0 and summ == [(EVIDENCE_WF, {"recovery_of": "903"})] and outs.get("dispatched") == "1",
+          f"rc={rc} {summ} {outs} {out[-300:]}")
+    similar = [("Patch Evidence Collection (recovery of run 9031)", 921),
+               ("Patch Evidence Collection (recovery of run 90)", 922),
+               ("Patch Evidence Collection (recovery of run 0903)", 923),
+               ("Patch Evidence Collection recovery of run 903", 924),
+               ("Patch Evidence Collection (x) (recovery of run 903)", 925),
+               ("Patch Evidence Collection (recovery of run 903) (recovery of run 7)", 926),
+               ("Patch Evidence Collection (recovery of run 903).", 927),
+               ("Patch Evidence Collection (rerun of run 903)", 928)]
+    rc, summ, out, outs = step(SIM_EVICTED_OBS=EVICTED_903, SIM_PAGE_OBS="".join(
+        page_line(rid, "completed", "failure", "workflow_dispatch", BOT, title) for title, rid in similar) + CRON_903,
+        **{f"SIM_JOBS_{rid}": "2" for _, rid in similar})
+    check("E5 coverage is never inferred from a similar title: only the strictly parsed marker naming exactly "
+          "this cycle counts, so the evicted cycle is still re-dispatched once",
+          rc == 0 and summ == [(EVIDENCE_WF, {"recovery_of": "903"})], f"rc={rc} {summ} {out[-300:]}")
+    rc, summ, out, outs = step(SIM_EVICTED_OBS=EVICTED_903, SIM_JOBS_911="2", SIM_PAGE_OBS=(
+        recovery_line(911, "903", actor="auxchan") + CRON_903))
+    check("E5 an operator's own dispatch carrying the marker is not the automatic recovery (its inputs are "
+          "invisible, as for a covering run): the cycle is still re-dispatched once",
+          rc == 0 and summ == [(EVIDENCE_WF, {"recovery_of": "903"})], f"rc={rc} {summ} {out[-300:]}")
+    rc, summ, out, outs = step(SIM_EVICTED_OBS=EVICTED_903 + "920 2026-11-22T09:00:00Z Patch Evidence Collection\n",
+                               SIM_JOBS_911="2", SIM_JOBS_920="0", SIM_PAGE_OBS=(
+                                   page_line(920, "completed", "cancelled", "schedule", "auxchan",
+                                             "Patch Evidence Collection")
+                                   + recovery_line(911, "903") + CRON_903))
+    check("E5 a fresh routine run evicted later is still recovered: the covered cycle is skipped and the "
+          "fresh one gets its one dispatch",
+          rc == 0 and summ == [(EVIDENCE_WF, {"recovery_of": "920"})], f"rc={rc} {summ} {out[-300:]}")
+
+    # E6: whether a recovery already started cannot be established -> FAIL CLOSED and say so
+    unsure_cases = [
+        ("the evicted run is not on the page read (`unlisted`)", {"SIM_PAGE_OBS": recovery_line(911, "903")}),
+        ("the run list cannot be read", {"SIM_PAGE_OBS": CRON_903, "SIM_PAGE_RC": "1"}),
+        ("a recovery's jobs cannot be read", {"SIM_PAGE_OBS": recovery_line(911, "903") + CRON_903,
+                                              "SIM_JOBS_911": "FAIL"}),
+        ("a recovery has no jobs and was not evicted (`startup_failure`)",
+         {"SIM_PAGE_OBS": recovery_line(911, "903", "completed", "startup_failure") + CRON_903, "SIM_JOBS_911": "0"}),
+        ("a recovery is still queued", {"SIM_PAGE_OBS": recovery_line(911, "903", "queued", None) + CRON_903,
+                                        "SIM_JOBS_911": "0"}),
+    ]
+    for label, sim in unsure_cases:
+        rc, summ, out, outs = step(SIM_EVICTED_OBS=EVICTED_903, **sim)
+        check(f"E6 {label}: nothing is dispatched, and the uncertainty is reported",
+              none_dispatched(rc, summ, outs) and "::warning" in out and "cannot be established" in out,
+              f"rc={rc} {summ} {outs} {out[-300:]}")
+
+
+def section_eviction_simulation() -> None:
+    """Both reaper steps, tick by tick, over 7 and 30 simulated days."""
+    print(NEWLINE + "[V'] both reaper steps over 7 and 30 simulated days")
+    found = _eviction_step()
+    if found is None:
+        return
+    step0, base = found
+    for days in (7, 30):
+        w = _eviction_sim(days, step0, base)
+        per_cycle: dict = {}
+        for _, _, _, of in w.step_dispatches:
+            per_cycle[of] = per_cycle.get(of, 0) + 1
+        started: dict = {}
+        for wf in w.runs:
+            for r in w.runs[wf]:
+                of = wcr.recovery_of(r)
+                if of and r["_jobs"]["total_count"] > 0:
+                    started[of] = started.get(of, 0) + 1
+        cycles = w.evicted_cycles()
+        # One dispatch per evicted cycle; a second only when the step's first was itself evicted before
+        # it started (it never ran, so it was no attempt).
+        expected = {c: 1 + w.evicted_step_recoveries.get(c, 0) for c in cycles}
+        check(f"V1 {days} days: at most ONE recovery dispatch per evicted cycle (a second only after the first "
+              "was itself evicted before it started), and every evicted cycle got its one",
+              bool(cycles) and per_cycle == expected,
+              f"cycles={cycles} per_cycle={per_cycle} expected={expected} dispatches={w.step_dispatches}")
+        check(f"V2 {days} days: no lost cycle ever had a second recovery that started -- failed, cancelled and "
+              "timed-out recoveries were never re-dispatched",
+              bool(started) and max(started.values()) == 1
+              and set(w.outcomes_of_started()) >= {"lost", "cancelled", "timed_out"},
+              f"started={started} outcomes={w.outcomes_of_started()}")
+        opens = [e for e in w.events if e[1] == "open"]
+        closes = [e for e in w.events if e[1] == "close"]
+        if days == 7:
+            check("V3 7 days: ONE tracking issue, opened when the first recovery lost and never closed while no "
+                  "routine run reached main (a dispatch is never taken as reaching main or Pages)",
+                  len(opens) == 1 and not closes and len(w.issues) == 1 and w.issues[0]["state"] == "open",
+                  f"events={[e[:2] for e in w.events if e[1] != 'update']}")
+        else:
+            close_at = closes[0][0] if closes else None
+            check("V3 30 days: ONE tracking issue through the whole outage, closed once -- only after a routine "
+                  "run reached main AND Pages deployed main's newest commit",
+                  len(opens) == 1 and len(closes) == 1 and close_at is not None
+                  and close_at > w.deployed_at > w.reached_at and len(w.issues) == 1
+                  and sha(4)[:7] in closes[0][2],
+                  f"events={[e[:2] for e in w.events if e[1] != 'update']} reached={w.reached_at} "
+                  f"deployed={w.deployed_at}")
+            fresh_evicted = w.fresh["evicted"]
+            fresh_lost = w.fresh["lost"]
+            check("V4 30 days: after the outage a fresh routine run is still recovered -- an evicted cron gets its "
+                  "one dispatch, a lost cron its one re-run -- and both reach main with no new issue",
+                  per_cycle.get(fresh_evicted) == 1
+                  and len([d for d in w.module_dispatches if d[2] == fresh_lost]) == 1
+                  and w.reached_recovery(fresh_evicted) and w.reached_recovery(fresh_lost)
+                  and len(w.issues) == 1 and w.issues[0]["state"] == "closed",
+                  f"per_cycle={per_cycle} module={w.module_dispatches} fresh={w.fresh}")
+
+
+class EvictionWorld:
+    """Both reapable lanes over simulated days, as BOTH reaper steps read them: the eviction step
+    (executed under bash -e against the fake gh, fed what each of its jq filters would select from
+    this history) and the lost-cycle step (the module's own plan_tick and keep_issue). Runs appear
+    when created and complete after their duration; a recovery's outcome comes from the plan for its
+    cycle (default: lost during the outage, reached after it)."""
+
+    PAGE = 50
+    NAMES = {EVIDENCE_WF: "Patch Evidence Collection", INGEST_WF: "AUXSAYS Patch Ingestion"}
+    CONCLUSION = {"reached": "success", "lost": "failure", "evicted": "cancelled", "cancelled": "cancelled",
+                  "timed_out": "cancelled"}
+
+    def __init__(self, t0: datetime) -> None:
+        self.t0 = t0
+        self.now = t0
+        self.runs: dict = {EVIDENCE_WF: [], INGEST_WF: []}
+        self.next_id = 9000
+        self.next_job = 50000
+        self.notes: dict = {}
+        self.plans: dict = {}
+        self.outage = True
+        self.issues: list = []
+        self.events: list = []
+        self.step_dispatches: list = []     # (tick, evicted run id, workflow, recovery_of)
+        self.module_dispatches: list = []   # (tick, workflow, recovery_of)
+        self.evicted_step_recoveries: dict = {}   # cycle -> the step's dispatches of it that were evicted
+        self.activity = [dict(push(3, 2, 0), timestamp=self.iso(t0 - timedelta(days=1))),
+                         dict(push(2, 1, 0), timestamp=self.iso(t0 - timedelta(days=40)))]
+        self.pages = [dict(prun(3, 0), created_at=self.iso(t0 - timedelta(days=1)))]
+        self.reached_at = None
+        self.deployed_at = None
+        self.fresh: dict = {}
+
+    @staticmethod
+    def iso(t: datetime) -> str:
+        return t.strftime("%Y-%m-%dT%H:%M:%SZ")
+
+    def _jobs(self, kind: str) -> dict:
+        self.next_job += 1
+        j = self.next_job
+        if kind == "evicted":
+            return {"total_count": 0, "jobs": []}
+        if kind == "reached":
+            return {"total_count": 1, "jobs": [{"id": j, "name": "chain-ingest", "conclusion": "success",
+                                                "steps": [{"name": wcr.CYCLE_MARKER_STEP, "conclusion": "success"}]}]}
+        if kind in ("cancelled", "timed_out"):
+            self.notes[str(j)] = TIMEOUT_NOTES if kind == "timed_out" else CANCEL_NOTES
+            return {"total_count": 1, "jobs": [{"id": j, "name": "collect", "conclusion": "cancelled",
+                                                "steps": [{"name": WRITEBACK_STEP, "conclusion": "cancelled"}]}]}
+        return jobs_of()
+
+    def add(self, wf: str, t: datetime, kind: str, of: str = "") -> str:
+        self.next_id += 1
+        rid = self.next_id
+        event = "schedule" if (wf == EVIDENCE_WF and not of) else "workflow_dispatch"
+        self.runs[wf].append({
+            "id": rid, "created_at": self.iso(t), "event": event,
+            "triggering_actor": {"login": "auxchan" if event == "schedule" else BOT}, "html_url": "",
+            "display_title": self.NAMES[wf] + (f" (recovery of run {of})" if of else ""),
+            "_start": t, "_done": t + (timedelta(minutes=1) if kind == "evicted" else timedelta(minutes=30)),
+            "_kind": kind, "_jobs": self._jobs(kind)})
+        return str(rid)
+
+    def behaviour(self, of: str) -> str:
+        queue = self.plans.get(of) or []
+        return queue.pop(0) if queue else ("lost" if self.outage else "reached")
+
+    # what the API shows at self.now
+    def visible(self, wf: str) -> list:
+        rows = [r for r in self.runs[wf] if r["_start"] <= self.now]
+        rows.sort(key=lambda r: (r["created_at"], r["id"]), reverse=True)
+        return rows
+
+    def public(self, r: dict) -> dict:
+        done = r["_done"] <= self.now
+        out = {k: v for k, v in r.items() if not k.startswith("_")}
+        out["status"] = "completed" if done else "in_progress"
+        out["conclusion"] = self.CONCLUSION[r["_kind"]] if done else None
+        return out
+
+    def in_flight(self, wf: str) -> int:
+        return sum(1 for r in self.runs.get(wf, []) if r["_start"] <= self.now < r["_done"])
+
+    def evicted_cycles(self) -> set:
+        """The cycle of every routine run evicted before any job ran (the eviction step's case): the
+        run's own id, or the cycle it was recovering."""
+        return {wcr.recovery_of(r) or str(r["id"]) for wf in self.runs for r in self.runs[wf]
+                if r["_kind"] == "evicted" and wcr.is_routine(self.public(r))}
+
+    def outcomes_of_started(self) -> list:
+        return [r["_kind"] for wf in self.runs for r in self.runs[wf]
+                if wcr.recovery_of(r) and r["_jobs"]["total_count"] > 0]
+
+    def reached_recovery(self, of: str) -> bool:
+        return any(wcr.recovery_of(r) == of and r["_kind"] == "reached" and r["_done"] <= self.now
+                   for wf in self.runs for r in self.runs[wf])
+
+    def step_env(self) -> tuple[dict, bool, int]:
+        """The eviction step's view (SIM_* for the fake gh), whether it has an eviction to consider,
+        and how many writer runs are in flight."""
+        since = self.iso(self.now - timedelta(hours=14))
+        env: dict = {}
+        has_eviction = False
+        for wf, tag in ((EVIDENCE_WF, "OBS"), (INGEST_WF, "ING")):
+            rows = [self.public(r) for r in self.visible(wf)]
+            done = [r for r in rows if r["status"] == "completed" and r["created_at"] >= since and wcr.is_routine(r)]
+            env[f"SIM_COVERING_{tag}"] = max((r["created_at"] for r in done if r["conclusion"] == "success"), default="")
+            cancelled = sorted((r for r in done if r["conclusion"] == "cancelled"), key=lambda r: r["created_at"])
+            env[f"SIM_EVICTED_{tag}"] = "".join(f"{r['id']} {r['created_at']} {r['display_title']}\n" for r in cancelled)
+            env[f"SIM_PAGE_{tag}"] = "".join(
+                page_line(r["id"], r["status"], r["conclusion"], r["event"], r["triggering_actor"]["login"],
+                          r["display_title"]) for r in rows[:self.PAGE])
+            for r in self.visible(wf)[:self.PAGE]:
+                env[f"SIM_JOBS_{r['id']}"] = str(r["_jobs"]["total_count"])
+            has_eviction = has_eviction or any(r["_kind"] == "evicted" and self.public(r)["status"] == "completed"
+                                               and r["created_at"] >= since and wcr.is_routine(self.public(r))
+                                               for r in self.visible(wf))
+        busy = self.in_flight(EVIDENCE_WF) + self.in_flight(INGEST_WF)
+        env["SIM_BUSY"] = str(busy)
+        return env, has_eviction, busy
+
+
+class _EvictGh:
+    """plan_tick's and keep_issue's API over an EvictionWorld."""
+
+    def __init__(self, w: EvictionWorld) -> None:
+        self.w = w
+
+    def runs(self, wf):
+        return [self.w.public(r) for r in self.w.visible(wf) if r["_done"] <= self.w.now][:EvictionWorld.PAGE]
+
+    def jobs(self, rid):
+        for wf in self.w.runs:
+            for r in self.w.runs[wf]:
+                if str(r["id"]) == str(rid):
+                    return r["_jobs"]
+        return None
+
+    def annotations(self, jid):
+        return self.w.notes.get(str(jid), [])
+
+    def active(self, wf):
+        return self.w.in_flight(wf)
+
+    def pages_runs(self):
+        return [p for p in self.w.pages if p["created_at"] <= self.w.iso(self.w.now)]
+
+    def activity(self):
+        return [a for a in self.w.activity if a["timestamp"] <= self.w.iso(self.w.now)]
+
+    def open_issue(self):
+        op = [i for i in self.w.issues if i["state"] == "open"]
+        return True, (op[0] if op else None)
+
+    def create_issue(self, body):
+        self.w.issues.append({"number": len(self.w.issues) + 1, "title": wcr.ISSUE_TITLE, "body": body,
+                              "state": "open", "user": {"login": BOT}})
+        self.w.events.append((self.w.now, "open"))
+        return True
+
+    def update_issue(self, number, body):
+        self.w.issues[number - 1]["body"] = body
+        self.w.events.append((self.w.now, "update"))
+        return True
+
+    def close_issue(self, number, comment):
+        self.w.issues[number - 1]["state"] = "closed"
+        self.w.events.append((self.w.now, "close", comment))
+        return True
+
+
+DISPATCH_LINE = re.compile(r"run (\d+): evicted while queued at \S+ with 0 jobs -- re-dispatching "
+                           r"\(recovery of run (\d+)\)")
+
+
+def _eviction_sim(days: int, step0: str, base: dict) -> EvictionWorld:
+    """A persistent collection outage (every run that starts loses its cycle; ingestion healthy) with
+    evicted cycles of both kinds -- an evicted cron (then its recovery runs and loses), and an evicted
+    RECOVERY -- whose one started recovery fails, is cancelled after it started, or hits its time limit.
+    The reaper ticks every two hours at :43. Over 30 days one re-dispatch is itself evicted first, and
+    the outage ends: a cron reaches main, Pages deploys its push, then a fresh cron is evicted and
+    another loses. The eviction step is EXECUTED on every tick with an eviction in its 14-hour window
+    (the only ticks on which it can dispatch); on the others only its occupancy output matters."""
+    t0 = datetime(2026, 11, 1, 0, 0, tzinfo=timezone.utc)
+    w = EvictionWorld(t0)
+    w.add(EVIDENCE_WF, t0 - timedelta(hours=6), "reached")
+    w.add(INGEST_WF, t0 - timedelta(hours=6) + timedelta(minutes=5), "reached")
+    # (day, hour) -> what the collection cron at that hour does; ("inject", plan) adds, at hh:50, an
+    # evicted recovery of the cron that ran at hh:00 and lost.
+    if days == 7:
+        script = {(0, 3): ("evicted", ["lost"]), (3, 3): ("inject", ["timed_out"]), (5, 9): ("evicted", ["cancelled"])}
+        recover_at = None
+    else:
+        script = {(0, 3): ("evicted", ["lost"]), (4, 3): ("inject", ["cancelled"]), (8, 15): ("evicted", ["timed_out"]),
+                  (12, 3): ("inject", ["lost"]), (16, 3): ("evicted", ["evicted", "lost"]),
+                  (20, 3): ("inject", ["timed_out"]), (24, 15): ("evicted", ["cancelled"]),
+                  (28, 9): ("fresh-evicted", []), (29, 3): ("fresh-lost", [])}
+        recover_at = (27, 3)
+    members = sorted(writer_group_members())
+    t, end = t0, t0 + timedelta(days=days)
+    while t < end:
+        w.now = t
+        day, hour = (t - t0).days, t.hour
+        if hour % 6 == 3:
+            what, queue = script.get((day, hour), ("", []))
+            if (day, hour) == recover_at:
+                w.outage = False
+                w.add(EVIDENCE_WF, t, "reached")
+                w.reached_at = t + timedelta(minutes=30)
+                w.activity.insert(0, dict(push(4, 3, 0), timestamp=w.iso(t + timedelta(minutes=30))))
+                w.deployed_at = t + timedelta(hours=2)
+                w.pages.insert(0, dict(prun(11, 0, commit=4), created_at=w.iso(w.deployed_at)))
+            elif what in ("evicted", "fresh-evicted"):
+                rid = w.add(EVIDENCE_WF, t, "evicted")
+                w.plans[rid] = list(queue)
+                if what == "fresh-evicted":
+                    w.fresh["evicted"] = rid
+            else:
+                rid = w.add(EVIDENCE_WF, t, "lost" if (w.outage or what == "fresh-lost") else "reached")
+                if what == "fresh-lost":
+                    w.fresh["lost"] = rid
+                if what == "inject":
+                    w.add(EVIDENCE_WF, t + timedelta(minutes=50), "evicted", of=rid)
+                    w.plans[rid] = list(queue)
+            w.add(INGEST_WF, t + timedelta(minutes=5), "reached")
+        if hour % 2 == 0:
+            w.now = tick = t + timedelta(minutes=43)
+            gh = _EvictGh(w)
+            env, has_eviction, busy = w.step_env()
+            if has_eviction:
+                rc, ds, out, output = run_shell(step0, dict(base, **env))
+                outs = dict(ln.split("=", 1) for ln in output.splitlines() if "=" in ln)
+                which = DISPATCH_LINE.findall(out)
+                for i, d in enumerate(ds):
+                    wf, fields = dispatch_summary(d)
+                    of = fields.get("recovery_of", "")
+                    w.step_dispatches.append((tick, which[i][0] if i < len(which) else "?", wf, of))
+                    kind = w.behaviour(of)
+                    if kind == "evicted":
+                        w.evicted_step_recoveries[of] = w.evicted_step_recoveries.get(of, 0) + 1
+                    w.add(wf, tick + timedelta(minutes=2), kind, of=of)
+            else:
+                # Nothing the step could dispatch (no eviction in its window): only its occupancy
+                # output reaches the next step, exactly as E2's quiet tick reports it.
+                outs = {"busy": str(4 * busy), "dispatched": "0"}
+            plan = wcr.plan_tick(gh, [EVIDENCE_WF, INGEST_WF], outs.get("busy", ""), outs.get("dispatched", ""),
+                                 tick, members)
+            if plan.dispatch:
+                wf, of = plan.dispatch
+                w.module_dispatches.append((tick, wf, of))
+                w.add(wf, tick + timedelta(minutes=3), w.behaviour(of), of=of)
+            wcr.keep_issue(gh, plan, dry_run=False)
+        t += timedelta(hours=1)
+    w.now = end
+    return w
+
 # --------------------------------------------------------------------------------------------------
 # [H] the PowerPoint graph's writeback binding
 # --------------------------------------------------------------------------------------------------
@@ -2412,6 +2873,8 @@ def main() -> int:
     section_decisions()
     section_cli()
     section_persistent_outage()
+    section_eviction_checks()
+    section_eviction_simulation()
     section_powerpoint_binding()
     print(NEWLINE + "=" * 74)
     print(f"Results: {_PASS}/{_PASS + _FAIL} passed, {_FAIL} failed")

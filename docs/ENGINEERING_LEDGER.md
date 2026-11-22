@@ -4594,7 +4594,12 @@ operator's by GitHub's annotation -- but only when the eviction step found the w
 free and dispatched nothing, and the same check repeated just before the dispatch still finds it
 free. A re-run checks out main as it is when its job starts and its writeback rebases onto any later
 main and re-validates before pushing. Every automatic re-run carries `recovery_of` in its `run-name`,
-so it survives an eviction: a recovery that loses again is never re-run. The walk has NO age limit:
+so it survives an eviction, and there is at most one recovery dispatch per lost cycle: a recovery that
+loses again is never re-run, and the eviction step treats an evicted run as covered once a routine
+recovery whose strictly parsed marker names its cycle has started (has jobs), whatever that recovery's
+outcome -- only a recovery evicted before it started is re-dispatched, and when whether one started
+cannot be established it dispatches nothing and warns. A dispatch is never taken as the cycle
+reaching main or Pages. The walk has NO age limit:
 after a recovery has lost, later losses of that lane pause until a run reaches main, however long
 that takes, and a loss whose deciding history is out of the API's page (neither a run that reached
 main nor a lost recovery in view) fails closed -- reported, never re-run. Visibility: a lost
@@ -4613,7 +4618,7 @@ deployed. A full page of open issues without it opens nothing. Run ids, commit i
 conclusions and failed step names only. The reaper dispatches nothing for a deployment (no retry
 storm, no re-push): redeploying stays with `--deploy-recovery` and pages.yml's daily cron.
 
-**Evidence** `test_deploy_verification_and_lost_race.py`, 197 governed checks: the real writeback
+**Evidence** `test_deploy_verification_and_lost_race.py`, 218 governed checks: the real writeback
 against a throwaway bare origin and a scripted Pages run list (superseded, descendant, ancestor,
 unattributable, stale-snapshot and hung-query cases) and on a fake clock where every query and fetch
 takes all the time it is allowed (the whole wait ends inside 20.5 minutes); a real fetch from a
@@ -4625,7 +4630,13 @@ fake `gh`, the last with its repository, lanes and writer group resolved from th
 production runs it; `writer_cycle_recovery.py` as functions and as a bare script against a fake `gh`
 serving raw API JSON; and a six-day and a fifteen-day outage ticked every two hours through the
 module's own `plan_tick` and `keep_issue` -- one re-run, one issue, never closed, past the API's page
-too -- then one close once a run reaches main and Pages deploys its push. Its reads were also run
+too -- then one close once a run reaches main and Pages deploys its push; the eviction step's recovery
+check executed against the fake `gh` (a recovery that failed, was cancelled, timed out or is still
+running covers its cycle; one evicted before it started does not; a similar title or an operator's
+dispatch never covers; five uncertain histories dispatch nothing and warn); and both reaper steps
+ticked through 7- and 30-day outages with evicted crons and evicted recoveries -- one dispatch per
+evicted cycle, never a second started recovery, one issue closed only after a run reached main and
+was deployed, and fresh routine runs still recovered. Its reads were also run
 read-only against the live API: run 44878227542 judges lost, run 33810979002 (PowerPoint time limit)
 lost, run 31111379736 (operator cancel) left alone, run 30669290854 an eviction; on 2026-11-22 both
 lanes' newest runs reached main and Pages run 44976872341 had deployed main's newest commit 44e6cc7e.
@@ -4634,7 +4645,10 @@ withdrawal merge (#272, 44e6cc7e) was followed by Pages run 44976872341 on that 
 of the 66 GitHub-release records the official notes refresh no longer re-reads (OBS 18, ComfyUI 48),
 none has current notes the AUX-125 grammar reads as declaring a known issue.
 
-**Known limits** A recovery waits for a free lane and a reaper tick (every two hours). Pre-merge runs
+**Known limits** A recovery waits for a free lane and a reaper tick (every two hours). A recovery that
+started is its cycle's one attempt even when an operator cancelled it. When whether a recovery of an
+evicted cycle already started cannot be established, the eviction step reports that in a warning and
+its summary, not on the tracking issue. Pre-merge runs
 carry no `Cycle reached main` step, so a pre-merge run that failed after reaching main and is still a
 lane's newest routine run would be re-run once. The reaper's re-check and its dispatch are two API
 calls; a writer arriving between them can still be evicted (and is then the eviction step's to
@@ -4648,7 +4662,8 @@ releases per product are still not re-read (AUX-125).
 **Reopen only if** a writer run pushes a site change and neither confirms its Pages build nor reports
 `deployment_unverified`; a superseded Pages run fails a lane; the build wait outlasts 20.5 minutes; a
 routine run without a successful `Cycle reached main` step is, two reaper ticks after the lane frees,
-neither re-run nor listed in the tracking issue; the tracking issue is closed while a lane's newest
+neither re-run nor listed in the tracking issue; an evicted cycle is re-dispatched after a recovery of
+it started; the tracking issue is closed while a lane's newest
 routine run has not reached main or main's newest commit has no successful Pages build; or a commit
 stays on main undeployed for more than four hours without a problem line on the issue.
 
