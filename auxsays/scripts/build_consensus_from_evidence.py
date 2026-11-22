@@ -234,18 +234,19 @@ def policy_decision(product_id: str, version: str, target_build: str, items: lis
     # (temporary, owner-gated) switch is on (AUX-099).
     valid = verdict_projection.page_supported_reasons(
         facts, items, valid, lambda: [r for r in (records or {}).values() if r.get("update_entry") is True])
-    return patch_decision.decide(facts, valid_reasons=valid, lifecycle=lifecycle), facts
+    # G87: the volume-based precaution reads these counted rows (counted_evidence_rows for this group).
+    return patch_decision.decide(facts, valid_reasons=valid, lifecycle=lifecycle, counted_rows=items), facts
 
 
 def recommendation_prefix(product_id: str, version: str, label: str, total: int,
-                          *, update_status: str = "") -> str:
+                          *, update_status: str = "", counted_rows: list[dict[str, Any]] | tuple = ()) -> str:
     # THE DECISION IS NOT CHOSEN HERE. This was the third independent implementation of one policy;
     # the other two were `_recommendation_prefix` (now deleted) and `_record_coherence_fields` in
     # apply_consensus_to_records. Three implementations of one decision are three chances to
     # disagree, and they did: the DaVinci beta record shipped "WAIT for production systems" as its
     # verdict beside "AVOID for production" as its summary.
     return patch_decision.decision_label(product_id, version, label, total,
-                                         record={"update_status": update_status})
+                                         record={"update_status": update_status}, counted_rows=counted_rows)
 
 
 def affected_workflow_sentence(product_id: str, version: str, label: str, themes: Counter[str],

@@ -242,9 +242,9 @@ def js_states(products: dict) -> dict | None:
 
 
 def payload_tuple(r: dict) -> list:
-    """My Patch Stack's 13-slot record tuple; installedState reads slots 0-4 and 11."""
+    """My Patch Stack's 14-slot record tuple; installedState reads slots 0-4, 11 and 13 (the release track)."""
     return [eo._ver(r), eo._build(r), eo._date(r), str(r.get("permalink") or ""), 1 if eo._beta(r) else 0,
-            "", 0, 0, "", 0, 0, eo._platform(r), ""]
+            "", 0, 0, "", 0, 0, eo._platform(r), "", eo._track(r)]
 
 
 # =========================================================================== run
@@ -470,7 +470,7 @@ def run() -> int:  # noqa: PLR0915
     py = {}
     for pid, recs in by_pid.items():
         payload = eo.product_payload(recs)
-        products[pid] = {"recs": [payload_tuple(r) for r in payload], "split": pid in split}
+        products[pid] = {"id": pid, "recs": [payload_tuple(r) for r in payload], "split": pid in split}
         for r in payload:
             t = eo.update_available(r, payload, split=pid in split)
             py[str(r.get("permalink") or "")] = str(t.get("permalink")) if t else None
@@ -587,13 +587,28 @@ def run() -> int:  # noqa: PLR0915
         if "count_line" not in rw:
             continue
         printed = verdict_projection.printed_row(r, real_verdict["pages"])
-        if (printed is not None) == rw["count_line"].endswith((eo.UNIVERSAL_CLAUSE, FINDING)):
+        volume = printed is not None and verdict_projection.is_volume_row(printed)
+        line = rw["count_line"]
+        if printed is None:
+            bad = not line.endswith((eo.UNIVERSAL_CLAUSE, FINDING))
+        elif volume:  # G87: a volume-based WAIT may keep a valid reviewed finding, never the universal clause
+            bad = line.endswith(eo.UNIVERSAL_CLAUSE)
+        else:
+            bad = line.endswith((eo.UNIVERSAL_CLAUSE, FINDING))
+        if bad:
             unreasoned_bad.append(k)
-    check("G7 in this tree a clause appears exactly on the pages that print no verdict (INSUFFICIENT DATA)",
+    check("G7 in this tree a clause appears exactly on the pages that print no verdict (INSUFFICIENT DATA), and "
+          "under a volume-based WAIT only a still-valid reviewed finding may stand (G87)",
           not unreasoned_bad, unreasoned_bad[:5])
     obs = real["pages"].get("obs-studio|33.0.1|", {})
     obs_rows = real_groups.get(("obs-studio", "33.0.1", ""), [])
-    expect = FINDING if eo.population_digest(obs_rows) == OBS_SHA and len(obs_rows) == 47 else eo.UNIVERSAL_CLAUSE
+    # G87: 33.0.1 prints the volume-based WAIT, so where its population is no longer G82's no clause follows the
+    # count (the universal clause never stands beside a printed verdict); with G82's population the finding does.
+    obs_printed = verdict_projection.printed_row({"product_id": "obs-studio", "update_version": "33.0.1",
+                                                  "target_build": ""}, real_verdict["pages"])
+    obs_volume = obs_printed is not None and verdict_projection.is_volume_row(obs_printed)
+    assessed = eo.population_digest(obs_rows) == OBS_SHA and len(obs_rows) == 47
+    expect = FINDING if assessed else ("" if obs_volume else eo.UNIVERSAL_CLAUSE)
     # The same tree with one counted row's id changed (same size, different population): only the reviewed
     # entry and the population may decide the clause, so a special case keyed on the page cannot pass this.
     moved_groups = dict(real_groups)
@@ -602,8 +617,10 @@ def run() -> int:  # noqa: PLR0915
     moved = eo.project(real_records, moved_groups, real_verdict["pages"], real_reasons, reviewed, split)
     moved_row = moved["pages"].get("obs-studio|33.0.1|", {})
     check("G8 OBS Studio 33.0.1 shows the reviewed finding exactly while its population is G82's, else the "
-          "universal clause (also with one of its counted rows changed in this tree)",
-          obs.get("count_line", "").endswith(expect)
+          "universal clause, or under its volume-based WAIT no clause at all (also with one of its counted rows "
+          "changed in this tree)",
+          (obs.get("count_line", "").endswith(expect) if expect
+           else obs.get("count_line", "") == eo.count_sentence(len(obs_rows)))
           and (not obs_rows or (bool(moved_row.get("count_line")) and not moved_row["count_line"].endswith(FINDING)
                                 and not moved_row.get("assessment"))),
           (obs.get("count_line"), moved_row.get("count_line")))
