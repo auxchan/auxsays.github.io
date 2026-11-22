@@ -19,6 +19,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-003 | Resolved | Ingestion health | High | A dead source reported healthy |
 | AUX-004 | Resolved | Presentation | Medium | Patch headings invisible in OS light mode |
 | AUX-005 | Deferred | Patch decision | Medium | Official hard-stop AVOID path (partially built) |
+| AUX-131 | Resolved | Patch decision | Medium | A second official withdrawal could not be recorded, and adding one took the first withdrawal's AVOID away |
 | AUX-006 | Deferred | Patch decision | Medium | Community-triggered AVOID |
 | AUX-007 | Resolved | Patch decision | Medium | OBS verdict keys on a dead `update_status` axis — closed by AUX-029 |
 | AUX-008 | Resolved | Vocabulary | Low | Verdict vocabulary declared five ways — closed by AUX-029 |
@@ -53,6 +54,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-048 | Resolved | Security | High | A page on the public domain asked visitors for a repository-write token |
 | AUX-041 | Resolved | Evidence integrity | High | A published theme contradicted the reporter and a platform label was never earned — one shared, negation-aware classifier |
 | AUX-047 | Resolved | Deployment | High | The published-payload gate refused a licence notice and halted every deploy |
+| AUX-128 | Resolved | Deployment | Medium | Writer lanes confirmed only that Pages was asked to deploy, and a cycle that never reached main was never re-run |
 | AUX-042 | Resolved | Evidence integrity | High | The gate guarding mature consensus demanded three fields nothing writes and the approved writer is forbidden to write |
 | AUX-038 | Resolved | Public disclosure | High | The site explained how it gathers evidence — a 1.5 MB telemetry page, and raw method ids on hundreds of patch pages |
 | AUX-043 | Resolved | Evidence integrity | Medium | Every published source asserted a patch match it never checked; now derived from the row |
@@ -763,6 +765,68 @@ store bytes, all eight decisions and every figure above were unchanged
 
 **Reopen only if** any of the eight counts again, row 51 stops counting, or `identity_not_the_subject` refuses a
 counted Windows row (that is a new candidate and needs its own audited manifest, never a widened run of this one).
+
+---
+
+### AUX-131 — A second official withdrawal could not be recorded, and adding one took the first withdrawal's AVOID away
+
+- **Status** Resolved · **Area** Patch decision · **Severity** Medium
+- **First seen** 2026-11-21 (G89 design: "`MAX_LIFECYCLE_ENTRIES = 1`") · **Resolved** 2026-11-22 (G94; GPT G89
+  decisions, owner-relayed: "A subsequent withdrawal must not be missed.")
+
+**Symptom** `_data/patch_lifecycle.yml` is the only record of an official withdrawal (decide's R1, AVOID). It could
+hold one entry for the whole site, not one per release. Measured on this tree with the real loader: appending any
+second entry (another update, a second statement about KB5079391, an exact duplicate) made both KB5079391 pages
+AVOID -> INSUFFICIENT DATA in the deploy projection. QA then reported `patch_lifecycle_invalid`, which blocks
+`pages.yml` (`--publish-strict`) and every writeback lane's validate step. So no second withdrawal could ever be
+recorded. Nothing was published wrong: the file has only ever held one entry.
+
+**Cause** `verdict_reasons.lifecycle_errors` refused more than `MAX_LIFECYCLE_ENTRIES = 1` entries. Every consumer
+treats a refused file as empty: the projection, both record writers (silently) and QA. Separately,
+`patch_decision.lifecycle_for` returned the first matching entry in file order. With two entries for one release,
+the replacement KB and the article the page printed depended on the order of the file.
+
+**Fix**
+1. The count check is removed. Every entry still passes every per-entry check, and a malformed entry still refuses
+   the whole file, with a QA error (GROWTH-3 review 2, unchanged). An entry is still added only by reviewed pull request.
+2. `lifecycle_for` reads every matching entry and rests the page on the earliest verified one (`verified_at`, then
+   `id`, then the whole entry). An entry verified later never replaces one verified earlier, and file order decides
+   nothing. "Earlier" is by `verified_at`, not by when an entry is added: a newly added entry with an earlier
+   `verified_at` does take over the page's replacement and article (the page stays AVOID). decide's precedence is
+   unchanged.
+
+**The cap's second job** The cap also held the shipped file, mechanically, to the one entry the owner approved
+(decision 2, KB5079391). That job now rests on review plus two blocking checks that pin the shipped file to exactly
+that entry (G94-C1 by id, G3-L1 by count and KB): a further withdrawal fails both until the same reviewed pull
+request changes them. Each new withdrawal still needs the owner's approval and the Microsoft source/terms decision
+(K1; no support.microsoft.com fetch until then) before it is added.
+
+**Measured** Origin/main 44e6cc7e (after G87) against this branch: the verdict projection (58 rows, 2 AVOID), the reason
+candidates, the evidence-overview projection and live eligibility are byte-identical. QA `--read-only --publish-strict`
+gives 0 errors on both, PR-time and in deploy order. `test_official_withdrawal_completeness.py` (11 checks; W1..W6,
+C1, C2, one mutant per fix, and X3) passes 1 of 11 on main's code. `test_growth3_verdict_policy.py` stays at 156:
+G3-L1 restated, and X13 now restores the cap. Review round 1 found an order led by `id` survived every suite (W2's
+later entry happened to sort after the earlier one by id too); W2 now uses two later-verified entries whose ids sort
+before and after the earlier one's, and mutant X3 pins it.
+
+**Not changed** No withdrawal added, no source, fetch, acceptance rule, threshold, verdict or template. The schema
+is still Microsoft-only (`official_url` on support.microsoft.com, one relationship). Withdrawals are still not
+observed automatically: that needs the KB source assessment and a deterministic writer.
+
+**Residual** One malformed entry still empties the whole file in memory. QA errors on it in every mode, so it can
+never publish silently. Two entries for one release that name different replacements raise no warning; the page
+shows the one verified earlier (verified the same day: the smaller id) (a QA warning for that case is the follow-up).
+
+**Reopen only if** a valid second entry is refused or empties the file; a page's lifecycle details change with file
+order; or a release with any valid entry naming its build is not AVOID.
+
+Review-limit exception (GPT standing rule Q1b, 2026-11-21). Round 2 confirmed the production fix and found one test
+gap: neither the earliest-verified rule nor the id tie-break was pinned (dropping the tie-break, ordering by the
+whole entry only, or reversing the tie-break all survived). The reviewer's exact test change was applied verbatim:
+E1B now covers both builds, a same-day entry E1T, two whole-entry invariants, and mutant G94-X4 (the tie-break
+dropped). The suite goes from 11 to 12 checks. No production code changed. Measured at the corrected head: 12/12
+passing; the tie-dropped, whole-entry-only and tie-reversed mutants are killed (W2, X3 and X4 fail under each:
+9/12). One independent verifier confirmed the diff before merge.
 
 ---
 
@@ -4635,6 +4699,122 @@ stored DaVinci rows. The fourteen remain an audit population; this makes the nex
 
 **Reopen only if** a counted row written after this change carries `match_basis: exact_version_text`
 without a `matched_text` that appears in its `matched_context`.
+
+### AUX-128 — Writer lanes confirmed only that Pages was asked to deploy, and a cycle that never reached main was never re-run
+
+- **Status** Resolved · **Area** Deployment · **Severity** Medium
+- **First seen** 2026-11-21 (run 44878227542) · **Resolved** 2026-11-22 (G91; live check at the first writer runs after merge)
+
+**Symptom** Three gaps after a correct writeback. (1) Every writer lane dispatched the Pages build and
+stopped there. `gh workflow run` returning 0 proves the dispatch was accepted, not that the site
+deployed; the writeback already had `--pages-confirm-build`, no workflow passed it, and the PowerPoint
+graph's Python binding had no way to. (2) Collection run 44878227542 (checkout b64fa539) lost its
+whole cycle: a pull request that touched the evidence store merged while it ran, the writeback
+correctly refused to combine the two (`rebase_conflict`), pushed nothing and exited 1. The
+writer-queue reaper repaired only runs evicted from the queue (zero jobs), so nothing re-ran a cycle
+that ran and failed -- a lost race, a refused writeback, a failure after collection, or a job that hit
+its time limit (which GitHub reports as `cancelled`, like an operator's cancel; runs 33810979002 and
+33753609648). (3) Nothing durable said when a cycle stayed lost or a deployment failed; it was visible
+only inside Actions. No stored evidence was lost; new evidence waited up to a cycle.
+
+**Fix** Deployment: every writer lane that pushes confirms its build: the four command-line lanes
+pass `--pages-confirm-build` (40 polls 30 s apart), and the PowerPoint graph's binding sets the same
+bound and writes the writeback's outputs to `$GITHUB_OUTPUT`. ONE monotonic deadline bounds the
+whole wait, `confirm_wait_bound` = 39 x 30 s + one 60 s status query = 20.5 minutes: every status
+query, every git fetch and every sleep is cut to the time left, and a query or fetch still running at
+its limit is killed without waiting for the processes it started (a capture-and-timeout
+`subprocess.run` on a fetch whose upload-pack hangs was measured returning after 20 s on a 1.5 s
+limit). A build this dispatch created that ends `failure`, `timed_out` or `startup_failure` fails the
+lane (the PowerPoint job gets a step that turns it red, since its graph step takes `tee`'s exit
+status; its message says whether a push landed or the no-change deploy-recovery re-dispatch failed).
+A run CANCELLED is not a failure: `pages.yml` has one concurrency group, so a waiting run is
+cancelled when a newer one arrives, and the newer build -- of the same commit, or of a later one,
+recognised by ancestry after fetching -- deploys this content. A failed run of the SHA already listed
+before a deploy-recovery re-dispatch is stale, never the new build's result. No verdict within the
+bound is `deployment_unverified` (output, outcome token, warning annotation, summary section with the
+reason) without failing the lane. The data commit is never reverted or re-pushed. The `lost_race`
+diagnostic counts `retry_exhausted` only when the last push was refused as non-fast-forward.
+Recovery: each routine writer run executes a step named `Cycle reached main` only when its
+writebacks pushed or had nothing to push (collection: chain-ingest's first step, over both writer
+jobs; ingestion: after its writeback, `always()`). The reaper's new step (`writer_cycle_recovery.py`)
+re-runs, once and on main, the newest routine run of each lane whose record step did not succeed --
+including a GREEN run whose record was skipped, and a time-limit cancel, told apart from an
+operator's by GitHub's annotation -- but only when the eviction step found the whole writer group
+free and dispatched nothing, and the same check repeated just before the dispatch still finds it
+free. A re-run checks out main as it is when its job starts and its writeback rebases onto any later
+main and re-validates before pushing. Every automatic re-run carries `recovery_of` in its `run-name`,
+so it survives an eviction, and there is at most one recovery dispatch per lost cycle: a recovery that
+loses again is never re-run, and the eviction step treats an evicted run as covered once a routine
+recovery whose strictly parsed marker names its cycle has started (has jobs), whatever that recovery's
+outcome -- only a recovery evicted before it started is re-dispatched, and when whether one started
+cannot be established it dispatches nothing and warns. A dispatch is never taken as the cycle
+reaching main or Pages. The walk has NO age limit:
+after a recovery has lost, later losses of that lane pause until a run reaches main, however long
+that takes, and a loss whose deciding history is out of the API's page (neither a run that reached
+main nor a lost recovery in view) fails closed -- reported, never re-run. Visibility: a lost
+recovery, a paused lane, a loss whose history cannot be established, a loss too old to re-run, a
+failed Pages build on main, or main undeployed past a 2-hour grace opens ONE tracking issue
+(`Automated writer recovery needs attention`). Deployment is judged commit by commit from main's
+fast-forward chain in the repository activity API: only a successful Pages run of main's newest
+commit counts, and the clock starts at the oldest undeployed push. The grace is 2 hours: the last
+100 Pages runs took 237-612 s (slowest of 300, 1402 s), and the one-deep `pages` group holds one
+running and one waiting build, so a push is deployed within about 47 minutes even behind a queue.
+The issue lists the problems and everything not yet resolved (a pending or held re-run, a deployment
+within its grace, a lane that could not be read); it is closed, with a "Resolved" comment naming the
+Pages run and the commit, only when every reapable lane's newest routine run reached main and that
+commit -- which contains their pushes, since each run started inside the unbroken chain -- was
+deployed. A full page of open issues without it opens nothing. Run ids, commit ids, workflow names,
+conclusions and failed step names only. The reaper dispatches nothing for a deployment (no retry
+storm, no re-push): redeploying stays with `--deploy-recovery` and pages.yml's daily cron.
+
+**Evidence** `test_deploy_verification_and_lost_race.py`, 218 governed checks: the real writeback
+against a throwaway bare origin and a scripted Pages run list (superseded, descendant, ancestor,
+unattributable, stale-snapshot and hung-query cases) and on a fake clock where every query and fetch
+takes all the time it is allowed (the whole wait ends inside 20.5 minutes); a real fetch from a
+remote whose upload-pack hangs, killed at the deadline; the bare script's outputs; every writer's
+argument list parsed by the writeback's own parser; the `Cycle reached main` conditions, run names and
+re-run checkout refs evaluated per context and read back by the reaper module; chain-ingest's, the
+eviction step's, the PowerPoint failure step's and the lost-cycle step's shell executed against a
+fake `gh`, the last with its repository, lanes and writer group resolved from the job env exactly as
+production runs it; `writer_cycle_recovery.py` as functions and as a bare script against a fake `gh`
+serving raw API JSON; and a six-day and a fifteen-day outage ticked every two hours through the
+module's own `plan_tick` and `keep_issue` -- one re-run, one issue, never closed, past the API's page
+too -- then one close once a run reaches main and Pages deploys its push; the eviction step's recovery
+check executed against the fake `gh` (a recovery that failed, was cancelled, timed out or is still
+running covers its cycle; one evicted before it started does not; a similar title or an operator's
+dispatch never covers; five uncertain histories dispatch nothing and warn); and both reaper steps
+ticked through 7- and 30-day outages with evicted crons and evicted recoveries -- one dispatch per
+evicted cycle, never a second started recovery, one issue closed only after a run reached main and
+was deployed, and fresh routine runs still recovered. Its reads were also run
+read-only against the live API: run 44878227542 judges lost, run 33810979002 (PowerPoint time limit)
+lost, run 31111379736 (operator cancel) left alone, run 30669290854 an eviction; on 2026-11-22 both
+lanes' newest runs reached main and Pages run 44976872341 had deployed main's newest commit 44e6cc7e.
+Mutants, one per fix, each killed by a named check. Measured with no change: the last audited
+withdrawal merge (#272, 44e6cc7e) was followed by Pages run 44976872341 on that SHA (push, success);
+of the 66 GitHub-release records the official notes refresh no longer re-reads (OBS 18, ComfyUI 48),
+none has current notes the AUX-125 grammar reads as declaring a known issue.
+
+**Known limits** A recovery waits for a free lane and a reaper tick (every two hours). A recovery that
+started is its cycle's one attempt even when an operator cancelled it. When whether a recovery of an
+evicted cycle already started cannot be established, the eviction step reports that in a warning and
+its summary, not on the tracking issue. Pre-merge runs
+carry no `Cycle reached main` step, so a pre-merge run that failed after reaching main and is still a
+lane's newest routine run would be re-run once. The reaper's re-check and its dispatch are two API
+calls; a writer arriving between them can still be evicted (and is then the eviction step's to
+re-dispatch). A writeback writes its outputs only when it ends, so a job killed by its time limit
+during the build wait counts as a lost cycle and is re-run once. A force push to main ends the chain
+deployment is judged from, so the issue cannot close until every lane has run again after it. The
+issue closes only when main's newest commit itself has a successful build, so a commit that lands
+just before a tick delays the close to a later tick. Official notes older than the two newest
+releases per product are still not re-read (AUX-125).
+
+**Reopen only if** a writer run pushes a site change and neither confirms its Pages build nor reports
+`deployment_unverified`; a superseded Pages run fails a lane; the build wait outlasts 20.5 minutes; a
+routine run without a successful `Cycle reached main` step is, two reaper ticks after the lane frees,
+neither re-run nor listed in the tracking issue; an evicted cycle is re-dispatched after a recovery of
+it started; the tracking issue is closed while a lane's newest
+routine run has not reached main or main's newest commit has no successful Pages build; or a commit
+stays on main undeployed for more than four hours without a problem line on the issue.
 
 ### AUX-048 — a page on the public domain asked visitors for a repository-write token
 

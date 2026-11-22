@@ -58,7 +58,7 @@ described above are gone: they made 233 of 235 report-bearing pages WAIT on 2026
 owner's verdict policy (decisions 1-3, 2026-11-06) retired. The policy now lives in `decide` at the
 end of this module -- an official withdrawal (AVOID), Microsoft's monthly security classification
 (SECURITY UPDATE), a reviewed and still-supported reason entry (WAIT / TEST FIRST), else
-INSUFFICIENT DATA -- and AVOID is reachable again, but only from the one verified lifecycle record.
+INSUFFICIENT DATA -- and AVOID is reachable again, but only from a verified lifecycle entry.
 The history above is kept because it explains why one function, not three, decides.
 """
 from __future__ import annotations
@@ -234,7 +234,7 @@ def leading_decision(text: str) -> str:
 # A verdict is a pure function of STORED FACTS, decided here and nowhere else:
 #
 #   R1  AVOID            an applicable official withdrawal for new installations (the lifecycle
-#                        file; today ONE verified exception, KB5079391)
+#                        file; one verified entry today, KB5079391)
 #   R2  SECURITY UPDATE  Microsoft's own classification of the exact update as a monthly security
 #                        release (release-health update type "YYYY-MM B", stored on the record).
 #                        User reports never override it; reviewed reasons only add a warning panel
@@ -527,21 +527,35 @@ def _release_context(record: dict[str, Any]) -> str:
     return ""
 
 
+def _lifecycle_order(entry: dict[str, Any]) -> tuple[str, str, str]:
+    """Earliest verified first, then id, then the entry's whole content: a total order that file
+    order never enters."""
+    return (_text(entry.get("verified_at")), _text(entry.get("id")),
+            repr(sorted((str(k), repr(v)) for k, v in entry.items())))
+
+
 def lifecycle_for(record: dict[str, Any] | None, lifecycle: Any = ()) -> dict[str, Any] | None:
     """The applicable official withdrawal for this exact record, or None. Exact identity only: same
-    product, same KB, and this record's own OS build listed. Never inferred from a newer number."""
+    product, same KB, and this record's own OS build listed. Never inferred from a newer number.
+
+    EVERY MATCHING ENTRY IS READ (G94, AUX-131). The first match in file order used to win, so with a
+    second entry for the same release (a later official statement about the same update) reordering
+    the file changed the replacement KB and the source the page printed. Now the page rests on the
+    EARLIEST verified matching entry (`verified_at` first; `id` only breaks a tie): an entry verified
+    later never replaces one verified earlier, file order decides nothing, and the release stays
+    withdrawn while any entry for it stands. "Earlier" is by `verified_at`, not by when an entry was
+    added: a newly added entry with an earlier `verified_at` does take over the page's details."""
     rec = record or {}
     kb = _text(rec.get("target_kb"))
     build = _text(rec.get("target_build"))
     if not kb or not build:
         return None
-    for entry in lifecycle or ():
-        if (_text(entry.get("product_id")) == _text(rec.get("product_id"))
-                and _text(entry.get("kb")) == kb
-                and _text(entry.get("relationship")) == "withdrawn_for_new_installs"
-                and build in [_text(b) for b in entry.get("builds") or []]):
-            return dict(entry)
-    return None
+    matches = [entry for entry in lifecycle or ()
+               if (_text(entry.get("product_id")) == _text(rec.get("product_id"))
+                   and _text(entry.get("kb")) == kb
+                   and _text(entry.get("relationship")) == "withdrawn_for_new_installs"
+                   and build in [_text(b) for b in entry.get("builds") or []])]
+    return dict(min(matches, key=_lifecycle_order)) if matches else None
 
 
 class Decision:

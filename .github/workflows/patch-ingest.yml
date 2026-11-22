@@ -1,4 +1,8 @@
 name: AUXSAYS Patch Ingestion
+# The writer-queue reaper reads this title through the API, even for a run evicted before any job
+# ran: a run it dispatched to re-run a lost cycle says "(recovery of run N)", and a recovery that
+# loses its cycle again is never re-run. Every other run keeps the workflow's name, as before.
+run-name: ${{ inputs.recovery_of && format('AUXSAYS Patch Ingestion (recovery of run {0})', inputs.recovery_of) || 'AUXSAYS Patch Ingestion' }}
 
 on:
   workflow_dispatch:
@@ -12,6 +16,12 @@ on:
         required: false
         default: false
         type: boolean
+      recovery_of:
+        description: "Set only by the writer-queue reaper when it re-runs a routine cycle that did not
+          reach main: the id of the run being re-run. It only names the run (see run-name); the run
+          itself is an ordinary routine cycle. Leave empty."
+        required: false
+        type: string
   # NO `schedule:` HERE, DELIBERATELY -- this lane is chained, not independently scheduled.
   #
   # This workflow used to declare `cron: "17 */6 * * *"`, byte-identical to the expression in
@@ -248,11 +258,22 @@ jobs:
             --max-retries 5 \
             --pages-cmd 'gh workflow run pages.yml --ref main' \
             --pages-max-attempts 3 --pages-backoff 5,15 \
+            --pages-confirm-build --pages-confirm-attempts 40 --pages-confirm-interval 30 \
             --deploy-recovery \
             --recovery-site-path auxsays/updates/generated \
             --recovery-site-path 'auxsays/updates/microsoft/microsoft-powerpoint/*/index.md' \
             --recovery-site-path 'auxsays/updates/microsoft/microsoft-windows-11/*/index.md' \
             --recovery-commit-grep 'Ingest official patch records'
+
+      # THE CYCLE'S RECORD (G91). Runs ONLY when the writeback above pushed or had nothing to push --
+      # this run's cycle reached main. The writer-queue reaper reads whether a step with exactly this
+      # name succeeded (writer_cycle_recovery.CYCLE_MARKER_STEP) and re-runs, once and only into a
+      # free lane, a routine run whose cycle did not reach main: a lost writeback race, a refused
+      # writeback, or an ingestion that failed before committing. `always()` so it is still recorded
+      # when a later step fails or the run is cancelled after the push.
+      - name: Cycle reached main
+        if: ${{ always() && (steps.commit.outputs.pushed == 'true' || steps.commit.outputs.outcome == 'no_changes') }}
+        run: echo "The writeback reached main (pushed, or nothing to push)."
 
       - name: Mark dry run as unchanged
         if: ${{ github.event.inputs.dry_run == 'true' }}
