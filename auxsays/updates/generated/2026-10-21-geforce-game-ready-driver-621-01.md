@@ -19,7 +19,7 @@ update_published_at: '2026-10-21T00:00:00Z'
 update_last_checked: '2026-11-19T23:17:53Z'
 source_last_checked: '2026-11-19T23:17:53Z'
 official_body_last_checked: '2026-11-19T23:17:53Z'
-record_last_updated: '2026-11-20T22:10:14.617307Z'
+record_last_updated: '2026-11-22T21:19:35.682483Z'
 patch_file_size: 1.04 GB
 patch_file_size_note: Installer size as NVIDIA lists it for the Windows desktop DCH package.
 patch_file_size_status: captured
@@ -180,4 +180,5 @@ accepted_report_sources:
   workflow_area: system stability
 evidence_source_limitations:
 - Too few reports for a firm verdict yet.
+- Some community sources were unavailable during the last check; unavailable sources were not counted as reports.
 ---

@@ -102063,3 +102063,1050 @@ evidence:
   title_dedup_sha256: 09c5f4907b41e551469321330728eaee7912835ebf996a5364170531e4877e0a
   issue_bucket: crash or stability problems
   facts_rule_version: v1
+- id: comfyui-0-46-0-github-issue-17922
+  product_id: comfyui
+  update_version: 0.46.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17922
+  parent_title: 0.46.0 server does not receive new job queues or cancels
+  report_title: 0.46.0 server does not receive new job queues or cancels
+  report_text_excerpt: '0.46.0 server does not receive new job queues or cancels ### Custom Node Testing - [x] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-with-all-custom-nodes-...'
+  captured_at: '2026-11-22T20:22:59Z'
+  source_date: '2026-11-22'
+  target_release_date: '2026-11-18'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: version_not_core_identity
+  issue_theme: crash or freeze
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.46.0
+  matched_field: report_text
+  matched_context: '0.46.0 server does not receive new job queues or cancels ### Custom Node Testing - [x...'
+  excerpt_norm_sha256: d13949a5728c0aacca51ae8612388e9b6c7f94d80f2a2920d351d2600676e024
+  title_dedup_sha256: 7051b0c799147686b8fe3bf1a8cb01ffb1e9edc4bf81b0540460b94dde362a58
+  issue_bucket: crash or freeze
+  facts_rule_version: v1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6078543-unable-to-join-or-start-meetings-in-mi
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6078543/unable-to-join-or-start-meetings-in-microsoft-team
+  parent_title: Unable to join or start meetings in Microsoft teams - Microsoft Q&A
+  report_title: Unable to join or start meetings in Microsoft teams - Microsoft Q&A
+  report_text_excerpt: 'Unable to join or start meetings in Microsoft teams Hello, I''m having trouble joining or starting meetings in Microsoft Teams. I keep getting the error: "Unable to make the call. Check your network connection." I''ve tried both Wi-Fi and mobile data, cleared the app cache,...'
+  captured_at: '2026-11-22T20:24:01Z'
+  source_date: '2026-11-21'
+  target_release_date: '2026-11-05'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: meeting join / connection failure
+  workflow_area: meetings
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 6e2afbc9a37ce0b0633dd6b218ced492cc9f35fe8a8a9f77af1fa0343323aa1c
+  title_dedup_sha256: 552696d301822c131500d721b1099df0771377910a42eef24f12acda1bbb3052
+  issue_bucket: meeting join / connection failure
+  facts_rule_version: v1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6078543-unable-to-join-or-start-meetings-in-mi
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6078543/unable-to-join-or-start-meetings-in-microsoft-team
+  parent_title: Unable to join or start meetings in Microsoft teams - Microsoft Q&A
+  report_title: Unable to join or start meetings in Microsoft teams - Microsoft Q&A
+  report_text_excerpt: 'Unable to join or start meetings in Microsoft teams Hello, I''m having trouble joining or starting meetings in Microsoft Teams. I keep getting the error: "Unable to make the call. Check your network connection." I''ve tried both Wi-Fi and mobile data, cleared the app cache,...'
+  captured_at: '2026-11-22T20:24:01Z'
+  source_date: '2026-11-21'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: meeting join / connection failure
+  workflow_area: meetings
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 6e2afbc9a37ce0b0633dd6b218ced492cc9f35fe8a8a9f77af1fa0343323aa1c
+  title_dedup_sha256: 552696d301822c131500d721b1099df0771377910a42eef24f12acda1bbb3052
+  issue_bucket: meeting join / connection failure
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6078543-unable-to-join-or-start-meetings-in-mi
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6078543/unable-to-join-or-start-meetings-in-microsoft-team
+  parent_title: Unable to join or start meetings in Microsoft teams - Microsoft Q&A
+  report_title: Unable to join or start meetings in Microsoft teams - Microsoft Q&A
+  report_text_excerpt: 'Unable to join or start meetings in Microsoft teams Hello, I''m having trouble joining or starting meetings in Microsoft Teams. I keep getting the error: "Unable to make the call. Check your network connection." I''ve tried both Wi-Fi and mobile data, cleared the app cache,...'
+  captured_at: '2026-11-22T20:24:01Z'
+  source_date: '2026-11-21'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: meeting join / connection failure
+  workflow_area: meetings
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 6e2afbc9a37ce0b0633dd6b218ced492cc9f35fe8a8a9f77af1fa0343323aa1c
+  title_dedup_sha256: 552696d301822c131500d721b1099df0771377910a42eef24f12acda1bbb3052
+  issue_bucket: meeting join / connection failure
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6078543-unable-to-join-or-start-meetings-in-mi
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6078543/unable-to-join-or-start-meetings-in-microsoft-team
+  parent_title: Unable to join or start meetings in Microsoft teams - Microsoft Q&A
+  report_title: Unable to join or start meetings in Microsoft teams - Microsoft Q&A
+  report_text_excerpt: 'Unable to join or start meetings in Microsoft teams Hello, I''m having trouble joining or starting meetings in Microsoft Teams. I keep getting the error: "Unable to make the call. Check your network connection." I''ve tried both Wi-Fi and mobile data, cleared the app cache,...'
+  captured_at: '2026-11-22T20:24:01Z'
+  source_date: '2026-11-21'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: meeting join / connection failure
+  workflow_area: meetings
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 6e2afbc9a37ce0b0633dd6b218ced492cc9f35fe8a8a9f77af1fa0343323aa1c
+  title_dedup_sha256: 552696d301822c131500d721b1099df0771377910a42eef24f12acda1bbb3052
+  issue_bucket: meeting join / connection failure
+  facts_rule_version: v1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6078543-unable-to-join-or-start-meetings-in-mi
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6078543/unable-to-join-or-start-meetings-in-microsoft-team
+  parent_title: Unable to join or start meetings in Microsoft teams - Microsoft Q&A
+  report_title: Unable to join or start meetings in Microsoft teams - Microsoft Q&A
+  report_text_excerpt: 'Unable to join or start meetings in Microsoft teams Hello, I''m having trouble joining or starting meetings in Microsoft Teams. I keep getting the error: "Unable to make the call. Check your network connection." I''ve tried both Wi-Fi and mobile data, cleared the app cache,...'
+  captured_at: '2026-11-22T20:24:01Z'
+  source_date: '2026-11-21'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: meeting join / connection failure
+  workflow_area: meetings
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 6e2afbc9a37ce0b0633dd6b218ced492cc9f35fe8a8a9f77af1fa0343323aa1c
+  title_dedup_sha256: 552696d301822c131500d721b1099df0771377910a42eef24f12acda1bbb3052
+  issue_bucket: meeting join / connection failure
+  facts_rule_version: v1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6078543-unable-to-join-or-start-meetings-in-mi
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6078543/unable-to-join-or-start-meetings-in-microsoft-team
+  parent_title: Unable to join or start meetings in Microsoft teams - Microsoft Q&A
+  report_title: Unable to join or start meetings in Microsoft teams - Microsoft Q&A
+  report_text_excerpt: 'Unable to join or start meetings in Microsoft teams Hello, I''m having trouble joining or starting meetings in Microsoft Teams. I keep getting the error: "Unable to make the call. Check your network connection." I''ve tried both Wi-Fi and mobile data, cleared the app cache,...'
+  captured_at: '2026-11-22T20:24:01Z'
+  source_date: '2026-11-21'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: meeting join / connection failure
+  workflow_area: meetings
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 6e2afbc9a37ce0b0633dd6b218ced492cc9f35fe8a8a9f77af1fa0343323aa1c
+  title_dedup_sha256: 552696d301822c131500d721b1099df0771377910a42eef24f12acda1bbb3052
+  issue_bucket: meeting join / connection failure
+  facts_rule_version: v1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6078543-unable-to-join-or-start-meetings-in-mi
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6078543/unable-to-join-or-start-meetings-in-microsoft-team
+  parent_title: Unable to join or start meetings in Microsoft teams - Microsoft Q&A
+  report_title: Unable to join or start meetings in Microsoft teams - Microsoft Q&A
+  report_text_excerpt: 'Unable to join or start meetings in Microsoft teams Hello, I''m having trouble joining or starting meetings in Microsoft Teams. I keep getting the error: "Unable to make the call. Check your network connection." I''ve tried both Wi-Fi and mobile data, cleared the app cache,...'
+  captured_at: '2026-11-22T20:24:01Z'
+  source_date: '2026-11-21'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: meeting join / connection failure
+  workflow_area: meetings
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 6e2afbc9a37ce0b0633dd6b218ced492cc9f35fe8a8a9f77af1fa0343323aa1c
+  title_dedup_sha256: 552696d301822c131500d721b1099df0771377910a42eef24f12acda1bbb3052
+  issue_bucket: meeting join / connection failure
+  facts_rule_version: v1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6078543-unable-to-join-or-start-meetings-in-mi
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6078543/unable-to-join-or-start-meetings-in-microsoft-team
+  parent_title: Unable to join or start meetings in Microsoft teams - Microsoft Q&A
+  report_title: Unable to join or start meetings in Microsoft teams - Microsoft Q&A
+  report_text_excerpt: 'Unable to join or start meetings in Microsoft teams Hello, I''m having trouble joining or starting meetings in Microsoft Teams. I keep getting the error: "Unable to make the call. Check your network connection." I''ve tried both Wi-Fi and mobile data, cleared the app cache,...'
+  captured_at: '2026-11-22T20:24:01Z'
+  source_date: '2026-11-21'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: meeting join / connection failure
+  workflow_area: meetings
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 6e2afbc9a37ce0b0633dd6b218ced492cc9f35fe8a8a9f77af1fa0343323aa1c
+  title_dedup_sha256: 552696d301822c131500d721b1099df0771377910a42eef24f12acda1bbb3052
+  issue_bucket: meeting join / connection failure
+  facts_rule_version: v1
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6078388-question-6078388
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6078388/the-preview-update-26300-10075-disrupts-the-operat
+  parent_title: The preview update 26300.10075 disrupts the operation of the TranslucentTB program (transparency of the taskbar does not change, forced termination of the process explorer.exe) - Microsoft Q&A
+  report_title: The preview update 26300.10075 disrupts the operation of the TranslucentTB program (transparency of the taskbar does not change, forced termination of the process explorer.exe) - Microsoft Q&A
+  report_text_excerpt: The preview update 26300.10075 disrupts the operation of the TranslucentTB program (transparency of the taskbar does not change, forced termination of the process explorer.exe) - Microsoft Q&A “Hey, I just installed the preview update 26300.10075, and TranslucentTB basically...
+  captured_at: '2026-11-22T20:32:20Z'
+  source_date: '2026-11-21'
+  target_release_date: '2026-11-19'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.10075'
+  match_basis: exact_os_build
+  matched_os_build: '26300.10075'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.10075'
+  excerpt_norm_sha256: d5ff9405fc53e851c649d4c24ba89422011abf59440726adb869290c70958695
+  title_dedup_sha256: 47b128ee4a4d4955ae3caa64cb4e80fa8a9f5eb39ae03cdf3ba0df7a3a666277
+  issue_bucket: update/install failure
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-24-nvidia-forum-comment-3634996
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593198/frame-generation-tearing-in-600-series-drivers-but-fixed-in-59636-also-another-thing-i-found/?comment=3634996
+  parent_title: Frame Generation Tearing in 600 series Drivers but fixed in 596.36. Also another thing I found.
+  report_title: Frame Generation Tearing in 600 series Drivers but fixed in 596.36. Also another thing I found.
+  report_text_excerpt: Frame Generation Tearing in 600 series Drivers but fixed in 596.36. Also another thing I found. I’m having a persistent DLSS Frame Generation tearing issue on my RTX 4060 Laptop GPU, and after doing a lot of testing I believe this is most likely a driver-side...
+  captured_at: '2026-11-22T20:46:51Z'
+  source_date: '2026-11-21T12:43:45Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: notebook_driver_not_tracked
+  issue_theme: ''
+  workflow_area: ''
+  platform: windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...M-NX9 1920×1080 144 Hz VRR display - Windows 11 25H2 - NVIDIA Game Ready Driver 621.24 The problem is specifically related to DLSS Frame Generation. ### What happen...'
+  excerpt_norm_sha256: f090d3cea3da78c0694ace9a246c0bfafc5bf91e2c96c4486d68b7f6235f12aa
+  title_dedup_sha256: 2f3cb918689c66a49ffefb5b9e55e5ade124a6a01a2f5d7b3e18e8f3d3c9793a
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-616-92-nvidia-forum-comment-3624851
+  product_id: nvidia-geforce-game-ready
+  update_version: '616.92'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/studio-drivers/39/590622/studio-driver-61692-broke-dp-output-on-my-4060/?comment=3624851
+  parent_title: Studio Driver 616.92 Broke DP Output on my 4060
+  report_title: Studio Driver 616.92 Broke DP Output on my 4060
+  report_text_excerpt: Studio Driver 616.92 Broke DP Output on my 4060 Installed Studio Driver 616.92 and it disabled all 3 DP outputs on my 4060 GPU. No bueno, Nvidia! Rolled back to 616.56 and DP ports came back online. Please fix!
+  captured_at: '2026-11-22T20:46:51Z'
+  source_date: '2026-09-10T17:23:07Z'
+  target_release_date: '2026-09-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.92'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '616.92'
+  matched_field: report_text
+  matched_context: Studio Driver 616.92 Broke DP Output on my 4060 Installed Studio Driver 616.92 and it disabled all 3...
+  excerpt_norm_sha256: 16717be32697b13d4a7f6b261584f2fccb709a12f757dd8cdc7647990405615d
+  title_dedup_sha256: f1469ad5044403959e2169d9108d4c5d053c54c5d37c3823ca7c8fe03b5b1af7
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-616-56-nvidia-forum-comment-3624851
+  product_id: nvidia-geforce-game-ready
+  update_version: '616.56'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/studio-drivers/39/590622/studio-driver-61692-broke-dp-output-on-my-4060/?comment=3624851
+  parent_title: Studio Driver 616.92 Broke DP Output on my 4060
+  report_title: Studio Driver 616.92 Broke DP Output on my 4060
+  report_text_excerpt: Studio Driver 616.92 Broke DP Output on my 4060 Installed Studio Driver 616.92 and it disabled all 3 DP outputs on my 4060 GPU. No bueno, Nvidia! Rolled back to 616.56 and DP ports came back online. Please fix!
+  captured_at: '2026-11-22T20:46:51Z'
+  source_date: '2026-09-10T17:23:07Z'
+  target_release_date: '2026-08-26'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.56'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '616.56'
+  matched_field: report_text
+  matched_context: '...it disabled all 3 DP outputs on my 4060 GPU. No bueno, Nvidia! Rolled back to 616.56 and DP ports came back online. Please fix!'
+  excerpt_norm_sha256: 16717be32697b13d4a7f6b261584f2fccb709a12f757dd8cdc7647990405615d
+  title_dedup_sha256: f1469ad5044403959e2169d9108d4c5d053c54c5d37c3823ca7c8fe03b5b1af7
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-616-56-nvidia-forum-comment-3623002
+  product_id: nvidia-geforce-game-ready
+  update_version: '616.56'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/studio-drivers/39/590188/rtx-50-series-hags-remote-desktop-black-screen-dxgkrnl-0x193-livekernelevent-driver-61656/?comment=3623002
+  parent_title: RTX 50-series + HAGS + Remote Desktop = black screen, dxgkrnl 0x193 LiveKernelEvent (driver 616.56)
+  report_title: RTX 50-series + HAGS + Remote Desktop = black screen, dxgkrnl 0x193 LiveKernelEvent (driver 616.56)
+  report_text_excerpt: RTX 50-series + HAGS + Remote Desktop = black screen, dxgkrnl 0x193 LiveKernelEvent (driver 616.56) Posting this as a new topic rather than a reply, because it isolates a specific trigger (HAGS + RDP) that I haven't seen named elsewhere — the existing "RTX 5080 keeps crashing"...
+  captured_at: '2026-11-22T20:46:51Z'
+  source_date: '2026-08-31T13:41:13Z'
+  target_release_date: '2026-08-26'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.56'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_both_named
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '616.56'
+  matched_field: report_text
+  matched_context: '...s + HAGS + Remote Desktop = black screen, dxgkrnl 0x193 LiveKernelEvent (driver 616.56) Posting this as a new topic rather than a reply, because it isolates a specifi...'
+  excerpt_norm_sha256: 12478aabbec077a79325be3c9fcd871db2a71b8a6abdb29f669226ee510aaf7c
+  title_dedup_sha256: 4017feeb6da6f2d7b530aff9e29c48f9534a125d0c33059ceb179edd1109159a
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-610-88-nvidia-forum-comment-3634324
+  product_id: nvidia-geforce-game-ready
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592907/continuous-writing-of-gigabytes-to-ssd-to-nvtopps-file-62124/?comment=3634324
+  parent_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_text_excerpt: Same issue on my end. The nvlog.nvlgstg file itself is only ~14.5 mb, but it writes to it over and over and over. Clearly something is stuck in a loop and going very wrong, hopefully Nvidia can fix it? Until then, I'm reverting back to an older driver. (Windows 11 26H2, Asus...
+  captured_at: '2026-11-22T20:46:51Z'
+  source_date: '2026-11-16T22:25:00Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: '...older driver. (Windows 11 26H2, Asus 4070 TI Super, 621.24 driver after using 610.88 where the problem did not show up)'
+  excerpt_norm_sha256: a6abb42517e8011d84bfadcc8c56efbb5fba0a8050217804370a800b5b581fa0
+  title_dedup_sha256: b8b623030234c6e88f3aba8553f5e25b24904f4507cec5db914698888bd335b4
+  issue_bucket: excessive disk writes
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-610-88-nvidia-forum-comment-3623002
+  product_id: nvidia-geforce-game-ready
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/studio-drivers/39/590188/rtx-50-series-hags-remote-desktop-black-screen-dxgkrnl-0x193-livekernelevent-driver-61656/?comment=3623002
+  parent_title: RTX 50-series + HAGS + Remote Desktop = black screen, dxgkrnl 0x193 LiveKernelEvent (driver 616.56)
+  report_title: RTX 50-series + HAGS + Remote Desktop = black screen, dxgkrnl 0x193 LiveKernelEvent (driver 616.56)
+  report_text_excerpt: RTX 50-series + HAGS + Remote Desktop = black screen, dxgkrnl 0x193 LiveKernelEvent (driver 616.56) Posting this as a new topic rather than a reply, because it isolates a specific trigger (HAGS + RDP) that I haven't seen named elsewhere — the existing "RTX 5080 keeps crashing"...
+  captured_at: '2026-11-22T20:46:51Z'
+  source_date: '2026-08-31T13:41:13Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_both_named
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: '.../corrupted install state, the bug is in 616.56 itself. - Rolling back to driver 610.88 (NVIDIA Studio Driver, released 7/28/2026) resolves the issue completely — same...'
+  excerpt_norm_sha256: 12478aabbec077a79325be3c9fcd871db2a71b8a6abdb29f669226ee510aaf7c
+  title_dedup_sha256: 4017feeb6da6f2d7b530aff9e29c48f9534a125d0c33059ceb179edd1109159a
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-610-62-nvidia-forum-comment-3625749
+  product_id: nvidia-geforce-game-ready
+  update_version: '610.62'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/studio-drivers/39/590622/studio-driver-61692-broke-dp-output-on-my-4060/?comment=3625749
+  parent_title: Studio Driver 616.92 Broke DP Output on my 4060
+  report_title: Studio Driver 616.92 Broke DP Output on my 4060
+  report_text_excerpt: 'This driver corrupted my Windows 11 login credentials and caused task manager to freeze and fail. Rolled back twice to make sure and each time was fine. Currently reverted to the driver below; NVIDIA system information report created on: 09/18/2026 00:32:20 NVIDIA App version:...'
+  captured_at: '2026-11-22T20:46:51Z'
+  source_date: '2026-09-18T05:37:16Z'
+  target_release_date: '2026-06-16'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.62'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.62'
+  matched_field: report_text
+  matched_context: '...Version 10.0.26200 DirectX runtime version: DirectX 12 Driver: Studio Driver - 610.62 - Tue Jun 16, 2026 CPU: Dual Intel(R) Xeon(R) Gold 6130 CPU @ 2.10GHz RAM: 64.0...'
+  excerpt_norm_sha256: 98c96f505e611c34a01befdf4685914d4f824f35b6b47e6c4e2f7ae7dfface08
+  title_dedup_sha256: f1469ad5044403959e2169d9108d4c5d053c54c5d37c3823ca7c8fe03b5b1af7
+  issue_bucket: crash or driver reset
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-610-62-nvidia-forum-comment-3634924
+  product_id: nvidia-geforce-game-ready
+  update_version: '610.62'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592907/continuous-writing-of-gigabytes-to-ssd-to-nvtopps-file-62124/?comment=3634924
+  parent_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_text_excerpt: Ya Same here . My SSD added another 10 tbs write . and got tried of the black screen . For anyone rocking an old card . I have a Arous 2060 windows 11 . I went back to the Arous engine and 610.62 drive with control panel . With no app . Drop alot of ram and almost no SSD write...
+  captured_at: '2026-11-22T20:46:51Z'
+  source_date: '2026-11-21T01:00:34Z'
+  target_release_date: '2026-06-16'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.62'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.62'
+  matched_field: report_text
+  matched_context: '...ld card . I have a Arous 2060 windows 11 . I went back to the Arous engine and 610.62 drive with control panel . With no app . Drop alot of ram and almost no SSD wri...'
+  excerpt_norm_sha256: ef4286308c91b72188856e11f57dd2a83c5e93a541be9fda06e09935fb221cbf
+  title_dedup_sha256: b8b623030234c6e88f3aba8553f5e25b24904f4507cec5db914698888bd335b4
+  issue_bucket: excessive disk writes
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-610-47-nvidia-forum-comment-3611164
+  product_id: nvidia-geforce-game-ready
+  update_version: '610.47'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/studio-drivers/39/586563/latest-61047-studio-driver/?comment=3611164
+  parent_title: latest 610.47 Studio driver.
+  report_title: latest 610.47 Studio driver.
+  report_text_excerpt: latest 610.47 Studio driver. After a [ clean install ] of studio driver 610.47 Windows 11 pro. after intall complet. no access to the setting neither to the control panel. Anyone had that problem and fix it ? with or whitout the NVIDIA [ cleanupTool ] ? works fine with all...
+  captured_at: '2026-11-22T20:46:51Z'
+  source_date: '2026-05-27T12:04:12Z'
+  target_release_date: '2026-05-26'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.47'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: ''
+  workflow_area: ''
+  platform: windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.47'
+  matched_field: report_text
+  matched_context: latest 610.47 Studio driver. After a [ clean install ] of studio driver 610.47 Windows 11 pr...
+  excerpt_norm_sha256: 85528c1685df88fd2a7d590e746dbf5b67d5698ac105bcea3e156f1bd0a02f15
+  title_dedup_sha256: 49884664a5f66c12b66f10e8f780c5fb4ad7869730cb694d821b901ed60364de
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-610-47-nvidia-forum-comment-3631638
+  product_id: nvidia-geforce-game-ready
+  update_version: '610.47'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/studio-drivers/39/586563/latest-61047-studio-driver/?comment=3631638
+  parent_title: latest 610.47 Studio driver.
+  report_title: latest 610.47 Studio driver.
+  report_text_excerpt: Seems like the 610.47 driver has some issues after a clean install. Since rolling back to 596.36 fixes the problem, it might be a bug in the latest version. Hopefully NVIDIA looks into this and releases a fix soon.
+  captured_at: '2026-11-22T20:46:51Z'
+  source_date: '2026-10-27T21:32:45Z'
+  target_release_date: '2026-05-26'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.47'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.47'
+  matched_field: report_text
+  matched_context: Seems like the 610.47 driver has some issues after a clean install. Since rolling back to 596.36 fixe...
+  excerpt_norm_sha256: f06953805d66a8e692e3fe19748a5b18263ad545f6110b2ae4622835e8ae6ff0
+  title_dedup_sha256: 49884664a5f66c12b66f10e8f780c5fb4ad7869730cb694d821b901ed60364de
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-24-nvidia-forum-comment-3634996
+  product_id: nvidia-studio-driver
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593198/frame-generation-tearing-in-600-series-drivers-but-fixed-in-59636-also-another-thing-i-found/?comment=3634996
+  parent_title: Frame Generation Tearing in 600 series Drivers but fixed in 596.36. Also another thing I found.
+  report_title: Frame Generation Tearing in 600 series Drivers but fixed in 596.36. Also another thing I found.
+  report_text_excerpt: Frame Generation Tearing in 600 series Drivers but fixed in 596.36. Also another thing I found. I’m having a persistent DLSS Frame Generation tearing issue on my RTX 4060 Laptop GPU, and after doing a lot of testing I believe this is most likely a driver-side...
+  captured_at: '2026-11-22T20:47:30Z'
+  source_date: '2026-11-21T12:43:45Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: ''
+  workflow_area: ''
+  platform: windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...M-NX9 1920×1080 144 Hz VRR display - Windows 11 25H2 - NVIDIA Game Ready Driver 621.24 The problem is specifically related to DLSS Frame Generation. ### What happen...'
+  excerpt_norm_sha256: f090d3cea3da78c0694ace9a246c0bfafc5bf91e2c96c4486d68b7f6235f12aa
+  title_dedup_sha256: 2f3cb918689c66a49ffefb5b9e55e5ade124a6a01a2f5d7b3e18e8f3d3c9793a
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: nvidia-studio-driver-616-92-nvidia-forum-comment-3624851
+  product_id: nvidia-studio-driver
+  update_version: '616.92'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/studio-drivers/39/590622/studio-driver-61692-broke-dp-output-on-my-4060/?comment=3624851
+  parent_title: Studio Driver 616.92 Broke DP Output on my 4060
+  report_title: Studio Driver 616.92 Broke DP Output on my 4060
+  report_text_excerpt: Studio Driver 616.92 Broke DP Output on my 4060 Installed Studio Driver 616.92 and it disabled all 3 DP outputs on my 4060 GPU. No bueno, Nvidia! Rolled back to 616.56 and DP ports came back online. Please fix!
+  captured_at: '2026-11-22T20:47:30Z'
+  source_date: '2026-09-10T17:23:07Z'
+  target_release_date: '2026-09-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.92'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: negative
+  source_weight: 1
+  matched_text: '616.92'
+  matched_field: report_text
+  matched_context: Studio Driver 616.92 Broke DP Output on my 4060 Installed Studio Driver 616.92 and it disabled all 3...
+  excerpt_norm_sha256: 16717be32697b13d4a7f6b261584f2fccb709a12f757dd8cdc7647990405615d
+  title_dedup_sha256: f1469ad5044403959e2169d9108d4c5d053c54c5d37c3823ca7c8fe03b5b1af7
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: nvidia-studio-driver-616-56-nvidia-forum-comment-3624851
+  product_id: nvidia-studio-driver
+  update_version: '616.56'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/studio-drivers/39/590622/studio-driver-61692-broke-dp-output-on-my-4060/?comment=3624851
+  parent_title: Studio Driver 616.92 Broke DP Output on my 4060
+  report_title: Studio Driver 616.92 Broke DP Output on my 4060
+  report_text_excerpt: Studio Driver 616.92 Broke DP Output on my 4060 Installed Studio Driver 616.92 and it disabled all 3 DP outputs on my 4060 GPU. No bueno, Nvidia! Rolled back to 616.56 and DP ports came back online. Please fix!
+  captured_at: '2026-11-22T20:47:30Z'
+  source_date: '2026-09-10T17:23:07Z'
+  target_release_date: '2026-08-26'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.56'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: version_role_rollback_target
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '616.56'
+  matched_field: report_text
+  matched_context: '...it disabled all 3 DP outputs on my 4060 GPU. No bueno, Nvidia! Rolled back to 616.56 and DP ports came back online. Please fix!'
+  excerpt_norm_sha256: 16717be32697b13d4a7f6b261584f2fccb709a12f757dd8cdc7647990405615d
+  title_dedup_sha256: f1469ad5044403959e2169d9108d4c5d053c54c5d37c3823ca7c8fe03b5b1af7
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: nvidia-studio-driver-616-56-nvidia-forum-comment-3623002
+  product_id: nvidia-studio-driver
+  update_version: '616.56'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/studio-drivers/39/590188/rtx-50-series-hags-remote-desktop-black-screen-dxgkrnl-0x193-livekernelevent-driver-61656/?comment=3623002
+  parent_title: RTX 50-series + HAGS + Remote Desktop = black screen, dxgkrnl 0x193 LiveKernelEvent (driver 616.56)
+  report_title: RTX 50-series + HAGS + Remote Desktop = black screen, dxgkrnl 0x193 LiveKernelEvent (driver 616.56)
+  report_text_excerpt: RTX 50-series + HAGS + Remote Desktop = black screen, dxgkrnl 0x193 LiveKernelEvent (driver 616.56) Posting this as a new topic rather than a reply, because it isolates a specific trigger (HAGS + RDP) that I haven't seen named elsewhere — the existing "RTX 5080 keeps crashing"...
+  captured_at: '2026-11-22T20:47:30Z'
+  source_date: '2026-08-31T13:41:13Z'
+  target_release_date: '2026-08-26'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.56'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_both_named
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '616.56'
+  matched_field: report_text
+  matched_context: '...s + HAGS + Remote Desktop = black screen, dxgkrnl 0x193 LiveKernelEvent (driver 616.56) Posting this as a new topic rather than a reply, because it isolates a specifi...'
+  excerpt_norm_sha256: 12478aabbec077a79325be3c9fcd871db2a71b8a6abdb29f669226ee510aaf7c
+  title_dedup_sha256: 4017feeb6da6f2d7b530aff9e29c48f9534a125d0c33059ceb179edd1109159a
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-studio-driver-610-88-nvidia-forum-comment-3623002
+  product_id: nvidia-studio-driver
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/studio-drivers/39/590188/rtx-50-series-hags-remote-desktop-black-screen-dxgkrnl-0x193-livekernelevent-driver-61656/?comment=3623002
+  parent_title: RTX 50-series + HAGS + Remote Desktop = black screen, dxgkrnl 0x193 LiveKernelEvent (driver 616.56)
+  report_title: RTX 50-series + HAGS + Remote Desktop = black screen, dxgkrnl 0x193 LiveKernelEvent (driver 616.56)
+  report_text_excerpt: RTX 50-series + HAGS + Remote Desktop = black screen, dxgkrnl 0x193 LiveKernelEvent (driver 616.56) Posting this as a new topic rather than a reply, because it isolates a specific trigger (HAGS + RDP) that I haven't seen named elsewhere — the existing "RTX 5080 keeps crashing"...
+  captured_at: '2026-11-22T20:47:30Z'
+  source_date: '2026-08-31T13:41:13Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_both_named
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: '.../corrupted install state, the bug is in 616.56 itself. - Rolling back to driver 610.88 (NVIDIA Studio Driver, released 7/28/2026) resolves the issue completely — same...'
+  excerpt_norm_sha256: 12478aabbec077a79325be3c9fcd871db2a71b8a6abdb29f669226ee510aaf7c
+  title_dedup_sha256: 4017feeb6da6f2d7b530aff9e29c48f9534a125d0c33059ceb179edd1109159a
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-studio-driver-610-62-nvidia-forum-comment-3625749
+  product_id: nvidia-studio-driver
+  update_version: '610.62'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/studio-drivers/39/590622/studio-driver-61692-broke-dp-output-on-my-4060/?comment=3625749
+  parent_title: Studio Driver 616.92 Broke DP Output on my 4060
+  report_title: Studio Driver 616.92 Broke DP Output on my 4060
+  report_text_excerpt: 'This driver corrupted my Windows 11 login credentials and caused task manager to freeze and fail. Rolled back twice to make sure and each time was fine. Currently reverted to the driver below; NVIDIA system information report created on: 09/18/2026 00:32:20 NVIDIA App version:...'
+  captured_at: '2026-11-22T20:47:30Z'
+  source_date: '2026-09-18T05:37:16Z'
+  target_release_date: '2026-06-16'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.62'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  matched_text: '610.62'
+  matched_field: report_text
+  matched_context: '...Version 10.0.26200 DirectX runtime version: DirectX 12 Driver: Studio Driver - 610.62 - Tue Jun 16, 2026 CPU: Dual Intel(R) Xeon(R) Gold 6130 CPU @ 2.10GHz RAM: 64.0...'
+  excerpt_norm_sha256: 98c96f505e611c34a01befdf4685914d4f824f35b6b47e6c4e2f7ae7dfface08
+  title_dedup_sha256: f1469ad5044403959e2169d9108d4c5d053c54c5d37c3823ca7c8fe03b5b1af7
+  issue_bucket: crash or driver reset
+  facts_rule_version: v1
+- id: nvidia-studio-driver-610-62-nvidia-forum-comment-3634924
+  product_id: nvidia-studio-driver
+  update_version: '610.62'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592907/continuous-writing-of-gigabytes-to-ssd-to-nvtopps-file-62124/?comment=3634924
+  parent_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_text_excerpt: Ya Same here . My SSD added another 10 tbs write . and got tried of the black screen . For anyone rocking an old card . I have a Arous 2060 windows 11 . I went back to the Arous engine and 610.62 drive with control panel . With no app . Drop alot of ram and almost no SSD write...
+  captured_at: '2026-11-22T20:47:30Z'
+  source_date: '2026-11-21T01:00:34Z'
+  target_release_date: '2026-06-16'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.62'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.62'
+  matched_field: report_text
+  matched_context: '...ld card . I have a Arous 2060 windows 11 . I went back to the Arous engine and 610.62 drive with control panel . With no app . Drop alot of ram and almost no SSD wri...'
+  excerpt_norm_sha256: ef4286308c91b72188856e11f57dd2a83c5e93a541be9fda06e09935fb221cbf
+  title_dedup_sha256: b8b623030234c6e88f3aba8553f5e25b24904f4507cec5db914698888bd335b4
+  issue_bucket: excessive disk writes
+  facts_rule_version: v1
+- id: nvidia-studio-driver-610-47-nvidia-forum-comment-3611164
+  product_id: nvidia-studio-driver
+  update_version: '610.47'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/studio-drivers/39/586563/latest-61047-studio-driver/?comment=3611164
+  parent_title: latest 610.47 Studio driver.
+  report_title: latest 610.47 Studio driver.
+  report_text_excerpt: latest 610.47 Studio driver. After a [ clean install ] of studio driver 610.47 Windows 11 pro. after intall complet. no access to the setting neither to the control panel. Anyone had that problem and fix it ? with or whitout the NVIDIA [ cleanupTool ] ? works fine with all...
+  captured_at: '2026-11-22T20:47:30Z'
+  source_date: '2026-05-27T12:04:12Z'
+  target_release_date: '2026-05-26'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.47'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: multiple_tracked_versions_named
+  issue_theme: ''
+  workflow_area: ''
+  platform: windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.47'
+  matched_field: report_text
+  matched_context: latest 610.47 Studio driver. After a [ clean install ] of studio driver 610.47 Windows 11 pr...
+  excerpt_norm_sha256: 85528c1685df88fd2a7d590e746dbf5b67d5698ac105bcea3e156f1bd0a02f15
+  title_dedup_sha256: 49884664a5f66c12b66f10e8f780c5fb4ad7869730cb694d821b901ed60364de
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: nvidia-studio-driver-610-47-nvidia-forum-comment-3631638
+  product_id: nvidia-studio-driver
+  update_version: '610.47'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/studio-drivers/39/586563/latest-61047-studio-driver/?comment=3631638
+  parent_title: latest 610.47 Studio driver.
+  report_title: latest 610.47 Studio driver.
+  report_text_excerpt: Seems like the 610.47 driver has some issues after a clean install. Since rolling back to 596.36 fixes the problem, it might be a bug in the latest version. Hopefully NVIDIA looks into this and releases a fix soon.
+  captured_at: '2026-11-22T20:47:30Z'
+  source_date: '2026-10-27T21:32:45Z'
+  target_release_date: '2026-05-26'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.47'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.47'
+  matched_field: report_text
+  matched_context: Seems like the 610.47 driver has some issues after a clean install. Since rolling back to 596.36 fixe...
+  excerpt_norm_sha256: f06953805d66a8e692e3fe19748a5b18263ad545f6110b2ae4622835e8ae6ff0
+  title_dedup_sha256: 49884664a5f66c12b66f10e8f780c5fb4ad7869730cb694d821b901ed60364de
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: nvidia-studio-driver-596-36-nvidia-forum-comment-3634996
+  product_id: nvidia-studio-driver
+  update_version: '596.36'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593198/frame-generation-tearing-in-600-series-drivers-but-fixed-in-59636-also-another-thing-i-found/?comment=3634996
+  parent_title: Frame Generation Tearing in 600 series Drivers but fixed in 596.36. Also another thing I found.
+  report_title: Frame Generation Tearing in 600 series Drivers but fixed in 596.36. Also another thing I found.
+  report_text_excerpt: Frame Generation Tearing in 600 series Drivers but fixed in 596.36. Also another thing I found. I’m having a persistent DLSS Frame Generation tearing issue on my RTX 4060 Laptop GPU, and after doing a lot of testing I believe this is most likely a driver-side...
+  captured_at: '2026-11-22T20:47:30Z'
+  source_date: '2026-11-21T12:43:45Z'
+  target_release_date: '2026-04-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '596.36'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: ''
+  workflow_area: ''
+  platform: windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '596.36'
+  matched_field: report_text
+  matched_context: Frame Generation Tearing in 600 series Drivers but fixed in 596.36. Also another thing I found. I’m having a persistent DLSS Frame Generation tear...
+  excerpt_norm_sha256: f090d3cea3da78c0694ace9a246c0bfafc5bf91e2c96c4486d68b7f6235f12aa
+  title_dedup_sha256: 2f3cb918689c66a49ffefb5b9e55e5ade124a6a01a2f5d7b3e18e8f3d3c9793a
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: nvidia-studio-driver-596-36-nvidia-forum-comment-3611164
+  product_id: nvidia-studio-driver
+  update_version: '596.36'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/studio-drivers/39/586563/latest-61047-studio-driver/?comment=3611164
+  parent_title: latest 610.47 Studio driver.
+  report_title: latest 610.47 Studio driver.
+  report_text_excerpt: latest 610.47 Studio driver. After a [ clean install ] of studio driver 610.47 Windows 11 pro. after intall complet. no access to the setting neither to the control panel. Anyone had that problem and fix it ? with or whitout the NVIDIA [ cleanupTool ] ? works fine with all...
+  captured_at: '2026-11-22T20:47:30Z'
+  source_date: '2026-05-27T12:04:12Z'
+  target_release_date: '2026-04-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '596.36'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: version_role_rollback_target
+  issue_theme: ''
+  workflow_area: ''
+  platform: windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '596.36'
+  matched_field: report_text
+  matched_context: '...cleanupTool ] ? works fine with all previous studio drivers... I roll back to 596.36, and have access to the setting and control panel. thanks'
+  excerpt_norm_sha256: 85528c1685df88fd2a7d590e746dbf5b67d5698ac105bcea3e156f1bd0a02f15
+  title_dedup_sha256: 49884664a5f66c12b66f10e8f780c5fb4ad7869730cb694d821b901ed60364de
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: nvidia-studio-driver-596-36-nvidia-forum-comment-3631638
+  product_id: nvidia-studio-driver
+  update_version: '596.36'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/studio-drivers/39/586563/latest-61047-studio-driver/?comment=3631638
+  parent_title: latest 610.47 Studio driver.
+  report_title: latest 610.47 Studio driver.
+  report_text_excerpt: Seems like the 610.47 driver has some issues after a clean install. Since rolling back to 596.36 fixes the problem, it might be a bug in the latest version. Hopefully NVIDIA looks into this and releases a fix soon.
+  captured_at: '2026-11-22T20:47:30Z'
+  source_date: '2026-10-27T21:32:45Z'
+  target_release_date: '2026-04-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '596.36'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '596.36'
+  matched_field: report_text
+  matched_context: '...the 610.47 driver has some issues after a clean install. Since rolling back to 596.36 fixes the problem, it might be a bug in the latest version. Hopefully NVIDIA lo...'
+  excerpt_norm_sha256: f06953805d66a8e692e3fe19748a5b18263ad545f6110b2ae4622835e8ae6ff0
+  title_dedup_sha256: 49884664a5f66c12b66f10e8f780c5fb4ad7869730cb694d821b901ed60364de
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: obs-studio-33-0-3-github-issue-14245
+  product_id: obs-studio
+  update_version: 33.0.3
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14245
+  parent_title: Browser source corruption
+  report_title: Browser source corruption
+  report_text_excerpt: 'Other ### Other OS Arch Linux ### OBS Studio Version Other ### OBS Studio Version (Other) 33.0.3 ### OBS Studio Log URL https://obsproject.com/logs/iZpEkXFhp7O6mrXm ### OBS Studio Crash Log URL _No response_ ### Expected Behavior The browser source to work. ### Current Behavior T'
+  captured_at: '2026-11-22T20:51:46Z'
+  source_date: '2026-11-22'
+  patch_version_matched: true
+  matched_version: 33.0.3
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: linux
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+  excerpt_norm_sha256: f54e5a35ad4df979dafececba1e8d0ce22cf0f33dd5bb6e1c61ad520b1ef1e59
+  title_dedup_sha256: 4aafeb22302dd5ab00bfa8b9fca1c7c36dd4a1594f7ae016bf1c146ec1e7bbd3
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: obs-studio-33-0-1-github-issue-14247
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14247
+  parent_title: Native VST3 host — Pro-L 2 metering freeze and dpMeter5 audio signal loss
+  report_title: Native VST3 host — Pro-L 2 metering freeze and dpMeter5 audio signal loss
+  report_text_excerpt: 's 11 ### Other OS _No response_ ### OBS Studio Version Git ### OBS Studio Version (Other) 33.0.1-42-g0c790bd01 ### OBS Studio Log URL https://obsproject.com/logs/KxGtQRWQeagS03oR ### OBS Studio Crash Log URL _No response_ ### Expected Behavior ### FabFilter Pro-L 2 (VST3) - Conti'
+  captured_at: '2026-11-22T20:55:55Z'
+  source_date: '2026-11-22'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  excerpt_norm_sha256: 467d67566b1e4edd1076663560857a16b14cb8999dccba3cc3256fb5ced51341
+  title_dedup_sha256: c9fae5127f598cdcfce0729da5e3cc9dc2db3bdb5a82e3d86080dd7bde0c4fa1
+  issue_bucket: audio mixer or routing issues
+  facts_rule_version: v1
+- id: obs-studio-33-0-1-obs-forum-thread-196960
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/obs-has-crashed.196960/
+  parent_title: obs has crashed!
+  report_title: obs has crashed!
+  report_text_excerpt: '-23, 00:26:01 Fault address: 7FFF9ADD9882 (c:\windows\system32\d3d11.dll) libobs version: 33.0.1 (64-bit) Windows version: 10.0 build 26300 (release: 26H2; revision: 10075; 64-bit) CPU: Intel(R) Core(TM) i9-9900K CPU @ 3.60GHz Thread 4240: libobs: graphics thread (Crashed) Stack'
+  captured_at: '2026-11-22T20:53:57Z'
+  source_date: '2026-11-22'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+  excerpt_norm_sha256: a47ba0b59f53f1406ac4b4a7c81271c3234f571a46d3d18c337076d96de77d78
+  title_dedup_sha256: 29679691d723c46bb85707e2f2a465067dbdfe681c78f31945f03d54ba1d3caa
+  issue_bucket: crash or stability problems
+  facts_rule_version: v1

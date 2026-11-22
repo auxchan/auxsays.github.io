@@ -44,7 +44,7 @@ reports:
   window_start: '2026-11-02'
   window_version: 26.003.22075
 - attribution_state: not_established
-  captured_at: '2026-11-22T06:42:22Z'
+  captured_at: '2026-11-22T19:33:27Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -63,7 +63,7 @@ reports:
   window_start: '2026-09-08'
   window_version: 26.002.21901
 - attribution_state: not_established
-  captured_at: '2026-11-22T06:42:22Z'
+  captured_at: '2026-11-22T19:33:27Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -83,7 +83,7 @@ reports:
   window_start: '2026-09-08'
   window_version: 26.002.21901
 - attribution_state: not_established
-  captured_at: '2026-11-22T06:42:22Z'
+  captured_at: '2026-11-22T19:33:27Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -264,7 +264,7 @@ reports:
   window_start: '2026-05-18'
   window_version: 26.001.21563
 - attribution_state: not_established
-  captured_at: '2026-11-19T20:31:33Z'
+  captured_at: '2026-11-22T19:33:27Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -624,7 +624,7 @@ reports:
   window_start: '2017-02-21'
   window_version: 15.023.20070
 - attribution_state: not_established
-  captured_at: '2026-11-22T07:03:26Z'
+  captured_at: '2026-11-22T19:56:03Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
@@ -643,7 +643,7 @@ reports:
   window_start: '2026-11-16'
   window_version: 26.003.22110
 - attribution_state: not_established
-  captured_at: '2026-11-22T07:03:26Z'
+  captured_at: '2026-11-22T19:56:03Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
@@ -683,7 +683,7 @@ reports:
   window_start: '2026-11-02'
   window_version: 26.003.22075
 - attribution_state: not_established
-  captured_at: '2026-11-22T07:03:26Z'
+  captured_at: '2026-11-22T19:56:03Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
@@ -703,7 +703,7 @@ reports:
   window_start: '2026-10-14'
   window_version: 26.002.22031
 - attribution_state: not_established
-  captured_at: '2026-11-22T07:03:26Z'
+  captured_at: '2026-11-22T19:56:03Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true

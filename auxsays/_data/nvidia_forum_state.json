@@ -1,8 +1,8 @@
 {
   "last_cycle": {
-    "at": "2026-11-21T20:34:50Z",
+    "at": "2026-11-22T20:45:50Z",
     "outcome": "ok",
-    "requests": 12
+    "requests": 16
   },
   "provenance": {
     "collection_authorization": "owner risk acceptance; NVIDIA permission not established",
@@ -16,23 +16,49 @@
   ],
   "source": "nvidia_geforce_forum",
   "threads": {
-    "586563": {
-      "community_id": 39,
-      "community_slug": "studio-drivers",
-      "created": 1779883452,
+    "581019": {
+      "community_id": 13,
+      "community_slug": "game-ready-drivers",
+      "created": 1768426006,
       "deferred": {
-        "first_deferred_at": "2026-11-21T20:34:50Z",
-        "queued_at": "2026-11-21T20:34:50Z",
+        "first_deferred_at": "2026-11-22T20:45:50Z",
+        "queued_at": "2026-11-22T20:45:50Z",
         "reason": "thread_cap",
         "times_deferred": 1
       },
       "last_activity": null,
       "staff": false,
+      "title": "Issue with G-SYNC and Frame Generation in Driver Version 591.74",
+      "title_versions": [
+        "591.74"
+      ],
+      "window": []
+    },
+    "586563": {
+      "community_id": 39,
+      "community_slug": "studio-drivers",
+      "coverage": [],
+      "created": 1779883452,
+      "first_read_at": "2026-11-22T20:46:51Z",
+      "gap_reasons": [],
+      "last_activity": 1793136765,
+      "last_read_at": "2026-11-22T20:46:51Z",
+      "staff": false,
       "title": "latest 610.47 Studio driver.",
       "title_versions": [
         "610.47"
       ],
-      "window": []
+      "total_rows": 2,
+      "window": [
+        [
+          3631638,
+          1793136765
+        ],
+        [
+          3611247,
+          1779910667
+        ]
+      ]
     },
     "588913": {
       "community_id": 39,
@@ -42,7 +68,7 @@
         "first_deferred_at": "2026-11-21T20:34:50Z",
         "queued_at": "2026-11-21T20:34:50Z",
         "reason": "thread_cap",
-        "times_deferred": 1
+        "times_deferred": 2
       },
       "last_activity": null,
       "staff": false,
@@ -55,20 +81,28 @@
     "590188": {
       "community_id": 39,
       "community_slug": "studio-drivers",
+      "coverage": [],
       "created": 1788183673,
-      "deferred": {
-        "first_deferred_at": "2026-11-21T20:34:50Z",
-        "queued_at": "2026-11-21T20:34:50Z",
-        "reason": "thread_cap",
-        "times_deferred": 1
-      },
-      "last_activity": null,
+      "first_read_at": "2026-11-22T20:46:43Z",
+      "gap_reasons": [],
+      "last_activity": 1794576341,
+      "last_read_at": "2026-11-22T20:46:43Z",
       "staff": false,
       "title": "RTX 50-series + HAGS + Remote Desktop = black screen, dxgkrnl 0x193 LiveKernelEvent (driver 616.56)",
       "title_versions": [
         "616.56"
       ],
-      "window": []
+      "total_rows": 2,
+      "window": [
+        [
+          3633707,
+          1794576341
+        ],
+        [
+          3623379,
+          1788342093
+        ]
+      ]
     },
     "590373": {
       "community_id": 13,
@@ -78,6 +112,12 @@
         "replies_not_embedded"
       ],
       "created": 1788958802,
+      "deferred": {
+        "first_deferred_at": "2026-11-22T20:45:50Z",
+        "queued_at": "2026-11-22T20:45:50Z",
+        "reason": "thread_cap",
+        "times_deferred": 1
+      },
       "first_read_at": "2026-11-20T21:29:33Z",
       "gap_reasons": [],
       "last_activity": 1795144982,
@@ -194,20 +234,32 @@
     "590622": {
       "community_id": 39,
       "community_slug": "studio-drivers",
+      "coverage": [],
       "created": 1789060987,
-      "deferred": {
-        "first_deferred_at": "2026-11-21T20:34:50Z",
-        "queued_at": "2026-11-21T20:34:50Z",
-        "reason": "thread_cap",
-        "times_deferred": 1
-      },
-      "last_activity": null,
+      "first_read_at": "2026-11-22T20:46:19Z",
+      "gap_reasons": [],
+      "last_activity": 1795379979,
+      "last_read_at": "2026-11-22T20:46:19Z",
       "staff": false,
       "title": "Studio Driver 616.92 Broke DP Output on my 4060",
       "title_versions": [
         "616.92"
       ],
-      "window": []
+      "total_rows": 3,
+      "window": [
+        [
+          3635177,
+          1795379979
+        ],
+        [
+          3626037,
+          1789920296
+        ],
+        [
+          3625749,
+          1789709836
+        ]
+      ]
     },
     "590759": {
       "community_id": 39,
@@ -217,7 +269,7 @@
         "first_deferred_at": "2026-11-21T20:34:50Z",
         "queued_at": "2026-11-21T20:34:50Z",
         "reason": "thread_cap",
-        "times_deferred": 1
+        "times_deferred": 2
       },
       "last_activity": null,
       "staff": false,
@@ -235,6 +287,12 @@
         "replies_not_embedded"
       ],
       "created": 1792587602,
+      "deferred": {
+        "first_deferred_at": "2026-11-22T20:45:50Z",
+        "queued_at": "2026-11-22T20:45:50Z",
+        "reason": "thread_cap",
+        "times_deferred": 1
+      },
       "first_read_at": "2026-11-20T21:29:25Z",
       "gap_reasons": [],
       "last_activity": 1795191770,
@@ -355,6 +413,12 @@
         "older_comments_outside_window"
       ],
       "created": 1793800802,
+      "deferred": {
+        "first_deferred_at": "2026-11-22T20:45:50Z",
+        "queued_at": "2026-11-22T20:45:50Z",
+        "reason": "thread_cap",
+        "times_deferred": 1
+      },
       "first_read_at": "2026-11-19T21:42:45Z",
       "gap_reasons": [],
       "last_activity": 1795290493,
@@ -473,6 +537,12 @@
       "community_slug": "game-ready-drivers",
       "coverage": [],
       "created": 1793807775,
+      "deferred": {
+        "first_deferred_at": "2026-11-22T20:45:50Z",
+        "queued_at": "2026-11-22T20:45:50Z",
+        "reason": "thread_cap",
+        "times_deferred": 1
+      },
       "first_read_at": "2026-11-21T20:35:34Z",
       "gap_reasons": [],
       "last_activity": 1795265450,
@@ -526,6 +596,12 @@
         "replies_not_embedded"
       ],
       "created": 1794493802,
+      "deferred": {
+        "first_deferred_at": "2026-11-22T20:45:50Z",
+        "queued_at": "2026-11-22T20:45:50Z",
+        "reason": "thread_cap",
+        "times_deferred": 1
+      },
       "first_read_at": "2026-11-19T21:42:37Z",
       "gap_reasons": [
         "no_overlap_and_previous_newest_gone"
@@ -648,23 +724,29 @@
         "replies_not_embedded"
       ],
       "created": 1794605793,
-      "deferred": {
-        "first_deferred_at": "2026-11-21T20:34:50Z",
-        "queued_at": "2026-11-21T20:34:50Z",
-        "reason": "thread_cap",
-        "times_deferred": 1
-      },
       "first_read_at": "2026-11-19T21:42:53Z",
       "gap_reasons": [],
-      "last_activity": 1795198499,
-      "last_read_at": "2026-11-20T21:29:41Z",
+      "last_activity": 1795321393,
+      "last_read_at": "2026-11-22T20:46:27Z",
       "staff": false,
       "title": "Continuous writing of gigabytes to SSD to nvtopps file, 621.24",
       "title_versions": [
         "621.24"
       ],
-      "total_rows": 18,
+      "total_rows": 21,
       "window": [
+        [
+          3635090,
+          1795321393
+        ],
+        [
+          3634924,
+          1795222834
+        ],
+        [
+          3634919,
+          1795221671
+        ],
         [
           3634800,
           1795161228
@@ -781,19 +863,18 @@
     "593198": {
       "community_id": 13,
       "community_slug": "game-ready-drivers",
+      "coverage": [],
       "created": 1795265025,
-      "deferred": {
-        "first_deferred_at": "2026-11-21T20:34:50Z",
-        "queued_at": "2026-11-21T20:34:50Z",
-        "reason": "thread_cap",
-        "times_deferred": 1
-      },
-      "last_activity": null,
+      "first_read_at": "2026-11-22T20:46:35Z",
+      "gap_reasons": [],
+      "last_activity": 1795265025,
+      "last_read_at": "2026-11-22T20:46:35Z",
       "staff": false,
       "title": "Frame Generation Tearing in 600 series Drivers but fixed in 596.36. Also another thing I found.",
       "title_versions": [
         "596.36"
       ],
+      "total_rows": 0,
       "window": []
     }
   }

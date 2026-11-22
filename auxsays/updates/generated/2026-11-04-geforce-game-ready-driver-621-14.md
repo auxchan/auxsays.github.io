@@ -19,7 +19,7 @@ update_published_at: '2026-11-04T00:00:00Z'
 update_last_checked: '2026-11-19T10:05:12Z'
 source_last_checked: '2026-11-22T09:44:28Z'
 official_body_last_checked: '2026-11-22T09:44:28Z'
-record_last_updated: '2026-11-21T21:17:45.273216Z'
+record_last_updated: '2026-11-22T21:19:37.198976Z'
 patch_file_size: 1.04 GB
 patch_file_size_note: Installer size as NVIDIA lists it for the Windows desktop DCH package.
 patch_file_size_status: captured
@@ -29,13 +29,13 @@ update_detail_title: GeForce Game Ready Driver 621.14
 update_consensus_label: Negative
 update_report_count: 8
 update_consensus_confidence: Low-Medium
-quick_verdict: GeForce Game Ready Driver 621.14 has an official AUXSAYS record. Confirmed patch-specific consensus is deferred
-  until the consensus refresh pipeline is active.
+quick_verdict: GeForce Game Ready Driver 621.14 has an official AUXSAYS record. Confirmed patch-specific consensus
+  is deferred until the consensus refresh pipeline is active.
 official_summary: NVIDIA published GeForce Game Ready Driver 621.14 on 2026-11-04.
 release_summary: NVIDIA lists GeForce Game Ready Driver 621.14 (branch R620) for Windows desktop, released 2026-11-04.
-consensus_report: '8 user reports found for GeForce Game Ready Driver 621.14. Current reports mention crash or driver reset,
-  flicker or wrong colors, and black screen or display loss. This is a surfaced user-report sample, not a live telemetry feed.
-  Sources represented: NVIDIA GeForce forum (user reports).'
+consensus_report: '8 user reports found for GeForce Game Ready Driver 621.14. Current reports mention crash or driver
+  reset, flicker or wrong colors, and black screen or display loss. This is a surfaced user-report sample, not a
+  live telemetry feed. Sources represented: NVIDIA GeForce forum (user reports).'
 evidence_state: pilot_sample
 evidence_state_label: Verified reports
 intelligence_stage: pilot
@@ -71,8 +71,8 @@ official_patch_notes_source_url: https://www.nvidia.com/en-us/drivers/details/28
 official_note_status: official_source_captured
 official_note_label: Official driver listing
 official_source_type: download_portal
-official_source_classification_note: NVIDIA's driver listing is treated as an official download-portal source. It confirms
-  the driver family, version, branch and release date; community evidence remains separate.
+official_source_classification_note: NVIDIA's driver listing is treated as an official download-portal source. It
+  confirms the driver family, version, branch and release date; community evidence remains separate.
 official_sources:
 - label: NVIDIA driver page
   url: https://www.nvidia.com/en-us/drivers/details/283968/
@@ -132,8 +132,8 @@ official_patch_notes_body: 'NVIDIA driver listing: GeForce Game Ready Driver 621
 
   - Call of Duty: Modern Warfare 4: Game may display incorrect visual colors [6972531]
 
-  - Fixed an issue where video playback may freeze or black screen on some GeForce RTX 50 Series GPUs/RTX Spark after updating
-  to GRD 621.01. [6979343]
+  - Fixed an issue where video playback may freeze or black screen on some GeForce RTX 50 Series GPUs/RTX Spark
+  after updating to GRD 621.01. [6979343]
 
 
   Official driver page: https://www.nvidia.com/en-us/drivers/details/283968/
@@ -141,8 +141,8 @@ official_patch_notes_body: 'NVIDIA driver listing: GeForce Game Ready Driver 621
   Official release notes (PDF): https://us.download.nvidia.com/Windows/621.14/621.14-geforce-win11-x64-release-notes.pdf
 
 
-  AUXSAYS note: this is official NVIDIA driver metadata, not community consensus. Game Ready and Studio drivers that share
-  a version number are separate records.'
+  AUXSAYS note: this is official NVIDIA driver metadata, not community consensus. Game Ready and Studio drivers
+  that share a version number are separate records.'
 official_checksums_body: ''
 official_checksums_capture_status: not-present
 driver_family: GeForce Game Ready
@@ -152,9 +152,9 @@ release_date_precision: day
 source_origin: NVIDIA official
 collection_method: public driver-lookup endpoint
 collection_authorization: owner risk acceptance; NVIDIA permission not established
-update_consensus_summary: 'INSUFFICIENT DATA: GeForce Game Ready Driver 621.14. 8 user reports are matched to this exact update,
-  but no problem in them is confirmed as reported independently by two or more users. If one matches your setup, test before
-  relying on this update.'
+update_consensus_summary: 'INSUFFICIENT DATA: GeForce Game Ready Driver 621.14. 8 user reports are matched to this
+  exact update, but no problem in them is confirmed as reported independently by two or more users. If one matches
+  your setup, test before relying on this update.'
 evidence_samples:
 - source_name: NVIDIA GeForce forum (user reports)
   source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633451
@@ -272,4 +272,5 @@ accepted_report_sources:
   workflow_area: rendering
 evidence_source_limitations:
 - This is a surfaced user-report sample, not a live telemetry feed.
+- Some community sources were unavailable during the last check; unavailable sources were not counted as reports.
 ---
