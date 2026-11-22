@@ -103,6 +103,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-099 | Deferred | Verdict policy | Medium | The reason producer counted unknown accounts as independent reporters and had no record of what it would have published (repaired; shadow operation; public activation OFF) |
 | AUX-124 | Resolved | Verdict policy | Medium | Automatically drafted verdict reasons skipped the checks a reviewed reason meets, and a true official confirmation could take away a Windows entry's support |
 | AUX-127 | Resolved | Verdict policy | High | Pages with 30 or more accepted problem reports said INSUFFICIENT DATA, and a report posted before its release was counted |
+| AUX-132 | Resolved | Published claims | Medium | A reviewed problem's "fixed in" line printed straight after a note naming a different, newer release, where it read as a recommendation of that release |
 | AUX-065 | Resolved | Coverage | Medium | DaVinci Resolve versions never archived, so routine collection spent its whole budget on releases nobody installs |
 | AUX-075 | Resolved | CI governance | Medium | The DaVinci archive build check asserted the one-time migration, so it failed on every pull request after it ran |
 | AUX-062 | Deferred | Evidence integrity | Low | Three classifier misses the sprint measured but did not fix |
@@ -583,6 +584,63 @@ prints the volume WAIT below 30 counted rows or 30 unique report URLs, on a prod
 a SECURITY UPDATE, an AVOID or an official security identification, or because collection health changed; a reviewed
 scoped finding disappears from beneath it; a page prints WAIT with no next action or with one the source facts do not
 give; or any surface, the newer-release note included, prints the volume WAIT without its label.
+
+---
+
+### AUX-132 — A reviewed problem's "fixed in" line printed straight after a note naming a different, newer release, where it read as a recommendation of that release
+
+- **Status** Resolved · **Area** Published claims · **Severity** Medium
+- **First seen** 2026-11-21 (G89 critic, comparison wording items a, b and e; owner question 2026-11-22) · **Resolved**
+  2026-11-22 (G95)
+
+**Symptom** G87 (AUX-127) added one line for a supported reviewed reason that names `fixed_in`: "The reviewed problem
+that applies <its scope> was fixed in <product> <fixed_in>." G87's own rule says it must never read as a
+recommendation of that version. It printed in the way forward, straight after the newer-release note. On OBS Studio
+32.1.2 and 32.2.2 that note names OBS Studio 33.0.2, with OBS's documented known issue, and says AUXSAYS has not
+matched its changes to the reports on the page. Beside it, "was fixed in OBS Studio 32.2.0" read as a recommendation
+of the release the note names and as a contradiction of "not matched". It also did not say where the fact came from.
+
+**Cause** The line belongs to a reviewed finding, but it was rendered by the way-forward block, and on a page whose
+way forward is a newer-release note that block has no lines of its own, so the fixed line was all it printed.
+
+**Fix**
+- The way-forward include no longer prints the fixed line. The verdict box prints it, directly beneath the line
+  that states the reviewed finding in the same scope words ("Also TEST FIRST if you use connected accounts or service
+  docks on macOS: ..."), and only under a printed WAIT. It is inline Liquid with no include tag, so the standalone
+  render harnesses that cut at the first include still read the whole box. No projection row prints nothing, byte
+  for byte.
+- `lib/evidence_overview.fixed_lines` stays the one producer (G89's B is to reuse it). `fix_credit` adds "<vendor>'s
+  release notes for <fixed_in> record a fix for this problem." only where the reason's official confirmation names
+  this product and exactly the fixed_in version. A supported reason's confirmation has already been found verbatim
+  in that record's notes. The vendor is the confirming record's own `update_source_name`. Otherwise the line is
+  G87's plain sentence.
+- The guard refuses a fixed line whose credit names another version. `RULE_VERSION` is now evidence-overview-v3.
+- The way forward keeps exactly its G87 variants. None of these strings enters the note's four checked fields, and
+  no new caution string exists.
+
+**Measured** Deploy projections built from main (44e6cc7e) and from this branch:
+- Identical: `consensus_evidence.yml`, `verdict_reasons.yml`, `patch_ingest_state.json`, the verdict projection
+  (sha256 `e846be5c`), the reason candidates and the monitoring and coverage projections. The live-eligibility
+  projection is identical apart from its `generated_at`.
+- The evidence overview projection differs only in its rule version and the two credited lines.
+- A full local Jekyll build of each tree (1,771 HTML files): only the 32.1.2 and 32.2.2 pages and the stylesheet
+  differ. Four files differ by build timestamps alone. OBS 33.0.1, 32.1.1 and 33.0.2, a Windows 11, a DaVinci and an
+  Acrobat page are byte-identical.
+- Publish-strict QA: 0 errors and the same single pre-existing warning on both trees.
+
+**Tests** `test_fixed_in_placement_g95.py` (19 checks, blocking) renders the real patch page with the shipped Liquid.
+It fails 9 checks on main. Four mutants were each killed:
+- reverting the placement: P1-P3;
+- crediting a confirmation of another version: C2;
+- printing the line inside the newer-release note: N1;
+- printing it under any verdict: P6.
+
+`test_volume_precaution_g87.py` keeps 56 checks: C3 pins the credited lines, and R6 pins an empty way forward after
+32.2.2's note.
+
+**Reopen only if** a fixed line prints in or after a newer-release note or in the way forward, prints away from the
+finding it belongs to or under a verdict other than WAIT, names the newer release, or credits the vendor without an
+official confirmation of exactly that version.
 
 ---
 
