@@ -565,6 +565,20 @@ auxsays/scripts/tests/test_publication_title_minimisation.py = 36
 # description. Corpus-wide properties are one check each, so evidence growth cannot change this
 # count. Needs ruby + liquid and node; fails without them.
 auxsays/scripts/tests/test_evidence_overview.py = 86
+# AUX-127 (G87): the volume-based WAIT precaution (30 accepted / 30 unique URLs, owner-approved 2026-11-21,
+# provisional) and the mandatory way forward. Pins the 29/30 report and URL boundaries, duplicate and unpublishable
+# rows, the ten promotion products, maturity / sentiment / stored count / collection health never inputs, SECURITY
+# UPDATE, official withdrawal and official security identification precedence, a reviewed TEST FIRST superseded and
+# a scoped WAIT kept visible and unrewritten, an audited withdrawal to 29 removing it, every way-forward variant
+# (archived, excluded, newer release, proven newest, not established, fixed_in) with the keep-it advice where the
+# verdict box lacks it, a newer-release note printing a volume WAIT with its label, never "safer", QA's
+# WAIT-without-next-action and recomputed-way-forward-mismatch publication errors (another variant, a stale
+# newer release), the empty-scope rule in Python and the Liquid gate, the six decide()
+# call sites over one stale-count fixture, a valid reviewed finding kept under the WAIT, a corpus guard (among the
+# pages measured at G87 exactly the four OBS pages change; later crossings only to an eligible volume WAIT), and the
+# patch page, homepage, feed, table and My Patch Stack rendered with the shipped Liquid, and QA's own verdict scan
+# clean on the four regenerated records. Needs ruby + liquid.
+auxsays/scripts/tests/test_volume_precaution_g87.py = 56
 
 # Premiere discovery ROUTING, and the health semantics that keep it honest. The nine-method flat
 # loop cost 546.8s over 219 HTTP requests for two records; wayback alone was 408.5s and reddit
@@ -730,6 +744,16 @@ auxsays/scripts/tests/test_withdraw_g60_davinci_howto_row.py = 34
 # AUX-088 fixture, whose free text is synthetic, plus one synthetic control row; the live store is read only for the
 # pin, the must-stay rows and the control finding.
 auxsays/scripts/tests/test_withdraw_g75_obs_source_tag_row.py = 37
+# AUX-127 (G87): the first LABEL-FREE withdrawal. One OBS 32.1.1 report posted the day before 32.1.1 was released,
+# withdrawn through the AUX-088 tool with an eighth manifest and the derived reason before_release_date, the OBS
+# acceptance gate's own string. The vocabulary is versioned (v1-v7 keep the five reasons byte for byte; only a
+# version-8 manifest may list the sixth), the reason is granted in code for exactly one identity, and the tool decides
+# it again every run by calling collect_obs_reports.release_date_gate on the pinned post time (AUX-090) and the
+# record's release date. Each refusal (no pinned time, no or unreadable release date, a gate result other than
+# before_release_date, a stored day that is not the pinned day, labels on the entry or the row, a kept row, a non-OBS
+# product, an ungranted row) fails closed and writes nothing; exactly 2 lines, idempotent; no lane promotes the reason
+# back. Bare script on the AUX-088 fixture plus two synthetic 32.1.1 rows; the live store is read only.
+auxsays/scripts/tests/test_withdraw_g87_obs_prerelease_row.py = 43
 # AUX-092: the OBS producer now stores that same day on every NEW row. source_date = the UTC day of the
 # creation stamp the release-date gate already reads (an issue's created_at, the opening post's own <time>),
 # directly after captured_at, no key when the stamp gives no UTC day; equal to every AUX-090 pin. A frozen

@@ -95,6 +95,12 @@ STAY_COUNTED = {
     ("32.1.2", "", "13429"), ("32.1.1", "", "13298"), ("32.1.2", "", "13997"), ("32.2.2", "", "13878"),
     ("32.1.1", "", "194821"), ("32.1.1", "", "13360"),
 }
+# A disagreement row a LATER audited withdrawal took out on a ground of its own, never on AUX-088's labels: per row, the
+# ledger entry, the later manifest that names it and the reason it carries there. G3 requires each to be stored once,
+# withdrawn with exactly that reason, and named by that manifest; every other disagreement row must still count.
+LATER_WITHDRAWN = {
+    ("32.1.1", "", "13278"): ("AUX-127", "live_citation_withdrawal_v8.json", "before_release_date"),
+}
 RECORDS = ("2026-01-13-windows-11-25h2-26200-7623.md", "2026-02-10-windows-11-25h2-26200-7840.md",
            "2026-04-02-obs-studio-32-1-1.md", "2026-04-21-obs-studio-32-1-2.md", "2026-08-14-obs-studio-32-2-2.md")
 
@@ -722,9 +728,20 @@ def run() -> int:  # noqa: PLR0915
     stay = collections.Counter(short(r) for r in live_parsed.values()
                                if short(r) in STAY_COUNTED and r.get("product_id") in (WIN, OBS))
     stay_counted = {short(r) for r in live_parsed.values() if short(r) in STAY_COUNTED and r.get("counted") is True}
-    check("G3 every row the reviews disagree on is still stored once and still counts",
-          set(stay) == STAY_COUNTED and set(stay.values()) == {1} and stay_counted == STAY_COUNTED,
-          str(sorted(STAY_COUNTED - stay_counted)))
+    later_ok = {}
+    for key, (ledger, name, reason) in LATER_WITHDRAWN.items():
+        later = json.loads((wd.MANIFEST.parent / name).read_text(encoding="utf-8"))
+        named = [e for e in later["entries"] if short(e) == key and e.get("role") == "withdraw"]
+        stored = [r for r in live_parsed.values() if short(r) == key and r.get("product_id") in (WIN, OBS)]
+        later_ok[key] = (later.get("ledger") == ledger and [e.get("exclusion_reason") for e in named] == [reason]
+                         and [(r.get("counted"), r.get("exclusion_reason")) for r in stored] == [(False, reason)])
+    check("G3 every row the reviews disagree on is still stored once and still counts, except a row a later audited "
+          "withdrawal took out on its own ground (AUX-127's before_release_date), which is stored once, withdrawn with "
+          "exactly that reason, and named by that manifest",
+          set(stay) == STAY_COUNTED and set(stay.values()) == {1}
+          and stay_counted == STAY_COUNTED - set(LATER_WITHDRAWN) and set(LATER_WITHDRAWN) <= STAY_COUNTED
+          and all(later_ok.values()) and len(later_ok) == 1,
+          str((sorted(STAY_COUNTED - stay_counted), later_ok)))
     successors_hold = []
     for b in json.loads(wd.BASELINE.read_text(encoding="utf-8"))["entries"]:
         hits = live_rows.get(ident(b), [])

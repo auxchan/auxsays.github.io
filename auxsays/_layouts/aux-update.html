@@ -844,7 +844,7 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
           {% endif %}
           {% if report_bearing_count > 0 and evidence_capture_date_known %}<p class="consensus-chart-meta">Newest accepted report captured: {{ evidence_checked_label }}</p>{% endif %}
         </div>{% include patch-evidence-overview.html part='overview' record=page %}
-      </div>{% include patch-evidence-overview.html part='newer' record=page %}
+      </div>{% include patch-evidence-overview.html part='newer' record=page %}{% include patch-evidence-overview.html part='next' record=page %}
 
       {% include monitoring-status.html mode='compact' product_id=page.product_id version=page.update_version target_build=page.target_build published_at=page.update_published_at report_count=page.update_report_count %}
 

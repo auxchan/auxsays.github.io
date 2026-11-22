@@ -39,8 +39,8 @@ from typing import Any, Iterable, Mapping
 
 from patch_collectors.base import load_front_matter_and_body
 
-from . import collector_ownership, maturity, monitoring_health
-from .evidence_classification import VALID_SENTIMENTS, VALID_SEVERITIES
+from . import collector_ownership, maturity, monitoring_health, patch_decision
+from .evidence_classification import VALID_SENTIMENTS, VALID_SEVERITIES  # noqa: F401 - re-exported for callers
 from .patch_identity import key_from
 from .report_counts import (CONSENSUS_PROMOTION_PRODUCTS, counted_evidence_rows,
                             load_evidence_store, windows_targets_from_front_matter)
@@ -121,11 +121,9 @@ def evaluate(record: Mapping[str, Any], counted_groups: Mapping[Key, Iterable[Ma
 
 
 def _projectable(row: Mapping[str, Any]) -> bool:
-    url = str(row.get("source_url") or "").strip().lower()
-    return (url.startswith(("http://", "https://"))
-            and row.get("source_date_pass") is not False
-            and str(row.get("sentiment") or "").strip().lower() in VALID_SENTIMENTS
-            and (str(row.get("severity") or "").strip().lower() or "low") in VALID_SEVERITIES)
+    """Condition (e) for one row. The one copy lives in lib.patch_decision.publishable_row, because the
+    volume-based precaution (G87) requires the same publishable population and must not hold a second rule."""
+    return patch_decision.publishable_row(dict(row))
 
 
 @dataclass(frozen=True)
