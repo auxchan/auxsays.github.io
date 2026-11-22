@@ -54,6 +54,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-048 | Resolved | Security | High | A page on the public domain asked visitors for a repository-write token |
 | AUX-041 | Resolved | Evidence integrity | High | A published theme contradicted the reporter and a platform label was never earned — one shared, negation-aware classifier |
 | AUX-047 | Resolved | Deployment | High | The published-payload gate refused a licence notice and halted every deploy |
+| AUX-128 | Resolved | Deployment | Medium | Writer lanes confirmed only that Pages was asked to deploy, and a cycle that never reached main was never re-run |
 | AUX-042 | Resolved | Evidence integrity | High | The gate guarding mature consensus demanded three fields nothing writes and the approved writer is forbidden to write |
 | AUX-038 | Resolved | Public disclosure | High | The site explained how it gathers evidence — a 1.5 MB telemetry page, and raw method ids on hundreds of patch pages |
 | AUX-043 | Resolved | Evidence integrity | Medium | Every published source asserted a patch match it never checked; now derived from the row |
@@ -88,6 +89,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-091 | Resolved | Publication | Medium | The homepage rows printed a sentiment word while the pages they open printed a verdict |
 | AUX-070 | Resolved | CI governance | Medium | The serial integrity job spent ~34 of its 45 minutes running 123 suites one after another |
 | AUX-126 | Resolved | CI governance | Medium | The live-consensus gate suite ran at the CI per-suite timeout on unchanged code |
+| AUX-133 | Resolved | CI governance | Medium | Main went red when the bot ingested OBS 33.0.3: a G87 check named the newer release instead of deriving it |
 | AUX-066 | Resolved | Evidence integrity | Medium | Stored Teams evidence still said platform "Windows" and carried no theme, area or severity |
 | AUX-079 | Resolved | Evidence integrity | High | Fourteen stored Windows rows counted against a patch they were not about, or twice for one question |
 | AUX-088 | Resolved | Evidence integrity | High | Twenty community reports cited on the live pages were credited to an update they were not about |
@@ -97,6 +99,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-111 | Resolved | Evidence integrity | Medium | Two Adobe reports counted against a version they were not about: the Premiere Pro version a project was made in, the Acrobat Reader version an update started from |
 | AUX-114 | Resolved | Evidence integrity | Low | A DaVinci Resolve 21.0.4 how-to question was counted as a report of a problem with 21.0.4 |
 | AUX-118 | Resolved | Evidence integrity | Low | An OBS Studio 31.1.2 report was counted for a version it names only as a release tag the reporter compared |
+| AUX-129 | Resolved | Evidence integrity | Low | An OBS Studio 32.1.2 install-failure report was labelled "the version works" by the withdrawal tool's validator; it stays counted |
 | AUX-092 | Resolved | Publication | Medium | Every new OBS report would again read "date not recorded": the collector never stored the date it checks |
 | AUX-093 | Resolved | Verdict policy | High | 234 of 236 pages with user reports said WAIT because of their product or a negative tone |
 | AUX-094 | Resolved | Verdict policy | Low | The page could print an official verdict the decision code did not give, and QA could not see it |
@@ -4613,6 +4616,122 @@ stored DaVinci rows. The fourteen remain an audit population; this makes the nex
 **Reopen only if** a counted row written after this change carries `match_basis: exact_version_text`
 without a `matched_text` that appears in its `matched_context`.
 
+### AUX-128 — Writer lanes confirmed only that Pages was asked to deploy, and a cycle that never reached main was never re-run
+
+- **Status** Resolved · **Area** Deployment · **Severity** Medium
+- **First seen** 2026-11-21 (run 44878227542) · **Resolved** 2026-11-22 (G91; live check at the first writer runs after merge)
+
+**Symptom** Three gaps after a correct writeback. (1) Every writer lane dispatched the Pages build and
+stopped there. `gh workflow run` returning 0 proves the dispatch was accepted, not that the site
+deployed; the writeback already had `--pages-confirm-build`, no workflow passed it, and the PowerPoint
+graph's Python binding had no way to. (2) Collection run 44878227542 (checkout b64fa539) lost its
+whole cycle: a pull request that touched the evidence store merged while it ran, the writeback
+correctly refused to combine the two (`rebase_conflict`), pushed nothing and exited 1. The
+writer-queue reaper repaired only runs evicted from the queue (zero jobs), so nothing re-ran a cycle
+that ran and failed -- a lost race, a refused writeback, a failure after collection, or a job that hit
+its time limit (which GitHub reports as `cancelled`, like an operator's cancel; runs 33810979002 and
+33753609648). (3) Nothing durable said when a cycle stayed lost or a deployment failed; it was visible
+only inside Actions. No stored evidence was lost; new evidence waited up to a cycle.
+
+**Fix** Deployment: every writer lane that pushes confirms its build: the four command-line lanes
+pass `--pages-confirm-build` (40 polls 30 s apart), and the PowerPoint graph's binding sets the same
+bound and writes the writeback's outputs to `$GITHUB_OUTPUT`. ONE monotonic deadline bounds the
+whole wait, `confirm_wait_bound` = 39 x 30 s + one 60 s status query = 20.5 minutes: every status
+query, every git fetch and every sleep is cut to the time left, and a query or fetch still running at
+its limit is killed without waiting for the processes it started (a capture-and-timeout
+`subprocess.run` on a fetch whose upload-pack hangs was measured returning after 20 s on a 1.5 s
+limit). A build this dispatch created that ends `failure`, `timed_out` or `startup_failure` fails the
+lane (the PowerPoint job gets a step that turns it red, since its graph step takes `tee`'s exit
+status; its message says whether a push landed or the no-change deploy-recovery re-dispatch failed).
+A run CANCELLED is not a failure: `pages.yml` has one concurrency group, so a waiting run is
+cancelled when a newer one arrives, and the newer build -- of the same commit, or of a later one,
+recognised by ancestry after fetching -- deploys this content. A failed run of the SHA already listed
+before a deploy-recovery re-dispatch is stale, never the new build's result. No verdict within the
+bound is `deployment_unverified` (output, outcome token, warning annotation, summary section with the
+reason) without failing the lane. The data commit is never reverted or re-pushed. The `lost_race`
+diagnostic counts `retry_exhausted` only when the last push was refused as non-fast-forward.
+Recovery: each routine writer run executes a step named `Cycle reached main` only when its
+writebacks pushed or had nothing to push (collection: chain-ingest's first step, over both writer
+jobs; ingestion: after its writeback, `always()`). The reaper's new step (`writer_cycle_recovery.py`)
+re-runs, once and on main, the newest routine run of each lane whose record step did not succeed --
+including a GREEN run whose record was skipped, and a time-limit cancel, told apart from an
+operator's by GitHub's annotation -- but only when the eviction step found the whole writer group
+free and dispatched nothing, and the same check repeated just before the dispatch still finds it
+free. A re-run checks out main as it is when its job starts and its writeback rebases onto any later
+main and re-validates before pushing. Every automatic re-run carries `recovery_of` in its `run-name`,
+so it survives an eviction, and there is at most one recovery dispatch per lost cycle: a recovery that
+loses again is never re-run, and the eviction step treats an evicted run as covered once a routine
+recovery whose strictly parsed marker names its cycle has started (has jobs), whatever that recovery's
+outcome -- only a recovery evicted before it started is re-dispatched, and when whether one started
+cannot be established it dispatches nothing and warns. A dispatch is never taken as the cycle
+reaching main or Pages. The walk has NO age limit:
+after a recovery has lost, later losses of that lane pause until a run reaches main, however long
+that takes, and a loss whose deciding history is out of the API's page (neither a run that reached
+main nor a lost recovery in view) fails closed -- reported, never re-run. Visibility: a lost
+recovery, a paused lane, a loss whose history cannot be established, a loss too old to re-run, a
+failed Pages build on main, or main undeployed past a 2-hour grace opens ONE tracking issue
+(`Automated writer recovery needs attention`). Deployment is judged commit by commit from main's
+fast-forward chain in the repository activity API: only a successful Pages run of main's newest
+commit counts, and the clock starts at the oldest undeployed push. The grace is 2 hours: the last
+100 Pages runs took 237-612 s (slowest of 300, 1402 s), and the one-deep `pages` group holds one
+running and one waiting build, so a push is deployed within about 47 minutes even behind a queue.
+The issue lists the problems and everything not yet resolved (a pending or held re-run, a deployment
+within its grace, a lane that could not be read); it is closed, with a "Resolved" comment naming the
+Pages run and the commit, only when every reapable lane's newest routine run reached main and that
+commit -- which contains their pushes, since each run started inside the unbroken chain -- was
+deployed. A full page of open issues without it opens nothing. Run ids, commit ids, workflow names,
+conclusions and failed step names only. The reaper dispatches nothing for a deployment (no retry
+storm, no re-push): redeploying stays with `--deploy-recovery` and pages.yml's daily cron.
+
+**Evidence** `test_deploy_verification_and_lost_race.py`, 218 governed checks: the real writeback
+against a throwaway bare origin and a scripted Pages run list (superseded, descendant, ancestor,
+unattributable, stale-snapshot and hung-query cases) and on a fake clock where every query and fetch
+takes all the time it is allowed (the whole wait ends inside 20.5 minutes); a real fetch from a
+remote whose upload-pack hangs, killed at the deadline; the bare script's outputs; every writer's
+argument list parsed by the writeback's own parser; the `Cycle reached main` conditions, run names and
+re-run checkout refs evaluated per context and read back by the reaper module; chain-ingest's, the
+eviction step's, the PowerPoint failure step's and the lost-cycle step's shell executed against a
+fake `gh`, the last with its repository, lanes and writer group resolved from the job env exactly as
+production runs it; `writer_cycle_recovery.py` as functions and as a bare script against a fake `gh`
+serving raw API JSON; and a six-day and a fifteen-day outage ticked every two hours through the
+module's own `plan_tick` and `keep_issue` -- one re-run, one issue, never closed, past the API's page
+too -- then one close once a run reaches main and Pages deploys its push; the eviction step's recovery
+check executed against the fake `gh` (a recovery that failed, was cancelled, timed out or is still
+running covers its cycle; one evicted before it started does not; a similar title or an operator's
+dispatch never covers; five uncertain histories dispatch nothing and warn); and both reaper steps
+ticked through 7- and 30-day outages with evicted crons and evicted recoveries -- one dispatch per
+evicted cycle, never a second started recovery, one issue closed only after a run reached main and
+was deployed, and fresh routine runs still recovered. Its reads were also run
+read-only against the live API: run 44878227542 judges lost, run 33810979002 (PowerPoint time limit)
+lost, run 31111379736 (operator cancel) left alone, run 30669290854 an eviction; on 2026-11-22 both
+lanes' newest runs reached main and Pages run 44976872341 had deployed main's newest commit 44e6cc7e.
+Mutants, one per fix, each killed by a named check. Measured with no change: the last audited
+withdrawal merge (#272, 44e6cc7e) was followed by Pages run 44976872341 on that SHA (push, success);
+of the 66 GitHub-release records the official notes refresh no longer re-reads (OBS 18, ComfyUI 48),
+none has current notes the AUX-125 grammar reads as declaring a known issue.
+
+**Known limits** A recovery waits for a free lane and a reaper tick (every two hours). A recovery that
+started is its cycle's one attempt even when an operator cancelled it. When whether a recovery of an
+evicted cycle already started cannot be established, the eviction step reports that in a warning and
+its summary, not on the tracking issue. Pre-merge runs
+carry no `Cycle reached main` step, so a pre-merge run that failed after reaching main and is still a
+lane's newest routine run would be re-run once. The reaper's re-check and its dispatch are two API
+calls; a writer arriving between them can still be evicted (and is then the eviction step's to
+re-dispatch). A writeback writes its outputs only when it ends, so a job killed by its time limit
+during the build wait counts as a lost cycle and is re-run once. A force push to main ends the chain
+deployment is judged from, so the issue cannot close until every lane has run again after it. The
+issue closes only when main's newest commit itself has a successful build, so a commit that lands
+just before a tick delays the close to a later tick. Official notes older than the two newest
+releases per product are still not re-read (AUX-125).
+
+**Reopen only if** a writer run pushes a site change and neither confirms its Pages build nor reports
+`deployment_unverified`; a superseded Pages run fails a lane; the build wait outlasts 20.5 minutes; a
+routine run without a successful `Cycle reached main` step is, two reaper ticks after the lane frees,
+neither re-run nor listed in the tracking issue; an evicted cycle is re-dispatched after a recovery of
+it started; the tracking issue is closed while a lane's newest
+routine run has not reached main or main's newest commit has no successful Pages build; or a commit
+stays on main undeployed for more than four hours without a problem line on the issue.
+
 ### AUX-048 — a page on the public domain asked visitors for a repository-write token
 
 - **Status** Resolved · **Area** Security · **Severity** High
@@ -5755,6 +5874,41 @@ count other than its governed one, or a failed, cancelled or missing shard leave
 
 ---
 
+### AUX-133 — Main went red when the bot ingested OBS 33.0.3: a G87 check named the newer release instead of deriving it
+
+- **Status** Resolved · **Area** CI governance · **Severity** Medium
+- **First seen** 2026-11-22 (main 9128bbf1; PR #273 CI run 45009350593) · **Resolved** 2026-11-22 (G96; test-only)
+
+**Symptom** `test_volume_precaution_g87.py` failed R6 on main (55/56), so every pull request's CI failed too.
+
+**Cause** Data, not code. R6 required OBS 33.0.1's newer-release note to name 33.0.2 and print the vendor's
+known-issue caution. The patch-ingest lane then stored OBS 33.0.3, which declares no known issue, so the note
+now correctly names 33.0.3 and says "Newer is not necessarily safer". Since #272 (44e6cc7e..9128bbf1) only
+`_data/` and `updates/generated/` changed, and with the 33.0.3 record removed the old R6 passes 56/56. This is
+the AUX-071 pattern again: a suite that reads the live corpus pinned what the corpus held that day.
+
+**Fix (test only)** R6 now derives each page's way forward from the facts the rule reads: the printed verdict
+and whether its box already advises keeping, the archived flag, the release `update_available` selects,
+whether THAT release declares a known issue, and the reviewed `fixed_in` on the printed reasons. It then
+asserts the rendered order and content, with G87's copy written out literally: the archived line; the
+vendor caution before the links exactly when the named release declares an issue (otherwise "Newer is not
+necessarily safer"); then the verdict, then the links; nothing after the note except the fix lines. The same
+comparison runs over a synthetic corpus: the [F] tree plus a newer release that declares no issue. That run
+must see all five variants, both cautions, a fix line, and the keep line both present and absent. No
+production, template, data or workflow file changed, and the governed count is still 56.
+
+**Verification** 56/56 on today's tree and on the tree without 33.0.3. Ten single-site mutants, each killed by
+R6: caution after the links; an extra line after the note (production and template); archived line dropped;
+archived branch skipped; fixed line dropped (production and template); vendor caution never chosen; vendor
+caution claimed for an undeclared release; keep line dropped. Four of the ten are killed by R6 alone. The
+remaining live-corpus checks name no bot-ingested release. C3 still pins the reviewed `fixed_in` releases
+(32.2.0, 33.0.0), which are reviewed data, and was left alone.
+
+**Reopen only if** a G87 check fails because the corpus gained or lost a release, rather than because a
+rendered way forward differs from what its facts give.
+
+---
+
 ### AUX-126 — The live-consensus gate suite ran at the CI per-suite timeout on unchanged code
 
 - **Status** Resolved · **Area** CI governance · **Severity** Medium
@@ -6518,6 +6672,118 @@ the new suite on this manifest.
 **Reopen only if** the row counts again; the must-stay #13989 row or the report's 32.2.2 row stops counting without
 its own audited withdrawal; the control finding is re-admitted without its own audited change; or an earlier
 withdrawal manifest changes.
+
+---
+### AUX-129 — An OBS Studio 32.1.2 install-failure report was labelled "the version works" by the withdrawal tool's validator; it stays counted
+
+- **Status** Resolved · **Area** Evidence integrity · **Severity** Low
+- **First seen** 2026-11-21 (a report-mode run of `withdraw_obs_role_misattributed_rows.py`) · **Resolved** 2026-11-21
+
+**Correcting the record** GitHub issue #13518, counted on OBS Studio 32.1.2, is an install-failure report. The
+reporter declares 32.1.2 in the issue template and says it cannot be installed on Ubuntu 26.04 (the issue's
+Current Behavior field; the stored excerpt ends before it). The report stays counted. The earlier label
+`version_reported_working`, which the audited-withdrawal tool printed for it in report mode and which a review
+then repeated as a report "describing a successful installation", was a validator artefact, not a finding about
+the report. No evidence was withdrawn, and no stored row, count, verdict or page changed.
+
+**Cause** Two validator defects, both met when a stored row is checked again:
+- The two working cues built on the verb "work" (`target_works`, `works_on_target` in `lib/target_outcome.py`)
+  read a hope as a claim. The issue's Expected Behavior field hopes that 32.1.2 "will work".
+- The tool ran every stored field together with spaces. A cue could then bind across two fields, and rule R1 (a
+  version the reporter declared is never vetoed) could not apply: the template's version answer is found by the
+  line break after its heading, and every stored OBS excerpt is whitespace-collapsed. In the issue's own layout
+  the collector's authority does not refuse it, which is why the collector counted it.
+
+**Fix (code; owner ruling 2026-11-21: narrow validator fixes, regression fixtures, no evidence withdrawal)**
+- `lib/target_outcome.py`: the two "work" cues skip a hoped-for, expected, conditional or requested outcome. That
+  is a modal or expectation directly before the verb ("should work", "will work", "is supposed to work"), or a
+  hypothetical lead directly before the subject (hope, if, whether, expect, want, need, "please make", or an
+  inverted auxiliary as in "would 32.1.2 work"), with only closed-class filler between. A present or past claim
+  ("32.1.2 works fine", "it worked on 32.1.2", "rolled back to 32.1.2 and it works") still vetoes. No other cue
+  changed. The R1 note there no longer says #13518 was about "cannot reproduce".
+- Same module, after independent review:
+  - The verb judged is the one bound to the target. In the mirror direction that is the last verb from which the
+    cue still reaches the target, so "Hope it works for you, it works on 32.1.2 for me" still vetoes.
+  - A later verb that target_works reaches keeps the claim unless it is hoped for or negated, so "32.1.2 should
+    work and it does work" still vetoes.
+  - A hope word that is the object of "as", "like", "what", "when", "if" or "than" is a comment, not a hope. So
+    "As expected 32.1.2 works fine" and "If needed 32.1.2 works" still veto without a comma.
+  - In the mirror direction a lead word may take "to": "I want it to work on 32.1.2" is no claim, while "I got it
+    to work on 32.1.2" still vetoes.
+  - Leads are read within the clause and at most 160 characters back, and the optional bracket can no longer
+    split a whitespace run several ways. A 10,000-space run used to take 6 to 13 s and now takes about 0.01 s.
+    A hoped-for match is skipped before the unbounded question scan.
+- Same module, after the second review (GPT ruling 2026-11-22: one bounded correction): a want or need that
+  touches the work verb closes a relative clause and is not a lead. So "Everything I need works with OBS 32.1.2"
+  and "The features I need work on 32.1.2" still veto, as on main. "I want it to work on 32.1.2", "I need it
+  working on 32.1.2" and "I want 32.1.2 to work" are still no claim.
+- `withdraw_obs_role_misattributed_rows.py`: a stored row is rebuilt the way the collector read it: the title, a
+  line break, then the body, with each distinct title once. When the authority would refuse a row whose stored text
+  holds the template's version heading without its line break, the tool reports the row as UNDETERMINABLE. It
+  never withdraws that row, even when its URL is named.
+
+**Measured** (stored rows only, old against new actions; nothing rewritten)
+- Shared predicate, all 3,482 stored rows of 11 products under three text builds: 1 outcome change (#13518,
+  working to no outcome language) and 0 rows newly vetoed.
+- OBS tool, 343 stored rows (317 counted): #13518 moves from refused to kept, and no counted row is newly refused.
+  The one already-withdrawn row (forum thread 190590) is refused before and after. Either fix alone also clears
+  #13518: the wording fix keeps it, and the boundary fix makes it undeterminable.
+- `consensus_evidence.yml`, every generated record and every `_data` file are byte-identical.
+- `test_obs_validator_boundaries.py` (119 checks, blocking) covers:
+  - #13518's stored fields read from the live store, and its template layout;
+  - hypothetical phrasings in both directions, genuine claims and inverse probes;
+  - the bound verb, governed and ungoverned hope words, and "to" in the mirror direction;
+  - a title/body line break as a clause boundary;
+  - timing checks on whitespace runs, on each lead pattern alone, and on a body of 2,000 hoped-for matches;
+  - a field-boundary fixture with its control, and the CLI on a temporary store;
+  - 17 want/need relative clauses that must veto, with four controls that must not.
+- 28 mutants, one per fix clause, each killed by its named checks. Three more from the second review are
+  killed too: removing the relative-clause correction (F1.130-F1.146), dropping "flow" from the not-a-verb guard
+  (F1.72) and dropping "hopefully" from the modal frame (F1.14).
+- About 250 reviewer and own phrasings, compared with main: 0 newly vetoed.
+
+**Residual** These are left out of the narrow fix. Each one behaves as main does, except where marked "read as
+hypothetical".
+- Other cues still read hypothetical wording as a claim: "I hope 32.1.2 is stable" (`target_said_fine`) and "I
+  hope to downgrade to 32.1.2" (rollback).
+- These keep the old veto:
+  - a word outside the closed filler list between the lead and the subject, as in "Please make the plugin work
+    with 32.1.2";
+  - a curly opening quote, or an "Expected Behavior: 32.1.2 works" heading;
+  - "32.1.2 must work", "32.1.2 has to work", "assuming 32.1.2 works", "Supposedly 32.1.2 works";
+  - "Try 32.1.2 and see if it works", "Is it working on 32.1.2" with no question mark;
+  - "I would like 32.1.2 to work";
+  - "if you want 32.1.2 to work, ...", because the governor rule keeps a governed hope word as a comment;
+  - "32.1.2 should be working now" and "It should be working on 32.1.2" (a "be" after the modal);
+  - the counterfactuals "32.1.2 should have worked", "It should've worked on 32.1.2" and "It would have worked
+    on 32.1.2 if ...", which mean it did not work;
+  - "32.1.2 (hopefully) works", because the bracket stops the frame from matching;
+  - "I hope 32.1.2 finally works", because "finally" is not in the tight-gap list;
+  - "Hoping to get it working on 32.1.2".
+- "Needs work on 32.1.2" vetoes, as on main: "work" is read as the verb. It can instead mean that something in
+  32.1.2 is defective or unfinished. Keeping main's behaviour is not proof that this reading is right, so it is
+  not pinned as a success fixture.
+- Read as hypothetical:
+  - "Everything I expected works on 32.1.2" and "Everything I hoped works on 32.1.2", which main vetoes. Both
+    are ambiguous: the expectation or the hope may have come true;
+  - "I tested whether 32.1.2 works and it does", "32.1.2 will work fine, I tested it";
+  - "Back then 32.1.2 would work every time", "It could work on 32.1.2 when I tried yesterday", "Only after a
+    reboot did it work on 32.1.2";
+  - a later verb beyond target_works' 25-character reach ("32.1.2 should work and indeed it works") or left
+    out ("32.1.2 should work, and it does").
+- Pre-existing, not changed here; each needs its own ticket:
+  - `_POLARITY_INVERTER`'s `\bn't\b` cannot match inside a contraction, so "32.1.2 won't work on Wayland" and
+    "32.1.2 isn't working" read as working claims, on main too.
+  - `_is_question` scans from the start of the text for every match it tests. A crafted 66,000-character body
+    of 2,000 negated claims takes about 2 s on main and on this branch.
+  - `target_works` can bind the verb of a later clause whose preposition names another version, because R2
+    inspects only the matched span. "I hope it works on 32.2.0 like it works on 32.1.2" still vetoes 32.2.0, and
+    "I hope it works on 32.1.2, it works on 32.1.1" still vetoes 32.1.2. Main vetoes both too (through
+    `works_on_target`).
+
+**Reopen only if** #13518 stops counting without its own audited change; a hoped-for "will work" or "should
+work" vetoes again; a genuine "works" or "worked" claim stops vetoing; or the tool refuses or withdraws a row
+whose stored text lost its declared-version line break.
 
 ---
 ### AUX-092 — Every new OBS report would again read "date not recorded": the collector never stored the date it checks

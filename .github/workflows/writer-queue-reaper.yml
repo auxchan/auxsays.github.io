@@ -28,11 +28,34 @@ name: Writer Queue Reaper
 # runs 34311698674 and 34311764894 did. A group with one member still has a pending slot of depth 1.
 # This workflow closes that half.
 #
-# IT IS NOT A WRITER. `contents: read`, and it never checks out or commits. It holds its OWN
-# concurrency group, so its own run can neither evict a pending writer nor be evicted by one.
-# The run it DISPATCHES is of course an entrant, which is why the guard below is group-wide rather
-# than per-workflow -- an adversarial review found that a per-workflow guard let this workflow add a
-# third entrant to a full group and destroy the very pending run it exists to protect.
+# IT IS NOT A WRITER. `contents: read`, and it never commits; it checks out only the scripts
+# directory, to run the lost-cycle step below. It holds its OWN concurrency group, so its own run can
+# neither evict a pending writer nor be evicted by one. The run it DISPATCHES is of course an
+# entrant, which is why the guard below is group-wide rather than per-workflow -- an adversarial
+# review found that a per-workflow guard let this workflow add a third entrant to a full group and
+# destroy the very pending run it exists to protect.
+#
+# A CYCLE THAT RAN BUT NEVER REACHED MAIN IS RE-RUN TOO (G91). Run 44878227542 collected a whole
+# cycle, lost its writeback race to a mid-run merge (`rebase_conflict`), pushed nothing and failed --
+# and the eviction repair below, which keys on zero jobs, left it. The second step re-runs, ONCE,
+# every routine run that ran without its cycle reaching main: a refused or lost writeback, a failure
+# after collection, a job that hit its time limit. "Reached main" is read from the run itself: each
+# routine writer run executes a step named exactly `Cycle reached main` only when its writeback
+# pushed or had nothing to push. Every automatic re-run carries `recovery_of`, which the writer
+# workflows put in their run name ("... (recovery of run N)"), so the record survives even an
+# eviction. That keeps it to AT MOST ONE RECOVERY DISPATCH PER LOST CYCLE: the second step never
+# re-runs a recovery, and the eviction step treats an evicted run as covered once a recovery whose
+# strictly parsed marker names its cycle has started (has jobs), whatever that recovery's outcome;
+# only a recovery evicted before it started is re-dispatched, with the same `recovery_of`. A
+# dispatch is never taken as the cycle reaching main or Pages. After a recovery has lost, re-runs
+# of that lane pause until a run reaches main, with no age limit; a loss whose history is out of
+# view is reported, never re-run.
+# When the one re-run also loses, the latest Pages build on main failed, or main has gone undeployed
+# past a 2-hour grace (judged commit by commit from main's push history: only a successful Pages
+# run of main's newest commit counts), the step opens ONE tracking issue. It stays open while any
+# lane is unresolved and is closed only when every lane's newest routine run reached main AND main's
+# newest commit, which contains them, was deployed.
+# Both steps dispatch only into a free lane and at most one entrant per tick, group-wide.
 
 on:
   schedule:
@@ -44,6 +67,12 @@ on:
 permissions:
   contents: read
   actions: write
+  # The one deduplicated tracking issue for a cycle that stays lost or a failing Pages build.
+  issues: write
+  # Job annotations: a job that hit its time limit ends `cancelled` exactly like an operator's
+  # cancel; only its annotation ("The job has exceeded the maximum execution time ...") tells them
+  # apart.
+  checks: read
 
 concurrency:
   # Deliberately NOT `auxsays-main-writeback`. Joining the writer group would make this workflow
@@ -75,6 +104,14 @@ jobs:
         id: reap
         run: |
           set -uo pipefail
+
+          # The cycle a run title names as recovered, or nothing: the strict parser of the recovery
+          # marker. The writer workflows' run-name is exactly "<workflow name> (recovery of run <id>)",
+          # a name with no parentheses and the marker at the end; any other title carries no marker,
+          # and the id is compared whole -- never as a prefix, suffix or substring of another.
+          recovery_marker() {
+            printf '%s' "${1:-}" | sed -n 's/^[^()]*(recovery of run \([0-9][0-9]*\))[[:space:]]*$/\1/p'
+          }
 
           # Only look back far enough to cover one missed cycle of the 6-hourly writers. The reaper
           # ticks every 2h, so a lost slot gets ~7 recovery opportunities even at the 300-minute
@@ -116,6 +153,8 @@ jobs:
               echo "- window: since \`${SINCE}\`"
               echo "- lane occupied by ${busy} run(s); no re-dispatch attempted"
             } >> "$GITHUB_STEP_SUMMARY"
+            # The lost-cycle step below reads these: an occupied lane gets no entrant from it either.
+            { echo "busy=${busy}"; echo "dispatched=0"; } >> "${GITHUB_OUTPUT:-/dev/null}"
             exit 0
           fi
 
@@ -143,8 +182,14 @@ jobs:
             # must not have it resurrected as a live writeback two hours later. Cron runs and this
             # repo's own automated dispatches (the chain-ingest lane) are the ones that represent
             # routine work nobody chose to abandon.
+            # The run's display title travels with each id: a run that was itself a recovery is titled
+            # "... (recovery of run N)" by the workflow's `run-name`, and that is visible even for a
+            # run evicted before any job ran. Its re-dispatch carries the SAME `recovery_of`, and the
+            # check before every dispatch below keeps it to at most one recovery dispatch per lost
+            # cycle: once a recovery of that cycle has started, nothing re-dispatches it, whatever
+            # that recovery's outcome.
             evicted="$(gh api "repos/${REPO}/actions/workflows/${wf}/runs?per_page=50" --jq \
-              "[.workflow_runs[] | select(.created_at >= \"${SINCE}\" and .conclusion == \"cancelled\" and (.event == \"schedule\" or .triggering_actor.login == \"github-actions[bot]\"))] | sort_by(.created_at) | .[] | \"\(.id) \(.created_at)\"" 2>/dev/null)" || {
+              "[.workflow_runs[] | select(.created_at >= \"${SINCE}\" and .conclusion == \"cancelled\" and (.event == \"schedule\" or .triggering_actor.login == \"github-actions[bot]\"))] | sort_by(.created_at) | .[] | \"\(.id) \(.created_at) \(.display_title)\"" 2>/dev/null)" || {
               echo "::warning title=Reaper::could not read runs for ${wf}; skipping this lane"
               continue
             }
@@ -155,7 +200,7 @@ jobs:
             fi
 
             repaired_one=0
-            while read -r id created; do
+            while read -r id created title; do
               [ -n "${id}" ] || continue
               jobs="$(gh api "repos/${REPO}/actions/runs/${id}/jobs" --jq '.total_count' 2>/dev/null)" || jobs=""
               if [ -z "${jobs}" ]; then
@@ -180,11 +225,64 @@ jobs:
                 notes="${notes}\n- \`${wf}\` run ${id} folded into an earlier repair"
                 continue
               fi
-              echo "  ${wf} run ${id}: evicted while queued at ${created} with 0 jobs -- re-dispatching"
-              if gh workflow run "${wf}" --ref main --repo "${REPO}"; then
+              # The cycle this re-dispatch repairs: the evicted run's own, or -- when the evicted run
+              # was itself a recovery -- the cycle it was recovering.
+              of="$(printf '%s' "${title:-}" | sed -n 's/.*(recovery of run \([0-9][0-9]*\))[[:space:]]*$/\1/p')"
+              of="${of:-${id}}"
+
+              # ---- AT MOST ONE RECOVERY DISPATCH PER LOST CYCLE (G91) ------------------------------
+              # Covered once a recovery of this cycle has STARTED (has jobs), whatever its outcome:
+              # a recovery that failed, was cancelled after it started or hit its time limit was the
+              # one attempt, and the tracking issue (next step) stays open until a later routine run
+              # reaches main and is deployed. Only a recovery evicted before any job ran (cancelled,
+              # zero jobs) never started; it is not an attempt. A recovery counts only when it is
+              # routine (this repo's own automation) and its title's strictly parsed marker names
+              # exactly this cycle; for an evicted routine run every such recovery is later than it.
+              # The run list read here is the one the evicted run came from, newest first: `unlisted`
+              # (the evicted run is not on it) or an unreadable list means a recovery could be out of
+              # view, so FAIL CLOSED -- nothing is dispatched and the uncertainty is reported.
+              runs_page="$(gh api "repos/${REPO}/actions/workflows/${wf}/runs?per_page=50" --jq \
+                "if any(.workflow_runs[]; .id == ${id}) then (.workflow_runs[] | \"\(.id) \(.status) \(.conclusion) \(.event) \(.triggering_actor.login) \(.display_title)\") else \"unlisted\" end" 2>/dev/null)" || runs_page="unreadable"
+              started_by=""
+              unsure=""
+              case "${runs_page}" in
+                unreadable) unsure="its workflow's run list could not be read" ;;
+                unlisted) unsure="it is not on its workflow's newest page of runs" ;;
+                *)
+                  while read -r rid rstatus rconc revent ractor rtitle; do
+                    case "${rid}" in ''|*[!0-9]*) continue ;; esac
+                    if [ "${rid}" = "${id}" ]; then continue; fi
+                    if [ "${revent}" != "schedule" ] && [ "${ractor}" != "github-actions[bot]" ]; then continue; fi
+                    # (cheap pre-filter, so the parser runs only on titles that could carry a marker)
+                    case "${rtitle:-}" in *"(recovery of run "*) ;; *) continue ;; esac
+                    if [ "$(recovery_marker "${rtitle:-}")" != "${of}" ]; then continue; fi
+                    rjobs="$(gh api "repos/${REPO}/actions/runs/${rid}/jobs" --jq '.total_count' 2>/dev/null)" || rjobs=""
+                    case "${rjobs}" in
+                      ''|*[!0-9]*) unsure="${unsure:-the jobs of recovery run ${rid} could not be read}" ;;
+                      0)
+                        if [ "${rstatus}" != "completed" ] || [ "${rconc}" != "cancelled" ]; then
+                          unsure="${unsure:-recovery run ${rid} (${rstatus}, ${rconc}) has no jobs and was not evicted}"
+                        fi ;;
+                      *) started_by="${rid} (${rstatus}, ${rconc})"; break ;;
+                    esac
+                  done <<< "${runs_page}" ;;
+              esac
+              if [ -n "${started_by}" ]; then
+                echo "  ${wf} run ${id}: evicted at ${created}; recovery run ${started_by} of its cycle (run ${of}) already started -- not re-dispatched"
+                notes="${notes}\n- \`${wf}\` run ${id}: not re-dispatched; recovery run ${started_by} of its cycle (run ${of}) already started"
+                continue
+              fi
+              if [ -n "${unsure}" ]; then
+                echo "::warning title=Reaper::${wf} run ${id}: whether a recovery of its cycle (run ${of}) already started cannot be established (${unsure}); not re-dispatched"
+                notes="${notes}\n- \`${wf}\` run ${id}: not re-dispatched; whether a recovery of its cycle (run ${of}) already started cannot be established (${unsure})"
+                continue
+              fi
+
+              echo "  ${wf} run ${id}: evicted while queued at ${created} with 0 jobs -- re-dispatching (recovery of run ${of})"
+              if gh workflow run "${wf}" --ref main --repo "${REPO}" -f recovery_of="${of}"; then
                 dispatched=$((dispatched + 1))
                 repaired_one=1
-                notes="${notes}\n- re-dispatched \`${wf}\` for the cycle lost at ${created}"
+                notes="${notes}\n- re-dispatched \`${wf}\` for the cycle lost at ${created} (recovery of run ${of})"
               else
                 echo "::warning title=Reaper::re-dispatch of ${wf} failed"
               fi
@@ -210,4 +308,34 @@ jobs:
               printf '%b\n' "${notes}"
             fi
           } >> "$GITHUB_STEP_SUMMARY"
+          { echo "busy=0"; echo "dispatched=${dispatched}"; } >> "${GITHUB_OUTPUT:-/dev/null}"
           exit 0
+
+      # THE STEPS BELOW STAY AFTER THE ONE ABOVE: test_writer_queue_reaper_behaviour.py executes
+      # steps[0] as the eviction repair.
+      - name: Checkout the scripts
+        if: ${{ !cancelled() }}
+        uses: actions/checkout@v7
+        with:
+          sparse-checkout: auxsays/scripts
+
+      - name: Setup Python
+        if: ${{ !cancelled() }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      # Re-runs ONCE a routine run that ran without its cycle reaching main, and keeps the tracking
+      # issue. It adds an entrant only when the step above found the lane free AND dispatched
+      # nothing; a missing or unreadable value counts as occupied. The issue is kept whether or not
+      # the lane is free. Its decisions and their tests: writer_cycle_recovery.py and
+      # test_deploy_verification_and_lost_race.py.
+      - name: Re-run a cycle that did not reach main, and report persistent failures
+        id: recover
+        if: ${{ !cancelled() }}
+        env:
+          LANE_BUSY: ${{ steps.reap.outputs.busy }}
+          DISPATCHED: ${{ steps.reap.outputs.dispatched }}
+        run: |
+          python auxsays/scripts/writer_cycle_recovery.py \
+            --lane-busy "${LANE_BUSY}" --dispatched "${DISPATCHED}"

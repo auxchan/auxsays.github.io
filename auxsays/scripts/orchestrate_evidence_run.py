@@ -109,14 +109,30 @@ PRODUCTION_VALIDATE = [
 ]
 
 
+# Pages BUILD confirmation for this lane, the same bound the command-line writer lanes pass
+# (`--pages-confirm-attempts 40 --pages-confirm-interval 30`; with the final 60 s status query a
+# hard 20.5 minutes, automation_writeback.confirm_wait_bound): a dispatch accepted by GitHub is not
+# a deployment. G91 enabled it on every writer lane that pushes.
+PAGES_CONFIRM_ATTEMPTS = 40
+PAGES_CONFIRM_INTERVAL = 30
+
+
 def default_writeback(repo_root: Path, allow: list[str], *, message: str,
                       pages_cmd: str | None = "gh workflow run pages.yml --ref main",
-                      max_retries: int = 5) -> Callable[[], dict[str, Any]]:
+                      max_retries: int = 5,
+                      github_output: bool = False) -> Callable[[], dict[str, Any]]:
     """Bind the REAL ``lib.automation_writeback`` authority. There is no second implementation.
 
     ``run_writeback`` owns staging against the allow list, the PR #57 equivalence gate (the tree it
-    validated is byte-identical to the tree it commits), rebase-on-conflict, push to main and the
-    bounded Pages dispatch. This function only supplies configuration; it decides nothing."""
+    validated is byte-identical to the tree it commits), rebase-on-conflict, push to main, the
+    bounded Pages dispatch and the confirmation of the build that dispatch created. This function
+    only supplies configuration; it decides nothing.
+
+    ``github_output`` (the production CLI sets it) writes the writeback's own outputs -- pushed,
+    outcome, deployment_pending, pages_build, deployment_unverified -- to ``$GITHUB_OUTPUT`` with
+    the same writer the command-line lanes use, so the workflow can tell whether this lane's cycle
+    reached main and whether its deployment was confirmed. Off by default so a test that calls the
+    binding never appends to the output file of the CI job running it."""
     from lib import automation_writeback as awb  # noqa: PLC0415
 
     def _writeback() -> dict[str, Any]:
@@ -124,9 +140,14 @@ def default_writeback(repo_root: Path, allow: list[str], *, message: str,
             repo=Path(repo_root), message=message, allow=list(allow),
             validate=list(PRODUCTION_VALIDATE), validate_before_commit=True,
             site_paths=list(allow), max_retries=max_retries, pages_cmd=pages_cmd,
+            pages_confirm_build=True, pages_confirm_attempts=PAGES_CONFIRM_ATTEMPTS,
+            pages_confirm_interval=PAGES_CONFIRM_INTERVAL,
             deploy_recovery=True, recovery_site_paths=list(allow),
         )
-        return awb.run_writeback(cfg).as_dict()
+        result = awb.run_writeback(cfg)
+        if github_output:
+            awb._write_github_output(result)
+        return result.as_dict()
 
     return _writeback
 
@@ -1226,6 +1247,7 @@ def main(argv: list[str] | None = None) -> int:
     writeback = default_writeback(
         repo_root, allow, message=args.message,
         pages_cmd=None if args.no_pages else "gh workflow run pages.yml --ref main",
+        github_output=True,
     ) if (args.write and allow) else None
 
     since = (datetime.now(timezone.utc) - timedelta(days=max(0, args.since_days))).date().isoformat()
