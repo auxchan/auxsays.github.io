@@ -72,7 +72,7 @@ from patch_collectors import base as wd_base  # noqa: E402
 TOOL = SCRIPTS / "withdraw_live_citation_rows.py"
 AUDIT = SCRIPTS / "audit"
 MANIFEST = AUDIT / "live_citation_withdrawal_v8.json"
-RUN_AUDIT = AUDIT / "live_citation_withdrawal_v8_2026-11-21.json"
+RUN_AUDIT = AUDIT / "live_citation_withdrawal_v8_2026-11-22.json"
 BASELINE = AUDIT / "live_citation_withdrawal_baseline_v2.json"
 REPORT_DATES = AUDIT / "obs_report_dates.json"
 FIX = SCRIPTS / "tests" / "fixtures" / "live_citation"
@@ -85,11 +85,15 @@ REASON = "before_release_date"
 LEGACY = {"identity_not_the_subject", "duplicate_existing_evidence", "version_named_but_working",
           "version_is_rollback_target", "not_a_real_issue_report"}
 PARENT = "4a559ed9f59cc5bb37e1003a001bdf9ba6529ec2"
+# The committed run audit is the run at the branch's base (origin/main b3a8193a), whose store is byte-identical to
+# the one the manifest pinned at PARENT (both hash to STORE_PIN); the run re-checks every pin against it.
+RUN_PARENT = "b3a8193a12140087f5dcc83f71f0ae55f334cbf8"
 STORE_PIN = "f92914e16ab1c1bbe035a6dd625868e93223236161e2c282db2e3de84a1a2674"
 RECORD = "2026-04-02-obs-studio-32-1-1.md"
 RELEASED = "2026-04-02T19:54:40Z"
 POSTED = "2026-04-01T12:05:03Z"
 URL_13278 = "https://github.com/obsproject/obs-studio/issues/13278"
+RELEASE_32_1_1 = "https://github.com/obsproject/obs-studio/releases/tag/32.1.1"
 
 # The row the gate refuses, written out in full here so neither the manifest nor the fixture can redefine it, and its
 # pinned before/after block hashes on the live store.
@@ -345,17 +349,27 @@ def run() -> int:  # noqa: PLR0915
               for p in run_audit.get("per_patch") or []}
     population = {k: v[0] - v[1] for k, v in (run_audit.get("counted_population") or {}).items()}
     basis = [(e.get("derived_basis") or {}) for e in run_audit.get("entries") or []]
-    check("A9 the committed run audit is this manifest's run: written, one row withdrawn at the pinned parent and store, "
-          "the manifest's hash, only the 32.1.1 page and the OBS population losing exactly one, no row newly counted, "
-          "the derived basis stated (the gate, the pinned post time, the release date), the three scoped writers ok",
+    check("A9 the committed run audit is this manifest's run: written, one row withdrawn at the base whose store is the "
+          "pinned one, the manifest's hash, only the 32.1.1 page and the OBS population losing exactly one, no row newly "
+          "counted, the derived basis stated (the gate, both timestamps with their sources, the result), the three "
+          "scoped writers ok",
           run_audit.get("written") is True and run_audit.get("withdrawn_now") == 1
-          and run_audit.get("parent_commit") == PARENT and run_audit.get("store_sha256_before") == STORE_PIN
+          and run_audit.get("parent_commit") == RUN_PARENT and run_audit.get("store_sha256_before") == STORE_PIN
           and run_audit.get("manifest_sha256") == sha(MANIFEST.read_bytes())
           and deltas == {(OBS, "32.1.1", ""): 1} and population == {WIN: 0, OBS: 1}
           and run_audit.get("newly_counted_rows") == [] and run_audit.get("product_scope") == [WIN, OBS]
           and sorted(run_audit.get("exclusion_reasons") or []) == sorted(LEGACY | {REASON})
           and basis == [{"gate": "collect_obs_reports.release_date_gate", "pinned_created_at": POSTED,
-                         "release_date": RELEASED, "gate_result": REASON}]
+                         "pinned_created_at_source": {
+                             "file": "auxsays/scripts/audit/obs_report_dates.json", "file_sha256": REPORT_DATES_SHA,
+                             "ledger": "AUX-090", "field": "entries[].source.created_at", "kind": "github_issue",
+                             "read": "GET https://api.github.com/repos/obsproject/obs-studio/issues/13278 (created_at)",
+                             "url": URL_13278},
+                         "release_date": RELEASED,
+                         "release_date_source": {"file": "auxsays/updates/generated/" + RECORD,
+                                                 "field": "update_published_at",
+                                                 "official_source_url": RELEASE_32_1_1},
+                         "gate_result": REASON}]
           and [w["command"] for w in run_audit.get("writers") or []] == [" ".join(w) for w in wd.writers_for(wd.PRODUCTS)]
           and all(w["returncode"] == 0 for w in run_audit.get("writers") or []),
           json.dumps({k: run_audit.get(k) for k in ("written", "withdrawn_now", "per_patch", "entries")})[:500])
@@ -439,12 +453,23 @@ def run() -> int:  # noqa: PLR0915
         audit = json.loads(audit_path.read_text(encoding="utf-8")) if audit_path.exists() else {}
         per_page = {(p["product_id"], p["update_version"], p["target_build"]): (p["before"], p["after"])
                     for p in audit.get("per_patch") or []}
+        fbasis = [(e.get("derived_basis") or {}) for e in audit.get("entries") or []]
+        fdates = sha(dates_path.read_bytes())
         check("C9 fixture counts: the 32.1.1 page loses exactly the one row and Windows does not move; the audit states "
-              "the derived basis",
+              "the derived basis: the gate's result, the pinned post time with its source (the pinned file by name and "
+              "hash, the field, the source kind) and the release time with its source (the record file, "
+              "update_published_at)",
               audit.get("written") is True and audit.get("withdrawn_now") == 1 and per_page == PER_PAGE
               and len(set((audit.get("counted_population") or {}).get(WIN) or [None, "moved"])) == 1
-              and [((e.get("derived_basis") or {}).get("gate_result"), (e.get("derived_basis") or {}).get("pinned_created_at"))
-                   for e in audit.get("entries") or []] == [(REASON, POSTED)]
+              and [(b.get("gate_result"), b.get("pinned_created_at"), b.get("release_date")) for b in fbasis]
+              == [(REASON, POSTED, RELEASED)]
+              and [((b.get("pinned_created_at_source") or {}).get("file"),
+                    (b.get("pinned_created_at_source") or {}).get("file_sha256"),
+                    (b.get("pinned_created_at_source") or {}).get("field"),
+                    (b.get("pinned_created_at_source") or {}).get("kind")) for b in fbasis]
+              == [("report_dates.json", fdates, "entries[].source.created_at", "github_issue")]
+              and [((b.get("release_date_source") or {}).get("file"), (b.get("release_date_source") or {}).get("field"))
+                   for b in fbasis] == [(RECORD, "update_published_at")]
               and audit.get("parent_commit") == "e" * 40,
               json.dumps({k: audit.get(k) for k in ("withdrawn_now", "counted_population", "per_patch")})[:600])
 

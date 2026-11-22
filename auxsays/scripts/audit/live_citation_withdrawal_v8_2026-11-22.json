@@ -12,7 +12,21 @@
    "derived_basis": {
     "gate": "collect_obs_reports.release_date_gate",
     "pinned_created_at": "2026-04-01T12:05:03Z",
+    "pinned_created_at_source": {
+     "file": "auxsays/scripts/audit/obs_report_dates.json",
+     "file_sha256": "c39ed71349bc26c7f3c5ff65255362cf641d76d99ee1c77e03449e42ee4efccd",
+     "ledger": "AUX-090",
+     "field": "entries[].source.created_at",
+     "kind": "github_issue",
+     "read": "GET https://api.github.com/repos/obsproject/obs-studio/issues/13278 (created_at)",
+     "url": "https://github.com/obsproject/obs-studio/issues/13278"
+    },
     "release_date": "2026-04-02T19:54:40Z",
+    "release_date_source": {
+     "file": "auxsays/updates/generated/2026-04-02-obs-studio-32-1-1.md",
+     "field": "update_published_at",
+     "official_source_url": "https://github.com/obsproject/obs-studio/releases/tag/32.1.1"
+    },
     "gate_result": "before_release_date"
    },
    "action": "withdraw",
@@ -45,7 +59,7 @@
   "microsoft-windows-11",
   "obs-studio"
  ],
- "generated_at": "2026-11-21T21:50:37Z",
+ "generated_at": "2026-11-22T00:14:31Z",
  "exclusion_reasons": [
   "before_release_date",
   "duplicate_existing_evidence",
@@ -83,5 +97,5 @@
    ]
   }
  ],
- "parent_commit": "4a559ed9f59cc5bb37e1003a001bdf9ba6529ec2"
+ "parent_commit": "b3a8193a12140087f5dcc83f71f0ae55f334cbf8"
 }

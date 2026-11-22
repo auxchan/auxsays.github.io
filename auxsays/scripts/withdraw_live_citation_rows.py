@@ -129,6 +129,10 @@ ways and widens nothing above:
               entry names a kept row (duplicate_of).
   edit        the same two OBS lines as every other reason (counted, exclusion_reason); source_date_pass
               stays as stored.
+  audit       the run audit states the derived basis: both timestamps WITH their sources (the pinned post time,
+              from audit/obs_report_dates.json -- its path, sha256 and the entry's own record of the source read;
+              the release time, the record's update_published_at -- its file and its official source URL) and
+              the gate's result.
 
 No resolver, tier or re-admission lane can promote the reason back into view: each reads a positive list
 that does not contain it (context_resolution.RESOLVABLE_REASONS, tier2_evidence.PROMOTABLE_REJECTIONS,
@@ -537,6 +541,42 @@ def load_report_dates(path: Path | None = REPORT_DATES) -> dict[tuple[str, ...],
     return out
 
 
+def _repo_relative(path: Path) -> str:
+    """A path as the audit names it: relative to the repository root when it is inside it, else its name."""
+    resolved = Path(path).resolve()
+    try:
+        return resolved.relative_to(ROOT.parent.resolve()).as_posix()
+    except ValueError:
+        return resolved.name
+
+
+def load_report_date_sources(path: Path | None = REPORT_DATES) -> dict[tuple[str, ...], dict[str, str]]:
+    """Five-field identity -> where its pinned post time comes from, for the audit (A3 item 4): the pinned file
+    (repository path and sha256), the field, and the entry's own record of how the source was read (AUX-090's
+    `source.kind`, `source.read`, `source.url`). An absent file is an empty map."""
+    if path is None or not Path(path).exists():
+        return {}
+    raw = Path(path).read_bytes()
+    doc = json.loads(raw.decode("utf-8"))
+    where = {"file": _repo_relative(Path(path)), "file_sha256": sha(raw), "ledger": str(doc.get("ledger") or ""),
+             "field": "entries[].source.created_at"}
+    out: dict[tuple[str, ...], dict[str, str]] = {}
+    for entry in doc.get("entries") or []:
+        source = entry.get("source") or {}
+        if str(source.get("created_at") or "").strip():
+            out[_ident(entry)] = {**where, "kind": str(source.get("kind") or ""),
+                                  "read": str(source.get("read") or ""), "url": str(source.get("url") or "")}
+    return out
+
+
+def release_date_source(name: str, data: dict[str, Any], generated_dir: Path | None = None) -> dict[str, str]:
+    """Where the record's release time comes from, for the audit: the record file, the field, and the official
+    source the record names for this release."""
+    path = Path(generated_dir) / name if generated_dir is not None else GENERATED / name
+    return {"file": _repo_relative(path), "field": "update_published_at",
+            "official_source_url": str(data.get("official_patch_notes_source_url") or data.get("update_source_url") or "")}
+
+
 def derived_refusal(entry: dict[str, Any], row: dict[str, Any], records: dict,
                     report_dates: dict[tuple[str, ...], str]) -> str:
     """'' when the derived reason holds for this stored row TODAY, decided by the OBS acceptance gate itself
@@ -620,17 +660,23 @@ def _duplicate_refusal(row: dict[str, Any], kept: dict[str, Any], entry: dict[st
 
 def plan(text: str, entries: list[dict[str, Any]], records: dict,  # noqa: PLR0912, PLR0915
          baseline: dict | None = None, scope: tuple[str, ...] | None = None,
-         report_dates: dict[tuple[str, ...], str] | None = None) -> dict[str, Any]:
+         report_dates: dict[tuple[str, ...], str] | None = None,
+         date_sources: dict[tuple[str, ...], dict[str, str]] | None = None,
+         generated_dir: Path | None = None) -> dict[str, Any]:
     """Decide every entry and prove the resulting text, without writing. Raises Refusal.
     `scope` is the manifest's declared product scope (when omitted: the first scope holding every entry's
     product, so AUX-088's when every entry is a Windows or OBS row, and otherwise AUX-098's).
     `report_dates` is the pinned post time per identity (load_report_dates), read only for a derived entry;
-    when omitted and a derived entry is planned, the committed file is read."""
+    when omitted and a derived entry is planned, the committed file is read. `date_sources` is where each
+    pinned time comes from (load_report_date_sources) and `generated_dir` where the records are, both named in
+    a derived entry's audit basis."""
     if scope is None:
         products = {e.get("product_id") for e in entries}
         scope = next((s for s in SCOPES if products <= set(s)), EXTENDED_PRODUCTS)
     if report_dates is None and any(e.get("exclusion_reason") == DERIVED_REASON for e in entries):
         report_dates = load_report_dates(REPORT_DATES)
+    if date_sources is None and any(e.get("exclusion_reason") == DERIVED_REASON for e in entries):
+        date_sources = load_report_date_sources(REPORT_DATES)
     blocks = aux072.store_blocks(text)
     by_identity: dict[tuple[str, ...], list[int]] = {}
     for index, (_lo, _hi, row) in enumerate(blocks):
@@ -668,10 +714,14 @@ def plan(text: str, entries: list[dict[str, Any]], records: dict,  # noqa: PLR09
             if why:
                 refusals.append(why)
                 continue
+            record_name, record_data = records[patch_key(*ident[:3])][0]
+            # Both timestamps and where each comes from, and the gate's result (A3 item 4).
             item["derived_basis"] = {"gate": "collect_obs_reports.release_date_gate",
                                      "pinned_created_at": (report_dates or {}).get(tuple(ident), ""),
-                                     "release_date": str(records[patch_key(*ident[:3])][0][1]
-                                                         .get("update_published_at") or ""),
+                                     "pinned_created_at_source": dict((date_sources or {}).get(tuple(ident), {})),
+                                     "release_date": str(record_data.get("update_published_at") or ""),
+                                     "release_date_source": release_date_source(record_name, record_data,
+                                                                                generated_dir),
                                      "gate_result": DERIVED_REASON}
         if entry["role"] == "retain":
             if not _pin_holds(entry, "block_sha256_before", digest, baseline):
@@ -769,9 +819,11 @@ def run(store: Path, generated_dir: Path, manifest: Path, write: bool,
     doc = json.loads(Path(manifest).read_text(encoding="utf-8"))
     scope = manifest_scope(doc)
     entries = manifest_entries(doc)
-    dates = (load_report_dates(report_dates)
-             if any(e.get("exclusion_reason") == DERIVED_REASON for e in entries) else {})
-    result = plan(text, entries, patch_records(generated_dir), load_baseline(baseline), scope, dates)
+    derived = any(e.get("exclusion_reason") == DERIVED_REASON for e in entries)
+    dates = load_report_dates(report_dates) if derived else {}
+    sources = load_report_date_sources(report_dates) if derived else {}
+    result = plan(text, entries, patch_records(generated_dir), load_baseline(baseline), scope, dates, sources,
+                  generated_dir)
     new_text = result.pop("new_text")
     result.update({
         "product_scope": list(scope),
