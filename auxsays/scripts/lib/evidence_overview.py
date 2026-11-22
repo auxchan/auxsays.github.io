@@ -34,7 +34,9 @@ WHAT A ROW HOLDS (keyed like the verdict projection: product_id|update_version|t
                   contract: `official_notes_known_issue: declared` from the release notes, or
                   `official_known_issues_present: true` from Windows Release Health), otherwise "Newer
                   is not necessarily safer. ...". Then the newer release's own verdict exactly as the
-                  verdict projection prints it on its page, or that AUXSAYS has not established one. It
+                  verdict projection prints it on its page -- the verdict word with its scope, or with the
+                  volume-based precaution's label (verdict_projection.printed_qualifier) -- or that AUXSAYS has
+                  not established one. It
                   never assigns a verdict and never says that its changes match a report on this page.
                   Windows 11 gets no note (NEWER_NOTE_EXCLUDED_PRODUCTS).
 
@@ -47,13 +49,19 @@ WHAT A ROW HOLDS (keyed like the verdict projection: product_id|update_version|t
                   PROVEN NEWEST, i.e. the first stable entry of the product's record list with nothing
                   released at or after it ("AUXSAYS has no record of a newer release. If your current version
                   works, consider keeping it until one is."); otherwise NOT ESTABLISHED ("AUXSAYS has not
-                  established a better-supported alternative."). A supported reviewed reason on the page that
+                  established a better-supported alternative."). Each of the three variants that says no
+                  better-supported alternative is established (archived, excluded, not established) ends with
+                  KEEP_LINE ("If your current version works, consider keeping it.") unless the page's verdict
+                  box already gives that advice (keep_advice_printed: the volume-based precaution's "Next step"
+                  does), so it is never said twice. A supported reviewed reason on the page that
                   names `fixed_in` adds "The reviewed problem that applies <its scope> was fixed in <product>
                   <fixed_in>." -- a fact in the reviewed scope, never a recommendation of that version (the
                   newer-release note may name a different, newer release with a vendor warning). None of these
                   strings goes into the newer-release note's own fields. A page that prints WAIT and has no
                   next action is a publication error in QA (qa_patch_records), so the exit never depends
-                  silently on this git-ignored projection.
+                  silently on this git-ignored projection; so is one whose rendered way forward is not the
+                  variant a recompute from the source facts gives, or whose newer-release note names another
+                  release or date (next_action_mismatch).
 
 VENDOR FIX LINES are a mechanism switched OFF for every source. Up to MAX_FIX_LINES attributed "Fixed
 ..." bullets may be shown from a newer release's official notes ONLY where that source's publication
@@ -165,6 +173,15 @@ NEXT_LINES: dict[str, tuple[str, ...]] = {
     NEXT_NEWEST: (NEWEST_LINE,),
     NEXT_NOT_ESTABLISHED: (NO_BETTER_ALTERNATIVE,),
 }
+# GPT's execution review (G87 amendment A3, item 3): where no better-supported alternative is established, say so
+# and advise keeping a working installation -- unless the page's verdict box already gives that advice, which the
+# volume-based precaution's "Next step" does (patch_decision.VOLUME_BODY), so it is never said twice.
+KEEP_LINE = "If your current version works, consider keeping it."
+KEEP_ADVICE = "If your current version works, consider keeping it"
+KEEP_KINDS = frozenset({NEXT_ARCHIVED, NEXT_EXCLUDED, NEXT_NOT_ESTABLISHED})
+# The newer-release note's fields that name the release and what the reader is told about it: a rendered note
+# that differs from the recompute in any of them points the reader at another release, date or verdict.
+NEWER_IDENTITY_KEYS = ("identity", "published_at", "url", "notes_url", "known_issue", "caution", "verdict_line")
 FIXED_LINE = "The reviewed problem that applies {scope} was fixed in {product} {fixed_in}."
 _FIXED_RE = re.compile(r"^The reviewed problem that applies (?:if|when|for) .+ was fixed in .+\.$")
 
@@ -546,11 +563,15 @@ def caution_line(target: Mapping[str, Any]) -> str:
 
 def newer_row(record: Mapping[str, Any], target: Mapping[str, Any], verdict_rows: Mapping[str, Any],
               reports_here: int) -> dict[str, Any]:
-    verdict, scope = verdict_projection.rendered_verdict(target, verdict_rows)
-    if verdict == "INSUFFICIENT DATA":
+    # The newer page's verdict exactly as its own gate prints it: the verdict word and its qualifier
+    # (printed_qualifier: the scope, or the volume-based precaution's label), never the bare scope -- a
+    # volume WAIT has none, and "WAIT." alone would read as a confirmed, universal WAIT (G87 review 1).
+    printed = verdict_projection.printed_row(target, verdict_rows)
+    if printed is None:
         verdict_line = NO_VERDICT_YET
     else:
-        verdict_line = f"{VERDICT_PREFIX}{verdict_projection.phrase(verdict, scope)}."
+        verdict_line = (f"{VERDICT_PREFIX}"
+                        f"{verdict_projection.phrase(_text(printed.get('verdict')), verdict_projection.printed_qualifier(printed))}.")
     url = notes_url(target)
     lines = fix_lines(_text(target.get("official_patch_notes_body"))) if publication_permitted(url) else []
     return {
@@ -600,10 +621,17 @@ def fixed_lines(record: Mapping[str, Any], printed: Mapping[str, Any],
     return out
 
 
+def keep_advice_printed(printed: Mapping[str, Any] | None) -> bool:
+    """Does the page's verdict box already advise keeping a working installation? Read from the line the gate
+    prints (the row's body), so a page that says it is never told it twice."""
+    return isinstance(printed, Mapping) and KEEP_ADVICE in _text(printed.get("body"))
+
+
 def next_action(record: Mapping[str, Any], row: Mapping[str, Any], recs: list[Mapping[str, Any]],
                 printed: Mapping[str, Any], reasons_by_id: Mapping[str, Mapping[str, Any]]) -> dict[str, Any]:
     """The way forward for a page that prints WAIT: archived -> excluded product -> a newer-release note ->
-    proven newest -> not established, plus any reviewed fixed_in line (module docstring)."""
+    proven newest -> not established, plus any reviewed fixed_in line (module docstring). A variant that says
+    no better-supported alternative is established ends with KEEP_LINE unless the verdict box already says it."""
     pid = _text(record.get("product_id"))
     if _text(record.get("update_status")) == "archived":
         kind = NEXT_ARCHIVED
@@ -615,7 +643,10 @@ def next_action(record: Mapping[str, Any], row: Mapping[str, Any], recs: list[Ma
         kind = NEXT_NEWEST
     else:
         kind = NEXT_NOT_ESTABLISHED
-    return {"kind": kind, "lines": list(NEXT_LINES[kind]), "fixed": fixed_lines(record, printed, reasons_by_id)}
+    lines = list(NEXT_LINES[kind])
+    if kind in KEEP_KINDS and not keep_advice_printed(printed):
+        lines.append(KEEP_LINE)
+    return {"kind": kind, "lines": lines, "fixed": fixed_lines(record, printed, reasons_by_id)}
 
 
 def newer_printable(newer: Any) -> bool:
@@ -636,6 +667,41 @@ def has_next_action(row: Mapping[str, Any] | None) -> bool:
     return nxt.get("kind") in NEXT_LINES and any(_text(s) for s in nxt.get("lines") or [])
 
 
+def _variant(row: Mapping[str, Any] | None) -> tuple[Any, list[str], list[str]]:
+    nxt = row.get("next_action") if isinstance(row, Mapping) else None
+    nxt = nxt if isinstance(nxt, Mapping) else {}
+    return (nxt.get("kind"), [_text(s) for s in nxt.get("lines") or []], [_text(s) for s in nxt.get("fixed") or []])
+
+
+def _release(row: Mapping[str, Any] | None) -> dict[str, Any]:
+    newer = row.get("newer") if isinstance(row, Mapping) else None
+    newer = newer if isinstance(newer, Mapping) else {}
+    return {k: (newer.get(k) if k == "known_issue" else _text(newer.get(k))) for k in NEWER_IDENTITY_KEYS}
+
+
+def next_action_mismatch(rendered: Mapping[str, Any] | None, expected: Mapping[str, Any] | None) -> list[str]:
+    """Why the way forward a page RENDERS (its row in the deploy's overview projection) is not the one a recompute
+    from the source facts gives (`expected`: the row `project` writes over the same tree, from the archived flag,
+    NEWER_NOTE_EXCLUDED_PRODUCTS, the newer-release note, the first-stable proof and the reviewed fixed_in): another
+    variant -- its kind, its lines or its fixed_in lines -- or, where either side's way forward is a newer
+    release, a note naming another release, date, link, caution or verdict. [] when they agree."""
+    problems: list[str] = []
+    got_kind, got_lines, got_fixed = _variant(rendered)
+    want_kind, want_lines, want_fixed = _variant(expected)
+    if (got_kind, got_lines, got_fixed) != (want_kind, want_lines, want_fixed):
+        problems.append(f"renders the {got_kind or 'missing'} way forward {got_lines + got_fixed}, but the source "
+                        f"facts give {want_kind or 'none'} {want_lines + want_fixed}")
+    if NEXT_NEWER in (got_kind, want_kind):
+        got, want = _release(rendered), _release(expected)
+        differs = [k for k in NEWER_IDENTITY_KEYS if got[k] != want[k]]
+        if differs:
+            problems.append(f"its newer-release note names {got['identity'] or 'nothing'} "
+                            f"({got['published_at'] or 'no date'}), but the source facts give "
+                            f"{want['identity'] or 'nothing'} ({want['published_at'] or 'no date'}); "
+                            f"it differs in {differs}")
+    return problems
+
+
 _RECOMMENDING_RE = re.compile(r"\b(?:upgrade|update to|install|recommend|safer|available)\b", re.I)
 
 
@@ -646,7 +712,8 @@ def next_action_problems(nxt: Mapping[str, Any]) -> list[str]:
     kind = nxt.get("kind")
     if kind not in NEXT_LINES:
         return [f"the next action's kind is not one this module writes: {kind!r}"]
-    if list(nxt.get("lines") or []) != list(NEXT_LINES[kind]):
+    allowed = [list(NEXT_LINES[kind])] + ([list(NEXT_LINES[kind]) + [KEEP_LINE]] if kind in KEEP_KINDS else [])
+    if list(nxt.get("lines") or []) not in allowed:
         problems.append(f"the next action's lines are not the {kind} lines this module writes")
     for line in nxt.get("fixed") or []:
         if not _FIXED_RE.match(_text(line)):

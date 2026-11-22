@@ -1001,6 +1001,11 @@ def scan_evidence_overview(files: list[Path], publish_strict: bool = False
         projection prints as WAIT (any reason) whose rendered overview row carries no next action: no
         newer-release note and no archived, newest or not-established line. It is promoted through
         PUBLICATION_BLOCKING_CODES, so the deploy stops instead of publishing a WAIT with no way forward.
+      * evidence_overview_wait_next_action_mismatch (G87 amendment A3, item 2) -- such a page renders a next
+        action, but not the one a recompute from this tree's source facts gives (the archived flag, the
+        excluded products, the newer-release note, the first-stable proof, the reviewed fixed_in): another
+        variant, or a newer-release note naming another release, date, link, caution or verdict
+        (evidence_overview.next_action_mismatch). Publication-blocking too.
     WARNING:
       * evidence_overview_family_unlabelled -- a counted source type has no public family name, so the
         page calls it "other public reports" until it gets one.
@@ -1084,6 +1089,13 @@ def scan_evidence_overview(files: list[Path], publish_strict: bool = False
                 "the page prints WAIT but no next action (no newer-release note, and no archived, newest or "
                 "not-established line); every WAIT must tell the reader what to do next. Rebuild the evidence "
                 "overview projection from this tree before QA and Jekyll.")
+            continue
+        # A3 item 2: not merely present -- the variant the page renders, and the release and date a newer-release
+        # note names, must be the ones a recompute from this tree's source facts gives.
+        for problem in evidence_overview.next_action_mismatch(rendered_overview.get(key), want.get(key)):
+            add(warnings, key, "evidence_overview_wait_next_action_mismatch",
+                f"the page prints WAIT and {problem}; the reader would be pointed somewhere the source facts do "
+                "not support. Rebuild the evidence overview projection from this tree before QA and Jekyll.")
 
     guard_bucket = errors if publish_strict else warnings
     for data in fronts:
@@ -1679,8 +1691,10 @@ PUBLICATION_BLOCKING_CODES = frozenset({"record_names_conflicting_actions",
                                         "record_identity_invisible_character",
                                         # AUX-097: a feed card that hides its page's official verdict.
                                         "feed_official_verdict_unprinted",
-                                        # G87 (AUX-127): a page that prints WAIT with no next action.
-                                        "evidence_overview_wait_without_next_action"})
+                                        # G87 (AUX-127): a page that prints WAIT with no next action, or
+                                        # with a way forward the source facts do not give (A3 item 2).
+                                        "evidence_overview_wait_without_next_action",
+                                        "evidence_overview_wait_next_action_mismatch"})
 
 
 def promote_for_publication(

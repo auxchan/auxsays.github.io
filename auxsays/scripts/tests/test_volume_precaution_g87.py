@@ -17,9 +17,13 @@ projections the lanes maintain, every row publishable, and no higher-precedence 
   [W] an audited withdrawal that drops the page to 29 removes the verdict
   [F] the way forward on every page that prints WAIT (any reason): archived, excluded product, newer release (the
       G83 note, its vendor caution before the links), proven newest (a tie is not proof), not established, and the
-      reviewed fixed_in line; newer is never called safer; a TEST FIRST page gets none
-  [Q] QA: a page that prints WAIT without a next action is a publication error; an empty scope is printed only
-      for the volume-based WAIT, in Python and in the Liquid gate alike
+      reviewed fixed_in line; newer is never called safer; a TEST FIRST page gets none; where no better-supported
+      alternative is established the keep-it advice follows unless the verdict box already gives it (A3 item 3);
+      a newer-release note pointing at a volume-WAIT page prints its label, never a bare WAIT (review 1)
+  [Q] QA: a page that prints WAIT without a next action is a publication error, and so is one whose rendered way
+      forward is not the variant a recompute from the source facts gives or whose newer-release note names a
+      stale release (A3 item 2); an empty scope is printed only for the volume-based WAIT, in Python and in the
+      Liquid gate alike
   [S] the six decide() call sites over ONE fixture whose stored count is stale: the projection, QA's two, both
       record writers and decision_label all read the canonical counted rows and agree
   [A] a still-valid reviewed finding (OBS 33.0.1's investigated line) keeps its place under a volume WAIT, only
@@ -425,7 +429,8 @@ def way_forward_tree():
            rec("90.1.0", update_published_at="2026-02-01T00:00:00Z", official_notes_known_issue="declared",
                update_source_name="OBS Project", official_patch_notes_source_url="https://notes.test/90.1.0"),
            rec("88.0.0", update_published_at="2025-11-01T00:00:00Z"),
-           rec("87.0.0", update_published_at="2025-10-01T00:00:00Z")]
+           rec("87.0.0", update_published_at="2025-10-01T00:00:00Z"),
+           rec("86.0.0", update_status="archived", update_published_at="2025-09-01T00:00:00Z")]
     tie = [rec("5.0.0", pid="comfyui", update_published_at="2026-03-01T00:00:00Z"),
            rec("5.0.1", pid="comfyui", update_published_at="2026-03-01T00:00:00Z")]
     win = [rec("25H2", pid=WIN, target_build="26200.4000", target_kb="KB5000009", update_type="2026-03 D",
@@ -436,11 +441,13 @@ def way_forward_tree():
               ("obs-studio", "90.1.0", ""): rows(31, version="90.1.0"),
               ("obs-studio", "88.0.0", ""): rows(2, version="88.0.0"),
               ("obs-studio", "87.0.0", ""): rows(2, version="87.0.0"),
+              ("obs-studio", "86.0.0", ""): rows(2, version="86.0.0"),
               ("comfyui", "5.0.0", ""): rows(30, pid="comfyui", version="5.0.0"),
               ("microsoft-windows-11", "25H2", "26200.4000"): rows(30, pid=WIN, version="25H2")}
     entries = [entry("fx", "TEST FIRST", "corroborated_issue", "90.0.0", fixed_in="90.0.5"),
                entry("rw", "WAIT", "regression", "88.0.0", fixed_in="88.0.1"),
-               entry("tf87", "TEST FIRST", "corroborated_issue", "87.0.0")]
+               entry("tf87", "TEST FIRST", "corroborated_issue", "87.0.0"),
+               entry("rw86", "WAIT", "regression", "86.0.0")]
     verdict, _u = vp.project(records, groups, entries, [])
     overview = eo.project(records, groups, verdict["pages"], entries, {}, [])
     return records, groups, entries, verdict, overview
@@ -475,7 +482,7 @@ def check_way_forward() -> None:
           nxt["obs-studio|90.1.0|"] == {"kind": "newest", "lines": [eo.NEWEST_LINE], "fixed": []})
     check("F5 a tie on the release time is not proof: two same-time releases give 'not established', never newest",
           nxt["comfyui|5.0.0|"]["kind"] == "not_established" and nxt["comfyui|5.0.0|"]["lines"] == [eo.NO_BETTER_ALTERNATIVE]
-          and not eo.proven_newest(records[5], eo.product_payload(records[5:7])))
+          and not eo.proven_newest(records[6], eo.product_payload(records[6:8])))
     check("F6 keyed on the printed verdict WAIT of ANY reason: a reviewed scoped WAIT below the volume minimum gets "
           "its way forward and its fixed_in line; a TEST FIRST page gets none",
           vrows["obs-studio|88.0.0|"]["rule"] == "R3" and nxt["obs-studio|88.0.0|"]["kind"] == "newer_release"
@@ -502,6 +509,34 @@ def check_way_forward() -> None:
           bool(eo.next_action_problems(forged)) and bool(eo.next_action_problems({"kind": "upgrade", "lines": []}))
           and bool(eo.next_action_problems({"kind": "newest", "lines": ["Install the newest one."], "fixed": []}))
           and not eo.next_action_problems((raw.get("obs-studio|90.0.0|") or {}).get("next_action") or {"kind": "none"}))
+    volume_lines = [nxt[k]["lines"] for k in ("obs-studio|89.0.0|", "microsoft-windows-11|25H2|26200.4000",
+                                              "comfyui|5.0.0|")]
+    check("F9 where no better-supported alternative is established the way forward ends with 'If your current version "
+          "works, consider keeping it.' -- on a reviewed WAIT (archived 86.0.0); never on a volume WAIT, whose verdict "
+          "box already says it; the guard accepts it only on those three variants",
+          vrows["obs-studio|86.0.0|"]["rule"] == "R3"
+          and nxt["obs-studio|86.0.0|"] == {"kind": "archived", "lines": [eo.ARCHIVED_LINE, eo.NO_BETTER_ALTERNATIVE,
+                                                                         eo.KEEP_LINE], "fixed": []}
+          and eo.KEEP_LINE == "If your current version works, consider keeping it."
+          and all(lines and eo.KEEP_LINE not in lines for lines in volume_lines)
+          and all(eo.KEEP_ADVICE in vrows[k]["body"] for k in ("obs-studio|89.0.0|", "comfyui|5.0.0|"))
+          and not eo.next_action_problems(raw.get("obs-studio|86.0.0|", {}).get("next_action") or {"kind": "none"})
+          and bool(eo.next_action_problems({"kind": "newest", "lines": [eo.NEWEST_LINE, eo.KEEP_LINE], "fixed": []})),
+          json.dumps({"86": nxt.get("obs-studio|86.0.0|"), "volume": volume_lines})[:400])
+    scoped_note = eo.newer_row(records[3], records[4], verdict["pages"], 0) if len(records) > 4 else {}
+    site = {"data": {"verdict_projection": verdict, "evidence_overview_projection": overview}}
+    item = dict(records[1], url=records[1].get("permalink"))
+    note_html = render_includes({"n": {"template": "{% include patch-evidence-overview.html part='newer' record=item %}",
+                                       "item": item, "summary": ""}}, site).get("n", "")
+    check("F10 a newer-release note pointing at a volume-WAIT page prints its verdict as that page's gate does, with the "
+          "label ('AUXSAYS verdict for this release: WAIT Volume-based precaution.'), and the shipped include prints it; "
+          "a note pointing at a scoped page keeps the scope",
+          vrows["obs-studio|90.1.0|"]["reason_code"] == "high_report_volume"
+          and p90["newer"]["verdict_line"] == "AUXSAYS verdict for this release: WAIT Volume-based precaution."
+          and pages["obs-studio|88.0.0|"]["newer"]["verdict_line"] == p90["newer"]["verdict_line"]
+          and "AUXSAYS verdict for this release: WAIT Volume-based precaution." in text_of(note_html)
+          and scoped_note.get("verdict_line") == "AUXSAYS verdict for this release: TEST FIRST if you use the test setup.",
+          f"{p90['newer'].get('verdict_line')!r} {scoped_note.get('verdict_line')!r} {text_of(note_html)[:200]!r}")
 
 
 # ------------------------------------------------------------------------------------------------ [Q]
@@ -511,26 +546,34 @@ def write_record(path: Path, data: dict) -> None:
 
 
 def qa_tree(tmp: Path, record: dict, population: list[dict], *, verdict_rows=None, overview_rows=None,
-            write_overview: bool = True):
+            write_overview: bool = True, others=()):
+    """A deploy tree QA reads: the record (and `others`, (record, population) pairs), the evidence store, empty fact
+    files, and the two projections as the deploy builds them -- `verdict_rows` / `overview_rows` forge a page row."""
     tmp.mkdir(parents=True, exist_ok=True)
     gen = tmp / "gen"
     gen.mkdir(exist_ok=True)
-    write_record(gen / "r.md", record)
+    records = [record] + [r for r, _p in others]
+    files = []
+    for i, r in enumerate(records):
+        write_record(gen / f"r{i}.md", r)
+        files.append(gen / f"r{i}.md")
     ev = tmp / "ev.yml"
-    ev.write_text(yaml.safe_dump({"schema_version": 1, "evidence": population}), encoding="utf-8")
+    store = list(population) + [row for _r, pop in others for row in pop]
+    ev.write_text(yaml.safe_dump({"schema_version": 1, "evidence": store}), encoding="utf-8")
     (tmp / "reasons.yml").write_text(yaml.safe_dump({"schema_version": 1, "entries": []}), encoding="utf-8")
     (tmp / "life.yml").write_text(yaml.safe_dump({"schema_version": 1, "entries": []}), encoding="utf-8")
     groups = {vr.record_identity(record): population}
-    verdict = vp.project([record], groups, [], [])[0]
+    groups.update({vr.record_identity(r): pop for r, pop in others})
+    verdict = vp.project(records, groups, [], [])[0]
     if verdict_rows is not None:
         verdict = dict(verdict, pages=verdict_rows(verdict["pages"]))
     (tmp / "vp.yml").write_text(vp.render(verdict), encoding="utf-8")
-    overview = eo.project([record], groups, vp.project([record], groups, [], [])[0]["pages"], [], {}, [])
+    overview = eo.project(records, groups, vp.project(records, groups, [], [])[0]["pages"], [], {}, [])
     if overview_rows is not None:
         overview = dict(overview, pages=overview_rows(overview["pages"]))
     if write_overview:
         (tmp / "eo.yml").write_text(eo.render(overview), encoding="utf-8")
-    return [gen / "r.md"], tmp
+    return files, tmp
 
 
 QA_PATHS = ("REASONS_PATH", "LIFECYCLE_PATH", "EVIDENCE_PATH", "PROJECTION_PATH", "EVIDENCE_OVERVIEW_PATH",
@@ -593,6 +636,42 @@ def check_qa(tmp: Path) -> None:
     want = {name: (("WAIT", LABEL) if ok else ("INSUFFICIENT DATA", "")) for name, (_row, ok) in shapes.items()}
     check("Q3 the Liquid gate agrees: it prints the volume row with its label in the scope slot and refuses every "
           "other empty-scope row", got == want, str(got))
+    mismatch = "evidence_overview_wait_next_action_mismatch"
+    alone_key = "obs-studio|77.0.0|"
+
+    def wrong_variant(pages):
+        out = copy.deepcopy(pages)
+        out[alone_key]["next_action"] = {"kind": "not_established",
+                                         "lines": [eo.NO_BETTER_ALTERNATIVE], "fixed": []}
+        return out
+    truth = (eo.project([record], {vr.record_identity(record): population},
+                        vp.project([record], {vr.record_identity(record): population}, [], [])[0]["pages"], [], {}, [])
+             ["pages"].get(alone_key) or {}).get("next_action") or {}
+    wv_e, wv_w = qa_run(qa_tree(tmp / "q-variant", record, population, overview_rows=wrong_variant),
+                        "scan_evidence_overview", publish_strict=True)
+    check("Q4 QA recomputes the way forward from the source facts: a lone release is proven newest; a deploy rendering "
+          "another variant (not established) still HAS a next action, yet is evidence_overview_wait_next_action_mismatch, "
+          "publication-blocking; the true variant is clean",
+          truth.get("kind") == "newest" and mismatch not in ok_e | ok_w and mismatch in wv_w
+          and code not in wv_w and mismatch in qa.PUBLICATION_BLOCKING_CODES, f"{truth} {wv_w} {ok_w}")
+    older = rec("76.0.0", update_report_count=30, update_published_at="2026-09-01T00:00:00Z")
+    newer = rec("76.1.0", update_report_count=1, update_published_at="2026-10-01T00:00:00Z")
+    older_rows, newer_rows = rows(30, version="76.0.0"), rows(1, version="76.1.0")
+    older_key = "obs-studio|76.0.0|"
+
+    def stale_release(pages):
+        out = copy.deepcopy(pages)
+        out[older_key]["newer"] = dict(out[older_key]["newer"], identity="OBS Studio 76.0.5",
+                                       published_at="2026-09-15T00:00:00Z")
+        return out
+    pair = {"others": [(newer, newer_rows)]}
+    good_e, good_w = qa_run(qa_tree(tmp / "q-pair", older, older_rows, **pair), "scan_evidence_overview",
+                            publish_strict=True)
+    st_e, st_w = qa_run(qa_tree(tmp / "q-stale", older, older_rows, overview_rows=stale_release, **pair),
+                        "scan_evidence_overview", publish_strict=True)
+    check("Q5 a newer-release note naming a stale release and date (76.0.5, Sep 15) where the source facts name 76.1.0 "
+          "is evidence_overview_wait_next_action_mismatch, though the page still prints a note; the true note is clean",
+          mismatch not in good_e | good_w and mismatch in st_w and code not in st_w, f"{good_w} {st_w}")
 
 
 # ------------------------------------------------------------------------------------------------ [S]

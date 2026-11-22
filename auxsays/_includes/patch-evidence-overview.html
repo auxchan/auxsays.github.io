@@ -17,10 +17,13 @@
                            A row without a caution prints no note at all.
                            'next' -- the way forward on a page whose printed verdict is WAIT (G87,
                            AUX-127): the projection's way-forward lines (archived, no better-supported
-                           alternative established, or no newer release on record), then any reviewed
-                           fixed_in line. Where a newer-release note is the way forward it has no lines
-                           of its own, so only a fixed_in line can print here. QA refuses a deploy whose
-                           WAIT page prints no next action (evidence_overview.has_next_action).
+                           alternative established, or no newer release on record, and the advice to
+                           keep a working installation where the verdict box does not already give it),
+                           then any reviewed fixed_in line. Where a newer-release note is the way forward
+                           it has no lines of its own, so only a fixed_in line can print here. QA refuses
+                           a deploy whose WAIT page prints no next action, or one other than a recompute
+                           from the source facts gives (evidence_overview.has_next_action and
+                           next_action_mismatch).
 
   FAIL CLOSED. No projection (a local render, a fresh checkout) or no row for this page: nothing is
   printed. The page keeps its verdict, its count and every source link; it only loses the overview.
