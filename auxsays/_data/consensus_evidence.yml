@@ -101981,3 +101981,85 @@ evidence:
   title_dedup_sha256: 9383ab0d5fb3c28e2a22b055ac31f74351b5a079011043f1f89cd9db9f4432bf
   issue_bucket: crash or stability problems
   facts_rule_version: v1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5779882-time-limitation-in-a-teams-meeting
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5779882/time-limitation-in-a-teams-meeting
+  parent_title: Time limitation in a Teams meeting - Microsoft Q&A
+  report_title: Time limitation in a Teams meeting - Microsoft Q&A
+  report_text_excerpt: Time limitation in a Teams meeting Set up a Teams meeting via outlook and it timed out after 60 minutes. How do I host a meeting with unlimited time? I do have Office 365 and am current on my annual fee if that makes a difference.
+  captured_at: '2026-11-22T07:35:12Z'
+  source_date: '2026-02-18'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 559260b98675a0aa2224051b2f79dcbe49d39a1aa54c7cc3d1468e9058f04e7e
+  title_dedup_sha256: 968a287405fb24247b029fb6a2a1b7bc5d85116583caa5e59124618ed9fe6ede
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5779882-time-limitation-in-a-teams-meeting-ans
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5779882/time-limitation-in-a-teams-meeting#answer-12601068
+  parent_title: Time limitation in a Teams meeting - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: Dear @Jennifer , Thank you for reaching out to Microsoft Q&A forum. I understand you're facing an issue with the 60-minute timeout during your Microsoft Teams meeting. As a forum moderator, I genuinely wish I could directly access your account or delve into the backend systems...
+  captured_at: '2026-11-22T07:35:12Z'
+  source_date: '2026-02-18T16:31:27.12+00:00'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: install/update failure
+  workflow_area: update
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: c7547be94ae40164807dc3fb81b83e67fd0a42f92644b56ee7dda95bc8e404de
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: install/update failure
+  facts_rule_version: v1
+- id: obs-studio-32-0-3-github-issue-14238
+  product_id: obs-studio
+  update_version: 32.0.3
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14238
+  parent_title: '[Linux/Flatpak 33.0.2] OBS hangs on quit — orphaned CEF browser subprocesses, requires force kill'
+  report_title: '[Linux/Flatpak 33.0.2] OBS hangs on quit — orphaned CEF browser subprocesses, requires force kill'
+  report_text_excerpt: 'Linux Flatpak), #12944 (browser sources broken on Flatpak after shutdown-logic changes in 32.0.3), #14085 (`libcef.so` crashes on Fedora-derived distros). PR #14219 already fixed a browser-source memory allocation crash on Linux in 33.0.2, but this is a hang rather than a crash.'
+  captured_at: '2026-11-22T08:18:26Z'
+  source_date: '2026-11-21'
+  patch_version_matched: true
+  matched_version: 32.0.3
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: freeze / hang
+  workflow_area: application stability
+  platform: linux
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  excerpt_norm_sha256: c2e47755f083d5bcd6125d7bf4f9db41102f2240d81b16db6c964d93881a165e
+  title_dedup_sha256: 09c5f4907b41e551469321330728eaee7912835ebf996a5364170531e4877e0a
+  issue_bucket: crash or stability problems
+  facts_rule_version: v1
