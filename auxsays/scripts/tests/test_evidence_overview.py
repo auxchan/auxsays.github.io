@@ -242,9 +242,9 @@ def js_states(products: dict) -> dict | None:
 
 
 def payload_tuple(r: dict) -> list:
-    """My Patch Stack's 13-slot record tuple; installedState reads slots 0-4 and 11."""
+    """My Patch Stack's 14-slot record tuple; installedState reads slots 0-4, 11 and 13 (the release track)."""
     return [eo._ver(r), eo._build(r), eo._date(r), str(r.get("permalink") or ""), 1 if eo._beta(r) else 0,
-            "", 0, 0, "", 0, 0, eo._platform(r), ""]
+            "", 0, 0, "", 0, 0, eo._platform(r), "", eo._track(r)]
 
 
 # =========================================================================== run
@@ -470,7 +470,7 @@ def run() -> int:  # noqa: PLR0915
     py = {}
     for pid, recs in by_pid.items():
         payload = eo.product_payload(recs)
-        products[pid] = {"recs": [payload_tuple(r) for r in payload], "split": pid in split}
+        products[pid] = {"id": pid, "recs": [payload_tuple(r) for r in payload], "split": pid in split}
         for r in payload:
             t = eo.update_available(r, payload, split=pid in split)
             py[str(r.get("permalink") or "")] = str(t.get("permalink")) if t else None

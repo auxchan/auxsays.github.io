@@ -69,6 +69,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-049 | Resolved | Published claims | High | A record built from one platform's release notes did not say so, and nothing kept consensus from mixing platforms |
 | AUX-125 | Resolved | Published claims | High | A known-issue warning OBS added to its 33.0.2 release notes after publication was stored but never shown |
 | AUX-050 | Resolved | Published claims | High | My Patch Stack recommended another platform's older release as an update |
+| AUX-130 | Resolved | Published claims | Medium | Acrobat Classic pages named a Continuous release as their newer release |
 | AUX-051 | Resolved | Published claims | Medium | Four records made just before AUX-050 could never be labelled, so their readers were stuck on UNKNOWN |
 | AUX-052 | Resolved | Evidence coverage | Low | Installer files written "7.1.0" did not count for release "7.1", so its notes were never labelled |
 | AUX-053 | Resolved | Evidence integrity | High | Four writers each derived a record's maturity, and none of them could keep a live state |
@@ -5060,6 +5061,56 @@ unavailable"): a listed file is taken as published.
 an update or told CURRENT while one is later or higher, the version comparator ever produces a
 confident state on its own, `windows_macos` is set without same-version installers for both
 platforms, or an unflagged product's comparison changes.
+
+---
+
+### AUX-130 — Acrobat Classic pages named a Continuous release as their newer release
+
+- **Status** Resolved · **Area** Published claims · **Severity** Medium
+- **First seen** 2026-11-21 (G89 design, section 10 item 1, confirmed by its critic) · **Resolved** 2026-11-21 (G93)
+
+**Symptom** Adobe services Acrobat Pro and Acrobat Reader on two tracks at once, Continuous and Classic.
+Every Classic page with a newer-release note named a Continuous release: all 62 Classic records (31 Pro,
+31 Reader). Acrobat Pro 20.005.30838 pointed at 26.003.22110. A Continuous release is not an update to a
+Classic installation.
+
+**Cause** Both selectors ordered a product's releases by date only. `update_available` (the G83 note in
+`lib/evidence_overview`) and `installedState` (My Patch Stack in `assets/js/auxsays.js`) never read
+`target_track`. That field is stored on all 398 Acrobat records.
+
+**Fix** The rule applies to `adobe-acrobat-pro` and `adobe-acrobat-reader` only. Both languages hold
+the same `TRACK_SCOPED_PRODUCTS` list, and a test pins the two copies equal.
+- A newer release must carry the same non-empty `target_track` as the reader's release.
+- A track missing on either side names nothing.
+- When no newer release is on the reader's track, My Patch Stack says NEWER TRACKED VERSION EXISTS,
+  never CURRENT. A track-scoped target is labelled "Latest on your line" only when a release is dated
+  after it.
+- The payload tuple grows from 13 to 14 slots: rec[13] is the record's track.
+- The same-day tie rule is unchanged, and so is every other product. `RULE_VERSION` is now
+  evidence-overview-v2.
+
+**Measured** Over this tree:
+- Patch-page notes: 62 Classic notes change. 60 now name Classic 20.005.30838, and the two 20.005.30838
+  pages name none.
+- 0 of the 336 Continuous notes change.
+- The 318 non-Acrobat projection rows are byte-identical (sha256 `bdc7c662`).
+- My Patch Stack: the 24-record window holds no Classic record today, so no state changes. The 285
+  non-Acrobat states are identical (sha256 `7500df50`), and the payload with rec[13] removed equals the
+  old payload.
+- No verdict, evidence, count or record changes.
+
+**Verification** `test_acrobat_track_scope.py` (27 checks, blocking) runs one fixture set through both
+implementations. test_evidence_overview's N11 parity now carries the track. Nine mutants were each
+killed: one per selector with the track check removed (N11 also kills both), and one each for the two
+fail-closed clauses, the payload slot, the JS list, the early return and both label conditions.
+
+**Known limits** A Classic reader in My Patch Stack is older than the window, so the card still lists
+the newer Continuous releases under "Newer tracked releases". It claims no update. The platform-split
+branch never reaches the track rule, and a check pins that no track-scoped product is split.
+
+**Reopen only if** an Acrobat page or card names a newer release on another track or with no track, a
+Classic reader is told CURRENT or UPDATE AVAILABLE while only Continuous releases are newer, or a
+product outside the list changes its newer release.
 
 ---
 

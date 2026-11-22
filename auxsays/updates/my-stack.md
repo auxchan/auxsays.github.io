@@ -115,12 +115,13 @@ permalink: /updates/my-stack/
       label, so the version string is it -- the same textual signal lib/patch_decision.version_is_beta
       uses. It exists so a stable reader is never told a newer BETA is an update.
 
-      Tuple shape, fixed at 13 and pinned exactly by the suite:
+      Tuple shape, fixed at 14 and pinned exactly by the suite:
         [0] version  [1] build  [2] date  [3] url  [4] beta
         [5] verdict  [6] rank   [7] reports  [8] evidence label
         [9] official active issue count      [10] official notes captured (0/1)
         [11] whose release notes the record holds (see below)
         [12] the verdict's scope, printed with [5] (see below)
+        [13] the release track the record names (`target_track`: Acrobat's Continuous or Classic), or ''
       0-4 drive the version picker; 5-10 and 12 exist so an upgrade path can show what AUXSAYS already
       says about each release it lists, WITHOUT a second verdict computation on the client.
     {%- endcomment -%}
@@ -220,8 +221,11 @@ permalink: /updates/my-stack/
               or '' for platform-neutral notes. The update comparison uses it so a release
               documented for another platform is never offered as an update.
               rec[12]: the verdict's scope ('if you use macOS 27.2'), or '' -- printed beside
-              rec[5] in every upgrade-path step (review 1, D1). {%- endcomment -%}
-            [{{ rec.update_version | default: '' | jsonify }},{{ rec.target_build | default: '' | jsonify }},{{ rec.update_published_at | date: "%Y-%m-%d" | jsonify }},{{ rec.url | jsonify }},{{ rec_is_beta }},{{ rec_verdict | jsonify }},{{ rec_rank }},{{ rec_n }},{{ rec_ev | jsonify }},{{ rec.official_active_issue_count | default: 0 | plus: 0 }},{{ rec_notes }},{{ rec.official_notes_platform | default: '' | jsonify }},{{ rec_scope | jsonify }}]
+              rec[5] in every upgrade-path step (review 1, D1).
+              rec[13]: the record's release track. On Acrobat, whose Continuous and Classic tracks
+              are serviced side by side, the update comparison names a newer release only on the
+              reader's own track (G93). {%- endcomment -%}
+            [{{ rec.update_version | default: '' | jsonify }},{{ rec.target_build | default: '' | jsonify }},{{ rec.update_published_at | date: "%Y-%m-%d" | jsonify }},{{ rec.url | jsonify }},{{ rec_is_beta }},{{ rec_verdict | jsonify }},{{ rec_rank }},{{ rec_n }},{{ rec_ev | jsonify }},{{ rec.official_active_issue_count | default: 0 | plus: 0 }},{{ rec_notes }},{{ rec.official_notes_platform | default: '' | jsonify }},{{ rec_scope | jsonify }},{{ rec.target_track | default: '' | jsonify }}]
           {%- endif -%}
         {%- endif -%}
       {%- endfor -%}
