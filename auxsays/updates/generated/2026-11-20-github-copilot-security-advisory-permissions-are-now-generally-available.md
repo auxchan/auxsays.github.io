@@ -18,8 +18,8 @@ update_version: Security advisory permissions are now generally available
 update_logo_text: GIT
 update_published_at: '2026-11-20T21:49:29Z'
 update_last_checked: '2026-11-20T23:13:30Z'
-source_last_checked: '2026-11-22T09:44:36Z'
-official_body_last_checked: '2026-11-22T09:44:36Z'
+source_last_checked: '2026-11-22T22:32:43Z'
+official_body_last_checked: '2026-11-22T22:32:43Z'
 record_last_updated: '2026-11-20T23:13:30Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -101,6 +101,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-11-22T09:44:36Z'
+  url: https://github.blog/changelog/2026-11-20-security-advisory-permissions-are-now-generally-available
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-22T22:32:43Z'
   url: https://github.blog/changelog/2026-11-20-security-advisory-permissions-are-now-generally-available
   status: captured-from-rss-feed
   body_captured: true
