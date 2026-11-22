@@ -782,13 +782,17 @@ auxsays/scripts/tests/test_writer_queue_concurrency.py = 72
 # and this repo's Windows dev setup both provide; it reports and fails if bash is absent
 # rather than passing vacuously.
 auxsays/scripts/tests/test_writer_queue_reaper_behaviour.py = 25
-# G91: a writer lane verifies its Pages DEPLOYMENT, not just the dispatch, and a writeback that lost
-# its race with another push to main is re-run once instead of losing the cycle (run 44878227542).
-# Drives the real writeback against a throwaway bare origin and a scripted run list, runs it as the
-# bare script to read the outputs the workflows consume, parses every writer's argument list with the
-# writeback's own argparse parser, and executes both recovery steps' shell against a fake gh,
-# including a fake that reports a waiting writer run only to a query that asks about `pending`.
-auxsays/scripts/tests/test_deploy_verification_and_lost_race.py = 85
+# G91: every writer lane that pushes verifies its Pages DEPLOYMENT, not just the dispatch (a run
+# superseded in the `pages` group is not a failed build), and a routine cycle that ran but never
+# reached main is re-run once by the writer-queue reaper instead of being lost (run 44878227542),
+# with ONE tracking issue when it stays lost or the Pages build on main fails. Drives the real
+# writeback against a throwaway bare origin and a scripted run list (including a later push whose
+# build supersedes ours), runs it as the bare script, parses every writer's argument list with the
+# writeback's own parser, evaluates the `Cycle reached main` conditions and run names per context,
+# executes chain-ingest's and the reaper's eviction shell against a fake gh, and runs
+# writer_cycle_recovery.py both as functions and as a bare script against a fake gh serving raw API
+# JSON.
+auxsays/scripts/tests/test_deploy_verification_and_lost_race.py = 151
 # AUX-120: not monitored is not too few reports. 847 zero-report patch pages of products with no
 # community collection said "Too few reports for a verdict yet." and "Community signal: Not enough
 # reports". Real Liquid renders of the patch page over every coverage and community state the

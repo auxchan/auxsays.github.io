@@ -1,33 +1,39 @@
 #!/usr/bin/env python3
-"""G91: a deployment is verified after material writeback, and a lost writeback race is re-run.
+"""G91: a deployment is verified after material writeback, and a cycle that did not reach main is
+re-run once -- with what stays broken made visible.
 
-TWO GAPS, BOTH IN THE STEP AFTER THE EVIDENCE IS ALREADY CORRECT
------------------------------------------------------------------
+THE GAPS, ALL IN THE STEP AFTER THE EVIDENCE IS ALREADY CORRECT
+----------------------------------------------------------------
 A. Every writer lane dispatched Pages after a material push and stopped there. `gh workflow run`
-   returning 0 proves only that the DISPATCH was accepted; no lane ever looked at the build, so a
-   Pages build that failed or never started left a correct commit undeployed with every lane green.
-   The writeback already had an opt-in poll (`--pages-confirm-build`); no workflow passed it.
+   returning 0 proves only that the DISPATCH was accepted; no lane looked at the build. The writeback
+   already had an opt-in poll (`--pages-confirm-build`); no workflow passed it, and the PowerPoint
+   graph's Python binding could not. A run cancelled because a newer build superseded it in the
+   one-deep `pages` concurrency group is NOT a failed build: the newer build deploys the content.
 B. Run 44878227542 lost its whole collection cycle: a PR touching the evidence store merged while it
    ran, the writeback correctly refused to merge the two (`rebase_conflict`), pushed nothing and
-   exited 1 -- and nothing re-ran the cycle. The writer-queue reaper repairs runs EVICTED from the
-   queue, not runs that failed, so the next attempt was the next scheduled cycle, ~12 hours later.
+   exited 1 -- and nothing re-ran it. The writer-queue reaper repaired runs EVICTED from the queue
+   (zero jobs), not runs that ran and lost their cycle, and a recovery that was itself evicted came
+   back with no record that it was a recovery. Nothing durable said when a cycle stayed lost.
 
 WHAT IS PINNED, AND HOW
 -----------------------
 [A] the writeback's build confirmation, against a throwaway bare origin and a scripted run list:
-    confirmed / failed / never appeared / never finished / unreadable, the outputs each sets, and that
-    no outcome re-pushes or reverts the data commit. Also the no-change --deploy-recovery path.
-[B] the `lost_race` classification: true for exactly the three race outcomes, false for a pushed run
-    whatever its Pages build did, false for refused pushes while main did not move, false for a
-    residual-file refusal that merely happened after main moved.
-[C] the same contract through the BARE SCRIPT, the way every workflow runs it, reading the real
-    $GITHUB_OUTPUT / $GITHUB_STEP_SUMMARY / annotations it writes.
+    confirmed / failed / never appeared / never finished / unreadable / superseded (cancelled, then
+    a same-SHA or descendant run) / a descendant that fails / an ancestor that must not count /
+    a pre-dispatch snapshot that could not be read. No outcome re-pushes or reverts the data commit.
+[B] the `lost_race` diagnostic, and that a run whose checkout went stale never pushes a stale tree.
+[C] the same contract through the BARE SCRIPT, the way every workflow runs it.
 [D] the workflow wiring, parsed: each writer's real argument list is fed to the writeback's own
-    argparse parser (never matched as text); the confirm bound fits each job's budget; the outputs
-    chain-ingest reads are the ones the writeback writes; a recovery run is still routine.
-[E] the two recovery steps' shell, EXECUTED under bash against a fake `gh`, in every state that
-    matters -- including a discriminating fake that reports a waiting writer run only to a query that
-    asks about the `pending` state.
+    argparse parser; the confirm bound fits each job's budget; the `Cycle reached main` steps and
+    the run names are EVALUATED per context and cross-checked against the reaper module that reads
+    them; the reaper's new step reads the eviction step's outputs and has the permissions it needs.
+[E] shell EXECUTED under bash against a fake `gh`: chain-ingest dispatches ingestion only; the
+    reaper's eviction step passes `recovery_of` on and reports whether the lane was free.
+[F] writer_cycle_recovery's decisions over scripted run histories: reached / lost / loop guard /
+    pause after a lost recovery / time limit vs operator cancel / one entrant per tick / Pages.
+[G] the same module as a BARE SCRIPT against a fake `gh` serving raw API JSON: the dispatch it
+    issues, and the ONE tracking issue it opens, updates, closes or leaves alone.
+[H] the PowerPoint graph's writeback binding confirms its build and writes its outputs.
 
 Deterministic, offline, writes nothing outside its temporary directories.
 Run with: PYTHONDONTWRITEBYTECODE=1 python auxsays/scripts/tests/test_deploy_verification_and_lost_race.py
@@ -43,6 +49,7 @@ import stat
 import subprocess
 import sys
 import tempfile
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 _REPO = Path(__file__).resolve().parents[3]
@@ -51,11 +58,14 @@ sys.path.insert(0, str(_REPO / "auxsays" / "scripts"))
 import yaml  # noqa: E402
 
 from lib import automation_writeback as aw  # noqa: E402
+import writer_cycle_recovery as wcr  # noqa: E402
 
 WORKFLOWS = _REPO / ".github" / "workflows"
 SCRIPT = _REPO / "auxsays" / "scripts" / "lib" / "automation_writeback.py"
+RECOVERY_SCRIPT = _REPO / "auxsays" / "scripts" / "writer_cycle_recovery.py"
 EVIDENCE_WF = "obs-evidence-collection.yml"
 INGEST_WF = "patch-ingest.yml"
+REAPER_WF = "writer-queue-reaper.yml"
 WRITER_GROUP = "auxsays-main-writeback"
 NEWLINE = "\n"
 
@@ -220,6 +230,84 @@ class StepSummary:
         return self.path.read_text(encoding="utf-8") if self.path.exists() else ""
 
 
+
+# A scripted `gh run list`: call n prints responses[n-1] (the last one repeats) and "FAIL" exits 1.
+# Placeholders: "SELF" -> origin/main at the time of the call; "PUSHED" -> the revision recorded by
+# the advancing dispatch stand-in below before it moved main on (origin/main when none recorded);
+# "ROOT" -> the first commit, an ANCESTOR of everything the writeback pushes.
+_SCRIPTED_STATUS = r"""
+import json, os, subprocess, sys
+counter, origin, responses_f, pushed_f = sys.argv[1:5]
+def rev(*a):
+    return subprocess.run(["git", "-C", origin, *a], capture_output=True, text=True).stdout.strip()
+main = rev("rev-parse", "main")
+pushed = open(pushed_f).read().strip() if os.path.exists(pushed_f) else main
+root = rev("rev-list", "--max-parents=0", "main").splitlines()[0]
+n = (int(open(counter).read()) if os.path.exists(counter) else 0) + 1
+open(counter, "w").write(str(n))
+responses = json.load(open(responses_f))
+resp = responses[min(n, len(responses)) - 1]
+if resp == "FAIL":
+    sys.exit(1)
+names = {"SELF": main, "PUSHED": pushed, "ROOT": root}
+for r in resp:
+    r["headSha"] = names.get(r.get("headSha"), r.get("headSha"))
+sys.stdout.write(json.dumps(resp))
+"""
+
+
+def scripted_status(tmp: Path, origin: Path, responses: list, tag: str) -> str:
+    """responses[0] answers the pre-dispatch snapshot; responses[1:] answer the polls."""
+    script = tmp / "scripted_status.py"
+    if not script.exists():
+        script.write_text(_SCRIPTED_STATUS, encoding="utf-8")
+    resp_f = tmp / f"responses_{tag}.json"
+    resp_f.write_text(json.dumps(responses), encoding="utf-8")
+    return (f'"{sys.executable}" "{script.as_posix()}" "{(tmp / f"count_{tag}").as_posix()}" '
+            f'"{origin.as_posix()}" "{resp_f.as_posix()}" "{(tmp / "pushed_sha").as_posix()}"')
+
+
+# A Pages dispatch stand-in that succeeds AND lets another push land right after ours: it records the
+# revision this run pushed, then pushes a later commit from another clone. The writeback's clone has
+# never seen that later commit, so recognising its build as a descendant's needs a fetch.
+_ADVANCE_DISPATCH = r"""
+import subprocess, sys, uuid
+origin, other, pushed_f = sys.argv[1:4]
+sha = subprocess.run(["git", "-C", origin, "rev-parse", "main"], capture_output=True, text=True).stdout.strip()
+open(pushed_f, "w").write(sha)
+def g(*a): subprocess.run(["git", "-C", other, *a], check=True, capture_output=True)
+g("fetch", "origin", "main"); g("reset", "--hard", "origin/main")
+open(other + "/records/rec-other.md", "w").write("later " + uuid.uuid4().hex + "\n")
+g("add", "-A"); g("commit", "-m", "a later push"); g("push", "origin", "main")
+"""
+
+
+def advance_dispatch(tmp: Path, origin: Path, other: Path) -> str:
+    script = tmp / "advance_dispatch.py"
+    script.write_text(_ADVANCE_DISPATCH, encoding="utf-8")
+    return (f'"{sys.executable}" "{script.as_posix()}" "{origin.as_posix()}" "{other.as_posix()}" '
+            f'"{(tmp / "pushed_sha").as_posix()}"')
+
+
+def confirm_case(responses: list, tag: str, advance: bool = False, attempts: int = 4):
+    """One material push with build confirmation on. Returns (result, summary text, origin head,
+    the revision the run pushed as the dispatch saw it)."""
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td)
+        origin, work = setup(tmp)
+        pages_cmd = PY_OK
+        if advance:
+            pages_cmd = advance_dispatch(tmp, origin, clone(tmp, origin, "later"))
+        status = scripted_status(tmp, origin, responses, tag)
+        write(work, "records/rec-a.md", f"{tag}\n")
+        with StepSummary(tmp, f"{tag}.md") as summ:
+            r = aw.run_writeback(cfg(work, pages_cmd=pages_cmd, pages_confirm_build=True,
+                                     pages_status_cmd=status, pages_confirm_attempts=attempts,
+                                     pages_confirm_interval=30))
+        pushed_f = tmp / "pushed_sha"
+        recorded = pushed_f.read_text().strip() if pushed_f.exists() else ""
+        return r, summ.text(), origin_head(origin), recorded
+
 # --------------------------------------------------------------------------------------------------
 # [A] build confirmation
 # --------------------------------------------------------------------------------------------------
@@ -343,6 +431,82 @@ def section_confirmation() -> None:
         check("A6 a recovery build that fails fails the run", not r.ok and r.pages_build_outcome == "failed")
 
 
+
+def section_superseded() -> None:
+    print(NEWLINE + "[A'] a superseded Pages run is not a failed build; only a genuine failure is")
+    # pages.yml: group `pages`, cancel-in-progress false. A run WAITING in that group is cancelled the
+    # moment a newer run enters it, and the newer run builds a later commit -- this content included.
+
+    # A7 the reviewers' reproduction: our run cancelled, a same-SHA run (e.g. the daily cron, or a
+    # deploy-recovery dispatch) waiting behind it -- then that run succeeds.
+    r, text, _, _ = confirm_case([[], [run("SELF", conclusion="cancelled", db=200),
+                                       run("SELF", status="queued", conclusion=None, db=201)],
+                                  [run("SELF", conclusion="cancelled", db=200), run("SELF", db=201)]], "a7")
+    check("A7 a run cancelled by a newer one is not a failed build: the poll waits for the run that "
+          "superseded it, which confirms", r.ok and r.pages_build_outcome == "confirmed"
+          and not r.deployment_pending and aw.PAGES_BUILD_FAILED not in r.outcomes, f"{r.outcomes}")
+    r, text, _, _ = confirm_case([[], [run("SELF", conclusion="cancelled", db=200),
+                                       run("SELF", status="queued", conclusion=None, db=201)]], "a7b")
+    check("A7 and when that run has not finished by the deadline: unverified, the lane stays green",
+          r.ok and r.deployment_unverified and r.pages_build_outcome == "unconfirmed"
+          and not r.deployment_pending and "had not finished" in text, f"{r.outcomes} {text[:200]}")
+
+    # A8 cancelled, and no other run for this revision or a later one ever shows up
+    r, text, _, _ = confirm_case([[], [run("SELF", conclusion="cancelled", db=200)]], "a8")
+    check("A8 a cancelled run with no successor in view is unverified (superseded), never failed",
+          r.ok and r.deployment_unverified and not r.deployment_pending
+          and aw.PAGES_BUILD_FAILED not in r.outcomes and "superseded" in text, f"{r.outcomes} {text[:200]}")
+
+    # A9 another push lands right after ours; our run is cancelled and the LATER commit's run succeeds
+    r, text, head, pushed = confirm_case([[], [run("PUSHED", conclusion="cancelled", db=200),
+                                               run("SELF", db=300)]], "a9", advance=True)
+    check("A9 the fixture is real: main moved past the pushed revision before the poll",
+          bool(pushed) and head != pushed and r.pushed_sha == pushed, f"pushed={pushed} head={head}")
+    check("A9 a later commit's successful build deploys this revision: confirmed",
+          r.ok and r.pages_build_outcome == "confirmed" and not r.deployment_unverified, f"{r.outcomes}")
+
+    r, text, _, _ = confirm_case([[], [run("PUSHED", conclusion="cancelled", db=200),
+                                       run("SELF", status="in_progress", conclusion=None, db=300)]],
+                                 "a10", advance=True)
+    check("A10 superseded, and the later build has not finished: unverified, and the summary says so",
+          r.ok and r.deployment_unverified and "newer build had not finished" in text, text[:300])
+
+    r, text, _, _ = confirm_case([[], [run("PUSHED", conclusion="cancelled", db=200),
+                                       run("SELF", conclusion="failure", db=300)]], "a11", advance=True)
+    check("A11 superseded, and the LATER commit's build failed: unverified, not this lane's failed build",
+          r.ok and r.deployment_unverified and not r.deployment_pending
+          and r.pages_build_outcome == "unconfirmed" and "newer build that would deploy it failed" in text,
+          f"{r.outcomes} {text[:300]}")
+
+    # A12 the genuine failure conclusions other than `failure` (A2 pins `failure`)
+    for conclusion in ("timed_out", "startup_failure"):
+        r, text, _, _ = confirm_case([[], [run("SELF", conclusion=conclusion, db=200)]], f"a12{conclusion}")
+        check(f"A12 a build of this revision that ended `{conclusion}` fails the lane",
+              not r.ok and r.deployment_pending and r.pages_build_outcome == "failed", f"{r.outcomes}")
+
+    # A13 direction matters: an ANCESTOR's successful build does not deploy this revision
+    r, text, _, _ = confirm_case([[], [run("ROOT", db=50)]], "a13")
+    check("A13 an older commit's successful build is never taken for this revision's deployment",
+          r.pages_build_outcome == "unconfirmed" and aw.PAGES_BUILD_CONFIRMED not in r.outcomes, f"{r.outcomes}")
+
+    # A14 the pre-dispatch snapshot could not be read (N2): a failed run for this revision cannot be
+    # attributed to this dispatch -- it may be the stale build the dispatch replaces
+    r, text, _, _ = confirm_case(["FAIL", [run("SELF", conclusion="failure", db=100)]], "a14")
+    check("A14 with no readable snapshot a failed run for this SHA is not attributed: unverified, green",
+          r.ok and r.deployment_unverified and not r.deployment_pending
+          and aw.PAGES_BUILD_FAILED not in r.outcomes and "could not be attributed" in text,
+          f"{r.outcomes} {text[:300]}")
+    r, text, _, _ = confirm_case(["FAIL", [run("SELF", db=100)]], "a14b")
+    check("A14 while a successful run for this SHA still confirms", r.ok and r.pages_build_outcome == "confirmed")
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td)
+        origin, work = setup(tmp)
+        unreadable = aw._run_ids_for_sha(cfg(work, pages_status_cmd=PY_FAIL), "abc")
+        readable = aw._run_ids_for_sha(cfg(work, pages_status_cmd=scripted_status(
+            tmp, origin, [[run("SELF", db=7)]], "a14c")), origin_head(origin))
+    check("A14 an unreadable snapshot is None, never an empty set that claims no run existed",
+          unreadable is None and readable == {"7"}, f"{unreadable!r} {readable!r}")
+
 # --------------------------------------------------------------------------------------------------
 # [B] lost-race classification
 # --------------------------------------------------------------------------------------------------
@@ -465,6 +629,29 @@ def section_lost_race() -> None:
           str(sorted(aw.RECOVERABLE_LOST_RACE_OUTCOMES)))
 
 
+
+
+def section_stale_tree() -> None:
+    print(NEWLINE + "[B'] a re-run starts from main, and no run ever pushes a stale tree")
+    # A recovery is dispatched with `--ref main` and checks out main when its job starts (pinned in
+    # [D]). If main moves again while it runs, the same writeback protects it as any run: it fetches
+    # main before every push, rebases its single commit, re-validates the rebased tree, and refuses
+    # any path both sides touched (B1).
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td)
+        origin, work = setup(tmp)
+        other = clone(tmp, origin, "other")
+        push_change(other, "records/rec-other.md", "upstream B10\n", "upstream")
+        upstream_tip = origin_head(origin)
+        write(work, "records/rec-a.md", "mine B10\n")
+        r = aw.run_writeback(cfg(work, pages_cmd=PY_OK))
+        parent = g(origin, "rev-parse", "main^").stdout.strip()
+        check("B10 a run whose checkout went stale pushes its commit rebased onto the NEW main, "
+              "re-validated, carrying both changes -- never its stale tree",
+              r.pushed and parent == upstream_tip and aw.VALIDATION_SUCCESS_AFTER_REBASE in r.outcomes
+              and "upstream B10" in g(origin, "show", "main:records/rec-other.md").stdout
+              and "mine B10" in g(origin, "show", "main:records/rec-a.md").stdout,
+              f"{r.outcomes} parent={parent} upstream={upstream_tip}")
 # --------------------------------------------------------------------------------------------------
 # [C] the bare script, the way every workflow runs it
 # --------------------------------------------------------------------------------------------------
@@ -548,8 +735,26 @@ def section_bare_script() -> None:
               f"rc={rc} {out}")
 
 
+
+def section_bare_script_superseded() -> None:
+    print(NEWLINE + "[C'] the bare script reports a superseded run as unverified, not failed")
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td)
+        origin, work = setup(tmp)
+        status = scripted_status(tmp, origin, [[], [run("SELF", conclusion="cancelled", db=9)]], "c5")
+        write(work, "records/rec-a.md", "C5\n")
+        rc, out, stdout, summary = run_script(tmp, work, [
+            "--pages-cmd", PY_OK, "--pages-confirm-build", "--pages-confirm-attempts", "2",
+            "--pages-confirm-interval", "0", "--pages-status-cmd", status], "c5")
+        check("C5 a cancelled (superseded) Pages run exits 0 with deployment_unverified=true and no error",
+              rc == 0 and out.get("deployment_unverified") == "true" and out.get("pages_build") == "unconfirmed"
+              and out.get("deployment_pending") == "false" and out.get("pushed") == "true"
+              and "::error" not in stdout and "::warning title=Deployment unverified::" in stdout,
+              f"rc={rc} {out} {stdout[-300:]}")
+
+
 # --------------------------------------------------------------------------------------------------
-# [D] workflow wiring, parsed
+# [D] workflow wiring, parsed and evaluated
 # --------------------------------------------------------------------------------------------------
 def load_wf(name: str) -> dict:
     doc = yaml.safe_load((WORKFLOWS / name).read_text(encoding="utf-8")) or {}
@@ -588,9 +793,9 @@ def strip_shell_comments(text: str) -> str:
     return NEWLINE.join(out)
 
 
-def writeback_invocations(doc: dict) -> list[tuple[str, dict, dict, list[str]]]:
-    """(job name, job, step, argv) for every step whose executed shell runs automation_writeback.py.
-    argv is the real argument list: comments stripped, continuations joined, shlex-split."""
+def script_invocations(doc: dict, script: str) -> list[tuple[str, dict, dict, list[str]]]:
+    """(job name, job, step, argv) for every step whose executed shell runs `script`. argv is the
+    real argument list: comments stripped, continuations joined, shlex-split."""
     found = []
     for jname, job in (doc.get("jobs") or {}).items():
         for step in (job.get("steps") or []):
@@ -599,10 +804,10 @@ def writeback_invocations(doc: dict) -> list[tuple[str, dict, dict, list[str]]]:
                 continue
             joined = re.sub(r"\\\n\s*", " ", strip_shell_comments(body))
             for line in joined.splitlines():
-                if "automation_writeback.py" not in line:
+                if script not in line:
                     continue
                 tokens = shlex.split(line)
-                at = next(i for i, t in enumerate(tokens) if t.endswith("automation_writeback.py"))
+                at = next(i for i, t in enumerate(tokens) if t.endswith(script))
                 found.append((jname, job, step, tokens[at + 1:]))
     return found
 
@@ -620,11 +825,12 @@ def eval_ref(template: str, ctx: dict) -> str:
 
 
 class Expr:
-    """A minimal evaluator for the `if:` grammar chain-ingest uses: always(), dotted context lookups,
-    string literals, == / !=, &&, ||, !, parentheses. Unknown syntax raises. Equality follows GitHub's
-    loose rule for the one case that matters here: a missing value equals ''."""
+    """A minimal evaluator for the expression grammar these workflows use: always(), cancelled(),
+    format(), dotted context lookups, string literals, == / !=, &&, ||, !, parentheses. Unknown
+    syntax raises. && and || return an operand, as GitHub's do, and equality follows GitHub's loose
+    rule for the one case that matters here: a missing value equals ''."""
 
-    TOKEN = re.compile(r"\s*(\$\{\{|\}\}|&&|\|\||==|!=|!|\(|\)|'[^']*'|[A-Za-z_][\w.-]*)")
+    TOKEN = re.compile(r"\s*(\$\{\{|\}\}|&&|\|\||==|!=|!|\(|\)|,|'[^']*'|[A-Za-z_][\w.-]*)")
 
     def __init__(self, text: str, ctx: dict) -> None:
         self.toks: list[str] = []
@@ -697,10 +903,22 @@ class Expr:
             return v
         if t.startswith("'"):
             return t[1:-1]
-        if t == "always" and self.peek() == "(":
+        if t in ("always", "cancelled") and self.peek() == "(":
             self.take()
             self.take()
-            return True
+            return True if t == "always" else bool(self.ctx.get("__cancelled__", False))
+        if t == "format" and self.peek() == "(":
+            self.take()
+            args = [self.parse_or()]
+            while self.peek() == ",":
+                self.take()
+                args.append(self.parse_or())
+            if self.take() != ")":
+                raise ValueError("unbalanced format()")
+            out = str(args[0])
+            for n, a in enumerate(args[1:]):
+                out = out.replace("{" + str(n) + "}", "" if a is None else str(a))
+            return out
         if re.fullmatch(r"[A-Za-z_][\w-]*(\.[A-Za-z_][\w-]*)*", t):
             cur = self.ctx
             for part in t.split("."):
@@ -709,14 +927,11 @@ class Expr:
         raise ValueError(f"unsupported token {t!r}")
 
 
-def recovery_step_index(steps: list) -> int:
-    """The patch-ingest recovery step, located STRUCTURALLY -- the step that reads the writeback's
-    lost_race output through its env -- so a mutant that edits its shell cannot also hide it."""
-    for i, s in enumerate(steps):
-        env = (s.get("env") or {}) if isinstance(s, dict) else {}
-        if "steps.commit.outputs.lost_race" in str(env.get("LOST_RACE", "")):
-            return i
-    return -1
+def evaluate(text: str, ctx: dict):
+    try:
+        return Expr(str(text), ctx).value()
+    except ValueError as exc:
+        return f"unparseable: {exc}"
 
 
 def writer_group_members() -> set[str]:
@@ -729,26 +944,44 @@ def writer_group_members() -> set[str]:
     return out
 
 
+def marker_step(steps: list, reads: str) -> tuple[int, dict]:
+    """The `Cycle reached main` step, located STRUCTURALLY -- the step whose `if` reads `reads` --
+    so a mutant that renames it is caught by the name check rather than hidden from it."""
+    for i, s in enumerate(steps):
+        if isinstance(s, dict) and reads in str(s.get("if") or ""):
+            return i, s
+    return -1, {}
+
+
+# Measured, not assumed (G91 round 2): the slowest post-collect tail of the collect job over the last
+# 60 runs (run 44939561794, 25.3 min) and the slowest PowerPoint job outside one outlier (59.1 min).
+MEASURED_POST_COLLECT_MIN = 25.3
+MEASURED_PPT_JOB_MIN = 59.1
+
+
 def section_wiring() -> None:
     print(NEWLINE + "[D] workflow wiring, parsed with the writeback's own argument parser")
     parser = aw.build_parser()
     lanes: dict[str, list] = {}
     for path in sorted(WORKFLOWS.glob("*.yml")):
         doc = load_wf(path.name)
-        for jname, job, step, argv in writeback_invocations(doc):
+        for jname, job, step, argv in script_invocations(doc, "automation_writeback.py"):
             lanes.setdefault(path.name, []).append((jname, job, step, parser.parse_args(argv)))
     expected = {EVIDENCE_WF, INGEST_WF, "davinci-updates.yml", "promote-davinci-verified-reports.yml"}
     check("D0 every CLI writer lane is found (closed world)", set(lanes) == expected, str(sorted(lanes)))
+    collect_args = None
     for name in sorted(expected):
         for jname, job, step, args in lanes.get(name, []) or [(None, {}, {}, None)]:
             if args is None:
                 check(f"D1 {name} confirms its Pages build", False, "no writeback invocation")
                 continue
+            if name == EVIDENCE_WF:
+                collect_args = args
             check(f"D1 {name} confirms its Pages build", bool(args.pages_cmd) and args.pages_confirm_build,
                   f"pages_cmd={args.pages_cmd!r} confirm={args.pages_confirm_build}")
             bound = max(args.pages_confirm_attempts - 1, 0) * args.pages_confirm_interval
-            # Measured Pages runs take 237-612 s from creation; one may queue behind another build in
-            # the `pages` concurrency group. 900 s covers that; 1500 s keeps the writer lane short.
+            # The last 100 Pages runs took 237-612 s from creation; one may queue behind another build
+            # in the `pages` concurrency group. 900 s covers that; 1500 s keeps the writer lane short.
             check(f"D2 {name} waits long enough for a queued build, and no longer than the lane can afford",
                   900 <= bound <= 1500 and args.pages_confirm_interval >= 15,
                   f"bound={bound}s interval={args.pages_confirm_interval}")
@@ -756,37 +989,62 @@ def section_wiring() -> None:
             job_timeout = float(job.get("timeout-minutes") or 360)
             capped = sum(float(s.get("timeout-minutes") or 0) for s in job.get("steps") or []
                          if isinstance(s, dict) and s is not step)
-            headroom = job_timeout - capped - bound / 60.0
-            check(f"D4 {name}/{jname} keeps at least 30 minutes of its job budget after the capped steps "
-                  f"and the confirm wait", headroom >= 30, f"headroom={headroom:.1f} min")
+            tail = MEASURED_POST_COLLECT_MIN if (name == EVIDENCE_WF and jname == "collect") else 0.0
+            headroom = job_timeout - capped - tail - bound / 60.0
+            check(f"D4 {name}/{jname} keeps at least 10 minutes of its job budget after its capped steps, "
+                  f"the measured uncapped tail and the confirm wait", headroom >= 10,
+                  f"headroom={headroom:.1f} min (timeout {job_timeout}, capped {capped}, tail {tail})")
 
     ev = load_wf(EVIDENCE_WF)
-    collect = ev["jobs"]["collect"]
+    jobs = ev["jobs"]
+    collect, ppt, chain = jobs["collect"], jobs["powerpoint-orchestrated"], jobs["chain-ingest"]
     wb_steps = [s for s in collect["steps"] if isinstance(s, dict)
                 and "automation_writeback.py" in strip_shell_comments(str(s.get("run") or ""))]
     check("D5 the collect job's writeback step carries id `writeback`",
           len(wb_steps) == 1 and wb_steps[0].get("id") == "writeback", str([s.get("id") for s in wb_steps]))
-    outputs = collect.get("outputs") or {}
+    sentinel = {"steps": {"writeback": {"outputs": {"pushed": "PUSHED", "outcome": "OUTCOME"}},
+                          "graph": {"outputs": {"pushed": "GPUSHED", "outcome": "GOUTCOME"}}}}
     try:
-        lost = eval_ref(outputs.get("writeback_lost_race", ""),
-                        {"steps": {"writeback": {"outputs": {"lost_race": "SENTINEL"}}}})
+        exported = {k: eval_ref((collect.get("outputs") or {}).get(k, ""), sentinel)
+                    for k in ("writeback_pushed", "writeback_outcome")}
+        gexported = {k: eval_ref((ppt.get("outputs") or {}).get(k, ""), sentinel)
+                     for k in ("writeback_pushed", "writeback_outcome")}
     except ValueError as exc:
-        lost = f"error: {exc}"
-    check("D5 the collect job exports the writeback's lost_race output", lost == "SENTINEL", lost)
+        exported = gexported = {"error": str(exc)}
+    check("D5 the collect job exports its writeback's pushed and outcome",
+          exported == {"writeback_pushed": "PUSHED", "writeback_outcome": "OUTCOME"}, str(exported))
+    check("D5 the PowerPoint job exports its graph writeback's pushed and outcome",
+          gexported == {"writeback_pushed": "GPUSHED", "writeback_outcome": "GOUTCOME"}, str(gexported))
 
-    chain = ev["jobs"]["chain-ingest"]
-    step = (chain.get("steps") or [{}])[0]
-    env = step.get("env") or {}
-    ctx = {"needs": {"collect": {"outputs": {"writeback_lost_race": "NEEDS"}}},
-           "github": {"event": {"inputs": {"recovery_of": "INPUT"}}, "run_id": "RUNID"}}
-    try:
-        resolved = {k: eval_ref(env.get(k, ""), ctx) for k in ("LOST_RACE", "RECOVERY_OF", "RUN_ID")}
-    except ValueError as exc:
-        resolved = {"error": str(exc)}
-    check("D6 chain-ingest reads the collect job's lost_race, its own recovery_of input and run id",
-          resolved == {"LOST_RACE": "NEEDS", "RECOVERY_OF": "INPUT", "RUN_ID": "RUNID"}, str(resolved))
-    check("D6 and interpolates no expression into its shell", "${{" not in str(step.get("run")))
-    check("D6 chain-ingest still needs the collect job", "collect" in (chain.get("needs") or []))
+    # D6 chain-ingest's `Cycle reached main`: first step, evaluated over every outcome pair that matters
+    csteps = chain.get("steps") or []
+    first = csteps[0] if csteps else {}
+    check("D6 chain-ingest's FIRST step is the cycle record, named exactly as the reaper reads it",
+          first.get("name") == wcr.CYCLE_MARKER_STEP and "run" in first, str(first.get("name")))
+
+    def reached(c_pushed, c_outcome, p_pushed, p_outcome):
+        return evaluate(first.get("if", ""), {"needs": {
+            "collect": {"outputs": {"writeback_pushed": c_pushed, "writeback_outcome": c_outcome}},
+            "powerpoint-orchestrated": {"outputs": {"writeback_pushed": p_pushed, "writeback_outcome": p_outcome}}}})
+
+    cases = {
+        "both pushed": (("true", "push_success_first_attempt", "true", "push_success_after_retry"), True),
+        "collect had nothing to push": (("false", "no_changes", "true", "push_success_first_attempt"), True),
+        "PowerPoint had nothing to push": (("true", "push_success_first_attempt", "false", "no_changes"), True),
+        "collect lost its race": (("false", "rebase_conflict", "true", "push_success_first_attempt"), False),
+        "collect writeback skipped (failure/time limit earlier)": (("", "", "true", "no_changes"), False),
+        "PowerPoint graph never wrote back": (("true", "push_success_first_attempt", "", ""), False),
+        "PowerPoint validation refused": (("true", "push_success_first_attempt", "false",
+                                           "validation_failed_pre_commit"), False),
+    }
+    got = {k: reached(*v[0]) is v[1] for k, v in cases.items()}
+    check("D6 it runs exactly when BOTH writer jobs' cycles reached main", all(got.values()), str(got))
+    disp = csteps[1:] if len(csteps) > 1 else []
+    check("D6 chain-ingest still dispatches ingestion after it, and dispatches nothing else",
+          len(disp) == 1 and "patch-ingest.yml" in strip_shell_comments(str(disp[0].get("run")))
+          and EVIDENCE_WF not in strip_shell_comments(str(disp[0].get("run"))), str([s.get("name") for s in disp]))
+    check("D6 chain-ingest still needs both writer jobs", set(chain.get("needs") or []) ==
+          {"collect", "powerpoint-orchestrated"}, str(chain.get("needs")))
 
     for name in (EVIDENCE_WF, INGEST_WF):
         inputs = ((load_wf(name)["on"].get("workflow_dispatch") or {}).get("inputs") or {})
@@ -802,7 +1060,7 @@ def section_wiring() -> None:
     routine = {"product_id": "", "update_version": "", "since": "", "dry_run": "false", "recovery_of": ""}
     recovery = dict(routine, recovery_of="44878227542")
     try:
-        cases = {
+        gcases = {
             "schedule": gate("schedule", None) is True,
             "no-input dispatch (reaper)": gate("workflow_dispatch", routine) is True,
             "recovery dispatch": gate("workflow_dispatch", recovery) is True,
@@ -810,69 +1068,138 @@ def section_wiring() -> None:
             "dry run": gate("workflow_dispatch", dict(routine, dry_run="true")) is False,
         }
     except ValueError as exc:
-        cases = {f"unparseable: {exc}": False}
-    check("D8 a recovery run is still a routine cycle, so its own chain-ingest dispatches ingestion",
-          all(cases.values()), str(cases))
+        gcases = {f"unparseable: {exc}": False}
+    check("D8 a recovery run is still a routine cycle: it records its cycle and dispatches ingestion",
+          all(gcases.values()), str(gcases))
 
-    ing = load_wf(INGEST_WF)
-    isteps = ing["jobs"]["ingest"]["steps"]
-    names = [s.get("name") for s in isteps]
+    # D9 patch-ingest's `Cycle reached main`
+    isteps = load_wf(INGEST_WF)["jobs"]["ingest"]["steps"]
     commit_idx = next((i for i, s in enumerate(isteps) if s.get("id") == "commit"), -1)
-    rec_idx = recovery_step_index(isteps)
-    check("D9 patch-ingest has a recovery step after its writeback step",
-          0 <= commit_idx < rec_idx, f"commit={commit_idx} recovery={rec_idx} names={names}")
-    rec = isteps[rec_idx] if rec_idx >= 0 else {}
-    rec_if = str(rec.get("if") or "")
-    check("D9 it runs after a failed writeback (a status function other than success())",
-          ("!cancelled()" in rec_if or "always()" in rec_if) and "success()" not in rec_if, rec_if)
-    renv = rec.get("env") or {}
-    rctx = {"steps": {"commit": {"outputs": {"lost_race": "STEP"}}},
-            "github": {"event": {"inputs": {"recovery_of": "INPUT", "source": "SRC"}}, "run_id": "RUNID",
-                       "repository": "REPO"}}
-    try:
-        rres = {k: eval_ref(renv.get(k, ""), rctx) for k in ("LOST_RACE", "RECOVERY_OF", "SOURCE", "RUN_ID")}
-    except ValueError as exc:
-        rres = {"error": str(exc)}
-    check("D9 it reads the writeback's lost_race, recovery_of, source and run id",
-          rres == {"LOST_RACE": "STEP", "RECOVERY_OF": "INPUT", "SOURCE": "SRC", "RUN_ID": "RUNID"}, str(rres))
-    check("D9 and interpolates no expression into its shell", "${{" not in str(rec.get("run")))
-    members = writer_group_members()
-    check("D10 its GROUP_MEMBERS equals the parsed membership of the writer group",
-          set(str(renv.get("GROUP_MEMBERS", "")).split()) == members and members,
-          f"declared={sorted(str(renv.get('GROUP_MEMBERS', '')).split())} parsed={sorted(members)}")
+    m_idx, mstep = marker_step(isteps, "steps.commit.outputs.pushed")
+    check("D9 patch-ingest records its cycle in a step after its writeback, named exactly as the reaper reads it",
+          0 <= commit_idx < m_idx and mstep.get("name") == wcr.CYCLE_MARKER_STEP, f"{commit_idx} {m_idx} {mstep.get('name')}")
+
+    def ingest_reached(pushed, outcome):
+        return evaluate(mstep.get("if", ""), {"steps": {"commit": {"outputs": {"pushed": pushed, "outcome": outcome}}}})
+
+    icases = {
+        "pushed": (("true", "push_success_first_attempt"), True),
+        "nothing to push": (("false", "no_changes"), True),
+        "access refusal committed, job still failed": (("true", "push_success_after_retry"), True),
+        "lost its race": (("false", "rebase_conflict"), False),
+        "writeback skipped (ingestion failed)": (("", ""), False),
+    }
+    igot = {k: (ingest_reached(*v[0]) is v[1]) for k, v in icases.items()}
+    check("D9 it runs exactly when the writeback reached main", all(igot.values()), str(igot))
+    check("D9 and it is recorded even when a later step fails or the run is cancelled (always())",
+          "always()" in str(mstep.get("if")), str(mstep.get("if")))
+    check("D9 patch-ingest no longer re-dispatches itself (recovery is the reaper's, from outside)",
+          not any("patch-ingest.yml" in strip_shell_comments(str(s.get("run") or "")) for s in isteps),
+          "a step of patch-ingest names its own workflow")
+
+    # D10 run names: evaluated per context, and parsed back by the reaper's module
+    for name, wfname in ((EVIDENCE_WF, "Patch Evidence Collection"), (INGEST_WF, "AUXSAYS Patch Ingestion")):
+        expr = str(load_wf(name).get("run-name") or "")
+        rec = evaluate(expr, {"inputs": {"recovery_of": "44878227542"}})
+        plain = evaluate(expr, {"inputs": {"recovery_of": ""}})
+        sched = evaluate(expr, {"inputs": {}})
+        check(f"D10 {name}: a recovery run is titled with the run it re-runs, every other run keeps the name",
+              rec == f"{wfname} (recovery of run 44878227542)" and plain == wfname and sched == wfname,
+              f"{rec!r} {plain!r} {sched!r}")
+        check(f"D10 {name}: the reaper's module reads that title back, and only that title",
+              wcr.recovery_of({"display_title": rec}) == "44878227542"
+              and wcr.recovery_of({"display_title": plain}) == "", f"{rec!r}")
+
+    # D11 the reaper: eviction step first, then the lost-cycle step wired to its outputs
+    reaper = load_wf(REAPER_WF)
+    rjob = reaper["jobs"]["reap"]
+    rsteps = rjob.get("steps") or []
+    check("D11 the reaper's FIRST step is still the eviction repair (test_writer_queue_reaper_behaviour "
+          "executes steps[0])", bool(rsteps) and rsteps[0].get("id") == "reap", str(rsteps[0].get("id") if rsteps else None))
+    inv = script_invocations(reaper, "writer_cycle_recovery.py")
+    check("D11 one later step runs writer_cycle_recovery.py", len(inv) == 1, str(len(inv)))
+    if inv:
+        _, _, rstep, rargv = inv[0]
+        rargs = wcr.build_parser().parse_args(rargv)
+        renv = rstep.get("env") or {}
+        ctx = {"steps": {"reap": {"outputs": {"busy": "BUSY", "dispatched": "DISP"}}}}
+        try:
+            resolved = {"LANE_BUSY": eval_ref(renv.get("LANE_BUSY", ""), ctx),
+                        "DISPATCHED": eval_ref(renv.get("DISPATCHED", ""), ctx)}
+        except ValueError as exc:
+            resolved = {"error": str(exc)}
+        check("D11 it passes the eviction step's `busy` and `dispatched` outputs, through env",
+              rargs.lane_busy == "${LANE_BUSY}" and rargs.dispatched == "${DISPATCHED}"
+              and resolved == {"LANE_BUSY": "BUSY", "DISPATCHED": "DISP"}, f"{rargs} {resolved}")
+        idx = rsteps.index(rstep)
+        runs_after_fail = evaluate(rstep.get("if", ""), {"__cancelled__": False})
+        check("D11 it runs after the eviction step whatever that step did, but not on cancellation",
+              idx > 0 and runs_after_fail is True and evaluate(rstep.get("if", ""), {"__cancelled__": True}) is False,
+              str(rstep.get("if")))
+        checkouts = [s for s in rsteps[:idx] if "actions/checkout" in str(s.get("uses"))]
+        check("D11 the scripts are checked out before it runs",
+              any("auxsays/scripts" in str((s.get("with") or {}).get("sparse-checkout")) for s in checkouts),
+              str(checkouts))
+    jenv = rjob.get("env") or {}
+    check("D11 the reaper job provides REPO, REAPABLE, GROUP_MEMBERS and a token to that step",
+          {"REPO", "REAPABLE", "GROUP_MEMBERS", "GH_TOKEN"} <= set(jenv)
+          and set(str(jenv.get("REAPABLE")).split()) == {EVIDENCE_WF, INGEST_WF}
+          and set(str(jenv.get("GROUP_MEMBERS")).split()) == writer_group_members(), str(sorted(jenv)))
+    perms = reaper.get("permissions") or {}
+    check("D11 the reaper may keep the tracking issue and read job annotations, and still only reads code",
+          perms.get("issues") == "write" and perms.get("checks") == "read" and perms.get("contents") == "read"
+          and perms.get("actions") == "write", str(perms))
+
+    # D12 the PowerPoint lane: its deployment is confirmed, and a failed one turns the lane red
+    psteps = ppt.get("steps") or []
+    f_idx, fstep = marker_step(psteps, "steps.graph.outputs.deployment_pending")
+    g_idx = next((i for i, s in enumerate(psteps) if s.get("id") == "graph"), -1)
+    fires = {v: evaluate(fstep.get("if", ""), {"steps": {"graph": {"outputs": {"deployment_pending": v}}}})
+             for v in ("true", "false", "")}
+    check("D12 a step after the graph fails the PowerPoint lane exactly when its deployment failed",
+          0 <= g_idx < f_idx and fires == {"true": True, "false": False, "": False}, f"{g_idx} {f_idx} {fires}")
+    import orchestrate_evidence_run as orch
+    ppt_bound = max(0, orch.PAGES_CONFIRM_ATTEMPTS - 1) * orch.PAGES_CONFIRM_INTERVAL / 60.0
+    ppt_headroom = float(ppt.get("timeout-minutes") or 360) - MEASURED_PPT_JOB_MIN - ppt_bound
+    check("D12 the PowerPoint job's time limit leaves 30 minutes after its slowest measured run and the "
+          "confirm wait", ppt_headroom >= 30, f"headroom={ppt_headroom:.1f} (bound {ppt_bound:.1f} min)")
+    if collect_args is not None:
+        check("D12 the graph confirms with the same bound as the command-line collect lane",
+              (orch.PAGES_CONFIRM_ATTEMPTS, orch.PAGES_CONFIRM_INTERVAL)
+              == (collect_args.pages_confirm_attempts, collect_args.pages_confirm_interval),
+              f"{orch.PAGES_CONFIRM_ATTEMPTS}/{orch.PAGES_CONFIRM_INTERVAL}")
 
 
 # --------------------------------------------------------------------------------------------------
-# [E] the recovery shell, executed
+# [E] shell, executed
 # --------------------------------------------------------------------------------------------------
-# Answers the pending-slot query with SIM_PENDING_N only when the query asks about `pending` AND
-# names SIM_PENDING_WF, so a guard that forgets the pending state, or checks only its own workflow,
-# sees a free lane and dispatches -- and fails the scenario.
+# chain-ingest's dispatch and the PowerPoint failure step: a fake gh that logs every dispatch.
 FAKE_GH = r"""#!/usr/bin/env bash
 echo "GH $*" >> "$SIM_LOG"
 if [ "$1" = "workflow" ]; then
   echo "DISPATCH $*" >> "$SIM_LOG"
   exit "${SIM_DISPATCH_RC:-0}"
 fi
-if [ "$1" = "api" ]; then
-  if [ "${SIM_API_RC:-0}" != "0" ]; then exit "${SIM_API_RC}"; fi
-  case "$*" in
-    *'.status == "pending"'*)
-      case "$2" in
-        *"/workflows/${SIM_PENDING_WF:-none}/"*) echo "${SIM_PENDING_N:-0}" ;;
-        *) echo 0 ;;
-      esac ;;
-    *) echo 0 ;;
-  esac
-  exit 0
-fi
+q="$*"
+case "$q" in
+  # the reaper's eviction step: occupancy, covering run, evicted runs (with titles), jobs
+  *'.status == "pending"'*) echo "${SIM_BUSY:-0}" ;;
+  *'conclusion == "success"'*) echo "${SIM_COVERING:-}" ;;
+  *'conclusion == "cancelled"'*)
+    case "$q" in
+      *obs-evidence-collection*) printf '%b' "${SIM_EVICTED_OBS:-}" ;;
+      *patch-ingest*) printf '%b' "${SIM_EVICTED_ING:-}" ;;
+    esac ;;
+  */jobs*) echo "${SIM_JOBS:-0}" ;;
+  *) echo 0 ;;
+esac
 exit 0
 """
 
 
-def run_shell(script: str, env_decl: dict, sim_env: dict) -> tuple[int, list[list[str]], list[str], str]:
+def run_shell(script: str, sim_env: dict) -> tuple[int, list[list[str]], str, str]:
     """Run a step's `run:` scalar the way GitHub runs a step with no `shell:` (bash -e), with a fake
-    gh first on PATH. Returns (exit code, dispatches as token lists, api queries, stdout)."""
+    gh first on PATH. Returns (exit code, dispatches as token lists, stdout+stderr, $GITHUB_OUTPUT)."""
     tmp = tempfile.mkdtemp()
     try:
         gh = Path(tmp, "gh")
@@ -882,24 +1209,23 @@ def run_shell(script: str, env_decl: dict, sim_env: dict) -> tuple[int, list[lis
         sh.write_text(script, newline="\n")
         log = Path(tmp, "gh.log")
         log.write_text("", newline="\n")
+        out_f = Path(tmp, "output")
         env = dict(os.environ)
-        env.pop("GITHUB_OUTPUT", None)
         env.update({
             "PATH": tmp + os.pathsep + env.get("PATH", ""),
             "GITHUB_STEP_SUMMARY": str(Path(tmp, "summary.md")),
+            "GITHUB_OUTPUT": str(out_f),
             "SIM_LOG": str(log),
             "REPO": "owner/repo",
             "GH_TOKEN": "fake",
         })
-        if "GROUP_MEMBERS" in env_decl:
-            env["GROUP_MEMBERS"] = " ".join(str(env_decl["GROUP_MEMBERS"]).split())
         env.update(sim_env)
         proc = subprocess.run([shutil.which("bash") or "bash", "--noprofile", "--norc", "-e", str(sh)],
                               capture_output=True, text=True, env=env)
         lines = log.read_text().splitlines()
         dispatches = [shlex.split(ln)[1:] for ln in lines if ln.startswith("DISPATCH ")]
-        queries = [ln for ln in lines if ln.startswith("GH api ")]
-        return proc.returncode, dispatches, queries, proc.stdout + proc.stderr
+        output = out_f.read_text() if out_f.exists() else ""
+        return proc.returncode, dispatches, proc.stdout + proc.stderr, output
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
@@ -920,86 +1246,476 @@ def declared_inputs(name: str) -> set[str]:
 
 
 def section_executed() -> None:
-    print(NEWLINE + "[E] the recovery shell, executed under bash against a fake gh")
+    print(NEWLINE + "[E] shell executed under bash against a fake gh")
     if shutil.which("bash") is None:
         check("E bash is available to execute the workflow shell", False, "bash not found")
         return
 
-    chain = load_wf(EVIDENCE_WF)["jobs"]["chain-ingest"]["steps"][0]
-    cscript, cenv = chain["run"], chain.get("env") or {}
-    base = {"RUN_ID": "777", "LOST_RACE": "", "RECOVERY_OF": ""}
+    chain = load_wf(EVIDENCE_WF)["jobs"]["chain-ingest"]["steps"]
+    body = str(chain[1].get("run") if len(chain) > 1 else "").replace("${{ github.repository }}", "owner/repo")
+    check("E1 the dispatch step interpolates nothing else", "${{" not in body)
+    rc, ds, out, _ = run_shell(body, {})
+    summ = [dispatch_summary(d) for d in ds]
+    check("E1 chain-ingest dispatches routine ingestion once, with no inputs, and nothing else",
+          rc == 0 and summ == [(INGEST_WF, {})], f"rc={rc} {summ} {out[-300:]}")
 
-    rc, ds, _, out = run_shell(cscript, cenv, dict(base, LOST_RACE="true"))
-    summ = [dispatch_summary(d) for d in ds]
-    check("E1 a lost race re-dispatches THIS workflow once, carrying recovery_of, and nothing else",
-          rc == 0 and summ == [(EVIDENCE_WF, {"recovery_of": "777"})], f"rc={rc} {summ} {out[-300:]}")
-    check("E1 every input it passes is declared by the workflow it dispatches",
-          all(set(f) <= declared_inputs(wf) for wf, f in summ if wf), str(summ))
-    rc, ds, _, out = run_shell(cscript, cenv, dict(base, LOST_RACE="true", RECOVERY_OF="555"))
-    summ = [dispatch_summary(d) for d in ds]
-    check("E2 a recovery run that loses again is NOT re-dispatched; ingestion still follows",
-          rc == 0 and summ == [(INGEST_WF, {})] and "::warning" in out, f"rc={rc} {summ}")
-    rc, ds, _, out = run_shell(cscript, cenv, dict(base, LOST_RACE="false"))
-    summ = [dispatch_summary(d) for d in ds]
-    check("E3 no lost race: routine ingestion only", rc == 0 and summ == [(INGEST_WF, {})], f"rc={rc} {summ}")
-    rc, ds, _, out = run_shell(cscript, cenv, dict(base))
-    summ = [dispatch_summary(d) for d in ds]
-    check("E4 no writeback output at all (collect failed earlier): routine ingestion only",
-          rc == 0 and summ == [(INGEST_WF, {})], f"rc={rc} {summ}")
-    check("E4 the ingestion dispatch passes only inputs patch-ingest declares",
-          all(set(f) <= declared_inputs(wf) for wf, f in summ if wf), str(summ))
+    reaper = load_wf(REAPER_WF)["jobs"]["reap"]
+    step0 = reaper["steps"][0]["run"]
+    renv = reaper.get("env") or {}
+    base = {"GROUP_MEMBERS": " ".join(str(renv.get("GROUP_MEMBERS", "")).split()),
+            "REAPABLE": str(renv.get("REAPABLE", ""))}
 
-    ing = load_wf(INGEST_WF)["jobs"]["ingest"]["steps"]
-    idx = recovery_step_index(ing)
-    rec = ing[idx] if idx >= 0 else None
-    if rec is None:
-        check("E patch-ingest has a recovery step to execute", False)
-        return
-    rscript, renv = rec["run"], rec.get("env") or {}
-    rbase = {"RUN_ID": "888", "LOST_RACE": "true", "RECOVERY_OF": "", "SOURCE": ""}
-
-    rc, ds, qs, out = run_shell(rscript, renv, rbase)
+    rc, ds, out, output = run_shell(step0, dict(base, SIM_EVICTED_OBS=(
+        "101 2026-11-22T03:00:00Z Patch Evidence Collection (recovery of run 99)\\n")))
     summ = [dispatch_summary(d) for d in ds]
-    check("E5 a lost race with a free lane re-dispatches patch-ingest once, carrying recovery_of",
-          rc == 0 and summ == [(INGEST_WF, {"recovery_of": "888"})], f"rc={rc} {summ} {out[-300:]}")
-    check("E5 every input it passes is declared by patch-ingest",
+    check("E2 an evicted RECOVERY run is re-dispatched carrying the SAME recovery_of (finding 4: the "
+          "loop guard survives an eviction)", rc == 0 and summ == [(EVIDENCE_WF, {"recovery_of": "99"})],
+          f"rc={rc} {summ} {out[-300:]}")
+    rc, ds, out, output = run_shell(step0, dict(base, SIM_EVICTED_ING=(
+        "201 2026-11-22T03:00:00Z AUXSAYS Patch Ingestion\\n")))
+    summ = [dispatch_summary(d) for d in ds]
+    check("E2 an evicted routine run is re-dispatched as the recovery of ITSELF",
+          rc == 0 and summ == [(INGEST_WF, {"recovery_of": "201"})], f"rc={rc} {summ}")
+    check("E2 every input it passes is declared by the workflow it dispatches",
           all(set(f) <= declared_inputs(wf) for wf, f in summ if wf), str(summ))
-    check("E5 the free-lane check reads every member of the writer group",
-          {m for m in writer_group_members() if any(f"/workflows/{m}/" in q for q in qs)} == writer_group_members(),
-          f"{len(qs)} queries")
-    rc, ds, _, out = run_shell(rscript, renv, dict(rbase, SIM_PENDING_WF="davinci-updates.yml",
-                                                   SIM_PENDING_N="1"))
-    check("E6 a writer run waiting in the pending slot (any lane) blocks the re-dispatch",
-          rc == 0 and ds == [] and "::warning" in out, f"rc={rc} {ds}")
-    rc, ds, _, out = run_shell(rscript, renv, dict(rbase, RECOVERY_OF="666"))
-    check("E7 a recovery run that loses again is not re-dispatched (loop guard)",
-          rc == 0 and ds == [] and "::warning" in out, f"rc={rc} {ds}")
-    rc, ds, _, out = run_shell(rscript, renv, dict(rbase, SOURCE="obs-studio"))
-    check("E8 a dispatch scoped to one source is not re-run automatically",
-          rc == 0 and ds == [], f"rc={rc} {ds}")
-    rc, ds, qs, out = run_shell(rscript, renv, dict(rbase, LOST_RACE="false"))
-    check("E9 no lost race: nothing dispatched and the API is not even read",
-          rc == 0 and ds == [] and qs == [], f"rc={rc} {ds} {qs}")
-    rc, ds, qs, out = run_shell(rscript, renv, dict(rbase, LOST_RACE=""))
-    check("E9 a skipped writeback (dry run, earlier failure): nothing dispatched", rc == 0 and ds == [],
-          f"rc={rc} {ds}")
-    rc, ds, _, out = run_shell(rscript, renv, dict(rbase, SIM_API_RC="1"))
-    check("E10 an unreadable run list fails SAFE: treated as occupied, nothing dispatched",
-          rc == 0 and ds == [] and "::warning" in out, f"rc={rc} {ds}")
-    rc, ds, _, out = run_shell(rscript, renv, dict(rbase, SIM_DISPATCH_RC="1"))
-    check("E11 a re-dispatch that fails is not silent: the step fails", rc != 0 and "::error" in out,
-          f"rc={rc}")
+    outs = dict(ln.split("=", 1) for ln in output.splitlines() if "=" in ln)
+    check("E2 and it tells the next step the lane was free and that it added the tick's one entrant",
+          outs.get("busy") == "0" and outs.get("dispatched") == "1", str(outs))
+    rc, ds, out, output = run_shell(step0, dict(base, SIM_BUSY="1", SIM_EVICTED_OBS=(
+        "101 2026-11-22T03:00:00Z Patch Evidence Collection\\n")))
+    outs = dict(ln.split("=", 1) for ln in output.splitlines() if "=" in ln)
+    check("E2 an occupied lane: nothing dispatched, and the next step is told so",
+          rc == 0 and ds == [] and int(outs.get("busy") or 0) > 0 and outs.get("dispatched") == "0", f"{ds} {outs}")
+    rc, ds, out, output = run_shell(step0, dict(base))
+    outs = dict(ln.split("=", 1) for ln in output.splitlines() if "=" in ln)
+    check("E2 a quiet tick reports a free lane and no entrant", rc == 0 and ds == []
+          and outs.get("busy") == "0" and outs.get("dispatched") == "0", str(outs))
+
+    ppt = load_wf(EVIDENCE_WF)["jobs"]["powerpoint-orchestrated"]["steps"]
+    _, fstep = marker_step(ppt, "steps.graph.outputs.deployment_pending")
+    rc, ds, out, _ = run_shell(str(fstep.get("run") or "exit 0"), {"PAGES_BUILD": "failed"})
+    check("E3 the PowerPoint failure step fails the lane and says why", rc != 0 and "::error" in out, f"rc={rc}")
+
+
+# --------------------------------------------------------------------------------------------------
+# [F] writer_cycle_recovery's decisions
+# --------------------------------------------------------------------------------------------------
+NOW = datetime(2026, 11, 22, 12, 0, tzinfo=timezone.utc)
+BOT = "github-actions[bot]"
+WRITEBACK_STEP = "Commit material evidence changes (conflict-safe writeback)"
+
+
+def at(hours_ago: float) -> str:
+    return (NOW - timedelta(hours=hours_ago)).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
+def wrun(rid: int, hours_ago: float, conclusion: str = "success", event: str = "schedule",
+         actor: str = "auxchan", of: str = "", name: str = "Patch Evidence Collection") -> dict:
+    return {"id": rid, "created_at": at(hours_ago), "status": "completed", "conclusion": conclusion,
+            "event": event, "triggering_actor": {"login": actor},
+            "display_title": name + (f" (recovery of run {of})" if of else ""),
+            "html_url": f"https://github.com/o/r/actions/runs/{rid}"}
+
+
+def recovery_run(rid: int, hours_ago: float, of: str, conclusion: str = "failure", **kw) -> dict:
+    return wrun(rid, hours_ago, conclusion, event="workflow_dispatch", actor=BOT, of=of, **kw)
+
+
+def jobs_of(marker: bool = False, failed: bool = True, cancelled_job: int | None = None,
+            evicted: bool = False) -> dict:
+    if evicted:
+        return {"total_count": 0, "jobs": []}
+    js = [{"id": 1, "name": "collect", "conclusion": "failure" if failed else "success",
+           "steps": [{"name": WRITEBACK_STEP, "conclusion": "failure" if failed else "success"}]},
+          {"id": 3, "name": "chain-ingest", "conclusion": "success",
+           "steps": [{"name": wcr.CYCLE_MARKER_STEP, "conclusion": "success" if marker else "skipped"}]}]
+    if cancelled_job is not None:
+        js.append({"id": cancelled_job, "name": "powerpoint-orchestrated", "conclusion": "cancelled",
+                   "steps": [{"name": "Run the PowerPoint evidence graph", "conclusion": "cancelled"}]})
+    return {"total_count": len(js), "jobs": js}
+
+
+TIMEOUT_NOTES = [{"annotation_level": "failure",
+                  "message": "The job has exceeded the maximum execution time of 1h30m0s"},
+                 {"annotation_level": "failure", "message": "The operation was canceled."}]
+CANCEL_NOTES = [{"annotation_level": "failure", "message": "The operation was canceled."}]
+
+
+def decide(runs: list, jobs: dict | None = None, notes: dict | None = None, wf: str = EVIDENCE_WF):
+    jobs = jobs or {}
+    notes = notes or {}
+    return wcr.decide_lane(wf, runs, lambda rid: jobs.get(str(rid)), lambda jid: notes.get(str(jid)), NOW)
+
+
+class FakeGhObj:
+    """plan_tick's view of the API, from dicts. A missing entry reads as unreadable."""
+
+    def __init__(self, runs: dict, jobs: dict | None = None, notes: dict | None = None,
+                 pages: list | None = None, active: dict | None = None) -> None:
+        self._runs, self._jobs, self._notes = runs, jobs or {}, notes or {}
+        self._pages = [] if pages is None else pages
+        self._active = active or {}
+
+    def active(self, wf):
+        return self._active.get(wf, 0)
+
+    def runs(self, wf):
+        return self._runs.get(wf)
+
+    def jobs(self, rid):
+        return self._jobs.get(str(rid))
+
+    def annotations(self, jid):
+        return self._notes.get(str(jid))
+
+    def pages_runs(self):
+        return self._pages
+
+
+def prun(rid: int, hours_ago: float, conclusion: str = "success", branch: str = "main") -> dict:
+    return {"id": rid, "created_at": at(hours_ago), "status": "completed", "conclusion": conclusion,
+            "head_branch": branch, "head_sha": f"{rid:07d}abcdef", "html_url": f"https://github.com/o/r/actions/runs/{rid}"}
+
+
+def section_decisions() -> None:
+    print(NEWLINE + "[F] writer_cycle_recovery: which cycle is re-run, which is reported")
+    d = decide([wrun(5, 2), wrun(4, 8, "failure")])
+    check("F1 the latest routine run reached main: nothing re-run, nothing reported",
+          d.decided and not d.dispatch_recovery_of and not d.problem, d.note)
+    d = decide([wrun(5, 2, "failure"), wrun(4, 8)], {"5": jobs_of()})
+    check("F2 the latest routine run ended without its cycle on main: re-run once, as its recovery",
+          d.dispatch_recovery_of == "5" and not d.problem, d.note)
+    d = decide([wrun(5, 2, "failure"), wrun(4, 8)], {"5": jobs_of(marker=True)})
+    check("F3 a run that failed AFTER its cycle reached main (e.g. its Pages build) is never re-run",
+          not d.dispatch_recovery_of and not d.problem, d.note)
+    d = decide([recovery_run(6, 1, of="5"), wrun(5, 6, "failure")], {"6": jobs_of(), "5": jobs_of()})
+    check("F4 a recovery that lost its cycle too is not re-run, and is reported with both run ids",
+          not d.dispatch_recovery_of and "6" in d.problem and "re-run of run 5" in d.problem, d.problem)
+    d = decide([wrun(7, 1, "failure"), recovery_run(6, 6, of="5"), wrun(5, 10, "failure")],
+               {"7": jobs_of(), "6": jobs_of(), "5": jobs_of()})
+    check("F5 after a recovery lost, later lost cycles pause until a run reaches main (no retry storm)",
+          not d.dispatch_recovery_of and "paused" in d.problem and "recovery run 6" in d.problem, d.problem)
+    d = decide([wrun(9, 1, "failure"), wrun(8, 5), recovery_run(6, 20, of="5")],
+               {"9": jobs_of(), "6": jobs_of()})
+    check("F6 a run that reached main since then lifts the pause: the new loss is re-run",
+          d.dispatch_recovery_of == "9" and not d.problem, d.note)
+    d = decide([wrun(5, 20, "failure")], {"5": jobs_of()})
+    check("F7 a lost cycle older than the re-run window is reported, not re-run",
+          not d.dispatch_recovery_of and "not re-run automatically" in d.problem, d.problem)
+    d = decide([wrun(5, 2, "cancelled"), wrun(4, 8)], {"5": jobs_of(failed=False, cancelled_job=77)},
+               {"77": TIMEOUT_NOTES})
+    check("F8 a run whose job hit its time limit (cancelled, with GitHub's timeout annotation) is lost: re-run",
+          d.dispatch_recovery_of == "5", d.note)
+    d = decide([wrun(5, 2, "cancelled"), wrun(4, 8)], {"5": jobs_of(marker=True, failed=False, cancelled_job=77)},
+               {"77": TIMEOUT_NOTES})
+    check("F8 unless its cycle had already reached main", not d.dispatch_recovery_of and not d.problem, d.note)
+    d = decide([wrun(5, 2, "cancelled"), wrun(4, 8)], {"5": jobs_of(failed=False, cancelled_job=77)},
+               {"77": CANCEL_NOTES})
+    check("F9 an operator's cancel of a started run is left alone, as the eviction step leaves it",
+          not d.dispatch_recovery_of and not d.problem and d.decided, d.note)
+    d = decide([wrun(5, 1, "cancelled"), wrun(4, 4, "failure")],
+               {"5": jobs_of(failed=False, cancelled_job=77), "4": jobs_of()}, {"77": CANCEL_NOTES})
+    check("F9 and does not hide an older lost cycle behind it", d.dispatch_recovery_of == "4", d.note)
+    d = decide([wrun(5, 1, "cancelled"), wrun(4, 6)], {"5": jobs_of(evicted=True)})
+    check("F10 an eviction (zero jobs) is the eviction step's, not this step's",
+          not d.dispatch_recovery_of and not d.problem, d.note)
+    d = decide([wrun(5, 1, "failure", event="workflow_dispatch", actor="auxchan"), wrun(4, 6)])
+    check("F11 an operator's own dispatch is never re-run (and is not even read)",
+          d.decided and not d.dispatch_recovery_of and not d.problem, d.note)
+    d = decide([wrun(5, 1, "failure")], {})
+    check("F12 a run that cannot be read decides nothing: no re-run, no report",
+          not d.decided and not d.dispatch_recovery_of and not d.problem, d.note)
+    d = decide([wrun(5, 1, "cancelled")], {"5": jobs_of(failed=False, cancelled_job=77)}, {})
+    check("F12 nor do unreadable annotations", not d.decided and not d.dispatch_recovery_of, d.note)
+    d = decide([recovery_run(6, 1, of="5", conclusion="cancelled"), wrun(5, 4, "failure")],
+               {"6": jobs_of(failed=False, cancelled_job=78), "5": jobs_of()}, {"78": CANCEL_NOTES})
+    check("F13 a recovery an operator cancelled after it started is not attempted again",
+          not d.dispatch_recovery_of and not d.problem, d.note)
+    frees = {(b, x): wcr.lane_free(b, x) for b, x in (("0", "0"), ("", "0"), ("0", ""), ("1", "0"),
+                                                       ("0", "1"), ("x", "0"))}
+    check("F14 only a positively free lane with no entrant this tick may take one; anything else is occupied",
+          frees == {("0", "0"): True, ("", "0"): False, ("0", ""): False, ("1", "0"): False,
+                    ("0", "1"): False, ("x", "0"): False}, str(frees))
+    both_lost = {EVIDENCE_WF: [wrun(5, 2, "failure")], INGEST_WF: [wrun(15, 1, "failure", name="AUXSAYS Patch Ingestion")]}
+    lost_jobs = {"5": jobs_of(), "15": jobs_of()}
+    members = sorted(writer_group_members())
+    plan = wcr.plan_tick(FakeGhObj(both_lost, lost_jobs), [EVIDENCE_WF, INGEST_WF], "0", "0", NOW, members)
+    check("F15 two lanes with lost cycles still get exactly one entrant per tick, group-wide",
+          plan.dispatch == (EVIDENCE_WF, "5"), str(plan.dispatch))
+    plan = wcr.plan_tick(FakeGhObj({EVIDENCE_WF: [recovery_run(6, 1, of="5")], INGEST_WF: [wrun(15, 1, "failure")]},
+                                   {"6": jobs_of(), "15": jobs_of()}), [EVIDENCE_WF, INGEST_WF], "2", "0", NOW, members)
+    check("F15 an occupied lane gets no entrant, but persistent failures are still reported",
+          plan.dispatch is None and len(plan.problems) == 1 and EVIDENCE_WF in plan.problems[0], str(plan.problems))
+    held = {}
+    for label, active in (("a member's run is now pending", {"davinci-updates.yml": 1}),
+                          ("a member's runs cannot be read", {"promote-davinci-verified-reports.yml": None})):
+        p2 = wcr.plan_tick(FakeGhObj(both_lost, lost_jobs, active=active), [EVIDENCE_WF, INGEST_WF], "0", "0",
+                           NOW, members)
+        held[label] = p2.dispatch is None and p2.held == (EVIDENCE_WF, "5")
+    p3 = wcr.plan_tick(FakeGhObj(both_lost, lost_jobs), [EVIDENCE_WF, INGEST_WF], "0", "0", NOW, [])
+    held["no group members named"] = p3.dispatch is None
+    check("F18 the group-wide check is repeated right before the dispatch: a writer that entered since, "
+          "an unreadable member or an unnamed group holds it back", all(held.values()), str(held))
+    pages = {
+        "latest failed": ([prun(3, 1, "failure"), prun(2, 5)], True),
+        "latest timed out": ([prun(3, 1, "timed_out")], True),
+        "latest cancelled, the one before succeeded": ([prun(3, 1, "cancelled"), prun(2, 5)], False),
+        "latest succeeded after a failure": ([prun(3, 1), prun(2, 5, "failure")], False),
+        "another branch failed": ([prun(3, 1, "failure", branch="feature"), prun(2, 5)], False),
+    }
+    pgot = {k: (bool(wcr.pages_problem(v)[1]) is want and wcr.pages_problem(v)[0]) for k, (v, want) in pages.items()}
+    check("F16 Pages: the latest completed, non-cancelled build on main decides; only a genuine failure is a problem",
+          all(pgot.values()) and wcr.pages_problem(None) == (False, ""), str(pgot))
+    check("F17 the module reads a recovery title from either writer workflow, and nothing else",
+          wcr.recovery_of({"display_title": "Patch Evidence Collection (recovery of run 123)"}) == "123"
+          and wcr.recovery_of({"display_title": "AUXSAYS Patch Ingestion (recovery of run 9)"}) == "9"
+          and wcr.recovery_of({"display_title": "Patch Evidence Collection"}) == ""
+          and wcr.recovery_of({"display_title": "recovery of run 7 (manual)"}) == "")
+
+
+# --------------------------------------------------------------------------------------------------
+# [G] writer_cycle_recovery as a bare script, against a fake gh serving raw API JSON
+# --------------------------------------------------------------------------------------------------
+FAKE_GH_PY = r'''
+import json, os, re, sys
+args = sys.argv[1:]
+scn = json.load(open(os.environ["FAKE_GH_SCENARIO"], encoding="utf-8"))
+log = open(os.environ["FAKE_GH_LOG"], "a", encoding="utf-8")
+def out(obj):
+    sys.stdout.write(json.dumps(obj))
+if args[:2] == ["workflow", "run"]:
+    log.write(json.dumps({"kind": "dispatch", "args": args}) + "\n")
+    sys.exit(scn.get("write_rc", 0))
+if args and args[0] == "api":
+    if "-X" in args:
+        i = args.index("-X")
+        method = args[i + 1]
+        rest = [a for j, a in enumerate(args) if j not in (0, i, i + 1)]
+        fields = {}
+        for j, a in enumerate(rest):
+            if a == "-f":
+                k, v = rest[j + 1].split("=", 1)
+                fields[k] = v
+        log.write(json.dumps({"kind": "write", "method": method, "path": rest[0], "fields": fields}) + "\n")
+        out({})
+        sys.exit(scn.get("write_rc", 0))
+    path = args[1]
+    log.write(json.dumps({"kind": "read", "path": path}) + "\n")
+    def serve(v, wrap=None):
+        if v is None or v == "FAIL":
+            sys.exit(1)
+        out({wrap: v} if wrap else v)
+        sys.exit(0)
+    m = re.match(r"repos/[^/]+/[^/]+/actions/workflows/([^/?]+)/runs", path)
+    if m and m.group(1) == "pages.yml":
+        serve(scn.get("pages", []), "workflow_runs")
+    if m:
+        serve(scn.get("runs", {}).get(m.group(1), []), "workflow_runs")
+    m = re.match(r"repos/[^/]+/[^/]+/actions/runs/(\d+)/jobs", path)
+    if m:
+        serve(scn.get("jobs", {}).get(m.group(1)))
+    m = re.match(r"repos/[^/]+/[^/]+/check-runs/(\d+)/annotations", path)
+    if m:
+        serve(scn.get("annotations", {}).get(m.group(1)))
+    if re.match(r"repos/[^/]+/[^/]+/issues\?", path):
+        serve(scn.get("issues", []))
+sys.exit(2)
+'''
+
+
+def run_cli(scn: dict, busy: str = "0", dispatched: str = "0", dry: bool = False):
+    tmp = tempfile.mkdtemp()
+    try:
+        fake = Path(tmp, "fake_gh.py")
+        fake.write_text(FAKE_GH_PY, encoding="utf-8")
+        scn_f = Path(tmp, "scenario.json")
+        scn_f.write_text(json.dumps(scn), encoding="utf-8")
+        log = Path(tmp, "log.jsonl")
+        log.write_text("", encoding="utf-8")
+        env = dict(os.environ, FAKE_GH_SCENARIO=str(scn_f), FAKE_GH_LOG=str(log),
+                   GITHUB_STEP_SUMMARY=str(Path(tmp, "summary.md")), PYTHONIOENCODING="utf-8",
+                   PYTHONDONTWRITEBYTECODE="1")
+        env.pop("GITHUB_OUTPUT", None)
+        cmd = [sys.executable, str(RECOVERY_SCRIPT), "--repo", "o/r", "--reapable", f"{EVIDENCE_WF} {INGEST_WF}",
+               "--group-members", " ".join(sorted(writer_group_members())),
+               "--lane-busy", busy, "--dispatched", dispatched, "--now", NOW.strftime("%Y-%m-%dT%H:%M:%SZ"),
+               "--gh-argv", json.dumps([sys.executable, str(fake)])] + (["--dry-run"] if dry else [])
+        p = subprocess.run(cmd, capture_output=True, text=True, env=env, encoding="utf-8", errors="replace")
+        entries = [json.loads(ln) for ln in log.read_text(encoding="utf-8").splitlines() if ln.strip()]
+        summary = Path(tmp, "summary.md").read_text(encoding="utf-8") if Path(tmp, "summary.md").exists() else ""
+        return p.returncode, p.stdout + p.stderr, entries, summary
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def writes(entries: list) -> list:
+    return [e for e in entries if e["kind"] in ("dispatch", "write")]
+
+
+def section_cli() -> None:
+    print(NEWLINE + "[G] writer_cycle_recovery as a bare script: its dispatch and its one tracking issue")
+    healthy = {"runs": {EVIDENCE_WF: [wrun(5, 2)], INGEST_WF: [wrun(15, 1, name="AUXSAYS Patch Ingestion")]},
+               "pages": [prun(3, 1)], "issues": []}
+    rc, out, entries, summary = run_cli(healthy)
+    check("G0 a healthy tick writes nothing, reads no job, and exits 0",
+          rc == 0 and writes(entries) == [] and not any("/jobs" in e.get("path", "") for e in entries),
+          f"rc={rc} {writes(entries)} {out[-300:]}")
+    lost = dict(healthy, runs={EVIDENCE_WF: [wrun(5, 2, "failure")], INGEST_WF: healthy["runs"][INGEST_WF]},
+                jobs={"5": jobs_of()})
+    rc, out, entries, summary = run_cli(lost)
+    w = writes(entries)
+    check("G1 a lost cycle and a free lane: exactly one dispatch, on main, carrying recovery_of",
+          rc == 0 and [e.get("args") for e in w] == [["workflow", "run", EVIDENCE_WF, "--ref", "main", "--repo",
+                                                        "o/r", "-f", "recovery_of=5"]], f"rc={rc} {w} {out[-300:]}")
+    summ = [dispatch_summary(e["args"]) for e in w if e["kind"] == "dispatch"]
+    check("G1 every input it passes is declared by the workflow it dispatches",
+          bool(summ) and all(set(f) <= declared_inputs(wf) for wf, f in summ), str(summ))
+    for busy, dispatched, label in (("", "0", "the eviction step's outputs are missing"),
+                                    ("1", "0", "the lane is occupied"),
+                                    ("0", "1", "the eviction step already added this tick's entrant")):
+        rc, out, entries, _ = run_cli(lost, busy=busy, dispatched=dispatched)
+        check(f"G2 no dispatch when {label}", rc == 0 and writes(entries) == [], str(writes(entries)))
+    arrived = dict(lost, runs=dict(lost["runs"], **{"davinci-updates.yml": [
+        {"id": 900, "status": "pending", "conclusion": None, "created_at": at(0.1), "event": "workflow_dispatch",
+         "triggering_actor": {"login": "auxchan"}, "display_title": "DaVinci"}]}))
+    rc, out, entries, summary = run_cli(arrived)
+    check("G11 a writer that entered the lane after the eviction step's check holds the dispatch back",
+          rc == 0 and writes(entries) == [] and "waits" in summary, f"{writes(entries)} {summary[-300:]}")
+
+    persistent = dict(healthy, runs={EVIDENCE_WF: [recovery_run(6, 1, of="5"), wrun(5, 6, "failure")],
+                                     INGEST_WF: healthy["runs"][INGEST_WF]},
+                      jobs={"6": jobs_of(), "5": jobs_of()})
+    rc, out, entries, _ = run_cli(persistent)
+    w = writes(entries)
+    created = [e for e in w if e["kind"] == "write" and e["method"] == "POST" and e["path"] == "repos/o/r/issues"]
+    body = created[0]["fields"].get("body", "") if created else ""
+    check("G3 a recovery that lost too: not re-run; ONE tracking issue opened, titled as the module says",
+          rc == 0 and not any(e["kind"] == "dispatch" for e in w) and len(created) == 1
+          and created[0]["fields"].get("title") == wcr.ISSUE_TITLE, f"{w}")
+    check("G3 the issue names the lane, the run ids and the outcome code",
+          EVIDENCE_WF in body and "6" in body and "re-run of run 5" in body and "`failure`" in body
+          and WRITEBACK_STEP in body, body[:400])
+    problem = decide(persistent["runs"][EVIDENCE_WF], persistent["jobs"]).problem
+    same = dict(persistent, issues=[{"number": 12, "title": wcr.ISSUE_TITLE, "user": {"login": BOT},
+                                     "body": wcr.issue_body([problem])}])
+    rc, out, entries, _ = run_cli(same)
+    check("G4 the same problems already listed: no duplicate, no edit", writes(entries) == [], str(writes(entries)))
+    stale = dict(same, issues=[dict(same["issues"][0], body="older problems\n")])
+    rc, out, entries, _ = run_cli(stale)
+    w = writes(entries)
+    check("G4 different problems: the one open issue's body is rewritten, nothing else",
+          [(e["method"], e["path"]) for e in w] == [("PATCH", "repos/o/r/issues/12")] and "body" in w[0]["fields"], str(w))
+    clear = dict(healthy, issues=same["issues"])
+    rc, out, entries, _ = run_cli(clear)
+    w = writes(entries)
+    check("G5 everything healthy again: the issue is commented on and closed",
+          [(e["method"], e["path"]) for e in w] == [("POST", "repos/o/r/issues/12/comments"),
+                                                     ("PATCH", "repos/o/r/issues/12")]
+          and w[-1]["fields"].get("state") == "closed", str(w))
+    half = dict(clear, runs={EVIDENCE_WF: [wrun(5, 2)], INGEST_WF: "FAIL"})
+    rc, out, entries, _ = run_cli(half)
+    check("G6 a lane that could not be read keeps the issue open: closing needs the whole state",
+          writes(entries) == [] and "::warning" in out, str(writes(entries)))
+    rc, out, entries, _ = run_cli(dict(persistent, issues="FAIL"))
+    check("G7 unreadable issues: nothing opened blindly (no duplicate), and it says so",
+          writes(entries) == [] and "::warning" in out, str(writes(entries)))
+    rc, out, entries, _ = run_cli(dict(lost, runs={EVIDENCE_WF: lost["runs"][EVIDENCE_WF],
+                                                   INGEST_WF: persistent["runs"][EVIDENCE_WF]},
+                                       jobs={"5": jobs_of(), "6": jobs_of()}), dry=True)
+    check("G8 a dry run dispatches nothing and writes no issue", writes(entries) == [] and rc == 0,
+          str(writes(entries)))
+    human = dict(healthy, issues=[{"number": 3, "title": wcr.ISSUE_TITLE, "user": {"login": "someone"}, "body": "x"}])
+    rc, out, entries, _ = run_cli(human)
+    check("G9 an issue a person opened with the same title is never edited or closed",
+          writes(entries) == [], str(writes(entries)))
+    rc, out, entries, _ = run_cli(dict(healthy, pages=[prun(3, 1, "failure"), prun(2, 5)]))
+    w = writes(entries)
+    check("G10 a failing Pages build on main opens the tracking issue too",
+          len(w) == 1 and w[0]["method"] == "POST" and "Pages" in w[0]["fields"].get("body", "")
+          and "`failure`" in w[0]["fields"].get("body", ""), str(w))
+
+
+# --------------------------------------------------------------------------------------------------
+# [H] the PowerPoint graph's writeback binding
+# --------------------------------------------------------------------------------------------------
+def section_powerpoint_binding() -> None:
+    print(NEWLINE + "[H] the PowerPoint graph confirms its build and reports its writeback")
+    import orchestrate_evidence_run as orch
+    seen: list = []
+    real = aw.run_writeback
+    tmp = Path(tempfile.mkdtemp())
+    out_f = tmp / "github_output"
+    old = os.environ.get("GITHUB_OUTPUT")
+    try:
+        aw.run_writeback = lambda c: (seen.append(c), aw.WritebackResult(
+            outcome=aw.PUSH_SUCCESS_FIRST_ATTEMPT, pushed=True, deployment_pending=True,
+            pages_build_outcome="failed", ok=False))[1]
+        os.environ["GITHUB_OUTPUT"] = str(out_f)
+        orch.default_writeback(_REPO, orch.POWERPOINT_ALLOW, message="m")()
+        silent = out_f.exists()
+        orch.default_writeback(_REPO, orch.POWERPOINT_ALLOW, message="m", github_output=True)()
+        outs = dict(ln.split("=", 1) for ln in out_f.read_text().splitlines() if "=" in ln) if out_f.exists() else {}
+    finally:
+        aw.run_writeback = real
+        if old is None:
+            os.environ.pop("GITHUB_OUTPUT", None)
+        else:
+            os.environ["GITHUB_OUTPUT"] = old
+        shutil.rmtree(tmp, ignore_errors=True)
+    c = seen[0] if seen else None
+    check("H1 the graph's writeback confirms its Pages build with the lanes' bound",
+          c is not None and c.pages_confirm_build is True and (c.pages_confirm_attempts, c.pages_confirm_interval)
+          == (orch.PAGES_CONFIRM_ATTEMPTS, orch.PAGES_CONFIRM_INTERVAL) == (40, 30),
+          str(c and (c.pages_confirm_build, c.pages_confirm_attempts, c.pages_confirm_interval)))
+    check("H2 by default the binding writes no step output (a test never touches the CI job's file)", not silent)
+    check("H3 with github_output it writes the outputs the workflow reads",
+          outs.get("pushed") == "true" and outs.get("outcome") == aw.PUSH_SUCCESS_FIRST_ATTEMPT
+          and outs.get("deployment_pending") == "true" and outs.get("pages_build") == "failed", str(outs))
+
+    captured: dict = {}
+
+    class _Pipeline:
+        def __init__(self, *a, **kw) -> None:
+            pass
+
+        def run(self, resume_run_id=None):
+            from lib.orchestration import DONE, OrchestrationState
+            s = OrchestrationState(run_id="t", trigger="t", product_ids=["microsoft-powerpoint"])
+            s.terminal = DONE
+            return s
+
+    saved = (orch.default_writeback, orch.Pipeline, orch.default_context_fetch)
+    ck = Path(tempfile.mkdtemp())
+    try:
+        orch.default_writeback = lambda *a, **kw: (captured.update(kw), (lambda: {}))[1]
+        orch.Pipeline = _Pipeline
+        orch.default_context_fetch = lambda: None
+        import contextlib
+        import io
+        with contextlib.redirect_stdout(io.StringIO()):
+            rc = orch.main(["--write", "--checkpoint-dir", str(ck)])
+    finally:
+        orch.default_writeback, orch.Pipeline, orch.default_context_fetch = saved
+        shutil.rmtree(ck, ignore_errors=True)
+    check("H4 the production CLI binds the writeback with github_output on",
+          rc == 0 and captured.get("github_output") is True, str(captured))
 
 
 def main() -> int:
     print("=" * 74)
-    print("G91 deployment verification and lost-race recovery")
+    print("G91 deployment verification and lost-cycle recovery")
     print("=" * 74)
     section_confirmation()
+    section_superseded()
     section_lost_race()
+    section_stale_tree()
     section_bare_script()
+    section_bare_script_superseded()
     section_wiring()
     section_executed()
+    section_decisions()
+    section_cli()
+    section_powerpoint_binding()
     print(NEWLINE + "=" * 74)
     print(f"Results: {_PASS}/{_PASS + _FAIL} passed, {_FAIL} failed")
     if _ERRORS:
