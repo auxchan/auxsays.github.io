@@ -50,7 +50,7 @@ auxsays/scripts/tests/test_automation_writeback.py = 152
 # executes chain-ingest's and the reaper's eviction shell against a fake gh, and runs
 # writer_cycle_recovery.py both as functions and as a bare script against a fake gh serving raw API
 # JSON.
-auxsays/scripts/tests/test_deploy_verification_and_lost_race.py = 151
+auxsays/scripts/tests/test_deploy_verification_and_lost_race.py = 160
 # A stored evidence row may not disappear, and may stop being accepted only by an audited in-place
 # withdrawal. Every in-tree gate compares the records against the SAME store a purge rewrote, so a
 # coherent 98% DaVinci deletion passed QA, the audit and this whole manifest, and the real writeback

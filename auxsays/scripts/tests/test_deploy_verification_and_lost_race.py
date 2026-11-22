@@ -20,19 +20,25 @@ WHAT IS PINNED, AND HOW
 [A] the writeback's build confirmation, against a throwaway bare origin and a scripted run list:
     confirmed / failed / never appeared / never finished / unreadable / superseded (cancelled, then
     a same-SHA or descendant run) / a descendant that fails / an ancestor that must not count /
-    a pre-dispatch snapshot that could not be read. No outcome re-pushes or reverts the data commit.
-[B] the `lost_race` diagnostic, and that a run whose checkout went stale never pushes a stale tree.
+    a pre-dispatch snapshot that could not be read / a status query that hangs. No outcome
+    re-pushes or reverts the data commit.
+[B] the `lost_race` diagnostic (a hook's refusal after a clean rebase is not a race), and that a
+    run whose checkout went stale never pushes a stale tree.
 [C] the same contract through the BARE SCRIPT, the way every workflow runs it.
 [D] the workflow wiring, parsed: each writer's real argument list is fed to the writeback's own
     argparse parser; the confirm bound fits each job's budget; the `Cycle reached main` steps and
     the run names are EVALUATED per context and cross-checked against the reaper module that reads
-    them; the reaper's new step reads the eviction step's outputs and has the permissions it needs.
-[E] shell EXECUTED under bash against a fake `gh`: chain-ingest dispatches ingestion only; the
-    reaper's eviction step passes `recovery_of` on and reports whether the lane was free.
+    them; the reaper's new step reads the eviction step's outputs and has the permissions it needs;
+    every writer job of a re-run checks out main as it is when the job starts.
+[E] shell EXECUTED under bash against a fake `gh`: chain-ingest dispatches ingestion only, on main;
+    the reaper's eviction step re-dispatches on main, passes `recovery_of` on and reports whether
+    the lane was free.
 [F] writer_cycle_recovery's decisions over scripted run histories: reached / lost / loop guard /
-    pause after a lost recovery / time limit vs operator cancel / one entrant per tick / Pages.
+    pause after a lost recovery / time limit vs operator cancel / one entrant per tick / Pages /
+    a GREEN run whose cycle record was skipped (the PowerPoint graph's writeback lost its race).
 [G] the same module as a BARE SCRIPT against a fake `gh` serving raw API JSON: the dispatch it
-    issues, and the ONE tracking issue it opens, updates, closes or leaves alone.
+    issues, the writer states that hold it back, and the ONE tracking issue it opens, updates,
+    closes or leaves alone.
 [H] the PowerPoint graph's writeback binding confirms its build and writes its outputs.
 
 Deterministic, offline, writes nothing outside its temporary directories.
@@ -282,6 +288,18 @@ g("add", "-A"); g("commit", "-m", "a later push"); g("push", "origin", "main")
 """
 
 
+# A `gh run list` stand-in that answers only after argv[2] seconds -- with a successful build of
+# origin/main, so a caller that waited for it would confirm.
+_SLOW_STATUS = r"""
+import json, subprocess, sys, time
+origin, delay = sys.argv[1], float(sys.argv[2])
+time.sleep(delay)
+sha = subprocess.run(["git", "-C", origin, "rev-parse", "main"], capture_output=True, text=True).stdout.strip()
+sys.stdout.write(json.dumps([{"databaseId": 900, "headSha": sha, "headBranch": "main",
+                              "status": "completed", "conclusion": "success"}]))
+"""
+
+
 def advance_dispatch(tmp: Path, origin: Path, other: Path) -> str:
     script = tmp / "advance_dispatch.py"
     script.write_text(_ADVANCE_DISPATCH, encoding="utf-8")
@@ -429,6 +447,24 @@ def section_confirmation() -> None:
                                  pages_confirm_attempts=3, pages_confirm_interval=30,
                                  deploy_recovery=True, recovery_site_paths=["records/*.md"]))
         check("A6 a recovery build that fails fails the run", not r.ok and r.pages_build_outcome == "failed")
+
+    # A15 a status query that hangs: each query is cut at pages_status_timeout and reads as
+    # unreadable, so a hung `gh` can never stretch the bounded wait into the job's time limit. The
+    # stand-in WOULD answer (a successful build of this very revision) if it were waited for.
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td)
+        origin, work = setup(tmp)
+        slow = tmp / "slow_status.py"
+        slow.write_text(_SLOW_STATUS, encoding="utf-8")
+        status = f'"{sys.executable}" "{slow.as_posix()}" "{origin.as_posix()}" 4'
+        write(work, "records/rec-a.md", "A15\n")
+        with StepSummary(tmp, "a15.md") as summ:
+            r = aw.run_writeback(cfg(work, pages_cmd=PY_OK, pages_confirm_build=True, pages_status_cmd=status,
+                                     pages_status_timeout=1, pages_confirm_attempts=2, pages_confirm_interval=30))
+        check("A15 a status query that does not answer within its timeout reads as unreadable: unverified, green",
+              r.ok and r.pushed and r.deployment_unverified and r.pages_build_outcome == "unconfirmed"
+              and aw.PAGES_BUILD_CONFIRMED not in r.outcomes and "could not be read" in summ.text(),
+              f"{r.outcomes} {summ.text()[:200]}")
 
 
 
@@ -609,6 +645,23 @@ def section_lost_race() -> None:
         check("B7 pushes refused while main did NOT move are not a lost race",
               r.outcome == aw.RETRY_EXHAUSTED and aw.UPSTREAM_ADVANCED not in r.outcomes
               and not r.lost_race, f"{r.outcome} {r.outcomes}")
+
+    # B7b (review NIT): main moved ONCE, the rebase was clean, and every push after it was refused by
+    # a hook. upstream_advanced is in the outcomes, but the retries ran out on a refusal, not a race.
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td)
+        origin, work = setup(tmp)
+        other = clone(tmp, origin, "other")
+        push_change(other, "records/rec-other.md", "upstream B7b\n", "upstream")
+        hook = origin / "hooks" / "pre-receive"
+        hook.write_text("#!/bin/sh\necho refused >&2\nexit 1\n", encoding="utf-8", newline="\n")
+        hook.chmod(hook.stat().st_mode | stat.S_IEXEC | stat.S_IXGRP | stat.S_IXOTH)
+        write(work, "records/rec-a.md", "mine B7b\n")
+        r = aw.run_writeback(cfg(work, pages_cmd=PY_OK, max_retries=1))
+        check("B7b a clean rebase followed by pushes a hook refused is not a lost race",
+              r.outcome == aw.RETRY_EXHAUSTED and aw.UPSTREAM_ADVANCED in r.outcomes
+              and aw.REBASE_SUCCESS in r.outcomes and not r.pushed and not r.lost_race,
+              f"{r.outcome} {r.outcomes}")
 
     with tempfile.TemporaryDirectory() as td:
         tmp = Path(td)
@@ -1170,6 +1223,22 @@ def section_wiring() -> None:
               == (collect_args.pages_confirm_attempts, collect_args.pages_confirm_interval),
               f"{orch.PAGES_CONFIRM_ATTEMPTS}/{orch.PAGES_CONFIRM_INTERVAL}")
 
+    # D13 (amendment A1.2) a re-run starts from main as it is when its job STARTS. A recovery is
+    # dispatched with `--ref main` (E1, E2, G1), so github.ref is refs/heads/main while github.sha is
+    # the tip at dispatch time, which a run waiting in the writer queue can be far behind. Every writer
+    # job checks out the REF, resolved when the checkout runs -- never the dispatch-time SHA.
+    recovery_ctx = {"github": {"ref": "refs/heads/main", "sha": "0000000stale-dispatch-time-tip"}}
+    refs = {}
+    for name, jname in ((EVIDENCE_WF, "collect"), (EVIDENCE_WF, "powerpoint-orchestrated"), (INGEST_WF, "ingest")):
+        cos = [s for s in (load_wf(name)["jobs"][jname].get("steps") or [])
+               if isinstance(s, dict) and str(s.get("uses") or "").startswith("actions/checkout@")]
+        try:
+            refs[f"{name}/{jname}"] = [eval_ref((c.get("with") or {}).get("ref", ""), recovery_ctx) for c in cos]
+        except ValueError as exc:
+            refs[f"{name}/{jname}"] = [f"unsupported: {exc}"]
+    check("D13 every writer job of a re-run checks out main as it is when the job starts, not the dispatch-time SHA",
+          all(v == ["refs/heads/main"] for v in refs.values()), str(refs))
+
 
 # --------------------------------------------------------------------------------------------------
 # [E] shell, executed
@@ -1242,6 +1311,12 @@ def dispatch_summary(d: list[str]) -> tuple[str, dict]:
     return wf, fields
 
 
+def on_main(d: list[str]) -> bool:
+    """A `workflow run` token list targets exactly `--ref main`, once."""
+    refs = [d[i + 1] for i, t in enumerate(d) if t == "--ref" and i + 1 < len(d)]
+    return refs == ["main"]
+
+
 def declared_inputs(name: str) -> set[str]:
     return set(((load_wf(name)["on"].get("workflow_dispatch") or {}).get("inputs") or {}).keys())
 
@@ -1259,6 +1334,7 @@ def section_executed() -> None:
     summ = [dispatch_summary(d) for d in ds]
     check("E1 chain-ingest dispatches routine ingestion once, with no inputs, and nothing else",
           rc == 0 and summ == [(INGEST_WF, {})], f"rc={rc} {summ} {out[-300:]}")
+    check("E1 and on main", len(ds) == 1 and on_main(ds[0]), str(ds))
 
     reaper = load_wf(REAPER_WF)["jobs"]["reap"]
     step0 = reaper["steps"][0]["run"]
@@ -1272,6 +1348,7 @@ def section_executed() -> None:
     check("E2 an evicted RECOVERY run is re-dispatched carrying the SAME recovery_of (finding 4: the "
           "loop guard survives an eviction)", rc == 0 and summ == [(EVIDENCE_WF, {"recovery_of": "99"})],
           f"rc={rc} {summ} {out[-300:]}")
+    check("E2 and on main (amendment A1.2: a re-run starts from main)", len(ds) == 1 and on_main(ds[0]), str(ds))
     rc, ds, out, output = run_shell(step0, dict(base, SIM_EVICTED_ING=(
         "201 2026-11-22T03:00:00Z AUXSAYS Patch Ingestion\\n")))
     summ = [dispatch_summary(d) for d in ds]
@@ -1342,8 +1419,29 @@ TIMEOUT_NOTES = [{"annotation_level": "failure",
 CANCEL_NOTES = [{"annotation_level": "failure", "message": "The operation was canceled."}]
 
 
+def legacy_jobs() -> dict:
+    """A green run from before the cycle record existed: no `Cycle reached main` step at all."""
+    return {"total_count": 2, "jobs": [
+        {"id": 1, "name": "collect", "conclusion": "success",
+         "steps": [{"name": WRITEBACK_STEP, "conclusion": "success"}]},
+        {"id": 3, "name": "chain-ingest", "conclusion": "success",
+         "steps": [{"name": "Dispatch routine patch ingestion", "conclusion": "success"}]}]}
+
+
+def with_green_jobs(runs, jobs: dict | None) -> dict:
+    """`jobs`, plus a successful cycle record for every green run the test gave none: the module
+    reads the record of a green run too, and most scenarios are about the runs that are not green."""
+    out = dict(jobs or {})
+    lists = runs.values() if isinstance(runs, dict) else [runs]
+    for lst in lists:
+        for r in lst if isinstance(lst, list) else []:
+            if r.get("conclusion") == "success" and str(r.get("id")) not in out:
+                out[str(r.get("id"))] = jobs_of(marker=True, failed=False)
+    return out
+
+
 def decide(runs: list, jobs: dict | None = None, notes: dict | None = None, wf: str = EVIDENCE_WF):
-    jobs = jobs or {}
+    jobs = with_green_jobs(runs, jobs)
     notes = notes or {}
     return wcr.decide_lane(wf, runs, lambda rid: jobs.get(str(rid)), lambda jid: notes.get(str(jid)), NOW)
 
@@ -1353,7 +1451,7 @@ class FakeGhObj:
 
     def __init__(self, runs: dict, jobs: dict | None = None, notes: dict | None = None,
                  pages: list | None = None, active: dict | None = None) -> None:
-        self._runs, self._jobs, self._notes = runs, jobs or {}, notes or {}
+        self._runs, self._jobs, self._notes = runs, with_green_jobs(runs, jobs), notes or {}
         self._pages = [] if pages is None else pages
         self._active = active or {}
 
@@ -1473,6 +1571,18 @@ def section_decisions() -> None:
           and wcr.recovery_of({"display_title": "AUXSAYS Patch Ingestion (recovery of run 9)"}) == "9"
           and wcr.recovery_of({"display_title": "Patch Evidence Collection"}) == ""
           and wcr.recovery_of({"display_title": "recovery of run 7 (manual)"}) == "")
+    # F19-F21: a GREEN run is judged by its record too. The PowerPoint graph's step takes `tee`'s exit
+    # status, so its writeback can lose a race (or the graph can stop before writing back) while the
+    # whole run concludes `success` -- with chain-ingest's `Cycle reached main` skipped.
+    d = decide([wrun(5, 2), wrun(4, 8)], {"5": jobs_of(marker=False, failed=False)})
+    check("F19 a green run whose cycle record was skipped (the PowerPoint writeback lost its race) is lost: re-run",
+          d.dispatch_recovery_of == "5" and not d.problem and "`success`" in d.note, d.note)
+    d = decide([wrun(5, 2), wrun(4, 8, "failure")], {"5": legacy_jobs()})
+    check("F20 a green run from before the record existed (no such step at all) reached main: nothing re-run",
+          d.decided and not d.dispatch_recovery_of and not d.problem, d.note)
+    d = decide([wrun(5, 2)], {"5": None})
+    check("F21 a green run whose jobs cannot be read decides nothing (its record is unknown)",
+          not d.decided and not d.dispatch_recovery_of and not d.problem, d.note)
 
 
 # --------------------------------------------------------------------------------------------------
@@ -1530,6 +1640,9 @@ def run_cli(scn: dict, busy: str = "0", dispatched: str = "0", dry: bool = False
     try:
         fake = Path(tmp, "fake_gh.py")
         fake.write_text(FAKE_GH_PY, encoding="utf-8")
+        scn = dict(scn)
+        if isinstance(scn.get("runs"), dict):
+            scn["jobs"] = with_green_jobs(scn["runs"], scn.get("jobs"))
         scn_f = Path(tmp, "scenario.json")
         scn_f.write_text(json.dumps(scn), encoding="utf-8")
         log = Path(tmp, "log.jsonl")
@@ -1559,9 +1672,16 @@ def section_cli() -> None:
     healthy = {"runs": {EVIDENCE_WF: [wrun(5, 2)], INGEST_WF: [wrun(15, 1, name="AUXSAYS Patch Ingestion")]},
                "pages": [prun(3, 1)], "issues": []}
     rc, out, entries, summary = run_cli(healthy)
-    check("G0 a healthy tick writes nothing, reads no job, and exits 0",
-          rc == 0 and writes(entries) == [] and not any("/jobs" in e.get("path", "") for e in entries),
-          f"rc={rc} {writes(entries)} {out[-300:]}")
+    job_reads = sorted(e["path"] for e in entries if "/jobs" in e.get("path", ""))
+    check("G0 a healthy tick writes nothing, reads only each lane's newest run's record, and exits 0",
+          rc == 0 and writes(entries) == [] and job_reads == ["repos/o/r/actions/runs/15/jobs?per_page=100",
+                                                              "repos/o/r/actions/runs/5/jobs?per_page=100"],
+          f"rc={rc} {writes(entries)} {job_reads} {out[-300:]}")
+    rc, out, entries, _ = run_cli(dict(healthy, jobs={"5": jobs_of(marker=False, failed=False)}))
+    w = writes(entries)
+    check("G12 a green run whose cycle record was skipped is re-run once, as its recovery",
+          rc == 0 and [e.get("args") for e in w] == [["workflow", "run", EVIDENCE_WF, "--ref", "main", "--repo",
+                                                        "o/r", "-f", "recovery_of=5"]], f"rc={rc} {w} {out[-300:]}")
     lost = dict(healthy, runs={EVIDENCE_WF: [wrun(5, 2, "failure")], INGEST_WF: healthy["runs"][INGEST_WF]},
                 jobs={"5": jobs_of()})
     rc, out, entries, summary = run_cli(lost)
@@ -1577,12 +1697,15 @@ def section_cli() -> None:
                                     ("0", "1", "the eviction step already added this tick's entrant")):
         rc, out, entries, _ = run_cli(lost, busy=busy, dispatched=dispatched)
         check(f"G2 no dispatch when {label}", rc == 0 and writes(entries) == [], str(writes(entries)))
-    arrived = dict(lost, runs=dict(lost["runs"], **{"davinci-updates.yml": [
-        {"id": 900, "status": "pending", "conclusion": None, "created_at": at(0.1), "event": "workflow_dispatch",
-         "triggering_actor": {"login": "auxchan"}, "display_title": "DaVinci"}]}))
-    rc, out, entries, summary = run_cli(arrived)
-    check("G11 a writer that entered the lane after the eviction step's check holds the dispatch back",
-          rc == 0 and writes(entries) == [] and "waits" in summary, f"{writes(entries)} {summary[-300:]}")
+    held_by = {}
+    for state in ("pending", "queued", "in_progress", "waiting", "requested"):
+        arrived = dict(lost, runs=dict(lost["runs"], **{"davinci-updates.yml": [
+            {"id": 900, "status": state, "conclusion": None, "created_at": at(0.1), "event": "workflow_dispatch",
+             "triggering_actor": {"login": "auxchan"}, "display_title": "DaVinci"}]}))
+        rc, out, entries, summary = run_cli(arrived)
+        held_by[state] = rc == 0 and writes(entries) == [] and "waits" in summary
+    check("G11 a writer that entered the lane after the eviction step's check holds the dispatch back, "
+          "in every state a run reports before it completes", all(held_by.values()), str(held_by))
 
     persistent = dict(healthy, runs={EVIDENCE_WF: [recovery_run(6, 1, of="5"), wrun(5, 6, "failure")],
                                      INGEST_WF: healthy["runs"][INGEST_WF]},

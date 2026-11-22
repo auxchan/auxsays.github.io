@@ -4578,14 +4578,21 @@ arrives, and the newer build -- of the same commit, or of a later one, which the
 by ancestry after fetching -- deploys this content; the poll keeps watching for it. No verdict within
 the bound is `deployment_unverified` (output, outcome token, warning annotation, summary section with
 the reason) without failing the lane. If the pre-dispatch run list could not be read, a failed run
-for the SHA is not attributed to the dispatch. The data commit is never reverted or re-pushed.
-Recovery: each routine writer run executes a step named `Cycle reached main` only when its writebacks
-pushed or had nothing to push (collection: chain-ingest's first step, over both writer jobs; ingestion:
-after its writeback, `always()`). The reaper's new step (`writer_cycle_recovery.py`) re-runs, once and
-on main, the newest routine run of each lane that ran without that step -- including a time-limit
-cancel, told apart from an operator's by GitHub's annotation -- but only when the eviction step found
-the whole writer group free and dispatched nothing, and the same check repeated just before the
-dispatch still finds it free: one entrant per tick, never a third entrant. Every automatic re-run
+for the SHA is not attributed to the dispatch, and a status query that has not answered in 60 s
+reads as unreadable, so a hung `gh` cannot stretch the wait. The data commit is never reverted or
+re-pushed. The `lost_race` diagnostic counts `retry_exhausted` only when the last push was refused as
+non-fast-forward, not by a hook. Recovery: each routine writer run executes a step named
+`Cycle reached main` only when its writebacks pushed or had nothing to push (collection:
+chain-ingest's first step, over both writer jobs; ingestion: after its writeback, `always()`). The
+reaper's new step (`writer_cycle_recovery.py`) re-runs, once and on main, the newest routine run of
+each lane whose record step did not succeed -- including a GREEN run, since the PowerPoint graph's
+step takes `tee`'s exit status and its writeback can lose a race while the run concludes `success`,
+and a time-limit cancel, told apart from an operator's by GitHub's annotation; a green run from
+before the record existed counts as reached -- but only when the eviction step found the whole
+writer group free and dispatched nothing, and the same check repeated just before the dispatch
+still finds it free: one entrant per tick, into a lane with no queued writer. A re-run checks out
+main as it is when its job starts (`ref: github.ref` under `--ref main`), and its writeback rebases
+onto any later main and re-validates before pushing. Every automatic re-run
 carries `recovery_of`, which the writer workflows put in their `run-name`, so it survives an eviction:
 a recovery that loses again is never re-run, and the eviction step re-dispatches an evicted recovery
 with the same `recovery_of`. After a recovery has lost, later losses of that lane pause until a run
@@ -4595,13 +4602,13 @@ that genuinely failed opens ONE tracking issue (`Automated writer recovery needs
 rewritten when the problems change and closed when all are healthy; run ids, workflow names,
 conclusions and failed step names only.
 
-**Evidence** `test_deploy_verification_and_lost_race.py`, 151 governed checks: the real writeback
+**Evidence** `test_deploy_verification_and_lost_race.py`, 160 governed checks: the real writeback
 against a throwaway bare origin and a scripted Pages run list (superseded, descendant, ancestor,
-unattributable cases), the bare script's outputs, every writer's argument list parsed by the
-writeback's own parser, the `Cycle reached main` conditions and run names evaluated per context and
-read back by the reaper module, chain-ingest's and the eviction step's shell executed against a fake
-`gh`, and `writer_cycle_recovery.py` as functions and as a bare script against a fake `gh` serving raw
-API JSON. Its reads were also run read-only against the live API: run 44878227542 judges lost, run
+unattributable and hung-query cases), the bare script's outputs, every writer's argument list parsed
+by the writeback's own parser, the `Cycle reached main` conditions, run names and re-run checkout
+refs evaluated per context and read back by the reaper module, chain-ingest's and the eviction step's
+shell executed against a fake `gh`, and `writer_cycle_recovery.py` as functions and as a bare script
+against a fake `gh` serving raw API JSON. Its reads were also run read-only against the live API: run 44878227542 judges lost, run
 33810979002 (PowerPoint time limit) lost, run 31111379736 (operator cancel) left alone, run
 30669290854 an eviction. Mutants, one per fix, each killed by a named check. Measured with no change:
 the last audited withdrawal merge (#265, b64fa539) was followed by Pages run 44876328066 on that SHA
@@ -4610,9 +4617,13 @@ the last audited withdrawal merge (#265, b64fa539) was followed by Pages run 448
 
 **Known limits** A recovery waits for a free lane and a reaper tick (every two hours). Pre-merge runs
 carry no `Cycle reached main` step, so a pre-merge run that failed after reaching main and is still a
-lane's newest routine run would be re-run once. A failed chain-ingest dispatch still leaves that
-cycle's ingestion undispatched (the run's own cycle reached main). Official notes older than the two
-newest releases per product are still not re-read (AUX-125).
+lane's newest routine run would be re-run once. The reaper's re-check and its dispatch are two API
+calls; a writer arriving between them can still be evicted (and is then the eviction step's to
+re-dispatch). Chain-ingest's ingestion dispatch, unchanged here, can still evict a queued cron run, as
+before. A writeback writes its outputs only when it ends, so a job killed by its time limit during
+the build wait counts as a lost cycle and is re-run once. A failed chain-ingest dispatch still leaves
+that cycle's ingestion undispatched (the run's own cycle reached main). Official notes older than the
+two newest releases per product are still not re-read (AUX-125).
 
 **Reopen only if** a writer run pushes a site change and neither confirms its Pages build nor reports
 `deployment_unverified`; a superseded Pages run fails a lane; or a routine run without a successful
