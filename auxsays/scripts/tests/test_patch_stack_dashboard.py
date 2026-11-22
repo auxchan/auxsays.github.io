@@ -199,8 +199,12 @@ VERDICT_FACTS = {
 
 
 def expected_phrase(rec: dict) -> tuple[str, str]:
-    """(verdict, scope) the authority gives this record, as every surface must print it."""
-    return verdict_projection.rendered_verdict(rec, _PROJECTION["pages"], VERDICT_FACTS["patch_lifecycle"]["entries"])
+    """(verdict, qualifier) the authority gives this record, as every surface must print it: the qualifier is the
+    scope, or -- for the volume-based precaution (G87), which has none -- its label, exactly what the gate hands
+    every surface as gate_scope."""
+    verdict, _scope = verdict_projection.rendered_verdict(rec, _PROJECTION["pages"],
+                                                          VERDICT_FACTS["patch_lifecycle"]["entries"])
+    return verdict, verdict_projection.printed_qualifier(verdict_projection.printed_row(rec, _PROJECTION["pages"]))
 
 
 def expected_verdict(rec: dict) -> str:
@@ -540,10 +544,15 @@ def run() -> int:
     m2 = re.search(r'<script type="application/json" id="patch-stack-data">(.*?)</script>', html2, re.S)
     obs2 = next((e for e in (json.loads(m2.group(1)) if m2 else []) if e.get("id") == "obs-studio"), {})
     rec2 = next((r for r in obs2.get("recs") or [] if r[0] == "32.2.2"), [])
-    check("UP2b a scoped verdict is carried WITH its scope: the card's verdict and the release's rec[12] "
-          "(OBS 32.2.2 made current)",
-          (obs2.get("verdict"), obs2.get("scope")) == ("WAIT", "if you use macOS 27.2")
-          and len(rec2) == REC_WIDTH and (rec2[5], rec2[12]) == ("WAIT", "if you use macOS 27.2"),
+    # G87: 32.2.2's primary verdict is now the volume-based WAIT, whose label stands where a scope would; its
+    # reviewed macOS 27.2 WAIT is printed beneath it on the page. The card and the release step must carry the
+    # verdict WITH that qualifier, exactly as the authority gives it.
+    want_322 = expected_phrase(obs_rec)
+    check("UP2b a qualified verdict is carried WITH its qualifier: the card's verdict and the release's rec[12] "
+          "(OBS 32.2.2 made current; its volume-based WAIT carries the label 'Volume-based precaution')",
+          want_322 == ("WAIT", "Volume-based precaution")
+          and (obs2.get("verdict"), obs2.get("scope")) == want_322
+          and len(rec2) == REC_WIDTH and (rec2[5], rec2[12]) == want_322,
           f"{(obs2.get('verdict'), obs2.get('scope'))} {rec2[5:6] + rec2[12:13] if rec2 else rec2}")
     check("UP3 every release carries its own report count", not count_drift, "; ".join(count_drift[:3]))
     check("UP4 every release carries the rank its verdict maps to", not rank_drift, "; ".join(rank_drift[:3]))

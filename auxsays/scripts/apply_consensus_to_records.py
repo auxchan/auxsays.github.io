@@ -1013,7 +1013,9 @@ def _policy_decision(pid: str, ver: str, build: str, rows: list[dict[str, Any]],
     # The page's reasons as the projection gathers them: the reason producer's candidates join only while
     # its (temporary, owner-gated) switch is on, so the prose stored here is the page's verdict (AUX-099).
     valid = verdict_projection.page_supported_reasons(facts, rows, valid, _all_entry_records)
-    return patch_decision.decide(facts, valid_reasons=valid, lifecycle=lifecycle), facts
+    # G87: the volume-based precaution reads this group's counted rows -- the authoritative population this
+    # writer stores as the count -- never the record's stored update_report_count.
+    return patch_decision.decide(facts, valid_reasons=valid, lifecycle=lifecycle, counted_rows=rows), facts
 
 
 _ALL_ENTRY_RECORDS: list[dict[str, Any]] = []
@@ -1147,7 +1149,13 @@ def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, A
         # instruction.
         # GROWTH-3: the body is the policy's line (above); `update_status` stays descriptive and the
         # archived notice is rendered by its own include, so it no longer appends to the verdict.
-        if decision == patch_decision.WAIT:
+        if decision == patch_decision.WAIT and policy.volume:
+            # G87: a volume-based WAIT applies to every setup, so "if your setup matches" would misstate it;
+            # the line above already says to keep a working version while reviewing known issues.
+            steps = [
+                "Keep a backup of your scene collection and profile before updating.",
+            ]
+        elif decision == patch_decision.WAIT:
             steps = [
                 "If your setup matches, keep your current OBS version until a release fixes it.",
                 "Keep a backup of your scene collection and profile before updating.",

@@ -1,4 +1,6 @@
-# REVIEWED VERDICT REASONS (GROWTH-3). The only way a patch page can say TEST FIRST or WAIT.
+# REVIEWED VERDICT REASONS (GROWTH-3). The only way a patch page can say TEST FIRST, or WAIT for a setup.
+# (The one other WAIT is the volume-based precaution, decided in lib/patch_decision from the page's counted
+# population, AUX-127; an entry here stays visible beneath it with its own scope.)
 #
 # Read by lib/patch_decision.decide (through lib/verdict_reasons). The page does not read this file:
 # build_verdict_projection.py writes decide's answer to _data/verdict_projection.yml at deploy and
@@ -16,8 +18,9 @@
 #   - a WAIT is a regression: the version transition, a written material impact, and new in this
 #     version (a persistent problem is never called new).
 #
-# Counts, sentiment and theme-derived severity never decide a verdict. A new TEST FIRST or WAIT
-# currently needs a new reviewed entry here; a deterministic corroboration signal is follow-up work.
+# Sentiment and theme-derived severity never decide a verdict, and no count does except the volume-based
+# precaution (AUX-127). A new scoped TEST FIRST or WAIT currently needs a new reviewed entry here; a
+# deterministic corroboration signal is follow-up work.
 #
 # REVIEWERS, distinct reporters (AUX-109). Two cited rows with an identical excerpt count as one
 # reporter. New Acrobat Pro / Reader and Premiere opening-post rows store their excerpt centred on the

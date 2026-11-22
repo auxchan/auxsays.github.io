@@ -67,6 +67,11 @@ import re
 import unicodedata
 from typing import Any
 
+# Two leaves of `lib`, standard library only: the report-URL identity every count and live check uses, and
+# the vocabularies a row must carry to be published. Neither imports the collector package.
+from .evidence_classification import VALID_SENTIMENTS, VALID_SEVERITIES
+from .source_segments import report_url_key
+
 INSUFFICIENT_DATA = "INSUFFICIENT DATA"
 
 # ---------------------------------------------------------------------------------------------
@@ -205,9 +210,13 @@ def leading_decision(text: str) -> str:
     A SCOPED lead is the same decision: GROWTH-3 stores "WAIT if you use macOS 27.2: ..." so the
     feed never prints a verdict without the setup it applies to, and that field still opens with
     WAIT. The scope must read the way a reason entry's scope reads ("if/when/for ...", no colon),
-    so a vendor title that merely begins with a decision word is not mistaken for one.
+    so a vendor title that merely begins with a decision word is not mistaken for one. The
+    volume-based precaution's lead, "WAIT Volume-based precaution:" (G87), is WAIT too -- that exact
+    label and no other.
     """
     body = str(text or "")
+    if body.startswith(VOLUME_LEAD + ":"):
+        return WAIT
     for phrase in _LONGEST_FIRST:
         if body.startswith(phrase + ":"):
             return phrase
@@ -229,17 +238,33 @@ def leading_decision(text: str) -> str:
 #   R2  SECURITY UPDATE  Microsoft's own classification of the exact update as a monthly security
 #                        release (release-health update type "YYYY-MM B", stored on the record).
 #                        User reports never override it; reviewed reasons only add a warning panel
+#   R3V WAIT             a VOLUME-BASED PRECAUTION (G87, below): 30 or more accepted patch-specific
+#                        reports with 30 or more unique report URLs, on a product whose projections the
+#                        lanes maintain. It outranks R3-R5 whenever it is at least as cautious; the
+#                        reviewed entries R3/R4 would have printed stay visible beneath it
 #   R3  WAIT             a reviewed `regression` reason entry that is supported by counted rows
 #   R4  TEST FIRST       a reviewed corroboration reason entry that is supported by counted rows
 #   R5  INSUFFICIENT DATA, the reported problems disclosed (reports, no supported reason)
 #   R6  INSUFFICIENT DATA (no reports, no official fact)
 #
-# WHAT IS NEVER AN INPUT. Report count, sentiment (`update_consensus_label`), `issue_theme`,
-# `severity`, maturity, `update_status` and the clock. `decide` does not accept them, so no count
-# can make a WAIT (G3-D4), no negative tone can (G3-D3), no theme-derived severity can (G3-D12), and
-# nothing becomes SAFE ENOUGH because time passed or complaints stopped (G3-D2). SAFE ENOUGH,
-# OFFICIAL ONLY and MANUAL WATCH stay canonical (recognised, ranked) but this policy produces none
-# of them: no positive evidence is collected.
+# WHAT IS NEVER AN INPUT. Sentiment (`update_consensus_label`), `issue_theme`, `severity`, maturity,
+# collection health (`evidence_method_health.yml`, the monitoring notice), `update_status` and the
+# clock. `decide` does not accept them, so no negative tone can make a WAIT (G3-D3), no theme-derived
+# severity can (G3-D12), no collector outage can add or remove one, and nothing becomes SAFE ENOUGH
+# because time passed or complaints stopped (G3-D2). SAFE ENOUGH, OFFICIAL ONLY and MANUAL WATCH stay
+# canonical (recognised, ranked) but this policy produces none of them: no positive evidence is
+# collected.
+#
+# THE ONE COUNT THAT IS AN INPUT (G87, owner amendment of 2026-11-21 to the 2026-11-06 policy). Until
+# G87 no count could make a WAIT (G3-D4). The owner amended that for one rule: a page whose canonical
+# counted population reaches VOLUME_MIN_REPORTS accepted patch-specific reports with VOLUME_MIN_UNIQUE_URLS
+# unique report URLs gets a WAIT labelled "Volume-based precaution" (reason high_report_volume). It is a
+# provisional policy constant, not a statistical claim: it says the volume of accepted reports warrants
+# caution, never that one defect is confirmed or how often installations fail. The count is read ONLY
+# from `counted_rows`, the page's population as lib.report_counts.counted_evidence_rows returns it --
+# the same rows every public count uses -- never from a record's stored update_report_count, which can
+# lag. Every other count rule still stands: the live rung (maturity.LIVE_MIN_ACCEPTED_REPORTS, 33) and
+# the evidence-strength ladder are untouched, and a count below the volume minimum still decides nothing.
 #
 # THE TEMPLATES DO NOT DECIDE A REASONED VERDICT. WAIT, TEST FIRST and a security page's warning
 # panel rest on reason entries that only Python can validate (counted rows, distinct reporters, a
@@ -262,6 +287,102 @@ AVOID = "AVOID"
 AVOID_SCOPE = "for new installations"
 WAIT = "WAIT"
 TEST_FIRST = "TEST FIRST"
+
+# ---------------------------------------------------------------------------------------------
+# G87: THE VOLUME-BASED PRECAUTION (owner-approved 2026-11-21; provisional policy constant, not a
+# statistical claim). A WAIT with reason code high_report_volume, printed with the label below in the
+# place every surface prints a verdict's scope. Eligibility, ALL required (`volume_problems` names each
+# failure):
+#   * the product is one whose projections the lanes rebuild and retract (VOLUME_PRODUCTS, the literal copy of
+#     report_counts.CONSENSUS_PROMOTION_PRODUCTS pinned to it by test: ten products today);
+#   * at least VOLUME_MIN_REPORTS counted rows in the page's canonical population (`counted_rows`);
+#   * at least VOLUME_MIN_UNIQUE_URLS distinct report URLs among them (source_segments.report_url_key, the
+#     identity every count and the live check use), and no report cited twice;
+#   * every row publishable: the live gate's condition (e) per row (`publishable_row`, which
+#     live_eligibility uses too), so the population can be printed under the publish-strict gate;
+#   * the record is not officially identified as a security update outside Windows (`security_identified`).
+# NOT an input: collection health. A blocked or stale collector changes the monitoring notice only; the
+# accepted rows it already collected still count (GPT C3). Also not an input: maturity (live or pilot),
+# sentiment values, themes, severity values and the clock. Recomputed from scratch every build; no state.
+#
+# PRECEDENCE. An official withdrawal (R1 AVOID) and Microsoft's monthly security classification (R2
+# SECURITY UPDATE) always win, and so does an official security identification outside Windows (the
+# volume rule does not apply there). Otherwise the volume WAIT is the PRIMARY verdict whenever it is at
+# least as cautious as what the reviewed entries would print (RISK_ORDER): it replaces INSUFFICIENT DATA,
+# supersedes a reviewed TEST FIRST, and stands beside an equally cautious reviewed WAIT. Those reviewed
+# entries stay in `reasons` and are printed beneath it with their own scope and wording ("Also WAIT if you
+# use macOS 27.2: ..."), never rewritten as a universal regression.
+# ---------------------------------------------------------------------------------------------
+VOLUME_REASON_CODE = "high_report_volume"
+VOLUME_LABEL = "Volume-based precaution"
+VOLUME_RULE = "R3V"
+VOLUME_MIN_REPORTS = 30
+VOLUME_MIN_UNIQUE_URLS = 30
+# report_counts.CONSENSUS_PROMOTION_PRODUCTS, as literals (the module comment above DAVINCI says why);
+# test_volume_precaution pins the two sets equal.
+VOLUME_PRODUCTS = frozenset({"microsoft-powerpoint", "microsoft-windows-11", "obs-studio", "adobe-acrobat-pro",
+                             "adobe-acrobat-reader", "microsoft-teams", "adobe-premiere-pro", "comfyui",
+                             "nvidia-geforce-game-ready", "nvidia-studio-driver"})
+# The volume WAIT's line, ONE copy. "{n}" is the canonical count; the reviewed entries follow it as "Also ...".
+VOLUME_BODY = ("{n} accepted patch-specific problem reports. "
+               "AUXSAYS recommends delaying this version unless you need its changes. "
+               "AUXSAYS recommends waiting because of the volume of accepted problem reports, not because one "
+               "widespread defect has been confirmed. "
+               "These reports do not establish how likely the update is to cause problems on your system. "
+               "Next step: If your current version works, consider keeping it while you review known issues and "
+               "available alternatives. A newer version is not necessarily safer.")
+VOLUME_LEAD = f"{WAIT} {VOLUME_LABEL}"
+# The structured fields that already mark a record as an officially identified security update outside
+# Windows (the same four _includes/patch-decision.html reads for its security-sensitive wording).
+SECURITY_FLAG_FIELDS = ("security_sensitive", "update_security_sensitive")
+SECURITY_SOURCE_FIELDS = ("official_patch_notes_source_type", "official_source_type")
+SECURITY_SOURCE_TYPE = "security_advisory"
+
+
+def publishable_row(row: dict[str, Any] | None) -> bool:
+    """May this counted row be printed as a citation? The live gate's condition (e), per row, and the one copy
+    of it (lib/live_eligibility delegates here): an http(s) URL, a source date that did not fail, and a
+    sentiment and severity inside the writer's vocabularies. Reads whether a value is IN a vocabulary, never
+    which one it is, so no sentiment or severity can select a verdict."""
+    r = row or {}
+    url = str(r.get("source_url") or "").strip().lower()
+    return (url.startswith(("http://", "https://"))
+            and r.get("source_date_pass") is not False
+            and str(r.get("sentiment") or "").strip().lower() in VALID_SENTIMENTS
+            and (str(r.get("severity") or "").strip().lower() or "low") in VALID_SEVERITIES)
+
+
+def security_identified(record: dict[str, Any] | None) -> bool:
+    """Is this record officially identified as a security update by the structured fields the site already
+    stores (a security flag, or an official source that is a security advisory)? Windows' monthly releases
+    are decided by R2 instead; this covers every other product, where the volume WAIT must never override one."""
+    rec = record or {}
+    return (any(rec.get(field) is True for field in SECURITY_FLAG_FIELDS)
+            or any(_text(rec.get(field)) == SECURITY_SOURCE_TYPE for field in SECURITY_SOURCE_FIELDS))
+
+
+def volume_problems(record: dict[str, Any] | None, counted_rows: Any = ()) -> list[str]:
+    """Why this page does NOT get the volume-based precaution; [] when it does. Every condition is evaluated,
+    so a diagnostic names all of them."""
+    rec = record or {}
+    rows = [r for r in (counted_rows or ()) if isinstance(r, dict)]
+    problems: list[str] = []
+    if _text(rec.get("product_id")) not in VOLUME_PRODUCTS:
+        problems.append("not_promotion_product")
+    if len(rows) < VOLUME_MIN_REPORTS:
+        problems.append(f"below_volume_reports:{len(rows)}")
+    keys = [report_url_key(str(r.get("source_url") or "")) for r in rows]
+    unique = {k for k in keys if k}
+    if len(unique) < VOLUME_MIN_UNIQUE_URLS:
+        problems.append(f"below_volume_unique_urls:{len(unique)}")
+    if len(set(keys)) != len(keys):
+        problems.append("duplicate_citation_urls")
+    unpublishable = sum(1 for r in rows if not publishable_row(r))
+    if unpublishable:
+        problems.append(f"unpublishable_rows:{unpublishable}")
+    if security_identified(rec):
+        problems.append("officially_identified_security_update")
+    return problems
 
 # ASCII ONLY (PR-A2 review, LOW-2, probe P3). Without re.ASCII, `\d` matches any Unicode digit and
 # int() reads it, so a preview page whose release type was rewritten with full-width or Arabic-Indic
@@ -425,18 +546,26 @@ def lifecycle_for(record: dict[str, Any] | None, lifecycle: Any = ()) -> dict[st
 
 class Decision:
     """What `decide` returns. `reasons` are the SUPPORTED reason entries for the page, most
-    cautionary first (file order breaks ties, exactly as the template iterates)."""
+    cautionary first (file order breaks ties, exactly as the template iterates). A volume-based WAIT
+    (G87) carries `reason_code` high_report_volume, its `label`, and `reports`, the canonical count it
+    rests on; its scope is empty (it applies to every setup), and its `reasons` are the reviewed entries
+    it stands above, still shown."""
 
-    __slots__ = ("verdict", "rule", "scope", "reasons", "lifecycle", "security")
+    __slots__ = ("verdict", "rule", "scope", "reasons", "lifecycle", "security", "reason_code", "label",
+                 "reports")
 
     def __init__(self, verdict: str, rule: str, *, scope: str = "", reasons: tuple = (),
-                 lifecycle: dict[str, Any] | None = None, security: bool = False) -> None:
+                 lifecycle: dict[str, Any] | None = None, security: bool = False, reason_code: str = "",
+                 label: str = "", reports: int = 0) -> None:
         self.verdict = verdict
         self.rule = rule
         self.scope = scope
         self.reasons = reasons
         self.lifecycle = lifecycle
         self.security = security
+        self.reason_code = reason_code
+        self.label = label
+        self.reports = reports
 
     def __repr__(self) -> str:
         return f"Decision({self.verdict!r}, {self.rule!r}, scope={self.scope!r})"
@@ -447,11 +576,26 @@ class Decision:
             return PANEL_KIND.get(_text(self.reasons[0].get("reason_class")), "")
         return ""
 
+    @property
+    def volume(self) -> bool:
+        """Is this the volume-based precaution (a WAIT with reason code high_report_volume)?"""
+        return self.verdict == WAIT and self.reason_code == VOLUME_REASON_CODE
 
-def decide(record: dict[str, Any] | None, *, valid_reasons: Any = (), lifecycle: Any = ()) -> Decision:
+    @property
+    def qualifier(self) -> str:
+        """What every surface prints beside the verdict word: the setup scope, or -- for the volume-based
+        precaution, which has none -- its label."""
+        return self.scope or (self.label if self.volume else "")
+
+
+def decide(record: dict[str, Any] | None, *, valid_reasons: Any = (), lifecycle: Any = (),
+           counted_rows: Any = ()) -> Decision:
     """THE decision for one patch. `valid_reasons` must already be the entries SUPPORTED by the
     page's counted rows (lib.verdict_reasons.valid_reasons_by_identity); `lifecycle` the validated
-    lifecycle entries. No count, sentiment, theme, severity, maturity or clock is accepted."""
+    lifecycle entries; `counted_rows` the page's canonical counted population
+    (lib.report_counts.counted_evidence_rows for this identity), read ONLY by the volume rule. No stored
+    count, sentiment, theme, severity, maturity, collection health or clock is accepted. A caller that
+    passes no rows gets no volume-based WAIT: it fails closed to the reviewed outcome."""
     rec = record or {}
     ordered = tuple(sorted((dict(e) for e in valid_reasons or ()),
                            key=lambda e: risk_rank(_text(e.get("verdict")))))
@@ -466,9 +610,15 @@ def decide(record: dict[str, Any] | None, *, valid_reasons: Any = (), lifecycle:
     if ordered:
         head = ordered[0]
         verdict = _text(head.get("verdict"))
-        return Decision(verdict, "R3" if verdict == WAIT else "R4", scope=_text(head.get("scope")),
-                        reasons=ordered)
-    return Decision(INSUFFICIENT_DATA, "R5")
+        reviewed = Decision(verdict, "R3" if verdict == WAIT else "R4", scope=_text(head.get("scope")),
+                            reasons=ordered)
+    else:
+        reviewed = Decision(INSUFFICIENT_DATA, "R5")
+    rows = [r for r in (counted_rows or ()) if isinstance(r, dict)]
+    if risk_rank(WAIT) <= risk_rank(reviewed.verdict) and not volume_problems(rec, rows):
+        return Decision(WAIT, VOLUME_RULE, reasons=ordered, reason_code=VOLUME_REASON_CODE,
+                        label=VOLUME_LABEL, reports=len(rows))
+    return reviewed
 
 
 def _reports_phrase(count: int) -> str:
@@ -480,6 +630,14 @@ def public_body(decision: Decision, record: dict[str, Any] | None, report_count:
     (a non-official page with no reports, which this policy does not reword)."""
     rec = record or {}
     n = max(int(report_count or 0), 0)
+    if decision.volume:
+        # The canonical count the decision rests on, never the caller's (a stored count can lag). The
+        # reviewed entries it stands above follow with their own verdict, scope and wording.
+        parts = [VOLUME_BODY.format(n=decision.reports)]
+        for other in decision.reasons:
+            parts.append(f"Also {_text(other.get('verdict'))} {_text(other.get('scope'))}: "
+                         f"{_text(other.get('reason'))}")
+        return " ".join(parts)
     if decision.verdict == AVOID and decision.lifecycle:
         parts = [f"Microsoft withdrew this update for new installations. Replacement: "
                  f"{_text(decision.lifecycle.get('replacement_kb'))}."]
@@ -578,8 +736,9 @@ def verdict_phrase(decision: Decision) -> str:
     "WAIT if you use macOS 27.2", "TEST FIRST when installing it", "AVOID for new installations";
     an unscoped verdict (SECURITY UPDATE, INSUFFICIENT DATA) is the word alone. GROWTH-3 review 1
     (D1) found three surfaces printing the word without its scope -- a WAIT that applies to one
-    setup read as a WAIT for everyone."""
-    return f"{decision.verdict} {decision.scope}".strip()
+    setup read as a WAIT for everyone. The volume-based precaution (G87) applies to every setup and
+    has no scope; its label stands in that place: "WAIT Volume-based precaution"."""
+    return f"{decision.verdict} {decision.qualifier}".strip()
 
 
 _NO_VERDICT_LEAD = "No verdict yet: "
@@ -612,7 +771,7 @@ def summary_line(decision: Decision, record: dict[str, Any] | None, report_count
 
 def decision_label(product_id: str, version: str, consensus_label: str = "", count: int = 0,
                    *, record: dict[str, Any] | None = None, valid_reasons: Any = (),
-                   lifecycle: Any = ()) -> str:
+                   lifecycle: Any = (), counted_rows: Any = ()) -> str:
     """The canonical verdict word -- `decide(...).verdict`, kept under its historical name.
 
     `consensus_label` and `count` are ACCEPTED AND IGNORED. They are the two inputs the old policy
@@ -620,8 +779,9 @@ def decision_label(product_id: str, version: str, consensus_label: str = "", cou
     product branches made every DaVinci, Windows and Premiere record WAIT with any count at all
     (233 of 235 report-bearing pages on 2026-11-06). The owner's rule is that neither decides a
     verdict; the parameters stay only so existing callers keep their shape, and G3-D3/G3-D4 prove
-    that changing them changes nothing."""
+    that changing them changes nothing. The volume-based precaution (G87) reads the page's canonical
+    population from `counted_rows`, never `count` (a caller's number, often a stale stored one)."""
     rec = dict(record or {})
     rec.setdefault("product_id", product_id)
     rec.setdefault("update_version", version)
-    return decide(rec, valid_reasons=valid_reasons, lifecycle=lifecycle).verdict
+    return decide(rec, valid_reasons=valid_reasons, lifecycle=lifecycle, counted_rows=counted_rows).verdict

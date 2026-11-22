@@ -1444,7 +1444,9 @@ def reviewed_only_projection(c) -> dict:
     valid, _u = vr.valid_reasons_by_identity(c["reasons"], c["groups"], by_ident)
     pages = {}
     for rec in c["records"]:
-        d = pd.decide(dict(rec), valid_reasons=valid.get(vr.record_identity(rec), []), lifecycle=c["lifecycle"])
+        # G87: decide reads the page's counted rows (the volume-based precaution), as the projection does.
+        d = pd.decide(dict(rec), valid_reasons=valid.get(vr.record_identity(rec), []), lifecycle=c["lifecycle"],
+                      counted_rows=c["groups"].get(vr.record_identity(rec), []))
         if d.verdict != pd.INSUFFICIENT_DATA:
             pages[vp.page_key(rec)] = vp.row_for(d, rec)
     return {"schema_version": vp.SCHEMA_VERSION, "pages": dict(sorted(pages.items()))}
@@ -1482,7 +1484,9 @@ def check_switch(tmp: Path) -> None:
     printed_ids = {i for row in on["pages"].values() for i in row["reasons"]}
     by_key = {vp.page_key(r): r for r in c["records"]}
     rows_are_decide = all(on["pages"][k] == vp.row_for(pd.decide(dict(by_key[k]), valid_reasons=valid_on.get(
-        vr.record_identity(by_key[k]), []), lifecycle=c["lifecycle"]), by_key[k]) for k in changed if k in on["pages"])
+        vr.record_identity(by_key[k]), []), lifecycle=c["lifecycle"],
+        counted_rows=c["groups"].get(vr.record_identity(by_key[k]), [])), by_key[k])
+        for k in changed if k in on["pages"])
     kept_reviewed = all(set(reviewed["pages"][k]["reasons"]) <= set(on["pages"][k]["reasons"])
                         for k in reviewed["pages"] if reviewed["pages"][k]["reasons"])
     check(f"VRP-S2 switch ON (G84: one contract for every reason): each of the corpus's {len(candidates)} candidates "

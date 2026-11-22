@@ -241,8 +241,9 @@ def check_decisions() -> None:
     params = set(inspect.signature(pd.decide).parameters)
     src = code_of(pd.decide) + code_of(pd.public_body)
     clocky = re.findall(r"\bdatetime\b|\btime\.\w+|\bnow\(|\btoday\(|\bdate\.today", src)
+    # G87: counted_rows is the page's canonical counted population, read only by the volume-based precaution.
     check("G3-D2 no clock: decide takes no time input and reads none, so nothing relaxes with age",
-          params == {"record", "valid_reasons", "lifecycle"} and not clocky, f"{params} {clocky}")
+          params == {"record", "valid_reasons", "lifecycle", "counted_rows"} and not clocky, f"{params} {clocky}")
 
     labels = ["Negative", "Positive", "Moderate", "Mixed", "Insufficient data", "", None]
     for rs in ([], [tf_e], [wait_e]):
@@ -814,10 +815,13 @@ def parse_probe(text: str) -> tuple | None:
     return tuple(s.strip() for s in m.groups()) if m else None
 
 
-def python_view(rec: dict, reasons: list, life: list, count: int) -> tuple:
-    d = pd.decide(rec, valid_reasons=reasons, lifecycle=life)
+def python_view(rec: dict, reasons: list, life: list, count: int, rows=()) -> tuple:
+    """What the gate must print for this page: decide over the page's counted rows (G87: the volume-based
+    precaution reads them), its qualifier (the scope, or the volume precaution's label: the gate prints that
+    as gate_scope), its line, and its panel."""
+    d = pd.decide(rec, valid_reasons=reasons, lifecycle=life, counted_rows=list(rows or ()))
     heading = pd.PANEL_HEADING.get(d.panel_kind, "")
-    return (d.verdict, d.scope, pd.public_body(d, rec, count), heading, pd.panel_text(d))
+    return (d.verdict, d.qualifier, pd.public_body(d, rec, count), heading, pd.panel_text(d))
 
 
 # The synthetic matrix. Every case is its own page (its own identity), with the rows COUNTED on it,
@@ -1123,7 +1127,8 @@ def check_render_corpus() -> None:
     recs = c["recs"]
     cases = {str(i): {"rec": slim(r), "cnt": int(r.get("update_report_count") or 0)} for i, r in enumerate(recs)}
     want = {str(i): python_view(r, c["valid"].get(vr.record_identity(r), []), LIFECYCLE["entries"],
-                                int(r.get("update_report_count") or 0)) for i, r in enumerate(recs)}
+                                int(r.get("update_report_count") or 0), c["groups"].get(vr.record_identity(r), []))
+            for i, r in enumerate(recs)}
     out = render_gate(cases, {"verdict_projection": c["projection"], "patch_lifecycle": LIFECYCLE})
     if not out or "__error__" in out:
         check("G3-R3 the gate renders the authority's verdict on every corpus record", False, str(out)[:200])
@@ -1177,7 +1182,8 @@ def render_probe(recs: list, reasons: list, target: tuple, template: str | None 
                       {"verdict_projection": projection, "patch_lifecycle": LIFECYCLE,
                        "verdict_reasons": {"schema_version": 1, "entries": reasons}},
                       template if template is not None else TEMPLATE_OVERRIDE)
-    return parse_probe((out or {}).get("p", "")), python_view(rec, valid.get(target, []), LIFECYCLE["entries"], n)
+    return parse_probe((out or {}).get("p", "")), python_view(rec, valid.get(target, []), LIFECYCLE["entries"], n,
+                                                              c["groups"].get(target, []))
 
 
 PROJECT_OVERRIDE = None   # set only by the projection mutant in [X]
@@ -1186,9 +1192,15 @@ PROJECT_OVERRIDE = None   # set only by the projection mutant in [X]
 def check_projection_probes() -> None:
     recs, reasons, meta = probe_a1()
     got, want = render_probe(recs, reasons, meta["target"], project_fn=PROJECT_OVERRIDE)
+    # G87: 32.2.2 now prints the volume-based WAIT whatever its reviewed entries say; the probe still proves the
+    # unsupported reviewed WAIT is gone: its "Also WAIT if you use macOS 27.2" line leaves the page, and only the
+    # still-supported menu-bar TEST FIRST is printed beneath the volume WAIT.
     check("G3-P3 probe A1 (OBS 33.0.0's note reworded) fails closed on the rendered 32.2.2 page: the "
-          "unsupported WAIT is gone and the page renders the authority's TEST FIRST",
-          got is not None and got == want and got[:2] == ("TEST FIRST", "if you use the menu-bar icon on macOS 27"),
+          "unsupported reviewed WAIT is gone and the page renders the authority's verdict (the volume-based WAIT, "
+          "with only the still-supported menu-bar TEST FIRST beneath it)",
+          got is not None and got == want and got[:2] == ("WAIT", pd.VOLUME_LABEL)
+          and "Also WAIT if you use macOS 27.2" not in got[2]
+          and "Also TEST FIRST if you use the menu-bar icon on macOS 27:" in got[2],
           f"rendered {got and got[:2]!r}; authority {want[:2]!r}")
     recs, reasons, meta = probe_a2()
     got, want = render_probe(recs, reasons, meta["target"], project_fn=PROJECT_OVERRIDE)
@@ -1204,7 +1216,8 @@ def check_projection() -> None:
     expect, wrong = {}, []
     for r in c["recs"]:
         mine = c["valid"].get(vr.record_identity(r), [])
-        d = pd.decide(r, valid_reasons=mine, lifecycle=LIFECYCLE["entries"])
+        d = pd.decide(r, valid_reasons=mine, lifecycle=LIFECYCLE["entries"],
+                      counted_rows=c["groups"].get(vr.record_identity(r), []))
         if d.verdict != "INSUFFICIENT DATA":
             expect[vp.page_key(r)] = vp.row_for(d, r)
     check(f"G3-P1 the projection IS the authority: one row per page with a verdict ({len(rows)}: official "
@@ -1215,7 +1228,8 @@ def check_projection() -> None:
              for r in c["recs"]
              if vp.rendered_verdict(r, rows, LIFECYCLE["entries"])
              != (lambda d: (d.verdict, d.scope))(pd.decide(r, valid_reasons=c["valid"].get(vr.record_identity(r), []),
-                                                          lifecycle=LIFECYCLE["entries"]))]
+                                                          lifecycle=LIFECYCLE["entries"],
+                                                          counted_rows=c["groups"].get(vr.record_identity(r), [])))]
     check(f"G3-P2 QA's model of the gate (rendered_verdict) equals decide on all {len(c['recs'])} records",
           not model, str(model[:3]))
     gate = GATE_PATH.read_text(encoding="utf-8")
@@ -1411,7 +1425,8 @@ def check_surfaces() -> None:
                 bad_feed.append((r.get("permalink"), "a line without a stored summary", line and line.group(1)[:80]))
         elif not line or not line.group(1).startswith(f"{verdict} {scope}: "):
             bad_feed.append((r.get("permalink"), line and line.group(1)[:80]))
-        d = pd.decide(r, valid_reasons=c["valid"].get(vr.record_identity(r), []), lifecycle=LIFECYCLE["entries"])
+        d = pd.decide(r, valid_reasons=c["valid"].get(vr.record_identity(r), []), lifecycle=LIFECYCLE["entries"],
+                      counted_rows=c["groups"].get(vr.record_identity(r), []))
         stored = str(r.get("update_consensus_summary") or "")
         if int(r.get("update_report_count") or 0) > 0 and \
                 (stored != pd.summary_line(d, r, int(r.get("update_report_count") or 0), identity=identity_of(r))
@@ -1428,7 +1443,8 @@ def check_surfaces() -> None:
     lead = [r.get("permalink") for r in c["recs"] if int(r.get("update_report_count") or 0) > 0
             and str(r.get("update_consensus_summary") or "").split(":", 1)[0].strip()
             != pd.verdict_phrase(pd.decide(r, valid_reasons=c["valid"].get(vr.record_identity(r), []),
-                                           lifecycle=LIFECYCLE["entries"]))]
+                                           lifecycle=LIFECYCLE["entries"],
+                                           counted_rows=c["groups"].get(vr.record_identity(r), [])))]
     check("G3-S4 every report-bearing record's stored summary opens with exactly the verdict phrase the "
           "pages render (none opens with a bare verdict beside a count)", not lead, str(lead[:3]))
     layout = (_AUX / "_layouts" / "aux-update.html").read_text(encoding="utf-8")
@@ -1462,7 +1478,8 @@ def check_feed_wording() -> None:
         return m.group(1) if m else None
 
     def expected(r):
-        d = pd.decide(r, valid_reasons=c["valid"].get(vr.record_identity(r), []), lifecycle=LIFECYCLE["entries"])
+        d = pd.decide(r, valid_reasons=c["valid"].get(vr.record_identity(r), []), lifecycle=LIFECYCLE["entries"],
+                      counted_rows=c["groups"].get(vr.record_identity(r), []))
         return pd.summary_line(d, r, int(r.get("update_report_count") or 0), identity=identity_of(r))
     listed = [(r.get("permalink"), (line(str(i)) or "")[-80:]) for i, r in enumerate(bearing)
               if line(str(i)) is None or "listed below" in line(str(i))]
@@ -1756,7 +1773,8 @@ def check_feed_official() -> None:
     official, wrong, zero, quiet, lined = [], [], [], [], []
     decisions = {}
     for i, r in enumerate(recs):
-        d = pd.decide(r, valid_reasons=c["valid"].get(vr.record_identity(r), []), lifecycle=LIFECYCLE["entries"])
+        d = pd.decide(r, valid_reasons=c["valid"].get(vr.record_identity(r), []), lifecycle=LIFECYCLE["entries"],
+                      counted_rows=c["groups"].get(vr.record_identity(r), []))
         decisions[i] = d
         n = int(r.get("update_report_count") or 0)
         got = line(f"inc:{i}")
@@ -1856,9 +1874,9 @@ def swap_many(owner, replacements: dict):
 def wrap_decide(transform):
     real = pd.decide
 
-    def mutated(record, *, valid_reasons=(), lifecycle=()):
-        return transform(real(record, valid_reasons=valid_reasons, lifecycle=lifecycle), record or {},
-                         list(valid_reasons or ()))
+    def mutated(record, *, valid_reasons=(), lifecycle=(), counted_rows=()):
+        return transform(real(record, valid_reasons=valid_reasons, lifecycle=lifecycle, counted_rows=counted_rows),
+                         record or {}, list(valid_reasons or ()))
     return swap(pd, "decide", mutated)
 
 
@@ -1956,8 +1974,9 @@ def check_mutations(tmp: Path) -> None:
          wrap_decide(lambda d, r, rs: D(rs[0]["verdict"], "R3", scope=rs[0]["scope"], reasons=tuple(rs))
                      if d.verdict == "SECURITY UPDATE" and rs else d)),
         ("X2 decide takes a clock", check_decisions,
-         swap(pd, "decide", (lambda real: (lambda record, *, valid_reasons=(), lifecycle=(), now=None:
-                                            real(record, valid_reasons=valid_reasons, lifecycle=lifecycle)))(pd.decide))),
+         swap(pd, "decide", (lambda real: (lambda record, *, valid_reasons=(), lifecycle=(), counted_rows=(), now=None:
+                                            real(record, valid_reasons=valid_reasons, lifecycle=lifecycle,
+                                                 counted_rows=counted_rows)))(pd.decide))),
         ("X3 negative sentiment makes a WAIT", check_decisions,
          wrap_decide(lambda d, r, rs: D("WAIT", "R3") if d.verdict == "INSUFFICIENT DATA"
                      and str(r.get("update_consensus_label") or "").lower() == "negative" else d)),
