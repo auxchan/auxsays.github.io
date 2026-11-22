@@ -4452,6 +4452,19 @@ html.js-reveal .reveal-up.is-visible { opacity:1; transform:none; }
   font-size: .82rem;
 }
 
+/* G95 (AUX-132): the version a reviewed problem was fixed in, printed directly after the clause of the verdict
+   line that states the finding it belongs to; the rest of the verdict line continues beneath it. */
+.update-decision-fixed {
+  margin: .35rem 0 0;
+  padding-left: .75rem;
+  color: var(--text-1);
+  font-size: .88rem;
+}
+
+.update-decision-continued {
+  margin-top: .35rem;
+}
+
 .update-decision-reasoning {
   display: grid;
   gap: .4rem;

@@ -784,8 +784,9 @@ WF_LINKS = "See its AUXSAYS page"
 
 
 def expected_next_text(lines: list[str], fixed: list[str]) -> str:
-    """The 'next' part as text: "Other versions:" and the way-forward lines, then each reviewed fixed_in line."""
-    return " ".join(([f"Other versions: {' '.join(lines)}"] if lines else []) + list(fixed))
+    """The 'next' part as text: "Other versions:" and the way-forward lines. The reviewed fixed_in lines print in
+    the verdict box, beneath their own finding, never here (G95, AUX-132)."""
+    return f"Other versions: {' '.join(lines)}" if lines else ""
 
 
 def released_day(record: dict) -> str:
@@ -953,14 +954,16 @@ def check_corpus_and_surfaces() -> None:
     kinds = {k: (v, (((overview["pages"].get(k) or {}).get("next_action") or {}).get("fixed"))) for k, v in kinds.items()}
     check("C3 every page that prints WAIT in this tree has a next action; the four: 33.0.1 the newer release, 32.1.1 "
           "archived, 32.1.2 the newer release plus its reviewed fix in 32.2.0, 32.2.2 the newer release plus its "
-          "reviewed fix in 33.0.0",
+          "reviewed fix in 33.0.0 (each credited to OBS Project's release notes for that version, whose official "
+          "confirmation the reason cites: G95, AUX-132)",
           printed_wait and not no_exit and kinds["obs-studio|32.1.1|"] == ("archived", [])
           and kinds["obs-studio|33.0.1|"][0] == "newer_release"
           and kinds["obs-studio|32.1.2|"] == ("newer_release", [
               "The reviewed problem that applies if you use connected accounts or service docks on macOS was fixed in "
-              "OBS Studio 32.2.0."])
+              "OBS Studio 32.2.0. OBS Project's release notes for 32.2.0 record a fix for this problem."])
           and kinds["obs-studio|32.2.2|"] == ("newer_release", [
-              "The reviewed problem that applies if you use macOS 27.2 was fixed in OBS Studio 33.0.0."]),
+              "The reviewed problem that applies if you use macOS 27.2 was fixed in OBS Studio 33.0.0. OBS Project's "
+              "release notes for 33.0.0 record a fix for this problem."]),
           f"{no_exit[:3]} {kinds}")
     safer = [k for k, row in overview["pages"].items()
              for s in ([str((row.get("newer") or {}).get(f) or "") for f in ("caution", "verdict_line", "match_note")]
@@ -1085,7 +1088,8 @@ def check_corpus_and_surfaces() -> None:
           "better-supported alternative.' (the keep line only where the verdict box lacks it), excluded / not "
           "established / newest their own lines, and a newer release the note naming the release the rule selects, "
           "the vendor's known-issue caution before its links exactly when THAT release declares one (else 'Newer is "
-          "not necessarily safer'), then its verdict, then its links, and nothing after it but the reviewed fix lines",
+          "not necessarily safer'), then its verdict, then its links, and nothing after it -- its reviewed fix lines "
+          "print in the verdict box (G95, AUX-132)",
           not live and len(live_seen) == len(FOUR) and not synthetic and covered,
           json.dumps({"live": live[:3], "synthetic": synthetic[:3], "covered": covered,
                       "four": [s[:4] for s in live_seen]})[:900])

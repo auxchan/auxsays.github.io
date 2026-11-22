@@ -107,6 +107,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-099 | Deferred | Verdict policy | Medium | The reason producer counted unknown accounts as independent reporters and had no record of what it would have published (repaired; shadow operation; public activation OFF) |
 | AUX-124 | Resolved | Verdict policy | Medium | Automatically drafted verdict reasons skipped the checks a reviewed reason meets, and a true official confirmation could take away a Windows entry's support |
 | AUX-127 | Resolved | Verdict policy | High | Pages with 30 or more accepted problem reports said INSUFFICIENT DATA, and a report posted before its release was counted |
+| AUX-132 | Resolved | Published claims | Medium | A reviewed problem's "fixed in" line printed straight after a note naming a different, newer release, where it read as a recommendation of that release |
 | AUX-065 | Resolved | Coverage | Medium | DaVinci Resolve versions never archived, so routine collection spent its whole budget on releases nobody installs |
 | AUX-075 | Resolved | CI governance | Medium | The DaVinci archive build check asserted the one-time migration, so it failed on every pull request after it ran |
 | AUX-062 | Deferred | Evidence integrity | Low | Three classifier misses the sprint measured but did not fix |
@@ -587,6 +588,89 @@ prints the volume WAIT below 30 counted rows or 30 unique report URLs, on a prod
 a SECURITY UPDATE, an AVOID or an official security identification, or because collection health changed; a reviewed
 scoped finding disappears from beneath it; a page prints WAIT with no next action or with one the source facts do not
 give; or any surface, the newer-release note included, prints the volume WAIT without its label.
+
+---
+
+### AUX-132 — A reviewed problem's "fixed in" line printed straight after a note naming a different, newer release, where it read as a recommendation of that release
+
+- **Status** Resolved · **Area** Published claims · **Severity** Medium
+- **First seen** 2026-11-21 (G89 critic, comparison wording items a, b and e; owner question 2026-11-22) · **Resolved**
+  2026-11-22 (G95)
+
+**Symptom** G87 (AUX-127) added one line for a supported reviewed reason that names `fixed_in`: "The reviewed problem
+that applies <its scope> was fixed in <product> <fixed_in>." G87's own rule says it must never read as a
+recommendation of that version. It printed in the way forward, straight after the newer-release note. On OBS Studio
+32.1.2 and 32.2.2 that note names OBS Studio 33.0.2, with OBS's documented known issue, and says AUXSAYS has not
+matched its changes to the reports on the page. Beside it, "was fixed in OBS Studio 32.2.0" read as a recommendation
+of the release the note names and as a contradiction of "not matched". It also did not say where the fact came from.
+
+**Cause** The line belongs to a reviewed finding, but it was rendered by the way-forward block. On a page whose way
+forward is a newer-release note, that block has no lines of its own, so the fixed line was all it printed.
+
+G95's first fix (review 1) moved the problem. It printed the line after the whole verdict paragraph, which
+`patch_decision.public_body` builds by joining every reviewed reason, so the line followed whichever finding came
+last. On 32.2.2 the macOS 27.2 fix line followed the menu-bar icon crash, which nothing records as fixed. The fixture
+passed because it asked only whether the finding appeared somewhere in the paragraph.
+
+**Fix**
+- The way-forward include no longer prints the fixed line.
+- `lib/evidence_overview.fixed_placements` is the one producer of the sentence. `fixed_lines` returns its lines
+  alone, for G89's B. Each line comes with its reason's own stored wording, which ends the clause stating that
+  finding in the verdict line.
+  - `finding_end` places a line only where that wording occurs exactly once and ends a clause. Otherwise no line is
+    produced.
+  - `next_action.fixed_after` carries the wordings, only beside fixed lines.
+- The verdict box, only under a printed WAIT, splits the verdict paragraph just after that finding. It prints the
+  paragraph up to the finding, then the fixed line, then the rest word for word.
+  - The rest is a continuation paragraph whose class keeps the verdict line the only paragraph classed exactly
+    `update-decision-recommendation`, which the search metadata and the deploy checks read.
+  - A line whose finding is not found is not printed. Nothing changes, byte for byte, without a fixed line.
+- `fix_credit` adds "<vendor>'s release notes for <fixed_in> record a fix for this problem." only where the reason's
+  official confirmation names this product and exactly the fixed_in version. The vendor is the confirming record's
+  `update_source_name`.
+- The guard refuses three things: a credit for another version (spaced versions included), a credit in another
+  shape, and a line without its finding. `next_action_mismatch` compares `fixed_after` too. `RULE_VERSION` is
+  evidence-overview-v3.
+- The way forward keeps exactly its G87 variants. None of these strings enters the note's four checked fields.
+
+**Measured** Deploy projections built from main (44e6cc7e) and from this branch:
+- Identical: `consensus_evidence.yml`, `verdict_reasons.yml`, `patch_ingest_state.json`, `patch_lifecycle.yml`, the
+  verdict projection (sha256 `e846be5c`), the reason candidates, and the monitoring, coverage and source-health
+  projections. Live eligibility and QA status are identical apart from `generated_at`.
+- The evidence overview projection differs only in its rule version, the two credited lines and their two
+  `fixed_after` wordings.
+- A full local Jekyll build of each tree (1,771 HTML files): only the 32.1.2 and 32.2.2 pages and the stylesheet
+  differ, plus four files by build timestamps alone. On 32.2.2 the fixed line now follows "...Also WAIT if you use
+  macOS 27.2: ... OBS fixed this crash in 33.0.0.", and the menu-bar finding continues beneath it.
+- Publish-strict QA: 0 errors and the same single pre-existing warning on both trees. The four deploy-time site
+  checks are clean on both builds.
+
+**Tests** `test_fixed_in_placement_g95.py` (27 checks, blocking) renders the real patch page with the shipped Liquid.
+- P2: the text directly before the fixed line is its own whole finding clause.
+- P3: the verdict text is unchanged word for word.
+- P8-P11 cover two lines, a misordered pair, a line that cannot be placed, a head reason and the placement rule.
+- It fails 7 checks on review 1's head (P2 among them) and 14 on main. Eight mutants were each killed; review 1's
+  whole-paragraph placement is killed by P2.
+
+`test_volume_precaution_g87.py` keeps 56 checks.
+
+**Reopen only if** a fixed line prints in or after a newer-release note or in the way forward, prints after anything
+but its own finding's clause, changes or reorders a word of the verdict line, prints under a verdict other than WAIT,
+names the newer release, or credits the vendor without an official confirmation of exactly that version.
+
+**Review-limit exception (GPT ruling Q1b, 2026-11-21)** Review 2 confirmed the production fix and found one QA branch
+that no test reached: `next_action_mismatch` comparing `fixed_after` (`elif got_after != want_after:`). That branch is
+how publish-strict QA refuses a deployed overview row whose fixed line would print after another finding, or that
+names no finding at all. With it replaced by `elif False:`, every suite still passed. The reviewer's exact test, C8,
+was applied verbatim, and the governed count moved from 25 to 26. No production code changed. Measured: the suite
+passes 26/26; with that mutant it fails 25/26, at C8; the eight earlier G95 mutants are each still killed. Merge waits
+on one independent verifier confirming that the diff holds only these changes.
+
+**Second test-only correction (GPT focused ruling, 2026-11-22)** After the bot ingested OBS 33.0.3, N1 stopped
+pinning 33.0.2: it derives the newer-release note from the data as G96 (AUX-133) derives G87's R6 and checks that the
+note names the newest stable release on record and never the fixed version, and a new synthetic check, N5, introduces
+a newer OBS release with and without a vendor known issue and holds N1 and R6 correct on both, with no production
+change and the governed count moving from 26 to 27.
 
 ---
 
