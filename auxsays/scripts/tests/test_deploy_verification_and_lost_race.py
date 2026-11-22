@@ -2123,12 +2123,19 @@ def section_reaper_step_env() -> None:
         m = re.match(r"repos/o/r/actions/workflows/([^/?]+)/runs\?per_page=20$", e.get("path", ""))
         if m:
             rechecked.add(m.group(1))
-    check("E4 the step as production runs it -- job env, no extra flags: the writer group comes from "
-          "GROUP_MEMBERS, every member is re-checked, and the lost cycle is re-run once, on main",
+    plan_lines = [ln for ln in proc.stdout.splitlines() if ln.startswith("REAPER_PLAN: ")]
+    try:
+        lanes = set(json.loads(plan_lines[-1][len("REAPER_PLAN: "):]).get("lanes") or {}) if plan_lines else set()
+    except ValueError:
+        lanes = set()
+    check("E4 the step as production runs it -- job env, no extra flags: the lanes come from REAPABLE, the "
+          "writer group from GROUP_MEMBERS (every member re-checked), the repository from REPO, and the lost "
+          "cycle is re-run once, on main",
           proc.returncode == 0 and rechecked == writer_group_members()
+          and lanes == set(jenv.get("REAPABLE", "").split()) == {EVIDENCE_WF, INGEST_WF}
           and dispatches == [["workflow", "run", EVIDENCE_WF, "--ref", "main", "--repo", "o/r",
                               "-f", "recovery_of=5"]],
-          f"rc={proc.returncode} rechecked={sorted(rechecked)} dispatches={dispatches} "
+          f"rc={proc.returncode} rechecked={sorted(rechecked)} lanes={sorted(lanes)} dispatches={dispatches} "
           f"{(proc.stdout + proc.stderr)[-400:]}")
 
 
