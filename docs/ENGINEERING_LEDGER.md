@@ -600,47 +600,59 @@ recommendation of that version. It printed in the way forward, straight after th
 matched its changes to the reports on the page. Beside it, "was fixed in OBS Studio 32.2.0" read as a recommendation
 of the release the note names and as a contradiction of "not matched". It also did not say where the fact came from.
 
-**Cause** The line belongs to a reviewed finding, but it was rendered by the way-forward block, and on a page whose
-way forward is a newer-release note that block has no lines of its own, so the fixed line was all it printed.
+**Cause** The line belongs to a reviewed finding, but it was rendered by the way-forward block. On a page whose way
+forward is a newer-release note, that block has no lines of its own, so the fixed line was all it printed.
+
+G95's first fix (review 1) moved the problem. It printed the line after the whole verdict paragraph, which
+`patch_decision.public_body` builds by joining every reviewed reason, so the line followed whichever finding came
+last. On 32.2.2 the macOS 27.2 fix line followed the menu-bar icon crash, which nothing records as fixed. The fixture
+passed because it asked only whether the finding appeared somewhere in the paragraph.
 
 **Fix**
-- The way-forward include no longer prints the fixed line. The verdict box prints it, directly beneath the line
-  that states the reviewed finding in the same scope words ("Also TEST FIRST if you use connected accounts or service
-  docks on macOS: ..."), and only under a printed WAIT. It is inline Liquid with no include tag, so the standalone
-  render harnesses that cut at the first include still read the whole box. No projection row prints nothing, byte
-  for byte.
-- `lib/evidence_overview.fixed_lines` stays the one producer (G89's B is to reuse it). `fix_credit` adds "<vendor>'s
-  release notes for <fixed_in> record a fix for this problem." only where the reason's official confirmation names
-  this product and exactly the fixed_in version. A supported reason's confirmation has already been found verbatim
-  in that record's notes. The vendor is the confirming record's own `update_source_name`. Otherwise the line is
-  G87's plain sentence.
-- The guard refuses a fixed line whose credit names another version. `RULE_VERSION` is now evidence-overview-v3.
-- The way forward keeps exactly its G87 variants. None of these strings enters the note's four checked fields, and
-  no new caution string exists.
+- The way-forward include no longer prints the fixed line.
+- `lib/evidence_overview.fixed_placements` is the one producer of the sentence. `fixed_lines` returns its lines
+  alone, for G89's B. Each line comes with its reason's own stored wording, which ends the clause stating that
+  finding in the verdict line.
+  - `finding_end` places a line only where that wording occurs exactly once and ends a clause. Otherwise no line is
+    produced.
+  - `next_action.fixed_after` carries the wordings, only beside fixed lines.
+- The verdict box, only under a printed WAIT, splits the verdict paragraph just after that finding. It prints the
+  paragraph up to the finding, then the fixed line, then the rest word for word.
+  - The rest is a continuation paragraph whose class keeps the verdict line the only paragraph classed exactly
+    `update-decision-recommendation`, which the search metadata and the deploy checks read.
+  - A line whose finding is not found is not printed. Nothing changes, byte for byte, without a fixed line.
+- `fix_credit` adds "<vendor>'s release notes for <fixed_in> record a fix for this problem." only where the reason's
+  official confirmation names this product and exactly the fixed_in version. The vendor is the confirming record's
+  `update_source_name`.
+- The guard refuses three things: a credit for another version (spaced versions included), a credit in another
+  shape, and a line without its finding. `next_action_mismatch` compares `fixed_after` too. `RULE_VERSION` is
+  evidence-overview-v3.
+- The way forward keeps exactly its G87 variants. None of these strings enters the note's four checked fields.
 
 **Measured** Deploy projections built from main (44e6cc7e) and from this branch:
-- Identical: `consensus_evidence.yml`, `verdict_reasons.yml`, `patch_ingest_state.json`, the verdict projection
-  (sha256 `e846be5c`), the reason candidates and the monitoring and coverage projections. The live-eligibility
-  projection is identical apart from its `generated_at`.
-- The evidence overview projection differs only in its rule version and the two credited lines.
+- Identical: `consensus_evidence.yml`, `verdict_reasons.yml`, `patch_ingest_state.json`, `patch_lifecycle.yml`, the
+  verdict projection (sha256 `e846be5c`), the reason candidates, and the monitoring, coverage and source-health
+  projections. Live eligibility and QA status are identical apart from `generated_at`.
+- The evidence overview projection differs only in its rule version, the two credited lines and their two
+  `fixed_after` wordings.
 - A full local Jekyll build of each tree (1,771 HTML files): only the 32.1.2 and 32.2.2 pages and the stylesheet
-  differ. Four files differ by build timestamps alone. OBS 33.0.1, 32.1.1 and 33.0.2, a Windows 11, a DaVinci and an
-  Acrobat page are byte-identical.
-- Publish-strict QA: 0 errors and the same single pre-existing warning on both trees.
+  differ, plus four files by build timestamps alone. On 32.2.2 the fixed line now follows "...Also WAIT if you use
+  macOS 27.2: ... OBS fixed this crash in 33.0.0.", and the menu-bar finding continues beneath it.
+- Publish-strict QA: 0 errors and the same single pre-existing warning on both trees. The four deploy-time site
+  checks are clean on both builds.
 
-**Tests** `test_fixed_in_placement_g95.py` (19 checks, blocking) renders the real patch page with the shipped Liquid.
-It fails 9 checks on main. Four mutants were each killed:
-- reverting the placement: P1-P3;
-- crediting a confirmation of another version: C2;
-- printing the line inside the newer-release note: N1;
-- printing it under any verdict: P6.
+**Tests** `test_fixed_in_placement_g95.py` (25 checks, blocking) renders the real patch page with the shipped Liquid.
+- P2: the text directly before the fixed line is its own whole finding clause.
+- P3: the verdict text is unchanged word for word.
+- P8-P11 cover two lines, a misordered pair, a line that cannot be placed, a head reason and the placement rule.
+- It fails 7 checks on review 1's head (P2 among them) and 14 on main. Eight mutants were each killed; review 1's
+  whole-paragraph placement is killed by P2.
 
-`test_volume_precaution_g87.py` keeps 56 checks: C3 pins the credited lines, and R6 pins an empty way forward after
-32.2.2's note.
+`test_volume_precaution_g87.py` keeps 56 checks.
 
-**Reopen only if** a fixed line prints in or after a newer-release note or in the way forward, prints away from the
-finding it belongs to or under a verdict other than WAIT, names the newer release, or credits the vendor without an
-official confirmation of exactly that version.
+**Reopen only if** a fixed line prints in or after a newer-release note or in the way forward, prints after anything
+but its own finding's clause, changes or reorders a word of the verdict line, prints under a verdict other than WAIT,
+names the newer release, or credits the vendor without an official confirmation of exactly that version.
 
 ---
 
