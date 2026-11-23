@@ -103110,3 +103110,990 @@ evidence:
   title_dedup_sha256: 29679691d723c46bb85707e2f2a465067dbdfe681c78f31945f03d54ba1d3caa
   issue_bucket: crash or stability problems
   facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-24-nvidia-forum-comment-3634931
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3634931
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'Serious rendering regression report - GeForce GRD 621.24 (WHQL, released 2026-11-12) System: - GPU: NVIDIA GeForce RTX 3060 12GB (MSI) - Driver: 621.24 / 32.0.16.2124 - OS: Windows 11 Pro Insider Preview, build 26340 - Display: 1920x1080 Issue: After updating to 621.24, GPU-...'
+  captured_at: '2026-11-23T09:00:21Z'
+  source_date: '2026-11-21T02:17:55Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: 'Serious rendering regression report - GeForce GRD 621.24 (WHQL, released 2026-11-12) System: - GPU: NVIDIA GeForce RTX 3060 12GB (MSI)...'
+  excerpt_norm_sha256: a0b5cf741d9ee02503175e0643b8a502b44fba8ec8a9cdc6c81d82c2ce5f9a6d
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: flicker or wrong colors
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-24-nvidia-forum-comment-3634925
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3634925
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'GPU: RTX 4070 SUPER 12GB CPU: AMD Ryzen 7 9700X (8C/16T) Display Configuration: TITAN ARMY P27H2V, 3840x2160 @ 120Hz, DP Operating System: Windows 10 Pro build 19045 Driver Regression: YES - Last good: 621.12 hotfix (Frame Generation ON, ~90% GPU, FPS 120) - Broken from:...'
+  captured_at: '2026-11-23T09:00:21Z'
+  source_date: '2026-11-21T01:25:35Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: ''
+  workflow_area: ''
+  platform: windows
+  severity: ''
+  sentiment: negative
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...Generation ON, ~90% GPU, FPS 120) - Broken from: 621.14 - Still broken in: 621.24 (latest) Affected Game: Phantom Blade Zero (Steam, patch 1.0302256) Issue Desc...'
+  excerpt_norm_sha256: c7edbe4fc39f48c6a9ad90a0d708da8545e94fc57dc1669bdc5f345e18264bd6
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-24-nvidia-forum-comment-3634910
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3634910
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: after installing 621.24 i tried to pair my quest 2 via steam link (Beta on pc and headset) and it failed unless i used alpha which just lags anyways
+  captured_at: '2026-11-23T09:00:21Z'
+  source_date: '2026-11-20T23:01:03Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: performance or stutter
+  workflow_area: performance
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: after installing 621.24 i tried to pair my quest 2 via steam link (Beta on pc and headset) and it faile...
+  excerpt_norm_sha256: 90fb09b70524f5ee4ead89c338570fc41390083bb57a21b6344e28dd05ae0012
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: performance or stutter
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-24-nvidia-forum-comment-3635075
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3635075
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'Laptop: Acer Nitro V15 (ANV15-51) GPU: GeForce RTX 4060 Laptop GPU CPU: Intel Core i7-13620H RAM: 32 GB | Storage: 1 TB SSD OS: Windows 11 25H2 and 26H2 NVIDIA App version: 617.42 Issue: Every R620 driver I tried (621.01, 621.14, 621.24) causes performance drops and image...'
+  captured_at: '2026-11-23T09:00:21Z'
+  source_date: '2026-11-22T00:04:52Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: notebook_driver_not_tracked
+  issue_theme: performance or stutter
+  workflow_area: performance
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...2 NVIDIA App version: 617.42 Issue: Every R620 driver I tried (621.01, 621.14, 621.24) causes performance drops and image corruption in games. Each driver was instal...'
+  excerpt_norm_sha256: 74dd255ce1fdcc3b01c05550331205df196bed676d593b2ef82c4fc0338331f6
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: performance or stutter
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-14-nvidia-forum-comment-3635075
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3635075
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'Laptop: Acer Nitro V15 (ANV15-51) GPU: GeForce RTX 4060 Laptop GPU CPU: Intel Core i7-13620H RAM: 32 GB | Storage: 1 TB SSD OS: Windows 11 25H2 and 26H2 NVIDIA App version: 617.42 Issue: Every R620 driver I tried (621.01, 621.14, 621.24) causes performance drops and image...'
+  captured_at: '2026-11-23T09:00:21Z'
+  source_date: '2026-11-22T00:04:52Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: performance or stutter
+  workflow_area: performance
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '...and 26H2 NVIDIA App version: 617.42 Issue: Every R620 driver I tried (621.01, 621.14, 621.24) causes performance drops and image corruption in games. Each driver wa...'
+  excerpt_norm_sha256: 74dd255ce1fdcc3b01c05550331205df196bed676d593b2ef82c4fc0338331f6
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: performance or stutter
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-14-nvidia-forum-comment-3634925
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3634925
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'GPU: RTX 4070 SUPER 12GB CPU: AMD Ryzen 7 9700X (8C/16T) Display Configuration: TITAN ARMY P27H2V, 3840x2160 @ 120Hz, DP Operating System: Windows 10 Pro build 19045 Driver Regression: YES - Last good: 621.12 hotfix (Frame Generation ON, ~90% GPU, FPS 120) - Broken from:...'
+  captured_at: '2026-11-23T09:00:21Z'
+  source_date: '2026-11-21T01:25:35Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: ''
+  workflow_area: ''
+  platform: windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '...t good: 621.12 hotfix (Frame Generation ON, ~90% GPU, FPS 120) - Broken from: 621.14 - Still broken in: 621.24 (latest) Affected Game: Phantom Blade Zero (Steam,...'
+  excerpt_norm_sha256: c7edbe4fc39f48c6a9ad90a0d708da8545e94fc57dc1669bdc5f345e18264bd6
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-01-nvidia-forum-comment-3635075
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.01'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3635075
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'Laptop: Acer Nitro V15 (ANV15-51) GPU: GeForce RTX 4060 Laptop GPU CPU: Intel Core i7-13620H RAM: 32 GB | Storage: 1 TB SSD OS: Windows 11 25H2 and 26H2 NVIDIA App version: 617.42 Issue: Every R620 driver I tried (621.01, 621.14, 621.24) causes performance drops and image...'
+  captured_at: '2026-11-23T09:00:21Z'
+  source_date: '2026-11-22T00:04:52Z'
+  target_release_date: '2026-10-21'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.01'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: performance or stutter
+  workflow_area: performance
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.01'
+  matched_field: report_text
+  matched_context: '...11 25H2 and 26H2 NVIDIA App version: 617.42 Issue: Every R620 driver I tried (621.01, 621.14, 621.24) causes performance drops and image corruption in games. Each d...'
+  excerpt_norm_sha256: 74dd255ce1fdcc3b01c05550331205df196bed676d593b2ef82c4fc0338331f6
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: performance or stutter
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-617-42-nvidia-forum-comment-3628858
+  product_id: nvidia-geforce-game-ready
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/studio-drivers/39/588913/bsod-0x7f-double-fault-kernel-stack-overflow-from-unbounded-recursion-in-nvlddmkmsys-61062-on/?comment=3628858
+  parent_title: BSOD 0x7F double-fault — kernel-stack overflow from unbounded recursion in nvlddmkm.sys (610.62) on
+  report_title: BSOD 0x7F double-fault — kernel-stack overflow from unbounded recursion in nvlddmkm.sys (610.62) on
+  report_text_excerpt: Hi Darius this has saved me a serious headache with this issue coming up frequently, I've rolled back to 610.47 Is there a way we can know if this has been fixed on future updates? Is there any way I can check 617.42 without installing it and waiting for BSOD again?
+  captured_at: '2026-11-23T09:00:21Z'
+  source_date: '2026-10-10T00:06:12Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: '...can know if this has been fixed on future updates? Is there any way I can check 617.42 without installing it and waiting for BSOD again?'
+  excerpt_norm_sha256: 448b43fc423f3c184ac7e2307ed54739f00032a088796f07966998de68531fbe
+  title_dedup_sha256: c0a64c9b134da7f9c5cff8982cc2d0d6d45e609b0b9f0a20847771db5763d6f4
+  issue_bucket: crash or driver reset
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-617-42-nvidia-forum-comment-3635075
+  product_id: nvidia-geforce-game-ready
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3635075
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'Laptop: Acer Nitro V15 (ANV15-51) GPU: GeForce RTX 4060 Laptop GPU CPU: Intel Core i7-13620H RAM: 32 GB | Storage: 1 TB SSD OS: Windows 11 25H2 and 26H2 NVIDIA App version: 617.42 Issue: Every R620 driver I tried (621.01, 621.14, 621.24) causes performance drops and image...'
+  captured_at: '2026-11-23T09:00:21Z'
+  source_date: '2026-11-22T00:04:52Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: performance or stutter
+  workflow_area: performance
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: '...RAM: 32 GB | Storage: 1 TB SSD OS: Windows 11 25H2 and 26H2 NVIDIA App version: 617.42 Issue: Every R620 driver I tried (621.01, 621.14, 621.24) causes performance d...'
+  excerpt_norm_sha256: 74dd255ce1fdcc3b01c05550331205df196bed676d593b2ef82c4fc0338331f6
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: performance or stutter
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-617-14-nvidia-forum-comment-3628244
+  product_id: nvidia-geforce-game-ready
+  update_version: '617.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/studio-drivers/39/590759/displayport-no-signal-black-screen-after-sleep-mode-nvidia-driver-61692/?comment=3628244
+  parent_title: DisplayPort No Signal / Black Screen after Sleep Mode (NVIDIA Driver 616.92)
+  report_title: DisplayPort No Signal / Black Screen after Sleep Mode (NVIDIA Driver 616.92)
+  report_text_excerpt: This issue has been resolved in 617.14. Unfortunately, Nvidia didn't reply to my email at all.
+  captured_at: '2026-11-23T09:00:21Z'
+  source_date: '2026-10-05T15:30:14Z'
+  target_release_date: '2026-09-22'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.14'
+  matched_field: report_text
+  matched_context: This issue has been resolved in 617.14. Unfortunately, Nvidia didn't reply to my email at all.
+  excerpt_norm_sha256: c4d2ea5a41bd4a5912464650a804b74f376477ad1ee1ec939d043b3d8e13822b
+  title_dedup_sha256: f0fe375f3c2fc574e5f9b8bb8916ef4d7664bca3861dac8b2e94c34b8a368097
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-616-92-nvidia-forum-comment-3625322
+  product_id: nvidia-geforce-game-ready
+  update_version: '616.92'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/studio-drivers/39/590759/displayport-no-signal-black-screen-after-sleep-mode-nvidia-driver-61692/?comment=3625322
+  parent_title: DisplayPort No Signal / Black Screen after Sleep Mode (NVIDIA Driver 616.92)
+  report_title: DisplayPort No Signal / Black Screen after Sleep Mode (NVIDIA Driver 616.92)
+  report_text_excerpt: 'DisplayPort No Signal / Black Screen after Sleep Mode (NVIDIA Driver 616.92) GPU: NVIDIA GeForce RTX 4070 Connection: DisplayPort (DP) Driver Version with Issue: 616.92 Previous Working Driver Version: 610.88 OS: Windows 11 Description: After updating to driver version 616.92,...'
+  captured_at: '2026-11-23T09:00:21Z'
+  source_date: '2026-09-14T16:23:57Z'
+  target_release_date: '2026-09-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.92'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '616.92'
+  matched_field: report_text
+  matched_context: 'DisplayPort No Signal / Black Screen after Sleep Mode (NVIDIA Driver 616.92) GPU: NVIDIA GeForce RTX 4070 Connection: DisplayPort (DP) Driver Version with...'
+  excerpt_norm_sha256: 757539e79ac2d374f4db744082eaec38680df6a644a6cde3befb1d36c37a278a
+  title_dedup_sha256: f0fe375f3c2fc574e5f9b8bb8916ef4d7664bca3861dac8b2e94c34b8a368097
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-610-88-nvidia-forum-comment-3618915
+  product_id: nvidia-geforce-game-ready
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/studio-drivers/39/588913/bsod-0x7f-double-fault-kernel-stack-overflow-from-unbounded-recursion-in-nvlddmkmsys-61062-on/?comment=3618915
+  parent_title: BSOD 0x7F double-fault — kernel-stack overflow from unbounded recursion in nvlddmkm.sys (610.62) on
+  report_title: BSOD 0x7F double-fault — kernel-stack overflow from unbounded recursion in nvlddmkm.sys (610.62) on
+  report_text_excerpt: I have a issue that is likely same or similar, at least based on AI based mindump analysis. I'm not technical enough to isolate the issue myself to this level of detail. My system is Dual GPU 5090 fully water cooled. The problem spans also to 610.88 studio driver. In fact...
+  captured_at: '2026-11-23T09:00:21Z'
+  source_date: '2026-07-31T11:37:21Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: '...etail. My system is Dual GPU 5090 fully water cooled. The problem spans also to 610.88 studio driver. In fact 610.88 made it worse. I can immediately replicate the pr...'
+  excerpt_norm_sha256: c38174df39dd62517e2bccf3bbe633ab06771456030dddbfc8e52be5bd0b6258
+  title_dedup_sha256: c0a64c9b134da7f9c5cff8982cc2d0d6d45e609b0b9f0a20847771db5763d6f4
+  issue_bucket: crash or driver reset
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-610-88-nvidia-forum-comment-3625322
+  product_id: nvidia-geforce-game-ready
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/studio-drivers/39/590759/displayport-no-signal-black-screen-after-sleep-mode-nvidia-driver-61692/?comment=3625322
+  parent_title: DisplayPort No Signal / Black Screen after Sleep Mode (NVIDIA Driver 616.92)
+  report_title: DisplayPort No Signal / Black Screen after Sleep Mode (NVIDIA Driver 616.92)
+  report_text_excerpt: 'DisplayPort No Signal / Black Screen after Sleep Mode (NVIDIA Driver 616.92) GPU: NVIDIA GeForce RTX 4070 Connection: DisplayPort (DP) Driver Version with Issue: 616.92 Previous Working Driver Version: 610.88 OS: Windows 11 Description: After updating to driver version 616.92,...'
+  captured_at: '2026-11-23T09:00:21Z'
+  source_date: '2026-09-14T16:23:57Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: '...layPort (DP) Driver Version with Issue: 616.92 Previous Working Driver Version: 610.88 OS: Windows 11 Description: After updating to driver version 616.92, my monito...'
+  excerpt_norm_sha256: 757539e79ac2d374f4db744082eaec38680df6a644a6cde3befb1d36c37a278a
+  title_dedup_sha256: f0fe375f3c2fc574e5f9b8bb8916ef4d7664bca3861dac8b2e94c34b8a368097
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-610-88-nvidia-forum-comment-3634719
+  product_id: nvidia-geforce-game-ready
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3634719
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: agreed, i was happy with 581.94 until stupid windows updated me to 610.88
+  captured_at: '2026-11-23T09:00:21Z'
+  source_date: '2026-11-19T12:40:58Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: agreed, i was happy with 581.94 until stupid windows updated me to 610.88
+  excerpt_norm_sha256: 05c1002123bdc89fa677fee33204a21dc10d770fc552dbde84004b46bece5388
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-610-62-nvidia-forum-comment-3618531
+  product_id: nvidia-geforce-game-ready
+  update_version: '610.62'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/studio-drivers/39/588913/bsod-0x7f-double-fault-kernel-stack-overflow-from-unbounded-recursion-in-nvlddmkmsys-61062-on/?comment=3618531
+  parent_title: BSOD 0x7F double-fault — kernel-stack overflow from unbounded recursion in nvlddmkm.sys (610.62) on
+  report_title: BSOD 0x7F double-fault — kernel-stack overflow from unbounded recursion in nvlddmkm.sys (610.62) on
+  report_text_excerpt: BSOD 0x7F double-fault — kernel-stack overflow from unbounded recursion in nvlddmkm.sys (610.62) on Hello SUMMARY Driver 610.62 (nvlddmkm.sys 32.0.16.1062) recurses without bound inside a GPU sensor/telemetry code path. A single query walks a cycle of nvlddmkm functions that...
+  captured_at: '2026-11-23T09:00:21Z'
+  source_date: '2026-07-29T09:32:35Z'
+  target_release_date: '2026-06-16'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.62'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.62'
+  matched_field: report_text
+  matched_context: '...double-fault — kernel-stack overflow from unbounded recursion in nvlddmkm.sys (610.62) on Hello SUMMARY Driver 610.62 (nvlddmkm.sys 32.0.16.1062) recurses without b...'
+  excerpt_norm_sha256: 143549c6366ca6b3eade393861278929c3ce7c3a58ea991b144269c9a85835d2
+  title_dedup_sha256: c0a64c9b134da7f9c5cff8982cc2d0d6d45e609b0b9f0a20847771db5763d6f4
+  issue_bucket: crash or driver reset
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-610-47-nvidia-forum-comment-3628858
+  product_id: nvidia-geforce-game-ready
+  update_version: '610.47'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/studio-drivers/39/588913/bsod-0x7f-double-fault-kernel-stack-overflow-from-unbounded-recursion-in-nvlddmkmsys-61062-on/?comment=3628858
+  parent_title: BSOD 0x7F double-fault — kernel-stack overflow from unbounded recursion in nvlddmkm.sys (610.62) on
+  report_title: BSOD 0x7F double-fault — kernel-stack overflow from unbounded recursion in nvlddmkm.sys (610.62) on
+  report_text_excerpt: Hi Darius this has saved me a serious headache with this issue coming up frequently, I've rolled back to 610.47 Is there a way we can know if this has been fixed on future updates? Is there any way I can check 617.42 without installing it and waiting for BSOD again?
+  captured_at: '2026-11-23T09:00:21Z'
+  source_date: '2026-10-10T00:06:12Z'
+  target_release_date: '2026-05-26'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.47'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.47'
+  matched_field: report_text
+  matched_context: '...me a serious headache with this issue coming up frequently, I''ve rolled back to 610.47 Is there a way we can know if this has been fixed on future updates? Is there a...'
+  excerpt_norm_sha256: 448b43fc423f3c184ac7e2307ed54739f00032a088796f07966998de68531fbe
+  title_dedup_sha256: c0a64c9b134da7f9c5cff8982cc2d0d6d45e609b0b9f0a20847771db5763d6f4
+  issue_bucket: crash or driver reset
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-610-47-nvidia-forum-comment-3633448
+  product_id: nvidia-geforce-game-ready
+  update_version: '610.47'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633448
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: 'Display calibration raises black by 1-2 levels on driver 621.14 (contrast 598:1 vs 963:1 on driver 591.74, same calibration) TL;DR: On drivers after 591.74, while a display calibration (gamma ramp / video LUT) is loaded, black and near-black are shown 1-2 levels too bright....'
+  captured_at: '2026-11-23T09:00:21Z'
+  source_date: '2026-11-11T22:09:35Z'
+  target_release_date: '2026-05-26'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.47'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: multiple_tracked_versions_named
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.47'
+  matched_field: report_text
+  matched_context: '...est below); also seen on 610.88 and 621.01. Not tested: 591.86, 596.21, 596.36, 610.47. All Game Ready drivers, standard package. * Affected Applications/Games: Any...'
+  excerpt_norm_sha256: 6ecce431f0169746b5f6c883dcaef85ec5d500e8c51a6e266f0fb34fffd2ee25
+  title_dedup_sha256: 5ed9045128af1fb603384e902a5e090ca835b2503a4677d30f78c0aaa8a49239
+  issue_bucket: flicker or wrong colors
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-24-nvidia-forum-comment-3635075
+  product_id: nvidia-studio-driver
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3635075
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'Laptop: Acer Nitro V15 (ANV15-51) GPU: GeForce RTX 4060 Laptop GPU CPU: Intel Core i7-13620H RAM: 32 GB | Storage: 1 TB SSD OS: Windows 11 25H2 and 26H2 NVIDIA App version: 617.42 Issue: Every R620 driver I tried (621.01, 621.14, 621.24) causes performance drops and image...'
+  captured_at: '2026-11-23T09:02:22Z'
+  source_date: '2026-11-22T00:04:52Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: performance or stutter
+  workflow_area: performance
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...2 NVIDIA App version: 617.42 Issue: Every R620 driver I tried (621.01, 621.14, 621.24) causes performance drops and image corruption in games. Each driver was instal...'
+  excerpt_norm_sha256: 74dd255ce1fdcc3b01c05550331205df196bed676d593b2ef82c4fc0338331f6
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: performance or stutter
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-24-nvidia-forum-comment-3634931
+  product_id: nvidia-studio-driver
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3634931
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'Serious rendering regression report - GeForce GRD 621.24 (WHQL, released 2026-11-12) System: - GPU: NVIDIA GeForce RTX 3060 12GB (MSI) - Driver: 621.24 / 32.0.16.2124 - OS: Windows 11 Pro Insider Preview, build 26340 - Display: 1920x1080 Issue: After updating to 621.24, GPU-...'
+  captured_at: '2026-11-23T09:02:22Z'
+  source_date: '2026-11-21T02:17:55Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: 'Serious rendering regression report - GeForce GRD 621.24 (WHQL, released 2026-11-12) System: - GPU: NVIDIA GeForce RTX 3060 12GB (MSI)...'
+  excerpt_norm_sha256: a0b5cf741d9ee02503175e0643b8a502b44fba8ec8a9cdc6c81d82c2ce5f9a6d
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: flicker or wrong colors
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-24-nvidia-forum-comment-3634925
+  product_id: nvidia-studio-driver
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3634925
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'GPU: RTX 4070 SUPER 12GB CPU: AMD Ryzen 7 9700X (8C/16T) Display Configuration: TITAN ARMY P27H2V, 3840x2160 @ 120Hz, DP Operating System: Windows 10 Pro build 19045 Driver Regression: YES - Last good: 621.12 hotfix (Frame Generation ON, ~90% GPU, FPS 120) - Broken from:...'
+  captured_at: '2026-11-23T09:02:22Z'
+  source_date: '2026-11-21T01:25:35Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: ''
+  workflow_area: ''
+  platform: windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...Generation ON, ~90% GPU, FPS 120) - Broken from: 621.14 - Still broken in: 621.24 (latest) Affected Game: Phantom Blade Zero (Steam, patch 1.0302256) Issue Desc...'
+  excerpt_norm_sha256: c7edbe4fc39f48c6a9ad90a0d708da8545e94fc57dc1669bdc5f345e18264bd6
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-24-nvidia-forum-comment-3634910
+  product_id: nvidia-studio-driver
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3634910
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: after installing 621.24 i tried to pair my quest 2 via steam link (Beta on pc and headset) and it failed unless i used alpha which just lags anyways
+  captured_at: '2026-11-23T09:02:22Z'
+  source_date: '2026-11-20T23:01:03Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: performance or stutter
+  workflow_area: performance
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: after installing 621.24 i tried to pair my quest 2 via steam link (Beta on pc and headset) and it faile...
+  excerpt_norm_sha256: 90fb09b70524f5ee4ead89c338570fc41390083bb57a21b6344e28dd05ae0012
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: performance or stutter
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-14-nvidia-forum-comment-3635075
+  product_id: nvidia-studio-driver
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3635075
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'Laptop: Acer Nitro V15 (ANV15-51) GPU: GeForce RTX 4060 Laptop GPU CPU: Intel Core i7-13620H RAM: 32 GB | Storage: 1 TB SSD OS: Windows 11 25H2 and 26H2 NVIDIA App version: 617.42 Issue: Every R620 driver I tried (621.01, 621.14, 621.24) causes performance drops and image...'
+  captured_at: '2026-11-23T09:02:22Z'
+  source_date: '2026-11-22T00:04:52Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: performance or stutter
+  workflow_area: performance
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '...and 26H2 NVIDIA App version: 617.42 Issue: Every R620 driver I tried (621.01, 621.14, 621.24) causes performance drops and image corruption in games. Each driver wa...'
+  excerpt_norm_sha256: 74dd255ce1fdcc3b01c05550331205df196bed676d593b2ef82c4fc0338331f6
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: performance or stutter
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-14-nvidia-forum-comment-3634925
+  product_id: nvidia-studio-driver
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3634925
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'GPU: RTX 4070 SUPER 12GB CPU: AMD Ryzen 7 9700X (8C/16T) Display Configuration: TITAN ARMY P27H2V, 3840x2160 @ 120Hz, DP Operating System: Windows 10 Pro build 19045 Driver Regression: YES - Last good: 621.12 hotfix (Frame Generation ON, ~90% GPU, FPS 120) - Broken from:...'
+  captured_at: '2026-11-23T09:02:22Z'
+  source_date: '2026-11-21T01:25:35Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: ''
+  workflow_area: ''
+  platform: windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '...t good: 621.12 hotfix (Frame Generation ON, ~90% GPU, FPS 120) - Broken from: 621.14 - Still broken in: 621.24 (latest) Affected Game: Phantom Blade Zero (Steam,...'
+  excerpt_norm_sha256: c7edbe4fc39f48c6a9ad90a0d708da8545e94fc57dc1669bdc5f345e18264bd6
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: nvidia-studio-driver-617-42-nvidia-forum-comment-3628858
+  product_id: nvidia-studio-driver
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/studio-drivers/39/588913/bsod-0x7f-double-fault-kernel-stack-overflow-from-unbounded-recursion-in-nvlddmkmsys-61062-on/?comment=3628858
+  parent_title: BSOD 0x7F double-fault — kernel-stack overflow from unbounded recursion in nvlddmkm.sys (610.62) on
+  report_title: BSOD 0x7F double-fault — kernel-stack overflow from unbounded recursion in nvlddmkm.sys (610.62) on
+  report_text_excerpt: Hi Darius this has saved me a serious headache with this issue coming up frequently, I've rolled back to 610.47 Is there a way we can know if this has been fixed on future updates? Is there any way I can check 617.42 without installing it and waiting for BSOD again?
+  captured_at: '2026-11-23T09:02:22Z'
+  source_date: '2026-10-10T00:06:12Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: '...can know if this has been fixed on future updates? Is there any way I can check 617.42 without installing it and waiting for BSOD again?'
+  excerpt_norm_sha256: 448b43fc423f3c184ac7e2307ed54739f00032a088796f07966998de68531fbe
+  title_dedup_sha256: c0a64c9b134da7f9c5cff8982cc2d0d6d45e609b0b9f0a20847771db5763d6f4
+  issue_bucket: crash or driver reset
+  facts_rule_version: v1
+- id: nvidia-studio-driver-617-42-nvidia-forum-comment-3635075
+  product_id: nvidia-studio-driver
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3635075
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'Laptop: Acer Nitro V15 (ANV15-51) GPU: GeForce RTX 4060 Laptop GPU CPU: Intel Core i7-13620H RAM: 32 GB | Storage: 1 TB SSD OS: Windows 11 25H2 and 26H2 NVIDIA App version: 617.42 Issue: Every R620 driver I tried (621.01, 621.14, 621.24) causes performance drops and image...'
+  captured_at: '2026-11-23T09:02:22Z'
+  source_date: '2026-11-22T00:04:52Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: performance or stutter
+  workflow_area: performance
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: '...RAM: 32 GB | Storage: 1 TB SSD OS: Windows 11 25H2 and 26H2 NVIDIA App version: 617.42 Issue: Every R620 driver I tried (621.01, 621.14, 621.24) causes performance d...'
+  excerpt_norm_sha256: 74dd255ce1fdcc3b01c05550331205df196bed676d593b2ef82c4fc0338331f6
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: performance or stutter
+  facts_rule_version: v1
+- id: nvidia-studio-driver-616-92-nvidia-forum-comment-3625322
+  product_id: nvidia-studio-driver
+  update_version: '616.92'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/studio-drivers/39/590759/displayport-no-signal-black-screen-after-sleep-mode-nvidia-driver-61692/?comment=3625322
+  parent_title: DisplayPort No Signal / Black Screen after Sleep Mode (NVIDIA Driver 616.92)
+  report_title: DisplayPort No Signal / Black Screen after Sleep Mode (NVIDIA Driver 616.92)
+  report_text_excerpt: 'DisplayPort No Signal / Black Screen after Sleep Mode (NVIDIA Driver 616.92) GPU: NVIDIA GeForce RTX 4070 Connection: DisplayPort (DP) Driver Version with Issue: 616.92 Previous Working Driver Version: 610.88 OS: Windows 11 Description: After updating to driver version 616.92,...'
+  captured_at: '2026-11-23T09:02:22Z'
+  source_date: '2026-09-14T16:23:57Z'
+  target_release_date: '2026-09-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.92'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '616.92'
+  matched_field: report_text
+  matched_context: 'DisplayPort No Signal / Black Screen after Sleep Mode (NVIDIA Driver 616.92) GPU: NVIDIA GeForce RTX 4070 Connection: DisplayPort (DP) Driver Version with...'
+  excerpt_norm_sha256: 757539e79ac2d374f4db744082eaec38680df6a644a6cde3befb1d36c37a278a
+  title_dedup_sha256: f0fe375f3c2fc574e5f9b8bb8916ef4d7664bca3861dac8b2e94c34b8a368097
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-studio-driver-610-88-nvidia-forum-comment-3618915
+  product_id: nvidia-studio-driver
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/studio-drivers/39/588913/bsod-0x7f-double-fault-kernel-stack-overflow-from-unbounded-recursion-in-nvlddmkmsys-61062-on/?comment=3618915
+  parent_title: BSOD 0x7F double-fault — kernel-stack overflow from unbounded recursion in nvlddmkm.sys (610.62) on
+  report_title: BSOD 0x7F double-fault — kernel-stack overflow from unbounded recursion in nvlddmkm.sys (610.62) on
+  report_text_excerpt: I have a issue that is likely same or similar, at least based on AI based mindump analysis. I'm not technical enough to isolate the issue myself to this level of detail. My system is Dual GPU 5090 fully water cooled. The problem spans also to 610.88 studio driver. In fact...
+  captured_at: '2026-11-23T09:02:22Z'
+  source_date: '2026-07-31T11:37:21Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: not_a_real_issue_report
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: '...etail. My system is Dual GPU 5090 fully water cooled. The problem spans also to 610.88 studio driver. In fact 610.88 made it worse. I can immediately replicate the pr...'
+  excerpt_norm_sha256: c38174df39dd62517e2bccf3bbe633ab06771456030dddbfc8e52be5bd0b6258
+  title_dedup_sha256: c0a64c9b134da7f9c5cff8982cc2d0d6d45e609b0b9f0a20847771db5763d6f4
+  issue_bucket: crash or driver reset
+  facts_rule_version: v1
+- id: nvidia-studio-driver-610-88-nvidia-forum-comment-3625322
+  product_id: nvidia-studio-driver
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/studio-drivers/39/590759/displayport-no-signal-black-screen-after-sleep-mode-nvidia-driver-61692/?comment=3625322
+  parent_title: DisplayPort No Signal / Black Screen after Sleep Mode (NVIDIA Driver 616.92)
+  report_title: DisplayPort No Signal / Black Screen after Sleep Mode (NVIDIA Driver 616.92)
+  report_text_excerpt: 'DisplayPort No Signal / Black Screen after Sleep Mode (NVIDIA Driver 616.92) GPU: NVIDIA GeForce RTX 4070 Connection: DisplayPort (DP) Driver Version with Issue: 616.92 Previous Working Driver Version: 610.88 OS: Windows 11 Description: After updating to driver version 616.92,...'
+  captured_at: '2026-11-23T09:02:22Z'
+  source_date: '2026-09-14T16:23:57Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: '...layPort (DP) Driver Version with Issue: 616.92 Previous Working Driver Version: 610.88 OS: Windows 11 Description: After updating to driver version 616.92, my monito...'
+  excerpt_norm_sha256: 757539e79ac2d374f4db744082eaec38680df6a644a6cde3befb1d36c37a278a
+  title_dedup_sha256: f0fe375f3c2fc574e5f9b8bb8916ef4d7664bca3861dac8b2e94c34b8a368097
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-studio-driver-610-62-nvidia-forum-comment-3618531
+  product_id: nvidia-studio-driver
+  update_version: '610.62'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/studio-drivers/39/588913/bsod-0x7f-double-fault-kernel-stack-overflow-from-unbounded-recursion-in-nvlddmkmsys-61062-on/?comment=3618531
+  parent_title: BSOD 0x7F double-fault — kernel-stack overflow from unbounded recursion in nvlddmkm.sys (610.62) on
+  report_title: BSOD 0x7F double-fault — kernel-stack overflow from unbounded recursion in nvlddmkm.sys (610.62) on
+  report_text_excerpt: BSOD 0x7F double-fault — kernel-stack overflow from unbounded recursion in nvlddmkm.sys (610.62) on Hello SUMMARY Driver 610.62 (nvlddmkm.sys 32.0.16.1062) recurses without bound inside a GPU sensor/telemetry code path. A single query walks a cycle of nvlddmkm functions that...
+  captured_at: '2026-11-23T09:02:22Z'
+  source_date: '2026-07-29T09:32:35Z'
+  target_release_date: '2026-06-16'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.62'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.62'
+  matched_field: report_text
+  matched_context: '...double-fault — kernel-stack overflow from unbounded recursion in nvlddmkm.sys (610.62) on Hello SUMMARY Driver 610.62 (nvlddmkm.sys 32.0.16.1062) recurses without b...'
+  excerpt_norm_sha256: 143549c6366ca6b3eade393861278929c3ce7c3a58ea991b144269c9a85835d2
+  title_dedup_sha256: c0a64c9b134da7f9c5cff8982cc2d0d6d45e609b0b9f0a20847771db5763d6f4
+  issue_bucket: crash or driver reset
+  facts_rule_version: v1
+- id: nvidia-studio-driver-610-47-nvidia-forum-comment-3628858
+  product_id: nvidia-studio-driver
+  update_version: '610.47'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/studio-drivers/39/588913/bsod-0x7f-double-fault-kernel-stack-overflow-from-unbounded-recursion-in-nvlddmkmsys-61062-on/?comment=3628858
+  parent_title: BSOD 0x7F double-fault — kernel-stack overflow from unbounded recursion in nvlddmkm.sys (610.62) on
+  report_title: BSOD 0x7F double-fault — kernel-stack overflow from unbounded recursion in nvlddmkm.sys (610.62) on
+  report_text_excerpt: Hi Darius this has saved me a serious headache with this issue coming up frequently, I've rolled back to 610.47 Is there a way we can know if this has been fixed on future updates? Is there any way I can check 617.42 without installing it and waiting for BSOD again?
+  captured_at: '2026-11-23T09:02:22Z'
+  source_date: '2026-10-10T00:06:12Z'
+  target_release_date: '2026-05-26'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.47'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.47'
+  matched_field: report_text
+  matched_context: '...me a serious headache with this issue coming up frequently, I''ve rolled back to 610.47 Is there a way we can know if this has been fixed on future updates? Is there a...'
+  excerpt_norm_sha256: 448b43fc423f3c184ac7e2307ed54739f00032a088796f07966998de68531fbe
+  title_dedup_sha256: c0a64c9b134da7f9c5cff8982cc2d0d6d45e609b0b9f0a20847771db5763d6f4
+  issue_bucket: crash or driver reset
+  facts_rule_version: v1
+- id: nvidia-studio-driver-591-74-nvidia-forum-comment-3633448
+  product_id: nvidia-studio-driver
+  update_version: '591.74'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633448
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: 'Display calibration raises black by 1-2 levels on driver 621.14 (contrast 598:1 vs 963:1 on driver 591.74, same calibration) TL;DR: On drivers after 591.74, while a display calibration (gamma ramp / video LUT) is loaded, black and near-black are shown 1-2 levels too bright....'
+  captured_at: '2026-11-23T09:02:22Z'
+  source_date: '2026-11-11T22:09:35Z'
+  target_release_date: '2026-01-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '591.74'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '591.74'
+  matched_field: report_text
+  matched_context: '...raises black by 1-2 levels on driver 621.14 (contrast 598:1 vs 963:1 on driver 591.74, same calibration) TL;DR: On drivers after 591.74, while a display calibration...'
+  excerpt_norm_sha256: 6ecce431f0169746b5f6c883dcaef85ec5d500e8c51a6e266f0fb34fffd2ee25
+  title_dedup_sha256: 5ed9045128af1fb603384e902a5e090ca835b2503a4677d30f78c0aaa8a49239
+  issue_bucket: flicker or wrong colors
+  facts_rule_version: v1
+- id: obs-studio-32-0-2-obs-forum-thread-192077
+  product_id: obs-studio
+  update_version: 32.0.2
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/stop-recording-and-close-the-obs-program-before-rebooting.192077/
+  parent_title: stop recording and close the OBS program before rebooting.
+  report_title: stop recording and close the OBS program before rebooting.
+  report_text_excerpt: that allow you to start OBS without displaying the safe mode window? Windows 11 24H4 OBS 32.0.2 Thanks.
+  captured_at: '2026-11-23T09:18:52Z'
+  source_date: '2025-11-13'
+  patch_version_matched: true
+  matched_version: 32.0.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+  excerpt_norm_sha256: 4d80f6ee5f5483bb5e6c6d03b39f7bd4bc49369f825d7214cbd185e8068ae086
+  title_dedup_sha256: 0bd0792db8b1c4f27a2ef0f40c5ef63e078fe643022d0af2c85e7b41f44e0b9c
+  issue_bucket: output or recording regressions
+  facts_rule_version: v1
