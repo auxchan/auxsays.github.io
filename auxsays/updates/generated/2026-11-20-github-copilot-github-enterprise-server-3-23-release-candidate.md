@@ -17,8 +17,8 @@ update_version: GitHub Enterprise Server 3.23 release candidate
 update_logo_text: GIT
 update_published_at: '2026-11-20T20:41:26Z'
 update_last_checked: '2026-11-20T23:13:30Z'
-source_last_checked: '2026-11-22T22:32:43Z'
-official_body_last_checked: '2026-11-22T22:32:43Z'
+source_last_checked: '2026-11-23T11:03:18Z'
+official_body_last_checked: '2026-11-23T11:03:18Z'
 record_last_updated: '2026-11-20T23:13:30Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -92,11 +92,6 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-11-20T23:13:30Z'
-  url: https://github.blog/changelog/2026-11-20-github-enterprise-server-3-23-release-candidate
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-11-21T09:49:46Z'
   url: https://github.blog/changelog/2026-11-20-github-enterprise-server-3-23-release-candidate
   status: captured-from-rss-feed
@@ -113,6 +108,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-11-22T22:32:43Z'
+  url: https://github.blog/changelog/2026-11-20-github-enterprise-server-3-23-release-candidate
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-23T11:03:18Z'
   url: https://github.blog/changelog/2026-11-20-github-enterprise-server-3-23-release-candidate
   status: captured-from-rss-feed
   body_captured: true
