@@ -4438,6 +4438,22 @@ html.js-reveal .reveal-up.is-visible { opacity:1; transform:none; }
   line-height: 1.5;
 }
 
+/* AUX-134: the provisional risk assessment. The recommendation and any limiting evidence are always
+   visible; what the assessment checked folds beneath them as whole sentences. */
+.update-risk-assessment__details summary {
+  cursor: pointer;
+  color: var(--text-1);
+  font-size: .88rem;
+}
+
+.update-risk-assessment__lines {
+  margin: .45rem 0 0;
+  padding-left: 1.1rem;
+  color: var(--text-1);
+  font-size: .88rem;
+  line-height: 1.5;
+}
+
 /* AUX-123 A1: a vendor-documented known issue in the newer-release note, printed before any link. */
 .update-evidence-freshness-notice .update-newer-release__caution--declared {
   color: var(--text-0);

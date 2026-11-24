@@ -28,6 +28,17 @@
                            deploy whose WAIT page prints no next action, or one other than a recompute
                            from the source facts gives (evidence_overview.has_next_action and
                            next_action_mismatch).
+                           'assessment' -- the provisional contextual risk assessment (AUX-134), on every
+                           page whose counted reports reach the assessment trigger, whatever its verdict:
+                           the Recommendation line (the verdict the gate prints, and why), the Limiting
+                           evidence line where the reports cannot support a recommendation, and, folded
+                           beneath, what the assessment checked, each dimension either stated from a
+                           stored fact or marked "Not established". Every line is the projection's
+                           (lib/patch_decision.assessment_lines), in its order. A row whose first line is
+                           not a Recommendation with text prints nothing (evidence_overview
+                           .assessment_printable), and QA refuses a deploy whose page at the trigger
+                           prints no assessment or one that names another verdict than the gate
+                           (evidence_overview.assessment_problems).
 
   FAIL CLOSED. No projection (a local render, a fresh checkout) or no row for this page: nothing is
   printed. The page keeps its verdict, its count and every source link; it only loses the overview.
@@ -91,6 +102,37 @@
   {%- if peo_next_lines.size > 0 %}
       <aside class="update-evidence-freshness-notice update-way-forward" role="note" aria-label="Other versions">
         <p><strong>Other versions:</strong>{% for peo_line in peo_next_lines %} {{ peo_line | escape }}{% endfor %}</p>
+      </aside>
+  {%- endif -%}
+{%- elsif peo_part == 'assessment' -%}
+  {%- assign peo_ra = peo_row.risk_assessment -%}
+  {%- assign peo_ra_result = peo_ra.result | default: '' | strip -%}
+  {%- assign peo_ra_lines = peo_ra.lines | default: empty -%}
+  {%- assign peo_ra_first = peo_ra_lines | first -%}
+  {%- assign peo_ra_first_label = peo_ra_first.label | default: '' | strip -%}
+  {%- assign peo_ra_first_text = peo_ra_first.text | default: '' | strip -%}
+  {%- if peo_ra_result != '' and peo_ra_first_label == 'Recommendation' and peo_ra_first_text != '' %}
+      <aside class="update-evidence-freshness-notice update-risk-assessment" role="note" aria-label="Provisional risk assessment">
+        <p><strong>Provisional risk assessment:</strong> {{ peo_ra_first_text | escape }}</p>
+        {%- for peo_ra_line in peo_ra_lines offset: 1 %}
+        {%- assign peo_ra_label = peo_ra_line.label | default: '' | strip -%}
+        {%- assign peo_ra_text = peo_ra_line.text | default: '' | strip -%}
+        {%- if peo_ra_label == 'Limiting evidence' and peo_ra_text != '' %}
+        <p class="update-risk-assessment__limit"><strong>Limiting evidence:</strong> {{ peo_ra_text | escape }}</p>
+        {%- endif %}
+        {%- endfor %}
+        <details class="update-risk-assessment__details">
+          <summary>What this assessment checked</summary>
+          <ul class="update-risk-assessment__lines">
+            {%- for peo_ra_line in peo_ra_lines offset: 1 %}
+            {%- assign peo_ra_label = peo_ra_line.label | default: '' | strip -%}
+            {%- assign peo_ra_text = peo_ra_line.text | default: '' | strip -%}
+            {%- if peo_ra_label != '' and peo_ra_label != 'Limiting evidence' and peo_ra_text != '' %}
+            <li><strong>{{ peo_ra_label | escape }}:</strong> {{ peo_ra_text | escape }}</li>
+            {%- endif %}
+            {%- endfor %}
+          </ul>
+        </details>
       </aside>
   {%- endif -%}
 {%- endif -%}
