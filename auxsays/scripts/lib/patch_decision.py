@@ -749,9 +749,11 @@ ASSESS_RECOMMENDATION = {
 # One sentence per `volume_problems` code: the precise limiting evidence. "{k}" is the code's own number,
 # "{n}" the counted reports, "{product}" the record's product name.
 ASSESS_LIMIT = {
+    # What membership of VOLUME_PRODUCTS (report_counts.CONSENSUS_PROMOTION_PRODUCTS) IS: the lanes may retract a
+    # product's published count projections only for a member.
     "not_promotion_product": (
-        "AUXSAYS does not yet rebuild and retract the published report counts of {product} on every automated "
-        "run, so the number of reports cannot set a recommendation for it."),
+        "The published report counts of {product} are not yet retracted automatically when a report is "
+        "withdrawn, so their number cannot set a recommendation for it."),
     "below_volume_unique_urls": "Only {k} separate report links stand behind the {n} reports.",
     "duplicate_citation_urls": "One report is cited more than once among the {n} reports.",
     "unpublishable_rows": (
@@ -926,7 +928,9 @@ def decide(record: dict[str, Any] | None, *, valid_reasons: Any = (), lifecycle:
     lifecycle entries; `counted_rows` the page's canonical counted population
     (lib.report_counts.counted_evidence_rows for this identity), read ONLY by the volume rule. No stored
     count, sentiment, theme, severity, maturity, collection health or clock is accepted. A caller that
-    passes no rows gets no volume-based WAIT: it fails closed to the reviewed outcome."""
+    passes no rows gets no volume-based WAIT: it fails closed to the reviewed outcome. At
+    ASSESSMENT_MIN_REPORTS counted rows the result carries `assessment` (AUX-134): the provisional
+    contextual risk assessment that reached this verdict, with its basis and its limits."""
     rec = record or {}
     ordered = tuple(sorted((dict(e) for e in valid_reasons or ()),
                            key=lambda e: risk_rank(_text(e.get("verdict")))))

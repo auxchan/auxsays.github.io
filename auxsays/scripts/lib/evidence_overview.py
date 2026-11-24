@@ -74,6 +74,17 @@ WHAT A ROW HOLDS (keyed like the verdict projection: product_id|update_version|t
                   variant a recompute from the source facts gives, or whose newer-release note names another
                   release or date (next_action_mismatch).
 
+  * risk_assessment  on every page whose counted reports reach the assessment trigger, whatever its verdict
+                  (AUX-134): the provisional contextual risk assessment `lib.patch_decision.decide` reached for
+                  the page, as `lib.patch_decision.assessment_lines` words it. `result` and `qualifier` are the
+                  verdict the gate prints; `basis` says why; `limits` name what keeps the count out of the
+                  verdict; `lines` are the printed {label, text} pairs in order, Recommendation first. This module
+                  supplies three facts one page cannot show: how many of its report URLs no other tracked
+                  version counts, a reviewed finding still valid for exactly this population, and where the
+                  release stands among its product's releases. A page at the trigger with no printable
+                  assessment, or one whose assessment names another verdict than the gate, is a publication
+                  error in QA (assessment_problems).
+
 VENDOR FIX LINES are a mechanism switched OFF for every source. Up to MAX_FIX_LINES attributed "Fixed
 ..." bullets may be shown from a newer release's official notes ONLY where that source's publication
 permission is on record (PUBLICATION_PERMITTED_HOSTS). No source in the repository records one -- the
