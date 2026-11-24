@@ -613,6 +613,17 @@ auxsays/scripts/tests/test_evidence_overview.py = 86
 # patch page, homepage, feed, table and My Patch Stack rendered with the shipped Liquid, and QA's own verdict scan
 # clean on the four regenerated records. Needs ruby + liquid.
 auxsays/scripts/tests/test_volume_precaution_g87.py = 56
+# AUX-134: the provisional contextual risk assessment at the report-count trigger (owner order of 2026-11-23: a
+# trigger to assess, not an automatic WAIT). Pins: nothing below the trigger and an assessment at it on any product;
+# the same result for other products, versions and counts; each limit (one stored excerpt repeated, a missing
+# comparison fact, a product outside the maintained set, a report cited twice, an unpublishable row, an official
+# security identification) keeping the count out of the verdict and named in its own sentence; the three bases of a
+# volume WAIT over one unchanged verdict row; a withdrawal and a monthly security classification deciding the page;
+# a reviewed regression at three reports and a withdrawal at none; a reviewed population finding; sentiment, health,
+# maturity, the stored count and the clock not inputs; never SAFE ENOUGH; the release context and the links only this
+# version counts; the public-text guard over the lines; QA's publication-blocking assessment mismatch; the shipped
+# include; and the corpus (one check per property, so evidence growth cannot change this count). Needs ruby + liquid.
+auxsays/scripts/tests/test_contextual_assessment.py = 47
 # AUX-132 (G95): where a reviewed problem's "fixed in" line prints and when it credits the vendor. Rendered with the
 # shipped Liquid through the real patch page: once, in the verdict box, DIRECTLY AFTER the clause of the verdict line
 # that states its own finding, the rest of the verdict line continuing beneath it word for word (OBS 32.1.2, and

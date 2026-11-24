@@ -1040,7 +1040,7 @@ def scan_evidence_overview(files: list[Path], publish_strict: bool = False
     groups = counted_evidence_rows(load_evidence_rows(), windows_targets=windows_targets_from_front_matter(fronts))
     verdict, _unsupported = verdict_projection.project(fronts, groups, reasons, lifecycle)
     expected = evidence_overview.project(fronts, groups, verdict["pages"], reasons, reviewed if not problems else {},
-                                         evidence_overview.split_products_from(ROOT))
+                                         evidence_overview.split_products_from(ROOT), lifecycle=lifecycle)
     want = expected["pages"]
 
     try:
@@ -1096,6 +1096,21 @@ def scan_evidence_overview(files: list[Path], publish_strict: bool = False
             add(warnings, key, "evidence_overview_wait_next_action_mismatch",
                 f"the page prints WAIT and {problem}; the reader would be pointed somewhere the source facts do "
                 "not support. Rebuild the evidence overview projection from this tree before QA and Jekyll.")
+
+    # AUX-134: the provisional risk assessment is MANDATORY on every page whose counted reports reach the
+    # trigger, and it is the page's own decision restated: read from what the page will render (the deploy's
+    # overview row beside the deploy's verdict row), a page at the trigger with no printable assessment, or one
+    # whose assessment names another verdict than the gate prints, is a publication error. Checked only where a
+    # deploy built both projections (no overview on disk prints nothing at all, reported above).
+    if disk is not None and not disk.get("error") and verdict_disk is not None:
+        for data in fronts:
+            key = verdict_projection.page_key(data)
+            count = len(groups.get(verdict_reasons.record_identity(data), []))
+            for problem in evidence_overview.assessment_problems(
+                    rendered_overview.get(key), verdict_projection.printed_row(data, printed_rows), count):
+                add(warnings, key, "evidence_overview_assessment_mismatch",
+                    f"the page {problem}. Rebuild the verdict and evidence overview projections from this tree "
+                    "before QA and Jekyll.")
 
     guard_bucket = errors if publish_strict else warnings
     for data in fronts:
@@ -1694,7 +1709,10 @@ PUBLICATION_BLOCKING_CODES = frozenset({"record_names_conflicting_actions",
                                         # G87 (AUX-127): a page that prints WAIT with no next action, or
                                         # with a way forward the source facts do not give (A3 item 2).
                                         "evidence_overview_wait_without_next_action",
-                                        "evidence_overview_wait_next_action_mismatch"})
+                                        "evidence_overview_wait_next_action_mismatch",
+                                        # AUX-134: a page at the assessment trigger with no printable
+                                        # risk assessment, or one that names another verdict than the gate.
+                                        "evidence_overview_assessment_mismatch"})
 
 
 def promote_for_publication(

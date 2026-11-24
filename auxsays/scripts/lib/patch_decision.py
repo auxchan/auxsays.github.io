@@ -67,8 +67,10 @@ import re
 import unicodedata
 from typing import Any
 
-# Two leaves of `lib`, standard library only: the report-URL identity every count and live check uses, and
-# the vocabularies a row must carry to be published. Neither imports the collector package.
+# Three leaves of `lib`, standard library only: the report-URL identity every count and live check uses, the
+# vocabularies a row must carry to be published, and the stored duplicate-group fact of a row (G68). None
+# imports the collector package.
+from . import evidence_facts
 from .evidence_classification import VALID_SENTIMENTS, VALID_SEVERITIES
 from .source_segments import report_url_key
 
@@ -240,7 +242,8 @@ def leading_decision(text: str) -> str:
 #                        User reports never override it; reviewed reasons only add a warning panel
 #   R3V WAIT             a VOLUME-BASED PRECAUTION (G87, below): 30 or more accepted patch-specific
 #                        reports with 30 or more unique report URLs, on a product whose projections the
-#                        lanes maintain. It outranks R3-R5 whenever it is at least as cautious; the
+#                        lanes maintain. Since AUX-134 the count is a TRIGGER TO ASSESS: `assess` runs at
+#                        30 counted reports and this WAIT is one result it can reach, never automatic. It outranks R3-R5 whenever it is at least as cautious; the
 #                        reviewed entries R3/R4 would have printed stay visible beneath it
 #   R3  WAIT             a reviewed `regression` reason entry that is supported by counted rows
 #   R4  TEST FIRST       a reviewed corroboration reason entry that is supported by counted rows
@@ -300,6 +303,8 @@ TEST_FIRST = "TEST FIRST"
 #     identity every count and the live check use), and no report cited twice;
 #   * every row publishable: the live gate's condition (e) per row (`publishable_row`, which
 #     live_eligibility uses too), so the population can be printed under the publish-strict gate;
+#   * at least VOLUME_MIN_INDEPENDENT SEPARATE reports (`independent_reports`, AUX-134): rows that carry one
+#     stored excerpt are one reporter, and a row whose stored fact is unavailable fails the page closed;
 #   * the record is not officially identified as a security update outside Windows (`security_identified`).
 # NOT an input: collection health. A blocked or stale collector changes the monitoring notice only; the
 # accepted rows it already collected still count (GPT C3). Also not an input: maturity (live or pilot),
@@ -318,6 +323,9 @@ VOLUME_LABEL = "Volume-based precaution"
 VOLUME_RULE = "R3V"
 VOLUME_MIN_REPORTS = 30
 VOLUME_MIN_UNIQUE_URLS = 30
+# AUX-134: the same number, read as SEPARATE reports (`independent_reports`): rows that carry one stored
+# excerpt are one reporter posting twice, exactly as the reviewed reasons' distinct-reporter rule reads them.
+VOLUME_MIN_INDEPENDENT = 30
 # report_counts.CONSENSUS_PROMOTION_PRODUCTS, as literals (the module comment above DAVINCI says why);
 # test_volume_precaution pins the two sets equal.
 VOLUME_PRODUCTS = frozenset({"microsoft-powerpoint", "microsoft-windows-11", "obs-studio", "adobe-acrobat-pro",
@@ -380,9 +388,50 @@ def volume_problems(record: dict[str, Any] | None, counted_rows: Any = ()) -> li
     unpublishable = sum(1 for r in rows if not publishable_row(r))
     if unpublishable:
         problems.append(f"unpublishable_rows:{unpublishable}")
+    independent, unavailable = independent_reports(rows)
+    if unavailable:
+        problems.append(f"report_facts_unavailable:{unavailable}")
+    elif independent < VOLUME_MIN_INDEPENDENT:
+        problems.append(f"below_independent_reports:{independent}")
     if security_identified(rec):
         problems.append("officially_identified_security_update")
     return problems
+
+
+def independent_reports(counted_rows: Any = ()) -> tuple[int, int]:
+    """(independent, unavailable): how many of the page's counted rows stand as SEPARATE reports, and how many
+    rows could not be compared at all.
+
+    The distinct-reporter rule the reviewed reasons already use (lib.verdict_reasons.support_problems), applied
+    to the whole page: a distinct report URL each, and rows that carry the SAME stored excerpt are one reporter
+    posting twice. The excerpt comparison reads the structured fact written with the row
+    (lib.evidence_facts.duplicate_group_key), never the stored text, and never rebuilds it: a row whose fact is
+    missing, malformed, of an unknown version or computed under another rule is `unavailable`, and a page with
+    any such row has not shown that its reports are separate (fail closed). Thirty copies of one complaint are
+    not thirty reports; this says nothing about whether separate reports describe one problem."""
+    rows = [r for r in (counted_rows or ()) if isinstance(r, dict)]
+    urls = {k for k in (report_url_key(str(r.get("source_url") or "")) for r in rows) if k}
+    groups: set[str] = set()
+    unavailable = 0
+    for r in rows:
+        try:
+            key = evidence_facts.duplicate_group_key(r)
+        except evidence_facts.FactUnavailable:
+            unavailable += 1
+            continue
+        if key is not None:
+            groups.add(key)
+    return min(len(urls), len(groups) if groups else len(urls)), unavailable
+
+
+def vendor_known_issue(record: dict[str, Any] | None) -> bool:
+    """Whether the record's vendor has documented a known issue for THIS exact release, read exactly as the
+    writers store it (G85 consumer contract, AUX-125): `official_notes_known_issue: declared` (official release
+    notes) or `official_known_issues_present: true` (Windows Release Health). An absent field never means "no
+    known issue"; it only means none is declared. The one copy: lib.evidence_overview delegates here."""
+    rec = record or {}
+    return (_text(rec.get("official_notes_known_issue")) == "declared"
+            or rec.get("official_known_issues_present") is True)
 
 # ASCII ONLY (PR-A2 review, LOW-2, probe P3). Without re.ASCII, `\d` matches any Unicode digit and
 # int() reads it, so a preview page whose release type was rewritten with full-width or Arabic-Indic
@@ -558,6 +607,271 @@ def lifecycle_for(record: dict[str, Any] | None, lifecycle: Any = ()) -> dict[st
     return dict(min(matches, key=_lifecycle_order)) if matches else None
 
 
+# ---------------------------------------------------------------------------------------------
+# AUX-134: THE PROVISIONAL CONTEXTUAL RISK ASSESSMENT (owner order of 2026-11-23).
+#
+# G87 gave a page WAIT as soon as it held 30 accepted reports on a maintained product. The owner's order
+# changes what the number IS: "a trigger to assess, not an automatic WAIT/AVOID verdict or statistically
+# representative estimate of installer failure rate". So at ASSESSMENT_MIN_REPORTS counted reports `assess`
+# RUNS, for every product and whatever the verdict turns out to be, and `decide` publishes the verdict it
+# reached together with WHY (`basis`) or, when the evidence cannot support a recommendation, exactly which
+# stored fact limits it (`limits`). It is the same authority and the same eight verdicts; no second rubric.
+#
+# WHAT IT READS. Only stored facts something already validates:
+#   * the page's canonical counted population: how many reports, on how many separate report URLs, and how
+#     many stand as separate reports (`independent_reports`, the G68 duplicate-group fact; NEW as a
+#     condition: thirty rows carrying one stored excerpt are one reporter, not thirty reports);
+#   * every other G87 condition, unchanged (`volume_problems`): a maintained product, no report cited twice,
+#     every row publishable, no official security identification;
+#   * the SUPPORTED reviewed reason entries (a confirmed regression, a corroborated problem) and the official
+#     facts that outrank everything (a withdrawal, Microsoft's monthly security classification);
+#   * the vendor's own known-issue declaration for this exact release (G85's stored field).
+#
+# WHAT IT DOES NOT READ, because no stored field is validated for it: severity and data loss (the stored
+# `severity` is derived from the issue label), recurring problem themes (the stored labels are withheld on
+# four products as wrong, lib/evidence_overview), affected platforms beyond a reviewed scope, and positive
+# outcomes (none are collected; silence is not positive evidence). The published assessment says "Not
+# established" for each of them instead of guessing. Collection health, sentiment, maturity and the clock are
+# still not inputs: the monitoring status is its own axis on the page.
+#
+# THE RESULT. An official fact decides and the assessment says so. Otherwise, with no limit, the result is the
+# risk-management WAIT the owner approved on 2026-11-21 (unchanged row: reason code high_report_volume, label
+# "Volume-based precaution"), and its basis names what stands behind it: a reviewed problem (a supported WAIT
+# or TEST FIRST entry, which stays printed beneath the WAIT) as well as the
+# volume, a vendor-documented known issue as well as the volume, or the volume alone with no cause
+# confirmed. With any limit the count adds nothing: the reviewed outcome stands, or the page stays
+# INSUFFICIENT DATA and names the limit. No denominator, percentage, rate, severity or theme is produced.
+# ---------------------------------------------------------------------------------------------
+ASSESSMENT_RULE = "contextual-assessment-1"
+ASSESSMENT_MIN_REPORTS = VOLUME_MIN_REPORTS
+BASIS_OFFICIAL_WITHDRAWAL = "official_withdrawal"
+BASIS_OFFICIAL_SECURITY = "official_security_classification"
+BASIS_REVIEWED_AND_VOLUME = "reviewed_problem_and_report_volume"
+BASIS_VENDOR_ISSUE_AND_VOLUME = "vendor_known_issue_and_report_volume"
+BASIS_VOLUME = "accepted_report_volume"
+BASIS_REVIEWED = "reviewed_finding"
+BASIS_LIMITED = "limited_evidence"
+# The bases whose verdict is the volume-based WAIT. Every other basis leaves the count out of the verdict.
+VOLUME_BASES = frozenset({BASIS_REVIEWED_AND_VOLUME, BASIS_VENDOR_ISSUE_AND_VOLUME, BASIS_VOLUME})
+
+
+class Assessment:
+    """What `assess` found for one page that reached the trigger. `result` and `scope` are the verdict the
+    page prints; `basis` says why; `limits` are the `volume_problems` codes that kept the count out of the
+    verdict (empty when it counts, and never the reason on an official verdict). `confirmed` and
+    `corroborated` count the supported reviewed WAIT and TEST FIRST entries on the page."""
+
+    __slots__ = ("rule", "reports", "unique_urls", "independent", "limits", "result", "scope", "basis",
+                 "confirmed", "corroborated", "vendor_known_issue")
+
+    def __init__(self, *, reports: int, unique_urls: int, independent: int, limits: tuple, result: str,
+                 scope: str, basis: str, confirmed: int, corroborated: int, vendor_known_issue: bool) -> None:
+        self.rule = ASSESSMENT_RULE
+        self.reports = reports
+        self.unique_urls = unique_urls
+        self.independent = independent
+        self.limits = limits
+        self.result = result
+        self.scope = scope
+        self.basis = basis
+        self.confirmed = confirmed
+        self.corroborated = corroborated
+        self.vendor_known_issue = vendor_known_issue
+
+    def __repr__(self) -> str:
+        return f"Assessment({self.result!r}, {self.basis!r}, limits={self.limits!r})"
+
+
+def assess(record: dict[str, Any] | None, reviewed_reasons: Any = (), counted_rows: Any = (), *,
+           withdrawn: bool = False, security: bool = False) -> Assessment | None:
+    """The provisional contextual risk assessment for one page, or None below the trigger.
+
+    `reviewed_reasons` are the page's SUPPORTED reason entries, most cautionary first (as `decide` orders
+    them); `withdrawn` and `security` are the two official facts `decide` has already established. Called by
+    `decide` and by nothing else: the verdict a page prints and the assessment it prints are one result."""
+    rec = record or {}
+    rows = [r for r in (counted_rows or ()) if isinstance(r, dict)]
+    if len(rows) < ASSESSMENT_MIN_REPORTS:
+        return None
+    reasons = [e for e in (reviewed_reasons or ()) if isinstance(e, dict)]
+    limits = tuple(volume_problems(rec, rows))
+    confirmed = sum(1 for e in reasons if _text(e.get("verdict")) == WAIT)
+    corroborated = sum(1 for e in reasons if _text(e.get("verdict")) == TEST_FIRST)
+    known_issue = vendor_known_issue(rec)
+    reviewed_verdict = _text(reasons[0].get("verdict")) if reasons else INSUFFICIENT_DATA
+    if withdrawn:
+        result, scope, basis = AVOID, AVOID_SCOPE, BASIS_OFFICIAL_WITHDRAWAL
+    elif security:
+        result, scope, basis = SECURITY_UPDATE, "", BASIS_OFFICIAL_SECURITY
+    elif not limits and risk_rank(WAIT) <= risk_rank(reviewed_verdict):
+        result, scope = WAIT, ""
+        basis = (BASIS_REVIEWED_AND_VOLUME if confirmed or corroborated
+                 else BASIS_VENDOR_ISSUE_AND_VOLUME if known_issue else BASIS_VOLUME)
+    elif reasons:
+        result, scope, basis = reviewed_verdict, _text(reasons[0].get("scope")), BASIS_REVIEWED
+    else:
+        result, scope, basis = INSUFFICIENT_DATA, "", BASIS_LIMITED
+    keys = {k for k in (report_url_key(str(r.get("source_url") or "")) for r in rows) if k}
+    return Assessment(reports=len(rows), unique_urls=len(keys), independent=independent_reports(rows)[0],
+                      limits=limits, result=result, scope=scope, basis=basis, confirmed=confirmed,
+                      corroborated=corroborated, vendor_known_issue=known_issue)
+
+
+# The assessment's public wording, ONE copy. lib/evidence_overview carries these lines to the page
+# (`risk_assessment` in its projection row) and _includes/patch-evidence-overview.html prints them; neither
+# words anything. No line states the trigger, a rate, a percentage or a share of installations.
+ASSESS_NOT_ESTABLISHED = "Not established."
+ASSESS_RECOMMENDATION = {
+    BASIS_VOLUME: (
+        "WAIT. This is a risk-management recommendation: it rests on the number of accepted reports that name "
+        "this exact version. No single cause is confirmed, and the reports do not show how often installations "
+        "fail."),
+    BASIS_REVIEWED_AND_VOLUME: (
+        "WAIT. A reviewed finding establishes a problem on a named setup, stated with the verdict above, and "
+        "this exact version also carries a high number of accepted reports. The other reports are not confirmed "
+        "as one defect, and they do not show how often installations fail."),
+    BASIS_VENDOR_ISSUE_AND_VOLUME: (
+        "WAIT. {vendor} has documented a known issue affecting this version, and it also carries a high number "
+        "of accepted reports. The reports are not confirmed as one defect, and they do not show how often "
+        "installations fail."),
+    BASIS_OFFICIAL_WITHDRAWAL: (
+        "AVOID for new installations. The vendor's withdrawal of this update decides this page; the accepted "
+        "reports do not change it."),
+    BASIS_OFFICIAL_SECURITY: (
+        "SECURITY UPDATE. Microsoft's classification of this update as a monthly security release decides this "
+        "page; the accepted reports do not override it."),
+    BASIS_REVIEWED: (
+        "{phrase}. The reviewed finding stated with the verdict above decides this page. The number of accepted "
+        "reports adds no wider recommendation here; the limiting evidence says why."),
+    BASIS_LIMITED: (
+        "No recommendation. The accepted reports cannot support one here; the limiting evidence says why."),
+}
+# One sentence per `volume_problems` code: the precise limiting evidence. "{k}" is the code's own number,
+# "{n}" the counted reports, "{product}" the record's product name.
+ASSESS_LIMIT = {
+    "not_promotion_product": (
+        "AUXSAYS does not yet rebuild and retract the published report counts of {product} on every automated "
+        "run, so the number of reports cannot set a recommendation for it."),
+    "below_volume_unique_urls": "Only {k} separate report links stand behind the {n} reports.",
+    "duplicate_citation_urls": "One report is cited more than once among the {n} reports.",
+    "unpublishable_rows": (
+        "{k} of the {n} reports cannot be published as a citation (a missing link, a failed date check or an "
+        "unreadable classification)."),
+    "report_facts_unavailable": (
+        "The stored comparison facts are missing for {k} of the {n} reports, so they are not shown to be "
+        "separate reports."),
+    "below_independent_reports": (
+        "Only {k} of the {n} reports carry text that differs from every other report; reports with identical "
+        "text are read as one reporter."),
+    "officially_identified_security_update": (
+        "The vendor identifies this release as a security update, so a number of reports does not set its "
+        "recommendation."),
+}
+ASSESS_MATURITY = "{n} accepted patch-specific reports on {u} separate report links."
+ASSESS_EXCLUSIVE_ALL = "Each of those links is counted for this version only."
+ASSESS_EXCLUSIVE_SOME = ("{x} of those links are counted for this version only; {y} are also counted for another "
+                         "tracked version.")
+ASSESS_CONFIRMED = ("Established for a named setup: each reviewed finding is stated with the verdict above. The "
+                    "other reports are not confirmed as one problem.")
+ASSESS_FINDING_PREFIX = "Reviewed finding: "
+ASSESS_UNCONFIRMED = ("Not established. AUXSAYS has no reviewed finding that confirms any one problem across "
+                      "these reports, so their number is not a count of one defect.")
+ASSESS_VENDOR_DECLARED = ("{vendor} has documented a known issue affecting this version; see its official "
+                          "notes for this release.")
+ASSESS_VENDOR_NONE = ("AUXSAYS has no record of a vendor-documented known issue for this version. That is not a "
+                      "statement that none exists.")
+ASSESS_SEVERITY = ("Not established. AUXSAYS holds no verified severity or data-loss finding for these reports; "
+                   "a reviewed finding, where one is shown above, states its own impact.")
+ASSESS_SETUPS_REVIEWED = ("Each reviewed finding stated with the verdict above names the setup it applies to. For "
+                          "the other reports: not established.")
+ASSESS_SETUPS = "Not established. AUXSAYS has not verified which platforms or workflows these reports concern."
+ASSESS_POSITIVE = ("Not established. AUXSAYS does not collect reports of successful installations, and a lack "
+                   "of complaints is not evidence that a version is safe.")
+ASSESS_RELEASED = "Released {date}."
+ASSESS_RELEASE = {
+    "archived": "This release is archived.",
+    "excluded_product": "AUXSAYS does not compare releases of this product.",
+    "newer_release": ("A newer release is on record: {identity}. Newer is not necessarily safer, and a fix in "
+                      "one release is not assumed to carry into a later one."),
+    "newest": "AUXSAYS has no record of a newer release.",
+    "not_established": "AUXSAYS has not established a better-supported alternative.",
+}
+ASSESS_COLLECTION = ("Shown in the monitoring status on this page. It does not change this assessment: accepted "
+                     "reports stay counted while collection is degraded or stopped, and a lack of new reports "
+                     "is not positive evidence.")
+ASSESS_PROVISIONAL = ("Provisional. Recomputed on every site build from the accepted reports, the reviewed "
+                      "findings and the vendor records on file; it changes when reports arrive or are "
+                      "withdrawn, when a vendor documents an issue or a fix, and when a newer release is "
+                      "recorded.")
+ASSESS_LABELS = ("Recommendation", "Limiting evidence", "Evidence maturity", "Problem confirmation",
+                 "Vendor known issues", "Severity and data loss", "Affected setups", "Positive outcomes",
+                 "Release and alternatives", "Collection health", "Status")
+_ISO_DATE_RE = re.compile(r"^(\d{4}-\d{2}-\d{2})(?:[T ]|$)", re.ASCII)
+
+
+def _vendor(record: dict[str, Any]) -> str:
+    return _text(record.get("update_source_name")) or "The vendor"
+
+
+def assessment_limit_lines(assessment: Assessment, record: dict[str, Any] | None) -> list[str]:
+    """The precise limiting evidence, one sentence per limit, or [] when the count stands or an official fact
+    decides the page (the limits are then not what decides it). A code with no sentence is a programming
+    error and raises, so a new limit can never be published as silence."""
+    if assessment.basis not in (BASIS_REVIEWED, BASIS_LIMITED):
+        return []
+    rec = record or {}
+    product = _text(rec.get("update_product")) or _text(rec.get("product_id")) or "this product"
+    lines = []
+    for limit in assessment.limits:
+        code, _, number = limit.partition(":")
+        if code == "below_volume_reports":
+            continue  # unreachable at the trigger; never a sentence
+        lines.append(ASSESS_LIMIT[code].format(k=number, n=assessment.reports, product=product))
+    return lines
+
+
+def assessment_lines(assessment: Assessment, record: dict[str, Any] | None, *, finding: str = "",
+                     exclusive: int | None = None, release_kind: str = "",
+                     newer_identity: str = "") -> list[dict[str, str]]:
+    """The published assessment: {"label", "text"} lines in print order. The caller supplies only facts this
+    module cannot see from one page: a still-valid reviewed finding about the population (`finding`), how many
+    of the page's report URLs no other tracked version counts (`exclusive`, None when unknown: the line then
+    says nothing about it), and the release context the page's way forward already computes (`release_kind`,
+    one of ASSESS_RELEASE, with the newer release's name)."""
+    rec = record or {}
+    out: list[dict[str, str]] = []
+
+    def add(label: str, text: str) -> None:
+        if text:
+            out.append({"label": label, "text": text})
+
+    phrase = f"{assessment.result} {assessment.scope}".strip()
+    add("Recommendation", ASSESS_RECOMMENDATION[assessment.basis].format(vendor=_vendor(rec), phrase=phrase))
+    add("Limiting evidence", " ".join(assessment_limit_lines(assessment, rec)))
+    maturity = ASSESS_MATURITY.format(n=assessment.reports, u=assessment.unique_urls)
+    if exclusive is not None:
+        shared = max(assessment.unique_urls - int(exclusive), 0)
+        maturity += " " + (ASSESS_EXCLUSIVE_SOME.format(x=int(exclusive), y=shared) if shared
+                           else ASSESS_EXCLUSIVE_ALL)
+    add("Evidence maturity", maturity)
+    reviewed = bool(assessment.confirmed or assessment.corroborated)
+    add("Problem confirmation", ASSESS_CONFIRMED if reviewed
+        else f"{ASSESS_FINDING_PREFIX}{finding}" if finding else ASSESS_UNCONFIRMED)
+    add("Vendor known issues", ASSESS_VENDOR_DECLARED.format(vendor=_vendor(rec))
+        if assessment.vendor_known_issue else ASSESS_VENDOR_NONE)
+    add("Severity and data loss", ASSESS_SEVERITY)
+    add("Affected setups", ASSESS_SETUPS_REVIEWED if reviewed else ASSESS_SETUPS)
+    add("Positive outcomes", ASSESS_POSITIVE)
+    released = _ISO_DATE_RE.match(_text(rec.get("update_published_at")))
+    release = [ASSESS_RELEASED.format(date=released.group(1))] if released else []
+    if release_kind:
+        release.append(ASSESS_RELEASE[release_kind].format(identity=newer_identity))
+    add("Release and alternatives", " ".join(release))
+    add("Collection health", ASSESS_COLLECTION)
+    add("Status", ASSESS_PROVISIONAL)
+    return out
+
+
 class Decision:
     """What `decide` returns. `reasons` are the SUPPORTED reason entries for the page, most
     cautionary first (file order breaks ties, exactly as the template iterates). A volume-based WAIT
@@ -566,11 +880,11 @@ class Decision:
     it stands above, still shown."""
 
     __slots__ = ("verdict", "rule", "scope", "reasons", "lifecycle", "security", "reason_code", "label",
-                 "reports")
+                 "reports", "assessment")
 
     def __init__(self, verdict: str, rule: str, *, scope: str = "", reasons: tuple = (),
                  lifecycle: dict[str, Any] | None = None, security: bool = False, reason_code: str = "",
-                 label: str = "", reports: int = 0) -> None:
+                 label: str = "", reports: int = 0, assessment: "Assessment | None" = None) -> None:
         self.verdict = verdict
         self.rule = rule
         self.scope = scope
@@ -580,6 +894,9 @@ class Decision:
         self.reason_code = reason_code
         self.label = label
         self.reports = reports
+        # AUX-134: the provisional contextual risk assessment the page's counted reports triggered, or None
+        # below the trigger. `assessment.result` is ALWAYS this decision's verdict: `decide` builds both.
+        self.assessment = assessment
 
     def __repr__(self) -> str:
         return f"Decision({self.verdict!r}, {self.rule!r}, scope={self.scope!r})"
@@ -615,24 +932,27 @@ def decide(record: dict[str, Any] | None, *, valid_reasons: Any = (), lifecycle:
                            key=lambda e: risk_rank(_text(e.get("verdict")))))
     security = is_monthly_security_update(rec)
     life = lifecycle_for(rec, lifecycle)
+    rows = [r for r in (counted_rows or ()) if isinstance(r, dict)]
+    # AUX-134: the count is a TRIGGER TO ASSESS. At ASSESSMENT_MIN_REPORTS counted reports `assess` runs for
+    # every product and every outcome, and the verdict below is the one it reached, with its basis and its
+    # limiting evidence; below the trigger it is None and nothing here reads the count.
+    assessment = assess(rec, ordered, rows, withdrawn=bool(life), security=security)
     if life:
         # Scoped like every non-default verdict: the withdrawal applies to INSTALLING the update,
         # not to a device that already has it (owner decision 2).
-        return Decision(AVOID, "R1", scope=AVOID_SCOPE, lifecycle=life, reasons=ordered, security=security)
+        return Decision(AVOID, "R1", scope=AVOID_SCOPE, lifecycle=life, reasons=ordered, security=security,
+                        assessment=assessment)
     if security:
-        return Decision(SECURITY_UPDATE, "R2", reasons=ordered, security=True)
+        return Decision(SECURITY_UPDATE, "R2", reasons=ordered, security=True, assessment=assessment)
+    if assessment is not None and assessment.basis in VOLUME_BASES:
+        return Decision(WAIT, VOLUME_RULE, reasons=ordered, reason_code=VOLUME_REASON_CODE,
+                        label=VOLUME_LABEL, reports=len(rows), assessment=assessment)
     if ordered:
         head = ordered[0]
         verdict = _text(head.get("verdict"))
-        reviewed = Decision(verdict, "R3" if verdict == WAIT else "R4", scope=_text(head.get("scope")),
-                            reasons=ordered)
-    else:
-        reviewed = Decision(INSUFFICIENT_DATA, "R5")
-    rows = [r for r in (counted_rows or ()) if isinstance(r, dict)]
-    if risk_rank(WAIT) <= risk_rank(reviewed.verdict) and not volume_problems(rec, rows):
-        return Decision(WAIT, VOLUME_RULE, reasons=ordered, reason_code=VOLUME_REASON_CODE,
-                        label=VOLUME_LABEL, reports=len(rows))
-    return reviewed
+        return Decision(verdict, "R3" if verdict == WAIT else "R4", scope=_text(head.get("scope")),
+                        reasons=ordered, assessment=assessment)
+    return Decision(INSUFFICIENT_DATA, "R5", assessment=assessment)
 
 
 def _reports_phrase(count: int) -> str:
