@@ -388,6 +388,13 @@ def scan_verdict_policy(files: list[Path]) -> tuple[list[dict[str, str]], list[d
         switch is on), because the writers gather reasons as the projection does (G35-04 review 1,
         LOW-4; closed by AUX-099).
       * patch_lifecycle_unmatched -- a lifecycle entry no record carries.
+      * volume_wait_withheld_report_facts (AUX-134, review round 1 F4) -- a page at the assessment trigger
+        whose ONLY limit is counted rows without a readable structured evidence fact
+        (patch_decision.facts_withheld_volume): the volume-based WAIT is off that page until the facts
+        migration runs. A WARNING like verdict_reason_unsupported, and for the same reason: the page has
+        already fallen back to a true, more modest statement and names the limit, so there is nothing false
+        to keep off the site, while an error here would stop every product's writeback and deploy over a
+        store-hygiene gap one command repairs. It names the PAGE; `evidence_facts_*` names the rows.
     """
     errors: list[dict[str, str]] = []
     warnings: list[dict[str, str]] = []
@@ -457,6 +464,13 @@ def scan_verdict_policy(files: list[Path]) -> tuple[list[dict[str, str]], list[d
         want = patch_decision.decide(data, valid_reasons=valid.get(verdict_reasons.record_identity(data), []),
                                      lifecycle=lifecycle,
                                      counted_rows=groups.get(verdict_reasons.record_identity(data), []))
+        factless = patch_decision.facts_withheld_volume(want)
+        if factless:
+            add(warnings, path, "volume_wait_withheld_report_facts",
+                f"{factless} of this page's {want.assessment.reports} counted reports carry no readable "
+                "structured evidence fact, and that alone keeps the volume-based WAIT off it: the page prints "
+                f"{patch_decision.verdict_phrase(want)!r} and names the missing facts as its limiting evidence. "
+                "Run migrate_evidence_facts.py --write before the deploy; the WAIT returns on the next build.")
         got_verdict, got_scope = verdict_projection.rendered_verdict(data, rows, lifecycle)
         got_row, want_row = rows.get(key), want_rows.get(key)
         if (got_verdict, got_scope) != (want.verdict, want.scope):
@@ -1460,10 +1474,11 @@ def scan_evidence_facts(rows: list[Any]) -> list[dict[str, str]]:
     what its own text gives under the current rules. One warning per problem kind, with the count and
     the first rows; the remedy is the zero-network migration (migrate_evidence_facts.py --write).
 
-    A WARNING, not an error. No page reads a fact directly yet. The one reader, the distinct-reporter
-    rule of a reviewed verdict reason (lib.verdict_reasons), already refuses a cited row without a
-    usable fact, so a reasoned verdict falls back instead of resting on it, and `verdict_reason_unsupported`
-    names that entry. This finding names the rows."""
+    A WARNING, not an error. Two rules read a fact, and both fail closed on a row without a usable one: the
+    distinct-reporter rule of a reviewed verdict reason (lib.verdict_reasons), so a reasoned verdict falls
+    back instead of resting on it and `verdict_reason_unsupported` names that entry; and, since AUX-134, the
+    separate-report condition of the volume-based WAIT (lib.patch_decision.independent_reports), so that WAIT
+    comes off the page and `volume_wait_withheld_report_facts` names that page. This finding names the rows."""
     warnings: list[dict[str, str]] = []
     found = evidence_facts.store_fact_problems(rows)
     for code in sorted(found):

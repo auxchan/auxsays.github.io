@@ -242,8 +242,11 @@ def leading_decision(text: str) -> str:
 #                        User reports never override it; reviewed reasons only add a warning panel
 #   R3V WAIT             a VOLUME-BASED PRECAUTION (G87, below): 30 or more accepted patch-specific
 #                        reports with 30 or more unique report URLs, on a product whose projections the
-#                        lanes maintain. Since AUX-134 the count is a TRIGGER TO ASSESS: `assess` runs at
-#                        30 counted reports and this WAIT is one result it can reach, never automatic. It outranks R3-R5 whenever it is at least as cautious; the
+#                        lanes maintain. Since AUX-134 `assess` runs at 30 counted reports and PUBLISHES the
+#                        basis of this WAIT. The WAIT itself is unchanged: 30 counted separate reports on
+#                        such a product with no limiting fact still give it on the count alone (the
+#                        owner-approved volume-based WAIT of 2026-11-22; whether that stays is owner
+#                        decision D1, pending). It outranks R3-R5 whenever it is at least as cautious; the
 #                        reviewed entries R3/R4 would have printed stay visible beneath it
 #   R3  WAIT             a reviewed `regression` reason entry that is supported by counted rows
 #   R4  TEST FIRST       a reviewed corroboration reason entry that is supported by counted rows
@@ -304,7 +307,8 @@ TEST_FIRST = "TEST FIRST"
 #   * every row publishable: the live gate's condition (e) per row (`publishable_row`, which
 #     live_eligibility uses too), so the population can be printed under the publish-strict gate;
 #   * at least VOLUME_MIN_INDEPENDENT SEPARATE reports (`independent_reports`, AUX-134): rows that carry one
-#     stored excerpt are one reporter, and a row whose stored fact is unavailable fails the page closed;
+#     stored excerpt are one reporter, a row with an EMPTY stored excerpt stands on its report link, and a row
+#     whose stored fact is unavailable fails the page closed (QA names that page: `facts_withheld_volume`);
 #   * the record is not officially identified as a security update outside Windows (`security_identified`).
 # NOT an input: collection health. A blocked or stale collector changes the monitoring notice only; the
 # accepted rows it already collected still count (GPT C3). Also not an input: maturity (live or pilot),
@@ -408,20 +412,45 @@ def independent_reports(counted_rows: Any = ()) -> tuple[int, int]:
     (lib.evidence_facts.duplicate_group_key), never the stored text, and never rebuilds it: a row whose fact is
     missing, malformed, of an unknown version or computed under another rule is `unavailable`, and a page with
     any such row has not shown that its reports are separate (fail closed). Thirty copies of one complaint are
-    not thirty reports; this says nothing about whether separate reports describe one problem."""
+    not thirty reports; this says nothing about whether separate reports describe one problem.
+
+    AN EMPTY STORED EXCERPT PROVES NOTHING EITHER WAY (review round 1, F3). The excerpt fact can only show
+    DUPLICATION: two rows with the same text are one reporter. A row whose stored excerpt is empty has no text
+    to compare, so it is neither merged with another row (two reports without stored text are not shown to be
+    one reporter) nor dropped: it stands on its own report link, as every row did before this condition
+    existed. ONE rule for every mix: separate reports = distinct non-empty excerpts + rows with an empty
+    excerpt, never more than the distinct report links. (The first version counted the empty rows only when
+    EVERY row was empty: sixty links of which fifty-nine had no stored text were read as one report.)"""
     rows = [r for r in (counted_rows or ()) if isinstance(r, dict)]
     urls = {k for k in (report_url_key(str(r.get("source_url") or "")) for r in rows) if k}
     groups: set[str] = set()
-    unavailable = 0
+    uncompared = unavailable = 0
     for r in rows:
         try:
             key = evidence_facts.duplicate_group_key(r)
         except evidence_facts.FactUnavailable:
             unavailable += 1
             continue
-        if key is not None:
+        if key is None:
+            uncompared += 1
+        else:
             groups.add(key)
-    return min(len(urls), len(groups) if groups else len(urls)), unavailable
+    return min(len(urls), len(groups) + uncompared), unavailable
+
+
+def facts_withheld_volume(decision: "Decision | None") -> int:
+    """How many counted rows without a readable stored fact are the ONLY thing that keeps the volume-based
+    WAIT off this page; 0 when it is not withheld, or not for that reason alone (review round 1, F4).
+
+    `independent_reports` fails a page closed on one such row, so a facts rule change that has not been
+    migrated (migrate_evidence_facts.py --write) takes the volume WAIT off every page at once. The page says so
+    in its limiting evidence; this lets QA say it too, under its own code, instead of leaving it to be inferred
+    from a store-wide `evidence_facts_*` warning. Never true where an official fact decides the page."""
+    found = getattr(decision, "assessment", None)
+    if found is None or found.basis not in (BASIS_REVIEWED, BASIS_LIMITED) or len(found.limits) != 1:
+        return 0
+    code, _, number = found.limits[0].partition(":")
+    return int(number) if code == "report_facts_unavailable" and number.isdigit() else 0
 
 
 def vendor_known_issue(record: dict[str, Any] | None) -> bool:
@@ -641,6 +670,13 @@ def lifecycle_for(record: dict[str, Any] | None, lifecycle: Any = ()) -> dict[st
 # volume, a vendor-documented known issue as well as the volume, or the volume alone with no cause
 # confirmed. With any limit the count adds nothing: the reviewed outcome stands, or the page stays
 # INSUFFICIENT DATA and names the limit. No denominator, percentage, rate, severity or theme is produced.
+#
+# WHAT THIS IS NOT (review round 1, F1). It is an EXPLANATION layer over the unchanged rule, not the contextual
+# weighing the order describes. Thirty counted separate reports on a maintained product with no limiting fact
+# still give WAIT on the count alone: no assessed dimension can move the verdict word (a reviewed finding or a
+# vendor known issue changes only the `basis` label), and the one new condition can only REMOVE the WAIT.
+# Whether the volume-based WAIT stays where no cause is confirmed is owner decision D1 (pending); whether a
+# product outside VOLUME_PRODUCTS gets it is owner decision D2 (pending).
 # ---------------------------------------------------------------------------------------------
 ASSESSMENT_RULE = "contextual-assessment-1"
 ASSESSMENT_MIN_REPORTS = VOLUME_MIN_REPORTS
@@ -727,9 +763,9 @@ ASSESS_RECOMMENDATION = {
         "this exact version. No single cause is confirmed, and the reports do not show how often installations "
         "fail."),
     BASIS_REVIEWED_AND_VOLUME: (
-        "WAIT. A reviewed finding establishes a problem on a named setup, stated with the verdict above, and "
-        "this exact version also carries a high number of accepted reports. The other reports are not confirmed "
-        "as one defect, and they do not show how often installations fail."),
+        "WAIT. {level} It is stated with the verdict above. This exact version also carries a high number of "
+        "accepted reports. The other reports are not confirmed as one defect, and they do not show how often "
+        "installations fail."),
     BASIS_VENDOR_ISSUE_AND_VOLUME: (
         "WAIT. {vendor} has documented a known issue affecting this version, and it also carries a high number "
         "of accepted reports. The reports are not confirmed as one defect, and they do not show how often "
@@ -747,24 +783,36 @@ ASSESS_RECOMMENDATION = {
         "No recommendation. The accepted reports cannot support one here; the limiting evidence says why."),
 }
 # One sentence per `volume_problems` code: the precise limiting evidence. "{k}" is the code's own number,
-# "{n}" the counted reports, "{product}" the record's product name.
+# "{n}" the counted reports, "{product}" the record's product name. A sentence prints a number only where the
+# code measured exactly that number (review round 1, F6).
 ASSESS_LIMIT = {
-    # What membership of VOLUME_PRODUCTS (report_counts.CONSENSUS_PROMOTION_PRODUCTS) IS: the lanes may retract a
-    # product's published count projections only for a member.
+    # A RULE OF SCOPE, and the sentence says only that (review round 1, F2). VOLUME_PRODUCTS is the literal copy
+    # of report_counts.CONSENSUS_PROMOTION_PRODUCTS, and what membership of THAT set grants is one thing: the
+    # lane may DELETE a record's published projections when its counted population reaches zero. A product is
+    # kept out of it where that deletion is judged unsafe in the collection lane (the workflow comment above the
+    # scoped promotion step of the one promoted non-member says why). It is not a statement about the count on a
+    # page: counts are reconciled for every product, and a page at the trigger holds thirty reports or more, so
+    # the zero-count residual cannot apply to a page that prints this. The first wording ("not yet retracted
+    # automatically when a report is withdrawn") said the opposite of what the code does.
     "not_promotion_product": (
-        "The published report counts of {product} are not yet retracted automatically when a report is "
-        "withdrawn, so their number cannot set a recommendation for it."),
+        "AUXSAYS does not apply its report-volume recommendation to {product}. That is a rule about which "
+        "products the recommendation covers, not a finding about these reports."),
     "below_volume_unique_urls": "Only {k} separate report links stand behind the {n} reports.",
-    "duplicate_citation_urls": "One report is cited more than once among the {n} reports.",
+    # No number: the condition is measured as "some link is not a row's own" (a shared link, or two rows with
+    # no readable link), never as how many.
+    "duplicate_citation_urls": "Not every one of the {n} reports has a report link of its own.",
     "unpublishable_rows": (
         "{k} of the {n} reports cannot be published as a citation (a missing link, a failed date check or an "
         "unreadable classification)."),
     "report_facts_unavailable": (
         "The stored comparison facts are missing for {k} of the {n} reports, so they are not shown to be "
         "separate reports."),
+    # "{k}" is `independent_reports`' own result, and the sentence states the rule that produced it. (It used
+    # to say "{k} of the {n} reports carry text that differs from every other report": thirty rows of which two
+    # share a text printed 29, and the reports that differ from every other number 28.)
     "below_independent_reports": (
-        "Only {k} of the {n} reports carry text that differs from every other report; reports with identical "
-        "text are read as one reporter."),
+        "Reports with identical text are read as one reporter and each report link is counted once; read that "
+        "way, the number of separate reports among the {n} is {k}."),
     "officially_identified_security_update": (
         "The vendor identifies this release as a security update, so a number of reports does not set its "
         "recommendation."),
@@ -773,8 +821,18 @@ ASSESS_MATURITY = "{n} accepted patch-specific reports on {u} separate report li
 ASSESS_EXCLUSIVE_ALL = "Each of those links is counted for this version only."
 ASSESS_EXCLUSIVE_SOME = ("{x} of those links are counted for this version only; {y} are also counted for another "
                          "tracked version.")
-ASSESS_CONFIRMED = ("Established for a named setup: each reviewed finding is stated with the verdict above. The "
-                    "other reports are not confirmed as one problem.")
+# A reviewed finding is worded at the strength of ITS OWN stored verdict, never above it (review round 1, F7).
+# A WAIT entry is a `regression` (lib.verdict_reasons: a version transition, a material impact,
+# `new_in_this_version: true`); a TEST FIRST entry is a corroboration, which may rest on two reporters or on a
+# cited official confirmation, so the line names its level and nothing about how it is supported. The page
+# with both is worded by the WAIT entry, the one `decide` puts first.
+ASSESS_REVIEWED_LEVEL = {
+    WAIT: "A reviewed finding describes a problem new in this version on a named setup.",
+    TEST_FIRST: ("A reviewed finding advises TEST FIRST on a named setup; it does not confirm a problem new in "
+                 "this version."),
+}
+ASSESS_REVIEWED_TAIL = ("Each reviewed finding is stated with the verdict above. The other reports are not "
+                        "confirmed as one problem.")
 ASSESS_FINDING_PREFIX = "Reviewed finding: "
 ASSESS_UNCONFIRMED = ("Not established. AUXSAYS has no reviewed finding that confirms any one problem across "
                       "these reports, so their number is not a count of one defect.")
@@ -801,10 +859,13 @@ ASSESS_RELEASE = {
 ASSESS_COLLECTION = ("Shown in the monitoring status on this page. It does not change this assessment: accepted "
                      "reports stay counted while collection is degraded or stopped, and a lack of new reports "
                      "is not positive evidence.")
+# Names ONLY inputs `assess` and `assessment_lines` read (review round 1, F5): the counted rows, the supported
+# reviewed findings, the vendor's known-issue declaration, an official withdrawal, the release context. Nothing
+# here reads a vendor FIX, so the line does not promise one.
 ASSESS_PROVISIONAL = ("Provisional. Recomputed on every site build from the accepted reports, the reviewed "
                       "findings and the vendor records on file; it changes when reports arrive or are "
-                      "withdrawn, when a vendor documents an issue or a fix, and when a newer release is "
-                      "recorded.")
+                      "withdrawn, when a reviewed finding is added or removed, when the vendor documents a "
+                      "known issue or withdraws the update, and when a newer release is recorded.")
 ASSESS_LABELS = ("Recommendation", "Limiting evidence", "Evidence maturity", "Problem confirmation",
                  "Vendor known issues", "Severity and data loss", "Affected setups", "Positive outcomes",
                  "Release and alternatives", "Collection health", "Status")
@@ -848,7 +909,9 @@ def assessment_lines(assessment: Assessment, record: dict[str, Any] | None, *, f
             out.append({"label": label, "text": text})
 
     phrase = f"{assessment.result} {assessment.scope}".strip()
-    add("Recommendation", ASSESS_RECOMMENDATION[assessment.basis].format(vendor=_vendor(rec), phrase=phrase))
+    level = ASSESS_REVIEWED_LEVEL[WAIT if assessment.confirmed else TEST_FIRST]
+    add("Recommendation", ASSESS_RECOMMENDATION[assessment.basis].format(vendor=_vendor(rec), phrase=phrase,
+                                                                         level=level))
     add("Limiting evidence", " ".join(assessment_limit_lines(assessment, rec)))
     maturity = ASSESS_MATURITY.format(n=assessment.reports, u=assessment.unique_urls)
     if exclusive is not None:
@@ -857,7 +920,7 @@ def assessment_lines(assessment: Assessment, record: dict[str, Any] | None, *, f
                            else ASSESS_EXCLUSIVE_ALL)
     add("Evidence maturity", maturity)
     reviewed = bool(assessment.confirmed or assessment.corroborated)
-    add("Problem confirmation", ASSESS_CONFIRMED if reviewed
+    add("Problem confirmation", f"{level} {ASSESS_REVIEWED_TAIL}" if reviewed
         else f"{ASSESS_FINDING_PREFIX}{finding}" if finding else ASSESS_UNCONFIRMED)
     add("Vendor known issues", ASSESS_VENDOR_DECLARED.format(vendor=_vendor(rec))
         if assessment.vendor_known_issue else ASSESS_VENDOR_NONE)
@@ -937,9 +1000,10 @@ def decide(record: dict[str, Any] | None, *, valid_reasons: Any = (), lifecycle:
     security = is_monthly_security_update(rec)
     life = lifecycle_for(rec, lifecycle)
     rows = [r for r in (counted_rows or ()) if isinstance(r, dict)]
-    # AUX-134: the count is a TRIGGER TO ASSESS. At ASSESSMENT_MIN_REPORTS counted reports `assess` runs for
-    # every product and every outcome, and the verdict below is the one it reached, with its basis and its
-    # limiting evidence; below the trigger it is None and nothing here reads the count.
+    # AUX-134: at ASSESSMENT_MIN_REPORTS counted reports `assess` runs for every product and every outcome,
+    # and the verdict below is the one it reached, with its basis and its limiting evidence; below the trigger
+    # it is None and nothing here reads the count. With no limit its result is still the volume WAIT, on the
+    # count alone (see WHAT THIS IS NOT above).
     assessment = assess(rec, ordered, rows, withdrawn=bool(life), security=security)
     if life:
         # Scoped like every non-default verdict: the withdrawal applies to INSTALLING the update,

@@ -3,16 +3,20 @@
 
 Owner order of 2026-11-23: at 30 independent, accepted, patch-specific reports the system must run and publish a
 mandatory provisional contextual risk assessment; the count is "a trigger to assess, not an automatic WAIT/AVOID
-verdict or statistically representative estimate of installer failure rate". `lib/patch_decision.assess` runs at
+verdict or statistically representative estimate of installer failure rate". What this branch builds is the PUBLISHED part
+of that, not the weighing: with no limiting fact the count alone still gives the volume-based WAIT (check B1), and
+whether that stays is the owner's pending decision. `lib/patch_decision.assess` runs at
 ASSESSMENT_MIN_REPORTS counted rows for every product and every outcome; `decide` returns the verdict it reached
 with its basis and its limiting evidence (Decision.assessment); `lib/evidence_overview` carries the published lines
 to the page (`risk_assessment`) and `_includes/patch-evidence-overview.html` prints them. Pinned here:
 
   [T] the trigger: nothing below it, an assessment at it on ANY product, the same result for other products,
       versions and counts (nothing is tied to a product name, a version or today's numbers)
-  [N] the count alone decides nothing: thirty rows carrying one stored excerpt, a missing comparison fact, a
-      product outside the maintained set, a report cited twice, an unpublishable row and an official security
-      identification each keep the count out of the verdict, and each is named as the limiting evidence
+  [N] what keeps the count out of the verdict: thirty rows carrying one stored excerpt, a missing comparison fact,
+      a product outside the maintained set, a report cited twice, an unpublishable row and an official security
+      identification, each named as the limiting evidence in a sentence that is true of the page (the scope rule
+      says only that it is a scope rule; a number is printed only where it was measured; an empty stored excerpt
+      is neither a duplicate nor a lost report). With none of them the count alone still gives WAIT ([B])
   [B] the basis of a volume WAIT: the volume alone with no cause confirmed, a reviewed finding as well, or a
       vendor-documented known issue as well; the printed verdict row is the same in all three
   [P] precedence, and caution below the trigger: a withdrawal and a monthly security classification decide the
@@ -23,7 +27,8 @@ to the page (`risk_assessment`) and `_includes/patch-evidence-overview.html` pri
   [R] release context: archived, a newer release (never called safer; a fix is not assumed carried forward), proven
       newest, a product with no release comparison; and how many report links only this version counts
   [G] the public-text guard reads the assessment lines; no line states the trigger, a rate or a percentage
-  [Q] QA: a page at the trigger with no assessment, or one naming another verdict than the gate, blocks publication
+  [Q] QA: a page at the trigger with no assessment, or one naming another verdict than the gate, blocks publication;
+      a page whose volume WAIT is withheld only by rows without a readable stored fact is named by its own warning
   [L] the shipped Liquid prints the lines as the projection gives them, and nothing without a Recommendation
   [C] corpus: every page at the trigger carries an assessment whose result is the verdict its gate prints, and no
       other page carries one
@@ -145,8 +150,8 @@ def lines_of(row: dict) -> dict[str, str]:
 
 def all_strings() -> list[str]:
     """Every sentence the assessment can publish, as the module holds it."""
-    out = [pd.ASSESS_MATURITY, pd.ASSESS_EXCLUSIVE_ALL, pd.ASSESS_EXCLUSIVE_SOME, pd.ASSESS_CONFIRMED,
-           pd.ASSESS_FINDING_PREFIX, pd.ASSESS_UNCONFIRMED, pd.ASSESS_VENDOR_DECLARED, pd.ASSESS_VENDOR_NONE,
+    out = [pd.ASSESS_MATURITY, pd.ASSESS_EXCLUSIVE_ALL, pd.ASSESS_EXCLUSIVE_SOME, pd.ASSESS_REVIEWED_TAIL,
+           *pd.ASSESS_REVIEWED_LEVEL.values(), pd.ASSESS_FINDING_PREFIX, pd.ASSESS_UNCONFIRMED, pd.ASSESS_VENDOR_DECLARED, pd.ASSESS_VENDOR_NONE,
            pd.ASSESS_SEVERITY, pd.ASSESS_SETUPS_REVIEWED, pd.ASSESS_SETUPS, pd.ASSESS_POSITIVE, pd.ASSESS_RELEASED,
            pd.ASSESS_COLLECTION, pd.ASSESS_PROVISIONAL]
     return out + list(pd.ASSESS_RECOMMENDATION.values()) + list(pd.ASSESS_LIMIT.values()) + list(pd.ASSESS_RELEASE.values())
@@ -155,7 +160,7 @@ def all_strings() -> list[str]:
 # ------------------------------------------------------------------------------------------------ [T]
 
 def check_trigger() -> None:
-    section("[T] the count is a trigger to assess")
+    section("[T] the trigger: an assessment runs at it")
     record = rec()
     below = decide(record, rows(N - 1))
     check("T1 one report below the trigger: no assessment runs, the page keeps INSUFFICIENT DATA and its overview row "
@@ -188,7 +193,7 @@ def check_trigger() -> None:
 # ------------------------------------------------------------------------------------------------ [N]
 
 def check_not_automatic() -> None:
-    section("[N] the count alone decides nothing")
+    section("[N] what keeps the count out of the verdict")
     record = rec()
     copies = [vrow(i, report_text_excerpt="The same complaint, posted again.") for i in range(1, N + 6)]
     d = decide(record, copies)
@@ -245,6 +250,58 @@ def check_not_automatic() -> None:
           "and the count adds no wider recommendation",
           d_tf.verdict == "TEST FIRST" and d_tf.rule == "R4" and d_tf.assessment.basis == pd.BASIS_REVIEWED
           and first.startswith("TEST FIRST if you use the first test setup. The reviewed finding"), first)
+    # Review round 1, F3: ONE rule for a row with an empty stored excerpt, in every mix.
+    sparse = [vrow(i, report_text_excerpt="" if i > 1 else "The one report with stored text.") for i in range(1, 61)]
+    d_sparse = decide(record, sparse)
+    check("N8 sixty reports on sixty links of which fifty-nine carry no stored text are sixty separate reports, not "
+          "one: an empty excerpt is not proof of duplication, so the WAIT stays and no limit is printed",
+          d_sparse.verdict == "WAIT" and d_sparse.assessment.independent == 60 and d_sparse.assessment.limits == ()
+          and "Limiting evidence" not in lines_of(one(record, sparse)),
+          f"{d_sparse.verdict} {d_sparse.assessment.independent} {d_sparse.assessment.limits}")
+
+    def mix(empty: int, texted: int, shared: int) -> list[dict]:
+        """`empty` rows without stored text, then `texted` rows with text of which `shared` repeat the first."""
+        out = [vrow(i, report_text_excerpt="") for i in range(1, empty + 1)]
+        out += [vrow(empty + i, report_text_excerpt="Stored text one." if i <= shared else f"Stored text {i}.")
+                for i in range(1, texted + 1)]
+        return out
+
+    counts = {name: independent_of(decide(record, population))
+              for name, population in (("all_empty", mix(N, 0, 0)), ("at", mix(10, N - 9, 2)),
+                                       ("below", mix(10, N - 10, 2)), ("none_empty", mix(0, N, 2)))}
+    check("N9 the same rule when every row is empty and when some are: an empty row stands on its report link, and "
+          "rows that DO share a text are still one reporter beside it (ten empty + twenty-one with text, two of "
+          "them identical = thirty and WAIT; one fewer = twenty-nine and no WAIT)",
+          counts == {"all_empty": (N, "WAIT"), "at": (N, "WAIT"), "below": (N - 1, "INSUFFICIENT DATA"),
+                     "none_empty": (N - 1, "INSUFFICIENT DATA")}, str(counts))
+    # Review round 1, F6: a limit sentence prints a number only where the code measured exactly that number.
+    said = lines_of(one(record, near)).get("Limiting evidence", "")
+    alone = sum(1 for r in near
+                if sum(1 for o in near if o["report_text_excerpt"] == r["report_text_excerpt"]) == 1)
+    check("N10 thirty reports of which two share a text: the sentence states the rule and the number the rule gives "
+          "(twenty-nine), and no longer calls that the number of reports that differ from every other (twenty-eight)",
+          alone == N - 2 and decide(record, near).assessment.independent == N - 1
+          and said == pd.ASSESS_LIMIT["below_independent_reports"].format(k=N - 1, n=N)
+          and re.findall(r"\d+", said) == [str(N), str(N - 1)] and "differ" not in said, said)
+    thrice = rows(N + 2)[:-3] + [vrow(N + k, url=f"https://reports.test/{MAINTAINED}/9.8.7/{k}") for k in (1, 2, 3)]
+    dup_line = pd.ASSESS_LIMIT["duplicate_citation_urls"].format(k="", n=len(thrice))
+    said = lines_of(one(record, thrice)).get("Limiting evidence", "")
+    check("N11 three report links each cited twice: the sentence about shared links states no number of them (none "
+          "is measured), and never 'one report'",
+          "duplicate_citation_urls" in decide(record, thrice).assessment.limits and dup_line in said
+          and re.findall(r"\d+", dup_line) == [str(len(thrice))] and "one report is" not in said.lower()
+          and "more than once" not in said, said)
+    # Review round 1, F2: the sentence for a product outside the set says what is true of the page and no more.
+    scope = pd.ASSESS_LIMIT["not_promotion_product"]
+    check("N12 a product outside the set is told that the volume rule does not cover it, as a rule of scope: nothing "
+          "about its counts being unreliable, unretracted or including withdrawn reports",
+          scope.startswith("AUXSAYS does not apply its report-volume recommendation to {product}.")
+          and "not a finding about these reports" in scope
+          and not [w for w in ("retract", "withdraw", "count", "number") if w in scope.lower()], scope)
+
+
+def independent_of(decision: pd.Decision) -> tuple[int, str]:
+    return decision.assessment.independent, decision.verdict
 
 
 # ------------------------------------------------------------------------------------------------ [B]
@@ -283,6 +340,23 @@ def check_basis() -> None:
     absent = lines_of(one(record, population)).get("Vendor known issues", "")
     check("B5 an absent vendor field is never read as 'no known issue': the line says none is on record and that this "
           "is not a statement that none exists", absent == pd.ASSESS_VENDOR_NONE and "not a statement" in absent)
+    # Review round 1, F7: a reviewed finding is worded at the strength of its own stored verdict.
+    tf_entry, wait_entry = entry("tf", "TEST FIRST", "corroborated_issue"), entry("w", "WAIT", "regression")
+    said = {name: lines_of(one(record, population, reasons=reasons))
+            for name, reasons in (("tf", [tf_entry]), ("wait", [wait_entry]), ("both", [tf_entry, wait_entry]))}
+    level = pd.ASSESS_REVIEWED_LEVEL
+    worded = {name: (text["Recommendation"], text["Problem confirmation"]) for name, text in said.items()}
+    check("B6 a reviewed TEST FIRST beside the volume is worded as TEST FIRST advice that does not confirm a problem "
+          "new in this version; only a reviewed WAIT is worded as a problem new in this version (and it words the "
+          "page that carries both); nothing is called 'established'",
+          all(level["TEST FIRST"] in line for line in worded["tf"])
+          and all(level["WAIT"] in line and level["TEST FIRST"] not in line
+                  for name in ("wait", "both") for line in worded[name])
+          and not any(level["WAIT"] in line for line in worded["tf"])
+          and level["TEST FIRST"].startswith("A reviewed finding advises TEST FIRST on a named setup")
+          and "does not confirm" in level["TEST FIRST"]
+          and not [line for pair in worded.values() for line in pair
+                   if "establishes" in line.lower() or line.lower().startswith("established")], str(worded["tf"]))
 
 
 # ------------------------------------------------------------------------------------------------ [P]
@@ -430,6 +504,26 @@ def check_guards() -> None:
                                                     pd.independent_reports, eo.risk_assessment))
     named = [w for w in ("obs", "davinci", "windows", "acrobat", "33.0", "32.1", "comfyui") if w in source.lower()]
     check("G4 the assessment code names no product and no version", not named, str(named))
+    # Review round 1, F5: the Status line names only inputs the assessment reads, and each one it names moves it.
+    status = pd.ASSESS_PROVISIONAL
+    base_lines = lines_of(row)
+    with_finding = lines_of(one(record, population, reasons=[entry("tf", "TEST FIRST", "corroborated_issue")]))
+    with_issue = lines_of(one(rec(official_notes_known_issue="declared"), population))
+    life = [{"id": "life", "product_id": WIN, "kb": "KB5000002", "builds": ["26200.2000"],
+             "relationship": "withdrawn_for_new_installs", "replacement_kb": "KB5000003"}]
+    win = rec("25H2", pid=WIN, target_build="26200.2000", target_kb="KB5000002", update_type="2026-03 D")
+    win_rows = rows(N, pid=WIN, version="25H2")
+    moved = {"reports arrive or are withdrawn": one(record, population[:-1]).get("risk_assessment") is None,
+             "a reviewed finding is added or removed":
+                 with_finding["Problem confirmation"] != base_lines["Problem confirmation"],
+             "the vendor documents a known issue": with_issue["Vendor known issues"] != base_lines["Vendor known issues"],
+             "withdraws the update": (lines_of(one(win, win_rows, life=life))["Recommendation"]
+                                      != lines_of(one(win, win_rows))["Recommendation"]),
+             "a newer release is recorded": "newer_release" in pd.ASSESS_RELEASE}
+    check("G5 the Status line promises no vendor fix (nothing reads one), and every change it does name is an input "
+          "that moves the published assessment",
+          " fix" not in status.lower() and all(phrase in status for phrase in moved) and all(moved.values()),
+          f"{status} {moved}")
 
 
 # ------------------------------------------------------------------------------------------------ [Q]
@@ -520,6 +614,50 @@ def check_qa(tmp: Path) -> None:
                                       ["pages"][vp.page_key(record)], N)
     check("Q4 a row the rule wrote has no problem against the verdict row it stands beside", problems == [],
           str(problems))
+    # Review round 1, F4: the page that loses its volume WAIT to a row without a readable fact is NAMED.
+    held = "volume_wait_withheld_report_facts"
+    big = rec(update_report_count=101)
+    bare = rows(101)
+    bare[4] = {k: v for k, v in bare[4].items() if k not in ef.STORED_FIELDS}
+    found = policy_run(qa_tree(tmp / "bare", big, bare))
+    clean = policy_run(qa_tree(tmp / "clean", big, rows(101)))
+    messages = [w["message"] for w in found[1] if w["code"] == held]
+    check("Q5 one counted row of 101 without a readable stored fact takes the volume WAIT off the page, and QA names "
+          "that page under its own code, with the numbers and the remedy; the same page with its facts is silent",
+          decide(big, bare).verdict == "INSUFFICIENT DATA" and pd.facts_withheld_volume(decide(big, bare)) == 1
+          and len(messages) == 1 and "1 of this page's 101 counted reports" in messages[0]
+          and "migrate_evidence_facts.py --write" in messages[0]
+          and held not in {w["code"] for w in clean[0] + clean[1]}, str(messages))
+    other = rec(pid=UNMAINTAINED, update_report_count=101)
+    other_rows = rows(101, pid=UNMAINTAINED)
+    other_rows[4] = {k: v for k, v in other_rows[4].items() if k not in ef.STORED_FIELDS}
+    win = rec("25H2", pid=WIN, target_build="26200.1000", target_kb="KB5000001", update_type="2026-02 B",
+              update_report_count=40)
+    win_rows = rows(40, pid=WIN, version="25H2")
+    win_rows[4] = {k: v for k, v in win_rows[4].items() if k not in ef.STORED_FIELDS}
+    _errors, kept = qa.promote_for_publication([], [{"code": held, "file": "x", "message": "m"}])
+    check("Q6 it is a warning that publication mode does not promote and no error carries (the page already prints a "
+          "true limit), and it is silent where the missing fact is not the one thing withholding the WAIT: another "
+          "limit as well, an official classification that decides the page, or a page below the trigger",
+          held not in qa.PUBLICATION_BLOCKING_CODES and [w["code"] for w in kept] == [held]
+          and held not in {e["code"] for e in found[0]}
+          and pd.facts_withheld_volume(decide(other, other_rows)) == 0
+          and pd.facts_withheld_volume(decide(win, win_rows)) == 0
+          and pd.facts_withheld_volume(decide(record, bare[:N - 1])) == 0
+          and pd.facts_withheld_volume(None) == 0)
+
+
+def policy_run(tree):
+    """qa.scan_verdict_policy over one fixture tree, as qa.main runs it: (errors, warnings)."""
+    files, tmp = tree
+    saved = {k: getattr(qa, k) for k in QA_PATHS}
+    try:
+        qa.REASONS_PATH, qa.LIFECYCLE_PATH, qa.EVIDENCE_PATH = tmp / "reasons.yml", tmp / "life.yml", tmp / "ev.yml"
+        qa.PROJECTION_PATH, qa.ROOT = tmp / "vp.yml", tmp
+        return qa.scan_verdict_policy(files)
+    finally:
+        for k, v in saved.items():
+            setattr(qa, k, v)
 
 
 # ------------------------------------------------------------------------------------------------ [L]
