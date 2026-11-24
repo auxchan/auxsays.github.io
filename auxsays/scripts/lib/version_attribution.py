@@ -41,7 +41,7 @@ import re
 from dataclasses import dataclass, field
 from typing import Any, Iterable, Mapping
 
-from .davinci_release_line import stated_point_releases
+from .davinci_release_line import counted_point_releases, stated_point_releases
 from .target_outcome import FIXED, ROLLBACK, classify_target_outcome
 
 FLAG_CONTRADICTED = "own_version_contradicted"
@@ -60,6 +60,9 @@ IDENTITY_FIELDS = ("update_version", "target_build", "matched_version", "matched
                    "matched_kb", "matched_feature_version", "matched_text")
 
 _BARE_LINE = re.compile(r"^\d{1,3}$")
+# A Windows feature-update name ("25H2"). It is `update_version` on every cumulative update of that
+# feature version, so it is shared by dozens of builds and identifies none of them.
+_FEATURE_UPDATE_NAME = re.compile(r"^\d{2}H[12]$", re.I)
 _SELF_IDENTIFYING = re.compile(r"^(?:\d+(?:\.\d+)+|KB\d{6,8})$", re.I)
 _TRUNCATED = re.compile(r"(?:\.\.\.|…)\s*$")
 
@@ -109,6 +112,23 @@ def own_identities(row: Mapping[str, Any]) -> list[str]:
         if value and value not in out:
             out.append(value)
     return out
+
+
+def exact_identities(row: Mapping[str, Any]) -> list[str]:
+    """The identities that can show the row's OWN update is named in its text.
+
+    Every identity, except a feature-update name on a row that also carries an exact one (a build
+    or a KB number). "25H2" in the text says which Windows the reporter runs; a 25H2 row counted
+    for build 26200.8973 whose text says "25H2 26200.8875" names another update, and reading the
+    shared name as the row's own identity hid 6 counted rows from the second check (measured at
+    57f65455). A row whose only identity is the feature name keeps it: there is nothing more exact
+    to ask for.
+    """
+    identities = own_identities(row)
+    exact = [i for i in identities if not _FEATURE_UPDATE_NAME.match(i)]
+    if len(exact) < len(identities) and any(is_self_identifying(i) for i in exact):
+        return exact
+    return identities
 
 
 def is_self_identifying(token: str) -> bool:
@@ -209,7 +229,7 @@ def assess_row(row: Mapping[str, Any], vocabulary: frozenset[str] = frozenset(),
 
     # 2. Another tracked version is named and none of the row's own identities is.
     identities = own_identities(row)
-    own_named = any(names_version(text, identity) for identity in identities)
+    own_named = any(names_version(text, identity) for identity in exact_identities(row))
     if not own_named:
         own = {identity.lower() for identity in identities}
         others = sorted(token for token in vocabulary
@@ -223,14 +243,19 @@ def assess_row(row: Mapping[str, Any], vocabulary: frozenset[str] = frozenset(),
                  others, also_counted_for=sorted(set(others) & counted_for))
 
     # 3. A release-line row whose stored text names an exact point release of that line.
+    #    Or one whose report is ALSO counted on a point release of that line: that count was made
+    #    on the full text, so the report names the point release even where this row's cut excerpt
+    #    stops before it (8 such rows at 57f65455; one report, two pages).
     if is_release_line(version):
         points = stated_point_releases(text, version, vocabulary)
-        if points:
+        elsewhere = counted_point_releases(version, counted_for)
+        if points or elsewhere:
             tracked = [p for p in points if p in vocabulary]
-            flag(FLAG_POINT_RELEASE,
-                 f"counted for the {version} release line; stored text names " + ", ".join(points),
-                 points, tracked_point_releases=tracked,
-                 also_counted_for=sorted(set(points) & counted_for))
+            said = ("stored text names " + ", ".join(points)) if points else \
+                "the same report is counted for " + ", ".join(elsewhere)
+            flag(FLAG_POINT_RELEASE, f"counted for the {version} release line; {said}",
+                 points or elsewhere, tracked_point_releases=tracked or elsewhere,
+                 also_counted_for=sorted((set(points) & counted_for) | set(elsewhere)))
     return flags
 
 

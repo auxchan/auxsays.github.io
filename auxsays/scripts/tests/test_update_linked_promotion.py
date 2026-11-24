@@ -16,6 +16,7 @@ Offline. The shipped store and tier files are read, never written.
 from __future__ import annotations
 
 import json
+import os
 import subprocess
 import sys
 import tempfile
@@ -31,6 +32,7 @@ if str(SCRIPTS) not in sys.path:
 import yaml  # noqa: E402
 
 import promote_update_linked_evidence as promo  # noqa: E402
+from patch_collectors import adobe_acrobat_community as acrobat  # noqa: E402
 from patch_collectors import base  # noqa: E402
 
 PASS = 0
@@ -115,6 +117,100 @@ def run_suite() -> int:
     check("C8 the associated release window is never an input",
           "associated_update_version" not in promo.candidate_from_held(
               held_row("p:9", base_url + "9", "t", "e", day, associated_update_version="x")))
+
+    print("X. what a held row carries (review M3)")
+    last3 = records[-3:]
+    oldest = last3[0]
+    off = promo.assess(PRO, [
+        held_row("p:20", base_url + "1700020", "Acrobat Pro crashes on open", exact, day,
+                 promotion_eligible=False),
+        held_row("p:21", base_url + "1700021", "Acrobat Pro crashes on open", exact, day,
+                 confirmation_state="withdrawn"),
+        {k: v for k, v in held_row("p:22", base_url + "1700022", "Acrobat Pro crashes on open", exact,
+                                   day).items() if k != "promotion_eligible"},
+        held_row("p:23", base_url + "1700023", "Acrobat Pro crashes on open", exact, day),
+    ], last3, promo._acrobat_accepts)
+    check("X1 a row that says it is not promotion-eligible is not put to the authority",
+          [e["outcome"] for e in off[:3]] == ["not_promotion_eligible"] * 3
+          and all(e["row"] is None for e in off[:3]) and off[3]["outcome"] == "qualifies",
+          str([e["outcome"] for e in off]))
+    # THE REVIEWER'S CASE. The report opens with the newest build and a crash; past the 280th
+    # character it asks for another build's installer and cites a third. The authority rejects the
+    # full report for every tracked patch; the stored excerpt alone reads as a clean report.
+    head = (f"Acrobat Pro {newest.update_version} crashes every time I open a PDF since the update. "
+            f"Reinstalling did not help. ")
+    pad = ("I have tried repairing the installation, clearing preferences and disabling protected "
+           "mode, with no change at all. ") * 3
+    tail = (f"Can I get the installer for {older.update_version} to revert in the meantime? "
+            f"The release notes for {oldest.update_version} mention this.")
+    full = head + pad + tail
+    excerpt = base.excerpt(full)
+    cut_url = base_url + "1700030"
+    on_full = []
+    for record in last3:
+        ok, _rejected = acrobat.evaluate_candidates(PRO, record, [{
+            "source_type": "adobe_community_bug_report", "source_name": "Adobe Community",
+            "source_url": cut_url, "parent_title": "Acrobat Pro crashes on open",
+            "report_title": "Acrobat Pro crashes on open", "report_text": full, "source_date": day}],
+            "2026-10-26T04:42:27Z")
+        on_full.extend(ok)
+    check("X2 the acceptance authority rejects the full report for every tracked patch",
+          not on_full and excerpt.endswith("...") and len(excerpt) <= 280, str(len(on_full)))
+    cut_row = held_row("p:30", cut_url, "Acrobat Pro crashes on open", excerpt, day)
+    judged = promo.assess(PRO, [cut_row], last3, promo._acrobat_accepts)[0]
+    check("X3 its cut excerpt is never promoted, whatever the authority says of the excerpt",
+          judged["outcome"] == "qualifies_on_cut_excerpt_only" and judged["row"] is None,
+          judged["outcome"])
+    check("X4 'cut' fails closed: the placeholder, the storage cap, an empty excerpt",
+          promo.stored_text_is_cut({"report_excerpt": "crashes on open..."})
+          and promo.stored_text_is_cut({"report_excerpt": "crashes on open…"})
+          and promo.stored_text_is_cut({"report_excerpt": "x" * 400})
+          and promo.stored_text_is_cut({"report_excerpt": ""})
+          and promo.stored_text_is_cut({"report_excerpt": "ok", "report_title": "t" * 300})
+          and not promo.stored_text_is_cut({"report_excerpt": exact, "report_title": "Crash on open"}))
+    with tempfile.TemporaryDirectory() as tmp:
+        store, tier = Path(tmp) / "consensus_evidence.yml", Path(tmp) / "tier2.yml"
+        base.write_evidence_file([{
+            "id": "seed-1", "product_id": "obs-studio", "update_version": "32.1.2",
+            "source_type": "github_issue", "source_name": "GitHub",
+            "source_url": "https://github.com/obsproject/obs-studio/issues/1", "parent_title": "seed",
+            "report_title": "seed", "report_text_excerpt": "seed", "captured_at": "2026-01-01T00:00:00Z",
+            "patch_version_matched": True, "matched_version": "32.1.2",
+            "match_basis": "exact_version_text", "counted": True, "exclusion_reason": None,
+            "source_weight": 1}], store)
+        tier.write_text(promo.dump_tier_file({"schema_version": 1, "note": "fixture"}, [cut_row]),
+                        encoding="utf-8", newline="\n")
+        s0, t0 = store.read_bytes(), tier.read_bytes()
+        wrote = run("--product-id", PRO, "--evidence-path", str(store), "--tier2-path", str(tier), "--write")
+        check("X5 --write on the reviewer's row appends nothing and leaves it in the second tier",
+              wrote.returncode == 0 and store.read_bytes() == s0 and tier.read_bytes() == t0
+              and "0 qualify" in wrote.stdout and "NOT promoted" in wrote.stdout,
+              wrote.stdout[-300:] + wrote.stderr[-300:])
+        # REVIEW S5: the step stands before the lane's only writeback.
+        tier.write_text("- not\n- a mapping\n", encoding="utf-8")
+        summary, output = Path(tmp) / "summary.md", Path(tmp) / "output.txt"
+        env = {**os.environ, "GITHUB_STEP_SUMMARY": str(summary), "GITHUB_OUTPUT": str(output)}
+        args = [sys.executable, TOOL, "--product-id", PRO, "--evidence-path", str(store),
+                "--tier2-path", str(tier)]
+        hard = subprocess.run(args, capture_output=True, text=True, env=env)
+        silent = not summary.exists()
+        soft = subprocess.run([*args, "--fail-soft"], capture_output=True, text=True, env=env)
+        check("X6 without --fail-soft a broken tier file still fails the command",
+              hard.returncode != 0 and silent, str(hard.returncode))
+        check("X7 --fail-soft: exit 0, and the failure is in the log, the job summary and the step output",
+              soft.returncode == 0 and "::error title=Second-tier promotion failed" in soft.stdout
+              and summary.exists() and "FAILED (fail-soft)" in summary.read_text(encoding="utf-8")
+              and "status=failed" in output.read_text(encoding="utf-8") and store.read_bytes() == s0,
+              str(soft.returncode) + soft.stdout[-300:])
+    workflow = yaml.safe_load((ROOT.parent / ".github" / "workflows" / "obs-evidence-collection.yml")
+                              .read_text(encoding="utf-8"))
+    commands = [line.split("#", 1)[0].strip()
+                for job in workflow["jobs"].values() for step in job.get("steps", [])
+                for line in str(step.get("run") or "").splitlines()
+                if "promote_update_linked_evidence.py" in line.split("#", 1)[0]]
+    check("X8 the scheduled lane runs promotion report-only and fail-soft: no --write on any call",
+          len(commands) == 2 and all("--write" not in c.split() and "--fail-soft" in c.split()
+                                     for c in commands), str(commands))
 
     print("W. the write, on a temporary store and tier file")
     with tempfile.TemporaryDirectory() as tmp:

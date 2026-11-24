@@ -69,9 +69,52 @@ def stated_point_releases(text: str, line: Any, tracked: Iterable[Any] = ()) -> 
         token = hit.group(0)
         if not token[len(line):].strip(".0") and token not in tracked_set:
             continue                                   # "20.0": the first release, written in full
+        if is_ordinary_number(token, body[hit.end():], tracked_set):
+            continue                                   # a date, a time or a measurement
         if token not in found:
             found.append(token)
     return found
+
+
+# A number that begins with the line's digits is not always a version. Each shape below is
+# structural, and each fails closed: a number this does NOT recognise is still read as a point
+# release, so the report is refused for the line page and counted nowhere, never counted wrongly.
+#   a measurement   "20.5 GB", "21.3 fps", "19.5 hours", "16.7 ms": the unit follows the number
+#   a date          "21.10.2026": three components, the last a four-digit year
+#   a clock time    "21.30": two components, the second two digits, and no release of that name
+#                   is tracked (Blackmagic has shipped no two-digit second component)
+_UNIT_AFTER = re.compile(
+    # No one-letter unit ("s", "h", "x", "w"): "21.1 w/ Studio" and "20.2 x64" follow a release.
+    r"\s?(?:%|°|(?:[kmgt]i?b|fps|ms|secs?|seconds?|mins?|minutes?|hrs?|hours?|days?|weeks?|"
+    r"months?|years?|k?hz|px|mm|cm|db|bits?|[kmg]bps|frames?|watts?)(?![A-Za-z0-9]))",
+    re.I)
+_DATE_SHAPE = re.compile(r"^\d{1,2}\.\d{1,2}\.(?:19|20)\d{2}$")
+_CLOCK_SHAPE = re.compile(r"^\d{1,2}\.\d{2}$")
+
+
+def is_ordinary_number(token: str, after: str, tracked: Iterable[Any] = ()) -> bool:
+    """Whether ``token`` (the line's digits and dotted components) is a date, time or measurement.
+
+    ``after`` is the text that follows it. A unit decides even for a tracked release ("20.3 fps" is
+    a frame rate although 20.3 exists); a date or clock shape decides only when no release of that
+    exact name is tracked.
+    """
+    if _UNIT_AFTER.match(after or ""):
+        return True
+    if token in {str(v or "").strip() for v in tracked}:
+        return False
+    return bool(_DATE_SHAPE.match(token) or _CLOCK_SHAPE.match(token))
+
+
+def counted_point_releases(line: Any, counted_for: Iterable[Any]) -> list[str]:
+    """The point releases of ``line`` among the versions one report is COUNTED for, oldest first.
+
+    A report counted on "21.0.2" was accepted there on its full text by the exact-version gate, so
+    the store itself records that the report names a point release, even when the line row's
+    280-character excerpt stops before it. That report belongs on the point release's page only.
+    """
+    line = str(line or "").strip()
+    return [v for v in line_members(line, counted_for) if v != line]
 
 
 def _version_key(version: str) -> tuple[int, ...]:
@@ -135,12 +178,19 @@ def identity_fields(product_label: str, line: Any, versions: Iterable[Any]) -> d
     return {
         SCOPE_FIELD: SCOPE_RELEASE_LINE,
         "update_channel_label": f"Release line: {line} to {last}",
+        # ONLY WHAT THE STORE CAN SHOW. A stored row keeps 280 characters of its report, so "these
+        # reports name no point release" cannot be shown for a row whose text was cut, and for
+        # 8 rows the store disproved it (the same report was counted on a point release). What is
+        # true of every row left on a line page, and pinned over the shipped store: it was matched
+        # to the line by the line's name, it is counted on no exact release's page, and the part
+        # of its text that is stored names no exact release.
         "description": (
-            f"User reports that name {name} without a point release. They can be about any release "
-            f"from {line} to {last}; each exact release has its own page."),
+            f"User reports matched to the {name} release line, not to one exact release. They can "
+            f"be about any release from {line} to {last}; each exact release has its own page."),
         "record_note": (
-            f"The user reports on this page say \"{name}\" and name no point release, so they can be "
-            f"about any release from {line} to {last}. This page is the {line} release line, not one "
-            f"exact update. A report that names an exact release is counted on that release's page. "
-            f"Beta reports are excluded."),
+            f"This page is the {line} release line, not one exact update. Its user reports were "
+            f"matched to \"{name}\" by the name of the line, so they can be about any release from "
+            f"{line} to {last}. No report counted here is also counted on an exact release's page, "
+            f"and a report known to name an exact release is not counted here. Beta reports are "
+            f"excluded."),
     }

@@ -918,6 +918,7 @@ def _proposed_record_fields(pid: str, ver: str, rows: list[dict[str, Any]], reco
     # entry that THIS group's counted rows still support (WAIT / TEST FIRST); else INSUFFICIENT DATA.
     policy, facts = _policy_decision(pid, ver, build, rows, record)
     decision = policy.verdict
+    facts = _with_identity_scope(pid, ver, count, record, facts)
     body = patch_decision.public_body(policy, facts, count)
     summary = _public_summary(
         pid=pid,
@@ -983,6 +984,28 @@ def _proposed_record_fields(pid: str, ver: str, rows: list[dict[str, Any]], reco
     fields.update(_record_coherence_fields(pid, ver, count, record, themes, build=build,
                                            decision=decision, policy=policy, facts=facts))
     return fields
+
+
+def _with_identity_scope(pid: str, ver: str, count: int, record: dict[str, Any] | None,
+                         facts: dict[str, Any] | None) -> dict[str, Any]:
+    """``facts`` with `update_identity_scope` when this record is a DaVinci release-line page.
+
+    The policy's line says what the reports are matched to: "this exact update", or "this release
+    line" for a page whose record carries the scope (lib.patch_decision.public_body). The record
+    writer decides the scope in the same pass that writes the line, so the line must be composed
+    from the scope this pass is about to write, not from the one the record held before: the same
+    predicate as the identity fields below (`davinci_release_line.identity_fields`, count > 0).
+    Without it the stored body said "matched to this exact update" on a page whose note said "not
+    one exact update" (review M1).
+    """
+    out = dict(facts or {})
+    out.pop(davinci_release_line.SCOPE_FIELD, None)
+    if pid == davinci_release_line.PRODUCT_ID and count > 0:
+        label = str((record or {}).get("update_product") or pid).strip()
+        out.update({k: v for k, v in davinci_release_line.identity_fields(
+            label, ver, davinci_release_line.versions_on_disk(GENERATED_DIR)).items()
+            if k == davinci_release_line.SCOPE_FIELD})
+    return out
 
 
 def _policy_decision(pid: str, ver: str, build: str, rows: list[dict[str, Any]],
@@ -1074,7 +1097,7 @@ def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, A
         # answers from the official facts alone (AVOID / SECURITY UPDATE) or INSUFFICIENT DATA.
         policy, facts = _policy_decision(pid, ver, build, [], record)
     decision = policy.verdict
-    facts = facts if facts is not None else dict(record)
+    facts = _with_identity_scope(pid, ver, count, record, facts if facts is not None else dict(record))
     # GROWTH-3: the body IS the policy's line, the same string the patch page renders under the
     # verdict (test_growth3_verdict_policy compares them over the corpus). Product branches below
     # keep only what is product-specific and verdict-neutral: recommendations and DaVinci 21's

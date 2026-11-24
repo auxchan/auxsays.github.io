@@ -139,9 +139,15 @@ jobs:
       #
       # After ingestion so it sees this run's records and state; before QA and the writeback, which
       # commits the file through the --allow entry below.
+      #
+      # --fail-soft: this is bookkeeping in front of the lane's only writeback, which needs
+      # success(). A crash here (an unreadable state value) must not discard the records this run
+      # ingested: the failure is an ::error annotation and a line in the job summary, the queue
+      # file is left as it was, and the run goes on.
       - name: Read the ingestion result back into the backfill queue
+        id: backfill_queue
         if: ${{ github.event.inputs.dry_run != 'true' }}
-        run: python auxsays/scripts/execute_backfill_queue.py --queue auxsays/_data/patch_backfill_queue.yml --write
+        run: python auxsays/scripts/execute_backfill_queue.py --queue auxsays/_data/patch_backfill_queue.yml --write --fail-soft
 
 
       # THE LANE THAT ADVANCES A PATCH IDENTITY MUST REPAIR THE DRIFT IT CREATES.

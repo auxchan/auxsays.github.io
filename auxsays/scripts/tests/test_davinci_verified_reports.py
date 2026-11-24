@@ -516,8 +516,11 @@ def run() -> int:
         # the body the verdict policy's own line, which states the evidence it was decided on (the
         # number of matched reports), so the count -- not a theme -- is the durable assertion. Planting
         # a literal in a static description cannot satisfy it.
+        # "21" has point releases under it, so the page is the 21 RELEASE LINE and its reports are
+        # matched to the line: the policy's line says so (review M1), where it used to say "this
+        # exact update" beside a note saying "not one exact update". The count is unchanged.
         and str(active_stable_fields.get("update_decision_body") or "").startswith(
-            f"No verdict yet: {len(coherence_rows)} user reports are matched to this exact update"),
+            f"No verdict yet: {len(coherence_rows)} user reports are matched to this release line"),
         f"active_prose={active_prose!r}",
     )
 

@@ -15,6 +15,8 @@ commit a scheduled lane can make.
 from __future__ import annotations
 
 import json
+import os
+from datetime import datetime, timezone
 import subprocess
 import sys
 import tempfile
@@ -58,19 +60,25 @@ def run_suite() -> int:
     row = {"product_id": "p", "coverage_state": "active_watch", "documented_update_count": 0,
            "backfill_status": "queued"}
 
+    # What the ingest lane records for a source whose last run was a whole pass against its
+    # primary official source: the state entry, and that run's result entry.
+    ok = {"last_success_at": "2026-11-24T03:01:36Z", "consecutive_failures": 0,
+          "extraction_mismatch": False}
+    whole = {"product_id": "p", "deferred_count": 0, "extraction_mismatch": False}
+
     print("D. each row is derived from facts")
-    d = q.derive(row, records=234, source=src(True), state={})
-    check("D1 records on disk -> complete, with their number",
+    d = q.derive(row, records=234, source=src(True), state=ok, result=whole)
+    check("D1 a whole pass against a reachable source, with records -> complete, with their number",
           d == {"documented_update_count": 234, "coverage_state": "documented",
                 "backfill_status": "complete"}, str(d))
-    d = q.derive(row, records=0, source=src(True), state={})
+    d = q.derive(row, records=0, source=src(True), state=ok, result=whole)
     check("D2 an enabled source with no record yet stays queued and names its executor",
           d["backfill_status"] == "queued" and d["backfill_executor"] == "official_ingest_lane"
           and "backfill_blocker" not in d, str(d))
-    d = q.derive(row, records=0, source=src(True), state={"extraction_mismatch": True})
+    d = q.derive(row, records=0, source=src(True), state={**ok, "extraction_mismatch": True}, result=whole)
     check("D3 an extractor that maps nothing is named as the blocker",
           d["backfill_status"] == "queued" and d["backfill_blocker"] == "extraction_mismatch", str(d))
-    d = q.derive(row, records=0, source=src(True), state={"consecutive_failures": 3})
+    d = q.derive(row, records=0, source=src(True), state={**ok, "consecutive_failures": 3}, result=whole)
     check("D4 a failing source is named as the blocker", d.get("backfill_blocker") == "source_failing", str(d))
     d = q.derive(row, records=0, source=src(False), state={})
     check("D5 a switched-off source is blocked, not queued",
@@ -85,12 +93,50 @@ def run_suite() -> int:
                  source=src(True), state={})
     check("D8 a 'complete' row whose records are gone is queued again, never left complete",
           d["backfill_status"] == "queued" and d["coverage_state"] == "active_watch", str(d))
-    d = q.derive(row, records=5, source=src(False), state={"extraction_mismatch": True})
-    check("D9 records decide: a row with records is complete whatever its source says",
-          d["backfill_status"] == "complete", str(d))
+    # REVIEW S1. "A record exists" is not "the backfill ran": Premiere Pro had 2 records while the
+    # same state recorded its official source as blocked, and read `complete`.
+    premiere = {**ok, "status": "partial", "primary_last_success_at": "",
+                "primary_source_error": "HTTP 403 while fetching official Adobe source",
+                "primary_source_error_type": "blocked"}
+    d = q.derive(row, records=2, source=src(True), state=premiere,
+                 result={**whole, "primary_source_error": "HTTP 403"})
+    check("D9 records with a blocked primary source are NOT complete; the count is still reported",
+          d["backfill_status"] == "queued" and d["backfill_blocker"] == "primary_source_blocked"
+          and d["documented_update_count"] == 2 and d["coverage_state"] == "documented", str(d))
     check("D10 every blocker the step can write is in the closed vocabulary",
-          {"extraction_mismatch", "source_failing", "source_disabled", "no_automated_source", "no_source"}
-          == set(q.BLOCKERS))
+          {"extraction_mismatch", "source_failing", "source_disabled", "no_automated_source", "no_source",
+           "not_run", "primary_source_blocked", "no_run_result", "records_deferred"} == set(q.BLOCKERS))
+    d = q.derive(row, records=2, source=src(True), state=ok, result={**whole, "deferred_count": 7})
+    check("D11 a bounded run that deferred records is in progress, not complete (Netlify: 2 of 9)",
+          d["backfill_status"] == "queued" and d["backfill_blocker"] == "records_deferred", str(d))
+    d = q.derive(row, records=5, source=src(False), state=ok, result=whole)
+    check("D12 records never make a switched-off source complete",
+          d["backfill_status"] == "blocked" and d["backfill_blocker"] == "source_disabled"
+          and d["documented_update_count"] == 5, str(d))
+    d = q.derive(row, records=5, source=src(True), state={}, result=whole)
+    check("D13 no successful run on record is not complete", d.get("backfill_blocker") == "not_run", str(d))
+    d = q.derive(row, records=5, source=src(True), state=ok, result=None)
+    check("D14 a row with no history and no result from this run is named, not passed",
+          d["backfill_status"] == "queued" and d.get("backfill_blocker") == "no_run_result", str(d))
+    d = q.derive({**row, "backfill_blocker": "records_deferred"}, records=5, source=src(True), state=ok,
+                 result=None)
+    check("D14b ...and a row still working through its listing stays in progress",
+          d["backfill_status"] == "queued" and d.get("backfill_blocker") == "records_deferred", str(d))
+    d = q.derive({**row, "backfill_status": "complete"}, records=5, source=src(True), state=ok, result=None)
+    check("D15 a one-source run does not un-complete the rows it did not touch",
+          d["backfill_status"] == "complete", str(d))
+    d = q.derive({**row, "backfill_status": "complete"}, records=5, source=src(True), state=premiere,
+                 result=None)
+    check("D16 ...but a state-level fault still does", d.get("backfill_blocker") == "primary_source_blocked",
+          str(d))
+    # REVIEW S5. A value that is not a number must not crash the step before the writeback.
+    try:
+        d = q.derive(row, records=5, source=src(True), state={**ok, "consecutive_failures": "n/a"},
+                     result={**whole, "deferred_count": "many"})
+        soft = d["backfill_status"] == "queued" and d["backfill_blocker"] == "source_failing"
+    except Exception as exc:                                  # noqa: BLE001
+        soft, d = False, repr(exc)
+    check("D17 a non-numeric state value fails closed and does not raise", soft, str(d))
 
     print("R. the command, on temporary files")
     with tempfile.TemporaryDirectory() as tmp:
@@ -110,7 +156,10 @@ def run_suite() -> int:
             {"product_id": "prod-a", **src(True)}, {"product_id": "prod-b", **src(True)},
             {"product_id": "prod-c", **src(False)}]), encoding="utf-8")
         (t / "state.json").write_text(json.dumps(
-            {"sources": {"prod-b": {"extraction_mismatch": True}}}), encoding="utf-8")
+            {"sources": {"prod-a": ok, "prod-b": {**ok, "extraction_mismatch": True}},
+             "last_results": [{**whole, "product_id": "prod-a"},
+                              {**whole, "product_id": "prod-b", "extraction_mismatch": True}]}),
+            encoding="utf-8")
         args = [sys.executable, TOOL, "--queue", str(t / "queue.yml"), "--sources", str(t / "sources.yml"),
                 "--state", str(t / "state.json"), "--generated-dir", str(t / "gen")]
         before = (t / "queue.yml").read_bytes()
@@ -133,6 +182,10 @@ def run_suite() -> int:
         # The next run of the lane writes the first record for prod-b: the row completes by itself.
         (t / "gen" / "2026-02-01-b-0.md").write_text(
             "---\nproduct_id: prod-b\nupdate_version: '1'\n---\n", encoding="utf-8")
+        (t / "state.json").write_text(json.dumps(
+            {"sources": {"prod-a": ok, "prod-b": ok},
+             "last_results": [{**whole, "product_id": "prod-a"}, {**whole, "product_id": "prod-b"}]}),
+            encoding="utf-8")
         subprocess.run([*args, "--write"], capture_output=True, text=True)
         after = {r["product_id"]: r for r in yaml.safe_load((t / "queue.yml").read_text(encoding="utf-8"))}
         check("R5 a queued row completes when the lane writes its first record, with no other step",
@@ -143,6 +196,25 @@ def run_suite() -> int:
         check("R6 a malformed queue is exit 2 and is not rewritten",
               bad.returncode == 2 and (t / "queue.yml").read_text(encoding="utf-8") == "not: a list\n",
               str(bad.returncode))
+        # REVIEW S5. In the lane the step runs with --fail-soft: the same failure is reported in
+        # the log, the job summary and the step output, the file is untouched, and the exit is 0.
+        summary, output = t / "summary.md", t / "output.txt"
+        env = {**os.environ, "GITHUB_STEP_SUMMARY": str(summary), "GITHUB_OUTPUT": str(output)}
+        softly = subprocess.run([*args, "--write", "--fail-soft"], capture_output=True, text=True, env=env)
+        check("R7 --fail-soft: the failure does not fail the step, and the file is not rewritten",
+              softly.returncode == 0 and (t / "queue.yml").read_text(encoding="utf-8") == "not: a list\n",
+              str(softly.returncode) + softly.stdout[-200:])
+        check("R8 --fail-soft: the failure is in the log, the job summary and the step output",
+              "::error title=Backfill queue read-back failed" in softly.stdout
+              and summary.exists() and "FAILED (fail-soft)" in summary.read_text(encoding="utf-8")
+              and output.exists() and "status=failed" in output.read_text(encoding="utf-8"),
+              softly.stdout[-300:])
+        (t / "queue.yml").write_bytes(fixed)
+        (t / "state.json").write_text("[1, 2]", encoding="utf-8")
+        crash = subprocess.run([*args, "--write", "--fail-soft"], capture_output=True, text=True, env=env)
+        check("R9 --fail-soft: a state file of the wrong shape is reported, never a traceback exit",
+              crash.returncode == 0 and "::error" in crash.stdout
+              and (t / "queue.yml").read_bytes() == fixed, str(crash.returncode) + crash.stdout[-200:])
 
     print("N. the one executable row: Netlify's extractor maps the entries its page publishes")
     base = "https://www.netlify.com/changelog/"
@@ -180,6 +252,21 @@ def run_suite() -> int:
     check("L3 every blocked row names its blocker", not unnamed, str(unnamed))
     check("L4 the ingest workflow runs the step, so coverage no longer reports an unexecuted queue",
           assess_coverage.backfill_has_executor() is True)
+    # REVIEW S1: the alarm must not go quiet for rows no run can execute.
+    report = assess_coverage.assess(now=datetime.now(timezone.utc), backfill=[
+        {"product_id": "off", "backfill_status": "blocked", "backfill_blocker": "source_disabled"},
+        {"product_id": "stuck", "backfill_status": "queued", "backfill_blocker": "primary_source_blocked"},
+        {"product_id": "busy", "backfill_status": "queued", "backfill_blocker": "records_deferred"},
+        {"product_id": "done", "backfill_status": "complete"}], backfill_executor=True)
+    named = sorted(p for f in report["flags"] if f["code"] == "backfill_queued" for p in f["products"])
+    check("L6 with an executor, coverage still reports blocked rows and stalled rows, and only those",
+          named == ["off", "stuck"], str(named))
+    lane = yaml.safe_load((REPO / ".github" / "workflows" / "patch-ingest.yml").read_text(encoding="utf-8"))
+    steps = [s for job in lane["jobs"].values() for s in job.get("steps", [])
+             if "execute_backfill_queue.py" in str(s.get("run") or "")]
+    check("L7 the lane runs the read-back fail-soft, in front of its writeback",
+          len(steps) == 1 and "--fail-soft" in steps[0]["run"].split("#", 1)[0]
+          and "--write" in steps[0]["run"], str([s.get("run") for s in steps]))
     wf = (REPO / ".github" / "workflows" / "patch-ingest.yml").read_text(encoding="utf-8")
     check("L5 the lane may commit the queue file it rewrites",
           "--allow auxsays/_data/patch_backfill_queue.yml" in wf)

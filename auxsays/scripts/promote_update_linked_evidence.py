@@ -17,6 +17,21 @@ first-tier report passes; no gate is skipped and none is reworded. Accepted for 
 refused, not resolved. The release window a second-tier row was associated with is never an input:
 a window is a date inference, and a date never establishes a version.
 
+WHAT A HELD ROW CARRIES, AND WHAT THAT FORBIDS. A held row stores an EXCERPT of its report: the
+first 280 characters and an ellipsis, 400 at most. The acceptance authority decides on the full
+report, and a held row by construction failed at the version gate, so its full text never met the
+later gates (version named as the rollback target or the fix, several builds named, vendor post).
+Putting only the excerpt to the authority counted a report the authority REJECTS on its full text
+(review M3: a report opening "Acrobat Pro <build> crashes..." whose later text names two other
+builds). So:
+
+  * a row whose stored text is CUT is never promoted. If the authority would accept the cut
+    excerpt, the outcome is `qualifies_on_cut_excerpt_only`: reported, never written;
+  * a row is promoted only when its stored text is the whole report (not cut) -- then the
+    authority has read everything acceptance would read;
+  * a row whose own `promotion_eligible` is not true, or whose `confirmation_state` says it was
+    withdrawn or confirmed elsewhere, is not put to the authority at all.
+
 THE WRITE. The accepted row goes through the store's own append guard (`append_evidence_rows`), so
 a report the store already holds for that patch -- counted or withdrawn -- is not added again. Its
 `capture_method` records where it came from (`promoted_from_update_linked:<report id>`), and the
@@ -37,6 +52,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[0]))
 
 import yaml  # noqa: E402
 
+from lib import fail_soft  # noqa: E402
 from lib.patch_identity import patch_key  # noqa: E402
 from lib.source_segments import report_url_key  # noqa: E402
 from patch_collectors import adobe_acrobat_community as acrobat  # noqa: E402
@@ -64,6 +80,28 @@ def close_append_gap(path: Path) -> None:
     closed = text.replace("\n\n- id: ", "\n- id: ")
     if closed != text:
         atomic_write_text(path, closed)
+
+
+# The second tier's writers cut a report at 280 characters with this placeholder, and cap the
+# stored excerpt and title (lib/tier2_evidence.py: `[:400]`, `[:300]`).
+_CUT_MARKS = ("...", "\u2026", "[...]")
+EXCERPT_CAP = 400
+TITLE_CAP = 300
+# The only state in which a held row is still waiting for a decision.
+OPEN_CONFIRMATION = ("", "not_confirmed")
+
+
+def stored_text_is_cut(row: dict[str, Any]) -> bool:
+    """Whether the held row's stored text can be LESS than the report acceptance would read.
+
+    Fails closed: an excerpt that ends in the cut placeholder or reaches the storage cap is cut,
+    and so is a report that happens to end in an ellipsis of its own. An empty excerpt is cut too:
+    nothing of the report is stored.
+    """
+    excerpt = str(row.get("report_excerpt") or "").rstrip()
+    title = str(row.get("report_title") or "")
+    return (not excerpt or excerpt.endswith(_CUT_MARKS) or len(excerpt) >= EXCERPT_CAP
+            or len(title) >= TITLE_CAP)
 
 
 def candidate_from_held(row: dict[str, Any]) -> dict[str, Any]:
@@ -144,6 +182,13 @@ def assess(product_id: str, held: list[dict[str, Any]], records: list[PatchRecor
             entry["outcome"] = "missing_stored_fact"
             out.append(entry)
             continue
+        # The row's own word comes first: its writer, or an audited decision, said not to promote.
+        if row.get("promotion_eligible") is not True \
+                or str(row.get("confirmation_state") or "") not in OPEN_CONFIRMATION:
+            entry["outcome"] = "not_promotion_eligible"
+            out.append(entry)
+            continue
+        cut = stored_text_is_cut(row)
         accepted = accepts(product_id, records, candidate_from_held(row),
                            str(row.get("captured_at") or ""))
         identities: dict[Identity, dict[str, Any]] = {}
@@ -151,7 +196,10 @@ def assess(product_id: str, held: list[dict[str, Any]], records: list[PatchRecor
             identities.setdefault(patch_key(item.get("product_id"), item.get("update_version"),
                                             item.get("target_build")), item)
         entry["identities"] = ["|".join(key) for key in identities]
-        if len(identities) == 1:
+        if len(identities) == 1 and cut:
+            # The authority accepts the EXCERPT. It has not read the report, so nothing is counted.
+            entry["outcome"] = "qualifies_on_cut_excerpt_only"
+        elif len(identities) == 1:
             promoted = dict(next(iter(identities.values())))
             promoted["capture_method"] = AUDIT_PREFIX + entry["report_id"]
             entry["outcome"] = "qualifies"
@@ -168,6 +216,8 @@ def main(argv: list[str] | None = None) -> int:
                     help="the ONE product to promote for; there is no all-products mode")
     ap.add_argument("--write", action="store_true", help="apply; without it nothing is written")
     ap.add_argument("--json", default="", help="write the assessment to this file")
+    ap.add_argument(fail_soft.FLAG, action="store_true",
+                    help="report a failure of this step (log, job summary, step output) and exit 0")
     ap.add_argument("--evidence-path", default=str(EVIDENCE_PATH), help=argparse.SUPPRESS)
     ap.add_argument("--tier2-path", default="", help=argparse.SUPPRESS)
     args = ap.parse_args(argv)
@@ -190,6 +240,10 @@ def main(argv: list[str] | None = None) -> int:
         print(f"  {name}: {outcomes[name]}")
     for entry in qualifying:
         print(f"- {entry['identities'][0]} <- {entry['source_url']}")
+    for entry in entries:
+        if entry["outcome"] == "qualifies_on_cut_excerpt_only":
+            print(f"- NOT promoted, only a cut excerpt is stored: {entry['identities'][0]} <- "
+                  f"{entry['source_url']}")
 
     promoted_ids: list[str] = []
     added: list[dict[str, Any]] = []
@@ -221,6 +275,10 @@ def main(argv: list[str] | None = None) -> int:
                    "appended": [r.get("id") for r in added], "promoted_out": promoted_ids,
                    "qualifying": [{"report_id": e["report_id"], "source_url": e["source_url"],
                                    "patch": e["identities"][0]} for e in qualifying],
+                   "held_back_cut_excerpt": [
+                       {"report_id": e["report_id"], "source_url": e["source_url"],
+                        "patch": e["identities"][0]} for e in entries
+                       if e["outcome"] == "qualifies_on_cut_excerpt_only"],
                    "refused_for_more_than_one_patch": [
                        {"report_id": e["report_id"], "patches": e["identities"]}
                        for e in entries if e["outcome"] == "accepted_for_more_than_one_patch"]}
@@ -230,4 +288,4 @@ def main(argv: list[str] | None = None) -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(fail_soft.run("Second-tier promotion", main))

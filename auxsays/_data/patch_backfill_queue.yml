@@ -116,7 +116,9 @@
   source_label: Figma release notes
   documented_update_count: 234
   coverage_state: documented
-  backfill_status: complete
+  backfill_status: queued
+  backfill_executor: official_ingest_lane
+  backfill_blocker: records_deferred
 - product_id: canva
   company_id: canva
   product_name: Canva
@@ -139,7 +141,9 @@
   source_label: Premiere Pro release notes
   documented_update_count: 2
   coverage_state: documented
-  backfill_status: complete
+  backfill_status: queued
+  backfill_executor: official_ingest_lane
+  backfill_blocker: primary_source_blocked
 - product_id: adobe-acrobat-reader
   company_id: adobe
   product_name: Acrobat Reader
@@ -385,7 +389,9 @@
   source_label: GitHub changelog
   documented_update_count: 472
   coverage_state: documented
-  backfill_status: complete
+  backfill_status: queued
+  backfill_executor: official_ingest_lane
+  backfill_blocker: records_deferred
 - product_id: cloudflare
   company_id: cloudflare
   product_name: Cloudflare

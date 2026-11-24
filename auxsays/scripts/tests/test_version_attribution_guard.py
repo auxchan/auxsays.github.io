@@ -32,7 +32,9 @@ SCRIPTS = ROOT / "scripts"
 if str(SCRIPTS) not in sys.path:
     sys.path.insert(0, str(SCRIPTS))
 
+import apply_consensus_to_records as writer  # noqa: E402
 from lib import davinci_release_line as drl  # noqa: E402
+from lib import patch_decision as pd  # noqa: E402
 from lib import version_attribution as va  # noqa: E402
 from patch_collectors import base, davinci  # noqa: E402
 
@@ -243,6 +245,137 @@ def run_suite() -> int:
         check("M9 a second run changes nothing", again.returncode == 0 and store.read_bytes() == second,
               again.stdout[-200:])
 
+    print("F. fix round 1: the review's findings")
+    dv = {"product_id": "blackmagic-davinci", "update_version": "21", "matched_version": "21"}
+    f = va.assess_row(row(**dv, report_title="Resolve crash",
+                          report_text_excerpt="DaVinci Resolve 21.0.3 crashes on export."),
+                      frozenset({"21.0.3"}))
+    check("F1 (S3) a release-line row whose stored text names a point release is flagged",
+          va.FLAG_POINT_RELEASE in codes(f) and f[-1].named == ("21.0.3",), str(codes(f)))
+    f = va.assess_row(row(**dv, report_text_excerpt="DaVinci Resolve 21 crashes on export."),
+                      frozenset({"21.0.3"}))
+    check("F2 (S3) a release-line row that names only the line is not flagged", not f, str(codes(f)))
+    cut = "DaVinci Resolve 21 crashes on export every time I render a long..."
+    f = va.assess_row(row(**dv, report_text_excerpt=cut), frozenset({"21.0.2"}),
+                      frozenset({"21", "21.0.2"}))
+    check("F3 (M2) a line row whose report is also counted on a point release of the line is flagged",
+          codes(f) == [va.FLAG_POINT_RELEASE] and f[0].extra.get("also_counted_for") == ["21.0.2"],
+          str([x.as_dict() for x in f])[:300])
+    f = va.assess_row(row(**dv, report_text_excerpt=cut), frozenset({"20.3"}), frozenset({"21", "20.3"}))
+    check("F4 (M2) a count on another line's release does not flag it", not f, str(codes(f)))
+
+    win = {"product_id": "microsoft-windows-11", "update_version": "25H2", "target_build": "26200.8973",
+           "matched_feature_version": "25H2", "matched_os_build": "26200.8973"}
+    wv = frozenset({"26200.8875", "26200.8973", "KB5094126"})
+    f = va.assess_row(row(**win, report_title="Store and Start menu crash - 25H2 26200.8875",
+                          report_text_excerpt="On Windows 11 25H2 build 26200.8875 the Store crashes."), wv)
+    check("F5 (S2) a feature-update name is not the row's own identity: another build is flagged",
+          codes(f) == [va.FLAG_OTHER_ONLY] and f[0].named == ("26200.8875",), str(codes(f)))
+    f = va.assess_row(row(**win, report_title="Store crash on 25H2 26200.8973",
+                          report_text_excerpt="Build 26200.8973 crashes; 26200.8875 was fine."), wv)
+    check("F6 (S2) the row's own build in the text still clears it",
+          va.FLAG_OTHER_ONLY not in codes(f), str(codes(f)))
+    f = va.assess_row(row(product_id="microsoft-windows-11", update_version="25H2",
+                          report_text_excerpt="Windows 11 25H2 crashes; 26200.8875 was fine."), wv)
+    check("F7 (S2) a row whose ONLY identity is the feature name keeps it",
+          va.FLAG_OTHER_ONLY not in codes(f), str(codes(f)))
+
+    tracked20 = ("20", "20.2", "20.3", "21", "21.0", "21.0.4", "21.1")
+    ordinary = [("21", "Since the update on 21.10.2026 Resolve 21 crashes on export"),
+                ("20", "Resolve 20 crashes; project is 20.5 GB on disk"),
+                ("20", "Resolve 20 timeline at 20.5 fps stutters"),
+                ("21", "Resolve 21 drops to 21.3 fps on playback"),
+                ("19", "Resolve 19 render takes 19.5 hours now"),
+                ("16", "Resolve 16 crashes with 16.7 ms frame time"),
+                ("21", "Resolve 21 crash at 21.30 last night"),
+                ("20", "Resolve 20 timeline at 20.3 fps stutters"),
+                ("21", "Resolve 21 uses 21.5% more memory and 21.5GB of swap")]
+    wrong = [(line, text, drl.stated_point_releases(text, line, tracked20)) for line, text in ordinary
+             if drl.stated_point_releases(text, line, tracked20)]
+    check(f"F8 (S4) a date, a time or a measurement is not a point release ({len(ordinary)} texts)",
+          not wrong, str(wrong[:3]))
+    still = [("21", "Resolve 21 is broken, 21.0.4 was fine, rolled back", ["21.0.4"]),
+             ("21", "DaVinci Resolve v21.1 crashes", ["21.1"]),
+             ("21", "Resolve (21.0.3 Free) crashes", ["21.0.3"]),
+             ("21", "DaVinci Resolve for iPad 21.0.0.1 crashes", ["21.0.0.1"]),
+             ("21", "Resolve 21.1 w/ Studio licence crashes", ["21.1"]),
+             ("20", "Resolve 20.2 x64 build crashes", ["20.2"]),
+             ("21", "Resolve 21.3 crashes on export", ["21.3"]),
+             ("21", "Resolve 21.2.1 crashes after 30 minutes", ["21.2.1"])]
+    lost = [(line, text, drl.stated_point_releases(text, line, tracked20)) for line, text, want in still
+            if drl.stated_point_releases(text, line, tracked20) != want]
+    check(f"F9 (S4) a point release is still read as one ({len(still)} texts)", not lost, str(lost[:3]))
+
+    decision = pd.decide({"product_id": "blackmagic-davinci", "update_version": "21"})
+    line_body = pd.public_body(decision, {drl.SCOPE_FIELD: drl.SCOPE_RELEASE_LINE}, 65)
+    exact_body = pd.public_body(decision, {}, 65)
+    one_body = pd.public_body(decision, {drl.SCOPE_FIELD: drl.SCOPE_RELEASE_LINE}, 1)
+    check("F10 (M1) a release-line page's line says its reports are matched to the release line",
+          "65 user reports are matched to this release line" in line_body
+          and "exact update" not in line_body
+          and "one user report is matched to this release line" in one_body, line_body[:120])
+    check("F11 (M1) every other page keeps 'matched to this exact update'",
+          "65 user reports are matched to this exact update" in exact_body, exact_body[:120])
+    gate = (ROOT / "_includes" / "patch-verdict-gate.html").read_text(encoding="utf-8")
+    check("F12 (M1) the verdict gate keys the same two sentences on the same field",
+          gate.count("pvg_record.update_identity_scope == 'release_line'") == 2
+          and gate.count("this release line") == 2 and gate.count("this exact update") == 2)
+    ident21 = drl.identity_fields("DaVinci Resolve", "21", ("21", "21.0", "21.2"))
+    said = ident21.get("record_note", "") + " " + ident21.get("description", "")
+    check("F13 (M2) the page states only what the store can show of its rows",
+          "name no point release" not in said and "without a point release" not in said
+          and "matched to" in said and "not one exact update" in said, said[:200])
+
+    # The record writer composes the stored line in the same pass that decides the scope, so it
+    # must hand the policy the scope it is about to write (the shipped tree has 21.x records).
+    record21 = {"update_product": "DaVinci Resolve"}
+    scoped = writer._with_identity_scope("blackmagic-davinci", "21", 65, record21, {"product_id": "x"})
+    check("F18 (M1) the record writer composes a line page's stored line with the release-line scope",
+          scoped.get(drl.SCOPE_FIELD) == drl.SCOPE_RELEASE_LINE and scoped.get("product_id") == "x"
+          and drl.SCOPE_FIELD not in writer._with_identity_scope("blackmagic-davinci", "21", 0, record21, {})
+          and drl.SCOPE_FIELD not in writer._with_identity_scope("blackmagic-davinci", "21.0.2", 9, record21, {})
+          and drl.SCOPE_FIELD not in writer._with_identity_scope(
+              "obs-studio", "21", 9, record21, {drl.SCOPE_FIELD: drl.SCOPE_RELEASE_LINE}), str(scoped))
+
+    with tempfile.TemporaryDirectory() as tmp:
+        store = Path(tmp) / "consensus_evidence.yml"
+        common = {"product_id": "blackmagic-davinci", "source_type": "creator_forum_report",
+                  "source_name": "Forum", "captured_at": "2026-07-11T00:00:00Z",
+                  "source_date": "2026-07-10", "patch_version_matched": True, "counted": True,
+                  "exclusion_reason": None, "source_weight": 1, "match_basis": "exact_version_text"}
+        t_cut = "DaVinci Resolve 21 crashes on export every time I render a long timeline with..."
+
+        def stored(row_id: str, version: str, n: int, **over) -> dict:
+            return {**common, "id": row_id, "update_version": version, "matched_version": version,
+                    "source_url": f"https://forum.example.test/viewtopic.php?t={n}",
+                    "parent_title": t_cut, "report_title": t_cut, "report_text_excerpt": t_cut, **over}
+
+        rows = [stored("line-twice", "21", 10), stored("shared-id", "21.0.4", 10),
+                stored("line-alone", "21", 11),
+                stored("line-held", "21", 12),
+                stored("shared-id", "21.1", 12, counted=False, exclusion_reason="not_a_real_issue_report")]
+        base.write_evidence_file(rows, store)
+        tool = str(SCRIPTS / "migrate_davinci_release_line_identity.py")
+        receipt = Path(tmp) / "receipt.json"
+        done = subprocess.run([sys.executable, tool, "--evidence-path", str(store), "--write",
+                               "--receipt", str(receipt)], capture_output=True, text=True)
+        after = base.load_evidence(store)
+        state = {(r["id"], r["update_version"]): (r.get("counted"), r.get("exclusion_reason")) for r in after}
+        check("F14 (M2) a line row whose report is counted on a point release is withdrawn, row kept",
+              done.returncode == 0 and len(after) == len(rows)
+              and state[("line-twice", "21")] == (False, drl.REASON_POINT_RELEASE_NAMED),
+              done.stdout[-300:] + done.stderr[-300:])
+        check("F15 (M2) one count per report: it stays counted on the release that counts it",
+              state[("shared-id", "21.0.4")] == (True, None), str(state))
+        check("F16 (M2) a report only HELD for a point release, not counted there, stays on the line",
+              state[("line-held", "21")] == (True, None) and state[("line-alone", "21")] == (True, None),
+              str(state))
+        data = json.loads(receipt.read_text(encoding="utf-8")) if receipt.exists() else {}
+        check("F17 (M2) the receipt names the basis and counts EVERY row, shared ids included",
+              [w.get("basis") for w in data.get("withdrawn", [])] == ["counted_on_point_release"]
+              and data.get("rows_before") == 5 and data.get("rows_after") == 5
+              and data.get("untouched_rows") == 4, str(data)[:300])
+
     print("S. the shipped store (read only; true for any corpus a collector can produce)")
     rows = base.load_evidence()
     counted = [r for r in rows if r.get("counted") is True]
@@ -267,6 +400,27 @@ def run_suite() -> int:
     check("S4 every flag names a counted row and one of the three codes",
           all(f.code in va.FLAG_ORDER and f.row_id for f in flags)
           and {f.row_id for f in flags} <= {r["id"] for r in counted})
+    twice = [r["id"] for r in counted if r.get("product_id") == drl.PRODUCT_ID
+             and drl.is_bare_line(r.get("update_version"))
+             and drl.counted_point_releases(r.get("update_version"), [
+                 o.get("update_version") for o in counted
+                 if o.get("product_id") == drl.PRODUCT_ID and o.get("source_url") == r.get("source_url")])]
+    check("S5 no DaVinci report is counted on a release line AND on a point release of it (M2)",
+          not twice, str(twice[:3]))
+    lines = []
+    for path in sorted(base.GENERATED_DIR.glob("*.md")):
+        head = path.read_text(encoding="utf-8", errors="replace").split("\n---", 1)[0]
+        if "update_identity_scope: release_line" in head:
+            lines.append((path.name, "matched to this exact update" in head,
+                          "name no point release" in head, "matched to this release line" in head))
+    bad = [name for name, exact, denies, line in lines if exact or denies]
+    check(f"S6 no release-line record says 'this exact update' or 'name no point release' ({len(lines)})",
+          not bad, str(bad))
+    check("S7 a release-line record with a 'no verdict yet' line says 'this release line'",
+          all(line for name, exact, denies, line in lines
+              if "No verdict yet" in (base.GENERATED_DIR / name).read_text(encoding="utf-8",
+                                                                          errors="replace")),
+          str([name for name, exact, denies, line in lines if not line]))
 
     print("X. the command")
     cli = str(SCRIPTS / "check_version_attribution.py")

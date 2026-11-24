@@ -6719,8 +6719,8 @@ evidence:
   patch_version_matched: true
   matched_version: '21'
   match_basis: exact_version_text
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: point_release_named_not_release_line
   issue_theme: performance regression
   workflow_area: timeline / GPU performance
   platform: windows
@@ -6747,8 +6747,8 @@ evidence:
   patch_version_matched: true
   matched_version: '21'
   match_basis: exact_version_text
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: point_release_named_not_release_line
   issue_theme: startup or application crash
   workflow_area: application stability
   platform: windows
@@ -7327,8 +7327,8 @@ evidence:
   patch_version_matched: true
   matched_version: '21'
   match_basis: exact_version_text
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: point_release_named_not_release_line
   issue_theme: unspecified issue
   workflow_area: general DaVinci Resolve workflow
   platform: unknown
@@ -9763,8 +9763,8 @@ evidence:
   patch_version_matched: true
   matched_version: '20'
   match_basis: exact_version_text
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: point_release_named_not_release_line
   issue_theme: startup or application crash
   workflow_area: application stability
   platform: windows
@@ -11433,8 +11433,8 @@ evidence:
   patch_version_matched: true
   matched_version: '20'
   match_basis: exact_version_text
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: point_release_named_not_release_line
   issue_theme: startup or application crash
   workflow_area: application stability
   platform: windows
@@ -11657,8 +11657,8 @@ evidence:
   patch_version_matched: true
   matched_version: '19'
   match_basis: exact_version_text
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: point_release_named_not_release_line
   issue_theme: render/export failure
   workflow_area: render/export
   platform: macos
@@ -35879,8 +35879,8 @@ evidence:
   patch_version_matched: true
   matched_version: '21'
   match_basis: exact_version_text
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: point_release_named_not_release_line
   issue_theme: startup or application crash
   workflow_area: application stability
   platform: macos
@@ -36306,8 +36306,8 @@ evidence:
   patch_version_matched: true
   matched_version: DaVinci Resolve 21
   match_basis: exact_version_alias
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: point_release_named_not_release_line
   issue_theme: install issue
   workflow_area: installation
   platform: windows

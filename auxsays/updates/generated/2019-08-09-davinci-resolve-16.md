@@ -1,8 +1,8 @@
 ---
 layout: aux-update
 title: DaVinci Resolve 16 official update breakdown
-description: User reports that name DaVinci Resolve 16 without a point release. They can be about any release from
-  16 to 16.2.8; each exact release has its own page.
+description: User reports matched to the DaVinci Resolve 16 release line, not to one exact release. They can be
+  about any release from 16 to 16.2.8; each exact release has its own page.
 permalink: /updates/blackmagic-design/blackmagic-davinci/16/
 update_entry: true
 company_id: blackmagic-design
@@ -20,7 +20,7 @@ update_published_at: '2019-08-09T00:00:00Z'
 update_last_checked: '2026-08-04T13:06:52Z'
 source_last_checked: '2026-08-04T13:06:52Z'
 official_body_last_checked: '2026-08-04T13:06:52Z'
-record_last_updated: '2026-11-24T06:59:26.030895Z'
+record_last_updated: '2026-11-24T09:36:08.215988Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
@@ -119,7 +119,7 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   AUXSAYS note: this is official download-portal metadata, not broad community consensus.'
 official_checksums_body: ''
 official_checksums_capture_status: not-present
-update_consensus_summary: 'INSUFFICIENT DATA: DaVinci Resolve 16. 2 user reports are matched to this exact update,
+update_consensus_summary: 'INSUFFICIENT DATA: DaVinci Resolve 16. 2 user reports are matched to this release line,
   but no problem in them is confirmed as reported independently by two or more users. If one matches your setup,
   test before relying on this update.'
 evidence_samples:
@@ -162,7 +162,7 @@ accepted_report_sources:
 evidence_source_limitations:
 - Too few reports for a firm verdict yet.
 update_decision_label: INSUFFICIENT DATA
-update_decision_body: 'No verdict yet: 2 user reports are matched to this exact update, but no problem in them is
+update_decision_body: 'No verdict yet: 2 user reports are matched to this release line, but no problem in them is
   confirmed as reported independently by two or more users. If one matches your setup, test before relying on this
   update.'
 practical_recommendations:
@@ -171,7 +171,8 @@ practical_recommendations:
 source_freshness_note: ''
 update_identity_scope: release_line
 update_channel_label: 'Release line: 16 to 16.2.8'
-record_note: The user reports on this page say "DaVinci Resolve 16" and name no point release, so they can be about
-  any release from 16 to 16.2.8. This page is the 16 release line, not one exact update. A report that names an
-  exact release is counted on that release's page. Beta reports are excluded.
+record_note: This page is the 16 release line, not one exact update. Its user reports were matched to "DaVinci Resolve
+  16" by the name of the line, so they can be about any release from 16 to 16.2.8. No report counted here is also
+  counted on an exact release's page, and a report known to name an exact release is not counted here. Beta reports
+  are excluded.
 ---

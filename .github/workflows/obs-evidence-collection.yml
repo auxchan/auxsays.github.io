@@ -202,22 +202,27 @@ jobs:
 
           python auxsays/scripts/run_patch_evidence_collection.py "${args[@]}"
 
-      - name: Promote update-linked Acrobat reports that now meet the counted standard
-        # A second-tier (update-linked) report had no route to counting unless a collector happened
-        # to find its thread again. This puts each held report's OWN stored facts to the Acrobat
-        # collector's unchanged evaluate_candidates; accepted for exactly one tracked patch, it is
-        # appended through the store's append guard and leaves the second tier. Zero network, one
-        # product per call, and with nothing qualifying (0 of 6 held rows today) it writes nothing.
+      - name: Report update-linked Acrobat reports that meet the counted standard (report only)
+        # A second-tier (update-linked) report has no route to counting unless a collector finds
+        # its thread again. This puts each held report's OWN stored facts to the Acrobat
+        # collector's unchanged evaluate_candidates and REPORTS what it finds. Zero network, one
+        # product per call.
         #
-        # POSITION IS LOAD-BEARING: after the collectors (the Acrobat collector is this file's only
-        # other writer, and it has finished) and before the consensus build, so a promoted row is
-        # counted, promoted and QA'd in the same run. PowerPoint is deliberately NOT here: its
-        # second-tier file is written by the powerpoint-orchestrated job, and two jobs writing one
-        # tracked file is the race in which the stale writer won.
+        # REPORT ONLY, ON PURPOSE: NO --write HERE. A held row stores a 280-character excerpt, and
+        # the acceptance authority decides on the full report: judged on the excerpt, a report was
+        # counted that the authority rejects on its full text. The tool itself now refuses to
+        # promote a row whose stored text is cut, and until a held row carries its full text this
+        # step writes nothing at all. Add --write only together with that storage change.
+        #
+        # --fail-soft: this step stands before the consensus build, QA and the only writeback, and
+        # all of them need success(). Its own crash must not discard the evidence this run
+        # collected: the failure is an ::error annotation and a line in the job summary, and the
+        # run goes on.
+        id: second_tier_promotion
         if: ${{ github.event.inputs.dry_run != 'true' }}
         run: |
-          python auxsays/scripts/promote_update_linked_evidence.py --product-id adobe-acrobat-reader --write
-          python auxsays/scripts/promote_update_linked_evidence.py --product-id adobe-acrobat-pro --write
+          python auxsays/scripts/promote_update_linked_evidence.py --product-id adobe-acrobat-reader --fail-soft
+          python auxsays/scripts/promote_update_linked_evidence.py --product-id adobe-acrobat-pro --fail-soft
 
       - name: Build consensus status
         id: consensus

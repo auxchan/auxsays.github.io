@@ -428,6 +428,25 @@ def assess(*, now: datetime, inputs: cov.Inputs | None = None, state: Mapping | 
         flags.append(_flag("backfill_queued", None,
                            f"{len(queued)} backfill rows are queued and no workflow executes the queue",
                            products=sorted(str(r.get("product_id")) for r in queued)))
+    # A workflow that names the queue file executes the rows it CAN execute. A row the queue's own
+    # read-back marks `blocked` (source switched off, watch-only, not configured) is one no run can
+    # execute, and a queued row with a fault as its blocker is one the lane is failing on. Both
+    # were reported until the read-back existed and must stay reported with it.
+    blocked = [r for r in backfill if str(r.get("backfill_status") or "") == "blocked"]
+    if blocked:
+        flags.append(_flag("backfill_queued", None,
+                           f"{len(blocked)} backfill rows cannot be executed by any run "
+                           "(their source is off, watch-only or not configured)",
+                           products=sorted(str(r.get("product_id")) for r in blocked),
+                           blockers=sorted({str(r.get("backfill_blocker") or "") for r in blocked})))
+    stalled = [r for r in queued if backfill_executor
+               and str(r.get("backfill_blocker") or "") not in ("", "records_deferred")]
+    if stalled:
+        flags.append(_flag("backfill_queued", None,
+                           f"{len(stalled)} queued backfill rows are executed every run and produce "
+                           "nothing complete (see each row's backfill_blocker)",
+                           products=sorted(str(r.get("product_id")) for r in stalled),
+                           blockers=sorted({str(r.get("backfill_blocker") or "") for r in stalled})))
 
     counts: dict[str, int] = {}
     for r in product_rows:

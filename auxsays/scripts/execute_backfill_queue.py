@@ -16,13 +16,24 @@ records per run and defers the rest to the next run. A row needs nothing else to
 was missing is the step that reads the result back. This is that step. It runs in the same lane,
 after ingestion, and sets each row to what the repository's own facts say:
 
-  complete   the product has generated records; `documented_update_count` is their number
-  queued     the source is enabled and no record exists yet: the lane works on it every run.
-             `backfill_blocker` says why it has produced nothing, when the lane's own health knows
-             (`extraction_mismatch`, `source_failing`)
+  complete   the backfill RAN against a reachable source and left nothing behind: the source is
+             enabled, its last run reached the primary official source, the extractor mapped what
+             the source listed, the run deferred no record, and records exist.
+             `documented_update_count` is their number
+  queued     the source is enabled and the lane works on it every run, but the facts above do not
+             all hold. `backfill_blocker` says which one fails: `not_run` (no successful run on
+             record), `source_failing`, `primary_source_blocked` (only a fallback answered, so
+             the run cannot show whether older or newer releases exist), `extraction_mismatch`,
+             `no_run_result` (this run reported nothing for the product), `records_deferred` (the
+             bounded run wrote its limit and deferred the rest: in progress, not blocked)
   blocked    no run can execute the row: the source is switched off (`source_disabled`), is
              watch-only with no automated adapter (`no_automated_source`), or is not configured
              (`no_source`). Switching a source on is an onboarding decision, not this step's.
+
+`documented_update_count` is always the number of records on disk, whatever the status. "A record
+exists" was the first version's meaning of complete: it called Premiere Pro complete at 2 records
+while the same state file recorded its official source as blocked (HTTP 403, only the pinned
+fallback answering), and it would have called Netlify complete after 2 of its 9 listed entries.
 
 Zero network. It never creates a record, never enables a source, and writes only the queue file.
 """
@@ -37,6 +48,10 @@ from typing import Any
 
 import yaml
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[0]))
+
+from lib import fail_soft  # noqa: E402
+
 ROOT = Path(__file__).resolve().parents[1]
 QUEUE_PATH = ROOT / "_data" / "patch_backfill_queue.yml"
 SOURCES_PATH = ROOT / "_data" / "patch_ingestion_sources.yml"
@@ -46,7 +61,9 @@ GENERATED_DIR = ROOT / "updates" / "generated"
 COMPLETE, QUEUED, BLOCKED = "complete", "queued", "blocked"
 EXECUTOR = "official_ingest_lane"
 BLOCKERS = ("extraction_mismatch", "source_failing", "source_disabled", "no_automated_source",
-            "no_source")
+            "no_source", "not_run", "primary_source_blocked", "no_run_result", "records_deferred")
+# Blockers that mean "the bounded lane is still working through the listing": not a fault.
+IN_PROGRESS = ("records_deferred",)
 # Derived fields this step owns. Every other key of a row is left exactly as it is.
 OWNED = ("documented_update_count", "coverage_state", "backfill_status", "backfill_executor",
          "backfill_blocker")
@@ -65,15 +82,60 @@ def record_counts(generated_dir: Path = GENERATED_DIR) -> dict[str, int]:
     return counts
 
 
+def _count(value: Any) -> int | None:
+    """A stored count as an int, or None when it is not one (never an exception: a hand-edited or
+    half-written state file must not crash the step that stands before the lane's writeback)."""
+    if value in (None, ""):
+        return 0
+    if isinstance(value, bool):
+        return None
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def run_blocker(state: dict[str, Any] | None, result: dict[str, Any] | None) -> str:
+    """"" when the lane's own facts prove the last run was a whole backfill pass against a
+    reachable source; otherwise the first fact that fails. Fails closed: a missing or unreadable
+    fact is a blocker, never a pass."""
+    state = state if isinstance(state, dict) else {}
+    failures = _count(state.get("consecutive_failures"))
+    if failures is None or failures > 0:
+        return "source_failing"
+    if not str(state.get("last_success_at") or "").strip():
+        return "not_run"
+    if str(state.get("primary_source_error") or "").strip() \
+            or str(state.get("status") or "").strip().lower() in ("partial", "blocked", "failed"):
+        return "primary_source_blocked"
+    if state.get("extraction_mismatch") is True:
+        return "extraction_mismatch"
+    if not isinstance(result, dict):
+        return "no_run_result"
+    if str(result.get("primary_source_error") or "").strip():
+        return "primary_source_blocked"
+    if result.get("extraction_mismatch") is True:
+        return "extraction_mismatch"
+    deferred = _count(result.get("deferred_count"))
+    if deferred is None or "deferred_count" not in result:
+        return "no_run_result"
+    if deferred > 0:
+        return "records_deferred"
+    return ""
+
+
 def derive(row: dict[str, Any], *, records: int, source: dict[str, Any] | None,
-           state: dict[str, Any] | None) -> dict[str, Any]:
-    """The owned fields for one row, from facts only. Pure."""
-    if records > 0:
-        return {"documented_update_count": records, "coverage_state": "documented",
-                "backfill_status": COMPLETE}
-    out: dict[str, Any] = {"documented_update_count": 0,
+           state: dict[str, Any] | None, result: dict[str, Any] | None = None) -> dict[str, Any]:
+    """The owned fields for one row, from facts only. Pure.
+
+    ``state`` is the product's entry in the ingest state, ``result`` its entry in that state's
+    `last_results` (the run that just finished). The record count is reported whatever the status.
+    """
+    out: dict[str, Any] = {"documented_update_count": records,
                            "coverage_state": str(row.get("coverage_state") or "active_watch")}
-    if out["coverage_state"] == "documented":
+    if records > 0:
+        out["coverage_state"] = "documented"
+    elif out["coverage_state"] == "documented":
         out["coverage_state"] = "active_watch"          # it documents nothing any more
     ingestion = (source or {}).get("ingestion") or {}
     if source is None:
@@ -83,17 +145,29 @@ def derive(row: dict[str, Any], *, records: int, source: dict[str, Any] | None,
     elif source.get("enabled") is not True:
         out.update(backfill_status=BLOCKED, backfill_blocker="source_disabled")
     else:
-        out.update(backfill_status=QUEUED, backfill_executor=EXECUTOR)
-        state = state or {}
-        if state.get("extraction_mismatch") is True:
-            out["backfill_blocker"] = "extraction_mismatch"
-        elif int(state.get("consecutive_failures") or 0) > 0:
-            out["backfill_blocker"] = "source_failing"
+        blocker = run_blocker(state, result)
+        if blocker == "no_run_result":
+            # A run for ONE selected source reports nothing for the others. Their state-level facts
+            # were checked above and still hold; what this run cannot re-prove is "nothing was
+            # deferred". Nothing disproves it either, so the row keeps what the last run that did
+            # report established, and a row with no such history is named `no_run_result`.
+            prior = str(row.get("backfill_status") or "")
+            if prior == COMPLETE:
+                blocker = ""
+            elif prior == QUEUED and str(row.get("backfill_blocker") or "") in IN_PROGRESS:
+                blocker = str(row.get("backfill_blocker"))
+        if not blocker and records > 0:
+            out.update(backfill_status=COMPLETE)
+        else:
+            out.update(backfill_status=QUEUED, backfill_executor=EXECUTOR)
+            if blocker:
+                out["backfill_blocker"] = blocker
     return out
 
 
 def reconcile(queue: list[dict[str, Any]], *, counts: dict[str, int],
-              sources: dict[str, dict[str, Any]], states: dict[str, dict[str, Any]]
+              sources: dict[str, dict[str, Any]], states: dict[str, dict[str, Any]],
+              results: dict[str, dict[str, Any]] | None = None
               ) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     """(the reconciled queue in its original order, one change entry per row that changed)."""
     out: list[dict[str, Any]] = []
@@ -101,7 +175,7 @@ def reconcile(queue: list[dict[str, Any]], *, counts: dict[str, int],
     for row in queue:
         product = str(row.get("product_id") or "")
         derived = derive(row, records=counts.get(product, 0), source=sources.get(product),
-                         state=states.get(product))
+                         state=states.get(product), result=(results or {}).get(product))
         new = {key: value for key, value in row.items() if key not in OWNED}
         for key in OWNED:                                 # owned fields, in one stable order
             if key in derived:
@@ -126,6 +200,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--generated-dir", default=str(GENERATED_DIR), help=argparse.SUPPRESS)
     ap.add_argument("--write", action="store_true", help="apply; without it nothing is written")
     ap.add_argument("--json", default="", help="write the result to this file")
+    ap.add_argument(fail_soft.FLAG, action="store_true",
+                    help="report a failure of this step (log, job summary, step output) and exit 0")
     args = ap.parse_args(argv)
 
     queue_path = Path(args.queue)
@@ -138,14 +214,20 @@ def main(argv: list[str] | None = None) -> int:
         print(f"::error::backfill queue: an input could not be read: {exc}")
         return 2
     if not isinstance(queue, list) or not all(isinstance(r, dict) for r in queue) \
-            or not isinstance(sources_doc, list):
-        print("::error::backfill queue: the queue and the source config must each be a list of rows")
+            or not isinstance(sources_doc, list) or not isinstance(state_doc, dict):
+        print("::error::backfill queue: the queue and the source config must each be a list of rows, "
+              "and the ingest state a mapping")
         return 2
 
     sources = {str(s.get("product_id")): s for s in sources_doc if isinstance(s, dict)}
-    states = {str(k): v for k, v in (state_doc.get("sources") or {}).items() if isinstance(v, dict)}
+    raw_states = state_doc.get("sources")
+    states = {str(k): v for k, v in (raw_states if isinstance(raw_states, dict) else {}).items()
+              if isinstance(v, dict)}
+    raw_results = state_doc.get("last_results")
+    results = {str(r.get("product_id")): r for r in (raw_results if isinstance(raw_results, list) else [])
+               if isinstance(r, dict) and r.get("product_id")}
     new_queue, changes = reconcile(queue, counts=record_counts(Path(args.generated_dir)),
-                                   sources=sources, states=states)
+                                   sources=sources, states=states, results=results)
 
     tally: dict[str, int] = {}
     for row in new_queue:
@@ -173,4 +255,4 @@ def main(argv: list[str] | None = None) -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(fail_soft.run("Backfill queue read-back", main))

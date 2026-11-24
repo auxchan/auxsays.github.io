@@ -103,7 +103,7 @@
     {%- endif -%}
   {%- endif -%}
 {%- elsif pvg_count == 1 -%}
-  {%- assign gate_body = 'No verdict yet: one user report is matched to this exact update, and one report does not show a pattern. If it matches your setup, test before relying on this update.' -%}
+  {%- capture gate_body -%}No verdict yet: one user report is matched to {% if pvg_record.update_identity_scope == 'release_line' %}this release line{% else %}this exact update{% endif %}, and one report does not show a pattern. If it matches your setup, test before relying on this update.{%- endcapture -%}
 {%- elsif pvg_count > 1 -%}
-  {%- capture gate_body -%}No verdict yet: {{ pvg_count }} user reports are matched to this exact update, but no problem in them is confirmed as reported independently by two or more users. If one matches your setup, test before relying on this update.{%- endcapture -%}
+  {%- capture gate_body -%}No verdict yet: {{ pvg_count }} user reports are matched to {% if pvg_record.update_identity_scope == 'release_line' %}this release line{% else %}this exact update{% endif %}, but no problem in them is confirmed as reported independently by two or more users. If one matches your setup, test before relying on this update.{%- endcapture -%}
 {%- endif -%}
