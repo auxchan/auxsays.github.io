@@ -68,6 +68,20 @@ def _blocks_by_id(text: str) -> dict[str, str]:
     return out
 
 
+def close_append_gap(path: Path) -> None:
+    """Remove the blank line the store's append path leaves before an appended batch.
+
+    `append_evidence_rows` joins the existing text and the new rows with a newline; on a store that
+    already ends in one, that is an empty line between two rows. The stored format has none, and
+    the text between two rows is read as the earlier row's facts. Only a blank line directly before
+    a row is removed; no row changes.
+    """
+    text = path.read_text(encoding="utf-8")
+    closed = text.replace("\n\n- id: ", "\n- id: ")
+    if closed != text:
+        atomic_write_text(path, closed)
+
+
 def candidate_from_row(row: dict) -> dict:
     """The stored row as the collector's candidate shape. The stored excerpt is the only text."""
     return {
@@ -166,6 +180,7 @@ def main(argv: list[str] | None = None) -> int:
     added_rows: list[dict] = []
     if new_rows:
         append_evidence_rows(new_rows, path, out_added=added_rows)
+        close_append_gap(path)
     added_ids = {row["id"] for row in added_rows}
     after = _blocks_by_id(path.read_text(encoding="utf-8"))
 

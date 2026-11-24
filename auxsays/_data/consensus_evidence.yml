@@ -105396,7 +105396,6 @@ evidence:
   title_dedup_sha256: 71423576cb6040168a100cadd3622801ee18728dc23c38f4a9c8d9d95503a9aa
   issue_bucket: capture-source issues
   facts_rule_version: v1
-
 - id: blackmagic-davinci-20-3-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1seungh-davinci-has-started-to-lag-a-lot-out-of-n
   product_id: blackmagic-davinci
   update_version: '20.3'

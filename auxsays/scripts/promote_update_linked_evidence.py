@@ -42,13 +42,28 @@ from lib.source_segments import report_url_key  # noqa: E402
 from patch_collectors import adobe_acrobat_community as acrobat  # noqa: E402
 from patch_collectors import microsoft_powerpoint as ppt  # noqa: E402
 from patch_collectors.base import (  # noqa: E402
-    EVIDENCE_PATH, ROOT, PatchRecord, append_evidence_rows, generated_records, load_evidence,
+    EVIDENCE_PATH, ROOT, PatchRecord, append_evidence_rows, atomic_write_text, generated_records,
+    load_evidence,
 )
 
 POWERPOINT_TIER2 = ROOT / "_data" / "update_linked_evidence.yml"
 ACROBAT_TIER2 = acrobat.TIER2_PATH
 AUDIT_PREFIX = "promoted_from_update_linked:"
 Identity = tuple[str, str, str]
+
+
+def close_append_gap(path: Path) -> None:
+    """Remove the blank line the store's append path leaves before an appended batch.
+
+    `append_evidence_rows` joins the existing text and the new rows with a newline; on a store that
+    already ends in one, that is an empty line between two rows. The stored format has none, and
+    the text between two rows is read as the earlier row's facts. Only a blank line directly before
+    a row is removed; no row changes.
+    """
+    text = path.read_text(encoding="utf-8")
+    closed = text.replace("\n\n- id: ", "\n- id: ")
+    if closed != text:
+        atomic_write_text(path, closed)
 
 
 def candidate_from_held(row: dict[str, Any]) -> dict[str, Any]:
@@ -182,6 +197,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.write and qualifying:
         append_evidence_rows([e["row"] for e in qualifying], evidence_path,
                              out_added=added, out_already_held=already)
+        close_append_gap(evidence_path)
         # A held row leaves the second tier only when the store now COUNTS that report: the row
         # just added, or a counted row the store already held for it. A report the store holds
         # withdrawn stays where it is, visible and uncounted.

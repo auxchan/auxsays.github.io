@@ -1134,7 +1134,12 @@ def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, A
                 ),
             })
             if not line_identity:
+                # "21" with no point release under it is one exact update: the first release.
                 fields["update_channel_label"] = "Stable / Studio release"
+                fields["description"] = (
+                    f"Published Apr 14, 2026. This page covers the stable {product_label} {ver} release. "
+                    f"Public beta reports are excluded."
+                )
             # ARCHIVAL IS NOT OWNED HERE (AUX-065). This projection used to write
             # `update_status: current`, which flipped an archived "21" back to current as soon as a
             # stable 23 made it archivable. It no longer writes update_status at all; the archive

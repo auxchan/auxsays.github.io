@@ -93,7 +93,7 @@ def line_members(line: Any, versions: Iterable[Any]) -> list[str]:
 
 
 @lru_cache(maxsize=8)
-def _versions_on_disk(generated_dir: str) -> tuple[str, ...]:
+def _versions_on_disk(generated_dir: str, stamp: int) -> tuple[str, ...]:
     out: list[str] = []
     for path in sorted(Path(generated_dir).glob("*.md")):
         head = path.read_text(encoding="utf-8", errors="replace").split("\n---", 1)[0]
@@ -104,8 +104,15 @@ def _versions_on_disk(generated_dir: str) -> tuple[str, ...]:
 
 
 def versions_on_disk(generated_dir: Path | str) -> tuple[str, ...]:
-    """Every DaVinci `update_version` that has a generated record under ``generated_dir``."""
-    return _versions_on_disk(str(generated_dir))
+    """Every DaVinci `update_version` that has a generated record under ``generated_dir``.
+
+    Cached per directory AND per directory modification time, so a record added or removed during
+    one process (an ingest run, a test tree) is seen; a directory that cannot be read has none."""
+    try:
+        stamp = Path(generated_dir).stat().st_mtime_ns
+    except OSError:
+        return ()
+    return _versions_on_disk(str(generated_dir), stamp)
 
 
 def is_release_line(line: Any, versions: Iterable[Any]) -> bool:
