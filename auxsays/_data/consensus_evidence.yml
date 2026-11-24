@@ -104532,3 +104532,867 @@ evidence:
   title_dedup_sha256: c24800de2e86dd991d6c7a2811c4685461f59629b420063818c00d8438d00910
   issue_bucket: general workflow reports
   facts_rule_version: v1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6079544-outlook-teams-crash
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6079544/outlook-teams-crash
+  parent_title: Outlook teams crash - Microsoft Q&A
+  report_title: Outlook teams crash - Microsoft Q&A
+  report_text_excerpt: Outlook teams crash Outlook keeps crashing every single time I try to join a Microsoft Teams meeting. I’ve already restarted both applications, but nothing works. What else am I supposed to do? I really don’t want to uninstall and reinstall everything just to fix this annoying...
+  captured_at: '2026-11-24T10:40:13Z'
+  source_date: '2026-11-23'
+  target_release_date: '2026-11-05'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: crash or hang
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 48629dc515a93ea537006adafc8513279f317da96077d8f1463289885d9fc5c3
+  title_dedup_sha256: fbdcf228661a0de396be72137b37d23bb6970e45c66d4eafc5230a3b7bfd8a23
+  issue_bucket: crash or hang
+  facts_rule_version: v1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6079544-outlook-teams-crash-answer-13060307
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6079544/outlook-teams-crash#answer-13060307
+  parent_title: Outlook teams crash - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: 'Dear William B , Thank you for reaching out. To help narrow down the issue, could you please confirm: Does this happen every time you attempt to schedule a Teams meeting? Is this affecting only your account, or are other users in your organization experiencing the same issue?...'
+  captured_at: '2026-11-24T10:40:13Z'
+  source_date: '2026-11-23T07:29:55.7133333+00:00'
+  target_release_date: '2026-11-05'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: crash or hang
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 3e9e90dcd0e119ff3c1f06e480e8c759c181d9ed488cf0b912048f8f4f691d3a
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: crash or hang
+  facts_rule_version: v1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6079544-outlook-teams-crash-answer-2895376
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6079544/outlook-teams-crash#answer-2895376
+  parent_title: Outlook teams crash - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: data="0" class="margin-top-xxs is-unstyled padding-block-xxs " > Jade Ng • Follow 17,240 Reputation points • Microsoft External Staff • Moderator 2026-11-24T03:26:13.2933333+00:00 Dear William B , I hope you’re doing well. I just wanted to check in regarding your issue and see...
+  captured_at: '2026-11-24T10:40:13Z'
+  source_date: '2026-11-24T03:26:13.2933333'
+  target_release_date: '2026-11-05'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: crash or hang
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: b23797c0b49d46b52e4861d2e6843861af9450e92c6710d9a5b95bf85909871c
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: crash or hang
+  facts_rule_version: v1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6079544-outlook-teams-crash
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6079544/outlook-teams-crash
+  parent_title: Outlook teams crash - Microsoft Q&A
+  report_title: Outlook teams crash - Microsoft Q&A
+  report_text_excerpt: Outlook teams crash Outlook keeps crashing every single time I try to join a Microsoft Teams meeting. I’ve already restarted both applications, but nothing works. What else am I supposed to do? I really don’t want to uninstall and reinstall everything just to fix this annoying...
+  captured_at: '2026-11-24T10:40:13Z'
+  source_date: '2026-11-23'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: crash or hang
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 48629dc515a93ea537006adafc8513279f317da96077d8f1463289885d9fc5c3
+  title_dedup_sha256: fbdcf228661a0de396be72137b37d23bb6970e45c66d4eafc5230a3b7bfd8a23
+  issue_bucket: crash or hang
+  facts_rule_version: v1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6079544-outlook-teams-crash-answer-13060307
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6079544/outlook-teams-crash#answer-13060307
+  parent_title: Outlook teams crash - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: 'Dear William B , Thank you for reaching out. To help narrow down the issue, could you please confirm: Does this happen every time you attempt to schedule a Teams meeting? Is this affecting only your account, or are other users in your organization experiencing the same issue?...'
+  captured_at: '2026-11-24T10:40:13Z'
+  source_date: '2026-11-23T07:29:55.7133333+00:00'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: crash or hang
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 3e9e90dcd0e119ff3c1f06e480e8c759c181d9ed488cf0b912048f8f4f691d3a
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: crash or hang
+  facts_rule_version: v1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6079544-outlook-teams-crash-answer-2895376
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6079544/outlook-teams-crash#answer-2895376
+  parent_title: Outlook teams crash - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: data="0" class="margin-top-xxs is-unstyled padding-block-xxs " > Jade Ng • Follow 17,240 Reputation points • Microsoft External Staff • Moderator 2026-11-24T03:26:13.2933333+00:00 Dear William B , I hope you’re doing well. I just wanted to check in regarding your issue and see...
+  captured_at: '2026-11-24T10:40:13Z'
+  source_date: '2026-11-24T03:26:13.2933333'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: crash or hang
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: b23797c0b49d46b52e4861d2e6843861af9450e92c6710d9a5b95bf85909871c
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: crash or hang
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6079544-outlook-teams-crash
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6079544/outlook-teams-crash
+  parent_title: Outlook teams crash - Microsoft Q&A
+  report_title: Outlook teams crash - Microsoft Q&A
+  report_text_excerpt: Outlook teams crash Outlook keeps crashing every single time I try to join a Microsoft Teams meeting. I’ve already restarted both applications, but nothing works. What else am I supposed to do? I really don’t want to uninstall and reinstall everything just to fix this annoying...
+  captured_at: '2026-11-24T10:40:13Z'
+  source_date: '2026-11-23'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: crash or hang
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 48629dc515a93ea537006adafc8513279f317da96077d8f1463289885d9fc5c3
+  title_dedup_sha256: fbdcf228661a0de396be72137b37d23bb6970e45c66d4eafc5230a3b7bfd8a23
+  issue_bucket: crash or hang
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6079544-outlook-teams-crash-answer-13060307
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6079544/outlook-teams-crash#answer-13060307
+  parent_title: Outlook teams crash - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: 'Dear William B , Thank you for reaching out. To help narrow down the issue, could you please confirm: Does this happen every time you attempt to schedule a Teams meeting? Is this affecting only your account, or are other users in your organization experiencing the same issue?...'
+  captured_at: '2026-11-24T10:40:13Z'
+  source_date: '2026-11-23T07:29:55.7133333+00:00'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: crash or hang
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 3e9e90dcd0e119ff3c1f06e480e8c759c181d9ed488cf0b912048f8f4f691d3a
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: crash or hang
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6079544-outlook-teams-crash-answer-2895376
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6079544/outlook-teams-crash#answer-2895376
+  parent_title: Outlook teams crash - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: data="0" class="margin-top-xxs is-unstyled padding-block-xxs " > Jade Ng • Follow 17,240 Reputation points • Microsoft External Staff • Moderator 2026-11-24T03:26:13.2933333+00:00 Dear William B , I hope you’re doing well. I just wanted to check in regarding your issue and see...
+  captured_at: '2026-11-24T10:40:13Z'
+  source_date: '2026-11-24T03:26:13.2933333'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: crash or hang
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: b23797c0b49d46b52e4861d2e6843861af9450e92c6710d9a5b95bf85909871c
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: crash or hang
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6079544-outlook-teams-crash
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6079544/outlook-teams-crash
+  parent_title: Outlook teams crash - Microsoft Q&A
+  report_title: Outlook teams crash - Microsoft Q&A
+  report_text_excerpt: Outlook teams crash Outlook keeps crashing every single time I try to join a Microsoft Teams meeting. I’ve already restarted both applications, but nothing works. What else am I supposed to do? I really don’t want to uninstall and reinstall everything just to fix this annoying...
+  captured_at: '2026-11-24T10:40:13Z'
+  source_date: '2026-11-23'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: crash or hang
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 48629dc515a93ea537006adafc8513279f317da96077d8f1463289885d9fc5c3
+  title_dedup_sha256: fbdcf228661a0de396be72137b37d23bb6970e45c66d4eafc5230a3b7bfd8a23
+  issue_bucket: crash or hang
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6079544-outlook-teams-crash-answer-13060307
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6079544/outlook-teams-crash#answer-13060307
+  parent_title: Outlook teams crash - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: 'Dear William B , Thank you for reaching out. To help narrow down the issue, could you please confirm: Does this happen every time you attempt to schedule a Teams meeting? Is this affecting only your account, or are other users in your organization experiencing the same issue?...'
+  captured_at: '2026-11-24T10:40:13Z'
+  source_date: '2026-11-23T07:29:55.7133333+00:00'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: crash or hang
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 3e9e90dcd0e119ff3c1f06e480e8c759c181d9ed488cf0b912048f8f4f691d3a
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: crash or hang
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6079544-outlook-teams-crash-answer-2895376
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6079544/outlook-teams-crash#answer-2895376
+  parent_title: Outlook teams crash - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: data="0" class="margin-top-xxs is-unstyled padding-block-xxs " > Jade Ng • Follow 17,240 Reputation points • Microsoft External Staff • Moderator 2026-11-24T03:26:13.2933333+00:00 Dear William B , I hope you’re doing well. I just wanted to check in regarding your issue and see...
+  captured_at: '2026-11-24T10:40:13Z'
+  source_date: '2026-11-24T03:26:13.2933333'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: crash or hang
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: b23797c0b49d46b52e4861d2e6843861af9450e92c6710d9a5b95bf85909871c
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: crash or hang
+  facts_rule_version: v1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6079544-outlook-teams-crash
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6079544/outlook-teams-crash
+  parent_title: Outlook teams crash - Microsoft Q&A
+  report_title: Outlook teams crash - Microsoft Q&A
+  report_text_excerpt: Outlook teams crash Outlook keeps crashing every single time I try to join a Microsoft Teams meeting. I’ve already restarted both applications, but nothing works. What else am I supposed to do? I really don’t want to uninstall and reinstall everything just to fix this annoying...
+  captured_at: '2026-11-24T10:40:13Z'
+  source_date: '2026-11-23'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: crash or hang
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 48629dc515a93ea537006adafc8513279f317da96077d8f1463289885d9fc5c3
+  title_dedup_sha256: fbdcf228661a0de396be72137b37d23bb6970e45c66d4eafc5230a3b7bfd8a23
+  issue_bucket: crash or hang
+  facts_rule_version: v1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6079544-outlook-teams-crash-answer-13060307
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6079544/outlook-teams-crash#answer-13060307
+  parent_title: Outlook teams crash - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: 'Dear William B , Thank you for reaching out. To help narrow down the issue, could you please confirm: Does this happen every time you attempt to schedule a Teams meeting? Is this affecting only your account, or are other users in your organization experiencing the same issue?...'
+  captured_at: '2026-11-24T10:40:13Z'
+  source_date: '2026-11-23T07:29:55.7133333+00:00'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: crash or hang
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 3e9e90dcd0e119ff3c1f06e480e8c759c181d9ed488cf0b912048f8f4f691d3a
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: crash or hang
+  facts_rule_version: v1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6079544-outlook-teams-crash-answer-2895376
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6079544/outlook-teams-crash#answer-2895376
+  parent_title: Outlook teams crash - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: data="0" class="margin-top-xxs is-unstyled padding-block-xxs " > Jade Ng • Follow 17,240 Reputation points • Microsoft External Staff • Moderator 2026-11-24T03:26:13.2933333+00:00 Dear William B , I hope you’re doing well. I just wanted to check in regarding your issue and see...
+  captured_at: '2026-11-24T10:40:13Z'
+  source_date: '2026-11-24T03:26:13.2933333'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: crash or hang
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: b23797c0b49d46b52e4861d2e6843861af9450e92c6710d9a5b95bf85909871c
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: crash or hang
+  facts_rule_version: v1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6079544-outlook-teams-crash
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6079544/outlook-teams-crash
+  parent_title: Outlook teams crash - Microsoft Q&A
+  report_title: Outlook teams crash - Microsoft Q&A
+  report_text_excerpt: Outlook teams crash Outlook keeps crashing every single time I try to join a Microsoft Teams meeting. I’ve already restarted both applications, but nothing works. What else am I supposed to do? I really don’t want to uninstall and reinstall everything just to fix this annoying...
+  captured_at: '2026-11-24T10:40:13Z'
+  source_date: '2026-11-23'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: crash or hang
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 48629dc515a93ea537006adafc8513279f317da96077d8f1463289885d9fc5c3
+  title_dedup_sha256: fbdcf228661a0de396be72137b37d23bb6970e45c66d4eafc5230a3b7bfd8a23
+  issue_bucket: crash or hang
+  facts_rule_version: v1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6079544-outlook-teams-crash-answer-13060307
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6079544/outlook-teams-crash#answer-13060307
+  parent_title: Outlook teams crash - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: 'Dear William B , Thank you for reaching out. To help narrow down the issue, could you please confirm: Does this happen every time you attempt to schedule a Teams meeting? Is this affecting only your account, or are other users in your organization experiencing the same issue?...'
+  captured_at: '2026-11-24T10:40:13Z'
+  source_date: '2026-11-23T07:29:55.7133333+00:00'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: crash or hang
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 3e9e90dcd0e119ff3c1f06e480e8c759c181d9ed488cf0b912048f8f4f691d3a
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: crash or hang
+  facts_rule_version: v1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6079544-outlook-teams-crash-answer-2895376
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6079544/outlook-teams-crash#answer-2895376
+  parent_title: Outlook teams crash - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: data="0" class="margin-top-xxs is-unstyled padding-block-xxs " > Jade Ng • Follow 17,240 Reputation points • Microsoft External Staff • Moderator 2026-11-24T03:26:13.2933333+00:00 Dear William B , I hope you’re doing well. I just wanted to check in regarding your issue and see...
+  captured_at: '2026-11-24T10:40:13Z'
+  source_date: '2026-11-24T03:26:13.2933333'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: crash or hang
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: b23797c0b49d46b52e4861d2e6843861af9450e92c6710d9a5b95bf85909871c
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: crash or hang
+  facts_rule_version: v1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6079544-outlook-teams-crash
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6079544/outlook-teams-crash
+  parent_title: Outlook teams crash - Microsoft Q&A
+  report_title: Outlook teams crash - Microsoft Q&A
+  report_text_excerpt: Outlook teams crash Outlook keeps crashing every single time I try to join a Microsoft Teams meeting. I’ve already restarted both applications, but nothing works. What else am I supposed to do? I really don’t want to uninstall and reinstall everything just to fix this annoying...
+  captured_at: '2026-11-24T10:40:13Z'
+  source_date: '2026-11-23'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: crash or hang
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 48629dc515a93ea537006adafc8513279f317da96077d8f1463289885d9fc5c3
+  title_dedup_sha256: fbdcf228661a0de396be72137b37d23bb6970e45c66d4eafc5230a3b7bfd8a23
+  issue_bucket: crash or hang
+  facts_rule_version: v1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6079544-outlook-teams-crash-answer-13060307
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6079544/outlook-teams-crash#answer-13060307
+  parent_title: Outlook teams crash - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: 'Dear William B , Thank you for reaching out. To help narrow down the issue, could you please confirm: Does this happen every time you attempt to schedule a Teams meeting? Is this affecting only your account, or are other users in your organization experiencing the same issue?...'
+  captured_at: '2026-11-24T10:40:13Z'
+  source_date: '2026-11-23T07:29:55.7133333+00:00'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: crash or hang
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 3e9e90dcd0e119ff3c1f06e480e8c759c181d9ed488cf0b912048f8f4f691d3a
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: crash or hang
+  facts_rule_version: v1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6079544-outlook-teams-crash-answer-2895376
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6079544/outlook-teams-crash#answer-2895376
+  parent_title: Outlook teams crash - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: data="0" class="margin-top-xxs is-unstyled padding-block-xxs " > Jade Ng • Follow 17,240 Reputation points • Microsoft External Staff • Moderator 2026-11-24T03:26:13.2933333+00:00 Dear William B , I hope you’re doing well. I just wanted to check in regarding your issue and see...
+  captured_at: '2026-11-24T10:40:13Z'
+  source_date: '2026-11-24T03:26:13.2933333'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: crash or hang
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: b23797c0b49d46b52e4861d2e6843861af9450e92c6710d9a5b95bf85909871c
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: crash or hang
+  facts_rule_version: v1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6079544-outlook-teams-crash
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6079544/outlook-teams-crash
+  parent_title: Outlook teams crash - Microsoft Q&A
+  report_title: Outlook teams crash - Microsoft Q&A
+  report_text_excerpt: Outlook teams crash Outlook keeps crashing every single time I try to join a Microsoft Teams meeting. I’ve already restarted both applications, but nothing works. What else am I supposed to do? I really don’t want to uninstall and reinstall everything just to fix this annoying...
+  captured_at: '2026-11-24T10:40:13Z'
+  source_date: '2026-11-23'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: crash or hang
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 48629dc515a93ea537006adafc8513279f317da96077d8f1463289885d9fc5c3
+  title_dedup_sha256: fbdcf228661a0de396be72137b37d23bb6970e45c66d4eafc5230a3b7bfd8a23
+  issue_bucket: crash or hang
+  facts_rule_version: v1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6079544-outlook-teams-crash-answer-13060307
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6079544/outlook-teams-crash#answer-13060307
+  parent_title: Outlook teams crash - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: 'Dear William B , Thank you for reaching out. To help narrow down the issue, could you please confirm: Does this happen every time you attempt to schedule a Teams meeting? Is this affecting only your account, or are other users in your organization experiencing the same issue?...'
+  captured_at: '2026-11-24T10:40:13Z'
+  source_date: '2026-11-23T07:29:55.7133333+00:00'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: crash or hang
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 3e9e90dcd0e119ff3c1f06e480e8c759c181d9ed488cf0b912048f8f4f691d3a
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: crash or hang
+  facts_rule_version: v1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6079544-outlook-teams-crash-answer-2895376
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6079544/outlook-teams-crash#answer-2895376
+  parent_title: Outlook teams crash - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: data="0" class="margin-top-xxs is-unstyled padding-block-xxs " > Jade Ng • Follow 17,240 Reputation points • Microsoft External Staff • Moderator 2026-11-24T03:26:13.2933333+00:00 Dear William B , I hope you’re doing well. I just wanted to check in regarding your issue and see...
+  captured_at: '2026-11-24T10:40:13Z'
+  source_date: '2026-11-24T03:26:13.2933333'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: crash or hang
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: b23797c0b49d46b52e4861d2e6843861af9450e92c6710d9a5b95bf85909871c
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: crash or hang
+  facts_rule_version: v1
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6079496-question-6079496
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6079496/windows-update-standalone-installer-error-0x800706
+  parent_title: windows update standalone installer error 0x800706be - Microsoft Q&A
+  report_title: windows update standalone installer error 0x800706be - Microsoft Q&A
+  report_text_excerpt: windows update standalone installer error 0x800706be - Microsoft Q&A I recently did a clean install of Windows 11 26H2 OS Build 26300.9457. The installation was successful. When I did a check for updates, there are 2 available, KB5132061 and Preview update KB5132057. For...
+  captured_at: '2026-11-24T10:49:06Z'
+  source_date: '2026-11-24'
+  target_release_date: '2026-11-19'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5132057
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5132057
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.10075'
+  excerpt_norm_sha256: b510c2528af51fd9c51f8fc3079c1340f0d74bd8c109d41641d0eb78266b9592
+  title_dedup_sha256: d30a7312778fff25588f7a3796e8995d881bed6cb4e7b2bffe116778c114a950
+  issue_bucket: update/install failure
+  facts_rule_version: v1
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6079966-question-6079966
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6079966/supported-windows-11-integration-for-remote-assist
+  parent_title: Supported Windows 11 integration for remote assistance at the physical console lock screen - Microsoft Q&A
+  report_title: Supported Windows 11 integration for remote assistance at the physical console lock screen - Microsoft Q&A
+  report_text_excerpt: Supported Windows 11 integration for remote assistance at the physical console lock screen - Microsoft Q&A We develop a signed Windows desktop app for remote assistance. An administrator installs its service and explicitly enables unattended access on the device. An authorized...
+  captured_at: '2026-11-24T10:49:06Z'
+  source_date: '2026-11-24'
+  target_release_date: '2026-11-19'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.10075'
+  match_basis: exact_os_build
+  matched_os_build: '26300.10075'
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.10075'
+  excerpt_norm_sha256: 1c35fffef141dd92598280b4f8eed4b71d5bf0f7a1fd1b6dbf1709ac54c5af26
+  title_dedup_sha256: 82accbef7c00fc9592d9dff2ae64b78ed6e04bd05db4c88e8575bfd920ac6854
+  issue_bucket: update/install failure
+  facts_rule_version: v1
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6080443-question-6080443
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6080443/windows-11-pro-26300-9974-amd64-garantiert-duplica
+  parent_title: Windows 11 Pro 26300.9974 AMD64 – garantiert DuplicateHandle die erste und einzige Installation im Zielprozess? - Microsoft Q&A
+  report_title: Windows 11 Pro 26300.9974 AMD64 – garantiert DuplicateHandle die erste und einzige Installation im Zielprozess? - Microsoft Q&A
+  report_text_excerpt: Windows 11 Pro 26300.9974 AMD64 – garantiert DuplicateHandle die erste und einzige Installation im Zielprozess? - Microsoft Q&A Guten Tag, wir bitten um eine technische Auskunft zur unterstützten Windows-Plattformsemantik für Windows 11 Pro 26H2, OS-Build 26300.9974,...
+  captured_at: '2026-11-24T10:49:25Z'
+  source_date: '2026-11-24'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9974'
+  match_basis: exact_os_build
+  matched_kb: KB5132061
+  matched_os_build: '26300.9974'
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9974'
+  excerpt_norm_sha256: 7901582f82f6511e8134bba248cf6335bcf1e524fd89b2d0a7b4fd3606006aac
+  title_dedup_sha256: afea77257d28adb7d59298c508f598eef2e6c83676a16fd8f1cbf8300e4346e9
+  issue_bucket: update/install failure
+  facts_rule_version: v1
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-learn-6080299-question-6080299
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6080299/wm-dde-initiate-not-forwarded-by-defsubclassproc-t
+  parent_title: WM_DDE_INITIATE not forwarded by DefSubclassProc to 32-bit ANSI window procedure - Microsoft Q&A
+  report_title: WM_DDE_INITIATE not forwarded by DefSubclassProc to 32-bit ANSI window procedure - Microsoft Q&A
+  report_text_excerpt: 'WM_DDE_INITIATE not forwarded by DefSubclassProc to 32-bit ANSI window procedure - Microsoft Q&A On Windows 11 25H2 build 26200.9974, a controlled test with two 32-bit ANSI windows shows different handling of WM_DDE_INITIATE when SetWindowSubclass is used. Reproduction: Create...'
+  captured_at: '2026-11-24T10:49:38Z'
+  source_date: '2026-11-24'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9974'
+  match_basis: exact_os_build
+  matched_os_build: '26200.9974'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified Windows issue
+  workflow_area: Windows workflow
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9974'
+  excerpt_norm_sha256: 5d17213e184d327c33d3546af19f2c85f9021c16cf5097bbb6da98b3be35f870
+  title_dedup_sha256: 6f4ded3c9aa4ca9454b5b596b2da8cc99091ecbedb6604c42833bf2349be0435
+  issue_bucket: unspecified windows issue
+  facts_rule_version: v1
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-learn-6079513-question-6079513
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6079513/window-11-version-26h2-fails
+  parent_title: Window 11, version 26H2 fails - Microsoft Q&A
+  report_title: Window 11, version 26H2 fails - Microsoft Q&A
+  report_text_excerpt: Window 11, version 26H2 fails - Microsoft Q&A Window 11, version 26H2 fails to install with an Install error - 0x80070801 My current version of Windows 11, Version 25H2 (OS Build 26200.7462) I have run WindowsPCHealthCheckSetup.msi AND Window11InstallationAssistant.exe AND...
+  captured_at: '2026-11-24T11:00:06Z'
+  source_date: '2026-11-23'
+  target_release_date: '2025-12-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.7462'
+  match_basis: exact_os_build
+  matched_os_build: '26200.7462'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.7462'
+  excerpt_norm_sha256: 1bf492628d63ef9b4c2ff3d3cedfa68c9f55f3b31e7cd0d81ab0eb64b2a464fa
+  title_dedup_sha256: a126e67b03c4ed4f0a8e625de37aca6355f6c96751410b1f2d0724e986393eae
+  issue_bucket: update/install failure
+  facts_rule_version: v1
+- id: obs-studio-33-0-0-github-issue-14254
+  product_id: obs-studio
+  update_version: 33.0.0
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14254
+  parent_title: All system lagging after capture mini player (apple music app) in OBS since big update (Patch 33) (M5 Pro chip, MacOS 27.2)
+  report_title: All system lagging after capture mini player (apple music app) in OBS since big update (Patch 33) (M5 Pro chip, MacOS 27.2)
+  report_text_excerpt: 'r System shouldn''t lag after capture mini player. ### Current Behavior Bug appeared since 33.0.0 update of OBS. ### Steps to Reproduce 1. Open Apple Music app on MacOS 2. Turn on mini player (Window -> Mini Player) 3. OBS -> Capture window -> Mini Player (apple music) aaaaand eve'
+  captured_at: '2026-11-24T11:17:29Z'
+  source_date: '2026-11-23'
+  patch_version_matched: true
+  matched_version: 33.0.0
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: macos
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+  excerpt_norm_sha256: eee881e0fac93e4c83a61efcb2f02c282b7271d16399a6a543b89deab409503a
+  title_dedup_sha256: 71423576cb6040168a100cadd3622801ee18728dc23c38f4a9c8d9d95503a9aa
+  issue_bucket: capture-source issues
+  facts_rule_version: v1
