@@ -11,6 +11,16 @@ description: >-
 url: "https://auxsays.com"
 baseurl: ""
 
+# SEARCH CONSOLE OWNERSHIP TAG (owner action; not set, and no token is committed here).
+# To verify auxsays.com in Google Search Console with the "HTML tag" method: remove the "# " from the
+# line below and replace the placeholder with the value of the `content` attribute of the meta tag
+# Search Console shows (the token only, in quotes). Every page then carries
+# <meta name="google-site-verification" content="..."> in its head: the site-wide SEO tag prints it,
+# and _includes/patch-search-meta.html mirrors it on patch pages. Leave the line commented out to
+# print no tag; an empty value must not be used. Do not use the webmaster_verifications table instead:
+# the patch head does not mirror it (test_patch_decision_authority S24 refuses it).
+# google_site_verification: "PASTE-THE-TOKEN-FROM-SEARCH-CONSOLE"
+
 github:
   username: auxchan
 

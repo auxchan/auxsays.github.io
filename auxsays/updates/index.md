@@ -1,6 +1,11 @@
 ---
 layout: aux-updates
-title: Patch Feed
+title: "Patch Feed: every tracked software update, newest first"
+# The search description of /updates/ (and, through _plugins/patch_feed_pages.rb, of every later feed
+# page, whose titles the plugin numbers). Without it the feed printed the site-wide creator tagline.
+description: >-
+  Every software update AUXSAYS tracks, newest first, by exact version or build. Each entry opens its
+  official notes, matched user reports and verdict. Search by product or version.
 permalink: /updates/
 # Cards per feed page. /updates/ is page 1; _plugins/patch_feed_pages.rb builds /updates/page/2/ onward
 # from this number, and the layout slices the same ordered list with it, so it is set here only.

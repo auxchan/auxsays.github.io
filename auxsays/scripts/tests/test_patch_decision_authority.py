@@ -1535,7 +1535,7 @@ def check_search_snippets() -> None:
           win["descriptions"] == [
               "AUXSAYS verdict for Windows 11 KB5127648 (25H2, Build 26200.7840): WAIT if you use the "
               "test driver. Users report that the test driver stops working after updating. 12 user "
-              "reports matched so far."], str(win["descriptions"]))
+              "reports matched so far. Released Oct 1, 2026."], str(win["descriptions"]))
     nokb = heads["win_no_kb"]
     check("S7 a record with no KB keeps the page's own heading and invents none",
           nokb["titles"] == ["Windows 11 25H2 (Build 26200.7840): WAIT if you use the test driver | AUXSAYS"]
@@ -1545,7 +1545,7 @@ def check_search_snippets() -> None:
           "nothing about early evidence, and the count stays a count",
           heads["early"]["titles"] == ["OBS Studio 99.0.0: TEST FIRST if you use the test dock | AUXSAYS"]
           and "early evidence" not in early_text
-          and (heads["early"]["descriptions"] or [""])[0].endswith(" 3 user reports matched so far."),
+          and (heads["early"]["descriptions"] or [""])[0].endswith(" 3 user reports matched so far. Released Oct 1, 2026."),
           f"{heads['early']['titles']} {heads['early']['descriptions']}")
     oz = heads["official_zero"]
     check("S9 an official-only page with no reports says there is no verdict, and claims none",
@@ -1566,7 +1566,7 @@ def check_search_snippets() -> None:
     check("S12 a claim the deploy projection certifies reads as live consensus -- of the COUNT, in the "
           "description: the title is the verdict and its scope only",
           lc["titles"] == ["OBS Studio 99.0.0: WAIT if you use the test setup | AUXSAYS"]
-          and (lc["descriptions"] or [""])[0].endswith(" 40 user reports matched so far (live consensus)."),
+          and (lc["descriptions"] or [""])[0].endswith(" 40 user reports matched so far (live consensus). Released Oct 1, 2026."),
           f"{lc['titles']} {lc['descriptions']}")
     lv = [n for n in ("live_uncertified", "live_absent")
           if heads[n]["titles"] != ["OBS Studio 99.0.0: WAIT if you use the test setup | AUXSAYS"]
@@ -1636,10 +1636,18 @@ def check_search_snippets() -> None:
     check("S23 live wording is gated on the page's live box AND the render-time certificate",
           live_gate is not None and emitted.count("assign psm_live = true") == 1)
     config = yaml.safe_load((_REPO / "auxsays" / "_config.yml").read_text(encoding="utf-8"))
-    unmirrored = [k for k in ("twitter", "facebook", "webmaster_verifications", "google_site_verification",
+    # google_site_verification is the one such option the patch head DOES mirror (the Search Console
+    # ownership tag), so it may be set; the webmaster_verifications table would shadow it in the
+    # site-wide tag and is not mirrored, so it stays refused with the rest.
+    unmirrored = [k for k in ("twitter", "facebook", "webmaster_verifications",
                               "logo", "author", "image") if config.get(k)]
-    check("S24 the site sets none of the SEO-tag options the patch head does not mirror",
-          not unmirrored, f"configured: {unmirrored}; mirror them in patch-search-meta.html first")
+    mirrors_verification = ("site.google_site_verification" in emitted
+                            and '<meta name="google-site-verification" content="{{ psm_google_verification }}" />' in emitted)
+    check("S24 the site sets none of the SEO-tag options the patch head does not mirror, and the head "
+          "mirrors the Search Console ownership tag",
+          not unmirrored and mirrors_verification,
+          f"configured: {unmirrored}; mirror them in patch-search-meta.html first; "
+          f"verification mirrored: {mirrors_verification}")
     base_src = BASE_LAYOUT.read_text(encoding="utf-8")
     seo_lines = [line.strip() for line in base_src.splitlines() if "{% seo" in line]
     check("S25 aux-base routes only aux-update pages through the include, and every other page to "

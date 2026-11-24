@@ -1,0 +1,95 @@
+---
+layout: null
+---
+{%- comment -%}
+  THE SITEMAP, WITH A LAST-MODIFIED DATE WHEREVER THE REPOSITORY STORES ONE.
+
+  jekyll-sitemap writes its own sitemap only when the site has none, so this file replaces the
+  plugin's template and nothing else: the plugin still writes robots.txt, which names this file.
+  The URL set is the plugin's, rule for rule: every output collection document, every HTML page,
+  and every static .htm / .html / .xhtml / .pdf file, each unless its front matter says
+  sitemap: false, and never /404.html. scripts/ci/verify_publication_hygiene.py reads the result.
+
+  WHY. The plugin dates a page only from a last_modified_at field no page here carries, so 5 of
+  1,769 URLs had a date and a crawler could not tell a patch page that changed yesterday from one
+  untouched since 2019.
+
+  WHERE A DATE COMES FROM. Only from stored data, never from the clock and never from a file's
+  modification time (on the deploy runner that is the checkout time, which is the build time):
+    - a patch record: its record_last_updated, the moment a writer last changed the record, or
+      the release date update_published_at for the few records written before that field existed;
+    - a product, company or version tracker: the newest record_last_updated among the records
+      the tracker lists (same product_id, company_id, or product_id and update_version);
+    - a post or other collection document: its last_modified_at, or the date its front matter or
+      file name states. Jekyll gives a document with no date of its own the build time as its
+      date, which is why /about/ and /articles/ used to carry the moment of the last deploy as
+      their lastmod; a date equal to the build time is not a stored date and is not printed;
+    - any other page: its last_modified_at when the front matter states one.
+  A URL with no stored date gets no lastmod element. That is the honest reading of "unknown":
+  the homepage, the Patch Feed pages and the methodology page are in that group, and so is
+  every static file, whose only date is the file time this template refuses to print.
+{%- endcomment -%}
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{%- assign sm_collections = site.collections | where_exp: 'collection', 'collection.output != false' -%}
+{%- for sm_collection in sm_collections -%}
+{%- assign sm_docs = sm_collection.docs | where_exp: 'doc', 'doc.sitemap != false' -%}
+{%- for sm_doc in sm_docs -%}
+{%- assign sm_doc_lastmod = sm_doc.last_modified_at | default: '' -%}
+{%- if sm_doc_lastmod == '' and sm_doc.date and sm_doc.date != site.time -%}{%- assign sm_doc_lastmod = sm_doc.date -%}{%- endif %}
+<url>
+<loc>{{ sm_doc.url | replace: '/index.html', '/' | absolute_url | xml_escape }}</loc>
+{%- if sm_doc_lastmod != '' %}
+<lastmod>{{ sm_doc_lastmod | date_to_xmlschema }}</lastmod>
+{%- endif %}
+</url>
+{%- endfor -%}
+{%- endfor -%}
+{%- assign sm_records = site.pages | where: 'update_entry', true -%}
+{%- assign sm_by_product = sm_records | group_by: 'product_id' -%}
+{%- assign sm_by_company = sm_records | group_by: 'company_id' -%}
+{%- assign sm_pages = site.html_pages | where_exp: 'doc', 'doc.sitemap != false' | where_exp: 'doc', 'doc.url != "/404.html"' -%}
+{%- for sm_page in sm_pages -%}
+{%- assign sm_lastmod = '' -%}
+{%- if sm_page.update_entry == true -%}
+  {%- assign sm_lastmod = sm_page.record_last_updated | default: sm_page.update_published_at | default: '' -%}
+{%- elsif sm_page.layout == 'aux-patch-product' or sm_page.layout == 'aux-patch-company' or sm_page.layout == 'aux-patch-version' -%}
+  {%- assign sm_listed = '' | split: '' -%}
+  {%- if sm_page.layout == 'aux-patch-company' -%}
+    {%- assign sm_group = sm_by_company | where: 'name', sm_page.company_id | first -%}
+    {%- if sm_group -%}{%- assign sm_listed = sm_group.items -%}{%- endif -%}
+  {%- else -%}
+    {%- assign sm_group = sm_by_product | where: 'name', sm_page.product_id | first -%}
+    {%- if sm_group -%}
+      {%- assign sm_listed = sm_group.items -%}
+      {%- if sm_page.layout == 'aux-patch-version' -%}{%- assign sm_listed = sm_listed | where: 'update_version', sm_page.update_version -%}{%- endif -%}
+    {%- endif -%}
+  {%- endif -%}
+  {%- assign sm_newest = 0 -%}
+  {%- for sm_record in sm_listed -%}
+    {%- assign sm_stamp = sm_record.record_last_updated | default: '' -%}
+    {%- if sm_stamp != '' -%}
+      {%- assign sm_seconds = sm_stamp | date: '%s' | plus: 0 -%}
+      {%- if sm_seconds > sm_newest -%}{%- assign sm_newest = sm_seconds -%}{%- assign sm_lastmod = sm_stamp -%}{%- endif -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- elsif sm_page.last_modified_at -%}
+  {%- assign sm_lastmod = sm_page.last_modified_at -%}
+{%- endif %}
+<url>
+<loc>{{ sm_page.url | replace: '/index.html', '/' | absolute_url | xml_escape }}</loc>
+{%- if sm_lastmod != '' %}
+<lastmod>{{ sm_lastmod | date_to_xmlschema }}</lastmod>
+{%- endif %}
+</url>
+{%- endfor -%}
+{%- for sm_file in site.static_files -%}
+{%- if sm_file.extname == '.htm' or sm_file.extname == '.html' or sm_file.extname == '.xhtml' or sm_file.extname == '.pdf' -%}
+{%- unless sm_file.sitemap == false or sm_file.name == '404.html' %}
+<url>
+<loc>{{ sm_file.path | replace: '/index.html', '/' | absolute_url | xml_escape }}</loc>
+</url>
+{%- endunless -%}
+{%- endif -%}
+{%- endfor %}
+</urlset>
