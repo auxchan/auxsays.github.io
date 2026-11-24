@@ -540,19 +540,29 @@ def load_method_health(path: Path = METHOD_HEALTH_PATH) -> list[dict[str, Any]]:
     raise ValueError(f"{path} must contain a YAML list or a mapping with a methods list")
 
 
+_KEEP: Any = object()
+
+
 def write_method_health_file(rows: list[dict[str, Any]], path: Path = METHOD_HEALTH_PATH,
-                             *, probes: list[dict[str, Any]] | None = None) -> None:
+                             *, probes: list[dict[str, Any]] | None = None,
+                             probe_step: Any = _KEEP) -> None:
     """Write the health file. ``probes`` is the re-probe section (see METHOD_PROBE_FIELDS); when it
     is not given, the section already in the file is PRESERVED -- a collector run that upserts
     method rows must not erase what the re-probe step recorded. The key is written only when the
-    section is non-empty, so a file that never held a probe keeps the bytes it always had."""
+    section is non-empty, so a file that never held a probe keeps the bytes it always had.
+    ``probe_step`` (see `record_probe_step`) is preserved the same way; pass None to clear it."""
     if probes is None:
         probes = load_method_probes(path)
+    if probe_step is _KEEP:
+        probe_step = load_probe_step(path)
     payload: dict[str, Any] = {"schema_version": 1,
                                "methods": [normalize_method_health_row(row) for row in rows]}
     cleaned = [normalize_method_probe_row(row) for row in probes]
     if cleaned:
         payload["probes"] = cleaned
+    step = normalize_probe_step(probe_step)
+    if step:
+        payload["probe_step"] = step
     atomic_write_text(path, yaml.safe_dump(payload, sort_keys=False, allow_unicode=True, width=1000))
 
 
@@ -564,7 +574,7 @@ def write_method_health_file(rows: list[dict[str, Any]], path: Path = METHOD_HEA
 # A probe record is never evidence and never a method row: the public pages read `methods` only.
 METHOD_PROBE_FIELDS = (
     "product_id", "method_id",
-    "result",                 # recovered | still_refused | inconclusive
+    "result",                 # recovered | still_refused | inconclusive | relapsed
     "probed_at",              # when the last probe ran
     "next_probe_after",       # earliest time another probe may run (cooldown)
     "consecutive_refusals",   # probes in a row that were not `recovered`
@@ -572,8 +582,19 @@ METHOD_PROBE_FIELDS = (
     "total_requests",         # requests all probes of this method have made
     "http_status",            # status of the decisive response, when there was one
     "reason",                 # bounded machine reason, e.g. access_challenge, http_403, marker_missing
+    # --- service state of a method a probe returned (written by the re-probe step ONLY) ---
+    "relapses",               # recoveries the real run then refused; an answered probe does NOT reset it
+    "service_runs",           # answered real runs since the last recovery (the ramp position)
+    "unsettled_runs",         # granted runs in a row that left no row behind (lost cycles)
+    "granted_at",             # when the re-probe step granted the CURRENT run its service
+    "grant_requests",         # the request budget granted for that run
+    "state_at",               # when this record last changed; the newer copy wins a carry merge
 )
-VALID_PROBE_RESULTS = frozenset({"recovered", "still_refused", "inconclusive"})
+VALID_PROBE_RESULTS = frozenset({"recovered", "still_refused", "inconclusive", "relapsed"})
+_PROBE_COUNTERS = ("consecutive_refusals", "requests", "total_requests")
+# Written only when they hold something, so a record that never served stays as small as it was.
+_PROBE_OPTIONAL_COUNTERS = ("relapses", "service_runs", "unsettled_runs", "grant_requests")
+_PROBE_OPTIONAL_TEXT = ("granted_at", "state_at")
 
 
 def method_probe_key(row: dict[str, Any]) -> tuple[str, str]:
@@ -583,17 +604,62 @@ def method_probe_key(row: dict[str, Any]) -> tuple[str, str]:
 def normalize_method_probe_row(row: dict[str, Any]) -> dict[str, Any]:
     normalized: dict[str, Any] = {}
     for field in METHOD_PROBE_FIELDS:
-        if field in ("consecutive_refusals", "requests", "total_requests"):
+        if field in _PROBE_COUNTERS:
             normalized[field] = _nonnegative_int(row.get(field)) or 0
-        elif field == "http_status":
+        elif field == "http_status" or field in _PROBE_OPTIONAL_COUNTERS:
             number = _nonnegative_int(row.get(field))
             if number:
                 normalized[field] = number
+        elif field in _PROBE_OPTIONAL_TEXT:
+            text = str(row.get(field) or "").strip()
+            if text:
+                normalized[field] = text
         else:
             normalized[field] = str(row.get(field) or "").strip()
     if normalized["result"] not in VALID_PROBE_RESULTS:
         normalized["result"] = "inconclusive"
     return normalized
+
+
+# --- the re-probe STEP's own health --------------------------------------------------------------
+# A probe step that crashes used to leave nothing behind: one log line, exit 0, a green run. Its
+# failure is now a fact in the health file: `probe_step: {status: error, at, error, consecutive_errors}`,
+# written by the step's own exception handler and removed by its next clean run. Absent = healthy.
+PROBE_STEP_FIELDS = ("status", "at", "error", "consecutive_errors")
+
+
+def normalize_probe_step(step: Any) -> dict[str, Any]:
+    if not isinstance(step, dict) or str(step.get("status") or "").strip() != "error":
+        return {}
+    return {"status": "error", "at": str(step.get("at") or "").strip(),
+            "error": str(step.get("error") or "").strip()[:120],
+            "consecutive_errors": _nonnegative_int(step.get("consecutive_errors")) or 1}
+
+
+def load_probe_step(path: Path = METHOD_HEALTH_PATH) -> dict[str, Any]:
+    try:
+        if not path.exists():
+            return {}
+        payload = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    except Exception:  # noqa: BLE001 -- an unreadable file has no step record to preserve
+        return {}
+    return normalize_probe_step(payload.get("probe_step")) if isinstance(payload, dict) else {}
+
+
+def record_probe_step(path: Path = METHOD_HEALTH_PATH, *, error: str = "", at: str = "") -> bool:
+    """Record that the re-probe step failed (`error` given) or ran clean (`error` empty, which
+    removes the record). Returns True when the file changed. Method rows and probe records are
+    rewritten as they are."""
+    prior = load_probe_step(path)
+    if not error:
+        if not prior:
+            return False
+        write_method_health_file(load_method_health(path), path, probe_step=None)
+        return True
+    step = {"status": "error", "at": at, "error": error,
+            "consecutive_errors": int(prior.get("consecutive_errors") or 0) + 1}
+    write_method_health_file(load_method_health(path), path, probe_step=step)
+    return True
 
 
 def load_method_probes(path: Path = METHOD_HEALTH_PATH) -> list[dict[str, Any]]:

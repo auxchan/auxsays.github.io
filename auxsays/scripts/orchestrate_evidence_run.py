@@ -56,7 +56,6 @@ from lib import recent_reports as l3  # noqa: E402
 # re-implementation: prioritisation must not be able to disagree with acceptance.
 from patch_collectors.microsoft_powerpoint import concrete_issue as ppt_concrete_issue  # noqa: E402
 from lib.method_routing import effective_plan, fallback_justified, plan_methods  # noqa: E402
-from lib import acquisition_methods as method_registry  # noqa: E402
 from lib.patch_identity import is_build_aware, patch_key, require_build  # noqa: E402
 from lib.live_eligibility import load_run_context  # noqa: E402
 from lib.report_counts import (  # noqa: E402
@@ -535,8 +534,12 @@ class Pipeline:
 
     def plan_methods_node(self, state: OrchestrationState) -> OrchestrationState:
         # ORDER FROM MEASURED HISTORY. The plan is the declared one with each role's methods put in
-        # the order the stored health rows say to try them (lib.method_routing.order_methods), and a
-        # switched-off method the re-probe step found answering returned as a bounded fallback.
+        # the order the stored health rows say to try them (lib.method_routing.order_methods).
+        # The graph does NOT return a switched-off method to service: a returned method must run
+        # under the request budget, spacing and robots.txt check its registry entry declares, and
+        # the graph has no per-run request budget to enforce them with. `effective_plan` is
+        # therefore called without the re-probe policy, which returns nothing (the DaVinci
+        # collector is the one caller that enforces the bounds and passes it).
         # Nothing about acceptance moves: the same methods run through the same authority. If the
         # stored telemetry cannot be read, or AUXSAYS_ADAPTIVE_ROUTING=0, the declared plan is used
         # as written -- the behaviour before this existed.
@@ -550,8 +553,7 @@ class Pipeline:
         try:
             from patch_collectors.base import load_method_health, load_method_probes
             return effective_plan(product_id, load_method_health(self.health_path),
-                                  load_method_probes(self.health_path),
-                                  reprobe_refusal=method_registry.reprobe_refusal)
+                                  load_method_probes(self.health_path))
         except Exception:  # noqa: BLE001 -- unreadable history must not stop collection
             return plan_methods(product_id)
 

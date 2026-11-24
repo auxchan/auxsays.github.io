@@ -62,7 +62,22 @@ method can have found them.
 method first and a method whose last pass was refused last; with no history it is the declared order.
 `reprobe_methods.py` re-tests a switched-off method on a bounded cadence when `reprobe_refusal`
 allows it. Closed by the floor, whatever is declared: Reddit, Microsoft Learn Q&A, Adobe, the paid
-search API, and any method with a recorded `rights_status`. Open today: `vendor_forum_search` only.
+search API, and any method with a recorded `rights_status`. The floor reads the PARSED host of
+every probe URL, and a probe may only go to the one host `REPROBE_HOST_PINS` names for its method.
+Open today: `vendor_forum_search` only.
+
+**What a recovery releases.** Not the method as it was. The probe asks the request the method
+makes (the forum's search form) with the agent the method sends, after reading robots.txt for that
+agent and those paths. If it answers, the re-probe step grants each following run a request budget
+from the declared ramp: 6, 12, 20, then 30 requests a run, robots.txt included, 6 a record, 2
+seconds apart. The collector serves the method only under a fresh grant. A run the source refuses
+is a relapse: the method is out, the cooldown restarts with a longer back-off (168, 336, 672, 720
+hours), and only a new probe can return it. The probe records are also kept in a small carried
+copy (actions/cache), so a cycle that never reaches main does not cause another probe.
+
+**Activating a new method id.** Declare it in `HEALTH_REPORTING_METHODS`, the ownership manifest
+and `HEALTH_REPORTERS_AWAITING_FIRST_ROW` in one change. The lane's first run writes its first
+row; no telemetry is written by hand.
 
 **Adding a vendor.** `python auxsays/scripts/onboard_vendor.py --product-id <id>` runs the sequence
 as ten checked steps and stops before activation. The product's plan and source types are declared

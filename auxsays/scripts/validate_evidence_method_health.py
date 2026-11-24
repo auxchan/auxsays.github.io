@@ -38,9 +38,11 @@ CANONICAL_PATH = Path(__file__).resolve().parents[1] / "_data" / "evidence_metho
 HISTORY_COUNTER_FIELDS = ("attempts", "consecutive_failures", "consecutive_zero_accept_runs",
                           "duration_ms", "requests")
 HISTORY_TIME_FIELDS = ("last_good_at", "last_accepted_at")
-PROBE_RESULTS = ("recovered", "still_refused", "inconclusive")
-PROBE_COUNTER_FIELDS = ("consecutive_refusals", "requests", "total_requests", "http_status")
+PROBE_RESULTS = ("recovered", "still_refused", "inconclusive", "relapsed")
+PROBE_COUNTER_FIELDS = ("consecutive_refusals", "requests", "total_requests", "http_status",
+                        "relapses", "service_runs", "unsettled_runs", "grant_requests")
 PROBE_TIME_FIELDS = ("probed_at", "next_probe_after")
+PROBE_OPTIONAL_TIME_FIELDS = ("granted_at", "state_at")
 # An ACTIVE method that keeps finding candidates and accepting none is a recall/precision review
 # item. It is a WARNING, never an error: low yield is a fact about a source, not a broken file.
 ZERO_ACCEPT_WARNING_RUNS = 20
@@ -190,7 +192,24 @@ def _validate_history(errors: list[str], *, row_index: int, row: dict[str, Any])
                    f"counts sum to {total}, more than rejected_reports {rejected}")
 
 
-def _validate_probes(errors: list[str], probes: Any, *, check_registry: bool) -> int:
+def _validate_probe_step(errors: list[str], warnings: list[str], step: Any) -> None:
+    """`probe_step` is present only while the re-probe step's last run FAILED. It is a WARNING,
+    never an error: a broken probe step must be seen, and must not block every product's
+    writeback while it is being seen."""
+    if step in (None, ""):
+        return
+    if not isinstance(step, dict) or step.get("status") != "error":
+        _add_error(errors, None, "probe_step", "must be a mapping with status 'error' (absent when healthy)")
+        return
+    if not _is_timestamp_like(step.get("at")):
+        _add_error(errors, None, "probe_step", "at must look like a timestamp")
+    warnings.append(f"WARN re-probe step: its last run FAILED ({step.get('error') or 'unknown error'}) at "
+                    f"{step.get('at')}; consecutive failures: {step.get('consecutive_errors') or 1}. "
+                    f"Switched-off sources are not being re-tested.")
+
+
+def _validate_probes(errors: list[str], probes: Any, *, check_registry: bool,
+                     warnings: list[str] | None = None) -> int:
     """The re-probe section: one record per (product, method). Never evidence, never a method row."""
     if probes in (None, ""):
         return 0
@@ -217,6 +236,20 @@ def _validate_probes(errors: list[str], probes: Any, *, check_registry: bool) ->
         for field in PROBE_COUNTER_FIELDS:
             if probe.get(field) not in (None, "") and not _is_nonnegative_int(probe.get(field)):
                 _add_error(errors, None, label, f"{field} must be a nonnegative integer")
+        for field in PROBE_OPTIONAL_TIME_FIELDS:
+            if probe.get(field) not in (None, "") and not _is_timestamp_like(probe.get(field)):
+                _add_error(errors, None, label, f"{field} must look like a timestamp")
+        grant = probe.get("grant_requests")
+        if _is_nonnegative_int(grant) and grant > registry.SERVICE_MAX_REQUESTS_PER_RUN:
+            _add_error(errors, None, label,
+                       f"a run was granted {grant} requests; the cap is {registry.SERVICE_MAX_REQUESTS_PER_RUN}")
+        if _is_nonnegative_int(grant) and grant > 0 and probe.get("result") != "recovered":
+            _add_error(errors, None, label, "only a `recovered` record may hold a service grant")
+        if warnings is not None:
+            for field in PROBE_TIME_FIELDS + PROBE_OPTIONAL_TIME_FIELDS:
+                if field != "next_probe_after" and _is_future(probe.get(field)):
+                    warnings.append(f"WARN {label}: {field} {probe.get(field)!r} is in the future; "
+                                    f"routing ignores such a record")
         requests = probe.get("requests")
         if _is_nonnegative_int(requests) and requests > registry.REPROBE_MAX_REQUESTS_PER_METHOD:
             _add_error(errors, None, label,
@@ -227,6 +260,20 @@ def _validate_probes(errors: list[str], probes: Any, *, check_registry: bool) ->
                 # A probe record for a source the owner or its terms closed must not exist.
                 _add_error(errors, None, label, f"method {key[1]!r} may not be re-probed ({refusal})")
     return len(probes)
+
+
+def _is_future(value: Any) -> bool:
+    from datetime import datetime, timedelta, timezone   # noqa: PLC0415 -- used by this check only
+    text = str(value or "").strip()
+    if not text:
+        return False
+    try:
+        moment = datetime.fromisoformat(text[:-1] + "+00:00" if text.endswith("Z") else text)
+    except ValueError:
+        return False
+    if moment.tzinfo is None:
+        moment = moment.replace(tzinfo=timezone.utc)
+    return moment > datetime.now(timezone.utc) + timedelta(minutes=10)
 
 
 def validate(path: Path = DEFAULT_PATH, *, check_registry: bool | None = None) -> int:
@@ -346,8 +393,11 @@ def validate(path: Path = DEFAULT_PATH, *, check_registry: bool | None = None) -
             else:
                 seen_keys[key] = row_index
 
+    probe_warnings: list[str] = []
     probe_count = _validate_probes(errors, payload.get("probes") if isinstance(payload, dict) else None,
-                                   check_registry=bool(check_registry))
+                                   check_registry=bool(check_registry), warnings=probe_warnings)
+    _validate_probe_step(errors, probe_warnings,
+                         payload.get("probe_step") if isinstance(payload, dict) else None)
 
     if errors:
         print(f"Evidence method-health validation failed: {len(errors)} error(s).")
@@ -362,6 +412,8 @@ def validate(path: Path = DEFAULT_PATH, *, check_registry: bool | None = None) -
         print(f"Re-probe records checked: {probe_count}")
     if check_registry:
         print("Registry join: every method_id is a catalogued health-reporting method.")
+    for warning in probe_warnings:
+        print(warning)
     if warnings:
         print(f"Low-yield review items: {len(warnings)} (warnings, not errors)")
         for warning in warnings[:20]:

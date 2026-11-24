@@ -42,6 +42,7 @@ Validated by `auxsays/scripts/tests/test_acquisition_method_registry.py`.
 from __future__ import annotations
 
 from typing import Any
+from urllib.parse import urlsplit
 
 # --- controlled vocabularies -------------------------------------------------------------------
 # Enums, not free text: an unknown value is a typo or a new concept that deserves a decision, and
@@ -2338,7 +2339,7 @@ METHODS: list[dict[str, Any]] = [
         "Thread text is cut at 4,000 characters; a version named only deep in a long thread is not seen",
     ],
         "failure_modes": [
-        "HTTP 429 Too Many Requests. Until the 2026-11-24 change the listing and up to 25 threads were re-fetched for EVERY record (123 records, up to ~3,690 requests a run), and the newest records -- walked first -- were the ones refused",
+        "HTTP 429 Too Many Requests. Until the 2026-11-24 change the listing and up to 25 threads were re-fetched for EVERY record (about 690 requests in a scheduled run of 23 live records; up to ~3,690 if all 123 records are targeted), and the newest records -- walked first -- were the ones refused",
         "creative_cow_thread_unparseable when a thread page has no extractable text",
         "A listing page with no thread links yields no candidates and no error, which reads as no_results",
     ],
@@ -2371,7 +2372,7 @@ METHODS: list[dict[str, Any]] = [
         "Measured 2026-08-01 to 2026-11-19: blocked on 6,725 of 6,725 executions (davinci.py AUX-117 note)",
         "2026-11-24: even /robots.txt answers HTTP 403 from awselb/2.0",
     ],
-        "execution": "Switched off (AUX-117): the adapter is kept but not called, and the method writes a fresh `disabled` row every cycle. It is the one method the re-probe step may re-test (see REPROBE): one robots.txt request, then at most one listing request, weekly at most, backing off to 30 days.",
+        "execution": "Switched off (AUX-117): the adapter is kept but not called, and the method writes a fresh `disabled` row every cycle. It is the one method the re-probe step may re-test (see REPROBE): one robots.txt request, then at most one search request, weekly at most, backing off to 30 days. If a probe answers, the collector serves it under the declared service bounds only: a granted budget of 6, 12, 20 then 30 requests a run (robots.txt included, 6 a record, 2 s apart), and a run the forum refuses is a relapse that needs a new probe.",
         "evidence_rules": "Candidate discovery only; when it ran, its candidates passed the same DaVinci acceptance authority as every other method. A challenge page is never a report.",
         "measured_notes": "123 health rows, all `disabled` with blocked_reason blackmagic_forum_refuses_automated_requests (evidence_method_health.yml at 12d207ba). Probe 2026-11-24T06:56:34Z: GET /robots.txt -> 403.",
         "revisit_trigger": "The re-probe record for (blackmagic-davinci, vendor_forum_search) reading `recovered`: robots.txt answers and does not disallow the listing, and the listing returns forum content rather than a challenge.",
@@ -2553,6 +2554,33 @@ HEALTH_REPORTING_METHODS = frozenset({
     "techcommunity_windows_sitemap", "vendor_forum_search", "wayback_snapshot_recheck", "web_search",
 })
 
+# ACTIVATING A NEW METHOD ID. A declared reporter with no row yet used to fail the join, and a row
+# from an undeclared id fails the writeback, so a new id could only be activated by hand-writing a
+# telemetry row first. The activation change now lists the id here as well: it is then a declared
+# reporter (the lane's own first run may write its row, `disabled` or attempted, and the validator
+# accepts it) that is ALLOWED to have no row yet (the registry suite stays green before that run
+# and after it). Remove the id in a later change once its row is committed; the suite prints a
+# reminder but does not fail, because the committed corpus changes under it at run time.
+# Every id here must also be in HEALTH_REPORTING_METHODS. Empty today.
+HEALTH_REPORTERS_AWAITING_FIRST_ROW: frozenset[str] = frozenset()
+
+
+def health_join_errors(emitted: set[str] | frozenset[str], *,
+                       manual_writers: set[str] | frozenset[str] = frozenset()) -> list[str]:
+    """The registry <-> health-file join, both directions, as one function the registry suite and
+    an activation rehearsal both call. `emitted` is the set of method ids that have a row."""
+    errors: list[str] = []
+    undeclared = sorted(set(emitted) - HEALTH_REPORTING_METHODS - set(manual_writers))
+    if undeclared:
+        errors.append(f"emitted, undeclared: {undeclared}")
+    silent = sorted(HEALTH_REPORTING_METHODS - set(emitted) - HEALTH_REPORTERS_AWAITING_FIRST_ROW)
+    if silent:
+        errors.append(f"declared, no rows: {silent}")
+    stray = sorted(HEALTH_REPORTERS_AWAITING_FIRST_ROW - HEALTH_REPORTING_METHODS)
+    if stray:
+        errors.append(f"awaiting a first row but not a declared reporter: {stray}")
+    return errors
+
 # Active sub-steps: each runs INSIDE the named method and has no row of its own.
 TELEMETRY_PARENTS: dict[str, str] = {
     "learn_qna_question_hydration": "learn_qna_search_rss",
@@ -2620,23 +2648,77 @@ _REPROBE_FLOOR: tuple[tuple[str, str], ...] = (
     ("brave", "paid_search_api_no_spending_approved"),
 )
 
+# THE FLOOR, BY HOST. The token list above reads a method's own identity. A probe's DESTINATION is
+# read separately, from the PARSED host of its URLs (never a substring of the URL text: a
+# `redd.it` link holds no "reddit", and "adobe" in a query string is not a host). A host that is,
+# or is a subdomain of, one of these is closed whatever is declared.
+_REPROBE_CLOSED_HOSTS: tuple[tuple[str, str], ...] = (
+    ("reddit.com", "reddit_access_policy_no_written_permission_AUX-064"),
+    ("redd.it", "reddit_access_policy_no_written_permission_AUX-064"),
+    ("redditmedia.com", "reddit_access_policy_no_written_permission_AUX-064"),
+    ("redditstatic.com", "reddit_access_policy_no_written_permission_AUX-064"),
+    ("learn.microsoft.com", "microsoft_learn_qna_owner_decision_O1_AUX-073"),
+    ("adobe.com", "adobe_terms_unresolved_no_expansion_AUX-113"),
+    ("adobe.io", "adobe_terms_unresolved_no_expansion_AUX-113"),
+    ("archive.org", "archived_copy_of_a_closed_source_AUX-113"),
+    ("brave.com", "paid_search_api_no_spending_approved"),
+)
+
+# THE PIN. The one host each re-probable method may be probed on and served from: the method's own
+# source. A declaration is not enough to name a destination; its URL hosts must EQUAL this entry,
+# and a method without an entry is closed. Opening a new host therefore takes a reviewed edit here
+# as well as in REPROBE, and the re-probe suite pins both tables to today's single method.
+REPROBE_HOST_PINS: dict[str, str] = {
+    "vendor_forum_search": "forum.blackmagicdesign.com",
+}
+
 REPROBE_COOLDOWN_HOURS_DEFAULT = 168      # one week between probes of one method
 REPROBE_COOLDOWN_HOURS_MAX = 720          # back-off ceiling: 30 days
 REPROBE_MAX_REQUESTS_PER_METHOD = 2       # robots.txt + one content request, never more
+
+# SERVICE BOUNDS of a method a probe returned. No declaration may exceed these, and a declaration
+# without a complete `service` block is closed: a method with no stated bound is not re-probed,
+# because a probe that answers would release it unbounded.
+SERVICE_MAX_REQUESTS_PER_RUN = 30         # the same order as the Creative COW single pass
+SERVICE_MAX_REQUESTS_PER_RECORD = 6
+SERVICE_MIN_SPACING_SECONDS = 2.0
+SERVICE_MIN_RAMP_RUNS = 3                 # at least this many answered runs before the steady cap
+SERVICE_FIELDS = ("user_agent", "robots_agent", "robots_sample_urls", "ramp_requests",
+                  "max_requests_per_run", "max_requests_per_record", "min_spacing_seconds")
 
 REPROBE: dict[str, dict[str, Any]] = {
     "vendor_forum_search": {
         "policy": "allowed",
         "basis": "Switched off for a TECHNICAL refusal (AWS WAF challenge), not for rights or an owner "
                  "decision; AUX-117 records that it can be restored if the forum starts answering "
-                 "automated requests. The probe reads robots.txt first and stops there if the forum "
-                 "disallows the listing or still refuses.",
+                 "automated requests. The probe reads robots.txt first, for the search and thread "
+                 "paths the method requests and for the agent it sends, and stops there if the forum "
+                 "disallows either or still refuses.",
         "robots_url": "https://forum.blackmagicdesign.com/robots.txt",
-        "url": "https://forum.blackmagicdesign.com/viewforum.php?f=21",
-        "expect_any": ["viewtopic.php"],
+        # The request the METHOD makes (davinci.vendor_forum_search_candidates): the search form.
+        # The board listing (/viewforum.php) answering says nothing about /search.php.
+        "url": "https://forum.blackmagicdesign.com/search.php?keywords=DaVinci+Resolve&terms=all&author=&sc=1&sf=all",
+        "expect_any": ["viewtopic.php", "No suitable matches were found"],
         "refusal_markers": ["awswaf", "window.gokuprops"],
         "cooldown_hours": REPROBE_COOLDOWN_HOURS_DEFAULT,
         "max_requests": 2,
+        "service": {
+            # The agent the collector really sends (davinci.TEXT_HEADERS; pinned by the suite), and
+            # the token robots.txt groups are matched against.
+            "user_agent": "Mozilla/5.0 (compatible; AUXSAYS-DaVinci-Evidence-Collector/1.0; +https://auxsays.com/)",
+            "robots_agent": "AUXSAYS-DaVinci-Evidence-Collector",
+            # One URL of each shape the method requests; robots.txt must allow them all.
+            "robots_sample_urls": [
+                "https://forum.blackmagicdesign.com/search.php?keywords=21.2&terms=all&author=&sc=1&sf=all",
+                "https://forum.blackmagicdesign.com/viewtopic.php?f=21&t=1",
+            ],
+            # Requests per run, robots.txt included: 6, 12, 20 in the first three answered runs
+            # after a recovery, then 30. Never the 1,127 an unbounded run of 23 records would send.
+            "ramp_requests": [6, 12, 20],
+            "max_requests_per_run": 30,
+            "max_requests_per_record": 6,
+            "min_spacing_seconds": 2.0,
+        },
     },
     "known_watchlist": {
         "policy": "never",
@@ -2702,24 +2784,88 @@ def reprobe_refusal(method_id: str) -> str:
         return "no_reprobe_declared"
     if spec.get("policy") != "allowed":
         return "declared_never"
-    url = str(spec.get("url") or "")
-    robots = str(spec.get("robots_url") or "")
-    if not (url.startswith("https://") and robots.startswith("https://") and spec.get("expect_any")):
+    service = spec.get("service") if isinstance(spec.get("service"), dict) else {}
+    urls = [str(spec.get("url") or ""), str(spec.get("robots_url") or "")]
+    if not (all(urls) and spec.get("expect_any")):
         return "probe_incomplete"
-    for token, reason in _REPROBE_FLOOR:
-        if token in (url + " " + robots).lower():
+    urls += [str(u) for u in (service.get("robots_sample_urls") or [])]
+    hosts = [probe_host(u) for u in urls]
+    if not all(hosts):
+        return "probe_incomplete"          # not https, no host, credentials or a port in the URL
+    # The floor on the DESTINATION, by parsed host, before the pin is even read.
+    for host in hosts:
+        closed = closed_host_reason(host)
+        if closed:
+            return closed
+    pin = str(REPROBE_HOST_PINS.get(entry["method_id"]) or "").lower()
+    if not pin:
+        return "no_host_pin"
+    if closed_host_reason(pin):
+        return closed_host_reason(pin)
+    if any(host != pin for host in hosts):
+        return "host_not_pinned"           # url, robots_url and every service URL: one host, the pin
+    if urlsplit(urls[1]).path != "/robots.txt":
+        return "probe_incomplete"
+    if service_bounds_error(service):
+        return "service_bounds_missing"
+    return ""
+
+
+def probe_host(url: str) -> str:
+    """The lowercased host of an https URL with no credentials and no explicit port, else ''."""
+    try:
+        parts = urlsplit(str(url or ""))
+        if parts.scheme != "https" or parts.username or parts.password or parts.port:
+            return ""
+        return (parts.hostname or "").lower().rstrip(".")
+    except ValueError:
+        return ""
+
+
+def closed_host_reason(host: str) -> str:
+    """The floor's reason when `host` is, or is a subdomain of, a closed source's host; else ''."""
+    host = str(host or "").lower().rstrip(".")
+    for closed, reason in _REPROBE_CLOSED_HOSTS:
+        if host == closed or host.endswith("." + closed):
             return reason
     return ""
 
 
+def service_bounds_error(service: dict[str, Any]) -> str:
+    """'' when a `service` block states every bound of a returned method; else what is missing."""
+    if not isinstance(service, dict):
+        return "no_service_block"
+    for field in SERVICE_FIELDS:
+        if not service.get(field):
+            return f"missing_{field}"
+    ramp = service["ramp_requests"]
+    if not (isinstance(ramp, list) and len(ramp) >= SERVICE_MIN_RAMP_RUNS
+            and all(isinstance(n, int) and not isinstance(n, bool) and n > 0 for n in ramp)
+            and ramp == sorted(ramp)):
+        return "ramp_not_increasing"
+    if str(service["robots_agent"]).lower() not in str(service["user_agent"]).lower():
+        return "robots_agent_not_in_user_agent"
+    return ""
+
+
 def reprobe_spec(method_id: str) -> dict[str, Any] | None:
-    """The probe of a method automation MAY re-test, with its bounds applied; None otherwise."""
+    """The probe of a method automation MAY re-test, with its bounds applied; None otherwise.
+    Every bound is clamped to this module's ceilings: a declaration can tighten, never loosen."""
     if reprobe_refusal(method_id):
         return None
     spec = dict(REPROBE[method_id])
+    spec["host"] = REPROBE_HOST_PINS[method_id]
     spec["max_requests"] = max(1, min(int(spec.get("max_requests") or REPROBE_MAX_REQUESTS_PER_METHOD),
                                       REPROBE_MAX_REQUESTS_PER_METHOD))
     spec["cooldown_hours"] = max(REPROBE_COOLDOWN_HOURS_DEFAULT,
                                  min(int(spec.get("cooldown_hours") or REPROBE_COOLDOWN_HOURS_DEFAULT),
                                      REPROBE_COOLDOWN_HOURS_MAX))
+    service = dict(spec["service"])
+    steady = max(1, min(int(service["max_requests_per_run"]), SERVICE_MAX_REQUESTS_PER_RUN))
+    service["max_requests_per_run"] = steady
+    service["ramp_requests"] = [max(1, min(int(n), steady)) for n in service["ramp_requests"]]
+    service["max_requests_per_record"] = max(1, min(int(service["max_requests_per_record"]),
+                                                    SERVICE_MAX_REQUESTS_PER_RECORD))
+    service["min_spacing_seconds"] = max(SERVICE_MIN_SPACING_SECONDS, float(service["min_spacing_seconds"]))
+    spec["service"] = service
     return spec

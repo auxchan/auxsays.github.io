@@ -253,11 +253,13 @@ def run() -> int:
     check("R24 every method id that reports health is a registry entry",
           len(emitted) >= 15 and not (emitted - set(ids)), str(sorted(emitted - set(ids))))
     manual_writers = {"local_playwright_capture_promotion"}
-    check("R25 every emitted id is a declared health reporter, and every declared reporter has rows",
-          emitted <= (am.HEALTH_REPORTING_METHODS | manual_writers)
-          and am.HEALTH_REPORTING_METHODS <= emitted,
-          f"emitted, undeclared: {sorted(emitted - am.HEALTH_REPORTING_METHODS - manual_writers)}; "
-          f"declared, no rows: {sorted(am.HEALTH_REPORTING_METHODS - emitted)}")
+    join = am.health_join_errors(emitted, manual_writers=manual_writers)
+    check("R25 every emitted id is a declared health reporter, and every declared reporter has rows "
+          "(or is declared as awaiting its first)", not join, "; ".join(join))
+    arrived = sorted(am.HEALTH_REPORTERS_AWAITING_FIRST_ROW & emitted)
+    if arrived:
+        # A reminder, never a failure: the committed corpus changes under this suite at run time.
+        print(f"  NOTE  these methods now have rows and can leave HEALTH_REPORTERS_AWAITING_FIRST_ROW: {arrived}")
     stores: dict[str, str] = {}
     store_errors: list[str] = []
     for m in methods:
@@ -330,6 +332,54 @@ def run() -> int:
                   or "authori" in str((am.by_id(mid) or {}).get("rights_note") or "").lower()]
     check("R34 the Microsoft Learn Q&A and Reddit methods record their unresolved rights",
           not unrecorded, str(unrecorded))
+
+    # ---- ACTIVATING A NEW METHOD ID, REHEARSED. A declared reporter with no row failed R25, and a
+    # row from an undeclared id fails the writeback, so a new id could only be activated by
+    # hand-writing a telemetry row first. The activation change now declares the id as a reporter
+    # AND as awaiting its first row; the lane's own first run writes that row. Rehearsed here with
+    # a made-up id, the real health writer and the real validator, in a temporary file.
+    import tempfile                                      # noqa: PLC0415 - test-only
+    import contextlib                                    # noqa: PLC0415 - test-only
+    import io                                            # noqa: PLC0415 - test-only
+    import validate_evidence_method_health as vh         # noqa: PLC0415 - test-only
+    from patch_collectors import base                    # noqa: PLC0415 - test-only
+    new_id = "rehearsal_new_vendor_forum_listing"
+    saved = (am.HEALTH_REPORTING_METHODS, am.HEALTH_REPORTERS_AWAITING_FIRST_ROW)
+    with tempfile.TemporaryDirectory() as td:
+        first_row_file = Path(td) / "evidence_method_health.yml"
+        try:
+            am.HEALTH_REPORTING_METHODS = saved[0] | {new_id}
+            blocked = am.health_join_errors(emitted, manual_writers=manual_writers)
+            am.HEALTH_REPORTERS_AWAITING_FIRST_ROW = saved[1] | {new_id}
+            waiting = am.health_join_errors(emitted, manual_writers=manual_writers)
+            check("R35 a newly declared reporter with no row fails the join UNLESS the activation change "
+                  "lists it as awaiting its first row",
+                  len(blocked) == 1 and new_id in blocked[0] and waiting == [], f"{blocked} / {waiting}")
+            base.upsert_method_health([base.method_health_row(
+                product_id="blackmagic-davinci", update_version="21.2", method_id=new_id,
+                source_type="vendor_forum", status="disabled", candidates_found=0, accepted_reports=0,
+                rejected_reports=0, blocked_reason="not_run_yet", last_run="2026-11-24T07:00:00Z",
+                notes="first row, written by the lane")], first_row_file)
+            with contextlib.redirect_stdout(io.StringIO()):
+                accepted = vh.validate(first_row_file, check_registry=True)
+            check("R36 the lane's own first row for it, a fresh `disabled` row from the health writer, passes "
+                  "the validator with the registry join on, and the join stays clean once the row exists",
+                  accepted == 0
+                  and am.health_join_errors(emitted | {new_id}, manual_writers=manual_writers) == [])
+        finally:
+            am.HEALTH_REPORTING_METHODS, am.HEALTH_REPORTERS_AWAITING_FIRST_ROW = saved
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            refused = vh.validate(first_row_file, check_registry=True)
+        try:
+            am.HEALTH_REPORTERS_AWAITING_FIRST_ROW = saved[1] | {new_id}
+            stray = am.health_join_errors(emitted, manual_writers=manual_writers)
+        finally:
+            am.HEALTH_REPORTERS_AWAITING_FIRST_ROW = saved[1]
+        check("R37 without the declaration the same row is still refused at the writeback, and an allowance "
+              "for an id that is not a declared reporter is itself an error",
+              refused == 1 and "is not a health-reporting method" in out.getvalue()
+              and len(stray) == 1 and "awaiting a first row" in stray[0], f"{refused} {stray}")
 
     print()
     print("=" * 74)
