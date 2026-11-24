@@ -833,7 +833,7 @@ auxsays/scripts/tests/test_withdraw_g87_obs_prerelease_row.py = 43
 # decisions, stored rows apart from the day, counts, maturity and live decisions. The gate is unchanged, the
 # collector's full rewrite leaves every stored row and every AUX-090 dated block as it was, and a rediscovered
 # report is not re-added. Offline; the live store is read only.
-auxsays/scripts/tests/test_obs_source_date_producer.py = 63
+auxsays/scripts/tests/test_obs_source_date_producer.py = 64
 auxsays/scripts/tests/test_windows_rollover_convergence.py = 36
 
 # A counted row carries the evidence for its own version match. Excerpts are truncated (Reddit
