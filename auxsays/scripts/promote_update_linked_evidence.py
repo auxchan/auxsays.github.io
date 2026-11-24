@@ -95,13 +95,15 @@ def stored_text_is_cut(row: dict[str, Any]) -> bool:
     """Whether the held row's stored text can be LESS than the report acceptance would read.
 
     Fails closed: an excerpt that ends in the cut placeholder or reaches the storage cap is cut,
-    and so is a report that happens to end in an ellipsis of its own. An empty excerpt is cut too:
-    nothing of the report is stored.
+    and so is a report that happens to end in an ellipsis of its own. An excerpt that STARTS with
+    a cut mark ("...and since then Acrobat Pro <build> crashes") was cut at its start, and an
+    explicit "[...]" anywhere marks an elision (review 2: the end alone was checked). An empty
+    excerpt is cut too: nothing of the report is stored.
     """
-    excerpt = str(row.get("report_excerpt") or "").rstrip()
+    excerpt = str(row.get("report_excerpt") or "").strip()
     title = str(row.get("report_title") or "")
-    return (not excerpt or excerpt.endswith(_CUT_MARKS) or len(excerpt) >= EXCERPT_CAP
-            or len(title) >= TITLE_CAP)
+    return (not excerpt or excerpt.endswith(_CUT_MARKS) or excerpt.startswith(_CUT_MARKS)
+            or "[...]" in excerpt or len(excerpt) >= EXCERPT_CAP or len(title) >= TITLE_CAP)
 
 
 def candidate_from_held(row: dict[str, Any]) -> dict[str, Any]:

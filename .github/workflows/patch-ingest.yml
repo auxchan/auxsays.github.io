@@ -301,3 +301,13 @@ jobs:
       - name: Mark dry run as unchanged
         if: ${{ github.event.inputs.dry_run == 'true' }}
         run: echo "Dry run complete; no commit or deploy will be performed."
+
+      # The backfill read-back is fail-soft so its own crash cannot discard this run's records: it
+      # exits 0 and writes status=failed. Read here, AFTER the writeback and the cycle record, so the
+      # records are committed and the reaper sees the cycle reached main, and a failure becomes the
+      # run's conclusion (red, and notified) instead of an annotation nobody reads.
+      - name: Fail the run when a fail-soft step failed
+        if: ${{ always() && steps.backfill_queue.outputs.status == 'failed' }}
+        run: |
+          echo "::error::The fail-soft backfill queue read-back failed; the queue file was left as it was and the records writeback was not held back. See that step's log."
+          exit 1

@@ -163,11 +163,37 @@ def is_release_line(line: Any, versions: Iterable[Any]) -> bool:
     return len(line_members(line, versions)) > 1
 
 
-def identity_fields(product_label: str, line: Any, versions: Iterable[Any]) -> dict[str, Any]:
+def line_overlaps(rows: Iterable[Any]) -> dict[str, int]:
+    """For each DaVinci release line, how many of its counted rows are reports ALSO counted on a
+    point release of that line (same report link), read from the store as it is now.
+
+    The page's sentence about this is DERIVED from this count every time the record writer runs
+    (the scheduled lanes that store DaVinci rows run it for DaVinci in the same run), so the page
+    never states a store fact that no scheduled step keeps true. The version-attribution guard
+    flags each such row as a warning; withdrawing one stays an audited, separate act."""
+    counted = [r for r in rows if isinstance(r, dict) and r.get("counted") is True
+               and str(r.get("product_id") or "").strip() == PRODUCT_ID]
+    by_url: dict[str, list[str]] = {}
+    for r in counted:
+        by_url.setdefault(str(r.get("source_url") or ""), []).append(
+            str(r.get("update_version") or "").strip())
+    out: dict[str, int] = {}
+    for r in counted:
+        line = str(r.get("update_version") or "").strip()
+        if is_bare_line(line) and counted_point_releases(line, by_url[str(r.get("source_url") or "")]):
+            out[line] = out.get(line, 0) + 1
+    return out
+
+
+def identity_fields(product_label: str, line: Any, versions: Iterable[Any],
+                    shared: int = 0) -> dict[str, Any]:
     """The record fields that state a release-line page's identity, or {} when it is not one.
 
     Written only by the record writer's DaVinci branch, which runs only while the page counts
-    reports: with none, the record is simply the vendor's first release of the line.
+    reports: with none, the record is simply the vendor's first release of the line. ``shared`` is
+    this line's entry in `line_overlaps` over the current store: the note says "no report counted
+    here is also counted on an exact release's page" only while that is 0, and states the number
+    otherwise.
     """
     line = str(line or "").strip()
     members = line_members(line, versions)
@@ -175,22 +201,28 @@ def identity_fields(product_label: str, line: Any, versions: Iterable[Any]) -> d
         return {}
     last = members[-1]
     name = f"{product_label} {line}"
+    shared = max(0, int(shared or 0))
+    if shared:
+        overlap = (f"{shared} of the reports counted here {'is' if shared == 1 else 'are'} also "
+                   f"counted on an exact release's page, which names {'it' if shared == 1 else 'them'} "
+                   f"more exactly.")
+    else:
+        overlap = ("No report counted here is also counted on an exact release's page, and a report "
+                   "known to name an exact release is not counted here.")
     return {
         SCOPE_FIELD: SCOPE_RELEASE_LINE,
         "update_channel_label": f"Release line: {line} to {last}",
         # ONLY WHAT THE STORE CAN SHOW. A stored row keeps 280 characters of its report, so "these
         # reports name no point release" cannot be shown for a row whose text was cut, and for
         # 8 rows the store disproved it (the same report was counted on a point release). What is
-        # true of every row left on a line page, and pinned over the shipped store: it was matched
-        # to the line by the line's name, it is counted on no exact release's page, and the part
-        # of its text that is stored names no exact release.
+        # true of every row left on a line page: it was matched to the line by the line's name, and
+        # the part of its text that is stored names no exact release. Whether it is also counted
+        # on an exact release's page is derived from the store on every write (`shared`).
         "description": (
             f"User reports matched to the {name} release line, not to one exact release. They can "
             f"be about any release from {line} to {last}; each exact release has its own page."),
         "record_note": (
             f"This page is the {line} release line, not one exact update. Its user reports were "
             f"matched to \"{name}\" by the name of the line, so they can be about any release from "
-            f"{line} to {last}. No report counted here is also counted on an exact release's page, "
-            f"and a report known to name an exact release is not counted here. Beta reports are "
-            f"excluded."),
+            f"{line} to {last}. {overlap} Beta reports are excluded."),
     }

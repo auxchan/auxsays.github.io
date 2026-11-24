@@ -267,6 +267,17 @@ def run_suite() -> int:
     check("L7 the lane runs the read-back fail-soft, in front of its writeback",
           len(steps) == 1 and "--fail-soft" in steps[0]["run"].split("#", 1)[0]
           and "--write" in steps[0]["run"], str([s.get("run") for s in steps]))
+    # Review 2 item a: the step's status=failed is read by a step AFTER the writeback that fails the job.
+    ingest = lane["jobs"]["ingest"]["steps"]
+    names = [str(s.get("name") or "") for s in ingest]
+    gate = [s for s in ingest if s.get("name") == "Fail the run when a fail-soft step failed"]
+    check("L8 a failed read-back is the run's conclusion, read after the writeback and the cycle record",
+          len(steps) == 1 and steps[0].get("id") == "backfill_queue" and len(gate) == 1
+          and "always()" in str(gate[0].get("if"))
+          and "steps.backfill_queue.outputs.status == 'failed'" in str(gate[0].get("if"))
+          and "exit 1" in str(gate[0].get("run"))
+          and names.index(gate[0]["name"]) > names.index("Cycle reached main")
+          > names.index("Commit generated patch records (conflict-safe writeback)"), str(gate))
     wf = (REPO / ".github" / "workflows" / "patch-ingest.yml").read_text(encoding="utf-8")
     check("L5 the lane may commit the queue file it rewrites",
           "--allow auxsays/_data/patch_backfill_queue.yml" in wf)

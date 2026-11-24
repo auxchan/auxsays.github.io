@@ -32,6 +32,7 @@ SCRIPTS = ROOT / "scripts"
 if str(SCRIPTS) not in sys.path:
     sys.path.insert(0, str(SCRIPTS))
 
+import yaml  # noqa: E402
 import apply_consensus_to_records as writer  # noqa: E402
 from lib import davinci_release_line as drl  # noqa: E402
 from lib import patch_decision as pd  # noqa: E402
@@ -154,6 +155,22 @@ def run_suite() -> int:
           and "not one exact update" in ident.get("record_note", ""), str(ident))
     check("P9 a line with no point release is one exact update",
           drl.identity_fields("DaVinci Resolve", "21", versions) == {})
+    none_note = ident.get("record_note", "")
+    two_note = drl.identity_fields("DaVinci Resolve", "20", versions, shared=2).get("record_note", "")
+    one_note = drl.identity_fields("DaVinci Resolve", "20", versions, shared=1).get("record_note", "")
+    check("P10 the note claims no overlap with exact releases only while the store shows none",
+          "No report counted here is also counted" in none_note
+          and "No report counted here" not in two_note and "known to name" not in two_note
+          and "2 of the reports counted here are also counted on an exact release's page" in two_note
+          and "1 of the reports counted here is also counted" in one_note, two_note)
+    lo_rows = [{"product_id": drl.PRODUCT_ID, "update_version": v, "source_url": u, "counted": c}
+               for v, u, c in [("20", "u1", True), ("20.2", "u1", True), ("20", "u2", True),
+                               ("20.2", "u2", False), ("20", "u3", True), ("21.1", "u3", True),
+                               ("21", "u4", True), ("21.0.2", "u4", True)]]
+    lo_rows.append({"product_id": "obs-studio", "update_version": "20", "source_url": "u5", "counted": True})
+    check("P11 line_overlaps counts a line row only when the same report is counted on a point "
+          "release of THAT line",
+          drl.line_overlaps(lo_rows) == {"20": 1, "21": 1}, str(drl.line_overlaps(lo_rows)))
 
     print("C. collector: the line page refuses a report that names a point release")
     record20 = next(r for r in base.generated_records("blackmagic-davinci", include_archived=True)
@@ -337,6 +354,26 @@ def run_suite() -> int:
           and drl.SCOPE_FIELD not in writer._with_identity_scope(
               "obs-studio", "21", 9, record21, {drl.SCOPE_FIELD: drl.SCOPE_RELEASE_LINE}), str(scoped))
 
+    # Review 2 item b: the writer derives the overlap sentence from the store it is given, in memory
+    # (dry run, nothing written). One line-"21" report also counted on 21.1 turns the claim into a count.
+    store_rows = base.load_evidence()
+    line21 = next((r for r in store_rows if r.get("product_id") == drl.PRODUCT_ID
+                   and r.get("counted") is True and str(r.get("update_version")) == "21"), None)
+    notes = {}
+    if line21 is not None:
+        probe = {**line21, "id": str(line21["id"]) + "-overlap-probe", "update_version": "21.1"}
+        index, _fronts = writer._scan_generated_records()
+        for label, given in (("plain", store_rows), ("overlap", store_rows + [probe])):
+            for res in writer.run_dry_run(evidence_path=base.EVIDENCE_PATH, product_id_filter=drl.PRODUCT_ID,
+                                          is_candidate_mode=False, records_index=index, rows=given):
+                if res.get("update_version") == "21":
+                    notes[label] = str((res.get("proposed_fields_if_written") or {}).get("record_note") or "")
+    check("F19 the record writer derives the line page's overlap sentence from the store it reads",
+          "1 of the reports counted here is also counted on an exact release's page" in notes.get("overlap", "")
+          and "No report counted here" not in notes.get("overlap", "")
+          and ("No report counted here" in notes.get("plain", "")) == (not drl.line_overlaps(store_rows).get("21")),
+          str(notes)[:300])
+
     with tempfile.TemporaryDirectory() as tmp:
         store = Path(tmp) / "consensus_evidence.yml"
         common = {"product_id": "blackmagic-davinci", "source_type": "creator_forum_report",
@@ -400,13 +437,25 @@ def run_suite() -> int:
     check("S4 every flag names a counted row and one of the three codes",
           all(f.code in va.FLAG_ORDER and f.row_id for f in flags)
           and {f.row_id for f in flags} <= {r["id"] for r in counted})
-    twice = [r["id"] for r in counted if r.get("product_id") == drl.PRODUCT_ID
-             and drl.is_bare_line(r.get("update_version"))
-             and drl.counted_point_releases(r.get("update_version"), [
-                 o.get("update_version") for o in counted
-                 if o.get("product_id") == drl.PRODUCT_ID and o.get("source_url") == r.get("source_url")])]
-    check("S5 no DaVinci report is counted on a release line AND on a point release of it (M2)",
-          not twice, str(twice[:3]))
+    # S5 used to pin "no report is counted on a line AND on a point release" over the store, a fact no
+    # scheduled step keeps true (review 2, item b). The page now DERIVES its sentence from the store on
+    # every record write, so what is pinned is that each line page states the overlap the store shows.
+    overlaps = drl.line_overlaps(rows)
+    stated = []
+    for path in sorted(base.GENERATED_DIR.glob("*.md")):
+        head = path.read_text(encoding="utf-8", errors="replace").split("\n---", 1)[0]
+        if "update_identity_scope: release_line" not in head:
+            continue
+        front = yaml.safe_load(head) or {}
+        version = str(front.get("update_version") or "").strip()
+        note = " ".join(str(front.get("record_note") or "").split())
+        n = overlaps.get(version, 0)
+        says_none = "No report counted here is also counted on an exact release's page" in note
+        says_n = f"{n} of the reports counted here" in note
+        stated.append((path.name, n, says_none if n == 0 else (says_n and not says_none)))
+    check(f"S5 each release-line page states the overlap with exact releases that the store shows "
+          f"({len(stated)} pages; {sum(overlaps.values())} shared rows)",
+          stated and all(ok for _, _, ok in stated), str([s for s in stated if not s[2]]))
     lines = []
     for path in sorted(base.GENERATED_DIR.glob("*.md")):
         head = path.read_text(encoding="utf-8", errors="replace").split("\n---", 1)[0]

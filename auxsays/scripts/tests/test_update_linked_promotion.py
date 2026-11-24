@@ -168,6 +168,12 @@ def run_suite() -> int:
           and promo.stored_text_is_cut({"report_excerpt": ""})
           and promo.stored_text_is_cut({"report_excerpt": "ok", "report_title": "t" * 300})
           and not promo.stored_text_is_cut({"report_excerpt": exact, "report_title": "Crash on open"}))
+    check("X10 a cut at the excerpt's START, or an elision inside it, is cut too (review 2)",
+          promo.stored_text_is_cut({"report_excerpt": "...and since then Acrobat Pro crashes on open"})
+          and promo.stored_text_is_cut({"report_excerpt": "…and since then it crashes"})
+          and promo.stored_text_is_cut({"report_excerpt": "  [...] then it crashes on open"})
+          and promo.stored_text_is_cut({"report_excerpt": "It crashes [...] on open every time"})
+          and not promo.stored_text_is_cut({"report_excerpt": "It crashes... on open every time"}))
     with tempfile.TemporaryDirectory() as tmp:
         store, tier = Path(tmp) / "consensus_evidence.yml", Path(tmp) / "tier2.yml"
         base.write_evidence_file([{
@@ -211,6 +217,22 @@ def run_suite() -> int:
     check("X8 the scheduled lane runs promotion report-only and fail-soft: no --write on any call",
           len(commands) == 2 and all("--write" not in c.split() and "--fail-soft" in c.split()
                                      for c in commands), str(commands))
+    # Review 2 item a: one command per step, each with its own id, and a step AFTER the writeback that
+    # reads every one of those ids and fails the job, so a failure is the run's conclusion.
+    collect = workflow["jobs"]["collect"]["steps"]
+    promo_steps = [s for s in collect if "promote_update_linked_evidence.py" in str(s.get("run") or "")]
+    ids = [str(s.get("id") or "") for s in promo_steps]
+    names = [str(s.get("name") or "") for s in collect]
+    gate = [s for s in collect if s.get("name") == "Fail the run when a fail-soft step failed"]
+    gate_if = str(gate[0].get("if") or "") if gate else ""
+    check("X9 each promotion command is its own step with its own id, read by a failing step after the writeback",
+          len(promo_steps) == 2 and len(set(ids)) == 2 and all(ids)
+          and all(len([ln for ln in str(s.get("run")).splitlines() if ln.strip()]) == 1 for s in promo_steps)
+          and len(gate) == 1 and "always()" in gate_if
+          and all(f"steps.{i}.outputs.status == 'failed'" in gate_if for i in ids)
+          and "exit 1" in str(gate[0].get("run") or "")
+          and names.index(gate[0]["name"]) > names.index(
+              "Commit material evidence changes (conflict-safe writeback)"), str(ids) + gate_if)
 
     print("W. the write, on a temporary store and tier file")
     with tempfile.TemporaryDirectory() as tmp:

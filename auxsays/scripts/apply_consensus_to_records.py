@@ -458,7 +458,7 @@ def _group_rows(rows: list[dict[str, Any]], *, is_candidate_mode: bool) -> dict[
     return groups
 
 
-def _result_for_group(pid: str, ver: str, rows: list[dict[str, Any]], *, is_candidate_mode: bool, records_index: dict[tuple[str, str, str], dict[str, Any]], write_requested: bool = False, build: str = "", live_context: Any = None) -> dict[str, Any]:
+def _result_for_group(pid: str, ver: str, rows: list[dict[str, Any]], *, is_candidate_mode: bool, records_index: dict[tuple[str, str, str], dict[str, Any]], write_requested: bool = False, build: str = "", live_context: Any = None, line_overlaps: dict[str, int] | None = None) -> dict[str, Any]:
     if not ver:
         return {
             "product_id": pid,
@@ -512,7 +512,8 @@ def _result_for_group(pid: str, ver: str, rows: list[dict[str, Any]], *, is_cand
     effective_write_plan: dict[str, Any] = {}
     if gate_eval["would_write"]:
         proposed_fields = _proposed_record_fields(pid, ver, included, record, evidence_last_checked,
-                                                  build=build, record_maturity=group_maturity)
+                                                  build=build, record_maturity=group_maturity,
+                                                  line_overlaps=line_overlaps)
         if front is not None:
             effective_write_plan = _public_write_plan(front, proposed_fields)
 
@@ -895,7 +896,7 @@ def _public_source_item(pid: str, ver: str, row: dict[str, Any]) -> dict[str, An
     }
 
 
-def _proposed_record_fields(pid: str, ver: str, rows: list[dict[str, Any]], record: dict[str, Any] | None, evidence_last_checked: str, *, build: str, record_maturity: maturity.Maturity | None = None) -> dict[str, Any]:
+def _proposed_record_fields(pid: str, ver: str, rows: list[dict[str, Any]], record: dict[str, Any] | None, evidence_last_checked: str, *, build: str, record_maturity: maturity.Maturity | None = None, line_overlaps: dict[str, int] | None = None) -> dict[str, Any]:
     count = len(rows)
     if record_maturity is None:
         record_maturity = maturity.record_maturity(record, rows)
@@ -982,7 +983,8 @@ def _proposed_record_fields(pid: str, ver: str, rows: list[dict[str, Any]], reco
         },
     }
     fields.update(_record_coherence_fields(pid, ver, count, record, themes, build=build,
-                                           decision=decision, policy=policy, facts=facts))
+                                           decision=decision, policy=policy, facts=facts,
+                                           line_overlaps=line_overlaps))
     return fields
 
 
@@ -1076,7 +1078,7 @@ def _confirmation_records(entries: list[dict[str, Any]]) -> dict[tuple[str, str,
     return found
 
 
-def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, Any] | None, themes: Counter, *, build: str = "", decision: str | None = None, policy: Any = None, facts: dict[str, Any] | None = None) -> dict[str, Any]:
+def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, Any] | None, themes: Counter, *, build: str = "", decision: str | None = None, policy: Any = None, facts: dict[str, Any] | None = None, line_overlaps: dict[str, int] | None = None) -> dict[str, Any]:
     """The verdict fields. `decision` arrives from the caller; this function does not choose one.
 
     Each branch used to name its own action ("WAIT for production systems" here, "TEST FIRST" for
@@ -1137,8 +1139,11 @@ def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, A
         # RELEASE-LINE IDENTITY (lib.davinci_release_line). A bare version with point releases under
         # it counts reports that name the LINE, so the page says it is the line and names its range.
         # This runs only at count > 0: with no reports the record is the vendor's first release.
+        # `line_overlaps` is derived from the whole store in this same run (run_dry_run), so the
+        # note's statement about reports also counted on an exact release is never a stale claim.
         line_identity = davinci_release_line.identity_fields(
-            product_label, ver, davinci_release_line.versions_on_disk(GENERATED_DIR))
+            product_label, ver, davinci_release_line.versions_on_disk(GENERATED_DIR),
+            shared=(line_overlaps or {}).get(str(ver).strip(), 0))
         fields.update(line_identity)
         if str(ver).strip() == "21":
             # "21" used to call itself "the stable DaVinci Resolve 21 release, published Apr 14,
@@ -1273,7 +1278,10 @@ def run_dry_run(*, evidence_path: Path, product_id_filter: str | None, is_candid
     if product_id_filter:
         groups = {k: v for k, v in groups.items() if k[0] == product_id_filter}
     context = None if is_candidate_mode else live_context
-    return [_result_for_group(pid, ver, rows, is_candidate_mode=is_candidate_mode, records_index=records_index, write_requested=write_requested, build=build, live_context=context)
+    # Over the WHOLE store, before the product filter: a DaVinci line page's note states how many of
+    # its reports are also counted on a point release, derived here on every run.
+    overlaps = {} if is_candidate_mode else davinci_release_line.line_overlaps(all_rows)
+    return [_result_for_group(pid, ver, rows, is_candidate_mode=is_candidate_mode, records_index=records_index, write_requested=write_requested, build=build, live_context=context, line_overlaps=overlaps)
             for (pid, ver, build), rows in sorted(groups.items())]
 
 
