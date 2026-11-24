@@ -126,7 +126,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-063 | Resolved | Evidence acceptance | Medium | The Windows authority can attribute a report to the patch whose build is only the reporter's baseline — closed by AUX-067 for the thread-50506 shape |
 | AUX-081 | Resolved | Collector telemetry | High | A new patch's never-run Reddit policy row had no last_run, and the validator refused every writeback for every product |
 | AUX-117 | Resolved | Collector telemetry | Medium | DaVinci kept asking a forum that refuses automated requests, and its blocked rows hid a one-source shortfall; PowerPoint's hydration cap left no trace |
-| AUX-134 | Resolved | Collector telemetry | Medium | Method health and the method registry were two unjoined lists; nothing re-tested a switched-off source; DaVinci re-fetched one forum for every record |
+| AUX-135 | Resolved | Collector telemetry | Medium | Method health and the method registry were two unjoined lists; nothing re-tested a switched-off source; DaVinci re-fetched one forum for every record |
 | AUX-067 | Resolved | Evidence acceptance | High | A Windows report whose title is about another update counted against the build it merely quoted |
 | AUX-068 | Resolved | Observability | Low | PowerPoint Learn Q&A health rows said `fetches=200` and nothing about the 200 ceiling, thread population or exhaustion |
 | AUX-087 | Open | Coverage | Medium | Premiere Pro releases after 26.2.2 are not discovered: the lane has no release discovery, and HelpX refuses CI |
@@ -348,7 +348,7 @@ source link, or the link line carries article text.
 
 ---
 
-### AUX-134 — Method health and the method registry were two unjoined lists; nothing re-tested a switched-off source; DaVinci re-fetched one forum for every record
+### AUX-135 — Method health and the method registry were two unjoined lists; nothing re-tested a switched-off source; DaVinci re-fetched one forum for every record
 
 - **Status** Resolved · **Area** Collector telemetry · **Severity** Medium
 - **First seen** 2026-11-23 (governance audit, registry gaps G1-G6) · **Resolved** 2026-11-24
