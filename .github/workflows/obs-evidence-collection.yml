@@ -90,6 +90,59 @@ jobs:
       - name: Install dependencies
         run: pip install -r auxsays/scripts/requirements-ingest.txt
 
+      # RE-PROBE STATE THAT SURVIVES A LOST CYCLE. The probe records (cooldowns, grants, relapses)
+      # reach main only with this job's final writeback. A cycle that never pushes (a QA or audit
+      # failure, the collect timeout, a lost race) used to discard them, so the next run probed
+      # again: "weekly" became "every run" exactly while the lane was unhealthy. A small JSON copy
+      # of the records is restored here and saved right after the step; the step keeps the newer
+      # copy of each record. Same action and pin as pages.yml's shadow ledger. It lives under the
+      # runner's temp directory, never in the checkout, so the writeback never sees it. A missing
+      # or evicted cache only means the step works from main's copy, as it did before.
+      - name: Restore re-probe state carried from earlier runs
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        continue-on-error: true
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ runner.temp }}/reprobe-carry
+          key: reprobe-carry-v1-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            reprobe-carry-v1-
+
+      - name: Re-probe switched-off sources (bounded)
+        id: reprobe
+        # A method switched off because its source REFUSED automated requests is re-tested here on
+        # a bounded cadence, so it returns by itself if the source recovers instead of waiting for
+        # a person to notice. Hard bounds, all enforced in the script and its policy modules: at
+        # most 2 requests per method (robots.txt first), at most 4 per run, at least a week between
+        # probes of one method (doubling to 30 days after each refusal or relapse). Reddit,
+        # Microsoft Learn Q&A, Adobe and the paid search API are refused by the policy floor in
+        # lib/acquisition_methods.py, a probe may only go to the host pinned for its method, and
+        # nothing else is ever sent a request. A probe stores no page content and writes no
+        # evidence; it records one small result in the `probes` section of
+        # evidence_method_health.yml, which reaches main with this job's ordinary writeback.
+        #
+        # This step is also what lets a recovered method run at all: each run it settles the run
+        # it last granted and grants this one a request budget (6, 12, 20, then 30 requests); the
+        # collector serves a returned method only under a fresh grant. A run the source refuses is
+        # a relapse, and only a new probe can return the method.
+        #
+        # Before collection, so a recovery is used by the same run. It cannot fail the run
+        # (continue-on-error), but it no longer fails silently: a crash exits 1, raises an
+        # ::error annotation, writes to the run summary and records `probe_step` in the health file.
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        continue-on-error: true
+        timeout-minutes: 3
+        shell: bash
+        run: python auxsays/scripts/reprobe_methods.py --write --carry-path "$RUNNER_TEMP/reprobe-carry/probes.json"
+
+      - name: Save re-probe state for later runs
+        if: ${{ always() && github.event.inputs.dry_run != 'true' && steps.reprobe.outputs.carry_changed == 'true' }}
+        continue-on-error: true
+        uses: actions/cache/save@v4
+        with:
+          path: ${{ runner.temp }}/reprobe-carry
+          key: reprobe-carry-v1-${{ github.run_id }}-${{ github.run_attempt }}
+
       - name: Collect patch evidence
         id: collect
         # Finite step timeout below the job timeout. Raised 180 -> 240 min: with the collector-txn
@@ -601,6 +654,8 @@ jobs:
           WB_OUTCOME: ${{ steps.writeback.outputs.outcome }}
           WB_BUILD: ${{ steps.writeback.outputs.pages_build }}
           WB_LOST_RACE: ${{ steps.writeback.outputs.lost_race }}
+          REPROBE: ${{ steps.reprobe.outcome }}
+          REPROBE_REQUESTS: ${{ steps.reprobe.outputs.requests_made }}
         run: |
           if [ "$QA" = success ] && [ "$AUDIT" = success ]; then validation="yes"; else validation="no (qa=$QA, audit=$AUDIT)"; fi
           if [ "$WRITEBACK" != success ] && [ "$WB_PUSHED" = true ]; then
@@ -619,6 +674,7 @@ jobs:
           {
             echo "### 🔎 Pipeline stage summary"
             echo ""
+            echo "- re-probe step: **${REPROBE:-skipped}** (probe requests: ${REPROBE_REQUESTS:-0})"
             echo "- collect step: **${COLLECT}**"
             echo "- build consensus: **${CONSENSUS:-skipped}**"
             echo "- reached validation (QA + audit succeeded): **${validation}**"

@@ -126,6 +126,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-063 | Resolved | Evidence acceptance | Medium | The Windows authority can attribute a report to the patch whose build is only the reporter's baseline — closed by AUX-067 for the thread-50506 shape |
 | AUX-081 | Resolved | Collector telemetry | High | A new patch's never-run Reddit policy row had no last_run, and the validator refused every writeback for every product |
 | AUX-117 | Resolved | Collector telemetry | Medium | DaVinci kept asking a forum that refuses automated requests, and its blocked rows hid a one-source shortfall; PowerPoint's hydration cap left no trace |
+| AUX-135 | Resolved | Collector telemetry | Medium | Method health and the method registry were two unjoined lists; nothing re-tested a switched-off source; DaVinci re-fetched one forum for every record |
 | AUX-067 | Resolved | Evidence acceptance | High | A Windows report whose title is about another update counted against the build it merely quoted |
 | AUX-068 | Resolved | Observability | Low | PowerPoint Learn Q&A health rows said `fetches=200` and nothing about the 200 ceiling, thread population or exhaustion |
 | AUX-087 | Open | Coverage | Medium | Premiere Pro releases after 26.2.2 are not discovered: the lane has no release discovery, and HelpX refuses CI |
@@ -346,6 +347,56 @@ ingestion config naming support.microsoft.com passes validation; a printing writ
 source link, or the link line carries article text.
 
 ---
+
+### AUX-135 — Method health and the method registry were two unjoined lists; nothing re-tested a switched-off source; DaVinci re-fetched one forum for every record
+
+- **Status** Resolved · **Area** Collector telemetry · **Severity** Medium
+- **First seen** 2026-11-23 (governance audit, registry gaps G1-G6) · **Resolved** 2026-11-24
+
+**Symptom**
+1. Four method ids wrote health rows with no registry entry (`creative_cow_forum_search`, `known_watchlist`,
+   `vendor_forum_search`, `web_search`: 512 of 1,994 rows), and nothing compared the two lists. Evidence rows did not
+   say which method found them. Community health rows had no last-known-good time, cost or rejection reasons.
+2. Method order was fixed in code. A method switched off because its source refused requests stayed off until a
+   person noticed the source had recovered; nothing re-tested it.
+3. DaVinci's Creative COW method fetched the board listing and up to 25 threads again for every record it walked:
+   about 690 requests in a scheduled run (23 live records, 30 requests each; the 123-record figure of up to about
+   3,690 applies only to a run that targets archived records too). The forum answered HTTP 429 and the newest records, walked first, were the
+   ones refused (10 of the 18 newest rows `blocked` on 2026-11-24).
+
+**Fix**
+1. `base.upsert_method_health` carries optional history on the row a method already owns (attempts, last good, last
+   accepted, failure and zero-accept streaks; cost and rejection reasons when a collector measured them). An absent
+   field means not measured. `append_evidence_rows(method_health=...)` stamps `discovery_method_id` on NEW rows only
+   when exactly one method can have found the row. The registry catalogues the four ids, says where every method
+   reports (`telemetry_store`), and the registry test fails if either side of the join drifts (R24-R29).
+2. `method_routing.order_methods` orders a role's methods from stored history (declared order with no history);
+   a fallback chain is bounded by declaration. `reprobe_methods.py`, run before collection, re-tests a switched-off
+   method the registry's policy allows: robots.txt first, two requests at most, a week between probes doubling to 30
+   days, four requests a run. Reddit, Microsoft Learn Q&A, Adobe and the paid search API are refused by a floor that
+   is evaluated before any declaration, on the method's identity AND on the parsed host of every probe URL; a probe
+   may only go to the host pinned for its method. The probe asks the request the method makes (the forum's search
+   form) with the agent the method sends, after reading robots.txt for that agent and those paths.
+   A `recovered` record does not release the method as it was. The first version did: one answered probe ran the
+   forum adapter for all 23 live records, 1,127 requests in one run with no pause (independent review, M1), and a
+   run the forum then refused put the method back every second cycle with no probe (M2). Now the re-probe step
+   grants each run a request budget from a declared ramp (6, 12, 20, then 30 requests, robots.txt included, 6 a
+   record, 2 s apart), the collector serves the method only under a fresh grant, a refused run is a relapse that
+   needs a new probe, and relapses lengthen the wait (168, 336, 672, 720 h). The probe records are also carried in
+   a workflow cache so that a cycle which never reaches main causes no extra probe, the cooldown is written before
+   the first request, and a crashing step exits 1 and records `probe_step` in the health file.
+3. The Creative COW pass is made once per collector run and shared by every record.
+4. `onboard_vendor.py` is the onboarding sequence as ten checked steps. Exercised on Elgato Stream Deck: nine pass,
+   and the tenth keeps it CONTAINED (a per-platform vendor takes no community evidence yet). Nothing is registered.
+
+**Proof** `test_adaptive_method_routing.py` (two opposite histories through the real graph store identical accepted
+evidence), `test_method_reprobe.py` (simulated source), `test_vendor_onboarding_playbook.py`,
+`test_acquisition_method_registry.py` R24-R34.
+
+**Reopen only if** a health row names a method the registry lacks; a probe record exists for Reddit, Microsoft
+Learn Q&A, Adobe or the paid search API; a re-probed source receives more than two probe requests in one run; a
+returned method sends more requests in a run than its grant, or runs again after a refused run without a new
+probe; or two method orders store different accepted evidence for the same candidates.
 
 ### AUX-117 — DaVinci kept asking a forum that refuses automated requests, and its blocked rows hid a one-source shortfall; PowerPoint's hydration cap left no trace
 

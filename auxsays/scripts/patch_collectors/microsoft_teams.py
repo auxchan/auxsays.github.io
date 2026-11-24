@@ -801,7 +801,8 @@ class TeamsCommunityCollector(base.ProductCollector):
                 persisted: list[dict[str, Any]] = []
                 already_held: list[dict[str, Any]] = []
                 added, total, _rows = base.append_evidence_rows(
-                    accepted + rejected, out_added=persisted, out_already_held=already_held)
+                    accepted + rejected, out_added=persisted, out_already_held=already_held,
+                    method_health=method_health)
                 # evidence_rows_added must state what actually REACHED the store, not what was
                 # accepted this run -- a collector re-finds the same threads every run.
                 base.finalize_method_health_delta(method_health, persisted, already_held)

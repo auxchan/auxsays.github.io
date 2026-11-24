@@ -54,6 +54,10 @@ from patch_collectors import obs_forum_source as forum  # noqa: E402
 FIXTURES = Path(__file__).resolve().parent / "fixtures" / "obs_source_date"
 CORPUS = FIXTURES / "corpus.json"
 GOLDEN = FIXTURES / "golden_base.json"
+# The provenance stamp the persistence boundary adds, and the one method each OBS source family has.
+# Stated here, not read from the producer, so C13 is an independent pin.
+METHOD_FIELD = "discovery_method_id"
+METHOD_BY_SOURCE_TYPE = {"github_issue": "github_issues", "obs_forum_thread": "obs_forum"}
 PINS = SCRIPTS / "audit" / "obs_report_dates.json"
 STORE = _REPO / "auxsays" / "_data" / "consensus_evidence.yml"
 FIELD = "source_date"
@@ -184,7 +188,9 @@ def run_corpus(corpus: dict) -> dict:
                 # The golden predates the structured evidence facts (G68): they are derived from the row's
                 # own fields by the persistence boundary, so they are set aside here like source_date, and
                 # test_structured_evidence_facts pins that every stored row carries the right ones.
-                derived = {FIELD, *evidence_facts.STORED_FIELDS}
+                # It also predates `discovery_method_id`, the provenance stamp the same boundary adds
+                # (nothing counts or gates on it); it is set aside the same way and pinned by C13 below.
+                derived = {FIELD, METHOD_FIELD, *evidence_facts.STORED_FIELDS}
                 bare = {k: v for k, v in row.items() if k not in derived}
                 listing.append([row["update_version"], row["id"], sha(bare), [k for k in row if k not in derived]])
                 out["expected"][f"{mode}|{row['update_version']}|{row['id']}"] = (
@@ -375,6 +381,11 @@ def run() -> int:  # noqa: PLR0915
     check("C11 non-vacuous: at least one identity is decided live by both producers", bool(lives), str(lives))
     check("C12 the golden is the OLD producer's: no stored row it describes carried a source_date",
           all(FIELD not in json.loads(k) for k in golden["key_orders"]))
+    written = [row for _cand, row in result["expected"].values()]
+    stamps = {(str(row.get("source_type")), row.get(METHOD_FIELD)) for row in written}
+    check("C13 the other field set aside, discovery_method_id, is on every stored row the one method of the "
+          "row's own source family, and both families occur",
+          bool(written) and stamps == set(METHOD_BY_SOURCE_TYPE.items()), str(sorted(stamps, key=str)))
 
     print("N the only difference: the new day, from the report itself")
     dated = undated_ok = 0

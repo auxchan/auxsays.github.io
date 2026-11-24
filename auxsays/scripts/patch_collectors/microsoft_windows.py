@@ -1333,7 +1333,8 @@ class WindowsLearnQnaCollector(ProductCollector):
                 persisted: list[dict[str, Any]] = []
                 already_held: list[dict[str, Any]] = []
                 added, total, rows = append_evidence_rows(
-                    accepted, out_added=persisted, out_already_held=already_held)
+                    accepted, out_added=persisted, out_already_held=already_held,
+                    method_health=health)
                 # The health rows were built before the append and could not know the delta; this is
                 # where it becomes knowable. Both methods' rows are in `health`, and attribution is
                 # by source_type, so each family gets its own true count.

@@ -726,7 +726,16 @@ auxsays/scripts/tests/test_official_notes_known_issue.py = 61
 auxsays/scripts/tests/test_transcoded_text_repair.py = 10
 auxsays/scripts/tests/test_reader_evidence_identity.py = 17
 auxsays/scripts/tests/test_report_count_reconciliation.py = 17
-auxsays/scripts/tests/test_acquisition_method_registry.py = 31
+auxsays/scripts/tests/test_acquisition_method_registry.py = 45
+# Adaptive collection. Health telemetry is joined to the method registry (R24-R34 above), method
+# order comes from stored history, switched-off sources are re-probed within hard bounds, and a
+# vendor is onboarded by an executable playbook. test_adaptive_method_routing runs two opposite
+# histories through the real graph and requires identical accepted evidence; test_method_reprobe
+# drives the probe against a simulated source and proves a closed source is never asked;
+# test_vendor_onboarding_playbook drives every playbook step to a failure.
+auxsays/scripts/tests/test_adaptive_method_routing.py = 55
+auxsays/scripts/tests/test_method_reprobe.py = 140
+auxsays/scripts/tests/test_vendor_onboarding_playbook.py = 56
 auxsays/scripts/tests/test_teams_record_cleanup.py = 9
 auxsays/scripts/tests/test_transactional_writeback.py = 10
 auxsays/scripts/tests/test_validate_evidence_method_health.py = 13
@@ -867,7 +876,7 @@ auxsays/scripts/tests/test_withdraw_g87_obs_prerelease_row.py = 43
 # decisions, stored rows apart from the day, counts, maturity and live decisions. The gate is unchanged, the
 # collector's full rewrite leaves every stored row and every AUX-090 dated block as it was, and a rediscovered
 # report is not re-added. Offline; the live store is read only.
-auxsays/scripts/tests/test_obs_source_date_producer.py = 63
+auxsays/scripts/tests/test_obs_source_date_producer.py = 64
 auxsays/scripts/tests/test_windows_rollover_convergence.py = 36
 
 # A counted row carries the evidence for its own version match. Excerpts are truncated (Reddit

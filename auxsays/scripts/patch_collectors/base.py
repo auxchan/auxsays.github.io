@@ -75,6 +75,12 @@ EVIDENCE_FIELDS = (
     # patch it was accepted for. Optional (and empty) for every product without a build
     # contract -- see lib.patch_identity.BUILD_AWARE_PRODUCTS.
     "target_build",
+    # WHICH DISCOVERY METHOD FOUND THIS ROW (lib.acquisition_methods method_id). Provenance only:
+    # nothing counts, gates or deduplicates on it, and a row without it is not a lesser row. Stamped
+    # forward-only at the append boundary (`append_evidence_rows(method_health=...)`), and only when
+    # exactly one method of the row's own patch and source type accepted anything in the run -- a row
+    # two methods could both have found is left unstamped rather than credited to a guess.
+    "discovery_method_id",
     # The occurrence that satisfied the version match, which field it came from, and a bounded window
     # around it. Retained because `report_text_excerpt` is truncated and could not substantiate its
     # own row's match after the fact. Optional and appended LAST: rows written before this existed
@@ -94,6 +100,7 @@ OPTIONAL_EVIDENCE_FIELDS = {
     *evidence_facts.STORED_FIELDS,
     "archive_url",
     "target_build",
+    "discovery_method_id",
     "matched_text",
     "matched_field",
     "matched_context",
@@ -137,7 +144,46 @@ METHOD_HEALTH_FIELDS = (
     "blocked_reason",
     "last_run",
     "notes",
+    # --- measured history (all OPTIONAL; see METHOD_HEALTH_HISTORY_FIELDS) ---
+    "attempts",
+    "last_good_at",
+    "last_accepted_at",
+    "consecutive_failures",
+    "consecutive_zero_accept_runs",
+    "duration_ms",
+    "requests",
+    "rejection_reasons",
 )
+
+# MEASURED HISTORY, carried on the row the method already owns (no second store). Every field is
+# OPTIONAL and is written only when it has a value, for two reasons. A row written before these
+# existed must load and re-serialize to the same bytes, so a run that does not touch a row does not
+# rewrite it. And an absent field means NOT MEASURED: a `duration_ms: 0` or `requests: 0` default
+# would read as a free, instant method, which is the flattering default this file must not grow.
+#
+#   attempts                     runs in which this method was actually attempted for this patch
+#   last_good_at                 last run whose status was a responding one (the source answered)
+#   last_accepted_at             last run in which it accepted at least one candidate
+#   consecutive_failures         attempted runs in a row ending blocked / stale / broken
+#   consecutive_zero_accept_runs attempted runs in a row that accepted nothing
+#   duration_ms, requests        cost of the LAST attempt, when the collector measured it
+#   rejection_reasons            {exclusion code: count} for the LAST attempt's rejected candidates
+#
+# The first five are maintained by `upsert_method_health` from the row it replaces; a collector never
+# supplies them. The last three are supplied by the collector that measured them.
+METHOD_HEALTH_CARRIED_FIELDS = (
+    "attempts", "last_good_at", "last_accepted_at",
+    "consecutive_failures", "consecutive_zero_accept_runs",
+)
+METHOD_HEALTH_MEASURED_FIELDS = ("duration_ms", "requests", "rejection_reasons")
+METHOD_HEALTH_HISTORY_FIELDS = METHOD_HEALTH_CARRIED_FIELDS + METHOD_HEALTH_MEASURED_FIELDS
+_HISTORY_INT_FIELDS = ("attempts", "consecutive_failures", "consecutive_zero_accept_runs",
+                       "duration_ms", "requests")
+_HISTORY_TIME_FIELDS = ("last_good_at", "last_accepted_at")
+# A status that means the SOURCE ANSWERED (whatever it answered) versus one that means it did not.
+# `disabled` and `manual_review_needed` are neither: nothing was attempted.
+RESPONDING_HEALTH_STATUSES = frozenset({"success", "partial", "no_results", "low_confidence"})
+FAILING_HEALTH_STATUSES = frozenset({"blocked", "stale", "broken"})
 
 VALID_METHOD_HEALTH_STATUSES = {
     "success",
@@ -397,8 +443,59 @@ def write_evidence_file(rows: list[dict[str, Any]], path: Path = EVIDENCE_PATH) 
     atomic_write_text(path, yaml.safe_dump(payload, sort_keys=False, allow_unicode=True, width=1000))
 
 
+def _nonnegative_int(value: Any) -> int | None:
+    if isinstance(value, bool) or value in (None, ""):
+        return None
+    try:
+        number = int(value)
+    except (TypeError, ValueError):
+        return None
+    return number if number >= 0 else None
+
+
+def normalize_rejection_reasons(value: Any) -> dict[str, int]:
+    """{exclusion code: positive count}, keys sorted. Anything else is dropped, never guessed."""
+    if not isinstance(value, dict):
+        return {}
+    cleaned: dict[str, int] = {}
+    for code, count in value.items():
+        number = _nonnegative_int(count)
+        code_text = str(code or "").strip()
+        if code_text and number:
+            cleaned[code_text] = number
+    return dict(sorted(cleaned.items()))
+
+
+def rejection_reason_counts(rows: Iterable[dict[str, Any]]) -> dict[str, int]:
+    """Count a method's rejected candidates by their own `exclusion_reason`. The codes are the ones
+    the acceptance gates already wrote; this only counts them."""
+    counts: dict[str, int] = {}
+    for row in rows or ():
+        code = str((row or {}).get("exclusion_reason") or "").strip() or "unspecified"
+        counts[code] = counts.get(code, 0) + 1
+    return dict(sorted(counts.items()))
+
+
 def normalize_method_health_row(row: dict[str, Any]) -> dict[str, Any]:
-    normalized = {field: row.get(field) for field in METHOD_HEALTH_FIELDS}
+    normalized = _normalize_method_health_core(row)
+    # Optional history: present only when it carries a value (see METHOD_HEALTH_HISTORY_FIELDS).
+    for field in _HISTORY_INT_FIELDS:
+        number = _nonnegative_int(row.get(field))
+        if number is not None and (number or field in ("duration_ms", "requests")):
+            normalized[field] = number
+    for field in _HISTORY_TIME_FIELDS:
+        text = str(row.get(field) or "").strip()
+        if text:
+            normalized[field] = text
+    reasons = normalize_rejection_reasons(row.get("rejection_reasons"))
+    if reasons:
+        normalized["rejection_reasons"] = reasons
+    return normalized
+
+
+def _normalize_method_health_core(row: dict[str, Any]) -> dict[str, Any]:
+    normalized = {field: row.get(field) for field in METHOD_HEALTH_FIELDS
+                  if field not in METHOD_HEALTH_HISTORY_FIELDS}
     for field in (
         "candidates_found",
         "accepted_candidates",
@@ -409,7 +506,7 @@ def normalize_method_health_row(row: dict[str, Any]) -> dict[str, Any]:
         "rejected_reports",
     ):
         normalized[field] = int(normalized.get(field) or 0)
-    for field in METHOD_HEALTH_FIELDS:
+    for field in list(normalized):
         if field in {
             "candidates_found",
             "accepted_candidates",
@@ -443,9 +540,161 @@ def load_method_health(path: Path = METHOD_HEALTH_PATH) -> list[dict[str, Any]]:
     raise ValueError(f"{path} must contain a YAML list or a mapping with a methods list")
 
 
-def write_method_health_file(rows: list[dict[str, Any]], path: Path = METHOD_HEALTH_PATH) -> None:
-    payload = {"schema_version": 1, "methods": [normalize_method_health_row(row) for row in rows]}
+_KEEP: Any = object()
+
+
+def write_method_health_file(rows: list[dict[str, Any]], path: Path = METHOD_HEALTH_PATH,
+                             *, probes: list[dict[str, Any]] | None = None,
+                             probe_step: Any = _KEEP) -> None:
+    """Write the health file. ``probes`` is the re-probe section (see METHOD_PROBE_FIELDS); when it
+    is not given, the section already in the file is PRESERVED -- a collector run that upserts
+    method rows must not erase what the re-probe step recorded. The key is written only when the
+    section is non-empty, so a file that never held a probe keeps the bytes it always had.
+    ``probe_step`` (see `record_probe_step`) is preserved the same way; pass None to clear it."""
+    if probes is None:
+        probes = load_method_probes(path)
+    if probe_step is _KEEP:
+        probe_step = load_probe_step(path)
+    payload: dict[str, Any] = {"schema_version": 1,
+                               "methods": [normalize_method_health_row(row) for row in rows]}
+    cleaned = [normalize_method_probe_row(row) for row in probes]
+    if cleaned:
+        payload["probes"] = cleaned
+    step = normalize_probe_step(probe_step)
+    if step:
+        payload["probe_step"] = step
     atomic_write_text(path, yaml.safe_dump(payload, sort_keys=False, allow_unicode=True, width=1000))
+
+
+# --- re-probe records ----------------------------------------------------------------------------
+# One record per (product_id, method_id) for a method that is switched OFF and is re-tested on a
+# bounded cadence (scripts/reprobe_methods.py; policy in lib.acquisition_methods, cadence in
+# lib.method_routing). Kept in the SAME file, written by the SAME writer: a probe is health
+# telemetry about a method, and a second store is exactly what makes two views of one method drift.
+# A probe record is never evidence and never a method row: the public pages read `methods` only.
+METHOD_PROBE_FIELDS = (
+    "product_id", "method_id",
+    "result",                 # recovered | still_refused | inconclusive | relapsed
+    "probed_at",              # when the last probe ran
+    "next_probe_after",       # earliest time another probe may run (cooldown)
+    "consecutive_refusals",   # probes in a row that were not `recovered`
+    "requests",               # requests the LAST probe made
+    "total_requests",         # requests all probes of this method have made
+    "http_status",            # status of the decisive response, when there was one
+    "reason",                 # bounded machine reason, e.g. access_challenge, http_403, marker_missing
+    # --- service state of a method a probe returned (written by the re-probe step ONLY) ---
+    "relapses",               # recoveries the real run then refused; an answered probe does NOT reset it
+    "service_runs",           # answered real runs since the last recovery (the ramp position)
+    "unsettled_runs",         # granted runs in a row that left no row behind (lost cycles)
+    "granted_at",             # when the re-probe step granted the CURRENT run its service
+    "grant_requests",         # the request budget granted for that run
+    "state_at",               # when this record last changed; the newer copy wins a carry merge
+)
+VALID_PROBE_RESULTS = frozenset({"recovered", "still_refused", "inconclusive", "relapsed"})
+_PROBE_COUNTERS = ("consecutive_refusals", "requests", "total_requests")
+# Written only when they hold something, so a record that never served stays as small as it was.
+_PROBE_OPTIONAL_COUNTERS = ("relapses", "service_runs", "unsettled_runs", "grant_requests")
+_PROBE_OPTIONAL_TEXT = ("granted_at", "state_at")
+
+
+def method_probe_key(row: dict[str, Any]) -> tuple[str, str]:
+    return (str(row.get("product_id") or "").strip(), str(row.get("method_id") or "").strip())
+
+
+def normalize_method_probe_row(row: dict[str, Any]) -> dict[str, Any]:
+    normalized: dict[str, Any] = {}
+    for field in METHOD_PROBE_FIELDS:
+        if field in _PROBE_COUNTERS:
+            normalized[field] = _nonnegative_int(row.get(field)) or 0
+        elif field == "http_status" or field in _PROBE_OPTIONAL_COUNTERS:
+            number = _nonnegative_int(row.get(field))
+            if number:
+                normalized[field] = number
+        elif field in _PROBE_OPTIONAL_TEXT:
+            text = str(row.get(field) or "").strip()
+            if text:
+                normalized[field] = text
+        else:
+            normalized[field] = str(row.get(field) or "").strip()
+    if normalized["result"] not in VALID_PROBE_RESULTS:
+        normalized["result"] = "inconclusive"
+    return normalized
+
+
+# --- the re-probe STEP's own health --------------------------------------------------------------
+# A probe step that crashes used to leave nothing behind: one log line, exit 0, a green run. Its
+# failure is now a fact in the health file: `probe_step: {status: error, at, error, consecutive_errors}`,
+# written by the step's own exception handler and removed by its next clean run. Absent = healthy.
+PROBE_STEP_FIELDS = ("status", "at", "error", "consecutive_errors")
+
+
+def normalize_probe_step(step: Any) -> dict[str, Any]:
+    if not isinstance(step, dict) or str(step.get("status") or "").strip() != "error":
+        return {}
+    return {"status": "error", "at": str(step.get("at") or "").strip(),
+            "error": str(step.get("error") or "").strip()[:120],
+            "consecutive_errors": _nonnegative_int(step.get("consecutive_errors")) or 1}
+
+
+def load_probe_step(path: Path = METHOD_HEALTH_PATH) -> dict[str, Any]:
+    try:
+        if not path.exists():
+            return {}
+        payload = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    except Exception:  # noqa: BLE001 -- an unreadable file has no step record to preserve
+        return {}
+    return normalize_probe_step(payload.get("probe_step")) if isinstance(payload, dict) else {}
+
+
+def record_probe_step(path: Path = METHOD_HEALTH_PATH, *, error: str = "", at: str = "") -> bool:
+    """Record that the re-probe step failed (`error` given) or ran clean (`error` empty, which
+    removes the record). Returns True when the file changed. Method rows and probe records are
+    rewritten as they are."""
+    prior = load_probe_step(path)
+    if not error:
+        if not prior:
+            return False
+        write_method_health_file(load_method_health(path), path, probe_step=None)
+        return True
+    step = {"status": "error", "at": at, "error": error,
+            "consecutive_errors": int(prior.get("consecutive_errors") or 0) + 1}
+    write_method_health_file(load_method_health(path), path, probe_step=step)
+    return True
+
+
+def load_method_probes(path: Path = METHOD_HEALTH_PATH) -> list[dict[str, Any]]:
+    if not path.exists():
+        return []
+    payload = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    if not isinstance(payload, dict):
+        return []
+    probes = payload.get("probes") or []
+    if not isinstance(probes, list):
+        raise ValueError(f"{path} field 'probes' must be a list")
+    return [normalize_method_probe_row(item) for item in probes if isinstance(item, dict)]
+
+
+def upsert_method_probes(rows: list[dict[str, Any]], path: Path = METHOD_HEALTH_PATH) -> tuple[int, list[dict[str, Any]]]:
+    """Insert or replace probe records by (product_id, method_id). Method rows are untouched."""
+    existing = load_method_probes(path)
+    index = {method_probe_key(row): idx for idx, row in enumerate(existing)}
+    changed = 0
+    for row in rows:
+        normalized = normalize_method_probe_row(row)
+        key = method_probe_key(normalized)
+        if not all(key):
+            continue
+        current = index.get(key)
+        if current is None:
+            index[key] = len(existing)
+            existing.append(normalized)
+            changed += 1
+        elif existing[current] != normalized:
+            existing[current] = normalized
+            changed += 1
+    if changed:
+        write_method_health_file(load_method_health(path), path, probes=existing)
+    return changed, existing
 
 
 def _family_key(row: dict[str, Any]) -> tuple[str, str, str, str]:
@@ -555,6 +804,7 @@ def upsert_method_health(rows: list[dict[str, Any]], path: Path = METHOD_HEALTH_
             # than restamping history with a time nothing was attempted. Only policy rows
             # (status disabled + reason reddit_access_policy_unauthorised) take this path.
             normalized["last_run"] = existing[current_idx].get("last_run", "") or ""
+        carry_method_history(existing[current_idx] if current_idx is not None else None, normalized)
         if current_idx is None:
             index[key] = len(existing)
             existing.append(normalized)
@@ -565,6 +815,65 @@ def upsert_method_health(rows: list[dict[str, Any]], path: Path = METHOD_HEALTH_
     if changed:
         write_method_health_file(existing, path)
     return changed, len(existing), existing
+
+
+def carry_method_history(prior: dict[str, Any] | None, row: dict[str, Any]) -> dict[str, Any]:
+    """Maintain the carried history fields of `row` from the row it replaces. Mutates and returns it.
+
+    Deterministic, and a function of the two rows only. An ATTEMPT is a row whose status is not
+    `disabled` and whose `last_run` is new: a switched-off method made no attempt, and the same run
+    upserted twice (a resumed cycle) is one attempt, not two. A non-attempt carries the prior
+    history through unchanged, so a method that is switched off keeps the record of when it last
+    answered instead of losing it.
+
+    A prior row written before these fields existed is read for what it actually says -- its own
+    status, accepted count and `last_run` are one known attempt -- and never back-filled further.
+    """
+    prior = prior or {}
+    prior_status = str(prior.get("status") or "")
+    prior_run = str(prior.get("last_run") or "")
+    prior_attempted = bool(prior_run) and prior_status not in ("", "disabled")
+
+    def _prior_int(field: str, seed: int) -> int:
+        number = _nonnegative_int(prior.get(field))
+        return seed if number is None else number
+
+    attempts = _prior_int("attempts", 1 if prior_attempted else 0)
+    last_good = str(prior.get("last_good_at") or "") or (
+        prior_run if prior_attempted and prior_status in RESPONDING_HEALTH_STATUSES else "")
+    last_accepted = str(prior.get("last_accepted_at") or "") or (
+        prior_run if prior_attempted and int(prior.get("accepted_candidates") or 0) > 0 else "")
+    failures = _prior_int("consecutive_failures",
+                          1 if prior_attempted and prior_status in FAILING_HEALTH_STATUSES else 0)
+    zero_runs = _prior_int("consecutive_zero_accept_runs",
+                           1 if prior_attempted and int(prior.get("accepted_candidates") or 0) == 0 else 0)
+
+    status = str(row.get("status") or "")
+    last_run = str(row.get("last_run") or "")
+    attempted = bool(last_run) and status != "disabled" and last_run != prior_run
+    if attempted:
+        attempts += 1
+        if status in RESPONDING_HEALTH_STATUSES:
+            last_good = last_run
+        failures = failures + 1 if status in FAILING_HEALTH_STATUSES else 0
+        if int(row.get("accepted_candidates") or 0) > 0:
+            last_accepted = last_run
+            zero_runs = 0
+        else:
+            zero_runs += 1
+    elif status != "disabled" and last_run == prior_run and prior:
+        # The same attempt written again: its measured cost belongs to it, keep what was stored.
+        for field in METHOD_HEALTH_MEASURED_FIELDS:
+            if field not in row and field in prior:
+                row[field] = prior[field]
+    for field, value in (("attempts", attempts), ("last_good_at", last_good),
+                         ("last_accepted_at", last_accepted), ("consecutive_failures", failures),
+                         ("consecutive_zero_accept_runs", zero_runs)):
+        if value:
+            row[field] = value
+        else:
+            row.pop(field, None)
+    return row
 
 
 def method_health_row(
@@ -585,8 +894,16 @@ def method_health_row(
     duplicate_existing_evidence: int = 0,
     evidence_rows_added: int | None = None,
     public_counted_reports: int | None = None,
+    duration_ms: int | None = None,
+    requests: int | None = None,
+    rejection_reasons: dict[str, int] | None = None,
 ) -> dict[str, Any]:
+    # `duration_ms` / `requests` / `rejection_reasons` are the MEASURED cost and outcome of this
+    # attempt. None means the collector did not measure it, and the row then carries no such field.
     return normalize_method_health_row({
+        "duration_ms": duration_ms,
+        "requests": requests,
+        "rejection_reasons": rejection_reasons,
         "product_id": product_id,
         "update_version": update_version,
         "target_build": target_build,
@@ -664,9 +981,32 @@ def evidence_key(row: dict[str, Any], key_field: str) -> tuple[str, str, str, st
     return (product_id, version, build, slot)
 
 
+def discovery_method_for(row: dict[str, Any], method_health: Iterable[dict[str, Any]] | None) -> str:
+    """The ONE method that can have found `row` in this run, or '' when that is not established.
+
+    A health row and an evidence row share exactly two things: the canonical patch identity and the
+    source type. So the method is established only when exactly one method of that patch and source
+    type accepted at least one candidate in this run. Two such methods (PowerPoint reads Microsoft
+    Q&A three ways) leave the row unstamped -- unless the collector, which does know, set
+    `discovery_method_id` itself; that value is kept when it is one of the run's own methods for the
+    row's patch, and dropped otherwise. Fail closed: no guess is ever written."""
+    health = [h for h in (method_health or ()) if isinstance(h, dict)]
+    same_patch = [h for h in health if patch_key_from(h) == patch_key_from(row)]
+    declared = str(row.get("discovery_method_id") or "").strip()
+    if declared:
+        return declared if any(str(h.get("method_id") or "") == declared for h in same_patch) else ""
+    source_type = str(row.get("source_type") or "").strip()
+    finders = sorted({str(h.get("method_id") or "") for h in same_patch
+                      if str(h.get("source_type") or "").strip() == source_type
+                      and int(h.get("accepted_candidates") or 0) > 0
+                      and str(h.get("status") or "") != "disabled"} - {""})
+    return finders[0] if len(finders) == 1 else ""
+
+
 def append_evidence_rows(rows: list[dict[str, Any]], path: Path = EVIDENCE_PATH,
                          *, out_added: list[dict[str, Any]] | None = None,
-                         out_already_held: list[dict[str, Any]] | None = None) -> tuple[int, int, list[dict[str, Any]]]:
+                         out_already_held: list[dict[str, Any]] | None = None,
+                         method_health: Iterable[dict[str, Any]] | None = None) -> tuple[int, int, list[dict[str, Any]]]:
     """Append rows the store does not already hold. Returns (added, total, all rows).
 
     ``out_added`` is an OPTIONAL sink for the rows actually persisted. It exists because the count
@@ -681,6 +1021,12 @@ def append_evidence_rows(rows: list[dict[str, Any]], path: Path = EVIDENCE_PATH,
     because an earlier row in this same batch had the identical URL, and neither is the same as a
     batch abandoned mid-flight by the build gate. Only this loop can tell them apart, because only
     it knows which keys were present before the batch started.
+
+    ``method_health`` is the run's own health rows. When given, each NEW row is stamped with the
+    discovery method that found it (``discovery_method_for``); a row whose finder is not established
+    is stored without the field. Without it, nothing is stamped and any `discovery_method_id` a row
+    arrives with is dropped, so the field can only ever name a method of the run that wrote the row.
+    It is provenance: no gate, count or dedupe key reads it, and stored rows are never restamped.
 
     Both guard sets are ``evidence_key``, so a Microsoft Learn Q&A report re-found under a new title
     slug is "already held" (and counted in ``out_already_held``), never a second row. The row the
@@ -702,6 +1048,12 @@ def append_evidence_rows(rows: list[dict[str, Any]], path: Path = EVIDENCE_PATH,
         # The structured facts are computed HERE, from the text this row holds, so every collector that
         # persists through this boundary writes them (G68). Existing rows are never touched.
         normalized = evidence_facts.with_facts(normalize_evidence_row(row))
+        finder = discovery_method_for(normalized, method_health)
+        if finder:
+            normalized["discovery_method_id"] = finder
+            normalized = normalize_evidence_row(normalized)  # canonical key order
+        else:
+            normalized.pop("discovery_method_id", None)
         # Fail closed at the durable boundary: a COUNTED row for a build-aware product must carry
         # the exact build it was accepted for. Persisting a counted row without one would create
         # evidence that names a version but no patch -- unattributable to any build-specific

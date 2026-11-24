@@ -679,7 +679,9 @@ class ComfyUICollector(base.ProductCollector):
             persisted: list[dict[str, Any]] = []
             already_held: list[dict[str, Any]] = []
             if run_rows:
-                base.append_evidence_rows(run_rows, out_added=persisted, out_already_held=already_held)
+                base.append_evidence_rows(
+                    run_rows, out_added=persisted, out_already_held=already_held,
+                    method_health=[row for result in results for row in result["method_health"]])
             # The health delta speaks about ACCEPTED reports: excluded rows are stored for audit,
             # and must not be credited as reports this method added (or already held). Attribution
             # is per (patch, source type), so one call finalizes every record's row.

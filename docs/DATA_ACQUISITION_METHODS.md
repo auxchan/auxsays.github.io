@@ -41,9 +41,53 @@ widening how we look never widens what counts. The validator refuses any entry t
 
 ---
 
+## The join with runtime health, and what adapts
+
+The registry is a catalogue, but three things now connect it to what runs. None of them changes what
+counts as an accepted report: every method's candidates pass the same acceptance gates.
+
+**Where a method reports.** `telemetry_store(method_id)` answers `method_health` (its own rows in
+`_data/evidence_method_health.yml`), `parent:<id>` (a step counted in another method's rows),
+`ingest_state` (the official lane), `workflow_artifact` (a dispatch-only probe) or `none` (it does
+not run). The registry test fails if a health row names an uncatalogued method, if a declared
+reporter has no rows, or if an `active` method reports nowhere.
+
+**What a health row remembers.** `attempts`, `last_good_at`, `last_accepted_at`,
+`consecutive_failures`, `consecutive_zero_accept_runs` are carried by the writer; `duration_ms`,
+`requests` and `rejection_reasons` are stored when the collector measured them. All optional: an
+absent field means not measured. New evidence rows carry `discovery_method_id` when exactly one
+method can have found them.
+
+**What routing does with it.** `method_routing.order_methods` tries the most recently productive
+method first and a method whose last pass was refused last; with no history it is the declared order.
+`reprobe_methods.py` re-tests a switched-off method on a bounded cadence when `reprobe_refusal`
+allows it. Closed by the floor, whatever is declared: Reddit, Microsoft Learn Q&A, Adobe, the paid
+search API, and any method with a recorded `rights_status`. The floor reads the PARSED host of
+every probe URL, and a probe may only go to the one host `REPROBE_HOST_PINS` names for its method.
+Open today: `vendor_forum_search` only.
+
+**What a recovery releases.** Not the method as it was. The probe asks the request the method
+makes (the forum's search form) with the agent the method sends, after reading robots.txt for that
+agent and those paths. If it answers, the re-probe step grants each following run a request budget
+from the declared ramp: 6, 12, 20, then 30 requests a run, robots.txt included, 6 a record, 2
+seconds apart. The collector serves the method only under a fresh grant. A run the source refuses
+is a relapse: the method is out, the cooldown restarts with a longer back-off (168, 336, 672, 720
+hours), and only a new probe can return it. The probe records are also kept in a small carried
+copy (actions/cache), so a cycle that never reaches main does not cause another probe.
+
+**Activating a new method id.** Declare it in `HEALTH_REPORTING_METHODS`, the ownership manifest
+and `HEALTH_REPORTERS_AWAITING_FIRST_ROW` in one change. The lane's first run writes its first
+row; no telemetry is written by hand.
+
+**Adding a vendor.** `python auxsays/scripts/onboard_vendor.py --product-id <id>` runs the sequence
+as ten checked steps and stops before activation. The product's plan and source types are declared
+in the playbook and reach the production maps only through a reviewed activation change.
+
+---
+
 ## The families
 
-21 families, 62 concrete implementations. Counts are generated from the registry.
+21 families, 66 concrete implementations. Counts are generated from the registry.
 
 | family | methods | purposes | transports |
 |---|---|---|---|
@@ -51,18 +95,18 @@ widening how we look never widens what counts. The validator refuses any entry t
 | `capability_probe` | 3 | candidate_discovery, capability_probe, fallback, official_ingestion, recheck | html, rest_json |
 | `direct_fetch` | 6 | archive, candidate_discovery, community_discovery, enrichment, official_ingestion | html |
 | `forum_tab_enumeration` | 1 | candidate_discovery, fallback | html |
-| `html_link_enumeration` | 4 | archive, candidate_discovery, capability_probe, fallback, official_ingestion, recheck | html |
+| `html_link_enumeration` | 5 | archive, candidate_discovery, capability_probe, community_discovery, fallback, official_ingestion, recheck | html |
 | `html_release_history` | 6 | official_ingestion | html, rest_json, rss_xml, subprocess_curl |
-| `html_search_result_scrape` | 1 | candidate_discovery, context_resolution | html |
+| `html_search_result_scrape` | 2 | candidate_discovery, context_resolution | html |
 | `html_table_enumeration` | 4 | community_discovery, fallback, official_ingestion | html |
 | `in_page_harvest` | 1 | candidate_discovery, context_resolution, recheck | html |
 | `issue_tracker_search_api` | 3 | candidate_discovery, community_discovery | github_api, html, rest_json |
 | `json_api_listing` | 6 | candidate_discovery, community_discovery, official_ingestion | github_api, rest_json |
 | `json_api_search` | 5 | candidate_discovery, community_discovery, context_resolution, fallback, recheck | github_api, html, rest_json |
-| `known_url_recheck` | 5 | candidate_discovery, context_resolution, recheck | html, rest_json, rss_xml |
+| `known_url_recheck` | 6 | candidate_discovery, context_resolution, recheck | html, rest_json, rss_xml |
 | `manual_watch` | 1 | candidate_discovery | html |
 | `open_web_federation` | 1 | candidate_discovery, recheck | html, rest_json |
-| `open_web_search_api` | 2 | candidate_discovery, recheck | html, rest_json |
+| `open_web_search_api` | 3 | candidate_discovery, recheck | html, rest_json |
 | `paginated_listing_enumeration` | 3 | candidate_discovery, recheck | html, rest_json, rss_xml |
 | `rss_feed_poll` | 3 | candidate_discovery, official_ingestion | rest_json, rss_xml |
 | `rss_search` | 2 | candidate_discovery, community_discovery, recheck | html, rest_json, rss_xml |

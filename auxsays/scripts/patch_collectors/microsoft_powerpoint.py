@@ -1681,7 +1681,8 @@ class PowerPointLearnQnaCollector(ProductCollector):
                 persisted: list[dict[str, Any]] = []
                 already_held: list[dict[str, Any]] = []
                 added, total, _rows = append_evidence_rows(
-                    accepted, out_added=persisted, out_already_held=already_held)
+                    accepted, out_added=persisted, out_already_held=already_held,
+                    method_health=health)
                 finalize_method_health_delta(health, persisted, already_held)
                 result.update({"evidence_rows_added": added, "evidence_rows_total": total})
             results.append(result)

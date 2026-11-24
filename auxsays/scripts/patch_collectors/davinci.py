@@ -31,10 +31,16 @@ from lib.davinci_release_line import (
     REASON_POINT_RELEASE_NAMED, stated_point_releases, versions_on_disk,
 )
 from lib.normalize_davinci_version import normalize_davinci_version
+from lib import acquisition_methods as _registry
+from lib import method_routing as _routing
 
 from .base import (
     GENERATED_DIR,
     EVIDENCE_PATH,
+    METHOD_HEALTH_PATH,
+    load_method_health,
+    load_method_probes,
+    rejection_reason_counts,
     CollectorContext,
     PatchRecord,
     ProductCollector,
@@ -320,12 +326,26 @@ class DavinciCollector(ProductCollector):
         records = newest_first(generated_records(
             PRODUCT_ID, context.target_versions, include_archived=bool(context.target_versions)))
         results: list[dict[str, Any]] = []
+        # A returned method is served only in a WRITE run: its outcome has to reach the health file
+        # for the re-probe step to settle it, and a dry run records nothing.
+        returned = return_services() if context.write else {}
+        global _CREATIVE_COW_RUN_CACHE
+        _CREATIVE_COW_RUN_CACHE = {}
+        try:
+            results = self._collect_records(records, context, returned)
+        finally:
+            _CREATIVE_COW_RUN_CACHE = None
+        return results
+
+    def _collect_records(self, records: list[PatchRecord], context: CollectorContext,
+                         returned: dict[str, "ReturnService"]) -> list[dict[str, Any]]:
+        results: list[dict[str, Any]] = []
         for record in records:
             _b = rb.get_run_budget()
             if _b is not None and _b.collector_finalize_expired():
                 rb.emit("collector_budget_stop", product_id=PRODUCT_ID, reason="collector_finalize")
                 break
-            accepted, rejected, method_health = collect_for_record(record, context)
+            accepted, rejected, method_health = collect_for_record(record, context, returned=returned)
             result: dict[str, Any] = {
                 "product_id": PRODUCT_ID,
                 "version": record.update_version,
@@ -342,7 +362,8 @@ class DavinciCollector(ProductCollector):
                 persisted: list[dict[str, Any]] = []
                 already_held: list[dict[str, Any]] = []
                 added, total, rows = append_evidence_rows(
-                    accepted, out_added=persisted, out_already_held=already_held)
+                    accepted, out_added=persisted, out_already_held=already_held,
+                    method_health=method_health)
                 finalize_method_health_delta(method_health, persisted, already_held)
                 structured_count = len(counted_rows(rows, PRODUCT_ID, record.update_version))
                 record_updated = False
@@ -926,8 +947,161 @@ def refused_source_disabled_row(record: PatchRecord, method_id: str, source_type
     )
 
 
-def collect_for_record(record: PatchRecord, context: CollectorContext) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
+# A RETURNED METHOD IS SERVED UNDER BOUNDS, OR NOT AT ALL. The first version of the return path ran
+# the forum adapter for every live record as soon as one probe answered: 24 searches and 25 thread
+# pages a record, 23 records, 1,127 requests in one run with no pause and no robots.txt check for
+# the pages actually requested. That is the per-record re-fetch this collector stopped doing to
+# Creative COW after it drew HTTP 429. The bounds below are declared in the registry
+# (lib.acquisition_methods.REPROBE[...]["service"]) and enforced here, on every request:
+#   * a request budget for the RUN, granted by the re-probe step from a ramp (6, 12, 20, then 30),
+#     robots.txt included, and a smaller budget per record;
+#   * robots.txt read first, every run, with this collector's own agent; each URL is checked
+#     against it before it is requested, and Crawl-delay raises the spacing;
+#   * a pause before every request after the first;
+#   * the pinned host only;
+#   * one refusal ends the method's run: nothing is retried and the remaining records are not asked.
+RETURN_SERVICE_BUDGET_REASON = "returned_source_request_budget_spent"
+RETURN_SERVICE_STOPPED_REASON = "returned_source_stopped_after_refusal"
+RETURN_SERVICE_NOTE = (
+    "Not run for this record in this pass. The Blackmagic Design forum answered a re-probe and is being "
+    "returned to service under a per-run request budget; this record was not reached within it. "
+    "Nothing was requested for it and nothing was counted."
+)
+RETURN_SERVICE_MAX_CRAWL_DELAY_SECONDS = 30.0
+service_sleep = time.sleep          # replaced by the suites; never by production code
+
+
+class ReturnService:
+    """The bounds of ONE run of ONE method a probe returned to service."""
+
+    def __init__(self, method_id: str, spec: dict[str, Any], grant_requests: int) -> None:
+        service = spec["service"]
+        self.method_id = method_id
+        self.host = str(spec["host"])
+        self.robots_url = str(spec["robots_url"])
+        self.agent = str(service["robots_agent"])
+        self.budget = max(0, min(int(grant_requests), int(service["max_requests_per_run"])))
+        self.per_record = int(service["max_requests_per_record"])
+        self.spacing = float(service["min_spacing_seconds"])
+        self.requests = 0               # requests this run, robots.txt included
+        self.record_requests = 0
+        self.robots: dict[str, Any] | None = None
+        self.refused_reason = ""
+
+    def can_serve(self) -> bool:
+        return not self.refused_reason and self.requests < self.budget
+
+    def begin_record(self) -> None:
+        self.record_requests = 0
+
+    def stop(self, reason: str) -> None:
+        self.refused_reason = self.refused_reason or reason
+
+    def _spend(self) -> None:
+        if self.requests:
+            service_sleep(self.spacing)
+        self.requests += 1
+
+    def _read_robots(self) -> None:
+        if self.requests >= self.budget:
+            return
+        self._spend()
+        try:
+            text = request_text(self.robots_url)
+        except SourceAccessError as exc:
+            if exc.status in (404, 410):
+                text = ""               # no robots.txt: nothing is disallowed
+            else:
+                self.stop(f"robots_blocked:{exc.reason}")
+                return
+        except Exception as exc:  # noqa: BLE001 -- no answer about the rules: do not proceed
+            self.stop(f"robots_blocked:{error_reason(exc)}")
+            return
+        robots = _routing.parse_robots(text, self.agent)
+        if not robots["readable"]:
+            self.stop("robots_blocked:not_a_robots_file")
+            return
+        delay = float(robots.get("crawl_delay") or 0.0)
+        if delay > RETURN_SERVICE_MAX_CRAWL_DELAY_SECONDS:
+            self.stop("robots_blocked:crawl_delay_too_long")
+            return
+        self.spacing = max(self.spacing, delay)
+        self.robots = robots
+
+    def admit(self, url: str, *, record_cap: int | None = None) -> bool:
+        """May this URL be requested now? Counts the request and waits out the spacing when True.
+        False ends the adapter's loop: a spent budget, the wrong host, a robots.txt rule, or an
+        earlier refusal. Only the last two set `refused_reason`."""
+        if self.refused_reason or _registry.probe_host(url) != self.host:
+            return False
+        if self.robots is None:
+            self._read_robots()
+            if self.robots is None:
+                return False
+        if not _routing.robots_allows(self.robots, url):
+            self.stop("robots_blocked:robots_disallow")
+            return False
+        cap = self.per_record if record_cap is None else min(self.per_record, int(record_cap))
+        if self.requests >= self.budget or self.record_requests >= cap:
+            return False
+        self._spend()
+        self.record_requests += 1
+        return True
+
+
+_ACTIVE_RETURN_SERVICE: ReturnService | None = None
+
+
+def return_services(health_path: Any = None, *, now: datetime | None = None) -> dict[str, ReturnService]:
+    """The refused methods the re-probe step returned to service FOR THIS RUN, each with its bounds.
+
+    Read once per run from the stored health file. A method is here only when the registry's policy
+    allows it to be re-probed at all, its probe record says `recovered`, the re-probe step granted
+    this run a request budget (`lib.method_routing.recovered_in_service`), and the agent the
+    registry declares for it is the agent this collector sends. Any failure to read that state
+    returns nothing: with no evidence of a grant the method stays off."""
+    path = health_path or METHOD_HEALTH_PATH
+    try:
+        probes = load_method_probes(path)
+        plan = _routing.effective_plan(PRODUCT_ID, load_method_health(path), probes,
+                                       reprobe_refusal=_registry.reprobe_refusal, now=now)
+        services: dict[str, ReturnService] = {}
+        for method_id in plan.get("returned_to_service") or ():
+            spec = _registry.reprobe_spec(method_id)
+            probe = next((p for p in probes if p.get("product_id") == PRODUCT_ID
+                          and p.get("method_id") == method_id), None)
+            if (method_id not in REFUSED_SOURCE_DISABLED_METHODS or spec is None or probe is None
+                    or spec["service"]["user_agent"] != TEXT_HEADERS["User-Agent"]):
+                continue
+            services[method_id] = ReturnService(method_id, spec, int(probe.get("grant_requests") or 0))
+        return services
+    except Exception:  # noqa: BLE001 -- unreadable telemetry must never switch a refused method on
+        return {}
+
+
+def returned_to_service(health_path: Any = None, *, now: datetime | None = None) -> frozenset[str]:
+    """The ids of `return_services`. An id alone runs nothing: `collect_for_record` serves a refused
+    method only when it is handed that method's ReturnService."""
+    return frozenset(return_services(health_path, now=now))
+
+
+def return_service_unserved_row(record: PatchRecord, method_id: str, source_type: str,
+                                captured_at: str, reason: str) -> dict[str, Any]:
+    """The row of a returned method for a record its run did not reach. `disabled`, zero counters:
+    nothing was asked, so it is neither an answer nor a refusal, and settles nothing."""
+    return method_health_row(
+        product_id=PRODUCT_ID, update_version=record.update_version, method_id=method_id,
+        source_type=source_type, status="disabled", candidates_found=0, accepted_reports=0,
+        rejected_reports=0, blocked_reason=reason, last_run=captured_at, notes=RETURN_SERVICE_NOTE)
+
+
+def collect_for_record(record: PatchRecord, context: CollectorContext,
+                       *, returned: Any = None) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
+    global _ACTIVE_RETURN_SERVICE
     captured_at = utc_now()
+    # Only a mapping of ReturnService objects can serve a refused method. A bare set of ids (the
+    # shape this parameter had before the bounds existed) serves nothing.
+    services: dict[str, ReturnService] = returned if isinstance(returned, dict) else {}
     accepted: list[dict[str, Any]] = []
     rejected: list[dict[str, Any]] = []
     seen_urls: set[str] = set()
@@ -943,7 +1117,10 @@ def collect_for_record(record: PatchRecord, context: CollectorContext) -> tuple[
 
     reddit_unauthorised = not reddit_access_authorized()
     for method_id, source_type, method in method_stack:
-        if method_id in REFUSED_SOURCE_DISABLED_METHODS:
+        service = services.get(method_id) if method_id in REFUSED_SOURCE_DISABLED_METHODS else None
+        if not isinstance(service, ReturnService):
+            service = None
+        if method_id in REFUSED_SOURCE_DISABLED_METHODS and service is None:
             # AUX-117: the Blackmagic forum refuses automated requests, so these two methods are
             # switched off. NOTHING is requested -- the adapter is not called at all, unlike the
             # web_search branch below, which labels its row `disabled` after calling its adapter.
@@ -970,8 +1147,22 @@ def collect_for_record(record: PatchRecord, context: CollectorContext) -> tuple[
                 notes=REDDIT_POLICY_NOTE,
             ))
             continue
+        if service is not None and not service.can_serve():
+            # The run's budget is spent, or the source refused earlier in this run: this record is
+            # not asked. The adapter is not called at all.
+            health.append(return_service_unserved_row(
+                record, method_id, source_type, captured_at,
+                RETURN_SERVICE_STOPPED_REASON if service.refused_reason else RETURN_SERVICE_BUDGET_REASON))
+            continue
         errors: list[dict[str, Any]] = []
-        candidates = method(record, context, errors)
+        _cost = _MethodCost()
+        if service is not None:
+            service.begin_record()
+        _ACTIVE_RETURN_SERVICE = service
+        try:
+            candidates = _cost.run(method_id, method, record, context, errors)
+        finally:
+            _ACTIVE_RETURN_SERVICE = None
         method_accepted, method_rejected = evaluate_candidates(record, candidates, captured_at, seen_urls)
         accepted.extend(method_accepted)
         rejected.extend(method_rejected)
@@ -988,6 +1179,8 @@ def collect_for_record(record: PatchRecord, context: CollectorContext) -> tuple[
             status = creative_cow_method_status(candidates, method_accepted, method_rejected, errors)
         else:
             status = method_status(candidates, method_accepted, method_rejected, errors)
+        if service is not None and status in {"blocked", "broken", "low_confidence"}:
+            service.stop("refused_in_this_run")        # one refusal ends this method's run
         if method_id == "vendor_forum_search" and status in {"blocked", "low_confidence"}:
             notes = f"Blackmagic forum acquisition did not return usable forum content. No unusable source checks were counted as reports. {blocked_reason}"
         health.append(method_health_row(
@@ -1002,9 +1195,45 @@ def collect_for_record(record: PatchRecord, context: CollectorContext) -> tuple[
             blocked_reason=blocked_reason,
             last_run=captured_at,
             notes=notes,
+            duration_ms=_cost.duration_ms,
+            requests=_cost.requests,
+            rejection_reasons=rejection_reason_counts(method_rejected),
         ))
 
     return accepted, rejected, health
+
+
+class _MethodCost:
+    """Measured cost of ONE method call for ONE record: wall time, and requests when known.
+
+    `requests` is the number of `request_text` calls the method made, counted by wrapping the
+    module's own transport for the duration of the call. A method that uses another transport
+    (Reddit) leaves it None -- not measured -- rather than reporting a zero it did not earn."""
+    COUNTED = frozenset({"creative_cow_forum_search", "vendor_forum_search", "known_watchlist"})
+
+    def __init__(self) -> None:
+        self.duration_ms: int | None = None
+        self.requests: int | None = None
+
+    def run(self, method_id: str, method: Any, record: PatchRecord, context: CollectorContext,
+            errors: list[dict[str, Any]]) -> list[dict[str, Any]]:
+        global request_text
+        original = request_text
+        calls = [0]
+
+        def counting(url: str) -> str:
+            calls[0] += 1
+            return original(url)
+
+        started = time.monotonic()
+        request_text = counting
+        try:
+            return method(record, context, errors)
+        finally:
+            request_text = original
+            self.duration_ms = int((time.monotonic() - started) * 1000)
+            if method_id in self.COUNTED:
+                self.requests = calls[0]
 
 
 def evaluate_candidates(
@@ -1304,10 +1533,20 @@ def known_watchlist_candidates(record: PatchRecord, context: CollectorContext, e
 
 
 def vendor_forum_search_candidates(record: PatchRecord, context: CollectorContext, errors: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    # Under a ReturnService (the only way the collector reaches this adapter) every request is
+    # admitted first: budget, spacing, host and robots.txt. Half a record's budget goes to
+    # searches so that the threads they find can still be read. A direct call, with no service,
+    # is a test or a probe script with a stubbed transport and behaves as it always did.
+    service = _ACTIVE_RETURN_SERVICE if (_ACTIVE_RETURN_SERVICE is not None
+                                         and _ACTIVE_RETURN_SERVICE.method_id == "vendor_forum_search") else None
     links: list[str] = []
     for term in forum_search_terms(record):
         params = urllib.parse.urlencode({"keywords": term, "terms": "all", "author": "", "sc": "1", "sf": "all"})
         url = f"{FORUM_SEARCH}?{params}"
+        if service is not None and not service.admit(url, record_cap=max(1, service.per_record // 2)):
+            if service.refused_reason:
+                errors.append({"source_url": url, "reason": f"vendor_forum_search_blocked_or_failed:{service.refused_reason}"})
+            break
         try:
             text = request_text(url)
         except Exception as exc:
@@ -1323,6 +1562,10 @@ def vendor_forum_search_candidates(record: PatchRecord, context: CollectorContex
     candidates: list[dict[str, Any]] = []
     for link in sorted(set(links))[:25]:
         source_url = urllib.parse.urljoin("https://forum.blackmagicdesign.com/", html.unescape(link))
+        if service is not None and not service.admit(source_url):
+            if service.refused_reason:
+                errors.append({"source_url": source_url, "reason": f"vendor_forum_thread_fetch_failed:blocked:{service.refused_reason}"})
+            break
         try:
             page = request_text(source_url)
         except Exception as exc:
@@ -1346,7 +1589,36 @@ def vendor_forum_search_candidates(record: PatchRecord, context: CollectorContex
     return candidates
 
 
+# ONE FETCH PASS PER RUN. The board listing and its threads do not depend on which record is being
+# evaluated, but this method used to fetch them again for EVERY record: 5 listing pages and up to 25
+# threads. A scheduled run walks the 23 live records, so that was about 690 requests a run against one
+# small forum (up to about 3,690 only when all 123 records, archived ones included, are targeted). The forum answered
+# HTTP 429, and because records are walked newest-first, the refused records were the newest ones
+# (10 of the 18 newest rows `blocked` on 2026-11-24). The pass is now made once per collector run and
+# every record is evaluated against the same candidates: at most 30 requests a run, and no record is
+# starved by an earlier record's requests.
+#
+# The cache is set by DavinciCollector.collect for the duration of one run and is None otherwise, so
+# a direct call (a test, a probe) fetches exactly as before. A pass that had fetch failures hands the
+# SAME failures to every record it serves: each record's row then says `partial` or `blocked`
+# truthfully, because the pass that produced its candidates is the one that failed.
+_CREATIVE_COW_RUN_CACHE: dict[tuple[Any, ...], tuple[list[dict[str, Any]], list[dict[str, Any]]]] | None = None
+
+
 def creative_cow_forum_search_candidates(record: PatchRecord, context: CollectorContext, errors: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    cache = _CREATIVE_COW_RUN_CACHE
+    if cache is None:
+        return _creative_cow_fetch_pass(context, errors)
+    key = (context.since, context.max_pages)
+    if key not in cache:
+        pass_errors: list[dict[str, Any]] = []
+        cache[key] = (_creative_cow_fetch_pass(context, pass_errors), pass_errors)
+    candidates, pass_errors = cache[key]
+    errors.extend(dict(error) for error in pass_errors)
+    return [dict(candidate) for candidate in candidates]
+
+
+def _creative_cow_fetch_pass(context: CollectorContext, errors: list[dict[str, Any]]) -> list[dict[str, Any]]:
     thread_urls: list[str] = []
     seen_urls: set[str] = set()
     for listing_url in creative_cow_listing_urls(context):

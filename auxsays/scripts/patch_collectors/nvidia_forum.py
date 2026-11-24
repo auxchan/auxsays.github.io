@@ -1241,7 +1241,9 @@ class NvidiaForumCollector(base.ProductCollector):
             persisted: list[dict[str, Any]] = []
             already_held: list[dict[str, Any]] = []
             if run_rows:
-                base.append_evidence_rows(run_rows, out_added=persisted, out_already_held=already_held)
+                base.append_evidence_rows(
+                    run_rows, out_added=persisted, out_already_held=already_held,
+                    method_health=[row for result in results for row in result["method_health"]])
             base.finalize_method_health_delta(
                 [row for result in results for row in result["method_health"]],
                 [r for r in persisted if r.get("counted")],

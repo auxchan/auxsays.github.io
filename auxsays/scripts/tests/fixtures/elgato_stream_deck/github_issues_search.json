@@ -1,0 +1,114 @@
+{
+  "synthetic": true,
+  "about": "Synthetic items in the shape of GitHub's /search/issues response for repo:elgatosf/streamdeck. Written for the test; no recorded issue text, titles, numbers or authors.",
+  "since": "2026-01-01",
+  "items": [
+    {
+      "number": 9001,
+      "title": "Stream Deck 7.6.1 crashes when a plugin registers a dial action",
+      "body": "After updating to Stream Deck 7.6.1 on Windows 11 the application crashes every time my plugin registers a dial action. Restarting does not help and the crash happens on every launch.",
+      "html_url": "https://github.com/elgatosf/streamdeck/issues/9001",
+      "created_at": "2026-11-10T09:00:00Z",
+      "updated_at": "2026-11-10T09:00:00Z",
+      "state": "open",
+      "labels": []
+    },
+    {
+      "number": 9002,
+      "title": "Keys go blank after the computer wakes from sleep",
+      "body": "### Stream Deck version\n\n7.6.1\n\n### Operating system\n\nmacOS 15\n\n### What happened\n\nAfter the computer wakes from sleep every key is blank and the plugin fails to reconnect until the application is restarted.",
+      "html_url": "https://github.com/elgatosf/streamdeck/issues/9002",
+      "created_at": "2026-11-12T14:30:00Z",
+      "updated_at": "2026-11-12T14:30:00Z",
+      "state": "open",
+      "labels": []
+    },
+    {
+      "number": 9003,
+      "title": "Build fails after upgrading the SDK",
+      "body": "Using SDK 7.6.1 the build fails with a type error in the generated manifest. The plugin fails to load in the editor.",
+      "html_url": "https://github.com/elgatosf/streamdeck/issues/9003",
+      "created_at": "2026-11-13T08:00:00Z",
+      "updated_at": "2026-11-13T08:00:00Z",
+      "state": "open",
+      "labels": []
+    },
+    {
+      "number": 9004,
+      "title": "Documentation should state the minimum application version",
+      "body": "The examples require Stream Deck 7.6.1 or later, but the page does not say so and the example fails to load on older installs.",
+      "html_url": "https://github.com/elgatosf/streamdeck/issues/9004",
+      "created_at": "2026-11-14T08:00:00Z",
+      "updated_at": "2026-11-14T08:00:00Z",
+      "state": "open",
+      "labels": []
+    },
+    {
+      "number": 9005,
+      "title": "Stream Deck 7.6.1: add an API to read the dial press duration",
+      "body": "With Stream Deck 7.6.1 there is no way to read how long a dial was pressed. Please add one.",
+      "html_url": "https://github.com/elgatosf/streamdeck/issues/9005",
+      "created_at": "2026-11-15T08:00:00Z",
+      "updated_at": "2026-11-15T08:00:00Z",
+      "state": "open",
+      "labels": [
+        {
+          "name": "enhancement"
+        }
+      ]
+    },
+    {
+      "number": 9006,
+      "title": "Stream Deck 7.6.1 beta build crashes on start",
+      "body": "Stream Deck 7.6.1 crashes on start on my machine every time.",
+      "html_url": "https://github.com/elgatosf/streamdeck/issues/9006",
+      "created_at": "2026-10-01T08:00:00Z",
+      "updated_at": "2026-10-01T08:00:00Z",
+      "state": "open",
+      "labels": []
+    },
+    {
+      "number": 9007,
+      "title": "fix: handle Stream Deck 7.6.1 crashes in the logger",
+      "body": "Stream Deck 7.6.1 crashes are now caught by the logger.",
+      "html_url": "https://github.com/elgatosf/streamdeck/pull/9007",
+      "created_at": "2026-11-16T08:00:00Z",
+      "updated_at": "2026-11-16T08:00:00Z",
+      "state": "open",
+      "labels": [],
+      "pull_request": {
+        "url": "https://api.github.com/repos/elgatosf/streamdeck/pulls/9007"
+      }
+    },
+    {
+      "number": 9008,
+      "title": "Stream Deck 7.6 freezes when a profile with 300 actions is opened",
+      "body": "Stream Deck 7.6 freezes for about a minute whenever I open a large profile, and the plugin disconnects while it is frozen.",
+      "html_url": "https://github.com/elgatosf/streamdeck/issues/9008",
+      "created_at": "2026-10-02T10:00:00Z",
+      "updated_at": "2026-10-02T10:00:00Z",
+      "state": "open",
+      "labels": []
+    },
+    {
+      "number": 9009,
+      "title": "Property inspector does not open",
+      "body": "The property inspector does not open for my action and nothing is logged. I have not checked which application version this started with.",
+      "html_url": "https://github.com/elgatosf/streamdeck/issues/9009",
+      "created_at": "2026-11-17T08:00:00Z",
+      "updated_at": "2026-11-17T08:00:00Z",
+      "state": "open",
+      "labels": []
+    },
+    {
+      "number": 9010,
+      "title": "Dial turns lag after the update",
+      "body": "After updating to Stream Deck 7.6.1 the dial lags badly on every turn. The same device on a second computer (Stream Deck app 7.6) shows no lag at all.",
+      "html_url": "https://github.com/elgatosf/streamdeck/issues/9010",
+      "created_at": "2026-11-18T08:00:00Z",
+      "updated_at": "2026-11-18T08:00:00Z",
+      "state": "open",
+      "labels": []
+    }
+  ]
+}
