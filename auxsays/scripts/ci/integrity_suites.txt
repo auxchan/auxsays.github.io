@@ -691,7 +691,7 @@ auxsays/scripts/tests/test_acquisition_method_registry.py = 45
 # drives the probe against a simulated source and proves a closed source is never asked;
 # test_vendor_onboarding_playbook drives every playbook step to a failure.
 auxsays/scripts/tests/test_adaptive_method_routing.py = 55
-auxsays/scripts/tests/test_method_reprobe.py = 134
+auxsays/scripts/tests/test_method_reprobe.py = 140
 auxsays/scripts/tests/test_vendor_onboarding_playbook.py = 56
 auxsays/scripts/tests/test_teams_record_cleanup.py = 9
 auxsays/scripts/tests/test_transactional_writeback.py = 10

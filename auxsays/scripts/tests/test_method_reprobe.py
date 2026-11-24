@@ -291,7 +291,10 @@ class Forum:
     threads are forum pages), `search_refused` (robots.txt allows, every search is an AWS WAF
     challenge), `robots_disallow` (robots.txt disallows /search.php for every agent),
     `robots_own_agent` (robots.txt disallows everything for the collector's own agent token only),
-    `robots_html` (an HTML page is served as robots.txt), `crawl_delay` (robots.txt asks for 7 s).
+    `robots_html` (an HTML page is served as robots.txt), `crawl_delay` (robots.txt asks for 7 s),
+    `robots_bom` (robots.txt starts with a UTF-8 byte-order mark and disallows everything),
+    `search_maintenance` (robots.txt allows, every search answers 200 with a page that is not the
+    forum: a maintenance notice).
     Every request is logged; anything off the forum's host answers an empty page."""
 
     def __init__(self, mode: str = "answer") -> None:
@@ -312,10 +315,14 @@ class Forum:
                 return "<!DOCTYPE html><html><body>Welcome</body></html>"
             if self.mode == "crawl_delay":
                 return "User-agent: *\nCrawl-delay: 7\nDisallow: /admin/\n"
+            if self.mode == "robots_bom":
+                return "\ufeffUser-agent: *\nDisallow: /\n"
             return ROBOTS_OK
         if parts.path == "/search.php":
             if self.mode == "search_refused":
                 raise dv.SourceAccessError("http_202_aws_waf_challenge", status=202)
+            if self.mode == "search_maintenance":
+                return "<html><body>We are down for scheduled maintenance. Back soon.</body></html>"
             seed = sum(ord(c) for c in parts.query) % 9000
             return "<html>phpbb search.php " + " ".join(
                 f'<a href="viewtopic.php?f=21&t={seed + i}">t</a>' for i in range(30)) + "</html>"
@@ -428,6 +435,8 @@ def service_bound_checks() -> None:
          "<!DOCTYPE html><html><body>hello</body></html>", "inconclusive", "robots_not_a_robots_file"),
         ("V9 a Crawl-delay longer than the step may wait ends the probe after one request",
          "User-agent: *\nCrawl-delay: 120\n", "inconclusive", "crawl_delay_too_long"),
+        ("V28 a robots.txt that starts with a UTF-8 byte-order mark is still read: `Disallow: /` refuses the probe",
+         "\ufeffUser-agent: *\nDisallow: /\n", "still_refused", "robots_disallow"),
     ]
     for label, robots, result, reason in robots_cases:
         source = Source((200, robots), (200, FORUM_PAGE))
@@ -437,6 +446,9 @@ def service_bound_checks() -> None:
     slept: list[float] = []
     rp.run_probe(spec, Source((200, "User-agent: *\nCrawl-delay: 9\n"), (200, FORUM_PAGE)), sleep=slept.append)
     check("V10 the probe waits out the source's Crawl-delay before its content request", slept == [9.0], str(slept))
+    bom = mr.parse_robots("\ufeffUser-agent: *\nDisallow: /\n", service["robots_agent"])
+    check("V29 the parser removes a leading byte-order mark: the `*` group and its rule are read, and nothing is allowed",
+          bom["readable"] and bom["rules"] == [(False, "/")] and not mr.robots_allows(bom, spec["url"]), str(bom))
 
     # THE WORST CASE, COUNTED. The real record walk over the real live records; the forum answers
     # every request as generously as it can (30 threads per search). Four runs after one recovery.
@@ -469,7 +481,8 @@ def service_bound_checks() -> None:
 
     for mode, label in (("robots_disallow", "V19 robots.txt disallowing /search.php at RUN time: one request, then the run stops"),
                         ("robots_own_agent", "V20 robots.txt addressing the collector's own agent at run time: one request, then stop"),
-                        ("robots_html", "V21 an HTML page served as robots.txt at run time: one request, then stop")):
+                        ("robots_html", "V21 an HTML page served as robots.txt at run time: one request, then stop"),
+                        ("robots_bom", "V30 a byte-order-marked robots.txt disallowing everything at run time: one request, then stop")):
         with tempfile.TemporaryDirectory() as td:
             lane = Lane(td)
             forum = Forum(mode)
@@ -590,6 +603,35 @@ def relapse_checks() -> None:
               first["served"] and [r["served"] for r in alone] == [False] * 7
               and len(forum.log) == 2 and base.load_method_probes(lane.main)[0]["result"] == "recovered",
               str([r["served"] for r in alone]) + str(len(forum.log)))
+
+    # A search that answers 200 with a page that is not the forum (a maintenance notice). The
+    # collector stops its run on that `low_confidence` result; the settlement must read it the same
+    # way, as refused, not as an answer that climbs the ramp.
+    with tempfile.TemporaryDirectory() as td:
+        lane = Lane(td)
+        forum = Forum("search_maintenance")
+        runs = [lane.cycle(at(6 * n), forum, answering_probe()) for n in range(8)]
+        check("R14 a non-forum 200 page on the search is a relapse: the method runs in ONE of 8 cycles, 2 requests "
+              "(the old settlement served it every cycle and climbed the ramp)",
+              [r["served"] for r in runs] == [True] + [False] * 7
+              and [r["forum_requests"] for r in runs] == [2, 0, 0, 0, 0, 0, 0, 0]
+              and runs[0]["statuses"] == ["disabled", "low_confidence"],
+              str([(r["served"], r["forum_requests"], r["statuses"]) for r in runs]))
+        record = runs[1]["probe"]
+        check("R15 the step records it as a refused run: `relapsed`, one relapse, the cooldown restarted",
+              record["result"] == "relapsed" and record["relapses"] == 1 and record["reason"] == "service_run_refused"
+              and record["next_probe_after"] == mr.format_time(at(6 + 168)), str(record))
+    granted = {"product_id": PID, "method_id": MID, "result": "recovered", "granted_at": mr.format_time(T0),
+               "grant_requests": 6, "service_runs": 0}
+    row = {"product_id": PID, "method_id": MID, "status": "low_confidence",
+           "last_run": mr.format_time(T0 + timedelta(hours=1))}
+    service = am.reprobe_spec(MID)["service"]
+    settled = {status: mr.advance_service(granted, [dict(row, status=status)], T0 + timedelta(hours=6),
+                                          service=service, cooldown_hours=168, max_cooldown_hours=720)[1]
+               for status in ("low_confidence", "success", "no_results", "partial", "blocked")}
+    check("R16 the settlement: low_confidence and blocked relapse; success, no_results and partial answer",
+          settled == {"low_confidence": "relapsed_refused", "success": "answered", "no_results": "answered",
+                      "partial": "answered", "blocked": "relapsed_refused"}, str(settled))
 
     refused = Source((403, "denied"), (200, FORUM_PAGE))
     with tempfile.TemporaryDirectory() as td:

@@ -199,6 +199,11 @@ def fallback_justified(primary_health: list[dict[str, Any]], accepted_count: int
 
 RESPONDING_STATUSES = frozenset({"success", "partial", "no_results", "low_confidence"})
 FAILING_STATUSES = frozenset({"blocked", "stale", "broken"})
+# What SETTLES a served run of a returned method as answered. Narrower than RESPONDING_STATUSES:
+# `low_confidence` (a 200 page that is not the forum's search result, e.g. a maintenance page) is
+# where the collector STOPS the served run (davinci.py), so the settlement reads it the same way,
+# as refused, and the method relapses instead of climbing the ramp on pages it could not use.
+SERVICE_ANSWERED_STATUSES = RESPONDING_STATUSES - {"low_confidence"}
 
 # Rows of one method whose `last_run` falls within this window of the method's newest row belong
 # to the same collection pass. A pass is bounded by the 240-minute collect step.
@@ -409,7 +414,8 @@ def advance_service(probe: dict[str, Any], rows: Iterable[dict[str, Any]] | None
     Returns (record, event); event is '' (not in service), `granted` (first grant), `answered`,
     `unsettled`, `relapsed_refused` or `relapsed_unsettled`.
 
-      * rows of the method newer than the grant, at least one answering -> the run counted:
+      * rows of the method newer than the grant, at least one answering (SERVICE_ANSWERED_STATUSES;
+        a `low_confidence` row is NOT an answer) -> the run counted:
         `service_runs` + 1 (the ramp advances); once the ramp is complete the relapse count is
         forgiven.
       * rows newer than the grant, none answering -> RELAPSE: the record becomes `relapsed`, the
@@ -436,7 +442,7 @@ def advance_service(probe: dict[str, Any], rows: Iterable[dict[str, Any]] | None
             event = "unsettled"
             if record["unsettled_runs"] >= MAX_UNSETTLED_SERVICE_RUNS:
                 event = "relapsed_unsettled"
-        elif any(status in RESPONDING_STATUSES for status in since):
+        elif any(status in SERVICE_ANSWERED_STATUSES for status in since):
             record["service_runs"] = int(record.get("service_runs") or 0) + 1
             record["unsettled_runs"] = 0
             event = "answered"
@@ -559,7 +565,9 @@ def due_reprobes(rows: Iterable[dict[str, Any]] | None, probes: Iterable[dict[st
 # NOT read as "nothing is disallowed": it is `unreadable`, and the caller must not proceed.
 def parse_robots(text: str, agent: str) -> dict[str, Any]:
     """{readable, rules: [(allow: bool, pattern)], crawl_delay: float | None} for `agent`."""
-    body = str(text or "")
+    # A UTF-8 byte-order mark is kept by both transports when they decode; left in place it glues
+    # itself to the first field name ("\ufeffuser-agent") and the whole file reads as no rules.
+    body = str(text or "").lstrip("\ufeff")
     head = body.lstrip()[:400].lower()
     if head.startswith("<") or "<html" in head or "<!doctype" in head:
         return {"readable": False, "rules": [], "crawl_delay": None}
