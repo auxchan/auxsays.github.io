@@ -104097,3 +104097,438 @@ evidence:
   title_dedup_sha256: 0bd0792db8b1c4f27a2ef0f40c5ef63e078fe643022d0af2c85e7b41f44e0b9c
   issue_bucket: output or recording regressions
   facts_rule_version: v1
+- id: comfyui-0-25-0-github-issue-17939
+  product_id: comfyui
+  update_version: 0.25.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17939
+  parent_title: 'Video Deflicker fails on Apple MPS: Unsupported Border padding mode'
+  report_title: 'Video Deflicker fails on Apple MPS: Unsupported Border padding mode'
+  report_text_excerpt: 'Video Deflicker fails on Apple MPS: Unsupported Border padding mode ### Custom Node Testing - [x] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-with-all-...'
+  captured_at: '2026-11-24T00:41:46Z'
+  source_date: '2026-11-23'
+  target_release_date: '2026-06-16'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: version_not_core_identity
+  issue_theme: ''
+  workflow_area: ''
+  platform: macos
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.25.0
+  matched_field: report_text
+  matched_context: '...Pro (`Mac17,6`), Apple M5 Max - Python: 3.12.11; PyTorch: 2.10.0; torchvision: 0.25.0 A local MPS-only workaround clamps normalized sampling coordinates to `[-1, 1]...'
+  excerpt_norm_sha256: 096098e75cfb9f9346e076528a9fc19a1d8580ca217d8ebe44258d94c3759e6d
+  title_dedup_sha256: b81efea2f0fc6a799c8f5c562cf4e48407f980712631ad8b1d40d0c943408b6d
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6078937-unable-to-hear-voice-from-speaker-for
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6078937/unable-to-hear-voice-from-speaker-for-teams-meetin
+  parent_title: unable to hear voice from speaker for teams meeting - Microsoft Q&A
+  report_title: unable to hear voice from speaker for teams meeting - Microsoft Q&A
+  report_text_excerpt: unable to hear voice from speaker for teams meeting I have connected my Bluetooth speaker but still im unable to hear sound during teams call otherwise for different apps it work perfectly fine
+  captured_at: '2026-11-24T00:42:58Z'
+  source_date: '2026-11-22'
+  target_release_date: '2026-11-05'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: audio / video failure
+  workflow_area: meeting audio and video
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: c1ed8be9bcf3fe4b1600d682540bb21cc689a2a47ceaff36ddbfc4241381dec0
+  title_dedup_sha256: 149d3bf8ec2f3666fb492cd7ccbed3e7253e36526ef7b9fbf81b6b0886e7b48c
+  issue_bucket: audio / video failure
+  facts_rule_version: v1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6078937-unable-to-hear-voice-from-speaker-for
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6078937/unable-to-hear-voice-from-speaker-for-teams-meetin
+  parent_title: unable to hear voice from speaker for teams meeting - Microsoft Q&A
+  report_title: unable to hear voice from speaker for teams meeting - Microsoft Q&A
+  report_text_excerpt: unable to hear voice from speaker for teams meeting I have connected my Bluetooth speaker but still im unable to hear sound during teams call otherwise for different apps it work perfectly fine
+  captured_at: '2026-11-24T00:42:58Z'
+  source_date: '2026-11-22'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: audio / video failure
+  workflow_area: meeting audio and video
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: c1ed8be9bcf3fe4b1600d682540bb21cc689a2a47ceaff36ddbfc4241381dec0
+  title_dedup_sha256: 149d3bf8ec2f3666fb492cd7ccbed3e7253e36526ef7b9fbf81b6b0886e7b48c
+  issue_bucket: audio / video failure
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6078937-unable-to-hear-voice-from-speaker-for
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6078937/unable-to-hear-voice-from-speaker-for-teams-meetin
+  parent_title: unable to hear voice from speaker for teams meeting - Microsoft Q&A
+  report_title: unable to hear voice from speaker for teams meeting - Microsoft Q&A
+  report_text_excerpt: unable to hear voice from speaker for teams meeting I have connected my Bluetooth speaker but still im unable to hear sound during teams call otherwise for different apps it work perfectly fine
+  captured_at: '2026-11-24T00:42:58Z'
+  source_date: '2026-11-22'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: audio / video failure
+  workflow_area: meeting audio and video
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: c1ed8be9bcf3fe4b1600d682540bb21cc689a2a47ceaff36ddbfc4241381dec0
+  title_dedup_sha256: 149d3bf8ec2f3666fb492cd7ccbed3e7253e36526ef7b9fbf81b6b0886e7b48c
+  issue_bucket: audio / video failure
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6078937-unable-to-hear-voice-from-speaker-for
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6078937/unable-to-hear-voice-from-speaker-for-teams-meetin
+  parent_title: unable to hear voice from speaker for teams meeting - Microsoft Q&A
+  report_title: unable to hear voice from speaker for teams meeting - Microsoft Q&A
+  report_text_excerpt: unable to hear voice from speaker for teams meeting I have connected my Bluetooth speaker but still im unable to hear sound during teams call otherwise for different apps it work perfectly fine
+  captured_at: '2026-11-24T00:42:58Z'
+  source_date: '2026-11-22'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: audio / video failure
+  workflow_area: meeting audio and video
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: c1ed8be9bcf3fe4b1600d682540bb21cc689a2a47ceaff36ddbfc4241381dec0
+  title_dedup_sha256: 149d3bf8ec2f3666fb492cd7ccbed3e7253e36526ef7b9fbf81b6b0886e7b48c
+  issue_bucket: audio / video failure
+  facts_rule_version: v1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6078937-unable-to-hear-voice-from-speaker-for
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6078937/unable-to-hear-voice-from-speaker-for-teams-meetin
+  parent_title: unable to hear voice from speaker for teams meeting - Microsoft Q&A
+  report_title: unable to hear voice from speaker for teams meeting - Microsoft Q&A
+  report_text_excerpt: unable to hear voice from speaker for teams meeting I have connected my Bluetooth speaker but still im unable to hear sound during teams call otherwise for different apps it work perfectly fine
+  captured_at: '2026-11-24T00:42:58Z'
+  source_date: '2026-11-22'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: audio / video failure
+  workflow_area: meeting audio and video
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: c1ed8be9bcf3fe4b1600d682540bb21cc689a2a47ceaff36ddbfc4241381dec0
+  title_dedup_sha256: 149d3bf8ec2f3666fb492cd7ccbed3e7253e36526ef7b9fbf81b6b0886e7b48c
+  issue_bucket: audio / video failure
+  facts_rule_version: v1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6078937-unable-to-hear-voice-from-speaker-for
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6078937/unable-to-hear-voice-from-speaker-for-teams-meetin
+  parent_title: unable to hear voice from speaker for teams meeting - Microsoft Q&A
+  report_title: unable to hear voice from speaker for teams meeting - Microsoft Q&A
+  report_text_excerpt: unable to hear voice from speaker for teams meeting I have connected my Bluetooth speaker but still im unable to hear sound during teams call otherwise for different apps it work perfectly fine
+  captured_at: '2026-11-24T00:42:58Z'
+  source_date: '2026-11-22'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: audio / video failure
+  workflow_area: meeting audio and video
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: c1ed8be9bcf3fe4b1600d682540bb21cc689a2a47ceaff36ddbfc4241381dec0
+  title_dedup_sha256: 149d3bf8ec2f3666fb492cd7ccbed3e7253e36526ef7b9fbf81b6b0886e7b48c
+  issue_bucket: audio / video failure
+  facts_rule_version: v1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6078937-unable-to-hear-voice-from-speaker-for
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6078937/unable-to-hear-voice-from-speaker-for-teams-meetin
+  parent_title: unable to hear voice from speaker for teams meeting - Microsoft Q&A
+  report_title: unable to hear voice from speaker for teams meeting - Microsoft Q&A
+  report_text_excerpt: unable to hear voice from speaker for teams meeting I have connected my Bluetooth speaker but still im unable to hear sound during teams call otherwise for different apps it work perfectly fine
+  captured_at: '2026-11-24T00:42:58Z'
+  source_date: '2026-11-22'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: audio / video failure
+  workflow_area: meeting audio and video
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: c1ed8be9bcf3fe4b1600d682540bb21cc689a2a47ceaff36ddbfc4241381dec0
+  title_dedup_sha256: 149d3bf8ec2f3666fb492cd7ccbed3e7253e36526ef7b9fbf81b6b0886e7b48c
+  issue_bucket: audio / video failure
+  facts_rule_version: v1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6078937-unable-to-hear-voice-from-speaker-for
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6078937/unable-to-hear-voice-from-speaker-for-teams-meetin
+  parent_title: unable to hear voice from speaker for teams meeting - Microsoft Q&A
+  report_title: unable to hear voice from speaker for teams meeting - Microsoft Q&A
+  report_text_excerpt: unable to hear voice from speaker for teams meeting I have connected my Bluetooth speaker but still im unable to hear sound during teams call otherwise for different apps it work perfectly fine
+  captured_at: '2026-11-24T00:42:58Z'
+  source_date: '2026-11-22'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: audio / video failure
+  workflow_area: meeting audio and video
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: c1ed8be9bcf3fe4b1600d682540bb21cc689a2a47ceaff36ddbfc4241381dec0
+  title_dedup_sha256: 149d3bf8ec2f3666fb492cd7ccbed3e7253e36526ef7b9fbf81b6b0886e7b48c
+  issue_bucket: audio / video failure
+  facts_rule_version: v1
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6079310-question-6079310
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6079310/windows-11-update-install-error-0x800f0993
+  parent_title: Windows 11 update install error 0x800F0993 - Microsoft Q&A
+  report_title: Windows 11 update install error 0x800F0993 - Microsoft Q&A
+  report_text_excerpt: Windows 11 update install error 0x800F0993 - Microsoft Q&A I need help with the 2026-11 Preview Update (KB5132057) (26300.10075) install error 0x800F0993. Tried three times with no luck. Tried the update troubleshooter, but it would not run. Any help would be appreciated....
+  captured_at: '2026-11-24T00:52:35Z'
+  source_date: '2026-11-22'
+  target_release_date: '2026-11-19'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.10075'
+  match_basis: exact_os_build
+  matched_kb: KB5132057
+  matched_os_build: '26300.10075'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.10075'
+  excerpt_norm_sha256: 993b4331643f9dea3164b30e8afbb6e4865146bb9cacb71f739f0a2a4f0eae73
+  title_dedup_sha256: 0a541764b3bc949d11cf5aadc50a2dc56a115d3bf5621c79ae7345d2db46863d
+  issue_bucket: update/install failure
+  facts_rule_version: v1
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6079276-question-6079276
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6079276/2026-11-preview-update-kb5132057-26300-10075
+  parent_title: 2026-11 Preview Update (KB5132057) (26300.10075) - Microsoft Q&A
+  report_title: 2026-11 Preview Update (KB5132057) (26300.10075) - Microsoft Q&A
+  report_text_excerpt: 2026-11 Preview Update (KB5132057) (26300.10075) - Microsoft Q&A 2026-11 Preview Update (KB5132057) (26300.10075) will not install, despite multiple tentative...
+  captured_at: '2026-11-24T00:52:35Z'
+  source_date: '2026-11-22'
+  target_release_date: '2026-11-19'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.10075'
+  match_basis: exact_os_build
+  matched_kb: KB5132057
+  matched_os_build: '26300.10075'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.10075'
+  excerpt_norm_sha256: 684b44df7998b268d15883dafaa84d63d88a7551c7d3ed1f43f66381f665c0b3
+  title_dedup_sha256: 93b007b1000de02e00fb22dc5e9be910cdb33ae62f5a2ceb237a5bee5fe97df3
+  issue_bucket: update/install failure
+  facts_rule_version: v1
+- id: nvidia-studio-driver-591-74-nvidia-forum-comment-3587305
+  product_id: nvidia-studio-driver
+  update_version: '591.74'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/581019/issue-with-g-sync-and-frame-generation-in-driver-version-59174/?comment=3587305
+  parent_title: Issue with G-SYNC and Frame Generation in Driver Version 591.74
+  report_title: Issue with G-SYNC and Frame Generation in Driver Version 591.74
+  report_text_excerpt: Issue with G-SYNC and Frame Generation in Driver Version 591.74 When G-SYNC is enabled, using DLSS Frame Generation or NVIDIA Smooth Motion causes the image to feel stuttery and not smooth whenever the camera is moved, and visual artifacts appear as if image sharpness is set...
+  captured_at: '2026-11-24T01:11:02Z'
+  source_date: '2026-01-14T21:26:46Z'
+  target_release_date: '2026-01-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '591.74'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '591.74'
+  matched_field: report_text
+  matched_context: Issue with G-SYNC and Frame Generation in Driver Version 591.74 When G-SYNC is enabled, using DLSS Frame Generation or NVIDIA Smooth Motion cau...
+  excerpt_norm_sha256: 0bd063e8ef873ffb7af4c242d54af4d6cf99b894256c905b53c3337540d694ee
+  title_dedup_sha256: f753f30d2e6dc50b8ba849f2e409161980f683f10a7de80699bac0b4c8a0aa67
+  issue_bucket: flicker or wrong colors
+  facts_rule_version: v1
+- id: nvidia-studio-driver-591-74-nvidia-forum-comment-3588547
+  product_id: nvidia-studio-driver
+  update_version: '591.74'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/581019/issue-with-g-sync-and-frame-generation-in-driver-version-59174/?comment=3588547
+  parent_title: Issue with G-SYNC and Frame Generation in Driver Version 591.74
+  report_title: Issue with G-SYNC and Frame Generation in Driver Version 591.74
+  report_text_excerpt: I am also experiencing this in World of Warcraft. Smooth motion is borked in 591.74. I reverted back to 581.94. Smooth as butter in 581.94. I replicated this issue on my sons computer.
+  captured_at: '2026-11-24T01:11:02Z'
+  source_date: '2026-01-20T20:27:30Z'
+  target_release_date: '2026-01-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '591.74'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '591.74'
+  matched_field: report_text
+  matched_context: I am also experiencing this in World of Warcraft. Smooth motion is borked in 591.74. I reverted back to 581.94. Smooth as butter in 581.94. I replicated this issue...
+  excerpt_norm_sha256: 9f8df2974398944675b6722cc4a5fe52b0eb0b0ade91f067e52afce59d99f92d
+  title_dedup_sha256: f753f30d2e6dc50b8ba849f2e409161980f683f10a7de80699bac0b4c8a0aa67
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: obs-studio-33-0-3-github-issue-14254
+  product_id: obs-studio
+  update_version: 33.0.3
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14254
+  parent_title: All system lagging after capture mini player (apple music app) in OBS since big update (Patch 33) (M5 Pro chip, MacOS 27.2)
+  report_title: All system lagging after capture mini player (apple music app) in OBS since big update (Patch 33) (M5 Pro chip, MacOS 27.2)
+  report_text_excerpt: '27 ### Other OS _No response_ ### OBS Studio Version Other ### OBS Studio Version (Other) 33.0.3 ### OBS Studio Log URL https://obsproject.com/logs/OPCseObQIgZO6COA ### OBS Studio Crash Log URL _No response_ ### Expected Behavior System shouldn''t lag after capture mini player. ##'
+  captured_at: '2026-11-24T01:15:11Z'
+  source_date: '2026-11-23'
+  patch_version_matched: true
+  matched_version: 33.0.3
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: macos
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+  excerpt_norm_sha256: d6e9580ff05f492d480627393042410943864e1e546137d98be75d5e9f227997
+  title_dedup_sha256: 71423576cb6040168a100cadd3622801ee18728dc23c38f4a9c8d9d95503a9aa
+  issue_bucket: capture-source issues
+  facts_rule_version: v1
+- id: obs-studio-33-0-3-github-issue-14253
+  product_id: obs-studio
+  update_version: 33.0.3
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14253
+  parent_title: OBS won't launch
+  report_title: OBS won't launch
+  report_text_excerpt: 'er ### Other OS Manjaro Linux ### OBS Studio Version Other ### OBS Studio Version (Other) 33.0.3 ### OBS Studio Log URL hh ### OBS Studio Crash Log URL _No response_ ### Expected Behavior F: „/usr/share/icons” nie będzie udostępniane piaskownicy: Ścieżka „/usr” jest zastrzeżona p'
+  captured_at: '2026-11-24T01:15:11Z'
+  source_date: '2026-11-23'
+  patch_version_matched: true
+  matched_version: 33.0.3
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: linux
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+  excerpt_norm_sha256: fda7cb1c56e54669521c361511b950a49a96dbda3ac52f78783791f045e7db71
+  title_dedup_sha256: c24800de2e86dd991d6c7a2811c4685461f59629b420063818c00d8438d00910
+  issue_bucket: general workflow reports
+  facts_rule_version: v1

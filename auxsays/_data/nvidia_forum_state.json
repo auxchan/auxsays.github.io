@@ -1,8 +1,8 @@
 {
   "last_cycle": {
-    "at": "2026-11-23T08:59:25Z",
+    "at": "2026-11-24T01:09:48Z",
     "outcome": "ok",
-    "requests": 15
+    "requests": 9
   },
   "provenance": {
     "collection_authorization": "owner risk acceptance; NVIDIA permission not established",
@@ -19,20 +19,98 @@
     "581019": {
       "community_id": 13,
       "community_slug": "game-ready-drivers",
+      "coverage": [
+        "replies_not_embedded"
+      ],
       "created": 1768426006,
-      "deferred": {
-        "first_deferred_at": "2026-11-22T20:45:50Z",
-        "queued_at": "2026-11-22T20:45:50Z",
-        "reason": "thread_cap",
-        "times_deferred": 2
-      },
-      "last_activity": null,
+      "first_read_at": "2026-11-24T01:10:21Z",
+      "gap_reasons": [],
+      "last_activity": 1795289771,
+      "last_read_at": "2026-11-24T01:10:21Z",
       "staff": false,
       "title": "Issue with G-SYNC and Frame Generation in Driver Version 591.74",
       "title_versions": [
         "591.74"
       ],
-      "window": []
+      "total_rows": 19,
+      "window": [
+        [
+          3635058,
+          1795289771
+        ],
+        [
+          3614401,
+          1782290531
+        ],
+        [
+          3612511,
+          1780788288
+        ],
+        [
+          3612450,
+          1780747035
+        ],
+        [
+          3611535,
+          1780085548
+        ],
+        [
+          3609396,
+          1778775765
+        ],
+        [
+          3609393,
+          1778774695
+        ],
+        [
+          3609390,
+          1778773623
+        ],
+        [
+          3609389,
+          1778773553
+        ],
+        [
+          3609376,
+          1778772131
+        ],
+        [
+          3597154,
+          1772582959
+        ],
+        [
+          3594781,
+          1771712115
+        ],
+        [
+          3592099,
+          1770270005
+        ],
+        [
+          3590338,
+          1769689646
+        ],
+        [
+          3590333,
+          1769687780
+        ],
+        [
+          3588547,
+          1768940850
+        ],
+        [
+          3588482,
+          1768919511
+        ],
+        [
+          3587643,
+          1768549023
+        ],
+        [
+          3587314,
+          1768428759
+        ]
+      ]
     },
     "586563": {
       "community_id": 39,
@@ -43,7 +121,7 @@
         "first_deferred_at": "2026-11-23T08:59:25Z",
         "queued_at": "2026-11-23T08:59:25Z",
         "reason": "thread_cap",
-        "times_deferred": 1
+        "times_deferred": 2
       },
       "first_read_at": "2026-11-22T20:46:51Z",
       "gap_reasons": [],
@@ -71,6 +149,12 @@
       "community_slug": "studio-drivers",
       "coverage": [],
       "created": 1785317555,
+      "deferred": {
+        "first_deferred_at": "2026-11-24T01:09:48Z",
+        "queued_at": "2026-11-24T01:09:48Z",
+        "reason": "thread_cap",
+        "times_deferred": 1
+      },
       "first_read_at": "2026-11-23T08:59:53Z",
       "gap_reasons": [],
       "last_activity": 1791590772,
@@ -101,7 +185,7 @@
         "first_deferred_at": "2026-11-23T08:59:25Z",
         "queued_at": "2026-11-23T08:59:25Z",
         "reason": "thread_cap",
-        "times_deferred": 1
+        "times_deferred": 2
       },
       "first_read_at": "2026-11-22T20:46:43Z",
       "gap_reasons": [],
@@ -132,12 +216,6 @@
         "replies_not_embedded"
       ],
       "created": 1788958802,
-      "deferred": {
-        "first_deferred_at": "2026-11-22T20:45:50Z",
-        "queued_at": "2026-11-22T20:45:50Z",
-        "reason": "thread_cap",
-        "times_deferred": 2
-      },
       "first_read_at": "2026-11-20T21:29:33Z",
       "gap_reasons": [],
       "last_activity": 1795144982,
@@ -256,12 +334,6 @@
       "community_slug": "studio-drivers",
       "coverage": [],
       "created": 1789060987,
-      "deferred": {
-        "first_deferred_at": "2026-11-23T08:59:25Z",
-        "queued_at": "2026-11-23T08:59:25Z",
-        "reason": "thread_cap",
-        "times_deferred": 1
-      },
       "first_read_at": "2026-11-22T20:46:19Z",
       "gap_reasons": [],
       "last_activity": 1795379979,
@@ -287,6 +359,24 @@
         ]
       ]
     },
+    "590759": {
+      "community_id": 39,
+      "community_slug": "studio-drivers",
+      "created": 1789403037,
+      "deferred": {
+        "first_deferred_at": "2026-11-24T01:09:48Z",
+        "queued_at": "2026-11-24T01:09:48Z",
+        "reason": "thread_cap",
+        "times_deferred": 1
+      },
+      "last_activity": null,
+      "staff": false,
+      "title": "DisplayPort No Signal / Black Screen after Sleep Mode (NVIDIA Driver 616.92)",
+      "title_versions": [
+        "616.92"
+      ],
+      "window": []
+    },
     "591981": {
       "community_id": 13,
       "community_slug": "game-ready-drivers",
@@ -295,6 +385,12 @@
         "replies_not_embedded"
       ],
       "created": 1792587602,
+      "deferred": {
+        "first_deferred_at": "2026-11-24T01:09:48Z",
+        "queued_at": "2026-11-24T01:09:48Z",
+        "reason": "thread_cap",
+        "times_deferred": 1
+      },
       "first_read_at": "2026-11-20T21:29:25Z",
       "gap_reasons": [],
       "last_activity": 1795191770,
@@ -415,6 +511,12 @@
         "older_comments_outside_window"
       ],
       "created": 1793800802,
+      "deferred": {
+        "first_deferred_at": "2026-11-24T01:09:48Z",
+        "queued_at": "2026-11-24T01:09:48Z",
+        "reason": "thread_cap",
+        "times_deferred": 1
+      },
       "first_read_at": "2026-11-19T21:42:45Z",
       "gap_reasons": [],
       "last_activity": 1795296038,
@@ -533,12 +635,6 @@
       "community_slug": "game-ready-drivers",
       "coverage": [],
       "created": 1793807775,
-      "deferred": {
-        "first_deferred_at": "2026-11-22T20:45:50Z",
-        "queued_at": "2026-11-22T20:45:50Z",
-        "reason": "thread_cap",
-        "times_deferred": 2
-      },
       "first_read_at": "2026-11-21T20:35:34Z",
       "gap_reasons": [],
       "last_activity": 1795265450,
@@ -591,6 +687,12 @@
         "older_comments_outside_window"
       ],
       "created": 1794493802,
+      "deferred": {
+        "first_deferred_at": "2026-11-24T01:09:48Z",
+        "queued_at": "2026-11-24T01:09:48Z",
+        "reason": "thread_cap",
+        "times_deferred": 1
+      },
       "first_read_at": "2026-11-19T21:42:37Z",
       "gap_reasons": [
         "no_overlap_and_previous_newest_gone"
@@ -713,12 +815,6 @@
         "replies_not_embedded"
       ],
       "created": 1794605793,
-      "deferred": {
-        "first_deferred_at": "2026-11-23T08:59:25Z",
-        "queued_at": "2026-11-23T08:59:25Z",
-        "reason": "thread_cap",
-        "times_deferred": 1
-      },
       "first_read_at": "2026-11-19T21:42:53Z",
       "gap_reasons": [],
       "last_activity": 1795321393,
@@ -864,7 +960,7 @@
         "first_deferred_at": "2026-11-23T08:59:25Z",
         "queued_at": "2026-11-23T08:59:25Z",
         "reason": "thread_cap",
-        "times_deferred": 1
+        "times_deferred": 2
       },
       "first_read_at": "2026-11-22T20:46:35Z",
       "gap_reasons": [],
