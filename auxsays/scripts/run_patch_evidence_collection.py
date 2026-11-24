@@ -148,6 +148,20 @@ def comfyui_consensus_enabled(env: dict[str, str] | None = None) -> bool:
     return str(source.get(COMFYUI_CONSENSUS_ENABLE_ENV, "")).strip().lower() == "true"
 
 
+# Elgato Stream Deck community evidence from Elgato's own public GitHub issue tracker. STAGED through
+# the vendor-onboarding playbook (scripts/onboard_vendor.py): default off, and no workflow sets the
+# flag. Activation is a separate, reviewed change (the playbook lists what it still needs).
+ELGATO_STREAM_DECK_PRODUCT_ID = "elgato-stream-deck"
+ELGATO_STREAM_DECK_ENABLE_ENV = "AUXSAYS_ENABLE_ELGATO_STREAM_DECK_CONSENSUS"
+
+
+def elgato_stream_deck_enabled(env: dict[str, str] | None = None) -> bool:
+    """Deterministic default-off gate for the staged Elgato Stream Deck collector. Explicit
+    true-only, the same shape as every other gated collector."""
+    source = os.environ if env is None else env
+    return str(source.get(ELGATO_STREAM_DECK_ENABLE_ENV, "")).strip().lower() == "true"
+
+
 def nvidia_forum_enabled(env: dict[str, str] | None = None) -> bool:
     """Deterministic default-off gate for registering the NVIDIA forum collector (both families).
 
@@ -211,6 +225,9 @@ def build_collectors(env: dict[str, str] | None = None) -> dict[str, Any]:
         from patch_collectors.nvidia_forum import NvidiaForumCollector
         for pid in NVIDIA_FORUM_PRODUCT_IDS:
             collectors[pid] = lambda p=pid: NvidiaForumCollector(p)
+    if elgato_stream_deck_enabled(env):
+        from patch_collectors.elgato_stream_deck import ElgatoStreamDeckCollector
+        collectors[ELGATO_STREAM_DECK_PRODUCT_ID] = ElgatoStreamDeckCollector
     # NO DOUBLE COLLECTION. A product driven by the orchestration graph is REMOVED from this
     # registry, so the legacy path cannot also collect it in the same run. Enforcing it here rather
     # than by workflow discipline means there is exactly one authoritative execution path per

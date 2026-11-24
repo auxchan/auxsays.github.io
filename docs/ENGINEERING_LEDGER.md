@@ -126,6 +126,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-063 | Resolved | Evidence acceptance | Medium | The Windows authority can attribute a report to the patch whose build is only the reporter's baseline — closed by AUX-067 for the thread-50506 shape |
 | AUX-081 | Resolved | Collector telemetry | High | A new patch's never-run Reddit policy row had no last_run, and the validator refused every writeback for every product |
 | AUX-117 | Resolved | Collector telemetry | Medium | DaVinci kept asking a forum that refuses automated requests, and its blocked rows hid a one-source shortfall; PowerPoint's hydration cap left no trace |
+| AUX-134 | Resolved | Collector telemetry | Medium | Method health and the method registry were two unjoined lists; nothing re-tested a switched-off source; DaVinci re-fetched one forum for every record |
 | AUX-067 | Resolved | Evidence acceptance | High | A Windows report whose title is about another update counted against the build it merely quoted |
 | AUX-068 | Resolved | Observability | Low | PowerPoint Learn Q&A health rows said `fetches=200` and nothing about the 200 ceiling, thread population or exhaustion |
 | AUX-087 | Open | Coverage | Medium | Premiere Pro releases after 26.2.2 are not discovered: the lane has no release discovery, and HelpX refuses CI |
@@ -346,6 +347,43 @@ ingestion config naming support.microsoft.com passes validation; a printing writ
 source link, or the link line carries article text.
 
 ---
+
+### AUX-134 — Method health and the method registry were two unjoined lists; nothing re-tested a switched-off source; DaVinci re-fetched one forum for every record
+
+- **Status** Resolved · **Area** Collector telemetry · **Severity** Medium
+- **First seen** 2026-11-23 (governance audit, registry gaps G1-G6) · **Resolved** 2026-11-24
+
+**Symptom**
+1. Four method ids wrote health rows with no registry entry (`creative_cow_forum_search`, `known_watchlist`,
+   `vendor_forum_search`, `web_search`: 512 of 1,994 rows), and nothing compared the two lists. Evidence rows did not
+   say which method found them. Community health rows had no last-known-good time, cost or rejection reasons.
+2. Method order was fixed in code. A method switched off because its source refused requests stayed off until a
+   person noticed the source had recovered; nothing re-tested it.
+3. DaVinci's Creative COW method fetched the board listing and up to 25 threads again for every one of 123 records
+   (up to about 3,690 requests a run). The forum answered HTTP 429 and the newest records, walked first, were the
+   ones refused (10 of the 18 newest rows `blocked` on 2026-11-24).
+
+**Fix**
+1. `base.upsert_method_health` carries optional history on the row a method already owns (attempts, last good, last
+   accepted, failure and zero-accept streaks; cost and rejection reasons when a collector measured them). An absent
+   field means not measured. `append_evidence_rows(method_health=...)` stamps `discovery_method_id` on NEW rows only
+   when exactly one method can have found the row. The registry catalogues the four ids, says where every method
+   reports (`telemetry_store`), and the registry test fails if either side of the join drifts (R24-R29).
+2. `method_routing.order_methods` orders a role's methods from stored history (declared order with no history);
+   a fallback chain is bounded by declaration. `reprobe_methods.py`, run before collection, re-tests a switched-off
+   method the registry's policy allows: robots.txt first, two requests at most, a week between probes doubling to 30
+   days, four requests a run. Reddit, Microsoft Learn Q&A, Adobe and the paid search API are refused by a floor that
+   is evaluated before any declaration. A `recovered` record returns the method as a fallback; its own rows keep it.
+3. The Creative COW pass is made once per collector run and shared by every record.
+4. `onboard_vendor.py` is the onboarding sequence as nine checked steps; exercised on Elgato Stream Deck (staged).
+
+**Proof** `test_adaptive_method_routing.py` (two opposite histories through the real graph store identical accepted
+evidence), `test_method_reprobe.py` (simulated source), `test_vendor_onboarding_playbook.py`,
+`test_acquisition_method_registry.py` R24-R34.
+
+**Reopen only if** a health row names a method the registry lacks; a probe record exists for Reddit, Microsoft
+Learn Q&A, Adobe or the paid search API; a re-probed source receives more than two requests in one run; or two
+method orders store different accepted evidence for the same candidates.
 
 ### AUX-117 — DaVinci kept asking a forum that refuses automated requests, and its blocked rows hid a one-source shortfall; PowerPoint's hydration cap left no trace
 

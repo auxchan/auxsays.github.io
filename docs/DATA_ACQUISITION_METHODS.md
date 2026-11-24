@@ -41,6 +41,34 @@ widening how we look never widens what counts. The validator refuses any entry t
 
 ---
 
+## The join with runtime health, and what adapts
+
+The registry is a catalogue, but three things now connect it to what runs. None of them changes what
+counts as an accepted report: every method's candidates pass the same acceptance gates.
+
+**Where a method reports.** `telemetry_store(method_id)` answers `method_health` (its own rows in
+`_data/evidence_method_health.yml`), `parent:<id>` (a step counted in another method's rows),
+`ingest_state` (the official lane), `workflow_artifact` (a dispatch-only probe) or `none` (it does
+not run). The registry test fails if a health row names an uncatalogued method, if a declared
+reporter has no rows, or if an `active` method reports nowhere.
+
+**What a health row remembers.** `attempts`, `last_good_at`, `last_accepted_at`,
+`consecutive_failures`, `consecutive_zero_accept_runs` are carried by the writer; `duration_ms`,
+`requests` and `rejection_reasons` are stored when the collector measured them. All optional: an
+absent field means not measured. New evidence rows carry `discovery_method_id` when exactly one
+method can have found them.
+
+**What routing does with it.** `method_routing.order_methods` tries the most recently productive
+method first and a method whose last pass was refused last; with no history it is the declared order.
+`reprobe_methods.py` re-tests a switched-off method on a bounded cadence when `reprobe_refusal`
+allows it. Closed by the floor, whatever is declared: Reddit, Microsoft Learn Q&A, Adobe, the paid
+search API, and any method with a recorded `rights_status`. Open today: `vendor_forum_search` only.
+
+**Adding a vendor.** `python auxsays/scripts/onboard_vendor.py --product-id <id>` runs the sequence
+as nine checked steps and stops before activation.
+
+---
+
 ## The families
 
 21 families, 66 concrete implementations. Counts are generated from the registry.

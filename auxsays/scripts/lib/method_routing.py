@@ -128,6 +128,10 @@ METHOD_PLANS: dict[str, dict[str, Any]] = {
     #                        re-probe step re-tests (weekly at most, two requests at most). If the
     #                        forum answers again, `effective_plan` returns it as a fallback and the
     #                        collector runs it; its own fresh row is what keeps it in service.
+    # Elgato Stream Deck: STAGED through the vendor-onboarding playbook, not collected in
+    # production (its collector is default-off). One primary and no fallback, by design: the other
+    # public Stream Deck communities are Reddit (closed by access policy) and a chat server.
+    "elgato-stream-deck": {"primary": ["github_issues"]},
     "blackmagic-davinci": {
         "primary": ["creative_cow_forum_search"],
         "fallback_when": ["no_accepted_reports", "blocked", "broken"],

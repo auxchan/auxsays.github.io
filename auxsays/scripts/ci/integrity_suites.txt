@@ -683,7 +683,16 @@ auxsays/scripts/tests/test_official_notes_known_issue.py = 61
 auxsays/scripts/tests/test_transcoded_text_repair.py = 10
 auxsays/scripts/tests/test_reader_evidence_identity.py = 17
 auxsays/scripts/tests/test_report_count_reconciliation.py = 17
-auxsays/scripts/tests/test_acquisition_method_registry.py = 31
+auxsays/scripts/tests/test_acquisition_method_registry.py = 42
+# Adaptive collection. Health telemetry is joined to the method registry (R24-R34 above), method
+# order comes from stored history, switched-off sources are re-probed within hard bounds, and a
+# vendor is onboarded by an executable playbook. test_adaptive_method_routing runs two opposite
+# histories through the real graph and requires identical accepted evidence; test_method_reprobe
+# drives the probe against a simulated source and proves a closed source is never asked;
+# test_vendor_onboarding_playbook drives every playbook step to a failure.
+auxsays/scripts/tests/test_adaptive_method_routing.py = 55
+auxsays/scripts/tests/test_method_reprobe.py = 61
+auxsays/scripts/tests/test_vendor_onboarding_playbook.py = 54
 auxsays/scripts/tests/test_teams_record_cleanup.py = 9
 auxsays/scripts/tests/test_transactional_writeback.py = 10
 auxsays/scripts/tests/test_validate_evidence_method_health.py = 13
