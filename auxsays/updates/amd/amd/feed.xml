@@ -1,0 +1,8 @@
+---
+layout: aux-patch-atom
+feed_product_id: amd
+feed_alternate: /updates/amd/amd/
+feed_limit: 20
+permalink: /updates/amd/amd/feed.xml
+sitemap: false
+---

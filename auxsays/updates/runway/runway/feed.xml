@@ -1,0 +1,8 @@
+---
+layout: aux-patch-atom
+feed_product_id: runway
+feed_alternate: /updates/runway/runway/
+feed_limit: 20
+permalink: /updates/runway/runway/feed.xml
+sitemap: false
+---

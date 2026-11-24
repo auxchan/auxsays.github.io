@@ -1,0 +1,8 @@
+---
+layout: aux-patch-atom
+feed_product_id: microsoft-windows-11
+feed_alternate: /updates/microsoft/microsoft-windows-11/
+feed_limit: 20
+permalink: /updates/microsoft/microsoft-windows-11/feed.xml
+sitemap: false
+---

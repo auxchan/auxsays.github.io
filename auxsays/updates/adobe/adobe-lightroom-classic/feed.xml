@@ -1,0 +1,8 @@
+---
+layout: aux-patch-atom
+feed_product_id: adobe-lightroom-classic
+feed_alternate: /updates/adobe/adobe-lightroom-classic/
+feed_limit: 20
+permalink: /updates/adobe/adobe-lightroom-classic/feed.xml
+sitemap: false
+---

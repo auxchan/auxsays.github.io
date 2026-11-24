@@ -1,0 +1,8 @@
+---
+layout: aux-patch-atom
+feed_product_id: microsoft-365-apps
+feed_alternate: /updates/microsoft/microsoft-365-apps/
+feed_limit: 20
+permalink: /updates/microsoft/microsoft-365-apps/feed.xml
+sitemap: false
+---

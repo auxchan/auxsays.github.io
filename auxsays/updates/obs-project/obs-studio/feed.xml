@@ -1,0 +1,8 @@
+---
+layout: aux-patch-atom
+feed_product_id: obs-studio
+feed_alternate: /updates/obs-project/obs-studio/
+feed_limit: 20
+permalink: /updates/obs-project/obs-studio/feed.xml
+sitemap: false
+---

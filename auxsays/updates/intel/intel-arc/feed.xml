@@ -1,0 +1,8 @@
+---
+layout: aux-patch-atom
+feed_product_id: intel-arc
+feed_alternate: /updates/intel/intel-arc/
+feed_limit: 20
+permalink: /updates/intel/intel-arc/feed.xml
+sitemap: false
+---

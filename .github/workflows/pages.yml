@@ -27,6 +27,8 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      indexnow_payload: ${{ steps.indexnow_plan.outputs.payload }}
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -252,6 +254,18 @@ jobs:
       - name: Verify coverage claims agree with the coverage projection
         run: python auxsays/scripts/ci/verify_coverage_claims.py --site auxsays/_site
 
+      # P8: which pages changed in THIS deploy, for the IndexNow ping at the end of the deploy job. The
+      # built sitemap against the live one (a patch page's lastmod is its record_last_updated): a URL is
+      # sent when it is new or its stored date moved, newest first, at most 500. It only reads; it always
+      # exits 0, and on any refusal (live sitemap unreadable or empty, no key file, nothing changed) its
+      # output is empty and nothing is sent. scripts/tests/test_indexnow_ping.py runs it.
+      - name: Plan the IndexNow ping (changed pages only)
+        id: indexnow_plan
+        if: github.ref == 'refs/heads/main'
+        continue-on-error: true
+        timeout-minutes: 3
+        run: python auxsays/scripts/ci/indexnow_plan.py --site auxsays/_site --github-output "$GITHUB_OUTPUT"
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5
         with:
@@ -289,3 +303,27 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
+
+      # P8: tell IndexNow (Bing and the engines that share it) which pages changed, ONLY after the deploy
+      # above succeeded, with the list the build job planned (at most 500 URLs; none planned, nothing
+      # sent). Fail soft: a refused, failed or timed-out request is a warning in this log and never fails
+      # the deploy. No secret: the key is public by design and served at the site root.
+      - name: Tell IndexNow which pages changed
+        if: success() && github.ref == 'refs/heads/main'
+        continue-on-error: true
+        timeout-minutes: 2
+        env:
+          PAYLOAD: ${{ needs.build.outputs.indexnow_payload }}
+        run: |
+          if [ -z "${PAYLOAD}" ]; then
+            echo "IndexNow: no changed pages were planned for this deploy; nothing sent."
+            exit 0
+          fi
+          status=$(curl --silent --show-error --output /dev/null --write-out '%{http_code}' --max-time 30 \
+            --header 'Content-Type: application/json; charset=utf-8' --data "${PAYLOAD}" \
+            https://api.indexnow.org/indexnow) || status="no response"
+          case "${status}" in
+            200|202) echo "IndexNow accepted the changed pages (HTTP ${status})." ;;
+            *) echo "::warning::IndexNow did not accept the changed pages (${status}). The deploy is unaffected." ;;
+          esac
+          exit 0

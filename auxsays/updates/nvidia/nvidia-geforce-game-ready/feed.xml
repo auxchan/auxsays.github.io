@@ -1,0 +1,8 @@
+---
+layout: aux-patch-atom
+feed_product_id: nvidia-geforce-game-ready
+feed_alternate: /updates/nvidia/nvidia-geforce-game-ready/
+feed_limit: 20
+permalink: /updates/nvidia/nvidia-geforce-game-ready/feed.xml
+sitemap: false
+---

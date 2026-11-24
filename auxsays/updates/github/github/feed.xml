@@ -1,0 +1,8 @@
+---
+layout: aux-patch-atom
+feed_product_id: github
+feed_alternate: /updates/github/github/
+feed_limit: 20
+permalink: /updates/github/github/feed.xml
+sitemap: false
+---
