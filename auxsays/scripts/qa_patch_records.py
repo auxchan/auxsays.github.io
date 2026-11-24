@@ -388,6 +388,13 @@ def scan_verdict_policy(files: list[Path]) -> tuple[list[dict[str, str]], list[d
         switch is on), because the writers gather reasons as the projection does (G35-04 review 1,
         LOW-4; closed by AUX-099).
       * patch_lifecycle_unmatched -- a lifecycle entry no record carries.
+      * volume_wait_withheld_report_facts (AUX-134, review round 1 F4) -- a page at the assessment trigger
+        whose ONLY limit is counted rows without a readable structured evidence fact
+        (patch_decision.facts_withheld_volume): the volume-based WAIT is off that page until the facts
+        migration runs. A WARNING like verdict_reason_unsupported, and for the same reason: the page has
+        already fallen back to a true, more modest statement and names the limit, so there is nothing false
+        to keep off the site, while an error here would stop every product's writeback and deploy over a
+        store-hygiene gap one command repairs. It names the PAGE; `evidence_facts_*` names the rows.
     """
     errors: list[dict[str, str]] = []
     warnings: list[dict[str, str]] = []
@@ -457,6 +464,13 @@ def scan_verdict_policy(files: list[Path]) -> tuple[list[dict[str, str]], list[d
         want = patch_decision.decide(data, valid_reasons=valid.get(verdict_reasons.record_identity(data), []),
                                      lifecycle=lifecycle,
                                      counted_rows=groups.get(verdict_reasons.record_identity(data), []))
+        factless = patch_decision.facts_withheld_volume(want)
+        if factless:
+            add(warnings, path, "volume_wait_withheld_report_facts",
+                f"{factless} of this page's {want.assessment.reports} counted reports carry no readable "
+                "structured evidence fact, and that alone keeps the volume-based WAIT off it: the page prints "
+                f"{patch_decision.verdict_phrase(want)!r} and names the missing facts as its limiting evidence. "
+                "Run migrate_evidence_facts.py --write before the deploy; the WAIT returns on the next build.")
         got_verdict, got_scope = verdict_projection.rendered_verdict(data, rows, lifecycle)
         got_row, want_row = rows.get(key), want_rows.get(key)
         if (got_verdict, got_scope) != (want.verdict, want.scope):
@@ -1040,7 +1054,7 @@ def scan_evidence_overview(files: list[Path], publish_strict: bool = False
     groups = counted_evidence_rows(load_evidence_rows(), windows_targets=windows_targets_from_front_matter(fronts))
     verdict, _unsupported = verdict_projection.project(fronts, groups, reasons, lifecycle)
     expected = evidence_overview.project(fronts, groups, verdict["pages"], reasons, reviewed if not problems else {},
-                                         evidence_overview.split_products_from(ROOT))
+                                         evidence_overview.split_products_from(ROOT), lifecycle=lifecycle)
     want = expected["pages"]
 
     try:
@@ -1096,6 +1110,21 @@ def scan_evidence_overview(files: list[Path], publish_strict: bool = False
             add(warnings, key, "evidence_overview_wait_next_action_mismatch",
                 f"the page prints WAIT and {problem}; the reader would be pointed somewhere the source facts do "
                 "not support. Rebuild the evidence overview projection from this tree before QA and Jekyll.")
+
+    # AUX-134: the provisional risk assessment is MANDATORY on every page whose counted reports reach the
+    # trigger, and it is the page's own decision restated: read from what the page will render (the deploy's
+    # overview row beside the deploy's verdict row), a page at the trigger with no printable assessment, or one
+    # whose assessment names another verdict than the gate prints, is a publication error. Checked only where a
+    # deploy built both projections (no overview on disk prints nothing at all, reported above).
+    if disk is not None and not disk.get("error") and verdict_disk is not None:
+        for data in fronts:
+            key = verdict_projection.page_key(data)
+            count = len(groups.get(verdict_reasons.record_identity(data), []))
+            for problem in evidence_overview.assessment_problems(
+                    rendered_overview.get(key), verdict_projection.printed_row(data, printed_rows), count):
+                add(warnings, key, "evidence_overview_assessment_mismatch",
+                    f"the page {problem}. Rebuild the verdict and evidence overview projections from this tree "
+                    "before QA and Jekyll.")
 
     guard_bucket = errors if publish_strict else warnings
     for data in fronts:
@@ -1445,10 +1474,11 @@ def scan_evidence_facts(rows: list[Any]) -> list[dict[str, str]]:
     what its own text gives under the current rules. One warning per problem kind, with the count and
     the first rows; the remedy is the zero-network migration (migrate_evidence_facts.py --write).
 
-    A WARNING, not an error. No page reads a fact directly yet. The one reader, the distinct-reporter
-    rule of a reviewed verdict reason (lib.verdict_reasons), already refuses a cited row without a
-    usable fact, so a reasoned verdict falls back instead of resting on it, and `verdict_reason_unsupported`
-    names that entry. This finding names the rows."""
+    A WARNING, not an error. Two rules read a fact, and both fail closed on a row without a usable one: the
+    distinct-reporter rule of a reviewed verdict reason (lib.verdict_reasons), so a reasoned verdict falls
+    back instead of resting on it and `verdict_reason_unsupported` names that entry; and, since AUX-134, the
+    separate-report condition of the volume-based WAIT (lib.patch_decision.independent_reports), so that WAIT
+    comes off the page and `volume_wait_withheld_report_facts` names that page. This finding names the rows."""
     warnings: list[dict[str, str]] = []
     found = evidence_facts.store_fact_problems(rows)
     for code in sorted(found):
@@ -1694,7 +1724,10 @@ PUBLICATION_BLOCKING_CODES = frozenset({"record_names_conflicting_actions",
                                         # G87 (AUX-127): a page that prints WAIT with no next action, or
                                         # with a way forward the source facts do not give (A3 item 2).
                                         "evidence_overview_wait_without_next_action",
-                                        "evidence_overview_wait_next_action_mismatch"})
+                                        "evidence_overview_wait_next_action_mismatch",
+                                        # AUX-134: a page at the assessment trigger with no printable
+                                        # risk assessment, or one that names another verdict than the gate.
+                                        "evidence_overview_assessment_mismatch"})
 
 
 def promote_for_publication(

@@ -130,8 +130,11 @@ def captured():
 # ---------------------------------------------------------------- generation helpers
 
 def evidence_row(pid: str, version: str, n: int, *, sentiment: str = "negative") -> dict:
-    """One row shaped like the live corpus, passing every gate in acr._filter_rows."""
-    return {
+    """One row shaped like the live corpus, passing every gate in acr._filter_rows: its own excerpt, and the
+    structured facts every stored row carries (AUX-134: the volume-based WAIT needs separate reports, read from
+    the stored duplicate-group fact; rows with one shared excerpt, or none of the facts, are not thirty reports)."""
+    from lib import evidence_facts  # noqa: PLC0415
+    return evidence_facts.with_facts({
         "id": f"{pid}-{version}-row-{n}",
         "product_id": pid,
         "update_version": version,
@@ -139,7 +142,7 @@ def evidence_row(pid: str, version: str, n: int, *, sentiment: str = "negative")
         "source_name": "Community Forum",
         "source_url": f"https://forum.example.invalid/{pid}/{version}/{n}",
         "report_title": f"{version} issue {n}",
-        "report_text_excerpt": f"User-verified report describing an issue on {version}.",
+        "report_text_excerpt": f"User-verified report {n} describing an issue on {version}.",
         "captured_at": "2026-09-01T00:00:00Z",
         "patch_version_matched": True,
         "matched_version": version,
@@ -148,7 +151,7 @@ def evidence_row(pid: str, version: str, n: int, *, sentiment: str = "negative")
         "severity": "high",
         "sentiment": sentiment,
         "source_weight": 1,
-    }
+    })
 
 
 def proposed(pid: str, version: str, *, sentiment: str = "negative", count: int = 15,

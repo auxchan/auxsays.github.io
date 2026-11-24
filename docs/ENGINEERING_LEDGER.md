@@ -107,6 +107,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-099 | Deferred | Verdict policy | Medium | The reason producer counted unknown accounts as independent reporters and had no record of what it would have published (repaired; shadow operation; public activation OFF) |
 | AUX-124 | Resolved | Verdict policy | Medium | Automatically drafted verdict reasons skipped the checks a reviewed reason meets, and a true official confirmation could take away a Windows entry's support |
 | AUX-127 | Resolved | Verdict policy | High | Pages with 30 or more accepted problem reports said INSUFFICIENT DATA, and a report posted before its release was counted |
+| AUX-134 | Open | Verdict policy | High | Thirty accepted reports give WAIT on the count alone and nothing said on what basis; the basis and each limit are now published, the WAIT itself is unchanged (owner decision pending) |
 | AUX-132 | Resolved | Published claims | Medium | A reviewed problem's "fixed in" line printed straight after a note naming a different, newer release, where it read as a recommendation of that release |
 | AUX-065 | Resolved | Coverage | Medium | DaVinci Resolve versions never archived, so routine collection spent its whole budget on releases nobody installs |
 | AUX-075 | Resolved | CI governance | Medium | The DaVinci archive build check asserted the one-time migration, so it failed on every pull request after it ran |
@@ -463,6 +464,72 @@ current main with `--expected-store-sha256`.
 **Reopen only if** either row stops counting without its own audited withdrawal, a row is re-admitted without two
 CORRECT labels from two adjudicators, 25.001.21111 counts before its context is recovered through an authorised
 procedure, or a replay of the veto over stored rows flags a counted row this manifest does not name.
+
+---
+
+### AUX-134 — Thirty accepted reports give WAIT on the count alone and nothing said on what basis; the basis and each limit are now published, the WAIT itself is unchanged (owner decision pending)
+
+- **Status** Open · **Area** Verdict policy · **Severity** High
+- **First seen** 2026-11-23 (owner order: the report count is a trigger to assess) · **Explanation layer** 2026-11-23; the order itself is not yet met (owner decisions D1 and D2 pending)
+
+**Symptom** AUX-127 gave a page WAIT as soon as it held 30 accepted reports on 30 report links, on a maintained
+product. Nothing was assessed and nothing was published about why: the same sentence stood on a page with a reviewed
+regression and on a page with none. Three DaVinci Resolve pages with 32 to 73 accepted reports stayed INSUFFICIENT
+DATA with the generic line, because their product is outside the maintained set, and no page said so. Thirty rows
+carrying one identical stored text would also have counted as thirty reports.
+
+**The owner's order (2026-11-23), and what this change does about it** The order: the count is a trigger to assess,
+not an automatic WAIT or AVOID and not an estimate of how often installations fail. This change does NOT yet meet
+it. At 30 counted separate reports on a maintained product with no limiting fact the result is still the
+owner-approved volume-based WAIT of 2026-11-22 (AUX-127), reached on the count alone: no assessed dimension can
+move the verdict word. What changes is that the basis of that WAIT, and the limit on every page that does not get
+it, are now published, and that one new condition can remove the WAIT (never add one). Whether the volume-based
+WAIT stays where no cause is confirmed is owner decision D1, pending. The AUX-127 rule is not replaced.
+
+**Fix** One authority, extended (`lib/patch_decision`):
+- `assess` runs at 30 counted reports for EVERY product and whatever the verdict turns out to be. `decide` routes the
+  count through it and returns its result with a basis and its limits (`Decision.assessment`). The assessment's result
+  is always the verdict the page prints.
+- It reads only stored facts something already validates: the canonical counted population, the supported reviewed
+  reasons, the two official facts that outrank everything, the vendor's own known-issue declaration for the exact
+  release, and one NEW condition: at least 30 SEPARATE reports by the stored duplicate-group fact (AUX-119's
+  structured facts). Rows with one stored excerpt are one reporter; a row with an empty stored excerpt stands on
+  its report link (one rule for every mix, review round 1); a row whose fact is unavailable fails closed, and QA
+  names the page that loses its WAIT that way (`volume_wait_withheld_report_facts`, a warning).
+- A volume WAIT now states its basis: the volume alone with no cause confirmed, a reviewed finding as well, or a
+  vendor-documented known issue as well. With any limit the count adds nothing: the reviewed outcome stands, or the
+  page stays INSUFFICIENT DATA and names the limit in one sentence per limit.
+- Severity and data loss, recurring problems, affected setups beyond a reviewed scope, and positive outcomes have no
+  validated stored field. The assessment prints "Not established" for each. It never derives them from report text.
+- Collection health, sentiment, maturity, the stored count and the clock are still not inputs.
+
+`lib/evidence_overview` (rule `evidence-overview-v4`) carries the published lines in each page's `risk_assessment`,
+adding the three facts one page cannot show: how many of its report links no other tracked version counts, a
+reviewed finding still valid for exactly this population, and where the release stands among its product's releases.
+`_includes/patch-evidence-overview.html` prints them. QA gains the publication-blocking
+`evidence_overview_assessment_mismatch`: a page at the trigger with no printable assessment, an assessment below the
+trigger, or one that names another verdict than the gate prints.
+
+**Effect** Measured on main 1f2047d9: the verdict projection is byte-identical for all 1,616 pages, and no tracked
+record or data file changes. Eleven pages gain the assessment: OBS Studio 32.1.2, 32.2.2, 33.0.1 and 32.1.1 (WAIT,
+with its basis), four Windows 11 monthly security updates (SECURITY UPDATE, the official classification decides)
+and DaVinci Resolve 21, 20.3.2 and 20 (INSUFFICIENT DATA, with the limit named).
+
+**Not done** A WAIT without a confirmed cause is still the result where no limit applies, on the count alone:
+changing that is owner decision D1. DaVinci Resolve stays outside the product set the volume rule covers, and its
+pages say only that (a rule of scope): membership of that set grants the lane the right to delete a record's
+projections at a count of zero, which is unrelated to a page holding thirty reports or more, so the exclusion has
+no remaining technical basis for such a page; granting it is owner decision D2. Links counted for more than one version
+are stated on the page but do not gate the verdict, because two record writers call the authority with one page's
+rows only.
+
+**Proof** `test_contextual_assessment.py` (56 checks): the trigger on any product, every limit named, the three
+bases, official precedence and caution below the trigger, a reviewed population finding, sentiment and collection
+health not inputs, the release context, the public-text guard, the QA error, the shipped Liquid, and the corpus.
+
+**Reopen only if** a page at 30 counted reports prints no assessment, an assessment names another verdict than its
+page, a count alone (with a limit present) produces a verdict, or an assessment line states a rate, a percentage, a
+severity or a theme that no stored validated field supports.
 
 ---
 
@@ -6986,6 +7053,12 @@ inputs, and every other count rule here still stands. Every page that prints WAI
 release with its vendor caution first, the release being archived, no newer release on record, or no
 better-supported alternative established, with the advice to keep a working installation where the verdict box
 does not already give it), and QA blocks a deploy where one is missing or is not the one the source facts give.
+
+**Explanation added (2026-11-23, AUX-134)** The owner ordered that the count be a trigger to assess, not an
+automatic WAIT. AUX-134 does not yet change the rule above: 30 counted separate reports on a maintained product
+with no limiting fact still give this WAIT on the count alone (owner decision D1, pending). It publishes, for every
+product at 30 counted reports, the basis of the result and, where the reports cannot support a recommendation,
+the precise limit, and it adds one condition to the WAIT: 30 separate reports by the stored duplicate-group fact.
 
 **Reopen only if** a page prints WAIT or TEST FIRST without a supported reason entry (other than the AUX-127
 volume-based precaution), any surface prints a WAIT, TEST FIRST or AVOID without its scope (or, for the volume-based
