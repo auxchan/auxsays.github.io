@@ -1118,7 +1118,10 @@ def corpus() -> dict:
 
 
 def slim(r: dict) -> dict:
-    s = {k: r.get(k) for k in ("product_id", "update_version", "target_build", "target_kb", "update_type")}
+    # `update_identity_scope` is a field the gate reads (a release-line page says "this release line"),
+    # so the record the harness hands the gate carries it, as a real page does.
+    s = {k: r.get(k) for k in ("product_id", "update_version", "target_build", "target_kb", "update_type",
+                               "update_identity_scope")}
     s["accepted_report_sources"] = [{"source_url": x.get("source_url")} for x in r.get("accepted_report_sources") or []]
     return s
 

@@ -1,0 +1,8 @@
+---
+layout: aux-patch-atom
+feed_product_id: anthropic-claude
+feed_alternate: /updates/anthropic/anthropic-claude/
+feed_limit: 20
+permalink: /updates/anthropic/anthropic-claude/feed.xml
+sitemap: false
+---

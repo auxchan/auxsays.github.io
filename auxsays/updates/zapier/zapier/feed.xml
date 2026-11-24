@@ -1,0 +1,8 @@
+---
+layout: aux-patch-atom
+feed_product_id: zapier
+feed_alternate: /updates/zapier/zapier/
+feed_limit: 20
+permalink: /updates/zapier/zapier/feed.xml
+sitemap: false
+---

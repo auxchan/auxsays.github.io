@@ -1077,10 +1077,14 @@ def public_body(decision: Decision, record: dict[str, Any] | None, report_count:
         return " ".join(parts)
     if n == 0:
         return ""
+    # A release-line page (a bare version that collects every report naming the line) is not one
+    # exact update, and its reports are matched to the line (lib.davinci_release_line).
+    matched_to = ("this release line" if _text(rec.get("update_identity_scope")) == "release_line"
+                  else "this exact update")
     if n == 1:
-        return ("No verdict yet: one user report is matched to this exact update, and one report does "
+        return (f"No verdict yet: one user report is matched to {matched_to}, and one report does "
                 "not show a pattern. If it matches your setup, test before relying on this update.")
-    return (f"No verdict yet: {n} user reports are matched to this exact update, but no problem in "
+    return (f"No verdict yet: {n} user reports are matched to {matched_to}, but no problem in "
             "them is confirmed as reported independently by two or more users. If one matches your "
             "setup, test before relying on this update.")
 

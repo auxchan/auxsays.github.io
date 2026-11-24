@@ -127,6 +127,28 @@ jobs:
             python auxsays/scripts/patch_ingest.py --source "${{ github.event.inputs.source }}"
           fi
 
+      # THE BACKFILL QUEUE'S EXECUTOR IS THE STEP ABOVE; THIS READS ITS RESULT BACK.
+      #
+      # _data/patch_backfill_queue.yml held 36 `queued` rows nothing read or wrote, six of them for
+      # products this lane had already written 1,156 records for. Ingestion is the bounded, resumable
+      # executor (at most record_limit new records per source per run, the rest deferred to the next
+      # run); what was missing is the write that records the outcome. Zero network: it counts the
+      # records on disk and reads this run's ingest state, then sets each row to complete, queued
+      # (enabled source, worked on every run, with the blocker the lane's own health reports) or
+      # blocked (the source is switched off, so no run can execute the row). It enables nothing.
+      #
+      # After ingestion so it sees this run's records and state; before QA and the writeback, which
+      # commits the file through the --allow entry below.
+      #
+      # --fail-soft: this is bookkeeping in front of the lane's only writeback, which needs
+      # success(). A crash here (an unreadable state value) must not discard the records this run
+      # ingested: the failure is an ::error annotation and a line in the job summary, the queue
+      # file is left as it was, and the run goes on.
+      - name: Read the ingestion result back into the backfill queue
+        id: backfill_queue
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: python auxsays/scripts/execute_backfill_queue.py --queue auxsays/_data/patch_backfill_queue.yml --write --fail-soft
+
 
       # THE LANE THAT ADVANCES A PATCH IDENTITY MUST REPAIR THE DRIFT IT CREATES.
       #
@@ -246,6 +268,7 @@ jobs:
           python auxsays/scripts/lib/automation_writeback.py \
             --message "Ingest official patch records" \
             --allow auxsays/_data/patch_ingest_state.json \
+            --allow auxsays/_data/patch_backfill_queue.yml \
             --allow auxsays/updates/generated \
             --allow 'auxsays/updates/microsoft/microsoft-powerpoint/*/index.md' \
             --allow 'auxsays/updates/microsoft/microsoft-windows-11/*/index.md' \
@@ -278,3 +301,13 @@ jobs:
       - name: Mark dry run as unchanged
         if: ${{ github.event.inputs.dry_run == 'true' }}
         run: echo "Dry run complete; no commit or deploy will be performed."
+
+      # The backfill read-back is fail-soft so its own crash cannot discard this run's records: it
+      # exits 0 and writes status=failed. Read here, AFTER the writeback and the cycle record, so the
+      # records are committed and the reaper sees the cycle reached main, and a failure becomes the
+      # run's conclusion (red, and notified) instead of an annotation nobody reads.
+      - name: Fail the run when a fail-soft step failed
+        if: ${{ always() && steps.backfill_queue.outputs.status == 'failed' }}
+        run: |
+          echo "::error::The fail-soft backfill queue read-back failed; the queue file was left as it was and the records writeback was not held back. See that step's log."
+          exit 1

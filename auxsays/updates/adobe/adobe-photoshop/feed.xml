@@ -1,0 +1,8 @@
+---
+layout: aux-patch-atom
+feed_product_id: adobe-photoshop
+feed_alternate: /updates/adobe/adobe-photoshop/
+feed_limit: 20
+permalink: /updates/adobe/adobe-photoshop/feed.xml
+sitemap: false
+---

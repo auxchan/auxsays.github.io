@@ -32,6 +32,7 @@ from patch_collectors.base import (
     atomic_write_text,
 )
 from lib import evidence_facts, live_eligibility, maturity, monitoring_health, verdict_projection, verdict_reasons
+from lib import davinci_release_line
 from lib.log_redaction import log_safe
 from lib.report_counts import EvidenceStoreError, load_evidence_store
 
@@ -71,6 +72,8 @@ CONSENSUS_COHERENCE_FIELDS = {
     "release_summary",
     "practical_recommendations",
     "source_freshness_note",
+    # Whether the page is one exact update or a release line (lib.davinci_release_line).
+    "update_identity_scope",
 }
 
 # POSITIVE collector write authority. An in-collector writeback runs BEFORE
@@ -455,7 +458,7 @@ def _group_rows(rows: list[dict[str, Any]], *, is_candidate_mode: bool) -> dict[
     return groups
 
 
-def _result_for_group(pid: str, ver: str, rows: list[dict[str, Any]], *, is_candidate_mode: bool, records_index: dict[tuple[str, str, str], dict[str, Any]], write_requested: bool = False, build: str = "", live_context: Any = None) -> dict[str, Any]:
+def _result_for_group(pid: str, ver: str, rows: list[dict[str, Any]], *, is_candidate_mode: bool, records_index: dict[tuple[str, str, str], dict[str, Any]], write_requested: bool = False, build: str = "", live_context: Any = None, line_overlaps: dict[str, int] | None = None) -> dict[str, Any]:
     if not ver:
         return {
             "product_id": pid,
@@ -509,7 +512,8 @@ def _result_for_group(pid: str, ver: str, rows: list[dict[str, Any]], *, is_cand
     effective_write_plan: dict[str, Any] = {}
     if gate_eval["would_write"]:
         proposed_fields = _proposed_record_fields(pid, ver, included, record, evidence_last_checked,
-                                                  build=build, record_maturity=group_maturity)
+                                                  build=build, record_maturity=group_maturity,
+                                                  line_overlaps=line_overlaps)
         if front is not None:
             effective_write_plan = _public_write_plan(front, proposed_fields)
 
@@ -892,7 +896,7 @@ def _public_source_item(pid: str, ver: str, row: dict[str, Any]) -> dict[str, An
     }
 
 
-def _proposed_record_fields(pid: str, ver: str, rows: list[dict[str, Any]], record: dict[str, Any] | None, evidence_last_checked: str, *, build: str, record_maturity: maturity.Maturity | None = None) -> dict[str, Any]:
+def _proposed_record_fields(pid: str, ver: str, rows: list[dict[str, Any]], record: dict[str, Any] | None, evidence_last_checked: str, *, build: str, record_maturity: maturity.Maturity | None = None, line_overlaps: dict[str, int] | None = None) -> dict[str, Any]:
     count = len(rows)
     if record_maturity is None:
         record_maturity = maturity.record_maturity(record, rows)
@@ -915,6 +919,7 @@ def _proposed_record_fields(pid: str, ver: str, rows: list[dict[str, Any]], reco
     # entry that THIS group's counted rows still support (WAIT / TEST FIRST); else INSUFFICIENT DATA.
     policy, facts = _policy_decision(pid, ver, build, rows, record)
     decision = policy.verdict
+    facts = _with_identity_scope(pid, ver, count, record, facts)
     body = patch_decision.public_body(policy, facts, count)
     summary = _public_summary(
         pid=pid,
@@ -978,8 +983,31 @@ def _proposed_record_fields(pid: str, ver: str, rows: list[dict[str, Any]], reco
         },
     }
     fields.update(_record_coherence_fields(pid, ver, count, record, themes, build=build,
-                                           decision=decision, policy=policy, facts=facts))
+                                           decision=decision, policy=policy, facts=facts,
+                                           line_overlaps=line_overlaps))
     return fields
+
+
+def _with_identity_scope(pid: str, ver: str, count: int, record: dict[str, Any] | None,
+                         facts: dict[str, Any] | None) -> dict[str, Any]:
+    """``facts`` with `update_identity_scope` when this record is a DaVinci release-line page.
+
+    The policy's line says what the reports are matched to: "this exact update", or "this release
+    line" for a page whose record carries the scope (lib.patch_decision.public_body). The record
+    writer decides the scope in the same pass that writes the line, so the line must be composed
+    from the scope this pass is about to write, not from the one the record held before: the same
+    predicate as the identity fields below (`davinci_release_line.identity_fields`, count > 0).
+    Without it the stored body said "matched to this exact update" on a page whose note said "not
+    one exact update" (review M1).
+    """
+    out = dict(facts or {})
+    out.pop(davinci_release_line.SCOPE_FIELD, None)
+    if pid == davinci_release_line.PRODUCT_ID and count > 0:
+        label = str((record or {}).get("update_product") or pid).strip()
+        out.update({k: v for k, v in davinci_release_line.identity_fields(
+            label, ver, davinci_release_line.versions_on_disk(GENERATED_DIR)).items()
+            if k == davinci_release_line.SCOPE_FIELD})
+    return out
 
 
 def _policy_decision(pid: str, ver: str, build: str, rows: list[dict[str, Any]],
@@ -1050,7 +1078,7 @@ def _confirmation_records(entries: list[dict[str, Any]]) -> dict[tuple[str, str,
     return found
 
 
-def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, Any] | None, themes: Counter, *, build: str = "", decision: str | None = None, policy: Any = None, facts: dict[str, Any] | None = None) -> dict[str, Any]:
+def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, Any] | None, themes: Counter, *, build: str = "", decision: str | None = None, policy: Any = None, facts: dict[str, Any] | None = None, line_overlaps: dict[str, int] | None = None) -> dict[str, Any]:
     """The verdict fields. `decision` arrives from the caller; this function does not choose one.
 
     Each branch used to name its own action ("WAIT for production systems" here, "TEST FIRST" for
@@ -1071,7 +1099,7 @@ def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, A
         # answers from the official facts alone (AVOID / SECURITY UPDATE) or INSUFFICIENT DATA.
         policy, facts = _policy_decision(pid, ver, build, [], record)
     decision = policy.verdict
-    facts = facts if facts is not None else dict(record)
+    facts = _with_identity_scope(pid, ver, count, record, facts if facts is not None else dict(record))
     # GROWTH-3: the body IS the policy's line, the same string the patch page renders under the
     # verdict (test_growth3_verdict_policy compares them over the corpus). Product branches below
     # keep only what is product-specific and verdict-neutral: recommendations and DaVinci 21's
@@ -1108,22 +1136,38 @@ def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, A
             ],
             "source_freshness_note": "",
         }
+        # RELEASE-LINE IDENTITY (lib.davinci_release_line). A bare version with point releases under
+        # it counts reports that name the LINE, so the page says it is the line and names its range.
+        # This runs only at count > 0: with no reports the record is the vendor's first release.
+        # `line_overlaps` is derived from the whole store in this same run (run_dry_run), so the
+        # note's statement about reports also counted on an exact release is never a stale claim.
+        line_identity = davinci_release_line.identity_fields(
+            product_label, ver, davinci_release_line.versions_on_disk(GENERATED_DIR),
+            shared=(line_overlaps or {}).get(str(ver).strip(), 0))
+        fields.update(line_identity)
         if str(ver).strip() == "21":
+            # "21" used to call itself "the stable DaVinci Resolve 21 release, published Apr 14,
+            # 2026". Its 73 reports were posted between 2026-04-14 and 2026-10-30 and name no point
+            # release; the page is the 21 line. The release framing below no longer claims otherwise.
             fields.update({
-                "description": (
-                    f"Published Apr 14, 2026. This page covers the stable {product_label} {ver} release. Public beta reports are excluded."
-                ),
                 "feed_hidden": False,
                 "status_change_type": "new",
                 "notification_message": "",
-                "update_channel_label": "Stable / Studio release",
                 "official_summary": (
-                    f"{product_label} {ver} is tracked here as the stable/Studio release. Public Beta 1 reports are excluded."
+                    f"{product_label} {ver} is tracked here as the stable/Studio release line: user reports "
+                    f"that name {ver} without a point release. Public beta reports are excluded."
                 ),
                 "release_summary": (
-                    f"{product_label} {ver} is the stable/Studio release. Use this page for stable release risk."
+                    f"{product_label} {ver} stable/Studio release line. Each exact release has its own page with its own reports."
                 ),
             })
+            if not line_identity:
+                # "21" with no point release under it is one exact update: the first release.
+                fields["update_channel_label"] = "Stable / Studio release"
+                fields["description"] = (
+                    f"Published Apr 14, 2026. This page covers the stable {product_label} {ver} release. "
+                    f"Public beta reports are excluded."
+                )
             # ARCHIVAL IS NOT OWNED HERE (AUX-065). This projection used to write
             # `update_status: current`, which flipped an archived "21" back to current as soon as a
             # stable 23 made it archivable. It no longer writes update_status at all; the archive
@@ -1234,7 +1278,10 @@ def run_dry_run(*, evidence_path: Path, product_id_filter: str | None, is_candid
     if product_id_filter:
         groups = {k: v for k, v in groups.items() if k[0] == product_id_filter}
     context = None if is_candidate_mode else live_context
-    return [_result_for_group(pid, ver, rows, is_candidate_mode=is_candidate_mode, records_index=records_index, write_requested=write_requested, build=build, live_context=context)
+    # Over the WHOLE store, before the product filter: a DaVinci line page's note states how many of
+    # its reports are also counted on a point release, derived here on every run.
+    overlaps = {} if is_candidate_mode else davinci_release_line.line_overlaps(all_rows)
+    return [_result_for_group(pid, ver, rows, is_candidate_mode=is_candidate_mode, records_index=records_index, write_requested=write_requested, build=build, live_context=context, line_overlaps=overlaps)
             for (pid, ver, build), rows in sorted(groups.items())]
 
 

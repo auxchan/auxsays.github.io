@@ -1,0 +1,107 @@
+{
+ "appended": [
+  {
+   "block_sha256": "e7145b376cee3d2501f404fe7b767b62aae574dfbefafac859f7d05dba9bf467",
+   "from_line_row": "blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1seungh-davinci-has-started-to-lag-a-lot-out-of-n",
+   "id": "blackmagic-davinci-20-3-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1seungh-davinci-has-started-to-lag-a-lot-out-of-n",
+   "match_basis": "exact_version_text",
+   "source_url": "https://www.reddit.com/r/davinciresolve/comments/1seungh/davinci_has_started_to_lag_a_lot_out_of_nowhere/",
+   "update_version": "20.3"
+  },
+  {
+   "block_sha256": "b200a58c206bb424145fa1cc3feb21be3cea542ec0e7f70f6ae14e78326f9bcf",
+   "from_line_row": "blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1nnkml9-stability-concerns-after-getting-rtx-5070",
+   "id": "blackmagic-davinci-20-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1nnkml9-stability-concerns-after-getting-rtx-5070",
+   "match_basis": "exact_version_text",
+   "source_url": "https://www.reddit.com/r/davinciresolve/comments/1nnkml9/stability_concerns_after_getting_rtx_5070_ti/",
+   "update_version": "20.2"
+  }
+ ],
+ "product_id": "blackmagic-davinci",
+ "reason": "point_release_named_not_release_line",
+ "rows_after": 3499,
+ "rows_before": 3497,
+ "tool": "migrate_davinci_release_line_identity.py",
+ "untouched_rows": 3491,
+ "untouched_rows_identical": true,
+ "withdrawn": [
+  {
+   "already_held_for": {},
+   "append_refused": "",
+   "block_sha256_after": "8dff1c0f08617f518eab7389931778c5d939b4ce0f1a44cdb34aa1f805e2ee9f",
+   "block_sha256_before": "2c48df3149fbce196bf0e80da552d07bde10ff245e9a06c23bac35831a96ad69",
+   "id": "blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1u10zc4-21-on-ipad-loses-sound-and-waveforms",
+   "line": "21",
+   "named": [
+    "21.0.0.1"
+   ],
+   "source_url": "https://www.reddit.com/r/davinciresolve/comments/1u10zc4/21_on_ipad_loses_sound_and_waveforms/"
+  },
+  {
+   "already_held_for": {},
+   "append_refused": "",
+   "block_sha256_after": "8a510e060d576cd2d2590b819137135cba95612c8c970993aefe46ea8351b469",
+   "block_sha256_before": "ec3595ff4daeed7283c9ec4b447b3838be7bba4db92ee91e1f612fba40b8fc39",
+   "id": "blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1seungh-davinci-has-started-to-lag-a-lot-out-of-n",
+   "line": "20",
+   "named": [
+    "20.3"
+   ],
+   "source_url": "https://www.reddit.com/r/davinciresolve/comments/1seungh/davinci_has_started_to_lag_a_lot_out_of_nowhere/"
+  },
+  {
+   "already_held_for": {},
+   "append_refused": "",
+   "block_sha256_after": "2ee0e9c812a65e874834046af7c055012ddee045d6c0268e86b6e08ecffa81f7",
+   "block_sha256_before": "17a9219a55d3dbf9764dbf143db1b56223641c4f121a27d678196c45aeaf19e2",
+   "id": "blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1nnkml9-stability-concerns-after-getting-rtx-5070",
+   "line": "20",
+   "named": [
+    "20.2"
+   ],
+   "source_url": "https://www.reddit.com/r/davinciresolve/comments/1nnkml9/stability_concerns_after_getting_rtx_5070_ti/"
+  },
+  {
+   "already_held_for": {
+    "20.2.2": true
+   },
+   "append_refused": "",
+   "block_sha256_after": "d3ac85f044227415472c06333412007c44d6d01e575392473938fa8fde756c1a",
+   "block_sha256_before": "4bed1cbb0ab5875cdc8f59c539170a25120dbd8c9b9716d925c1abb1a73f9046",
+   "id": "blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1v5o79j-davinci-resolve-2021-unsupported-gpu-proc",
+   "line": "20",
+   "named": [
+    "20.2.2"
+   ],
+   "source_url": "https://www.reddit.com/r/davinciresolve/comments/1v5o79j/davinci_resolve_2021_unsupported_gpu_processing/"
+  },
+  {
+   "already_held_for": {
+    "21.0": true
+   },
+   "append_refused": "",
+   "block_sha256_after": "50652734eb25c1c3a979fd91417958c27c5d1a6bde2ab5b137f8bf85d1c442b9",
+   "block_sha256_before": "f863aa6a300c10b018a0b14459cb506dfcd690873cf01fcd174698a31b9da485",
+   "id": "blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1vjls37-planar-tracker-crashing-instantly-when-us",
+   "line": "21",
+   "named": [
+    "21.0"
+   ],
+   "source_url": "https://www.reddit.com/r/davinciresolve/comments/1vjls37/planar_tracker_crashing_instantly_when_using/"
+  },
+  {
+   "already_held_for": {
+    "21.1": true
+   },
+   "append_refused": "",
+   "block_sha256_after": "a140ef6c40d50520da0b3cce72266d17fe01ef5401d30d227228ee776bd3e513",
+   "block_sha256_before": "a1f8274aad5a6d0685159b740955959de650ff2ed5bcdb631d090f624c96f4b6",
+   "id": "blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wblwm2-changing-clip-image-orientation-no-longer",
+   "line": "21",
+   "named": [
+    "21.1"
+   ],
+   "source_url": "https://www.reddit.com/r/davinciresolve/comments/1wblwm2/changing_clip_image_orientation_no_longer_changes/"
+  }
+ ]
+}

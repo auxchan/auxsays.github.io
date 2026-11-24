@@ -1,0 +1,8 @@
+---
+layout: aux-patch-atom
+feed_product_id: pika
+feed_alternate: /updates/pika/pika/
+feed_limit: 20
+permalink: /updates/pika/pika/feed.xml
+sitemap: false
+---

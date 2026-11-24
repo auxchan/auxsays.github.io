@@ -1,0 +1,8 @@
+---
+layout: aux-patch-atom
+feed_product_id: google-gemini
+feed_alternate: /updates/google/google-gemini/
+feed_limit: 20
+permalink: /updates/google/google-gemini/feed.xml
+sitemap: false
+---

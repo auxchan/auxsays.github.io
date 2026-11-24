@@ -1,0 +1,8 @@
+---
+layout: aux-patch-atom
+feed_product_id: netlify
+feed_alternate: /updates/netlify/netlify/
+feed_limit: 20
+permalink: /updates/netlify/netlify/feed.xml
+sitemap: false
+---

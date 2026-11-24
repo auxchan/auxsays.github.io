@@ -188,6 +188,38 @@ auxsays/scripts/tests/test_collector_transaction.py = 23
 auxsays/scripts/tests/test_collector_txn_nested_root.py = 26
 auxsays/scripts/tests/test_collector_write_authority.py = 128
 auxsays/scripts/tests/test_davinci_bare_version_identity.py = 58
+# AUX-108 follow-up: wrong-version attribution was found only by people. The corpus guard re-reads each
+# counted row's OWN stored text and flags a version named as the rollback target or the fix, another
+# tracked version named with the row's own absent, and a release-line row that names a point release;
+# a flag warns, never fails and never withdraws. Also DaVinci release-line identity: the collector's
+# point-release refusal, the line's range and identity fields, the stored-row migration on a temporary
+# store (withdrawn rows kept, one append through the named record's own gates, receipt, idempotent).
+# Fix round 1 (review of 57f65455): a release-line page says its reports are matched to the release
+# line; a line row whose report is counted on a point release is withdrawn and flagged; a Windows
+# feature-update name is not a row's own identity; dates, times and measurements are not point releases.
+# Review 2: the line page's "no report is also counted on an exact release" is derived from the store on
+# every record write (a count when it is not true), and S5 pins the page against the store, not the store.
+auxsays/scripts/tests/test_version_attribution_guard.py = 72
+# Second-tier (update-linked) reports had no route to counting of their own. A held report is promoted
+# only when the product's unchanged evaluate_candidates accepts a candidate rebuilt from its stored
+# title, excerpt, date and link for exactly one tracked patch: appended through the store's append guard
+# with its origin on the row, and removed from the second tier. Product scope required; a withdrawn
+# report is never re-admitted; idempotent; unchanged tier files rewrite byte for byte (0 of 207 qualify).
+# Fix round 1: a held row whose stored text is cut is never promoted (the authority decides on the
+# full report), a row that says it is not promotion-eligible is not assessed, the lane runs the step
+# report-only and fail-soft.
+# Review 2: one command per step with its own id, a failing step after the writeback reads each status;
+# a cut at the excerpt's start or an explicit elision is cut too.
+auxsays/scripts/tests/test_update_linked_promotion.py = 33
+# The backfill queue had 36 `queued` rows nothing executed or read. The official ingest lane is its
+# executor; execute_backfill_queue.py reads the result back in that lane: complete (records exist),
+# queued (enabled source, with the blocker ingest health reports) or blocked (source switched off), on
+# temporary files, idempotent, a completed row needing no other step; plus the Netlify extractor repair
+# (dated-slug and slug-only entries mapped, dates from the entry URL) that makes the one enabled row run.
+# Fix round 1: complete means a whole pass against a reachable primary source with nothing deferred,
+# not 'a record exists'; coverage keeps reporting rows no run can execute; the step is fail-soft.
+# Review 2: a failed read-back is the run's conclusion, read by a step after the writeback.
+auxsays/scripts/tests/test_backfill_queue_executor.py = 38
 # Budget-bounded collectors must walk the corpus newest-first. DaVinci did not, so every
 # scheduled run spent its 1200s budget on 2014-2018 records and the newest release had never
 # been searched once. Wiring is asserted from the AST, not by grepping the file, and a budget
@@ -518,6 +550,17 @@ auxsays/scripts/tests/test_feed_discovery.py = 73
 # (SM1), a stored date on a record, tracker, post and stamped page (SM2), a stored value that is not a date
 # listed with no lastmod instead of failing the build (SM3), and no build time or file time anywhere (SM4).
 auxsays/scripts/tests/test_publication_hygiene.py = 42
+# P8: the per-product patch verdict Atom feeds. Renders the shipped feed include, layout and aux-base's
+# autodiscovery block with the Liquid gem (ruby + liquid required): valid Atom; only that product's pages,
+# newest release first, archived/hidden/undated left out, the limit kept; the verdict gate's verdict, never a
+# stored label; stored dates only; a subtitle that says there is no verdict-change history ([F], [L]); one
+# feed per product tracker ([S]); feed links only where a feed page exists ([A]).
+auxsays/scripts/tests/test_patch_atom_feeds.py = 22
+# P8: the deploy-time IndexNow ping. Runs the bare planner (changed pages only, newest first, at most 500,
+# nothing when the live sitemap or the key is in doubt, exit 0 always), pins the key file, parses pages.yml,
+# and EXECUTES the ping step's run: scalar with a fake curl (skip, one POST, a refusal and a network failure
+# exit 0 with a warning).
+auxsays/scripts/tests/test_indexnow_ping.py = 16
 # The published Systems Monitor bundle is minified without its dependencies' licence comments, so
 # THIRD_PARTY_NOTICES.txt ships beside it (AUX-082). Runs the REAL Node scripts (node required, its
 # absence a failure): the committed file names exactly the lockfile's production set; regeneration over

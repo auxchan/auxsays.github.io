@@ -255,6 +255,35 @@ jobs:
 
           python auxsays/scripts/run_patch_evidence_collection.py "${args[@]}"
 
+      - name: Report update-linked Acrobat Reader reports that meet the counted standard (report only)
+        # A second-tier (update-linked) report has no route to counting unless a collector finds
+        # its thread again. This puts each held report's OWN stored facts to the Acrobat
+        # collector's unchanged evaluate_candidates and REPORTS what it finds. Zero network, one
+        # product per call.
+        #
+        # REPORT ONLY, ON PURPOSE: NO --write HERE. A held row stores a 280-character excerpt, and
+        # the acceptance authority decides on the full report: judged on the excerpt, a report was
+        # counted that the authority rejects on its full text. The tool itself now refuses to
+        # promote a row whose stored text is cut, and until a held row carries its full text this
+        # step writes nothing at all. Add --write only together with that storage change.
+        #
+        # --fail-soft: this step stands before the consensus build, QA and the only writeback, and
+        # all of them need success(). Its own crash must not discard the evidence this run
+        # collected: the failure is an ::error annotation, a line in the job summary and
+        # `status=failed` in this step's outputs, and the run goes on. The last step of this job
+        # reads that status AFTER the writeback and fails the job, so the failure is the run's
+        # conclusion and not only an annotation. ONE command per step, each with its own id: in one
+        # step a later success would overwrite an earlier failure's status (last write wins).
+        id: second_tier_promotion_reader
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: python auxsays/scripts/promote_update_linked_evidence.py --product-id adobe-acrobat-reader --fail-soft
+
+      - name: Report update-linked Acrobat Pro reports that meet the counted standard (report only)
+        # The same report-only, fail-soft step for the second product (see the step above).
+        id: second_tier_promotion_pro
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: python auxsays/scripts/promote_update_linked_evidence.py --product-id adobe-acrobat-pro --fail-soft
+
       - name: Build consensus status
         id: consensus
         if: ${{ github.event.inputs.dry_run != 'true' }}
@@ -526,6 +555,12 @@ jobs:
         if: ${{ github.event.inputs.dry_run != 'true' }}
         run: python auxsays/scripts/qa_patch_records.py
 
+      - name: Version attribution guard
+        # The same read-only check ci-integrity runs, here over the rows this run just stored: a
+        # counted row whose own stored text names a different version, or its own version only as the
+        # rollback target or the fix. It warns in the job summary and never fails or withdraws.
+        run: python auxsays/scripts/check_version_attribution.py --github
+
       - name: Remove transient validation output
         if: ${{ github.event.inputs.dry_run != 'true' }}
         run: |
@@ -649,6 +684,23 @@ jobs:
             echo "- writeback outcome token: \`${WB_OUTCOME:-n/a}\`"
             echo "- lost writeback race, nothing pushed: **${WB_LOST_RACE:-false}**"
           } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Fail the run when a fail-soft step failed
+        # The second-tier promotion steps are fail-soft so that their own crash cannot discard this
+        # run's evidence: they exit 0 and write status=failed. This reads each one's status AFTER the
+        # writeback and the run summary, so what the run collected is already committed, and turns a
+        # failure into the run's conclusion (red, and notified) instead of an annotation nobody reads.
+        # The PowerPoint job (`always()`) and chain-ingest (`always()`, its cycle record reads the
+        # writeback outputs, not this job's result) run as before.
+        if: >-
+          ${{ always() && (steps.second_tier_promotion_reader.outputs.status == 'failed' ||
+              steps.second_tier_promotion_pro.outputs.status == 'failed') }}
+        env:
+          READER: ${{ steps.second_tier_promotion_reader.outputs.status }}
+          PRO: ${{ steps.second_tier_promotion_pro.outputs.status }}
+        run: |
+          echo "::error::A fail-soft step failed (Acrobat Reader promotion: ${READER:-not run}; Acrobat Pro promotion: ${PRO:-not run}). The evidence writeback above was not held back; see that step's log."
+          exit 1
 
   powerpoint-orchestrated:
     # The PowerPoint lane, driven by the repo-owned deterministic orchestration graph. This is the

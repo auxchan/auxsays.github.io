@@ -14,6 +14,13 @@ from lib.normalize import strip_tags, normalize_date, first_nonempty
 
 DATE_RE = re.compile(r"([A-Z][a-z]{2,8}\s+\d{1,2},\s+\d{4}|\d{4}-\d{2}-\d{2})")
 NETLIFY_DETAIL_RE = re.compile(r"/changelog/\d{4}/\d{1,2}/\d{1,2}/[^/?#]+/?$", re.I)
+# Netlify moved its entries to ONE path segment under /changelog/, most carrying their date:
+# /changelog/2026-11-23-agent-runners-pull-request-improvements/. The dated-folder pattern above
+# matched none of them for 244 consecutive runs while the listing kept publishing (measured
+# 2026-11-24: 9 entry links on the first page, 0 mapped). An entry is a hyphenated slug; a tag
+# index (/changelog/tag/x/), a page (/changelog/page/2) and the feed have another shape.
+NETLIFY_SLUG_RE = re.compile(r"^/changelog/(?P<slug>[a-z0-9]+(?:-[a-z0-9]+)+)/$", re.I)
+NETLIFY_SLUG_DATE_RE = re.compile(r"/changelog/(\d{4})-(\d{2})-(\d{2})-[^/]+/?$")
 GENERIC_EXCLUDE_RE = re.compile(r"/(tag|tags|category|categories|author|page|feed|rss|atom)/", re.I)
 # Feeds and downloadable assets are never changelog ENTRIES, whatever path they sit under.
 FEED_OR_ASSET_RE = re.compile(r"\.(xml|rss|atom|json|zip|pdf|dmg|exe|pkg|png|jpe?g|svg)$", re.I)
@@ -70,7 +77,16 @@ def _is_netlify_detail_url(url: str) -> bool:
     if parsed.netloc and parsed.netloc.lower() not in {"www.netlify.com", "netlify.com"}:
         return False
     path = parsed.path.rstrip("/") + "/"
-    return bool(NETLIFY_DETAIL_RE.search(path))
+    return bool(NETLIFY_DETAIL_RE.search(path) or NETLIFY_SLUG_RE.match(path))
+
+
+def _date_from_entry_url(url: str) -> str:
+    """The date an entry URL states about itself ("/changelog/2026-11-23-..."), or "".
+
+    A structured fact the source supplies, so it outranks the first date-shaped text on the page,
+    which can be another entry's date in the sidebar."""
+    m = NETLIFY_SLUG_DATE_RE.search(urlparse(url).path)
+    return normalize_date(f"{m.group(1)}-{m.group(2)}-{m.group(3)}") if m else ""
 
 
 def _adobe_month_year_to_date(title: str) -> str:
@@ -201,9 +217,10 @@ def changelog_probe(source: dict, source_url: str, listing: str, matched: list[s
     """Structural evidence about THIS listing: entries present, versus entries mapped.
 
     `extraction_mismatch` says the page still publishes entries and the configured extractor maps
-    none of them. That is Netlify exactly: the changelog moved to slug-only URLs, and
-    NETLIFY_DETAIL_RE still demands /changelog/YYYY/M/D/slug/, so every entry is invisible to it
-    while the fetch keeps succeeding.
+    none of them. That was Netlify exactly until 2026-11-24: the changelog moved to slug-only URLs
+    while NETLIFY_DETAIL_RE still demanded /changelog/YYYY/M/D/slug/, so every entry was invisible
+    to it while the fetch kept succeeding. NETLIFY_SLUG_RE now maps them; the signal stays for the
+    next time a profile is narrower than its page.
 
     It cannot fire for a `generic` profile, because there the family test IS the candidate test --
     if the generic rule finds no entries, there is nothing claimed to be present. That is the
@@ -264,7 +281,11 @@ def fetch(source: dict, limit: int = 3, probe: dict | None = None) -> list[dict]
         detail = fetch_text(link, **_fetch_options(source)).text
         title = _title_from_html(detail)
         body = _body_from_html(detail)
-        date = _date_from_html(detail)
+        # The entry's own date: the one its URL states, else the one that opens its article. Only
+        # then the page-level search, which on a long page finds nothing and falls back to "now".
+        lead = DATE_RE.search(body[:400])
+        date = (_date_from_entry_url(link) or (normalize_date(lead.group(1)) if lead else "")
+                or _date_from_html(detail))
         digest = hashlib.sha256((link + title + date).encode("utf-8")).hexdigest()[:16]
         records.append({
             "record_id": f"html:{source['product_id']}:{digest}",

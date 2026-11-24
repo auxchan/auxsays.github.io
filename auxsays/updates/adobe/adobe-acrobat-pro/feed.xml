@@ -1,0 +1,8 @@
+---
+layout: aux-patch-atom
+feed_product_id: adobe-acrobat-pro
+feed_alternate: /updates/adobe/adobe-acrobat-pro/
+feed_limit: 20
+permalink: /updates/adobe/adobe-acrobat-pro/feed.xml
+sitemap: false
+---

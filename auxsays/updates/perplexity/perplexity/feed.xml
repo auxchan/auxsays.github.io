@@ -1,0 +1,8 @@
+---
+layout: aux-patch-atom
+feed_product_id: perplexity
+feed_alternate: /updates/perplexity/perplexity/
+feed_limit: 20
+permalink: /updates/perplexity/perplexity/feed.xml
+sitemap: false
+---
