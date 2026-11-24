@@ -1,0 +1,133 @@
+{
+ "appended": [],
+ "product_id": "blackmagic-davinci",
+ "proof": "every block compared by position in store order; ids are not unique",
+ "reason": "point_release_named_not_release_line",
+ "rows_after": 3569,
+ "rows_before": 3569,
+ "tool": "migrate_davinci_release_line_identity.py",
+ "untouched_rows": 3561,
+ "untouched_rows_identical": true,
+ "withdrawn": [
+  {
+   "already_held_for": {
+    "21.0.2": true
+   },
+   "append_refused": "",
+   "basis": "counted_on_point_release",
+   "block_sha256_after": "988670d72a1aea43217444dfed81011e25448f4545d76cb904b86745a4e58b19",
+   "block_sha256_before": "a140863cbc814dc9334d6fda68775b3e5772d25b7b6fd100cb20a636f9cfc950",
+   "id": "blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1uw93ul-issue-with-resolve-21s-playback",
+   "line": "21",
+   "named": [
+    "21.0.2"
+   ],
+   "source_url": "https://www.reddit.com/r/davinciresolve/comments/1uw93ul/issue_with_resolve_21s_playback/"
+  },
+  {
+   "already_held_for": {
+    "21.0.2": true
+   },
+   "append_refused": "",
+   "basis": "counted_on_point_release",
+   "block_sha256_after": "75cdc397d32d395b31407250ea5e1b325ee049d8b0eea207603962e0c7985b67",
+   "block_sha256_before": "ebef582b1338499a17b31edf62edfad849d028149a7bf3d0b1f24cedce727614",
+   "id": "blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1uw7he8-davinci-crashs-on-fusion-animations",
+   "line": "21",
+   "named": [
+    "21.0.2"
+   ],
+   "source_url": "https://www.reddit.com/r/davinciresolve/comments/1uw7he8/davinci_crashs_on_fusion_animations/"
+  },
+  {
+   "already_held_for": {
+    "21.0.2": true
+   },
+   "append_refused": "",
+   "basis": "counted_on_point_release",
+   "block_sha256_after": "641b59db97410efc9885ae113b26da30e97b6a2b8876d022cb1c6f77b017ecfe",
+   "block_sha256_before": "9566e163c5e04616278c53d7c962c5e7f4d32d4fc3a2ae70c9732a53287f0ad8",
+   "id": "blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1uzxa5d-i-cannot-open-my-spline-window-in-fusion",
+   "line": "21",
+   "named": [
+    "21.0.2"
+   ],
+   "source_url": "https://www.reddit.com/r/davinciresolve/comments/1uzxa5d/i_cannot_open_my_spline_window_in_fusion/"
+  },
+  {
+   "already_held_for": {
+    "20.3.2": true
+   },
+   "append_refused": "",
+   "basis": "counted_on_point_release",
+   "block_sha256_after": "032eeb490156a9f8f82a754db91bc342b21873b0ca060e2c0906446de6779d37",
+   "block_sha256_before": "c2811e45ae48d0d78d1dc6c06e82861ee6c9f9bc63b0d40838c83f295a7f9f4a",
+   "id": "blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1ta80h5-win-11-davinci-resolve-issue",
+   "line": "20",
+   "named": [
+    "20.3.2"
+   ],
+   "source_url": "https://www.reddit.com/r/davinciresolve/comments/1ta80h5/win_11_davinci_resolve_issue/"
+  },
+  {
+   "already_held_for": {
+    "20.3.2": true
+   },
+   "append_refused": "",
+   "basis": "counted_on_point_release",
+   "block_sha256_after": "b63dc2277f21432d79967dfdcbf40f0add64cd5d235db214d128104d77b95dc5",
+   "block_sha256_before": "31de423d19c3157605ed54142d7e5cb2fbb7ab5e8ed08436f8c739e8535f7657",
+   "id": "blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1tf3jzh-davinci-resolve-randomly-started-crashing",
+   "line": "20",
+   "named": [
+    "20.3.2"
+   ],
+   "source_url": "https://www.reddit.com/r/davinciresolve/comments/1tf3jzh/davinci_resolve_randomly_started_crashing_in/"
+  },
+  {
+   "already_held_for": {
+    "19.1.2": true
+   },
+   "append_refused": "",
+   "basis": "counted_on_point_release",
+   "block_sha256_after": "9cf2ca0641673921cc9347d3c2cdbb6741d50a450b125014dc8325352083794c",
+   "block_sha256_before": "989e516b214316697c8e2dd22341885b42ef9655d1e848a9c4357ac4325136ef",
+   "id": "blackmagic-davinci-19-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1sf309s-os-tahoe-and-sequoia-resolve-19-has-an-in",
+   "line": "19",
+   "named": [
+    "19.1.2"
+   ],
+   "source_url": "https://www.reddit.com/r/davinciresolve/comments/1sf309s/os_tahoe_and_sequoia_resolve_19_has_an_incredibly/"
+  },
+  {
+   "already_held_for": {
+    "21.0.4": true
+   },
+   "append_refused": "",
+   "basis": "counted_on_point_release",
+   "block_sha256_after": "2ff132acc7ee153637fb96f0a28c390dccdba0c59f4e9a13e17190e921c2bd82",
+   "block_sha256_before": "eb7fa07d6daf2fc3888f1c7e994df84b5467386a93fb2fac324ab982f802c968",
+   "id": "blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1vpu8os-unusable-level-of-lag-on-m4-pro-and-ive-t",
+   "line": "21",
+   "named": [
+    "21.0.4"
+   ],
+   "source_url": "https://www.reddit.com/r/davinciresolve/comments/1vpu8os/unusable_level_of_lag_on_m4_pro_and_ive_tried/"
+  },
+  {
+   "already_held_for": {
+    "21.1": true
+   },
+   "append_refused": "",
+   "basis": "counted_on_point_release",
+   "block_sha256_after": "fe980e8e6618b44bc7defbbcf580f00050e082e1fd9747783265521d8f948f3c",
+   "block_sha256_before": "2df3c6f20ce0d5240a7346e59f1c758fac7f57d934ff5b2690fc8f8167b7571f",
+   "id": "blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wd67zz-autosubs-380-not-launching-from-davinci-r",
+   "line": "21",
+   "named": [
+    "21.1"
+   ],
+   "source_url": "https://www.reddit.com/r/davinciresolve/comments/1wd67zz/autosubs_380_not_launching_from_davinci_resolve/"
+  }
+ ]
+}

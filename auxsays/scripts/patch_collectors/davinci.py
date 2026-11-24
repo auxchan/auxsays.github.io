@@ -27,9 +27,13 @@ from lib.reddit_access_policy import (
     reddit_access_authorized,
     require_reddit_access,
 )
+from lib.davinci_release_line import (
+    REASON_POINT_RELEASE_NAMED, stated_point_releases, versions_on_disk,
+)
 from lib.normalize_davinci_version import normalize_davinci_version
 
 from .base import (
+    GENERATED_DIR,
     EVIDENCE_PATH,
     CollectorContext,
     PatchRecord,
@@ -1853,6 +1857,15 @@ def row_from_candidate(record: PatchRecord, candidate: dict[str, Any], captured_
     if gated.get("counted") is True and not davinci_strong_issue_match(report_text):
         gated["counted"] = False
         gated["exclusion_reason"] = "not_a_real_issue_report"
+    # RELEASE-LINE IDENTITY. A bare version ("21") is also the name of the whole 21 line, so its
+    # record collects every report that names the line. A report whose text names an exact point
+    # release of that line ("21.1", "21.0.3") has said which release it is about: it is evaluated
+    # for that release's own record, and it is never counted on the line page. Strictly narrowing:
+    # this can only refuse a row the gates above accepted (lib.davinci_release_line).
+    if gated.get("counted") is True and stated_point_releases(
+            report_text, record.update_version, versions_on_disk(GENERATED_DIR)):
+        gated["counted"] = False
+        gated["exclusion_reason"] = REASON_POINT_RELEASE_NAMED
     return gated
 
 

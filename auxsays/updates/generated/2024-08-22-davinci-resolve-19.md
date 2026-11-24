@@ -1,7 +1,8 @@
 ---
 layout: aux-update
 title: DaVinci Resolve 19 official update breakdown
-description: Official DaVinci Resolve update record captured from Blackmagic Design.
+description: User reports matched to the DaVinci Resolve 19 release line, not to one exact release. They can be
+  about any release from 19 to 19.1.4; each exact release has its own page.
 permalink: /updates/blackmagic-design/blackmagic-davinci/19/
 update_entry: true
 company_id: blackmagic-design
@@ -19,7 +20,7 @@ update_published_at: '2024-08-22T00:00:00Z'
 update_last_checked: '2026-07-23T19:48:59Z'
 source_last_checked: '2026-07-23T19:48:59Z'
 official_body_last_checked: '2026-07-23T19:48:59Z'
-record_last_updated: '2026-11-21T21:13:18.364738Z'
+record_last_updated: '2026-11-24T09:36:16.439867Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
@@ -27,9 +28,9 @@ update_status: archived
 update_feed_title: DaVinci Resolve 19
 update_detail_title: DaVinci Resolve 19
 update_consensus_label: Negative
-update_report_count: 12
+update_report_count: 11
 update_consensus_confidence: Low-Medium
-quick_verdict: 'INSUFFICIENT DATA: DaVinci Resolve 19 has 12 user reports found.'
+quick_verdict: 'INSUFFICIENT DATA: DaVinci Resolve 19 has 11 user reports found.'
 official_summary: Blackmagic Design lists DaVinci Resolve Studio 19 in its official support downloads feed.
 release_summary: This software update installs the final release of DaVinci Resolve Studio 19 which adds support
   for new DaVinci Neural Engine AI tools and over 100 feature upgrades including new color grading palettes and
@@ -39,14 +40,14 @@ release_summary: This software update installs the final release of DaVinci Reso
   Replay, live media sync into DaVinci Resolve bins for editing while the camera is recording and the new Organizations
   App in Blackmagic Cloud. This version requires a DaVinci Resolve Studio license dongle or software activation
   code.
-consensus_report: '12 user reports found for DaVinci Resolve 19. Current reports mention render/export failures
+consensus_report: '11 user reports found for DaVinci Resolve 19. Current reports mention render/export failures
   and startup or application crashes. Current reports are Reddit-heavy, so production users should test before updating.
   Sources represented: r/davinciresolve and Creative COW DaVinci Resolve.'
 evidence_state: pilot_sample
 evidence_state_label: Verified reports
 intelligence_stage: pilot
 official_source_captured: true
-confirmed_patch_specific_report_count: 12
+confirmed_patch_specific_report_count: 11
 evidence_last_checked: '2026-11-05T00:24:43Z'
 known_issues_present: null
 consensus_collection_status: pilot_initial_sample
@@ -81,6 +82,9 @@ status_events:
 - at: '2026-11-05T01:21:02.630272Z'
   label: User reports found
   note: User report count updated to 12.
+- at: '2026-11-24T09:28:28.796002Z'
+  label: User reports found
+  note: User report count updated to 11.
 official_patch_notes_source_type: download_portal
 primary_official_source: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
 fallback_official_sources:
@@ -135,7 +139,7 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   AUXSAYS note: this is official download-portal metadata, not broad community consensus.'
 official_checksums_body: ''
 official_checksums_capture_status: not-present
-update_consensus_summary: 'INSUFFICIENT DATA: DaVinci Resolve 19. 12 user reports are matched to this exact update,
+update_consensus_summary: 'INSUFFICIENT DATA: DaVinci Resolve 19. 11 user reports are matched to this release line,
   but no problem in them is confirmed as reported independently by two or more users. If one matches your setup,
   test before relying on this update.'
 evidence_samples:
@@ -246,16 +250,6 @@ accepted_report_sources:
   workflow_area: render/export
 - source_name: r/davinciresolve
   source_type: reddit community report
-  source_url: https://www.reddit.com/r/davinciresolve/comments/1sf309s/os_tahoe_and_sequoia_resolve_19_has_an_incredibly/
-  source_title: (OS Tahoe AND Sequoia) Resolve 19 has an incredibly slow startup (sometimes doesn't get past loading
-    screen at all) and freezes 5 minutes into work (needs a force quit). Cannot find a solution anywhere.
-  source_date: '2026-04-07'
-  version_matched: '19'
-  patch_version_matched: true
-  issue: render/export failures
-  workflow_area: render/export
-- source_name: r/davinciresolve
-  source_type: reddit community report
   source_url: https://www.reddit.com/r/davinciresolve/comments/1p2t6ry/whats_the_problem_here/
   source_title: What's the problem here?
   source_date: '2025-11-21'
@@ -293,11 +287,17 @@ accepted_report_sources:
 evidence_source_limitations:
 - Current reports are Reddit-heavy, so production users should test before updating.
 update_decision_label: INSUFFICIENT DATA
-update_decision_body: 'No verdict yet: 12 user reports are matched to this exact update, but no problem in them
+update_decision_body: 'No verdict yet: 11 user reports are matched to this release line, but no problem in them
   is confirmed as reported independently by two or more users. If one matches your setup, test before relying on
   this update.'
 practical_recommendations:
 - Test on copied projects before moving client work to this version.
 - Keep a known-good Resolve version available.
 source_freshness_note: ''
+update_identity_scope: release_line
+update_channel_label: 'Release line: 19 to 19.1.4'
+record_note: This page is the 19 release line, not one exact update. Its user reports were matched to "DaVinci Resolve
+  19" by the name of the line, so they can be about any release from 19 to 19.1.4. No report counted here is also
+  counted on an exact release's page, and a report known to name an exact release is not counted here. Beta reports
+  are excluded.
 ---

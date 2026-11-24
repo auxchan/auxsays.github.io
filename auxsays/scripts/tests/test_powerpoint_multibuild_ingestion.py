@@ -651,11 +651,13 @@ def run() -> int:  # noqa: PLR0915
           not [pid for pid in sorted(BUILD_AWARE_PRODUCTS)
                if awb._matches_any(f"auxsays/updates/microsoft/{pid}/index.md", pats)],
           str(pats))
-    # And the WHOLE allow surface: generated records, the ingest state file, PowerPoint landings.
+    # And the WHOLE allow surface: generated records, the ingest state file, PowerPoint landings, and
+    # the backfill queue this lane reads its own result back into (execute_backfill_queue.py).
     # Nothing else in the tracked tree may be committable by this lane.
     stray = [f for f in tracked if awb._matches_any(f, pats)
              and not f.startswith("auxsays/updates/generated/")
              and f != "auxsays/_data/patch_ingest_state.json"
+             and f != "auxsays/_data/patch_backfill_queue.yml"
              and not f.startswith(landing_prefixes)]
     check("writeback: no tracked file outside generated/ + state + landings is authorized",
           not stray, str(stray[:5]))
