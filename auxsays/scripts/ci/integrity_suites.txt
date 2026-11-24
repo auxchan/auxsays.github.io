@@ -692,7 +692,7 @@ auxsays/scripts/tests/test_acquisition_method_registry.py = 42
 # test_vendor_onboarding_playbook drives every playbook step to a failure.
 auxsays/scripts/tests/test_adaptive_method_routing.py = 55
 auxsays/scripts/tests/test_method_reprobe.py = 61
-auxsays/scripts/tests/test_vendor_onboarding_playbook.py = 54
+auxsays/scripts/tests/test_vendor_onboarding_playbook.py = 56
 auxsays/scripts/tests/test_teams_record_cleanup.py = 9
 auxsays/scripts/tests/test_transactional_writeback.py = 10
 auxsays/scripts/tests/test_validate_evidence_method_health.py = 13

@@ -375,7 +375,8 @@ source link, or the link line carries article text.
    days, four requests a run. Reddit, Microsoft Learn Q&A, Adobe and the paid search API are refused by a floor that
    is evaluated before any declaration. A `recovered` record returns the method as a fallback; its own rows keep it.
 3. The Creative COW pass is made once per collector run and shared by every record.
-4. `onboard_vendor.py` is the onboarding sequence as nine checked steps; exercised on Elgato Stream Deck (staged).
+4. `onboard_vendor.py` is the onboarding sequence as ten checked steps. Exercised on Elgato Stream Deck: nine pass,
+   and the tenth keeps it CONTAINED (a per-platform vendor takes no community evidence yet). Nothing is registered.
 
 **Proof** `test_adaptive_method_routing.py` (two opposite histories through the real graph store identical accepted
 evidence), `test_method_reprobe.py` (simulated source), `test_vendor_onboarding_playbook.py`,

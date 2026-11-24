@@ -10,7 +10,9 @@ WHAT THIS GUARDS.
      adapter's identity rules only REMOVE candidates (the application version must be stated as the
      application's, not as a requirement, not as one of several versions whose role is unstated),
      and everything else is the shared acceptance authority.
-  N. NOT ACTIVATED. The collector is registered only behind a flag no workflow sets.
+  N. NOT ACTIVATED. No production path registers the collector, the production maps do not name
+     the product, and the collector refuses write mode. Elgato is a per-platform vendor: the
+     playbook's last step keeps it CONTAINED until its records carry a platform gate.
 
 Offline and deterministic. The fixture is synthetic (no recorded issue text).
 Run: PYTHONDONTWRITEBYTECODE=1 python auxsays/scripts/tests/test_vendor_onboarding_playbook.py
@@ -31,6 +33,7 @@ _REPO = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(_REPO / "auxsays" / "scripts"))
 
 import onboard_vendor as ov  # noqa: E402
+import qa_patch_records as qa  # noqa: E402
 import run_patch_evidence_collection as runner  # noqa: E402
 from lib import collector_ownership as co  # noqa: E402
 from lib import method_routing as mr  # noqa: E402
@@ -74,115 +77,100 @@ def failed(report: dict) -> list[int]:
 
 
 def playbook_checks() -> None:
-    print("-- P. the playbook passes for the staged product, and every step can fail")
+    print("-- P. the playbook runs for the product, stops where it must, and every step can fail")
     report = quiet(ov.run_playbook, PID)
-    check("P1 all nine steps pass for Elgato Stream Deck and the state is STAGED",
-          report["state"] == "STAGED" and len(report["steps"]) == 9 and not failed(report),
+    check("P1 Elgato Stream Deck passes all nine build steps",
+          len(report["steps"]) == 10 and not (set(failed(report)) - {10}),
           str([(i["step"], i["detail"]) for i in report["steps"] if not i["ok"]]))
-    check("P2 the report says what activation still needs, and the playbook did not do it",
-          len(report["activation_still_needs"]) >= 5 and any("flag" in line for line in report["activation_still_needs"]))
+    check("P2 and is stopped by the tenth: its vendor is under the per-platform containment decision",
+          report["state"] == "CONTAINED" and failed(report) == [10]
+          and "PLATFORM_UNGATED_COMPANIES" in report["steps"][9]["detail"], str(report["steps"][9]))
+    check("P3 the declaration lived in the playbook manifest and was removed again afterwards",
+          report["declared_in"].startswith("playbook manifest")
+          and PID not in mr.METHOD_PLANS and PID not in co.ALLOWED_METHODS and PID not in co.ALLOWED_SOURCE_TYPES)
     out = io.StringIO()
     with contextlib.redirect_stdout(out):
         rc = ov.main(["--product-id", PID])
-    check("P3 the command exits 0 when staged and prints that the product is NOT activated",
-          rc == 0 and "State: STAGED" in out.getvalue() and "Not activated" in out.getvalue())
+    check("P4 the command exits 2 for CONTAINED and prints what activation would still need",
+          rc == 2 and "State: CONTAINED" in out.getvalue() and "Not activated" in out.getvalue())
     unknown = quiet(ov.run_playbook, "figma")
     with contextlib.redirect_stdout(io.StringIO()):
         rc_unknown = ov.main(["--product-id", "figma"])
-    check("P4 a product not taken through the playbook is NOT_STARTED and exits 1",
+    check("P5 a product not taken through the playbook is NOT_STARTED and exits 1",
           unknown["state"] == "NOT_STARTED" and rc_unknown == 1)
 
-    saved_plans = copy.deepcopy(mr.METHOD_PLANS)
-    saved_methods, saved_sources = copy.deepcopy(co.ALLOWED_METHODS), copy.deepcopy(co.ALLOWED_SOURCE_TYPES)
     saved_onboarding = copy.deepcopy(ov.ONBOARDING)
     saved_collectors = dict(runner.COLLECTORS)
+    saved_blocked = qa.PLATFORM_UNGATED_COMPANIES
 
     def restore() -> None:
-        mr.METHOD_PLANS.clear(); mr.METHOD_PLANS.update(copy.deepcopy(saved_plans))          # noqa: E702
-        co.ALLOWED_METHODS.clear(); co.ALLOWED_METHODS.update(copy.deepcopy(saved_methods))   # noqa: E702
-        co.ALLOWED_SOURCE_TYPES.clear(); co.ALLOWED_SOURCE_TYPES.update(copy.deepcopy(saved_sources))  # noqa: E702
         ov.ONBOARDING.clear(); ov.ONBOARDING.update(copy.deepcopy(saved_onboarding))          # noqa: E702
         runner.COLLECTORS.clear(); runner.COLLECTORS.update(saved_collectors)                 # noqa: E702
+        qa.PLATFORM_UNGATED_COMPANIES = saved_blocked
+
+    def with_cfg(**changes) -> list[int]:
+        ov.ONBOARDING[PID].update(changes)
+        try:
+            return failed(quiet(ov.run_playbook, PID))
+        finally:
+            restore()
 
     try:
-        ov.ONBOARDING["no-such-product"] = dict(CFG)
-        check("P5 step 1 fails for a product with no entry in the product list",
+        qa.PLATFORM_UNGATED_COMPANIES = frozenset()
+        lifted = quiet(ov.run_playbook, PID)
+        with contextlib.redirect_stdout(io.StringIO()):
+            rc_lifted = ov.main(["--product-id", PID])
+        check("P6 with the containment lifted (simulated) the same product is VALIDATED and exits 0",
+              lifted["state"] == "VALIDATED" and not failed(lifted) and rc_lifted == 0, str(failed(lifted)))
+        restore()
+
+        ov.ONBOARDING["no-such-product"] = dict(saved_onboarding[PID])
+        check("P7 step 1 fails for a product with no entry in the product list",
               1 in failed(quiet(ov.run_playbook, "no-such-product")))
         restore()
 
-        mr.METHOD_PLANS.pop(PID)
-        broken = failed(quiet(ov.run_playbook, PID))
-        check("P6 without a method plan, steps 2, 3 and 4 fail", {2, 3, 4} <= set(broken), str(broken))
-        restore()
-
-        mr.METHOD_PLANS[PID] = {"primary": ["not_a_catalogued_method"]}
-        co.ALLOWED_METHODS[PID] = {"not_a_catalogued_method"}
-        check("P7 step 2 fails when a planned method is not in the registry",
-              2 in failed(quiet(ov.run_playbook, PID)))
-        restore()
-
+        broken = with_cfg(plan={})
+        check("P8 without a declared plan, steps 2, 3, 4 and 5 fail", {2, 3, 4, 5} <= set(broken), str(broken))
+        check("P9 step 2 fails when a planned method is not in the registry",
+              2 in with_cfg(plan={"primary": ["not_a_catalogued_method"]}))
         for closed, why in (("reddit_search", "Reddit"), ("learn_qna_search_rss", "Microsoft Learn Q&A"),
                             ("adobe_community_algolia_search", "Adobe")):
-            mr.METHOD_PLANS[PID] = {"primary": [closed]}
-            co.ALLOWED_METHODS[PID] = {closed}
-            broken = failed(quiet(ov.run_playbook, PID))
-            check(f"P8 step 3 refuses to start a new product on {why}", 3 in broken, str(broken))
-            restore()
-
-        mr.METHOD_PLANS[PID] = {"primary": []}
-        check("P9 step 4 fails for a plan with no primary", 4 in failed(quiet(ov.run_playbook, PID)))
-        restore()
-        mr.METHOD_PLANS[PID] = {"primary": ["github_issues"], "fallback": ["obs_forum"]}
-        co.ALLOWED_METHODS[PID] = {"github_issues", "obs_forum"}
-        check("P10 step 4 fails for a fallback that has no condition and could never run",
-              4 in failed(quiet(ov.run_playbook, PID)))
-        restore()
-
-        co.ALLOWED_METHODS[PID] = {"github_issues", "obs_forum"}
-        check("P11 step 5 fails when ownership names a method the plan does not",
-              5 in failed(quiet(ov.run_playbook, PID)))
-        restore()
-        co.ALLOWED_METHODS.pop(PID)
-        check("P12 step 5 fails with no ownership entry at all", 5 in failed(quiet(ov.run_playbook, PID)))
-        restore()
-        co.ALLOWED_SOURCE_TYPES.pop(PID)
-        check("P13 step 5 fails with no declared evidence source type", 5 in failed(quiet(ov.run_playbook, PID)))
-        restore()
-
-        ov.ONBOARDING[PID]["collector_class"] = "NoSuchCollector"
-        check("P14 step 6 fails when the collector class does not import",
-              6 in failed(quiet(ov.run_playbook, PID)))
-        restore()
+            broken = with_cfg(plan={"primary": [closed]})
+            check(f"P10 step 3 refuses to start a new product on {why}", 3 in broken, str(broken))
+        check("P11 step 4 fails for a plan with no primary", 4 in with_cfg(plan={"primary": [], "disabled": ["web_search"]}))
+        check("P12 step 4 fails for a fallback that has no condition and could never run",
+              4 in with_cfg(plan={"primary": ["github_issues"], "fallback": ["obs_forum"]}))
+        check("P13 step 4 fails for a fallback chain longer than the bound",
+              4 in with_cfg(plan={"primary": ["github_issues"], "fallback_when": ["blocked"],
+                                  "fallback": ["obs_forum", "stack_exchange_search", "open_web_discovery",
+                                               "tech_community_discussions"]}))
+        check("P14 step 5 fails with no declared evidence source type", 5 in with_cfg(source_types=[]))
+        check("P15 step 8 fails when a planned method is never emitted by the collector",
+              8 in with_cfg(plan={"primary": ["github_issues", "obs_forum"]}))
+        check("P16 step 6 fails when the collector class does not import",
+              6 in with_cfg(collector_class="NoSuchCollector"))
 
         with tempfile.TemporaryDirectory() as td:
             only_pass = Path(td) / "only_pass.json"
             only_pass.write_text(json.dumps({"synthetic": True, "since": "2026-01-01",
                                              "items": [ISSUES[9001]]}), encoding="utf-8")
-            ov.ONBOARDING[PID]["fixture"] = str(only_pass)      # an absolute path replaces the base
-            broken = failed(quiet(ov.run_playbook, PID))
-            check("P15 step 8 fails for a fixture that never exercises a rejection", 8 in broken, str(broken))
+            broken = with_cfg(fixture=str(only_pass))       # an absolute path replaces the base
+            check("P17 step 8 fails for a fixture that never exercises a rejection", 8 in broken, str(broken))
             recorded = Path(td) / "recorded.json"
             recorded.write_text(json.dumps({"since": "2026-01-01", "items": FIXTURE["items"]}), encoding="utf-8")
-            ov.ONBOARDING[PID]["fixture"] = str(recorded)
-            check("P16 step 7 refuses a fixture that is not marked synthetic",
-                  7 in failed(quiet(ov.run_playbook, PID)))
-            restore()
-        ov.ONBOARDING[PID]["suite"] = "auxsays/scripts/tests/test_no_such_suite.py"
-        check("P17 step 7 fails when the product's suite is not governed in CI",
-              7 in failed(quiet(ov.run_playbook, PID)))
-        restore()
+            check("P18 step 7 refuses a fixture that is not marked synthetic", 7 in with_cfg(fixture=str(recorded)))
+        check("P19 step 7 fails when the product's suite is not governed in CI",
+              7 in with_cfg(suite="auxsays/scripts/tests/test_no_such_suite.py"))
 
         runner.COLLECTORS[PID] = esd.ElgatoStreamDeckCollector
-        check("P18 step 9 fails if the collector would run with no flag set",
+        check("P20 step 9 fails if any production path registers the collector",
               9 in failed(quiet(ov.run_playbook, PID)))
         restore()
-        ov.ONBOARDING[PID]["activation_flag"] = "AUXSAYS_ENABLE_COMFYUI_CONSENSUS"
-        check("P19 step 9 fails when a workflow already sets the product's activation flag",
-              9 in failed(quiet(ov.run_playbook, PID)))
     finally:
         restore()
-    check("P20 the mutations above were all undone (the playbook passes again)",
-          quiet(ov.run_playbook, PID)["state"] == "STAGED")
+    after = quiet(ov.run_playbook, PID)
+    check("P21 the mutations above were all undone (CONTAINED again, production maps untouched)",
+          after["state"] == "CONTAINED" and PID not in mr.METHOD_PLANS and PID not in co.ALLOWED_METHODS)
 
 
 def row(version: str, number: int) -> dict:
@@ -236,7 +224,7 @@ def collector_checks() -> None:
         check(f"E7 identity {'established' if established else 'refused'}: {text[:44]!r}",
               got["established"] is established, str(got))
 
-    with ov._one_record_scan():
+    with ov._one_record_scan(), ov.declared(PID, CFG):
         run = quiet(ov.offline_run, PID, CFG)
     results = {r["version"]: r for r in run["results"]}
     health = [h for r in run["results"] for h in r["method_health"]]
@@ -284,7 +272,7 @@ def collector_checks() -> None:
               and written[1]["counted"] is False and len({r["id"] for r in written}) == 2,
               str([(r["id"], r.get("discovery_method_id")) for r in written]))
         try:
-            with ov._one_record_scan():
+            with ov._one_record_scan(), ov.declared(PID, CFG):
                 co.validate_evidence(PID, None, store.read_text(encoding="utf-8"))
             owned_ok = True
         except co.OwnershipViolation:
@@ -293,30 +281,38 @@ def collector_checks() -> None:
 
 
 def staging_checks() -> None:
-    print("-- N. staged, not activated")
-    check("N1 with no flag the collector is not registered",
-          PID not in runner.build_collectors({}) and PID not in runner.COLLECTORS)
-    check("N2 only the explicit value 'true' registers it",
-          PID in runner.build_collectors({CFG["activation_flag"]: "true"})
-          and all(PID not in runner.build_collectors({CFG["activation_flag"]: v}) for v in ("1", "yes", "on", "false", "")))
+    print("-- N. built, not registered, not activated")
+    every_flag = {getattr(runner, name): "true" for name in dir(runner) if name.endswith("_ENABLE_ENV")}
+    check("N1 no production path registers the collector, with no flag or with every flag set",
+          PID not in runner.build_collectors({}) and PID not in runner.build_collectors(every_flag)
+          and PID not in runner.COLLECTORS and len(every_flag) >= 5)
+    check("N2 the production maps hold no plan, ownership or source type for the product",
+          PID not in mr.METHOD_PLANS and PID not in co.ALLOWED_METHODS and PID not in co.ALLOWED_SOURCE_TYPES)
     workflows = "\n".join(p.read_text(encoding="utf-8")
                           for p in sorted((_REPO / ".github" / "workflows").glob("*.yml")))
-    check("N3 no workflow names the activation flag or the product",
-          CFG["activation_flag"] not in workflows and "elgato_stream_deck" not in workflows
-          and "'auxsays/updates/generated/*stream-deck*.md'" not in workflows)
+    check("N3 no workflow names the collector or allow-lists its records",
+          "elgato_stream_deck" not in workflows and "*stream-deck*" not in workflows)
     source = (_REPO / "auxsays/scripts/patch_collectors/elgato_stream_deck.py").read_text(encoding="utf-8")
-    check("N4 the collector has ONE transport call site, the shared GitHub client",
-          source.count("github_api.get_json(") == 1 and "urlopen" not in source and "fetch_text" not in source)
-    check("N5 the stored evidence holds no Elgato row (nothing was collected by this change)",
+    check("N4 the collector has ONE transport call site, the shared GitHub client, and no write path",
+          source.count("github_api.get_json(") == 1 and "urlopen" not in source and "fetch_text" not in source
+          and "append_evidence_rows" not in source and "_index_generated_records" not in source)
+    refused = False
+    try:
+        with ov._one_record_scan():
+            esd.ElgatoStreamDeckCollector().collect(base.CollectorContext(write=True, since=None, max_pages=1))
+    except RuntimeError as exc:
+        refused = "not activated" in str(exc)
+    check("N5 the collector refuses write mode outright", refused)
+    check("N6 the stored evidence holds no Elgato row (nothing was collected by this change)",
           not any(r.get("product_id") == PID for r in base.load_evidence()))
-    check("N6 the playbook script itself makes no request and writes no tracked file",
+    check("N7 the playbook script itself makes no request and writes no tracked file",
           all(token not in (_REPO / "auxsays/scripts/onboard_vendor.py").read_text(encoding="utf-8")
               for token in ("urlopen", "requests.get", "write_text(", "atomic_write")))
 
 
 def run() -> int:
     print("=" * 78)
-    print("Vendor onboarding playbook (exercised on Elgato Stream Deck; staged, not activated)")
+    print("Vendor onboarding playbook (exercised on Elgato Stream Deck; built, contained, not activated)")
     print("=" * 78)
     playbook_checks()
     collector_checks()

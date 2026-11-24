@@ -97,10 +97,6 @@ ALLOWED_METHODS: dict[str, set[str]] = {
     # read once per run, each family keeping only what its own identity rules establish.
     "nvidia-geforce-game-ready": {"nvidia_forum_default_views"},
     "nvidia-studio-driver": {"nvidia_forum_default_views"},
-    # STAGED (vendor-onboarding playbook): Elgato's own public GitHub issue tracker, the same method
-    # id and source type OBS and ComfyUI use. The collector is default-off; this entry is what lets
-    # its rows be written under a declared identity on the day it is activated.
-    "elgato-stream-deck": {"github_issues"},
 }
 
 # Per-product allowed evidence source_type identities. Evidence rows carry ``source_type`` (not a
@@ -135,7 +131,6 @@ ALLOWED_SOURCE_TYPES: dict[str, set[str]] = {
     "comfyui": {"github_issue"},
     "nvidia-geforce-game-ready": {"nvidia_forum_comment"},
     "nvidia-studio-driver": {"nvidia_forum_comment"},
-    "elgato-stream-deck": {"github_issue"},
 }
 
 # Per-product allowed permalink route slug(s). A record's public permalink is the canonical shape

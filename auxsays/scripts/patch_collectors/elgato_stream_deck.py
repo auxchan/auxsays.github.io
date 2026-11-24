@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """Elgato Stream Deck community evidence from Elgato's own public GitHub issue tracker.
 
-STATUS: STAGED. Built and tested through the vendor-onboarding playbook
-(scripts/onboard_vendor.py); registered default-off behind
-AUXSAYS_ENABLE_ELGATO_STREAM_DECK_CONSENSUS, which no workflow sets. Nothing here runs in production.
+STATUS: BUILT, NOT REGISTERED. Taken through the vendor-onboarding playbook
+(scripts/onboard_vendor.py). No production path registers this collector, no method plan or
+ownership entry names its product, and it refuses write mode: Elgato is a per-platform vendor, and
+qa_patch_records.PLATFORM_UNGATED_COMPANIES keeps community evidence away from such a vendor until
+its records carry a platform gate. Nothing here runs in production.
 
 SOURCE. github.com/elgatosf/streamdeck -- Elgato's public repository for the Stream Deck SDK, MIT
 licensed, issues open. Read through GitHub's REST API with the repository's shared client
@@ -325,32 +327,6 @@ def method_status(errors: list[dict[str, Any]], telemetry: dict[str, Any], accep
     return "success" if accepted else "no_results"
 
 
-def apply_consensus_writebacks(update_versions: list[str]) -> dict[str, bool]:
-    """Hand each patch that gained an accepted report to the SHARED consensus authority, which
-    filters every proposal through COLLECTOR_WRITABLE_FIELDS (freshness only). The ComfyUI shape."""
-    from apply_consensus_to_records import (_index_generated_records,  # noqa: PLC0415
-                                            apply_collector_record_fields, run_dry_run)
-
-    wanted = [str(v) for v in update_versions if str(v or "")]
-    out = {version: False for version in wanted}
-    if not wanted:
-        return out
-    results = run_dry_run(evidence_path=base.EVIDENCE_PATH, product_id_filter=PRODUCT_ID,
-                          is_candidate_mode=False, records_index=_index_generated_records(),
-                          write_requested=True)
-    for version in wanted:
-        matches = [item for item in results if item.get("update_version") == version]
-        if len(matches) != 1 or not matches[0].get("would_write"):
-            continue
-        record_rel = matches[0].get("matched_generated_record_path")
-        if not record_rel:
-            continue
-        applied = apply_collector_record_fields(
-            ROOT / record_rel, dict(matches[0].get("proposed_fields_if_written") or {})) or {}
-        out[version] = bool((applied.get("write_plan") or {}).get("fields"))
-    return out
-
-
 class ElgatoStreamDeckCollector(base.ProductCollector):
     """Community evidence for the Stream Deck releases the official lane already tracks. Patch
     targets come from the EXISTING generated records, never from version arithmetic."""
@@ -358,6 +334,10 @@ class ElgatoStreamDeckCollector(base.ProductCollector):
     product_id = PRODUCT_ID
 
     def collect(self, context: base.CollectorContext) -> list[dict[str, Any]]:
+        if context.write:
+            # Persisting evidence and touching records is part of ACTIVATION, which this collector
+            # has not been through (see the module docstring and the playbook's checklist).
+            raise RuntimeError("elgato_stream_deck collector is not activated: dry-run only")
         # ONE scan of the generated records: the run's targets and the tracked-version list both
         # come from it (a scan reads every record file in the repository).
         every_record = base.generated_records(PRODUCT_ID, None)
@@ -412,19 +392,4 @@ class ElgatoStreamDeckCollector(base.ProductCollector):
             })
             run_rows.extend(accepted + rejected)
 
-        if context.write:
-            persisted: list[dict[str, Any]] = []
-            already_held: list[dict[str, Any]] = []
-            all_health = [row for result in results for row in result["method_health"]]
-            if run_rows:
-                base.append_evidence_rows(run_rows, out_added=persisted, out_already_held=already_held,
-                                          method_health=all_health)
-            base.finalize_method_health_delta(all_health, [r for r in persisted if r.get("counted")],
-                                              [r for r in already_held if r.get("counted")])
-            updated = apply_consensus_writebacks(
-                sorted({str(r.get("update_version") or "") for r in persisted if r.get("counted")}))
-            for result in results:
-                version = str(result["version"])
-                result["evidence_rows_added"] = sum(1 for r in persisted if str(r.get("update_version") or "") == version)
-                result["record_updated"] = bool(updated.get(version, False))
         return results

@@ -65,7 +65,8 @@ allows it. Closed by the floor, whatever is declared: Reddit, Microsoft Learn Q&
 search API, and any method with a recorded `rights_status`. Open today: `vendor_forum_search` only.
 
 **Adding a vendor.** `python auxsays/scripts/onboard_vendor.py --product-id <id>` runs the sequence
-as nine checked steps and stops before activation.
+as ten checked steps and stops before activation. The product's plan and source types are declared
+in the playbook and reach the production maps only through a reviewed activation change.
 
 ---
 
