@@ -1,0 +1,8 @@
+---
+layout: aux-patch-atom
+feed_product_id: adobe-acrobat-reader
+feed_alternate: /updates/adobe/adobe-acrobat-reader/
+feed_limit: 20
+permalink: /updates/adobe/adobe-acrobat-reader/feed.xml
+sitemap: false
+---

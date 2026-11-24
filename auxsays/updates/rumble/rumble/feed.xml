@@ -1,0 +1,8 @@
+---
+layout: aux-patch-atom
+feed_product_id: rumble
+feed_alternate: /updates/rumble/rumble/
+feed_limit: 20
+permalink: /updates/rumble/rumble/feed.xml
+sitemap: false
+---

@@ -1,0 +1,117 @@
+{%- comment -%}
+  THE PATCH VERDICT FEEDS (P8): one Atom feed per product tracker and one for every product.
+
+  WHAT AN ENTRY IS. A patch page and the verdict that page prints today. AUXSAYS stores no history of
+  verdict changes: a record's status_events hold its publication and its report-count updates, never
+  a verdict, and the verdict itself is decided at deploy (lib/patch_decision.decide, projected to
+  _data/verdict_projection.yml). So a feed lists the NEWEST patch pages, by their stored release date,
+  each with its current verdict, and its subtitle says so. It never calls an entry a change.
+
+  NO SECOND VERDICT AUTHORITY. The verdict, its scope and its line come from patch-verdict-gate.html,
+  the file every other surface prints a verdict from, so a feed cannot say what the page does not.
+  INSUFFICIENT DATA is written "no verdict yet", as the page's search title writes it.
+
+  DATES. An entry's <updated> is the record's record_last_updated (the moment a writer last changed
+  it), else its release date: the same stored dates, under the same three tests, as sitemap.xml
+  (written as a date, readable, between 2000 and this build). A record with neither is skipped, never
+  dated with the build time. The feed's own <updated> is its newest entry's; only a feed with no entry
+  carries the build time, because Atom requires the element and nothing else is true of it.
+
+  Input:   include.product_id  a product id, or empty for every product
+           include.limit       the most entries to list
+           include.title_name  the name the feed title and subtitle use
+           include.alternate   the page the feed belongs to (a product tracker, or the Patch Feed)
+           page.url            the feed's own URL
+  Plain Liquid apart from where / sort / absolute_url / xml_escape, so the test can render this very
+  file with the Liquid gem (scripts/tests/test_patch_atom_feeds.py).
+  No literal Liquid tag appears in this comment on purpose: a comment block still parses tags.
+{%- endcomment -%}
+{%- assign paf_pid = include.product_id | default: '' | append: '' | strip -%}
+{%- assign paf_limit = include.limit | default: 20 | plus: 0 -%}
+{%- assign paf_name = include.title_name | default: 'every tracked product' | append: '' | strip -%}
+{%- assign paf_floor = 946684800 -%}
+{%- assign paf_now = site.time | date: '%s' | plus: 0 -%}
+{%- assign paf_pages = site.pages | where: 'update_entry', true -%}
+{%- if paf_pid != '' -%}{%- assign paf_pages = paf_pages | where: 'product_id', paf_pid -%}{%- endif -%}
+{%- assign paf_pages = paf_pages | sort: 'update_published_at' | reverse -%}
+{%- assign paf_count = 0 -%}
+{%- assign paf_newest = 0 -%}
+{%- assign paf_newest_stamp = '' -%}
+{%- capture paf_entries -%}
+{%- for paf_item in paf_pages -%}
+  {%- if paf_count >= paf_limit -%}{%- break -%}{%- endif -%}
+  {%- if paf_item.update_status == 'archived' or paf_item.feed_hidden == true -%}{%- continue -%}{%- endif -%}
+  {%- comment -%} The stored date, under the sitemap's three tests. {%- endcomment -%}
+  {%- assign paf_released = '' -%}
+  {%- assign paf_value = paf_item.update_published_at | default: '' -%}
+  {%- assign paf_shape = paf_value | append: '' | slice: 4, 1 -%}
+  {%- assign paf_seconds = paf_value | date: '%s' | plus: 0 -%}
+  {%- if paf_shape == '-' and paf_seconds >= paf_floor and paf_seconds <= paf_now -%}
+    {%- assign paf_released = paf_value -%}{%- assign paf_released_seconds = paf_seconds -%}
+  {%- endif -%}
+  {%- assign paf_stamp = '' -%}
+  {%- assign paf_value = paf_item.record_last_updated | default: '' -%}
+  {%- assign paf_shape = paf_value | append: '' | slice: 4, 1 -%}
+  {%- assign paf_seconds = paf_value | date: '%s' | plus: 0 -%}
+  {%- if paf_shape == '-' and paf_seconds >= paf_floor and paf_seconds <= paf_now -%}
+    {%- assign paf_stamp = paf_value -%}{%- assign paf_stamp_seconds = paf_seconds -%}
+  {%- elsif paf_released != '' -%}
+    {%- assign paf_stamp = paf_released -%}{%- assign paf_stamp_seconds = paf_released_seconds -%}
+  {%- endif -%}
+  {%- if paf_stamp == '' -%}{%- continue -%}{%- endif -%}
+  {%- comment -%} The page's own heading: detail title, else feed title, else product and version, with the product named once. {%- endcomment -%}
+  {%- assign paf_title = paf_item.update_detail_title | default: '' | append: '' | strip -%}
+  {%- if paf_title == '' -%}{%- assign paf_title = paf_item.update_feed_title | default: '' | append: '' | strip -%}{%- endif -%}
+  {%- if paf_title == '' -%}{%- assign paf_title = paf_item.update_product | default: '' | append: ' ' | append: paf_item.update_version | strip -%}{%- endif -%}
+  {%- include patch-display-title.html title=paf_title product=paf_item.update_product -%}
+  {%- assign paf_title = patch_display_title | default: paf_title -%}
+  {%- assign paf_reports = paf_item.update_report_count | default: 0 | plus: 0 -%}
+  {%- include patch-verdict-gate.html record=paf_item count=paf_reports -%}
+  {%- if gate_label == 'INSUFFICIENT DATA' -%}
+    {%- assign paf_verdict = 'no verdict yet' -%}
+    {%- comment -%} The gate's own no-verdict line when it has one (it opens "No verdict yet:"), else the search title's zero-report wording. {%- endcomment -%}
+    {%- assign paf_summary = gate_body -%}
+    {%- if paf_summary == '' -%}{%- assign paf_summary = 'No verdict yet. No user reports have been counted for this update yet, so there is no AUXSAYS verdict.' -%}{%- endif -%}
+  {%- else -%}
+    {%- assign paf_verdict = gate_label -%}
+    {%- if gate_scope != '' -%}{%- assign paf_verdict = gate_label | append: ' ' | append: gate_scope -%}{%- endif -%}
+    {%- capture paf_summary -%}AUXSAYS verdict: {{ paf_verdict }}. {{ gate_body }}{%- endcapture -%}
+  {%- endif -%}
+  {%- if paf_released != '' -%}{%- capture paf_summary -%}{{ paf_summary }} Released {{ paf_released | date: '%b %-d, %Y' }}.{%- endcapture -%}{%- endif -%}
+  {%- assign paf_url = paf_item.url | replace: '/index.html', '/' | absolute_url -%}
+  {%- if paf_stamp_seconds > paf_newest -%}{%- assign paf_newest = paf_stamp_seconds -%}{%- assign paf_newest_stamp = paf_stamp -%}{%- endif -%}
+  {%- assign paf_count = paf_count | plus: 1 %}
+  <entry>
+    <id>{{ paf_url | xml_escape }}</id>
+    <title type="text">{{ paf_title | strip_html | strip_newlines | strip | xml_escape }}: {{ paf_verdict | xml_escape }}</title>
+    <link rel="alternate" type="text/html" href="{{ paf_url | append: '?utm_source=feed&utm_medium=rss' | xml_escape }}"/>
+    <updated>{{ paf_stamp | date: '%Y-%m-%dT%H:%M:%S%:z' }}</updated>
+    {%- if paf_released != '' %}
+    <published>{{ paf_released | date: '%Y-%m-%dT%H:%M:%S%:z' }}</published>
+    {%- endif %}
+    <category term="{{ gate_label | xml_escape }}" label="{{ gate_label | xml_escape }}"/>
+    <summary type="text">{{ paf_summary | strip_html | strip_newlines | strip | xml_escape }}</summary>
+  </entry>
+{%- endfor -%}
+{%- endcapture -%}
+{%- assign paf_self = page.url | absolute_url -%}
+{%- assign paf_alternate = include.alternate | default: '/updates/' | absolute_url -%}
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>{{ paf_self | xml_escape }}</id>
+  <title type="text">AUXSAYS patch verdicts: {{ paf_name | xml_escape }}</title>
+  <subtitle type="text">The newest {{ paf_name | xml_escape }} patch pages, each with the verdict its page prints today. AUXSAYS keeps no history of verdict changes yet, so an entry is a patch page and its current verdict, not a change; its date is when the record last changed.{% if paf_count == 0 %} No patch page is listed for it yet.{% endif %}</subtitle>
+  <link rel="self" type="application/atom+xml" href="{{ paf_self | xml_escape }}"/>
+  <link rel="alternate" type="text/html" href="{{ paf_alternate | xml_escape }}"/>
+  {%- if paf_newest_stamp != '' %}
+  <updated>{{ paf_newest_stamp | date: '%Y-%m-%dT%H:%M:%S%:z' }}</updated>
+  {%- else %}
+  <updated>{{ site.time | date: '%Y-%m-%dT%H:%M:%S%:z' }}</updated>
+  {%- endif %}
+  <author>
+    <name>AUXSAYS</name>
+    <uri>{{ '/' | absolute_url | xml_escape }}</uri>
+  </author>
+  <generator uri="https://jekyllrb.com/">Jekyll</generator>
+{{ paf_entries }}
+</feed>

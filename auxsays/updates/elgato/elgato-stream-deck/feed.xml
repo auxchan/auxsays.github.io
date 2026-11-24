@@ -1,0 +1,8 @@
+---
+layout: aux-patch-atom
+feed_product_id: elgato-stream-deck
+feed_alternate: /updates/elgato/elgato-stream-deck/
+feed_limit: 20
+permalink: /updates/elgato/elgato-stream-deck/feed.xml
+sitemap: false
+---

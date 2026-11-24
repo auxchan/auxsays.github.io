@@ -1,0 +1,8 @@
+---
+layout: aux-patch-atom
+feed_product_id: comfyui
+feed_alternate: /updates/comfyui/comfyui/
+feed_limit: 20
+permalink: /updates/comfyui/comfyui/feed.xml
+sitemap: false
+---

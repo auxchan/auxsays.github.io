@@ -1,0 +1,8 @@
+---
+layout: aux-patch-atom
+feed_product_id: cloudflare
+feed_alternate: /updates/cloudflare/cloudflare/
+feed_limit: 20
+permalink: /updates/cloudflare/cloudflare/feed.xml
+sitemap: false
+---

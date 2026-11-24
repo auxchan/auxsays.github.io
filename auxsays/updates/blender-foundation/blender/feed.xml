@@ -1,0 +1,8 @@
+---
+layout: aux-patch-atom
+feed_product_id: blender
+feed_alternate: /updates/blender-foundation/blender/
+feed_limit: 20
+permalink: /updates/blender-foundation/blender/feed.xml
+sitemap: false
+---

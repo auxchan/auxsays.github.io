@@ -1,0 +1,8 @@
+---
+layout: aux-patch-atom
+feed_product_id: midjourney
+feed_alternate: /updates/midjourney/midjourney/
+feed_limit: 20
+permalink: /updates/midjourney/midjourney/feed.xml
+sitemap: false
+---
