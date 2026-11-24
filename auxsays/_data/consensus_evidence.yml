@@ -4784,8 +4784,8 @@ evidence:
   patch_version_matched: true
   matched_version: '21'
   match_basis: exact_version_text
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: point_release_named_not_release_line
   issue_theme: unspecified issue
   workflow_area: general DaVinci Resolve workflow
   platform: unknown
@@ -9681,8 +9681,8 @@ evidence:
   patch_version_matched: true
   matched_version: '20'
   match_basis: exact_version_text
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: point_release_named_not_release_line
   issue_theme: render/export failure
   workflow_area: render/export
   platform: windows
@@ -11517,8 +11517,8 @@ evidence:
   patch_version_matched: true
   matched_version: '20'
   match_basis: exact_version_text
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: point_release_named_not_release_line
   issue_theme: startup or application crash
   workflow_area: application stability
   platform: macos
@@ -11573,8 +11573,8 @@ evidence:
   patch_version_matched: true
   matched_version: '20'
   match_basis: exact_version_text
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: point_release_named_not_release_line
   issue_theme: render/export failure
   workflow_area: render/export
   platform: unknown
@@ -35907,8 +35907,8 @@ evidence:
   patch_version_matched: true
   matched_version: '21.0'
   match_basis: exact_version_alias
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: point_release_named_not_release_line
   issue_theme: startup or application crash
   workflow_area: application stability
   platform: unknown
@@ -36664,8 +36664,8 @@ evidence:
   patch_version_matched: true
   matched_version: '21'
   match_basis: exact_version_text
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: point_release_named_not_release_line
   issue_theme: unspecified issue
   workflow_area: general DaVinci Resolve workflow
   platform: unknown
@@ -105395,4 +105395,67 @@ evidence:
   excerpt_norm_sha256: eee881e0fac93e4c83a61efcb2f02c282b7271d16399a6a543b89deab409503a
   title_dedup_sha256: 71423576cb6040168a100cadd3622801ee18728dc23c38f4a9c8d9d95503a9aa
   issue_bucket: capture-source issues
+  facts_rule_version: v1
+
+- id: blackmagic-davinci-20-3-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1seungh-davinci-has-started-to-lag-a-lot-out-of-n
+  product_id: blackmagic-davinci
+  update_version: '20.3'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1seungh/davinci_has_started_to_lag_a_lot_out_of_nowhere/
+  parent_title: Davinci has started to lag a lot out of nowhere
+  report_title: Davinci has started to lag a lot out of nowhere
+  report_text_excerpt: 'Davinci has started to lag a lot out of nowhere Info: DaVinci Resolve Studio 20 Version 20.3 Build 10 Windows 11 MediaArea Text AJA System Test C Drive AJA System Test D Drive Problem: Davinci used to be fluent and I could easily make cuts while editing and it continues...'
+  captured_at: '2026-07-22T22:47:39Z'
+  source_date: '2026-04-07'
+  target_release_date: '2025-12-01'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20.3'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: performance regression
+  workflow_area: timeline / GPU performance
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  matched_text: '20.3'
+  matched_field: report_text
+  matched_context: '...has started to lag a lot out of nowhere Info: DaVinci Resolve Studio 20 Version 20.3 Build 10 Windows 11 MediaArea Text AJA System Test C Drive AJA System Test D Dr...'
+  excerpt_norm_sha256: 5c9b07be79422b8a85c1887b31d15c8d682653c6a14f0780729864d387ff11a4
+  title_dedup_sha256: 8e66ef9dc181fe9d5d7d71856ffdf4010bf934d98b520e50b7a2b93a7be1ba78
+  issue_bucket: performance slowdowns
+  facts_rule_version: v1
+- id: blackmagic-davinci-20-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1nnkml9-stability-concerns-after-getting-rtx-5070
+  product_id: blackmagic-davinci
+  update_version: '20.2'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1nnkml9/stability_concerns_after_getting_rtx_5070_ti/
+  parent_title: Stability concerns after getting RTX 5070 TI.
+  report_title: Stability concerns after getting RTX 5070 TI.
+  report_text_excerpt: Stability concerns after getting RTX 5070 TI. Not the usual Hardware Rant. Let's discuss. I’m experiencing frequent, totally random crashes with DaVinci Resolve Studio 20.2 on an RTX 5070 Ti and possibly other RTX 5000 series GPUs. Here's the situation and things I’ve...
+  captured_at: '2026-07-24T15:07:07Z'
+  source_date: '2025-09-22'
+  target_release_date: '2025-09-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20.2'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  matched_text: '20.2'
+  matched_field: report_text
+  matched_context: '.... I’m experiencing frequent, totally random crashes with DaVinci Resolve Studio 20.2 on an RTX 5070 Ti and possibly other RTX 5000 series GPUs. Here''s the situation...'
+  excerpt_norm_sha256: 30092ed736221502b2acc1a076fc12e60f622862b6b6eede220bc2b41b78c85a
+  title_dedup_sha256: 95b2c0ec1f7300565b1fdff825bbc97b4e7ddffbe4f2fed05fe17caffe81ada1
+  issue_bucket: startup or application crashes
   facts_rule_version: v1

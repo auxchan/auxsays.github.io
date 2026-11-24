@@ -19,7 +19,7 @@ update_published_at: '2025-12-01T00:00:00Z'
 update_last_checked: '2026-07-21T08:49:00Z'
 source_last_checked: '2026-07-21T08:49:00Z'
 official_body_last_checked: '2026-07-21T08:49:00Z'
-record_last_updated: '2026-11-24T11:32:55.338754Z'
+record_last_updated: '2026-11-24T06:59:50.176617Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
@@ -27,22 +27,22 @@ update_status: current
 update_feed_title: DaVinci Resolve 20.3
 update_detail_title: DaVinci Resolve 20.3
 update_consensus_label: Negative
-update_report_count: 6
+update_report_count: 7
 update_consensus_confidence: Low
-quick_verdict: 'INSUFFICIENT DATA: DaVinci Resolve 20.3 has 6 user reports found.'
+quick_verdict: 'INSUFFICIENT DATA: DaVinci Resolve 20.3 has 7 user reports found.'
 official_summary: Blackmagic Design lists DaVinci Resolve Studio 20.3 in its official support downloads feed.
 release_summary: This software update adds support for 32K resolution support on Apple M5 Macs, improves timeline
   versioning with custom naming, adds new metadata fields in the media pool and improves Resolve FX noise reduction
   performance. This version requires a DaVinci Resolve Studio license dongle, Blackmagic Cloud license or software
   activation code.
-consensus_report: '6 user reports found for DaVinci Resolve 20.3. Current reports mention startup or application
-  crashes and render/export failures. Current reports are Reddit-heavy, so production users should test before updating.
-  Sources represented: r/davinciresolve.'
+consensus_report: '7 user reports found for DaVinci Resolve 20.3. Current reports mention startup or application
+  crashes, render/export failures, and performance slowdowns. Current reports are Reddit-heavy, so production users
+  should test before updating. Sources represented: r/davinciresolve.'
 evidence_state: pilot_sample
 evidence_state_label: Verified reports
 intelligence_stage: pilot
 official_source_captured: true
-confirmed_patch_specific_report_count: 6
+confirmed_patch_specific_report_count: 7
 evidence_last_checked: '2026-09-13T05:53:53Z'
 known_issues_present: null
 consensus_collection_status: pilot_initial_sample
@@ -68,6 +68,9 @@ status_events:
 - at: '2026-09-16T02:08:30.098062Z'
   label: User reports found
   note: User report count updated to 6.
+- at: '2026-11-24T06:59:50.176617Z'
+  label: User reports found
+  note: User report count updated to 7.
 official_patch_notes_source_type: download_portal
 primary_official_source: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
 fallback_official_sources:
@@ -119,7 +122,7 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   AUXSAYS note: this is official download-portal metadata, not broad community consensus.'
 official_checksums_body: ''
 official_checksums_capture_status: not-present
-update_consensus_summary: 'INSUFFICIENT DATA: DaVinci Resolve 20.3. 6 user reports are matched to this exact update,
+update_consensus_summary: 'INSUFFICIENT DATA: DaVinci Resolve 20.3. 7 user reports are matched to this exact update,
   but no problem in them is confirmed as reported independently by two or more users. If one matches your setup,
   test before relying on this update.'
 evidence_samples:
@@ -140,6 +143,14 @@ evidence_samples:
   issue: render/export failures
   outcome: medium
 - source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1seungh/davinci_has_started_to_lag_a_lot_out_of_nowhere/
+  source_title: Davinci has started to lag a lot out of nowhere
+  counted: true
+  version_matched: '20.3'
+  patch_version_matched: true
+  issue: performance slowdowns in timeline / GPU performance
+  outcome: medium
+- source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1s41za2/davinci_resolve_studio_crashes_when_connecting/
   source_title: DaVinci Resolve Studio crashes when connecting 5th+ Fusion alpha output as matte in Color page —
     anyone else?
@@ -156,14 +167,6 @@ evidence_samples:
   patch_version_matched: true
   issue: startup or application crashes in application stability
   outcome: high
-- source_name: r/davinciresolve
-  source_url: https://www.reddit.com/r/davinciresolve/comments/1tybsea/bug_en_davinci_resolve_2032/
-  source_title: Bug en davinci resolve 20.3.2
-  counted: true
-  version_matched: '20.3'
-  patch_version_matched: true
-  issue: render/export failures
-  outcome: medium
 evidence_sample_visible_limit: 5
 accepted_report_sources:
 - source_name: r/davinciresolve
@@ -221,10 +224,20 @@ accepted_report_sources:
   patch_version_matched: true
   issue: render/export failures
   workflow_area: render/export
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1seungh/davinci_has_started_to_lag_a_lot_out_of_nowhere/
+  source_title: Davinci has started to lag a lot out of nowhere
+  source_date: '2026-04-07'
+  version_matched: '20.3'
+  patch_version_matched: true
+  issue: performance slowdowns in timeline / GPU performance
+  workflow_area: timeline / GPU performance
 evidence_source_limitations:
 - Current reports are Reddit-heavy, so production users should test before updating.
+- Some community sources were unavailable during the last check; unavailable sources were not counted as reports.
 update_decision_label: INSUFFICIENT DATA
-update_decision_body: 'No verdict yet: 6 user reports are matched to this exact update, but no problem in them is
+update_decision_body: 'No verdict yet: 7 user reports are matched to this exact update, but no problem in them is
   confirmed as reported independently by two or more users. If one matches your setup, test before relying on this
   update.'
 practical_recommendations:

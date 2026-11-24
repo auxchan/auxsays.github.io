@@ -32,6 +32,7 @@ from patch_collectors.base import (
     atomic_write_text,
 )
 from lib import evidence_facts, live_eligibility, maturity, monitoring_health, verdict_projection, verdict_reasons
+from lib import davinci_release_line
 from lib.log_redaction import log_safe
 from lib.report_counts import EvidenceStoreError, load_evidence_store
 
@@ -71,6 +72,8 @@ CONSENSUS_COHERENCE_FIELDS = {
     "release_summary",
     "practical_recommendations",
     "source_freshness_note",
+    # Whether the page is one exact update or a release line (lib.davinci_release_line).
+    "update_identity_scope",
 }
 
 # POSITIVE collector write authority. An in-collector writeback runs BEFORE
@@ -1108,22 +1111,30 @@ def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, A
             ],
             "source_freshness_note": "",
         }
+        # RELEASE-LINE IDENTITY (lib.davinci_release_line). A bare version with point releases under
+        # it counts reports that name the LINE, so the page says it is the line and names its range.
+        # This runs only at count > 0: with no reports the record is the vendor's first release.
+        line_identity = davinci_release_line.identity_fields(
+            product_label, ver, davinci_release_line.versions_on_disk(GENERATED_DIR))
+        fields.update(line_identity)
         if str(ver).strip() == "21":
+            # "21" used to call itself "the stable DaVinci Resolve 21 release, published Apr 14,
+            # 2026". Its 73 reports were posted between 2026-04-14 and 2026-10-30 and name no point
+            # release; the page is the 21 line. The release framing below no longer claims otherwise.
             fields.update({
-                "description": (
-                    f"Published Apr 14, 2026. This page covers the stable {product_label} {ver} release. Public beta reports are excluded."
-                ),
                 "feed_hidden": False,
                 "status_change_type": "new",
                 "notification_message": "",
-                "update_channel_label": "Stable / Studio release",
                 "official_summary": (
-                    f"{product_label} {ver} is tracked here as the stable/Studio release. Public Beta 1 reports are excluded."
+                    f"{product_label} {ver} is tracked here as the stable/Studio release line: user reports "
+                    f"that name {ver} without a point release. Public beta reports are excluded."
                 ),
                 "release_summary": (
-                    f"{product_label} {ver} is the stable/Studio release. Use this page for stable release risk."
+                    f"{product_label} {ver} stable/Studio release line. Each exact release has its own page with its own reports."
                 ),
             })
+            if not line_identity:
+                fields["update_channel_label"] = "Stable / Studio release"
             # ARCHIVAL IS NOT OWNED HERE (AUX-065). This projection used to write
             # `update_status: current`, which flipped an archived "21" back to current as soon as a
             # stable 23 made it archivable. It no longer writes update_status at all; the archive

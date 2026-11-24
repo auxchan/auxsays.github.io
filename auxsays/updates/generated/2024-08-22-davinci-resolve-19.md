@@ -1,7 +1,8 @@
 ---
 layout: aux-update
 title: DaVinci Resolve 19 official update breakdown
-description: Official DaVinci Resolve update record captured from Blackmagic Design.
+description: User reports that name DaVinci Resolve 19 without a point release. They can be about any release from
+  19 to 19.1.4; each exact release has its own page.
 permalink: /updates/blackmagic-design/blackmagic-davinci/19/
 update_entry: true
 company_id: blackmagic-design
@@ -19,7 +20,7 @@ update_published_at: '2024-08-22T00:00:00Z'
 update_last_checked: '2026-07-23T19:48:59Z'
 source_last_checked: '2026-07-23T19:48:59Z'
 official_body_last_checked: '2026-07-23T19:48:59Z'
-record_last_updated: '2026-11-21T21:13:18.364738Z'
+record_last_updated: '2026-11-24T06:59:30.538699Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
@@ -300,4 +301,9 @@ practical_recommendations:
 - Test on copied projects before moving client work to this version.
 - Keep a known-good Resolve version available.
 source_freshness_note: ''
+update_identity_scope: release_line
+update_channel_label: 'Release line: 19 to 19.1.4'
+record_note: The user reports on this page say "DaVinci Resolve 19" and name no point release, so they can be about
+  any release from 19 to 19.1.4. This page is the 19 release line, not one exact update. A report that names an
+  exact release is counted on that release's page. Beta reports are excluded.
 ---

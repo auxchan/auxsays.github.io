@@ -288,6 +288,12 @@ jobs:
       - name: Audit consensus evidence
         run: python auxsays/scripts/audit_consensus_evidence.py
 
+      # Counted rows whose own stored text disagrees with the version they are counted for. Read-only.
+      # A flag is a warning and a job-summary entry, never a failure: stored excerpts are cut, and a
+      # bot commit that stores a new row must not turn main red. Exit 2 only if the store is unreadable.
+      - name: Version attribution guard
+        run: python auxsays/scripts/check_version_attribution.py --github
+
       # The gate the writer lanes and the Pages deploy both block on, executed against this tree
       # rather than mirrored by a re-implementation. Publication mode is the stricter of the two and
       # is what pages.yml runs, so that is what is checked here.

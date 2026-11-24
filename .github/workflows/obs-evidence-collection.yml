@@ -473,6 +473,12 @@ jobs:
         if: ${{ github.event.inputs.dry_run != 'true' }}
         run: python auxsays/scripts/qa_patch_records.py
 
+      - name: Version attribution guard
+        # The same read-only check ci-integrity runs, here over the rows this run just stored: a
+        # counted row whose own stored text names a different version, or its own version only as the
+        # rollback target or the fix. It warns in the job summary and never fails or withdraws.
+        run: python auxsays/scripts/check_version_attribution.py --github
+
       - name: Remove transient validation output
         if: ${{ github.event.inputs.dry_run != 'true' }}
         run: |

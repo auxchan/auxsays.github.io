@@ -1,7 +1,8 @@
 ---
 layout: aux-update
 title: DaVinci Resolve 20 official update breakdown
-description: Official DaVinci Resolve update record captured from Blackmagic Design.
+description: User reports that name DaVinci Resolve 20 without a point release. They can be about any release from
+  20 to 20.3.3; each exact release has its own page.
 permalink: /updates/blackmagic-design/blackmagic-davinci/20/
 update_entry: true
 company_id: blackmagic-design
@@ -19,7 +20,7 @@ update_published_at: '2025-05-28T00:00:00Z'
 update_last_checked: '2026-07-22T08:47:09Z'
 source_last_checked: '2026-07-22T08:47:09Z'
 official_body_last_checked: '2026-07-22T08:47:09Z'
-record_last_updated: '2026-11-21T21:13:28.026714Z'
+record_last_updated: '2026-11-24T06:59:36.675868Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
@@ -27,23 +28,23 @@ update_status: current
 update_feed_title: DaVinci Resolve 20
 update_detail_title: DaVinci Resolve 20
 update_consensus_label: Negative
-update_report_count: 32
+update_report_count: 29
 update_consensus_confidence: Medium
-quick_verdict: 'INSUFFICIENT DATA: DaVinci Resolve 20 has 32 user reports found.'
+quick_verdict: 'INSUFFICIENT DATA: DaVinci Resolve 20 has 29 user reports found.'
 official_summary: Blackmagic Design lists DaVinci Resolve Studio 20 in its official support downloads feed.
 release_summary: This software update installs the final release of DaVinci Resolve Studio 20 which adds support
   for over 100 new features and AI tools such as AI IntelliScript, AI Animated Subtitles, AI Multicam SmartSwitch
   and AI Audio Assistant, as well as keyframe editing, voice over palette, multi layer compositing tools, new optical
   flow vector tools and major updates to Magic Mask and depth map. This version requires a DaVinci Resolve Studio
   license dongle or software activation code.
-consensus_report: '32 user reports found for DaVinci Resolve 20. Current reports mention startup or application
+consensus_report: '29 user reports found for DaVinci Resolve 20. Current reports mention startup or application
   crashes, render/export failures, and performance slowdowns. Current reports are Reddit-heavy, so production users
   should test before updating. Sources represented: r/davinciresolve.'
 evidence_state: pilot_sample
 evidence_state_label: Verified reports
 intelligence_stage: pilot
 official_source_captured: true
-confirmed_patch_specific_report_count: 32
+confirmed_patch_specific_report_count: 29
 evidence_last_checked: '2026-11-04T00:18:43Z'
 known_issues_present: null
 consensus_collection_status: pilot_initial_sample
@@ -99,6 +100,9 @@ status_events:
 - at: '2026-11-19T11:44:54.629138Z'
   label: User reports found
   note: User report count updated to 32.
+- at: '2026-11-24T06:59:36.675868Z'
+  label: User reports found
+  note: User report count updated to 29.
 official_patch_notes_source_type: download_portal
 primary_official_source: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
 fallback_official_sources:
@@ -151,7 +155,7 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   AUXSAYS note: this is official download-portal metadata, not broad community consensus.'
 official_checksums_body: ''
 official_checksums_capture_status: not-present
-update_consensus_summary: 'INSUFFICIENT DATA: DaVinci Resolve 20. 32 user reports are matched to this exact update,
+update_consensus_summary: 'INSUFFICIENT DATA: DaVinci Resolve 20. 29 user reports are matched to this exact update,
   but no problem in them is confirmed as reported independently by two or more users. If one matches your setup,
   test before relying on this update.'
 evidence_samples:
@@ -266,15 +270,6 @@ accepted_report_sources:
   source_url: https://www.reddit.com/r/davinciresolve/comments/1sgvy32/processor_intensive_tasks_general_advice/
   source_title: Processor Intensive Tasks General Advice.
   source_date: '2026-04-09'
-  version_matched: '20'
-  patch_version_matched: true
-  issue: render/export failures
-  workflow_area: render/export
-- source_name: r/davinciresolve
-  source_type: reddit community report
-  source_url: https://www.reddit.com/r/davinciresolve/comments/1seungh/davinci_has_started_to_lag_a_lot_out_of_nowhere/
-  source_title: Davinci has started to lag a lot out of nowhere
-  source_date: '2026-04-07'
   version_matched: '20'
   patch_version_matched: true
   issue: render/export failures
@@ -418,25 +413,6 @@ accepted_report_sources:
   workflow_area: application stability
 - source_name: r/davinciresolve
   source_type: reddit community report
-  source_url: https://www.reddit.com/r/davinciresolve/comments/1nnkml9/stability_concerns_after_getting_rtx_5070_ti/
-  source_title: Stability concerns after getting RTX 5070 TI.
-  source_date: '2025-09-22'
-  version_matched: '20'
-  patch_version_matched: true
-  issue: startup or application crashes in application stability
-  workflow_area: application stability
-- source_name: r/davinciresolve
-  source_type: reddit community report
-  source_url: https://www.reddit.com/r/davinciresolve/comments/1v5o79j/davinci_resolve_2021_unsupported_gpu_processing/
-  source_title: 'DaVinci Resolve 20/21: "Unsupported GPU Processing Mode" - RX 6600 detected by Windows but not
-    by Resolve'
-  source_date: '2026-07-24'
-  version_matched: '20'
-  patch_version_matched: true
-  issue: render/export failures
-  workflow_area: render/export
-- source_name: r/davinciresolve
-  source_type: reddit community report
   source_url: https://www.reddit.com/r/davinciresolve/comments/1wgm2a5/cannot_for_the_life_of_me_get_a_clean_export_in/
   source_title: Cannot for the life of me get a clean export in Resolve.
   source_date: '2026-09-15'
@@ -492,11 +468,16 @@ accepted_report_sources:
 evidence_source_limitations:
 - Current reports are Reddit-heavy, so production users should test before updating.
 update_decision_label: INSUFFICIENT DATA
-update_decision_body: 'No verdict yet: 32 user reports are matched to this exact update, but no problem in them
+update_decision_body: 'No verdict yet: 29 user reports are matched to this exact update, but no problem in them
   is confirmed as reported independently by two or more users. If one matches your setup, test before relying on
   this update.'
 practical_recommendations:
 - Test on copied projects before moving client work to this version.
 - Keep a known-good Resolve version available.
 source_freshness_note: ''
+update_identity_scope: release_line
+update_channel_label: 'Release line: 20 to 20.3.3'
+record_note: The user reports on this page say "DaVinci Resolve 20" and name no point release, so they can be about
+  any release from 20 to 20.3.3. This page is the 20 release line, not one exact update. A report that names an
+  exact release is counted on that release's page. Beta reports are excluded.
 ---

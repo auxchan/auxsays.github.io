@@ -344,7 +344,6 @@ def run() -> int:
         ("stable Studio full product alias passes", "DaVinci Resolve Studio 21 crashed during export."),
         ("stable Resolve Studio alias passes", "Resolve Studio 21 crashed during export."),
         ("stable DaVinci shorthand alias passes", "DaVinci 21 crashed during export."),
-        ("stable 21.0 alias passes", "DaVinci Resolve Studio 21.0 crashed during export."),
         ("stable version 21 alias passes with product context", "DaVinci Resolve version 21 crashed during export."),
     ]
     for index, (label, text) in enumerate(stable_alias_cases, start=1):
@@ -361,6 +360,24 @@ def run() -> int:
             stable_alias_row.get("counted") is True,
             f"reason={stable_alias_row.get('exclusion_reason')!r}, matched={stable_alias_row.get('matched_version')!r}",
         )
+
+    # RELEASE-LINE IDENTITY: "21.0" has its own record, so a report that names 21.0 is put to that
+    # record and is no longer counted on the 21 line page (lib/davinci_release_line.py). It used to
+    # count here as an alias, which counted one report on two pages.
+    point_release_candidate = dict(stable_for_beta)
+    point_release_text = "DaVinci Resolve Studio 21.0 crashed during export."
+    point_release_candidate.update({
+        "source_url": "https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=241004",
+        "parent_title": point_release_text, "report_title": point_release_text,
+        "report_text": point_release_text,
+    })
+    point_release_row = row_from_candidate(stable_record, point_release_candidate, "2026-05-13T00:00:00Z")
+    check(
+        "a report naming 21.0 is not counted on the 21 line page",
+        point_release_row.get("counted") is False
+        and point_release_row.get("exclusion_reason") == "point_release_named_not_release_line",
+        f"counted={point_release_row.get('counted')!r}, reason={point_release_row.get('exclusion_reason')!r}",
+    )
 
     version_only_stable = dict(stable_for_beta)
     version_only_stable.update({

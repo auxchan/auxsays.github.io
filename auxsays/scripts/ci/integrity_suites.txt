@@ -188,6 +188,13 @@ auxsays/scripts/tests/test_collector_transaction.py = 23
 auxsays/scripts/tests/test_collector_txn_nested_root.py = 26
 auxsays/scripts/tests/test_collector_write_authority.py = 128
 auxsays/scripts/tests/test_davinci_bare_version_identity.py = 58
+# AUX-108 follow-up: wrong-version attribution was found only by people. The corpus guard re-reads each
+# counted row's OWN stored text and flags a version named as the rollback target or the fix, another
+# tracked version named with the row's own absent, and a release-line row that names a point release;
+# a flag warns, never fails and never withdraws. Also DaVinci release-line identity: the collector's
+# point-release refusal, the line's range and identity fields, the stored-row migration on a temporary
+# store (withdrawn rows kept, one append through the named record's own gates, receipt, idempotent).
+auxsays/scripts/tests/test_version_attribution_guard.py = 48
 # Budget-bounded collectors must walk the corpus newest-first. DaVinci did not, so every
 # scheduled run spent its 1200s budget on 2014-2018 records and the newest release had never
 # been searched once. Wiring is asserted from the AST, not by grepping the file, and a budget

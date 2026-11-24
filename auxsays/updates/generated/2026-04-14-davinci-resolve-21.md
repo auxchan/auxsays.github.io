@@ -1,8 +1,8 @@
 ---
 layout: aux-update
 title: DaVinci Resolve 21 official update breakdown
-description: Published Apr 14, 2026. This page covers the stable DaVinci Resolve 21 release. Public beta reports
-  are excluded.
+description: User reports that name DaVinci Resolve 21 without a point release. They can be about any release from
+  21 to 21.2; each exact release has its own page.
 permalink: /updates/blackmagic-design/davinci-resolve/21/
 update_entry: true
 feed_hidden: false
@@ -20,10 +20,10 @@ update_status: current
 update_feed_title: DaVinci Resolve 21
 update_detail_title: DaVinci Resolve 21
 update_consensus_label: Negative
-update_consensus_summary: 'INSUFFICIENT DATA: DaVinci Resolve 21. 73 user reports are matched to this exact update,
+update_consensus_summary: 'INSUFFICIENT DATA: DaVinci Resolve 21. 70 user reports are matched to this exact update,
   but no problem in them is confirmed as reported independently by two or more users. If one matches your setup,
   test before relying on this update.'
-update_report_count: 73
+update_report_count: 70
 update_consensus_confidence: High
 status_change_type: new
 notification_message: ''
@@ -35,16 +35,19 @@ official_patch_notes_capture_status: captured-from-official-blackmagic-support-a
 official_source_classification_note: Blackmagic's source is a vendor release page for the DaVinci Resolve 21 announcement.
   AUXSAYS links it as the official source, but has not captured a full structured patch-note body from that page.
 patch_file_size_status: not_provided_by_source
-update_channel_label: Stable / Studio release
-quick_verdict: 'INSUFFICIENT DATA: DaVinci Resolve 21 has 73 user reports found.'
+update_channel_label: 'Release line: 21 to 21.2'
+quick_verdict: 'INSUFFICIENT DATA: DaVinci Resolve 21 has 70 user reports found.'
 update_decision_label: INSUFFICIENT DATA
-update_decision_body: 'No verdict yet: 73 user reports are matched to this exact update, but no problem in them
+update_decision_body: 'No verdict yet: 70 user reports are matched to this exact update, but no problem in them
   is confirmed as reported independently by two or more users. If one matches your setup, test before relying on
   this update.'
 source_freshness_note: ''
-record_note: This page covers DaVinci Resolve 21. Beta reports are excluded from this record.
-official_summary: DaVinci Resolve 21 is tracked here as the stable/Studio release. Public Beta 1 reports are excluded.
-consensus_report: '73 user reports found for DaVinci Resolve 21. Current reports mention render/export failures,
+record_note: The user reports on this page say "DaVinci Resolve 21" and name no point release, so they can be about
+  any release from 21 to 21.2. This page is the 21 release line, not one exact update. A report that names an exact
+  release is counted on that release's page. Beta reports are excluded.
+official_summary: 'DaVinci Resolve 21 is tracked here as the stable/Studio release line: user reports that name
+  21 without a point release. Public beta reports are excluded.'
+consensus_report: '70 user reports found for DaVinci Resolve 21. Current reports mention render/export failures,
   startup or application crashes, and performance slowdowns. Current reports are Reddit-heavy, so production users
   should test before updating. Sources represented: r/davinciresolve.'
 status_events:
@@ -213,6 +216,9 @@ status_events:
 - at: '2026-11-19T11:45:07.319841Z'
   label: User reports found
   note: User report count updated to 73.
+- at: '2026-11-24T06:59:56.998488Z'
+  label: User reports found
+  note: User report count updated to 70.
 legacy_consensus_score: 0
 legacy_consensus_score_percent: 50
 official_patch_notes_source_url: https://www.blackmagicdesign.com/media/release/20260414-01
@@ -238,7 +244,8 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
 
 
   AUXSAYS note: this is official download-portal metadata, not broad community consensus.'
-release_summary: DaVinci Resolve 21 is the stable/Studio release. Use this page for stable release risk.
+release_summary: DaVinci Resolve 21 stable/Studio release line. Each exact release has its own page with its own
+  reports.
 consensus_match_policy: confirmed_patch_specific_reports_v1
 consensus_match_policy_label: Confirmed patch-specific reports only
 consensus_report_count_label: user reports found
@@ -248,7 +255,7 @@ consensus_collection_status: pilot_initial_sample
 evidence_state: pilot_sample
 evidence_state_label: Verified reports
 official_source_captured: true
-confirmed_patch_specific_report_count: 73
+confirmed_patch_specific_report_count: 70
 known_issues_present: null
 official_checksums_body: ''
 source_last_checked: '2026-07-01T15:14:39Z'
@@ -282,7 +289,7 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 evidence_last_checked: '2026-10-31T22:24:20Z'
-record_last_updated: '2026-11-24T11:33:01.454670Z'
+record_last_updated: '2026-11-24T07:07:44.863069Z'
 intelligence_stage: pilot
 evidence_samples:
 - source_name: r/davinciresolve
@@ -403,15 +410,6 @@ accepted_report_sources:
   patch_version_matched: true
   issue: performance slowdowns in timeline / GPU performance
   workflow_area: timeline / GPU performance
-- source_name: r/davinciresolve
-  source_type: reddit community report
-  source_url: https://www.reddit.com/r/davinciresolve/comments/1u10zc4/21_on_ipad_loses_sound_and_waveforms/
-  source_title: 21 on iPad loses sound and waveforms?
-  source_date: '2026-06-09'
-  version_matched: '21'
-  patch_version_matched: true
-  issue: general workflow reports
-  workflow_area: general DaVinci Resolve workflow
 - source_name: r/davinciresolve
   source_type: reddit community report
   source_url: https://www.reddit.com/r/davinciresolve/comments/1u0yjc0/crashing_on_render_after_updating_to_21/
@@ -773,15 +771,6 @@ accepted_report_sources:
   workflow_area: application stability
 - source_name: r/davinciresolve
   source_type: reddit community report
-  source_url: https://www.reddit.com/r/davinciresolve/comments/1vjls37/planar_tracker_crashing_instantly_when_using/
-  source_title: Planar Tracker crashing instantly when using occlusion mask
-  source_date: '2026-08-09'
-  version_matched: '21.0'
-  patch_version_matched: true
-  issue: startup or application crashes in application stability
-  workflow_area: application stability
-- source_name: r/davinciresolve
-  source_type: reddit community report
   source_url: https://www.reddit.com/r/davinciresolve/comments/1w3otmy/is_the_resolve_site_broken/
   source_title: Is the Resolve site broken?
   source_date: '2026-08-31'
@@ -816,15 +805,6 @@ accepted_report_sources:
   patch_version_matched: true
   issue: render/export failures
   workflow_area: render/export
-- source_name: r/davinciresolve
-  source_type: reddit community report
-  source_url: https://www.reddit.com/r/davinciresolve/comments/1wblwm2/changing_clip_image_orientation_no_longer_changes/
-  source_title: Changing clip image orientation no longer changes aspect ratio since DaVinci Resolve 21.1
-  source_date: '2026-09-09'
-  version_matched: '21'
-  patch_version_matched: true
-  issue: general workflow reports
-  workflow_area: general DaVinci Resolve workflow
 - source_name: r/davinciresolve
   source_type: reddit community report
   source_url: https://www.reddit.com/r/davinciresolve/comments/1wge6on/davinci_resolve_21_randomly_switching_cameras/
@@ -1002,7 +982,9 @@ accepted_report_sources:
   workflow_area: application stability
 evidence_source_limitations:
 - Current reports are Reddit-heavy, so production users should test before updating.
+- Some community sources were unavailable during the last check; unavailable sources were not counted as reports.
 practical_recommendations:
 - Test on copied projects before moving client work to this version.
 - Keep a known-good Resolve version available.
+update_identity_scope: release_line
 ---
