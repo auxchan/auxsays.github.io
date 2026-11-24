@@ -1,0 +1,58 @@
+{
+  "acceptanceAuthority": "TAYLOR_LAYOFFS_LEVEL4_ACCEPTANCE_2026_09_11",
+  "acceptedAt": "2026-09-11T21:30:00Z",
+  "acceptedBySource": {
+    "bls-ces": 40,
+    "bls-cps": 38,
+    "bls-jolts": 76,
+    "dol-ui-claims": 34
+  },
+  "acceptedComparableFactorCount": 8,
+  "acceptedComparableSeriesCount": 9,
+  "acceptedObservationCount": 188,
+  "acceptedStructuralRelationshipCount": 0,
+  "bedRights": {
+    "acceptedObservationCount": 0,
+    "exactPolicyPresent": true,
+    "modelFeatureUse": "UNKNOWN",
+    "modelTrainingUse": "UNKNOWN",
+    "remainingBlocker": "TAYLOR_ACCEPTANCE_AUTHORITY_NOT_GRANTED"
+  },
+  "candidateCount": 282,
+  "currentRevisedHistoryCount": 187,
+  "dolRepair": {
+    "freshness": {
+      "newestObservationPeriod": "2026-08-15",
+      "observationAgeHours": 624.97,
+      "retrievedTime": "2026-09-10T00:58:12.132990Z",
+      "staleAfterHours": 336,
+      "status": "STALE"
+    },
+    "revisedValue": "212000",
+    "routineRuleActive": true,
+    "seedValue": "209000",
+    "sourceReleaseMarker": "DOL-UI-r539cyNational-2026-09-10",
+    "staleCurrentRetrievalFailsClosed": true
+  },
+  "factualDirectionFactorCount": 8,
+  "gateBStatus": "OPEN; descriptive history activated, structural acceptance unchanged",
+  "historyWritten": false,
+  "humanQaRequired": true,
+  "materialityState": "UNKNOWN",
+  "newlyAcceptedObservationCount": 0,
+  "newlyPromotedCandidateCount": 0,
+  "revisionChainCount": 1,
+  "revisionChains": [
+    {
+      "revisionNumber": 1,
+      "sourceSeriesId": "DOL-UI-SA-INITIAL",
+      "supersedesObservationId": "e93a7df7af10302a9df6d66965680b8a69bed24ba18d80d208396fe2b9a94d8e",
+      "validTime": "2026-08-08",
+      "value": "212000"
+    }
+  ],
+  "schemaVersion": "layoffs-history-activation-report-1.0.0",
+  "seedMigrated": false,
+  "status": "ACTIVATED",
+  "vintageQualifiedObservationCount": 0
+}

@@ -6,7 +6,7 @@ import { createPersistentWorld, employmentDriverCandidates, persistentWorldFinge
 import { persistentWorldFactualBinding } from "../src/data/persistentWorldFactualBindings";
 import { PERSISTENT_WORLD_PROFILED_FACTOR_COUNT, persistentWorldCandidateSourceProfile } from "../src/data/persistentWorldSourceCatalog";
 import { persistentWorldMediaFor } from "../src/views/persistent/persistentWorldMedia";
-import { PERSISTENT_GLINT_PERIOD_MS, PERSISTENT_GLINT_TRAIL, blendPremiumColor, compactPersistentValue, createPersistentCameraTransition, easePremiumHover, factorGlyph, persistentAmbientEdges, persistentFocusRotation, persistentGlintProgress, persistentPlacementAccent, premiumCurveRoute, resolvePersistentLod, resolvePremiumLabels, samplePersistentCameraTransition, shortestAngleDelta } from "../src/views/persistent/persistentWorldVisuals";
+import { PERSISTENT_GLINT_PERIOD_MS, PERSISTENT_GLINT_TRAIL, blendPremiumColor, compactPersistentValue, createPersistentCameraTransition, easePremiumHover, factorGlyph, persistentAmbientEdges, persistentFocusRotation, persistentGlintProgress, persistentPlacementAccent, premiumCurveRoute, premiumNodeLabelPoint, resolvePersistentLod, resolvePremiumLabels, samplePersistentCameraTransition, shortestAngleDelta } from "../src/views/persistent/persistentWorldVisuals";
 import { PERSISTENT_AMBIENT_ORBIT_PERIOD_MS, PERSISTENT_RIGHT_CONTROL_LABEL_INSET, PERSISTENT_TENDRIL_SWAY_PERIOD_MS, decayPersistentWorldOrbitVelocity, persistentWorldAmbientOrbitDelta, persistentWorldCanvasPixelRatio, persistentWorldCanvasResizeRequired, persistentWorldDoubleClickAction, persistentWorldEdgeTransitionAlpha, persistentWorldFullWorldScale, persistentWorldGraphNodeLabel, persistentWorldOrbitAngle, persistentWorldOrbitVelocity, persistentWorldOverviewScale, persistentWorldPublicPlacementVisible, persistentWorldPublicRelationshipVisible, persistentWorldSideLabelX, persistentWorldTapWithinTolerance, persistentWorldTendrilStrandSway, persistentWorldTendrilSway, persistentWorldTargetCamera, polishPersistentCameraTransition } from "../src/views/persistent/PremiumPersistentWorldSurface";
 import { persistentWorldInitialImmersive, persistentWorldUpSelection } from "../src/views/persistent/PersistentWorldShell";
 import { createPersistentWorldSpatialLayout, projectPersistentPlacement } from "../src/views/persistent/persistentWorldSpatialLayout";
@@ -123,7 +123,7 @@ describe("premium persistent-world visual language", () => {
     expect(persistentWorldGraphNodeLabel(model, placements[3])).toBe("Initial UI Claims");
     expect(persistentWorldGraphNodeLabel(model, placements[3])).not.toContain("209");
     expect(persistentWorldGraphNodeLabel(model, placements[3])).not.toContain("thousand");
-    expect(compactPersistentValue(persistentWorldFactualBinding("Labor-Force Participation").displayValue)).toBe("61.4%");
+    expect(compactPersistentValue(persistentWorldFactualBinding("Labor-Force Participation").displayValue)).toMatch(/^\d+(\.\d+)?%$/);
     expect(compactPersistentValue("209 thousand")).toBe("209 thousand");
     expect(persistentWorldFingerprint(model)).toBe(before);
   });
@@ -179,6 +179,35 @@ describe("premium persistent-world visual language", () => {
     expect(orbitLabels.map((item) => item.id)).toEqual(["orbit-left", "orbit-right"]);
     expect(Math.min(...orbitLabels.map((item) => item.left))).toBeGreaterThanOrEqual(8);
     expect(Math.max(...orbitLabels.map((item) => item.left + item.width))).toBeLessThanOrEqual(392);
+
+    const attached = resolvePremiumLabels([
+      { id: "attached-a", text: "A", x: 160, y: 100, priority: 50, width: 80, height: 22, accent: "#fff", anchorX: 140, anchorY: 100, required: true },
+      { id: "attached-b", text: "B", x: 160, y: 100, priority: 50, width: 80, height: 22, accent: "#fff", anchorX: 140, anchorY: 100, required: true }
+    ], 400, 240);
+    expect(attached.map((item) => item.id)).toEqual(["attached-a", "attached-b"]);
+    expect(attached[0].y).not.toBe(attached[1].y);
+    expect(Math.abs(attached[0].x - attached[1].x)).toBeLessThanOrEqual(1);
+
+    const crowdedFrame = resolvePremiumLabels([
+      { id: "fixed", text: "Fixed", x: 100, y: 100, priority: 100, width: 80, height: 22, accent: "#fff", required: true },
+      { id: "moving", text: "Moving", x: 187.5, y: 100, priority: 50, width: 80, height: 22, accent: "#fff", anchorX: 167.5, anchorY: 100, required: true }
+    ], 400, 240);
+    const movingShift = crowdedFrame.find((item) => item.id === "moving")!.shift;
+    expect(movingShift).toBe(-1);
+    const nextFrame = resolvePremiumLabels([
+      { id: "fixed", text: "Fixed", x: 100, y: 100, priority: 100, width: 80, height: 22, accent: "#fff", required: true },
+      { id: "moving", text: "Moving", x: 188.5, y: 100, priority: 50, width: 80, height: 22, accent: "#fff", anchorX: 168.5, anchorY: 100, required: true, preferredShift: movingShift }
+    ], 400, 240);
+    expect(nextFrame.find((item) => item.id === "moving")!.shift).toBe(movingShift);
+    expect(nextFrame.find((item) => item.id === "moving")!.y).toBe(crowdedFrame.find((item) => item.id === "moving")!.y);
+  });
+
+  it("moves a node title in lockstep with its animated bubble", () => {
+    const before = premiumNodeLabelPoint({ x: 100, y: 80 }, { x: 100, y: 180 }, 14, 2);
+    const after = premiumNodeLabelPoint({ x: 113, y: 87 }, { x: 113, y: 187 }, 14, 2);
+    expect(after.x - before.x).toBeCloseTo(13);
+    expect(after.y - before.y).toBeCloseTo(7);
+    expect(Math.hypot(before.x - 100, before.y - 80)).toBeCloseTo(Math.hypot(after.x - 113, after.y - 87));
   });
 
   it("normalizes every sector into the same focus-camera orientation", () => {
@@ -458,49 +487,70 @@ describe("persistent world local-review shell", () => {
 
   it("keeps mobile node navigation visible until the user enables details", async () => {
     const original = window.matchMedia;
-    window.matchMedia = ((query: string) => ({ matches: query.includes("max-width: 900px") || query.includes("hover: none") || query.includes("pointer: coarse"), media: query, onchange: null, addListener() {}, removeListener() {}, addEventListener() {}, removeEventListener() {}, dispatchEvent: () => false })) as typeof window.matchMedia;
+    window.matchMedia = ((query: string) => ({ matches: query.includes("max-width: 900px") || query.includes("max-width: 620px") || query.includes("hover: none") || query.includes("pointer: coarse"), media: query, onchange: null, addListener() {}, removeListener() {}, addEventListener() {}, removeEventListener() {}, dispatchEvent: () => false })) as typeof window.matchMedia;
     try {
       window.history.replaceState({}, "", "/systems-monitor/#persistent-world");
       render(<SnapshotProvider><SystemsMonitorApp /></SnapshotProvider>);
       const surface = await screen.findByRole("application", { name: "U.S. systems factor map" }, { timeout: 15_000 });
       const workspace = surface.closest(".sm-pw-workspace");
-      expect(workspace?.classList.contains("is-fullscreen-fallback")).toBe(true);
-      expect(workspace?.getAttribute("data-fullscreen")).toBe("true");
-      expect(screen.getByRole("button", { name: "Exit full screen" })).toBeTruthy();
-      const infoToggle = screen.getByRole("button", { name: "Info stays closed until requested" });
-      expect(infoToggle.hasAttribute("disabled")).toBe(false);
-      fireEvent.click(screen.getByRole("button", { name: /Consumer DemandMaster-defined system/ }));
+      expect(workspace?.classList.contains("is-fullscreen-fallback")).toBe(false);
+      expect(workspace?.getAttribute("data-fullscreen")).toBe("false");
+      expect(screen.getByRole("navigation", { name: "Mobile map toolbar" })).toBeTruthy();
+      const infoToggle = screen.getByRole("button", { name: /Inspector/ });
+      expect(infoToggle.hasAttribute("disabled")).toBe(true);
+      fireEvent.click(screen.getByRole("button", { name: /Consumer Demand/ }));
       expect(surface.getAttribute("data-selected-placement-id")).toBe("placement:consumer-demand");
-      expect(screen.queryByRole("complementary", { name: "Persistent world factor details" })).toBeNull();
+      expect(infoToggle.hasAttribute("disabled")).toBe(false);
       fireEvent.click(infoToggle);
-      const inspector = screen.getByRole("complementary", { name: "Persistent world factor details" });
+      const inspector = screen.getByRole("dialog", { name: "Persistent world factor details" });
       expect(within(inspector).getByRole("heading", { name: "Consumer Demand" })).toBeTruthy();
-      fireEvent.click(screen.getByRole("button", { name: /01Real Personal Consumption/ }));
-      expect(within(inspector).getByRole("heading", { name: "Real Personal Consumption" })).toBeTruthy();
-      expect(screen.getByRole("button", { name: "Info opens automatically while navigating" }).getAttribute("aria-pressed")).toBe("true");
+      fireEvent.keyDown(window, { key: "Escape" });
+      expect(screen.queryByRole("dialog", { name: "Persistent world factor details" })).toBeNull();
+      await waitFor(() => expect(document.activeElement).toBe(infoToggle));
+    } finally {
+      window.matchMedia = original;
+    }
+  });
+
+  it("keeps desktop navigation visible when a wide viewport reports a coarse pointer", async () => {
+    const original = window.matchMedia;
+    window.matchMedia = ((query: string) => ({ matches: query.includes("hover: none") || query.includes("pointer: coarse"), media: query, onchange: null, addListener() {}, removeListener() {}, addEventListener() {}, removeEventListener() {}, dispatchEvent: () => false })) as typeof window.matchMedia;
+    try {
+      window.history.replaceState({}, "", "/systems-monitor/#persistent-world");
+      render(<SnapshotProvider><SystemsMonitorApp /></SnapshotProvider>);
+      await screen.findByRole("application", { name: "U.S. systems factor map" }, { timeout: 15_000 });
+      const navigationToolbar = screen.getByRole("toolbar", { name: "Map navigation controls" });
+      const viewToolbar = screen.getByRole("toolbar", { name: "Map view controls" });
+      expect(within(navigationToolbar).getByRole("button", { name: "Back in exploration history" })).toBeTruthy();
+      expect(within(navigationToolbar).getByRole("button", { name: "Forward in exploration history" })).toBeTruthy();
+      expect(within(navigationToolbar).getByRole("button", { name: "Up one level" })).toBeTruthy();
+      expect(within(navigationToolbar).getByRole("button", { name: /Find a factor/ })).toBeTruthy();
+      expect(within(navigationToolbar).getByRole("button", { name: "Reset" })).toBeTruthy();
+      expect(within(viewToolbar).getByRole("button", { name: "Top-down" })).toBeTruthy();
+      expect(within(viewToolbar).getByRole("button", { name: "Enter full screen" })).toBeTruthy();
+      expect(screen.queryByRole("navigation", { name: "Mobile map toolbar" })).toBeNull();
     } finally {
       window.matchMedia = original;
     }
   });
 
   it("supports direct immersive links and a mobile page-mode override", () => {
-    expect(persistentWorldInitialImmersive("", true)).toBe(true);
+    expect(persistentWorldInitialImmersive("", true)).toBe(false);
     expect(persistentWorldInitialImmersive("?immersive=1", false)).toBe(true);
     expect(persistentWorldInitialImmersive("?immersive=0", true)).toBe(false);
     expect(persistentWorldInitialImmersive("", false)).toBe(false);
   });
 
-  it("lets mobile users select automatic info before entering a node", async () => {
+  it("lets mobile users open the selected node in a dialog inspector", async () => {
     const original = window.matchMedia;
-    window.matchMedia = ((query: string) => ({ matches: query.includes("max-width: 900px") || query.includes("hover: none") || query.includes("pointer: coarse"), media: query, onchange: null, addListener() {}, removeListener() {}, addEventListener() {}, removeEventListener() {}, dispatchEvent: () => false })) as typeof window.matchMedia;
+    window.matchMedia = ((query: string) => ({ matches: query.includes("max-width: 900px") || query.includes("max-width: 620px") || query.includes("hover: none") || query.includes("pointer: coarse"), media: query, onchange: null, addListener() {}, removeListener() {}, addEventListener() {}, removeEventListener() {}, dispatchEvent: () => false })) as typeof window.matchMedia;
     try {
       window.history.replaceState({}, "", "/systems-monitor/#persistent-world");
       render(<SnapshotProvider><SystemsMonitorApp /></SnapshotProvider>);
-      const infoToggle = await screen.findByRole("button", { name: "Info stays closed until requested" }, { timeout: 15_000 });
+      const infoToggle = await screen.findByRole("button", { name: /Inspector/ }, { timeout: 15_000 });
+      fireEvent.click(screen.getByRole("button", { name: /Consumer Demand/ }));
       fireEvent.click(infoToggle);
-      expect(screen.getByRole("button", { name: "Info opens automatically while navigating" }).getAttribute("aria-pressed")).toBe("true");
-      fireEvent.click(screen.getByRole("button", { name: /Consumer DemandMaster-defined system/ }));
-      const inspector = screen.getByRole("complementary", { name: "Persistent world factor details" });
+      const inspector = screen.getByRole("dialog", { name: "Persistent world factor details" });
       expect(within(inspector).getByRole("heading", { name: "Consumer Demand" })).toBeTruthy();
     } finally {
       window.matchMedia = original;
@@ -516,9 +566,9 @@ describe("persistent world local-review shell", () => {
     expect(surface.getAttribute("data-resident-placement-count")).toBe("1111");
     expect(surface.getAttribute("data-resident-relationship-count")).toBe("3110");
     expect(surface.getAttribute("data-semantic-node-count")).toBe("11");
-    expect(surface.getAttribute("data-factual-binding-count")).toBe("5");
-    expect(surface.getAttribute("data-connected-placement-count")).toBe("5");
-    expect(surface.getAttribute("data-connected-canonical-factor-count")).toBe("4");
+    expect(surface.getAttribute("data-factual-binding-count")).toBe("28");
+    expect(surface.getAttribute("data-connected-placement-count")).toBe("28");
+    expect(surface.getAttribute("data-connected-canonical-factor-count")).toBe("15");
     expect(surface.getAttribute("data-lod-mode")).toBe("OVERVIEW");
     expect(surface.getAttribute("data-view-mode")).toBe("TOP_DOWN");
     expect(screen.getByRole("button", { name: "Top-down" }).getAttribute("aria-pressed")).toBe("true");
@@ -544,7 +594,7 @@ describe("persistent world local-review shell", () => {
     fireEvent.pointerUp(canvas, { pointerId: 8, clientX: -20, clientY: -116 });
     expect(["DRIFTING", "IDLE"]).toContain(surface.getAttribute("data-orbit-drag-state"));
 
-    fireEvent.click(screen.getByRole("button", { name: /03Employer Labor DemandMaster-defined system/ }));
+    fireEvent.click(screen.getByRole("button", { name: /03Employer Labor DemandVerified reading not yet available/ }));
     expect(surface.getAttribute("data-selected-placement-id")).toBe("placement:employer-labor-demand");
     expect(surface.getAttribute("data-resident-placement-count")).toBe("1111");
     expect(surface.getAttribute("data-semantic-node-count")).toBe("12");
@@ -562,10 +612,10 @@ describe("persistent world local-review shell", () => {
     expect(within(inspector).getByRole("heading", { name: "Employer Labor Demand" })).toBeTruthy();
     expect(window.location.hash).toContain("placement%3Aemployer-labor-demand");
 
-    fireEvent.click(screen.getByRole("button", { name: /01Job OpeningsAccepted factual reading/ }));
+    fireEvent.click(screen.getByRole("button", { name: /01Job OpeningsNot enough comparable history yet/ }));
     expect(surface.getAttribute("data-selected-placement-id")).toContain("job-openings");
     expect(surface.getAttribute("data-resident-placement-count")).toBe("1111");
-    expect(screen.getAllByText(/Fixture only · hierarchy tether/)).toHaveLength(10);
+    expect(screen.getAllByText(/Configuration pending · not factual/).length).toBeGreaterThanOrEqual(10);
     expect(within(inspector).getByRole("heading", { name: "Latest accepted reading" })).toBeTruthy();
     fireEvent.click(within(inspector).getByRole("button", { name: "Open Deep Dive" }));
     expect(within(inspector).getByRole("heading", { name: "How it connects" })).toBeTruthy();
@@ -602,16 +652,20 @@ describe("persistent world local-review shell", () => {
     const inspector = await screen.findByRole("complementary", { name: "Persistent world factor details" }, { timeout: 15_000 });
     const surface = screen.getByRole("application", { name: "U.S. systems factor map" });
     const topologyFingerprint = surface.getAttribute("data-topology-fingerprint");
-    expect(surface.getAttribute("data-factual-binding-count")).toBe("5");
-    expect(within(inspector).getAllByText("61.4%").length).toBeGreaterThan(0);
-    expect(within(inspector).queryByText("61.4 percent")).toBeNull();
+    const fullCurrentReading = persistentWorldFactualBinding("Labor-Force Participation").displayValue;
+    if (!fullCurrentReading) throw new Error("Labor-Force Participation must have a production reading");
+    const currentReading = compactPersistentValue(fullCurrentReading);
+    if (!currentReading) throw new Error("Labor-Force Participation reading must compact for display");
+    expect(surface.getAttribute("data-factual-binding-count")).toBe("28");
+    expect(within(inspector).getAllByText(currentReading).length).toBeGreaterThan(0);
+    expect(within(inspector).queryByText(fullCurrentReading)).toBeNull();
     Object.defineProperty(surface, "getBoundingClientRect", { configurable: true, value: () => ({ x: 0, y: 0, left: 0, top: 0, right: 980, bottom: 720, width: 980, height: 720, toJSON: () => ({}) }) });
     fireEvent.pointerMove(surface, { pointerId: 1, clientX: 490, clientY: 360 });
     const hover = screen.getByRole("tooltip");
     expect(within(hover).getByText("Labor-Force Participation")).toBeTruthy();
-    expect(within(hover).getByText("61.4%")).toBeTruthy();
-    expect(within(hover).queryByText(/Labor-Force Participation\s*·\s*61\.4%/)).toBeNull();
-    expect(surface.getAttribute("data-factual-binding-count")).toBe("5");
+    expect(within(hover).getByText(currentReading)).toBeTruthy();
+    expect(within(hover).queryByText(new RegExp(`Labor-Force Participation\\s*·\\s*${currentReading.replace(".", "\\.")}`))).toBeNull();
+    expect(surface.getAttribute("data-factual-binding-count")).toBe("28");
     expect(surface.getAttribute("data-topology-fingerprint")).toBe(topologyFingerprint);
     const factualLinks = within(inspector).getAllByRole("link", { name: "Open factual record" });
     expect(factualLinks.length).toBeGreaterThan(0);
@@ -644,15 +698,38 @@ describe("persistent world local-review shell", () => {
     render(<SnapshotProvider><SystemsMonitorApp /></SnapshotProvider>);
     await screen.findByRole("heading", { name: "What changed" }, { timeout: 15_000 });
     expect(screen.getByText("0 governed connector signals")).toBeTruthy();
-    expect(screen.getByText("Structured retrieval path is stale")).toBeTruthy();
-    const staleItem = screen.getByText("Structured retrieval path is stale").closest("li");
-    expect(staleItem?.getAttribute("data-impact")).toBe("UNKNOWN");
+    const changes = screen.getByRole("region", { name: "What changed" });
+    expect(within(changes).getByText("Structured retrieval path is stale")).toBeTruthy();
+    const staleItem = within(changes).getByText("Structured retrieval path is stale").closest("li");
+    expect(staleItem?.getAttribute("data-event-class")).toBe("OPERATIONAL");
     expect(staleItem?.getAttribute("data-kind")).toBe("SOURCE_STALE");
     fireEvent.click(screen.getByRole("button", { name: "24h" }));
-    expect(screen.getByText("Structured retrieval path is stale")).toBeTruthy();
-    expect(screen.getByText("Structured retrieval path is stale").closest("li")?.getAttribute("data-impact")).toBe("UNKNOWN");
+    expect(within(changes).getByText("Structured retrieval path is stale")).toBeTruthy();
+    expect(within(changes).getByText("Structured retrieval path is stale").closest("li")?.getAttribute("data-event-class")).toBe("OPERATIONAL");
     fireEvent.click(screen.getByRole("button", { name: "1y" }));
-    expect(screen.getByText("Structured retrieval path is stale")).toBeTruthy();
+    expect(within(changes).getByText("Structured retrieval path is stale")).toBeTruthy();
+  });
+
+  it("defaults change history to the selected branch and links briefing movements to the existing factor", async () => {
+    window.history.replaceState({}, "", "/systems-monitor/#persistent-world");
+    render(<SnapshotProvider><SystemsMonitorApp /></SnapshotProvider>);
+    await screen.findByRole("heading", { name: "What changed" }, { timeout: 15_000 });
+    fireEvent.click(screen.getByRole("button", { name: /04Layoffs & Job Destruction/ }));
+    const briefing = screen.getByRole("region", { name: "Layoffs & Job Destruction" });
+    expect(within(briefing).getByText("12 accepted-history factors")).toBeTruthy();
+    const selectedScope = screen.getByRole("button", { name: "Selected branch" });
+    const allScope = screen.getByRole("button", { name: "All systems" });
+    expect(selectedScope.getAttribute("aria-pressed")).toBe("true");
+    expect(allScope.getAttribute("aria-pressed")).toBe("false");
+    const branchCount = screen.getByRole("region", { name: "What changed" }).querySelectorAll("ol > li").length;
+    fireEvent.click(allScope);
+    expect(screen.getByRole("region", { name: "What changed" }).querySelectorAll("ol > li").length).toBeGreaterThan(branchCount);
+    fireEvent.click(selectedScope);
+    const movements = briefing.querySelector(".sm-pw-briefing__moved");
+    expect(movements).toBeTruthy();
+    fireEvent.click(within(movements as HTMLElement).getAllByRole("button")[0]);
+    const inspector = screen.getByRole("complementary", { name: "Persistent world factor details" });
+    expect(within(inspector).getByRole("heading", { level: 2 })).toBeTruthy();
   });
 
   it("indexes all resident placements and ranks reviewed factors above fixtures", () => {

@@ -191,9 +191,8 @@ def parse_bea_api_response(
 ) -> tuple[ExternalObservationCandidate, ...]:
     """Parse only registry-approved BEA table/line selectors.
 
-    The shipped registry deliberately has no approved BEA selectors yet. This
-    parser is ready for the narrow table/line amendment without treating API
-    discovery results as accepted observations.
+    Exact registry-approved table/line selectors still emit nonpublishable
+    candidates. Selector authority is not observation or history acceptance.
     """
 
     _validate_batch(release_id, artifact_sha256, retrieved_time, provenance_url)
@@ -217,6 +216,12 @@ def parse_bea_api_response(
         for row in rows:
             if str(row.get("TableName")) != spec["table_name"] or str(row.get("LineNumber")) != str(spec["line_number"]):
                 continue
+            if str(row.get("LineDescription", "")).strip() != spec["line_description"]:
+                raise ValueError("BEA selected line description changed")
+            if str(row.get("CL_UNIT", "")).strip() != spec["cl_unit"]:
+                raise ValueError("BEA selected line unit changed")
+            if str(row.get("UNIT_MULT", "")).strip() != spec["unit_multiplier"]:
+                raise ValueError("BEA selected line multiplier changed")
             period = str(row.get("TimePeriod", "")).strip()
             raw_value = str(row.get("DataValue", "")).replace(",", "").strip()
             if not period or raw_value in {"", "--", "(NA)"}:
@@ -531,7 +536,7 @@ def _find_f2_headers(rows: list[list[str]]) -> tuple[int, list[str]]:
     for index in range(len(rows) - 1):
         first = [value.strip() for value in rows[index]]
         second = [value.strip() for value in rows[index + 1]]
-        if any(value.lower() == "business" for value in first) and any("chapter 7" in value.lower() for value in second):
+        if any(value.lower() == "business" for value in first) and any("chapter" in value.lower() for value in second):
             width = max(len(first), len(second))
             group = ""
             headers = []
@@ -554,8 +559,12 @@ def _find_national_total(rows: list[list[str]]) -> list[str]:
 
 
 def _find_business_column(headers: list[str], chapter: str) -> int:
-    target = f"business {chapter}".lower()
-    matches = [index for index, header in enumerate(headers) if "nonbusiness" not in header.lower() and target in header.lower()]
+    target = " ".join(f"business {chapter}".lower().split())
+    matches = [
+        index for index, header in enumerate(headers)
+        if "nonbusiness" not in " ".join(header.lower().split())
+        and target in " ".join(header.lower().split())
+    ]
     if len(matches) != 1:
         raise ValueError(f"U.S. Courts F-2 expected one Business {chapter} column")
     return matches[0]

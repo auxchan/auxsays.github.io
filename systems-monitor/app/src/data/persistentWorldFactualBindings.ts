@@ -1,8 +1,14 @@
-import activeFactualSnapshot from "../../../data/review/local-active-pdi-test-snapshot.json";
+import { productionFactualSnapshot as activeFactualSnapshot } from "./productionDataReadModel";
 import { laborMarketHierarchy, observationForFactor, evidenceForFactor } from "./laborMarketReadModel";
 import { createSnapshotViewModel } from "./snapshotViewModelFactory";
 import { validatePublicSnapshot } from "./validatePublicSnapshot";
 import { layoffsFactorSourceState, type LayoffsClaimClassification } from "./layoffsBranchReadModel";
+import {
+  acceptedLayoffsHistoryForFactor,
+  acceptedLayoffsHistoryFreshness,
+  LAYOFFS_ACCEPTED_OBSERVATION_COUNT,
+  type LayoffsAcceptedFactorSummary,
+} from "./layoffsAcceptedHistoryReadModel";
 
 export type PersistentWorldBindingStatus = "CONNECTED" | "SOURCE_ENABLED_PENDING_ACCEPTANCE" | "SOURCE_IDENTIFIED" | "BLOCKED" | "FIXTURE_ONLY" | "UNMAPPED";
 
@@ -23,13 +29,14 @@ export interface PersistentWorldFactualBinding {
   candidateSeries?: readonly { sourceId: string; seriesId: string; label: string; unit: string; cadence: string; adjustment: string; evidenceUrl: string; methodologyUrl?: string }[];
   claimClassification?: LayoffsClaimClassification;
   blockedReason?: string;
+  temporalHistory?: LayoffsAcceptedFactorSummary;
 }
 
 const factualSnapshot = createSnapshotViewModel(validatePublicSnapshot(activeFactualSnapshot as unknown));
 const hierarchy = laborMarketHierarchy(factualSnapshot);
 const factorsByLabel = new Map(Object.values(hierarchy.canonicalFactors).map((factor) => [factor.label.toLowerCase(), factor]));
 
-export const PERSISTENT_FACTUAL_OBSERVATION_COUNT = factualSnapshot.extensions["auxsays.phase2.metrics"].length;
+export const PERSISTENT_FACTUAL_OBSERVATION_COUNT = factualSnapshot.extensions["auxsays.phase2.metrics"].length + LAYOFFS_ACCEPTED_OBSERVATION_COUNT;
 
 /**
  * Additive read-only bridge from a named persistent-world factor to the already
@@ -64,22 +71,26 @@ export function persistentWorldFactualBindingForFactor(canonicalFactorId: string
   if (canonicalFactorId.startsWith("fixture-factor:")) return { status: "FIXTURE_ONLY", label };
   const layoffs = layoffsFactorSourceState(canonicalFactorId);
   if (!layoffs) return persistentWorldFactualBinding(label);
-  if (layoffs.activationState === "ACCEPTED" && canonicalFactorId === "factor:canonical:initial-claims") {
-    const metric = factualSnapshot.extensions["auxsays.phase2.metrics"].find((item) => item.id === "US_LABOR_INITIAL_UI_CLAIMS");
-    if (metric) {
-      const sourceId = metric.sourceRefs[0];
-      const source = factualSnapshot.sources[sourceId];
-      const provenanceId = metric.provenanceRefs[0];
-      const provenance = factualSnapshot.extensions["auxsays.phase3.provenance"]?.[provenanceId];
-      const seriesId = metric.sourceSeriesIds?.[0];
-      return {
-        status: "CONNECTED", label, displayValue: metric.displayValue, validTime: metric.validTime,
-        provider: source?.provider, dataset: source?.dataset, seriesId, freshness: source?.freshness,
-        evidenceUrl: seriesId ? provenance?.seriesEvidenceUrls?.[seriesId] ?? provenance?.evidenceUrl : provenance?.evidenceUrl,
-        methodologyUrl: source?.methodologyUrl, acquisitionProvenanceUrl: provenance?.evidenceUrl,
-        acceptedAt: provenance?.acceptedAt, candidateSeries: layoffs.series, claimClassification: layoffs.claimClassification
-      };
-    }
+  const temporalHistory = acceptedLayoffsHistoryForFactor(canonicalFactorId);
+  if (temporalHistory) {
+    const primary = temporalHistory.primary;
+    return {
+      status: "CONNECTED",
+      label,
+      displayValue: primary.currentDisplay,
+      validTime: primary.current.validTime,
+      provider: primary.provider,
+      dataset: primary.dataset,
+      seriesId: primary.sourceSeriesId,
+      freshness: acceptedLayoffsHistoryFreshness(primary.sourceId),
+      evidenceUrl: primary.current.evidenceUrl,
+      methodologyUrl: primary.current.methodologyUrl,
+      acquisitionProvenanceUrl: primary.current.provenanceUrl,
+      acceptedAt: primary.current.acceptedTime,
+      candidateSeries: layoffs.series,
+      claimClassification: layoffs.claimClassification,
+      temporalHistory,
+    };
   }
   const status: PersistentWorldBindingStatus = layoffs.activationState === "ACCEPTED"
     ? "SOURCE_IDENTIFIED"

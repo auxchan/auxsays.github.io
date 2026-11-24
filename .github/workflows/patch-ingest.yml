@@ -278,3 +278,24 @@ jobs:
       - name: Mark dry run as unchanged
         if: ${{ github.event.inputs.dry_run == 'true' }}
         run: echo "Dry run complete; no commit or deploy will be performed."
+
+  chain-systems-monitor:
+    # One scheduled entry point owns the writer sequence. Keep economic data
+    # acquisition ordered behind ingestion, including when ingestion fails.
+    needs: ingest
+    if: >-
+      ${{ always() && !cancelled() && github.ref == 'refs/heads/main' &&
+          (github.event.inputs.source == '' || github.event.inputs.source == null) &&
+          github.event.inputs.dry_run != 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      actions: write
+    steps:
+      - name: Dispatch governed Systems Monitor data
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          gh workflow run systems-monitor-data.yml --ref main --repo "$REPO"

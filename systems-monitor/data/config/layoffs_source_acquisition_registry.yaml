@@ -311,7 +311,7 @@ sources:
     currentness: not asserted until an exact EIA route/facet is approved
 
 factorSourceMap:
-  real-output-growth: [bea_nipa]
+  real-gdp-growth: [bea_nipa]
   consumer-spending: [bea_nipa]
   consumer-demand: [bea_nipa, census_marts]
   retail-sales: [census_marts]
@@ -336,10 +336,10 @@ factorSourceMap:
   firm-deaths: [census_bds]
   firm-death-shutdown-stress: [census_bds, uscourts_bankruptcy]
   industry-payroll-contraction: [bls_ces]
-  payroll-growth: [bls_ces]
+  payroll-growth: [bls_ces] # stable placement slug; canonical factor is Total Nonfarm Payroll Change / PAYROLL_CHANGE_V1
   temporary-help-employment: [bls_ces]
-  regional-employment-growth: [bls_ces]
-  business-formations: [census_bfs]
+  regional-employment-growth: [bls_ces] # stable placement slug; canonical factor is State-Level Payroll Growth Breadth
+  business-formations: [census_bfs] # stable placement slug; canonical factor is Business Formations Within 4 Quarters
   business-formation-dynamism: [census_bfs, census_bds]
   disaster-operational-shock: [fema_openfema, noaa_storm_events]
   disaster-weather-shock: [noaa_storm_events, fema_openfema]
@@ -377,7 +377,7 @@ hierarchy:
     label: Layoffs & Discharges
     primarySourceCandidates: [bls_jolts]
     placements:
-      - [real-output-growth, Real Output Growth]
+      - [real-output-growth, Real GDP Growth]
       - [consumer-spending, Consumer Spending]
       - [retail-sales, Retail Sales]
       - [job-openings-rate, Job Openings Rate]
@@ -398,7 +398,7 @@ hierarchy:
       - [gross-job-losses, Gross Job Losses]
       - [establishment-deaths, Establishment Deaths]
       - [business-failure-stress, Business Bankruptcy Stress]
-      - [real-output-growth, Real Output Growth]
+      - [real-output-growth, Real GDP Growth]
       - [consumer-demand, Consumer Demand]
       - [disaster-operational-shock, Disaster / Operational Shock]
   - id: continued-claims-insured-unemployment
@@ -408,13 +408,13 @@ hierarchy:
       - [initial-ui-claims, Initial Claims]
       - [hires-rate, Hires Rate]
       - [job-openings-rate, Job Openings Rate]
-      - [payroll-growth, Payroll Growth]
+      - [payroll-growth, Total Nonfarm Payroll Change]
       - [temporary-help-employment, Temporary Help Employment]
       - [average-weekly-hours, Average Weekly Hours]
-      - [business-formations, Business Formations]
-      - [real-output-growth, Real Output Growth]
+      - [business-formations, Business Formations Within 4 Quarters]
+      - [real-output-growth, Real GDP Growth]
       - [consumer-demand, Consumer Demand]
-      - [regional-employment-growth, Regional Employment Growth]
+      - [regional-employment-growth, State-Level Payroll Growth Breadth]
   - id: permanent-job-losers
     label: Permanent Job Losers
     primarySourceCandidates: [bls_cps]
@@ -428,7 +428,7 @@ hierarchy:
       - [trade-import-pressure, Import / Trade Pressure]
       - [ci-lending-standards, C&I Credit Conditions]
       - [corporate-profits, Corporate Profitability]
-      - [real-output-growth, Real Output Growth]
+      - [real-output-growth, Real GDP Growth]
   - id: temporary-layoffs
     label: Temporary Layoffs
     primarySourceCandidates: [bls_cps]
@@ -449,7 +449,7 @@ hierarchy:
     placements:
       - [establishment-contractions, Establishment Contractions]
       - [establishment-closures, Establishment Closures]
-      - [real-output-growth, Real Output Growth]
+      - [real-output-growth, Real GDP Growth]
       - [consumer-spending, Consumer Spending]
       - [new-orders, New Orders]
       - [corporate-profits, Corporate Profits]
@@ -512,7 +512,7 @@ hierarchy:
       - [unit-labor-costs, Unit Labor Costs]
       - [inventory-sales-ratio, Inventory / Sales Ratio]
       - [business-formations, Business Formation]
-      - [real-output-growth, Real Output Growth]
+      - [real-output-growth, Real GDP Growth]
 
 coverageGaps:
   - Industry Credit Conditions has no accepted official industry-granular series; SLOOS is an aggregate candidate only.

@@ -70,6 +70,7 @@ case "$q" in
       case "$q" in
         *obs-evidence-collection*) echo "$SIM_EVICTED_OBS" ;;
         *patch-ingest*)            echo "$SIM_EVICTED_ING" ;;
+        *systems-monitor-data*)    echo "$SIM_EVICTED_MONITOR" ;;
       esac ;;
   */jobs*)                                                     echo "$SIM_JOBS" ;;
 esac
@@ -107,6 +108,7 @@ def run_scenario(script: str, env_decl: dict, **sim) -> tuple[int, str, list[str
             "SIM_COVERING": sim.get("covering", ""),
             "SIM_EVICTED_OBS": sim.get("evicted_obs", ""),
             "SIM_EVICTED_ING": sim.get("evicted_ing", ""),
+            "SIM_EVICTED_MONITOR": sim.get("evicted_monitor", ""),
             "SIM_JOBS": sim.get("jobs", "0"),
             "SIM_DISPATCH_LOG": str(log),
         })
@@ -151,6 +153,10 @@ SCENARIOS = [
     ("losses in BOTH lanes still produce exactly one entrant, group-wide",
      {"evicted_obs": "101 2026-09-09T03:00:00Z",
       "evicted_ing": "201 2026-09-09T03:00:00Z"}, [OBS]),
+    ("an evicted Systems Monitor cycle is repaired in its own lane",
+     {"evicted_monitor": "301 2026-09-09T03:00:00Z"}, ["systems-monitor-data.yml"]),
+    ("an economic-data loss does not add a second entrant while another loss is repaired",
+     {"evicted_obs": "101 2026-09-09T03:00:00Z", "evicted_monitor": "301 2026-09-09T03:00:00Z"}, [OBS]),
 ]
 
 
