@@ -1,0 +1,8 @@
+---
+layout: aux-patch-atom
+feed_product_id: elgato-camera-hub
+feed_alternate: /updates/elgato/elgato-camera-hub/
+feed_limit: 20
+permalink: /updates/elgato/elgato-camera-hub/feed.xml
+sitemap: false
+---

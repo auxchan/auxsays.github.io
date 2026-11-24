@@ -1,0 +1,8 @@
+---
+layout: aux-patch-atom
+feed_product_id: openai-chatgpt
+feed_alternate: /updates/openai/openai-chatgpt/
+feed_limit: 20
+permalink: /updates/openai/openai-chatgpt/feed.xml
+sitemap: false
+---

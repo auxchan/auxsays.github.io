@@ -1,0 +1,8 @@
+---
+layout: aux-patch-atom
+feed_product_id: kick
+feed_alternate: /updates/kick/kick/
+feed_limit: 20
+permalink: /updates/kick/kick/feed.xml
+sitemap: false
+---

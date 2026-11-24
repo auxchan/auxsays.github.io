@@ -1,0 +1,8 @@
+---
+layout: aux-patch-atom
+feed_product_id: notion
+feed_alternate: /updates/notion/notion/
+feed_limit: 20
+permalink: /updates/notion/notion/feed.xml
+sitemap: false
+---

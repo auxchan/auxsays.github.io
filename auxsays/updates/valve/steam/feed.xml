@@ -1,0 +1,8 @@
+---
+layout: aux-patch-atom
+feed_product_id: steam
+feed_alternate: /updates/valve/steam/
+feed_limit: 20
+permalink: /updates/valve/steam/feed.xml
+sitemap: false
+---

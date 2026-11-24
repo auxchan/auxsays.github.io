@@ -1,0 +1,15 @@
+{%- comment -%}
+  An Atom feed page (P8). The page is a front-matter-only file: feed_scope "all" for the feed of every
+  product, or feed_product_id for one product tracker's feed. The entries, their verdicts and their
+  dates are _includes/patch-atom-feed.html's. A page with neither prints nothing.
+{%- endcomment -%}
+{%- assign apa_scope = page.feed_scope | default: '' | append: '' | strip -%}
+{%- assign apa_pid = page.feed_product_id | default: '' | append: '' | strip -%}
+{%- assign apa_limit = page.feed_limit | default: 20 | plus: 0 -%}
+{%- if apa_scope == 'all' -%}
+  {%- include patch-atom-feed.html product_id='' limit=apa_limit title_name='every tracked product' alternate='/updates/' -%}
+{%- elsif apa_pid != '' -%}
+  {%- assign apa_product = site.data.patch_products | where: 'id', apa_pid | first -%}
+  {%- assign apa_name = apa_product.product_name | default: apa_pid -%}
+  {%- include patch-atom-feed.html product_id=apa_pid limit=apa_limit title_name=apa_name alternate=page.feed_alternate -%}
+{%- endif -%}

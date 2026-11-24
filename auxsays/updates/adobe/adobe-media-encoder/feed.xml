@@ -1,0 +1,8 @@
+---
+layout: aux-patch-atom
+feed_product_id: adobe-media-encoder
+feed_alternate: /updates/adobe/adobe-media-encoder/
+feed_limit: 20
+permalink: /updates/adobe/adobe-media-encoder/feed.xml
+sitemap: false
+---

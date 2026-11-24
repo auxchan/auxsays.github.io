@@ -1,0 +1,7 @@
+---
+layout: aux-patch-atom
+feed_scope: all
+feed_limit: 50
+permalink: /updates/feed.xml
+sitemap: false
+---

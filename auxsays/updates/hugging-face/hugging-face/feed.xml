@@ -1,0 +1,8 @@
+---
+layout: aux-patch-atom
+feed_product_id: hugging-face
+feed_alternate: /updates/hugging-face/hugging-face/
+feed_limit: 20
+permalink: /updates/hugging-face/hugging-face/feed.xml
+sitemap: false
+---

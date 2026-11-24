@@ -1,0 +1,8 @@
+---
+layout: aux-patch-atom
+feed_product_id: figma
+feed_alternate: /updates/figma/figma/
+feed_limit: 20
+permalink: /updates/figma/figma/feed.xml
+sitemap: false
+---

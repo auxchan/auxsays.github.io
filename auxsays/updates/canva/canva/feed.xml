@@ -1,0 +1,8 @@
+---
+layout: aux-patch-atom
+feed_product_id: canva
+feed_alternate: /updates/canva/canva/
+feed_limit: 20
+permalink: /updates/canva/canva/feed.xml
+sitemap: false
+---

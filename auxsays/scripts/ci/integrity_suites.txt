@@ -550,6 +550,17 @@ auxsays/scripts/tests/test_feed_discovery.py = 73
 # (SM1), a stored date on a record, tracker, post and stamped page (SM2), a stored value that is not a date
 # listed with no lastmod instead of failing the build (SM3), and no build time or file time anywhere (SM4).
 auxsays/scripts/tests/test_publication_hygiene.py = 42
+# P8: the per-product patch verdict Atom feeds. Renders the shipped feed include, layout and aux-base's
+# autodiscovery block with the Liquid gem (ruby + liquid required): valid Atom; only that product's pages,
+# newest release first, archived/hidden/undated left out, the limit kept; the verdict gate's verdict, never a
+# stored label; stored dates only; a subtitle that says there is no verdict-change history ([F], [L]); one
+# feed per product tracker ([S]); feed links only where a feed page exists ([A]).
+auxsays/scripts/tests/test_patch_atom_feeds.py = 22
+# P8: the deploy-time IndexNow ping. Runs the bare planner (changed pages only, newest first, at most 500,
+# nothing when the live sitemap or the key is in doubt, exit 0 always), pins the key file, parses pages.yml,
+# and EXECUTES the ping step's run: scalar with a fake curl (skip, one POST, a refusal and a network failure
+# exit 0 with a warning).
+auxsays/scripts/tests/test_indexnow_ping.py = 16
 # The published Systems Monitor bundle is minified without its dependencies' licence comments, so
 # THIRD_PARTY_NOTICES.txt ships beside it (AUX-082). Runs the REAL Node scripts (node required, its
 # absence a failure): the committed file names exactly the lockfile's production set; regeneration over

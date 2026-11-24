@@ -1,0 +1,8 @@
+---
+layout: aux-patch-atom
+feed_product_id: blackmagic-davinci
+feed_alternate: /updates/blackmagic-design/blackmagic-davinci/
+feed_limit: 20
+permalink: /updates/blackmagic-design/blackmagic-davinci/feed.xml
+sitemap: false
+---

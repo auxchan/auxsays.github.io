@@ -1,0 +1,8 @@
+---
+layout: aux-patch-atom
+feed_product_id: microsoft-teams
+feed_alternate: /updates/microsoft/microsoft-teams/
+feed_limit: 20
+permalink: /updates/microsoft/microsoft-teams/feed.xml
+sitemap: false
+---

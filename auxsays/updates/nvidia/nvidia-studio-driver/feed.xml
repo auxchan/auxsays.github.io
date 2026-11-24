@@ -1,0 +1,8 @@
+---
+layout: aux-patch-atom
+feed_product_id: nvidia-studio-driver
+feed_alternate: /updates/nvidia/nvidia-studio-driver/
+feed_limit: 20
+permalink: /updates/nvidia/nvidia-studio-driver/feed.xml
+sitemap: false
+---

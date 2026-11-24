@@ -17,8 +17,8 @@ update_version: Smoother FigJam collaboration and navigation on mobile
 update_logo_text: FIG
 update_published_at: '2026-11-20T00:00:00.000Z'
 update_last_checked: '2026-11-20T23:11:54Z'
-source_last_checked: '2026-11-24T03:01:28Z'
-official_body_last_checked: '2026-11-24T03:01:28Z'
+source_last_checked: '2026-11-24T12:51:25Z'
+official_body_last_checked: '2026-11-24T12:51:25Z'
 record_last_updated: '2026-11-20T23:11:54Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -70,11 +70,6 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-11-21T22:21:31Z'
-  url: https://www.figma.com/release-notes/?title=smoother-figjam-collaboration-and-navigation-on-mobile
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-11-22T09:44:16Z'
   url: https://www.figma.com/release-notes/?title=smoother-figjam-collaboration-and-navigation-on-mobile
   status: captured-from-rss-feed
@@ -91,6 +86,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-11-24T03:01:28Z'
+  url: https://www.figma.com/release-notes/?title=smoother-figjam-collaboration-and-navigation-on-mobile
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-24T12:51:25Z'
   url: https://www.figma.com/release-notes/?title=smoother-figjam-collaboration-and-navigation-on-mobile
   status: captured-from-rss-feed
   body_captured: true
