@@ -1387,6 +1387,9 @@ def _search_cases() -> dict:
                                               accepted_report_sources=[]),
                           "site": search_site()},
         "live_certified": {"page": search_page(**live), "site": search_site([PATCH_URL])},
+        # The Search Console ownership tag: set, and set but empty (the one value _config.yml says not to use).
+        "verify_token": {"page": search_page(), "site": dict(search_site(), google_site_verification=VERIFY_TOKEN)},
+        "verify_empty": {"page": search_page(), "site": dict(search_site(), google_site_verification="  ")},
         "live_uncertified": {"page": search_page(**live), "site": search_site([])},
         "live_absent": {"page": search_page(**live), "site": search_site(projection=False)},
         # GROWTH-3: the real layout never prints a legacy phrasing now, so the read-back of one is
@@ -1422,6 +1425,8 @@ def _search_cases() -> dict:
 
 
 FALLBACK_CASES = ("not_a_patch_page", "unreadable_page", "two_verdicts")
+VERIFY_TOKEN = "fixture-not-a-real-token"
+VERIFY_TAG = '<meta name="google-site-verification"'
 LABEL_TWICE_PRODUCT = "GitHub / Copilot"
 LABEL_TWICE_STORED = "GitHub / Copilot Copilot Student GPT-5.3-Codex removal from model picker"
 LABEL_ONCE = "GitHub / Copilot Student GPT-5.3-Codex removal from model picker"
@@ -1641,13 +1646,23 @@ def check_search_snippets() -> None:
     # site-wide tag and is not mirrored, so it stays refused with the rest.
     unmirrored = [k for k in ("twitter", "facebook", "webmaster_verifications",
                               "logo", "author", "image") if config.get(k)]
-    mirrors_verification = ("site.google_site_verification" in emitted
-                            and '<meta name="google-site-verification" content="{{ psm_google_verification }}" />' in emitted)
+    # RENDERED, not read: with a token set the patch head carries the tag exactly once, inside the head and
+    # nowhere in the body; set but empty (or only spaces) and unset, no page carries it. An inverted or
+    # missing guard prints an empty tag on every other case; a deleted mirror prints none on the token case.
+    token_html = out["verify_token"]["html"]
+    token_once = (heads["verify_token"]["raw_head"].count(f'{VERIFY_TAG} content="{VERIFY_TOKEN}" />') == 1
+                  and token_html.count(VERIFY_TAG) == 1)
+    tagged = sorted(n for n in cases if VERIFY_TAG in out[n]["html"])
+    # The site-wide tag prints an EMPTY tag for a key that is set but empty (it tests truthiness), so the
+    # shipped config may leave the key out or give it a real value, never an empty one.
+    stored_token = config.get("google_site_verification")
+    config_token_ok = "google_site_verification" not in config or (isinstance(stored_token, str)
+                                                                   and stored_token.strip() != "")
     check("S24 the site sets none of the SEO-tag options the patch head does not mirror, and the head "
           "mirrors the Search Console ownership tag",
-          not unmirrored and mirrors_verification,
-          f"configured: {unmirrored}; mirror them in patch-search-meta.html first; "
-          f"verification mirrored: {mirrors_verification}")
+          not unmirrored and config_token_ok and token_once and tagged == ["verify_token"],
+          f"configured: {unmirrored}; mirror them in patch-search-meta.html first; config token ok: "
+          f"{config_token_ok}; token case carries it once in the head: {token_once}; cases carrying a tag: {tagged}")
     base_src = BASE_LAYOUT.read_text(encoding="utf-8")
     seo_lines = [line.strip() for line in base_src.splitlines() if "{% seo" in line]
     check("S25 aux-base routes only aux-update pages through the include, and every other page to "
