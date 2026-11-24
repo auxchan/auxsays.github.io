@@ -243,6 +243,94 @@ def run() -> int:
     check("R23 a recorded rights status is declared, states its basis, and covers Adobe Community",
           not bad_rights and adobe_community <= set(ids), str(bad_rights[:5]))
 
+    # ---- THE JOIN WITH RUNTIME HEALTH ("R12" of the 2026-11 governance audit; numbered R24+ here
+    # because R12 was already taken). The registry and the telemetry were two lists nothing compared:
+    # DaVinci's only working method reported health for months with no catalogue entry. Both
+    # directions are checked against the COMMITTED health file, so either side drifting fails.
+    health_rows = (yaml.safe_load((_REPO / "auxsays" / "_data" / "evidence_method_health.yml")
+                                  .read_text(encoding="utf-8")) or {}).get("methods") or []
+    emitted = {str(r.get("method_id") or "") for r in health_rows if isinstance(r, dict)} - {""}
+    check("R24 every method id that reports health is a registry entry",
+          len(emitted) >= 15 and not (emitted - set(ids)), str(sorted(emitted - set(ids))))
+    manual_writers = {"local_playwright_capture_promotion"}
+    check("R25 every emitted id is a declared health reporter, and every declared reporter has rows",
+          emitted <= (am.HEALTH_REPORTING_METHODS | manual_writers)
+          and am.HEALTH_REPORTING_METHODS <= emitted,
+          f"emitted, undeclared: {sorted(emitted - am.HEALTH_REPORTING_METHODS - manual_writers)}; "
+          f"declared, no rows: {sorted(am.HEALTH_REPORTING_METHODS - emitted)}")
+    stores: dict[str, str] = {}
+    store_errors: list[str] = []
+    for m in methods:
+        try:
+            stores[m["method_id"]] = am.telemetry_store(m["method_id"])
+        except (KeyError, ValueError) as exc:
+            store_errors.append(f"{m['method_id']}: {exc}")
+    silent_active = [mid for mid, store in stores.items()
+                     if store == "none" and am.by_id(mid)["status"] == "active"]
+    bad_store = [f"{mid}={store}" for mid, store in stores.items()
+                 if store.split(":")[0] not in (am.TELEMETRY_STORES | {"parent"})]
+    check("R26 every method says where it reports, and no ACTIVE method reports nowhere",
+          not store_errors and not silent_active and not bad_store and len(stores) == len(methods),
+          "; ".join(store_errors[:3]) + str(silent_active[:3]) + str(bad_store[:3]))
+    bad_parent = [f"{child}->{parent}" for child, parent in am.TELEMETRY_PARENTS.items()
+                  if child not in ids or parent not in am.HEALTH_REPORTING_METHODS
+                  or child in am.HEALTH_REPORTING_METHODS]
+    check("R27 a sub-step's parent is a real health reporter, and a sub-step has no row of its own",
+          not bad_parent and not (set(am.TELEMETRY_PARENTS) & emitted),
+          str(bad_parent) + str(sorted(set(am.TELEMETRY_PARENTS) & emitted)))
+    from lib import collector_ownership as ownership   # noqa: PLC0415 - test-only
+    owned = set().union(*ownership.ALLOWED_METHODS.values())
+    check("R28 the ownership manifest and the registry name the same health reporters",
+          owned - set(ownership.MANUAL_ONLY_METHODS) == set(am.HEALTH_REPORTING_METHODS)
+          and set(ownership.MANUAL_ONLY_METHODS) == manual_writers,
+          f"owned only: {sorted(owned - am.HEALTH_REPORTING_METHODS - manual_writers)}; "
+          f"registry only: {sorted(am.HEALTH_REPORTING_METHODS - owned)}")
+    all_roles: set[str] = set()
+    for plan in method_routing.METHOD_PLANS.values():
+        for role in ("primary", "fallback", "probe_only", "disabled"):
+            all_roles |= set(plan.get(role, []))
+    check("R29 every method a plan names in ANY role, including switched-off ones, is in the registry",
+          not (all_roles - set(ids)) and len(all_roles) > len(routed), str(sorted(all_roles - set(ids))))
+
+    # ---- RE-PROBE POLICY. Whether automation may ever re-test a switched-off method is a fact
+    # about the source and its terms. Closed is the default; each open door is one declaration.
+    off_methods = [m["method_id"] for m in methods if m["status"] in ("blocked", "disabled")]
+    undeclared = [mid for mid in off_methods
+                  if am.reprobe_refusal(mid) in ("no_reprobe_declared", "probe_incomplete")]
+    check("R30 every blocked or disabled method has a recorded re-probe decision",
+          not undeclared and len(off_methods) >= 15, str(undeclared))
+    no_basis = [mid for mid, spec in am.REPROBE.items()
+                if mid not in ids or spec.get("policy") not in ("allowed", "never")
+                or len(str(spec.get("basis") or "")) < 40]
+    check("R31 every re-probe declaration names a registry method, a policy and its basis",
+          not no_basis and len(am.REPROBE) >= 8, str(no_basis))
+    with_rights = [m["method_id"] for m in methods if m.get("rights_status")]
+    reopened = [mid for mid in with_rights if not am.reprobe_refusal(mid)]
+    closed_families = [m["method_id"] for m in methods
+                       if any(tok in m["method_id"] for tok in ("reddit", "learn_qna", "adobe", "brave"))]
+    reopened += [mid for mid in closed_families if not am.reprobe_refusal(mid)]
+    check("R32 no method with unresolved rights, and no Reddit / Learn Q&A / Adobe / paid-search "
+          "method, can be re-probed",
+          not reopened and len(with_rights) >= 12 and len(closed_families) >= 15,
+          f"{reopened} rights={len(with_rights)} closed={len(closed_families)}")
+    allowed_specs = {mid: am.reprobe_spec(mid) for mid in ids if am.reprobe_spec(mid)}
+    loose = [mid for mid, spec in allowed_specs.items()
+             if spec["max_requests"] > am.REPROBE_MAX_REQUESTS_PER_METHOD
+             or spec["cooldown_hours"] < am.REPROBE_COOLDOWN_HOURS_DEFAULT
+             or not str(spec.get("robots_url", "")).startswith("https://")
+             or not spec.get("expect_any")]
+    check("R33 every re-probable method is bounded: robots.txt first, two requests, a week at least",
+          not loose and 1 <= len(allowed_specs) <= 5, f"{loose} allowed={sorted(allowed_specs)}")
+    learn_and_reddit = {"learn_qna_search_rss", "learn_qna_powerpoint_tags", "learn_qna_question_hydration",
+                        "learn_qna_segment_context", "learn_qna_thread_reply_harvest",
+                        "open_web_provider_qna_search_rss", "reddit_search",
+                        "reddit_listing_enumeration", "reddit_feed_fallback"}
+    unrecorded = [mid for mid in learn_and_reddit
+                  if (am.by_id(mid) or {}).get("rights_status") not in am.RIGHTS_STATUSES
+                  or "authori" in str((am.by_id(mid) or {}).get("rights_note") or "").lower()]
+    check("R34 the Microsoft Learn Q&A and Reddit methods record their unresolved rights",
+          not unrecorded, str(unrecorded))
+
     print()
     print("=" * 74)
     total = _PASS + _FAIL

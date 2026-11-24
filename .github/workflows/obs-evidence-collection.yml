@@ -90,6 +90,26 @@ jobs:
       - name: Install dependencies
         run: pip install -r auxsays/scripts/requirements-ingest.txt
 
+      - name: Re-probe switched-off sources (bounded)
+        # A method switched off because its source REFUSED automated requests is re-tested here on
+        # a bounded cadence, so it returns by itself if the source recovers instead of waiting for
+        # a person to notice. Hard bounds, all enforced in the script and its policy modules: at
+        # most 2 requests per method (robots.txt first), at most 4 per run, at least a week between
+        # probes of one method (doubling to 30 days after each refusal). Reddit, Microsoft Learn
+        # Q&A, Adobe and the paid search API are refused by the policy floor in
+        # lib/acquisition_methods.py and are never sent a request. A probe stores no page content
+        # and writes no evidence; it records one small result in the `probes` section of
+        # evidence_method_health.yml, which the collectors read through lib/method_routing.py and
+        # which reaches main with this job's ordinary writeback.
+        #
+        # Before collection, so a recovery is used by the same run. It can never fail the run: the
+        # script exits 0 on any probe failure, and continue-on-error covers anything else.
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        continue-on-error: true
+        timeout-minutes: 3
+        shell: bash
+        run: python auxsays/scripts/reprobe_methods.py --write
+
       - name: Collect patch evidence
         id: collect
         # Finite step timeout below the job timeout. Raised 180 -> 240 min: with the collector-txn

@@ -183,7 +183,9 @@ def relapsed(product_id: str, method_id: str, rows: list[dict[str, Any]], probes
 
 
 def run(*, health_path: Path, now: datetime, write: bool, max_requests: int,
-        fetch: Fetch = default_fetch, sleep: Callable[[float], None] = time.sleep) -> dict[str, Any]:
+        fetch: Fetch | None = None, sleep: Callable[[float], None] = time.sleep) -> dict[str, Any]:
+    # Resolved at CALL time, so a test that replaces `default_fetch` can never reach the network.
+    fetch = fetch or default_fetch
     rows = base.load_method_health(health_path)
     probes = base.load_method_probes(health_path)
     cap = max(0, min(int(max_requests), routing.MAX_REPROBE_REQUESTS_PER_RUN))
