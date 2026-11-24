@@ -201,6 +201,12 @@ auxsays/scripts/tests/test_version_attribution_guard.py = 48
 # with its origin on the row, and removed from the second tier. Product scope required; a withdrawn
 # report is never re-admitted; idempotent; unchanged tier files rewrite byte for byte (0 of 207 qualify).
 auxsays/scripts/tests/test_update_linked_promotion.py = 23
+# The backfill queue had 36 `queued` rows nothing executed or read. The official ingest lane is its
+# executor; execute_backfill_queue.py reads the result back in that lane: complete (records exist),
+# queued (enabled source, with the blocker ingest health reports) or blocked (source switched off), on
+# temporary files, idempotent, a completed row needing no other step; plus the Netlify extractor repair
+# (dated-slug and slug-only entries mapped, dates from the entry URL) that makes the one enabled row run.
+auxsays/scripts/tests/test_backfill_queue_executor.py = 24
 # Budget-bounded collectors must walk the corpus newest-first. DaVinci did not, so every
 # scheduled run spent its 1200s budget on 2014-2018 records and the newest release had never
 # been searched once. Wiring is asserted from the AST, not by grepping the file, and a budget

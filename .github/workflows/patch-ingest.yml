@@ -127,6 +127,22 @@ jobs:
             python auxsays/scripts/patch_ingest.py --source "${{ github.event.inputs.source }}"
           fi
 
+      # THE BACKFILL QUEUE'S EXECUTOR IS THE STEP ABOVE; THIS READS ITS RESULT BACK.
+      #
+      # _data/patch_backfill_queue.yml held 36 `queued` rows nothing read or wrote, six of them for
+      # products this lane had already written 1,156 records for. Ingestion is the bounded, resumable
+      # executor (at most record_limit new records per source per run, the rest deferred to the next
+      # run); what was missing is the write that records the outcome. Zero network: it counts the
+      # records on disk and reads this run's ingest state, then sets each row to complete, queued
+      # (enabled source, worked on every run, with the blocker the lane's own health reports) or
+      # blocked (the source is switched off, so no run can execute the row). It enables nothing.
+      #
+      # After ingestion so it sees this run's records and state; before QA and the writeback, which
+      # commits the file through the --allow entry below.
+      - name: Read the ingestion result back into the backfill queue
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: python auxsays/scripts/execute_backfill_queue.py --queue auxsays/_data/patch_backfill_queue.yml --write
+
 
       # THE LANE THAT ADVANCES A PATCH IDENTITY MUST REPAIR THE DRIFT IT CREATES.
       #
@@ -246,6 +262,7 @@ jobs:
           python auxsays/scripts/lib/automation_writeback.py \
             --message "Ingest official patch records" \
             --allow auxsays/_data/patch_ingest_state.json \
+            --allow auxsays/_data/patch_backfill_queue.yml \
             --allow auxsays/updates/generated \
             --allow 'auxsays/updates/microsoft/microsoft-powerpoint/*/index.md' \
             --allow 'auxsays/updates/microsoft/microsoft-windows-11/*/index.md' \

@@ -722,8 +722,14 @@ def main() -> int:
                     "<a href='/changelog/cursor-origin-git-provider/'>Two</a>"
                     "<a href='/changelog/feed.xml'>RSS</a>")
     dated_listing = "<a href='/changelog/2026/9/11/social-media-share-buttons/'>One</a>"
-    p_slug = HC.changelog_probe(netlify_src, base, slug_listing, HC._candidate_links(netlify_src, base, slug_listing))
-    check("EXA1 slug-only entries the date pattern cannot match report a mismatch",
+    # The Netlify profile maps its own slug entries since 2026-11-24 (NETLIFY_SLUG_RE), so the
+    # mismatch is shown with entries the profile still cannot map: the same site publishing under
+    # /releases/, which the family rule sees and the Netlify profile does not.
+    moved_listing = ("<a href='/releases/social-media-share-buttons/'>One</a>"
+                     "<a href='/releases/cursor-origin-git-provider/'>Two</a>"
+                     "<a href='/changelog/feed.xml'>RSS</a>")
+    p_slug = HC.changelog_probe(netlify_src, base, moved_listing, HC._candidate_links(netlify_src, base, moved_listing))
+    check("EXA1 entries the profile cannot match report a mismatch",
           p_slug["extraction_mismatch"] is True and p_slug["upstream_candidates"] == 2
           and p_slug["matched_candidates"] == 0, str(p_slug))
     p_dated = HC.changelog_probe(netlify_src, base, dated_listing, HC._candidate_links(netlify_src, base, dated_listing))

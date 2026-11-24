@@ -6,9 +6,10 @@
   category_key: ai-tools
   source_url: https://help.openai.com/en/articles/6825453-chatgpt-release-notes
   source_label: ChatGPT release notes
-  coverage_state: active_watch
   documented_update_count: 0
-  backfill_status: queued
+  coverage_state: active_watch
+  backfill_status: blocked
+  backfill_blocker: source_disabled
 - product_id: anthropic-claude
   company_id: anthropic
   product_name: Claude
@@ -17,9 +18,10 @@
   category_key: ai-tools
   source_url: https://support.claude.com/en/articles/12138966-release-notes
   source_label: Claude release notes
-  coverage_state: active_watch
   documented_update_count: 0
-  backfill_status: queued
+  coverage_state: active_watch
+  backfill_status: blocked
+  backfill_blocker: source_disabled
 - product_id: google-gemini
   company_id: google
   product_name: Gemini
@@ -28,9 +30,10 @@
   category_key: ai-tools
   source_url: https://gemini.google/release-notes/
   source_label: Gemini Apps release notes
-  coverage_state: active_watch
   documented_update_count: 0
-  backfill_status: queued
+  coverage_state: active_watch
+  backfill_status: blocked
+  backfill_blocker: source_disabled
 - product_id: perplexity
   company_id: perplexity
   product_name: Perplexity
@@ -39,9 +42,10 @@
   category_key: ai-tools
   source_url: https://www.perplexity.ai/hub/blog
   source_label: Perplexity blog
-  coverage_state: active_watch
   documented_update_count: 0
-  backfill_status: queued
+  coverage_state: active_watch
+  backfill_status: blocked
+  backfill_blocker: source_disabled
 - product_id: midjourney
   company_id: midjourney
   product_name: Midjourney
@@ -50,9 +54,10 @@
   category_key: ai-image
   source_url: https://www.midjourney.com/updates/
   source_label: Midjourney updates
-  coverage_state: active_watch
   documented_update_count: 0
-  backfill_status: queued
+  coverage_state: active_watch
+  backfill_status: blocked
+  backfill_blocker: no_automated_source
 - product_id: stability-ai
   company_id: stability-ai
   product_name: Stable Diffusion / Stable Audio
@@ -61,9 +66,10 @@
   category_key: ai-image
   source_url: https://stability.ai/news
   source_label: Stability AI news
-  coverage_state: active_watch
   documented_update_count: 0
-  backfill_status: queued
+  coverage_state: active_watch
+  backfill_status: blocked
+  backfill_blocker: source_disabled
 - product_id: runway
   company_id: runway
   product_name: Runway
@@ -72,9 +78,10 @@
   category_key: ai-video
   source_url: https://runwayml.com/research/
   source_label: Runway research
-  coverage_state: active_watch
   documented_update_count: 0
-  backfill_status: queued
+  coverage_state: active_watch
+  backfill_status: blocked
+  backfill_blocker: source_disabled
 - product_id: pika
   company_id: pika
   product_name: Pika
@@ -83,9 +90,10 @@
   category_key: ai-video
   source_url: https://pika.art/
   source_label: Pika product site
-  coverage_state: active_watch
   documented_update_count: 0
-  backfill_status: queued
+  coverage_state: active_watch
+  backfill_status: blocked
+  backfill_blocker: no_automated_source
 - product_id: lottiefiles
   company_id: lottiefiles
   product_name: LottieFiles
@@ -94,9 +102,10 @@
   category_key: design-workflow
   source_url: https://lottiefiles.com/blog
   source_label: LottieFiles blog
-  coverage_state: active_watch
   documented_update_count: 0
-  backfill_status: queued
+  coverage_state: active_watch
+  backfill_status: blocked
+  backfill_blocker: source_disabled
 - product_id: figma
   company_id: figma
   product_name: Figma
@@ -105,9 +114,9 @@
   category_key: design-workflow
   source_url: https://www.figma.com/release-notes/
   source_label: Figma release notes
-  coverage_state: active_watch
-  documented_update_count: 0
-  backfill_status: queued
+  documented_update_count: 234
+  coverage_state: documented
+  backfill_status: complete
 - product_id: canva
   company_id: canva
   product_name: Canva
@@ -116,9 +125,10 @@
   category_key: design-workflow
   source_url: https://www.canva.com/newsroom/
   source_label: Canva newsroom
-  coverage_state: active_watch
   documented_update_count: 0
-  backfill_status: queued
+  coverage_state: active_watch
+  backfill_status: blocked
+  backfill_blocker: source_disabled
 - product_id: adobe-premiere-pro
   company_id: adobe
   product_name: Premiere Pro
@@ -127,9 +137,9 @@
   category_key: video-production
   source_url: https://helpx.adobe.com/premiere/desktop/whats-new/release-notes.html
   source_label: Premiere Pro release notes
-  coverage_state: active_watch
-  documented_update_count: 0
-  backfill_status: queued
+  documented_update_count: 2
+  coverage_state: documented
+  backfill_status: complete
 - product_id: adobe-acrobat-reader
   company_id: adobe
   product_name: Acrobat Reader
@@ -138,9 +148,9 @@
   category_key: workplace-critical
   source_url: https://www.adobe.com/devnet-docs/acrobatetk/tools/ReleaseNotesDC/index.html
   source_label: Acrobat Enterprise release notes
-  coverage_state: active_watch
-  documented_update_count: 0
-  backfill_status: queued
+  documented_update_count: 199
+  coverage_state: documented
+  backfill_status: complete
 - product_id: adobe-acrobat-pro
   company_id: adobe
   product_name: Acrobat Pro
@@ -149,9 +159,9 @@
   category_key: workplace-critical
   source_url: https://www.adobe.com/devnet-docs/acrobatetk/tools/ReleaseNotesDC/index.html
   source_label: Acrobat Enterprise release notes
-  coverage_state: active_watch
-  documented_update_count: 0
-  backfill_status: queued
+  documented_update_count: 199
+  coverage_state: documented
+  backfill_status: complete
 - product_id: adobe-after-effects
   company_id: adobe
   product_name: After Effects
@@ -160,9 +170,10 @@
   category_key: video-production
   source_url: https://helpx.adobe.com/after-effects/release-note/release-notes-after-effects.html
   source_label: After Effects release notes
-  coverage_state: active_watch
   documented_update_count: 0
-  backfill_status: queued
+  coverage_state: active_watch
+  backfill_status: blocked
+  backfill_blocker: source_disabled
 - product_id: adobe-photoshop
   company_id: adobe
   product_name: Photoshop
@@ -171,9 +182,10 @@
   category_key: design-workflow
   source_url: https://helpx.adobe.com/photoshop/desktop/whats-new/photoshop-on-desktop-release-notes.html
   source_label: Photoshop release notes
-  coverage_state: active_watch
   documented_update_count: 0
-  backfill_status: queued
+  coverage_state: active_watch
+  backfill_status: blocked
+  backfill_blocker: source_disabled
 - product_id: adobe-media-encoder
   company_id: adobe
   product_name: Media Encoder
@@ -182,9 +194,10 @@
   category_key: video-production
   source_url: https://helpx.adobe.com/media-encoder/release-notes.html
   source_label: Media Encoder release notes
-  coverage_state: active_watch
   documented_update_count: 0
-  backfill_status: queued
+  coverage_state: active_watch
+  backfill_status: blocked
+  backfill_blocker: source_disabled
 - product_id: adobe-lightroom-classic
   company_id: adobe
   product_name: Lightroom Classic
@@ -193,9 +206,10 @@
   category_key: design-workflow
   source_url: https://helpx.adobe.com/lightroom-classic/help/whats-new/release-notes.html
   source_label: Lightroom Classic release notes
-  coverage_state: active_watch
   documented_update_count: 0
-  backfill_status: queued
+  coverage_state: active_watch
+  backfill_status: blocked
+  backfill_blocker: source_disabled
 - product_id: blackmagic-davinci
   company_id: blackmagic-design
   product_name: DaVinci Resolve
@@ -204,8 +218,8 @@
   category_key: video-production
   source_url: https://www.blackmagicdesign.com/media
   source_label: Blackmagic media releases
+  documented_update_count: 123
   coverage_state: documented
-  documented_update_count: 1
   backfill_status: complete
 - product_id: obs-studio
   company_id: obs-project
@@ -215,8 +229,8 @@
   category_key: streaming
   source_url: https://github.com/obsproject/obs-studio/releases
   source_label: OBS GitHub releases
+  documented_update_count: 20
   coverage_state: documented
-  documented_update_count: 2
   backfill_status: complete
 - product_id: twitch
   company_id: twitch
@@ -226,9 +240,10 @@
   category_key: creator-platforms
   source_url: https://blog.twitch.tv/
   source_label: Twitch blog
-  coverage_state: active_watch
   documented_update_count: 0
-  backfill_status: queued
+  coverage_state: active_watch
+  backfill_status: blocked
+  backfill_blocker: source_disabled
 - product_id: youtube
   company_id: youtube
   product_name: YouTube / YouTube Studio
@@ -237,9 +252,10 @@
   category_key: creator-platforms
   source_url: https://blog.youtube/news-and-events/
   source_label: YouTube official blog
-  coverage_state: active_watch
   documented_update_count: 0
-  backfill_status: queued
+  coverage_state: active_watch
+  backfill_status: blocked
+  backfill_blocker: source_disabled
 - product_id: kick
   company_id: kick
   product_name: Kick
@@ -248,9 +264,10 @@
   category_key: creator-platforms
   source_url: null
   source_label: null
-  coverage_state: active_watch
   documented_update_count: 0
-  backfill_status: queued
+  coverage_state: active_watch
+  backfill_status: blocked
+  backfill_blocker: no_automated_source
 - product_id: rumble
   company_id: rumble
   product_name: Rumble
@@ -259,9 +276,10 @@
   category_key: creator-platforms
   source_url: https://corp.rumble.com/blog/
   source_label: Rumble blog
-  coverage_state: active_watch
   documented_update_count: 0
-  backfill_status: queued
+  coverage_state: active_watch
+  backfill_status: blocked
+  backfill_blocker: source_disabled
 - product_id: epic-unreal
   company_id: epic-games
   product_name: Unreal Engine
@@ -270,9 +288,10 @@
   category_key: game-engines
   source_url: https://dev.epicgames.com/documentation/en-us/unreal-engine/whats-new
   source_label: Unreal what's new
-  coverage_state: active_watch
   documented_update_count: 0
-  backfill_status: queued
+  coverage_state: active_watch
+  backfill_status: blocked
+  backfill_blocker: source_disabled
 - product_id: unity
   company_id: unity
   product_name: Unity
@@ -281,9 +300,10 @@
   category_key: game-engines
   source_url: https://unity.com/releases
   source_label: Unity releases
-  coverage_state: active_watch
   documented_update_count: 0
-  backfill_status: queued
+  coverage_state: active_watch
+  backfill_status: blocked
+  backfill_blocker: source_disabled
 - product_id: steam
   company_id: valve
   product_name: Steam
@@ -292,9 +312,10 @@
   category_key: game-platforms
   source_url: https://store.steampowered.com/news/group/4145017
   source_label: Steam news
-  coverage_state: active_watch
   documented_update_count: 0
-  backfill_status: queued
+  coverage_state: active_watch
+  backfill_status: blocked
+  backfill_blocker: source_disabled
 - product_id: amd
   company_id: amd
   product_name: AMD Software / Radeon
@@ -303,9 +324,10 @@
   category_key: hardware-drivers
   source_url: https://www.amd.com/en/support/download/drivers.html
   source_label: AMD drivers
-  coverage_state: active_watch
   documented_update_count: 0
-  backfill_status: queued
+  coverage_state: active_watch
+  backfill_status: blocked
+  backfill_blocker: source_disabled
 - product_id: intel-arc
   company_id: intel
   product_name: Intel Graphics / Arc
@@ -314,9 +336,10 @@
   category_key: hardware-drivers
   source_url: https://www.intel.com/content/www/us/en/download-center/home.html
   source_label: Intel download center
-  coverage_state: active_watch
   documented_update_count: 0
-  backfill_status: queued
+  coverage_state: active_watch
+  backfill_status: blocked
+  backfill_blocker: source_disabled
 - product_id: blender
   company_id: blender-foundation
   product_name: Blender
@@ -325,9 +348,10 @@
   category_key: video-production
   source_url: https://www.blender.org/download/releases/
   source_label: Blender releases
-  coverage_state: active_watch
   documented_update_count: 0
-  backfill_status: queued
+  coverage_state: active_watch
+  backfill_status: blocked
+  backfill_blocker: source_disabled
 - product_id: comfyui
   company_id: comfyui
   product_name: ComfyUI
@@ -336,9 +360,9 @@
   category_key: ai-image
   source_url: https://github.com/comfyanonymous/ComfyUI/releases
   source_label: ComfyUI releases
-  coverage_state: active_watch
-  documented_update_count: 0
-  backfill_status: queued
+  documented_update_count: 50
+  coverage_state: documented
+  backfill_status: complete
 - product_id: hugging-face
   company_id: hugging-face
   product_name: Hugging Face
@@ -347,9 +371,10 @@
   category_key: dev-web
   source_url: https://huggingface.co/blog
   source_label: Hugging Face blog
-  coverage_state: active_watch
   documented_update_count: 0
-  backfill_status: queued
+  coverage_state: active_watch
+  backfill_status: blocked
+  backfill_blocker: source_disabled
 - product_id: github
   company_id: github
   product_name: GitHub / Copilot
@@ -358,9 +383,9 @@
   category_key: dev-web
   source_url: https://github.blog/changelog/
   source_label: GitHub changelog
-  coverage_state: active_watch
-  documented_update_count: 0
-  backfill_status: queued
+  documented_update_count: 472
+  coverage_state: documented
+  backfill_status: complete
 - product_id: cloudflare
   company_id: cloudflare
   product_name: Cloudflare
@@ -369,9 +394,10 @@
   category_key: dev-web
   source_url: https://blog.cloudflare.com/
   source_label: Cloudflare blog
-  coverage_state: active_watch
   documented_update_count: 0
-  backfill_status: queued
+  coverage_state: active_watch
+  backfill_status: blocked
+  backfill_blocker: source_disabled
 - product_id: netlify
   company_id: netlify
   product_name: Netlify
@@ -380,9 +406,11 @@
   category_key: dev-web
   source_url: https://www.netlify.com/changelog/
   source_label: Netlify changelog
-  coverage_state: active_watch
   documented_update_count: 0
+  coverage_state: active_watch
   backfill_status: queued
+  backfill_executor: official_ingest_lane
+  backfill_blocker: extraction_mismatch
 - product_id: notion
   company_id: notion
   product_name: Notion
@@ -391,9 +419,10 @@
   category_key: workflow-automation
   source_url: https://www.notion.com/releases
   source_label: Notion releases
-  coverage_state: active_watch
   documented_update_count: 0
-  backfill_status: queued
+  coverage_state: active_watch
+  backfill_status: blocked
+  backfill_blocker: source_disabled
 - product_id: zapier
   company_id: zapier
   product_name: Zapier
@@ -402,9 +431,10 @@
   category_key: workflow-automation
   source_url: https://zapier.com/blog/updates/
   source_label: Zapier updates
-  coverage_state: active_watch
   documented_update_count: 0
-  backfill_status: queued
+  coverage_state: active_watch
+  backfill_status: blocked
+  backfill_blocker: source_disabled
 - product_id: make
   company_id: make
   product_name: Make
@@ -413,6 +443,7 @@
   category_key: workflow-automation
   source_url: https://www.make.com/en/changelog
   source_label: Make changelog
-  coverage_state: active_watch
   documented_update_count: 0
-  backfill_status: queued
+  coverage_state: active_watch
+  backfill_status: blocked
+  backfill_blocker: source_disabled
