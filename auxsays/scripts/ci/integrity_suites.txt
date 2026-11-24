@@ -514,7 +514,10 @@ auxsays/scripts/tests/test_feed_discovery.py = 73
 # 860px block only; [TT] renders the title include with the Liquid gem (the repeated label shown once, every
 # other title byte-identical, no output of its own), pins its call sites, and renders aux-update.html's
 # written-out copy over the same titles (TT5).
-auxsays/scripts/tests/test_publication_hygiene.py = 38
+# 38 -> 42: [SM] renders auxsays/sitemap.xml with the Liquid gem (ruby + liquid required): the plugin's URL set
+# (SM1), a stored date on a record, tracker, post and stamped page (SM2), a stored value that is not a date
+# listed with no lastmod instead of failing the build (SM3), and no build time or file time anywhere (SM4).
+auxsays/scripts/tests/test_publication_hygiene.py = 42
 # The published Systems Monitor bundle is minified without its dependencies' licence comments, so
 # THIRD_PARTY_NOTICES.txt ships beside it (AUX-082). Runs the REAL Node scripts (node required, its
 # absence a failure): the committed file names exactly the lockfile's production set; regeneration over

@@ -31,6 +31,11 @@ WHAT IS PINNED HERE.
         copy (the top of that layout holds no include tag), rendered over the same titles (TT5). The
         heading, search title and JSON-LD headline of a rendered patch page are pinned by
         test_patch_decision_authority S27/S28.
+  [SM]  auxsays/sitemap.xml, rendered with the Liquid gem over a site that holds every kind of URL and every
+        kind of stored value: the URL set is jekyll-sitemap's, a record / tracker / post carries its stored
+        date, a stored value that is not a date (a word, an impossible month, 'now', a bare number, a future
+        date) leaves its URL listed with no lastmod instead of failing the build, and nothing carries the
+        build time or a file time. Needs ruby + liquid.
   [W]   wiring: pages.yml runs the gate on auxsays/_site after the build and before the upload, and it
         is not continue-on-error; the DaVinci 20.2.2 notice keeps its noindex policy out of the sitemap;
         the gate's live marker is the class aux-update.html renders for a live page.
@@ -49,6 +54,7 @@ import tempfile
 import traceback
 from contextlib import redirect_stdout
 from pathlib import Path
+from xml.etree import ElementTree
 
 _REPO = Path(__file__).resolve().parents[3]
 _SCRIPTS = _REPO / "auxsays" / "scripts"
@@ -476,6 +482,143 @@ def section_tt() -> None:
           copy_out == ["[]" + s for s in shown], str([(a, b) for a, b in zip(copy_out, shown) if a != "[]" + b][:3]))
 
 
+# ----------------------------------------------------------------------------------------------
+# [SM] the sitemap template: a lastmod only from a stored date
+# ----------------------------------------------------------------------------------------------
+SITEMAP_TEMPLATE = AUX / "sitemap.xml"
+SM_NOW = "2026-11-24T08:00:00Z"
+_SM_RUBY = r"""
+require 'liquid'
+require 'json'
+module SitemapShims
+  def absolute_url(i) = "https://auxsays.com/" + i.to_s.sub(%r{\A/}, "")
+  def xml_escape(i) = i.to_s.encode(xml: :text)
+end
+Liquid::Template.register_filter(SitemapShims)
+source = File.read(ARGV[0], encoding: 'utf-8').sub(/\A---\n.*?\n---\n/m, '')
+site = JSON.parse(File.read(ARGV[1], encoding: 'utf-8'))
+print Liquid::Template.parse(source, error_mode: :strict).render!({ 'site' => site }, strict_filters: true)
+"""
+
+
+def _sm_record(name: str, *, product: str = "tool", version: str = "1.0", **fields) -> dict:
+    return {"url": f"/u/{product}/{name}/", "layout": "aux-update", "update_entry": True, "company_id": "acme",
+            "product_id": product, "update_version": version, **fields}
+
+
+#: url -> the lastmod the template must print, or None for "listed, no lastmod". Offsets are written out in
+#: every stored value, so the expected text does not depend on the machine's time zone.
+SM_EXPECT = {
+    "/articles/a/": "2026-04-10T07:45:00-07:00",
+    "/about/": None,                                    # an undated document: its date IS the build time
+    "/": None,
+    "/stamped/": "2026-05-05T00:00:00+00:00",
+    "/u/tool/good/": "2026-11-22T21:14:15+00:00",
+    "/u/tool/older/": "2026-11-01T00:00:00+00:00",
+    "/u/tool/fallback/": "2026-10-01T00:00:00+00:00",   # no record_last_updated: the release date
+    "/u/other/x/": "2026-10-05T10:00:00+00:00",
+    "/u/tool/bad-word/": None, "/u/tool/bad-month/": None, "/u/tool/bad-now/": None, "/u/tool/bad-int/": None,
+    "/u/tool/bad-future/": None, "/u/tool/bad-fallback/": None, "/u/broken/bad-only/": None,
+    "/u/tool/": "2026-11-22T21:14:15+00:00",            # product tracker: its newest valid record
+    "/u/": "2026-11-22T21:14:15+00:00",                 # company tracker
+    "/u/tool/v2/": "2026-11-01T00:00:00+00:00",         # version tracker: that version's records only
+    "/u/empty/": None, "/u/broken/": None, "/u/noid/": None,
+    "/file.pdf": None, "/doc.html": None,
+}
+SM_BAD = [u for u in SM_EXPECT if "/bad-" in u] + ["/u/broken/"]
+SM_ABSENT = ["/404.html", "/hidden/", "/articles/hidden/", "/no/", "/style.css", "/old/404.html"]
+
+
+def sm_site() -> dict:
+    """A site as Jekyll hands it to the template, with every kind of URL and every kind of stored value."""
+    records = [
+        _sm_record("good", record_last_updated="2026-11-22T21:14:15.681110Z", update_published_at="2026-10-01T00:00:00Z"),
+        _sm_record("older", version="2.0", record_last_updated="2026-11-01T00:00:00Z"),
+        _sm_record("fallback", update_published_at="2026-10-01T00:00:00Z"),
+        _sm_record("x", product="other", record_last_updated="2026-10-05T10:00:00Z"),
+        _sm_record("bad-word", record_last_updated="not-a-date"),
+        _sm_record("bad-month", record_last_updated="2026-13-45T00:00:00Z"),
+        _sm_record("bad-now", record_last_updated="now"),
+        _sm_record("bad-int", record_last_updated=1732000000),
+        _sm_record("bad-future", record_last_updated="2099-01-01T00:00:00Z"),
+        _sm_record("bad-fallback", update_published_at="soon"),
+        _sm_record("bad-only", product="broken", record_last_updated="garbage"),
+    ]
+    trackers = [
+        {"url": "/u/tool/", "layout": "aux-patch-product", "company_id": "acme", "product_id": "tool"},
+        {"url": "/u/", "layout": "aux-patch-company", "company_id": "acme"},
+        {"url": "/u/tool/v2/", "layout": "aux-patch-version", "product_id": "tool", "update_version": "2.0"},
+        {"url": "/u/empty/", "layout": "aux-patch-product", "product_id": "none-here"},
+        {"url": "/u/broken/", "layout": "aux-patch-product", "product_id": "broken"},
+        {"url": "/u/noid/", "layout": "aux-patch-product"},
+    ]
+    plain = [{"url": "/", "layout": "aux-home"}, {"url": "/404.html", "layout": "aux-base"},
+             {"url": "/hidden/", "layout": "aux-base", "sitemap": False},
+             {"url": "/stamped/", "layout": "aux-base", "last_modified_at": "2026-05-05T00:00:00Z"}]
+    return {
+        "time": SM_NOW,
+        "collections": [
+            {"label": "posts", "output": True, "docs": [
+                {"url": "/articles/a/", "date": "2026-04-10T07:45:00-07:00"},
+                {"url": "/articles/hidden/", "date": "2026-04-11T07:45:00-07:00", "sitemap": False}]},
+            {"label": "tabs", "output": True, "docs": [{"url": "/about/", "date": SM_NOW}]},
+            {"label": "drafts", "output": False, "docs": [{"url": "/no/", "date": "2026-01-01T00:00:00Z"}]}],
+        "html_pages": plain + records + trackers,
+        "static_files": [
+            {"path": "/file.pdf", "name": "file.pdf", "extname": ".pdf", "modified_time": SM_NOW},
+            {"path": "/doc.html", "name": "doc.html", "extname": ".html", "modified_time": "2026-11-20T00:00:00Z"},
+            {"path": "/old/404.html", "name": "404.html", "extname": ".html", "modified_time": SM_NOW},
+            {"path": "/style.css", "name": "style.css", "extname": ".css", "modified_time": SM_NOW}],
+    }
+
+
+def section_sm() -> None:
+    print("\n[SM] the sitemap template prints a lastmod only from a stored date")
+    ruby = shutil.which("ruby")
+    if not ruby:
+        check("SM1 the shipped sitemap.xml renders under the Liquid gem", False, "ruby missing")
+        return
+    with tempfile.TemporaryDirectory() as td:
+        payload, script = Path(td) / "site.json", Path(td) / "sm.rb"
+        payload.write_text(json.dumps(sm_site()), encoding="utf-8")
+        script.write_text(_SM_RUBY, encoding="utf-8")
+        proc = subprocess.run([ruby, str(script), str(SITEMAP_TEMPLATE), str(payload)], capture_output=True,
+                              text=True, encoding="utf-8", timeout=120)
+    xml = proc.stdout or ""
+    got: dict[str, str | None] = {}
+    blocks = re.findall(r"<url>(.*?)</url>", xml, re.S)
+    for block in blocks:
+        loc = re.search(r"<loc>(.*?)</loc>", block, re.S)
+        mod = re.findall(r"<lastmod>(.*?)</lastmod>", block, re.S)
+        if loc:
+            got[loc.group(1).strip().replace(ORIGIN, "")] = mod[0].strip() if len(mod) == 1 else (None if not mod else "TWO")
+    try:
+        ElementTree.fromstring(xml)
+        parses = True
+    except ElementTree.ParseError:
+        parses = False
+    check("SM1 the shipped sitemap.xml renders under the Liquid gem with malformed stored dates in the site, "
+          "as XML that opens with its declaration, and lists exactly the plugin's URL set",
+          proc.returncode == 0 and xml.startswith("<?xml") and parses and len(blocks) == len(got)
+          and sorted(got) == sorted(SM_EXPECT) and not [u for u in SM_ABSENT if u in got],
+          f"rc={proc.returncode} {(proc.stderr or '')[-300:]} extra={sorted(set(got) - set(SM_EXPECT))} "
+          f"missing={sorted(set(SM_EXPECT) - set(got))}")
+    dated = {u: v for u, v in SM_EXPECT.items() if v}
+    wrong = {u: got.get(u) for u, v in dated.items() if got.get(u) != v}
+    check(f"SM2 a record, a tracker, a post and a stamped page carry their stored date, to the second "
+          f"({len(dated)} URLs)", bool(got) and not wrong, str(wrong))
+    leaked = {u: got.get(u, "ABSENT") for u in SM_BAD if got.get(u, "ABSENT") is not None}
+    check(f"SM3 a stored value that is not a date (a word, an impossible month, 'now', a bare number, a future "
+          f"date, a bad fallback) leaves its URL listed with no lastmod ({len(SM_BAD)} URLs)",
+          bool(got) and not leaked, str(leaked))
+    undated = {u: got.get(u, "ABSENT") for u, v in SM_EXPECT.items() if v is None and got.get(u, "ABSENT") is not None}
+    build_time = [u for u, v in got.items() if v and v[:16] == SM_NOW[:16]]
+    check("SM4 no URL carries the build time or a file time: an undated document, a tracker with no record, "
+          "a tracker with no id and every static file have no lastmod",
+          bool(got) and not undated and not build_time
+          and sum(1 for v in got.values() if v) == len(dated), f"undated={undated} build_time={build_time}")
+
+
 def section_w() -> None:
     print("\n[W] wiring")
     wf = yaml.safe_load(PAGES_YML.read_text(encoding="utf-8"))
@@ -513,6 +656,7 @@ def main() -> int:
     section_rb()
     section_css()
     section_tt()
+    section_sm()
     section_w()
     print()
     print("=" * 78)

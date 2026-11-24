@@ -36,8 +36,9 @@
   OUTPUT. Sets patch_search_emitted. When true it has emitted the same tags the site-wide SEO tag
   emits for a patch page (title, generator, og:title, og:locale, description, og:description,
   canonical, og:url, og:site_name, og:type, twitter:card, twitter:title, JSON-LD WebPage), with the
-  canonical URL computed exactly as that tag computes it. The tag reacts to site settings this file
-  does not read (twitter, facebook, webmaster verifications, a site logo or image);
+  canonical URL computed exactly as that tag computes it, and the Search Console ownership tag when
+  google_site_verification is set. The tag reacts to site settings this file does not read (twitter,
+  facebook, the webmaster_verifications table, a site logo or image);
   test_patch_decision_authority S24 pins that none is configured, so adding one fails a check
   instead of silently diverging.
 
@@ -117,7 +118,7 @@
       {%- comment -%} AVOID and SECURITY UPDATE come from an official fact, not from the reports, so the
         title names the fact and the description never says the verdict is "from" N reports. {%- endcomment -%}
       {%- capture psm_title -%}{{ psm_identity }}: {{ psm_phrase }}{%- endcapture -%}
-      {%- capture psm_description -%}AUXSAYS verdict for {{ psm_identity }}: {{ psm_phrase }}.{% if psm_sentence != '' %} {{ psm_sentence }}{% endif %}{% if psm_count > 0 %} {{ psm_reports }} matched so far.{% endif %}{%- endcapture -%}
+      {%- capture psm_description -%}AUXSAYS verdict for {{ psm_identity }}: {{ psm_phrase }}.{% if psm_sentence != '' %} {{ psm_sentence }}{% endif %}{% if psm_count > 0 %} {{ psm_reports }} matched so far.{% endif %}{% if psm_released != '' %} Released {{ psm_released }}.{% endif %}{%- endcapture -%}
     {%- else -%}
       {%- comment -%} WAIT and TEST FIRST rest on a reviewed reason about a stated setup, not on the whole
         report population and not on the evidence maturity, so the title is the verdict and its scope
@@ -125,8 +126,13 @@
         the verdict is "from" N reports, a "live consensus of" N or "on early evidence": OBS 32.2.2's
         WAIT rests on one report and OBS's own note, not on its 53 (GROWTH-3 review 2, LOW-2). {%- endcomment -%}
       {%- capture psm_title -%}{{ psm_identity }}: {{ psm_phrase }}{%- endcapture -%}
-      {%- capture psm_description -%}AUXSAYS verdict for {{ psm_identity }}: {{ psm_phrase }}.{% if psm_sentence != '' %} {{ psm_sentence }}{% endif %}{% if psm_count > 0 %} {{ psm_reports }} matched so far{% if psm_live %} (live consensus){% endif %}.{% endif %}{%- endcapture -%}
+      {%- capture psm_description -%}AUXSAYS verdict for {{ psm_identity }}: {{ psm_phrase }}.{% if psm_sentence != '' %} {{ psm_sentence }}{% endif %}{% if psm_count > 0 %} {{ psm_reports }} matched so far{% if psm_live %} (live consensus){% endif %}.{% endif %}{% if psm_released != '' %} Released {{ psm_released }}.{% endif %}{%- endcapture -%}
     {%- endif -%}
+    {%- comment -%} Every description closes with the stored release date (update_published_at) when the
+      record has one. The no-verdict descriptions always did; the verdict descriptions (WAIT, TEST FIRST,
+      AVOID, SECURITY UPDATE) did not, so a search result for an exact build could not be told from a
+      neighbouring build's by its date. It is the page's own "Release date", and it follows the verdict,
+      the reason and the count, so nothing above reads differently. {%- endcomment -%}
     {%- assign psm_title = psm_title | strip_html | strip_newlines | strip | escape_once -%}
     {%- assign psm_description = psm_description | strip_html | strip_newlines | strip | escape_once -%}
     {%- assign psm_site_title = site.title | default: 'AUXSAYS' | strip_html | strip | escape_once -%}
@@ -141,6 +147,10 @@
     {%- endif -%}
     {%- assign psm_canonical = psm_canonical | escape_once -%}
     {%- assign psm_locale = psm_record.locale | default: site.locale | default: psm_record.lang | default: site.lang | default: 'en_US' | replace: '-', '_' | escape_once -%}
+    {%- comment -%} The Search Console ownership tag, mirrored from the one site setting the site-wide SEO
+      tag also reads (google_site_verification in _config.yml), so a patch page and every other page
+      carry the same tag or none. Unset or empty prints nothing. {%- endcomment -%}
+    {%- assign psm_google_verification = site.google_site_verification | default: '' | append: '' | strip | escape_once -%}
     {%- comment -%}
       JSON-LD CARRIES THE TEXT, NOT ITS HTML (G39). A <script> element is raw text: the browser and a
       search engine read "&amp;" there as five characters, not as "&". The values above are HTML-escaped
@@ -173,6 +183,9 @@
 <meta property="og:type" content="website" />
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="{{ psm_title }}" />
+{%- if psm_google_verification != '' %}
+<meta name="google-site-verification" content="{{ psm_google_verification }}" />
+{%- endif %}
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebPage","description":{{ psm_json_description }},"headline":{{ psm_json_headline }},"url":{{ psm_json_url }}}</script>
 <!-- End patch page search metadata -->
