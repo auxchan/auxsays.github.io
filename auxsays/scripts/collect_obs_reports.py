@@ -573,6 +573,9 @@ def evidence_key(row: dict[str, Any], field: str) -> tuple[str, str, str]:
     )
 
 
+DISCOVERY_METHOD_BY_SOURCE_TYPE = {"github_issue": "github_issues", "obs_forum_thread": "obs_forum"}
+
+
 def write_evidence(rows: list[dict[str, Any]],
                    added_out: list[dict[str, Any]] | None = None) -> tuple[int, int, list[dict[str, Any]]]:
     """Append rows that are not already stored, and report the real delta.
@@ -599,7 +602,15 @@ def write_evidence(rows: list[dict[str, Any]],
         # This is OBS's own persistence boundary, so the structured facts are written here (G68), from
         # the row as it will be serialised. Existing rows keep theirs untouched.
         facts = evidence_facts.compute_facts(normalize_row(row))
-        row = {**{k: v for k, v in row.items() if k not in evidence_facts.STORED_FIELDS}, **facts}
+        row = {k: v for k, v in row.items()
+               if k not in evidence_facts.STORED_FIELDS and k != "discovery_method_id"}
+        # Which discovery method found the row (provenance only; nothing counts or gates on it).
+        # OBS has exactly one method per source family, so the family names the method. A source
+        # type with no such mapping is stored unstamped rather than guessed.
+        finder = DISCOVERY_METHOD_BY_SOURCE_TYPE.get(str(row.get("source_type") or ""))
+        if finder:
+            row["discovery_method_id"] = finder
+        row = {**row, **facts}
         existing.append(row)
         seen_ids.add(id_key)
         seen_urls.add(url_key)

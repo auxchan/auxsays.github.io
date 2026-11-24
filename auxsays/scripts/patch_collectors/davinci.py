@@ -28,9 +28,15 @@ from lib.reddit_access_policy import (
     require_reddit_access,
 )
 from lib.normalize_davinci_version import normalize_davinci_version
+from lib import acquisition_methods as _registry
+from lib import method_routing as _routing
 
 from .base import (
     EVIDENCE_PATH,
+    METHOD_HEALTH_PATH,
+    load_method_health,
+    load_method_probes,
+    rejection_reason_counts,
     CollectorContext,
     PatchRecord,
     ProductCollector,
@@ -316,12 +322,24 @@ class DavinciCollector(ProductCollector):
         records = newest_first(generated_records(
             PRODUCT_ID, context.target_versions, include_archived=bool(context.target_versions)))
         results: list[dict[str, Any]] = []
+        returned = returned_to_service()
+        global _CREATIVE_COW_RUN_CACHE
+        _CREATIVE_COW_RUN_CACHE = {}
+        try:
+            results = self._collect_records(records, context, returned)
+        finally:
+            _CREATIVE_COW_RUN_CACHE = None
+        return results
+
+    def _collect_records(self, records: list[PatchRecord], context: CollectorContext,
+                         returned: frozenset[str]) -> list[dict[str, Any]]:
+        results: list[dict[str, Any]] = []
         for record in records:
             _b = rb.get_run_budget()
             if _b is not None and _b.collector_finalize_expired():
                 rb.emit("collector_budget_stop", product_id=PRODUCT_ID, reason="collector_finalize")
                 break
-            accepted, rejected, method_health = collect_for_record(record, context)
+            accepted, rejected, method_health = collect_for_record(record, context, returned=returned)
             result: dict[str, Any] = {
                 "product_id": PRODUCT_ID,
                 "version": record.update_version,
@@ -338,7 +356,8 @@ class DavinciCollector(ProductCollector):
                 persisted: list[dict[str, Any]] = []
                 already_held: list[dict[str, Any]] = []
                 added, total, rows = append_evidence_rows(
-                    accepted, out_added=persisted, out_already_held=already_held)
+                    accepted, out_added=persisted, out_already_held=already_held,
+                    method_health=method_health)
                 finalize_method_health_delta(method_health, persisted, already_held)
                 structured_count = len(counted_rows(rows, PRODUCT_ID, record.update_version))
                 record_updated = False
@@ -922,7 +941,25 @@ def refused_source_disabled_row(record: PatchRecord, method_id: str, source_type
     )
 
 
-def collect_for_record(record: PatchRecord, context: CollectorContext) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
+def returned_to_service(health_path: Any = None) -> frozenset[str]:
+    """The refused methods a re-probe found answering again, per `lib.method_routing.effective_plan`.
+
+    Read once per run from the stored health file: the rows, and the probe records the re-probe
+    step wrote before collection. Empty unless the registry's policy allows the method to be
+    re-probed at all AND its probe says `recovered` AND its own rows since have not all failed.
+    Any failure to read that state returns the empty set: with no evidence of recovery the method
+    stays off, which is the behaviour before this existed."""
+    path = health_path or METHOD_HEALTH_PATH
+    try:
+        plan = _routing.effective_plan(PRODUCT_ID, load_method_health(path), load_method_probes(path),
+                                       reprobe_refusal=_registry.reprobe_refusal)
+    except Exception:  # noqa: BLE001 -- unreadable telemetry must never switch a refused method on
+        return frozenset()
+    return frozenset(plan.get("returned_to_service") or ()) & REFUSED_SOURCE_DISABLED_METHODS
+
+
+def collect_for_record(record: PatchRecord, context: CollectorContext,
+                       *, returned: frozenset[str] = frozenset()) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
     captured_at = utc_now()
     accepted: list[dict[str, Any]] = []
     rejected: list[dict[str, Any]] = []
@@ -939,7 +976,7 @@ def collect_for_record(record: PatchRecord, context: CollectorContext) -> tuple[
 
     reddit_unauthorised = not reddit_access_authorized()
     for method_id, source_type, method in method_stack:
-        if method_id in REFUSED_SOURCE_DISABLED_METHODS:
+        if method_id in REFUSED_SOURCE_DISABLED_METHODS and method_id not in returned:
             # AUX-117: the Blackmagic forum refuses automated requests, so these two methods are
             # switched off. NOTHING is requested -- the adapter is not called at all, unlike the
             # web_search branch below, which labels its row `disabled` after calling its adapter.
@@ -967,7 +1004,8 @@ def collect_for_record(record: PatchRecord, context: CollectorContext) -> tuple[
             ))
             continue
         errors: list[dict[str, Any]] = []
-        candidates = method(record, context, errors)
+        _cost = _MethodCost()
+        candidates = _cost.run(method_id, method, record, context, errors)
         method_accepted, method_rejected = evaluate_candidates(record, candidates, captured_at, seen_urls)
         accepted.extend(method_accepted)
         rejected.extend(method_rejected)
@@ -998,9 +1036,45 @@ def collect_for_record(record: PatchRecord, context: CollectorContext) -> tuple[
             blocked_reason=blocked_reason,
             last_run=captured_at,
             notes=notes,
+            duration_ms=_cost.duration_ms,
+            requests=_cost.requests,
+            rejection_reasons=rejection_reason_counts(method_rejected),
         ))
 
     return accepted, rejected, health
+
+
+class _MethodCost:
+    """Measured cost of ONE method call for ONE record: wall time, and requests when known.
+
+    `requests` is the number of `request_text` calls the method made, counted by wrapping the
+    module's own transport for the duration of the call. A method that uses another transport
+    (Reddit) leaves it None -- not measured -- rather than reporting a zero it did not earn."""
+    COUNTED = frozenset({"creative_cow_forum_search", "vendor_forum_search", "known_watchlist"})
+
+    def __init__(self) -> None:
+        self.duration_ms: int | None = None
+        self.requests: int | None = None
+
+    def run(self, method_id: str, method: Any, record: PatchRecord, context: CollectorContext,
+            errors: list[dict[str, Any]]) -> list[dict[str, Any]]:
+        global request_text
+        original = request_text
+        calls = [0]
+
+        def counting(url: str) -> str:
+            calls[0] += 1
+            return original(url)
+
+        started = time.monotonic()
+        request_text = counting
+        try:
+            return method(record, context, errors)
+        finally:
+            request_text = original
+            self.duration_ms = int((time.monotonic() - started) * 1000)
+            if method_id in self.COUNTED:
+                self.requests = calls[0]
 
 
 def evaluate_candidates(
@@ -1342,7 +1416,35 @@ def vendor_forum_search_candidates(record: PatchRecord, context: CollectorContex
     return candidates
 
 
+# ONE FETCH PASS PER RUN. The board listing and its threads do not depend on which record is being
+# evaluated, but this method used to fetch them again for EVERY record: 5 listing pages and up to 25
+# threads, 123 records, up to about 3,690 requests a run against one small forum. The forum answered
+# HTTP 429, and because records are walked newest-first, the refused records were the newest ones
+# (10 of the 18 newest rows `blocked` on 2026-11-24). The pass is now made once per collector run and
+# every record is evaluated against the same candidates: at most 30 requests a run, and no record is
+# starved by an earlier record's requests.
+#
+# The cache is set by DavinciCollector.collect for the duration of one run and is None otherwise, so
+# a direct call (a test, a probe) fetches exactly as before. A pass that had fetch failures hands the
+# SAME failures to every record it serves: each record's row then says `partial` or `blocked`
+# truthfully, because the pass that produced its candidates is the one that failed.
+_CREATIVE_COW_RUN_CACHE: dict[tuple[Any, ...], tuple[list[dict[str, Any]], list[dict[str, Any]]]] | None = None
+
+
 def creative_cow_forum_search_candidates(record: PatchRecord, context: CollectorContext, errors: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    cache = _CREATIVE_COW_RUN_CACHE
+    if cache is None:
+        return _creative_cow_fetch_pass(context, errors)
+    key = (context.since, context.max_pages)
+    if key not in cache:
+        pass_errors: list[dict[str, Any]] = []
+        cache[key] = (_creative_cow_fetch_pass(context, pass_errors), pass_errors)
+    candidates, pass_errors = cache[key]
+    errors.extend(dict(error) for error in pass_errors)
+    return [dict(candidate) for candidate in candidates]
+
+
+def _creative_cow_fetch_pass(context: CollectorContext, errors: list[dict[str, Any]]) -> list[dict[str, Any]]:
     thread_urls: list[str] = []
     seen_urls: set[str] = set()
     for listing_url in creative_cow_listing_urls(context):

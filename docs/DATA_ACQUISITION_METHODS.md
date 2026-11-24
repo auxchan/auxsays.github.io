@@ -43,7 +43,7 @@ widening how we look never widens what counts. The validator refuses any entry t
 
 ## The families
 
-21 families, 62 concrete implementations. Counts are generated from the registry.
+21 families, 66 concrete implementations. Counts are generated from the registry.
 
 | family | methods | purposes | transports |
 |---|---|---|---|
@@ -51,18 +51,18 @@ widening how we look never widens what counts. The validator refuses any entry t
 | `capability_probe` | 3 | candidate_discovery, capability_probe, fallback, official_ingestion, recheck | html, rest_json |
 | `direct_fetch` | 6 | archive, candidate_discovery, community_discovery, enrichment, official_ingestion | html |
 | `forum_tab_enumeration` | 1 | candidate_discovery, fallback | html |
-| `html_link_enumeration` | 4 | archive, candidate_discovery, capability_probe, fallback, official_ingestion, recheck | html |
+| `html_link_enumeration` | 5 | archive, candidate_discovery, capability_probe, community_discovery, fallback, official_ingestion, recheck | html |
 | `html_release_history` | 6 | official_ingestion | html, rest_json, rss_xml, subprocess_curl |
-| `html_search_result_scrape` | 1 | candidate_discovery, context_resolution | html |
+| `html_search_result_scrape` | 2 | candidate_discovery, context_resolution | html |
 | `html_table_enumeration` | 4 | community_discovery, fallback, official_ingestion | html |
 | `in_page_harvest` | 1 | candidate_discovery, context_resolution, recheck | html |
 | `issue_tracker_search_api` | 3 | candidate_discovery, community_discovery | github_api, html, rest_json |
 | `json_api_listing` | 6 | candidate_discovery, community_discovery, official_ingestion | github_api, rest_json |
 | `json_api_search` | 5 | candidate_discovery, community_discovery, context_resolution, fallback, recheck | github_api, html, rest_json |
-| `known_url_recheck` | 5 | candidate_discovery, context_resolution, recheck | html, rest_json, rss_xml |
+| `known_url_recheck` | 6 | candidate_discovery, context_resolution, recheck | html, rest_json, rss_xml |
 | `manual_watch` | 1 | candidate_discovery | html |
 | `open_web_federation` | 1 | candidate_discovery, recheck | html, rest_json |
-| `open_web_search_api` | 2 | candidate_discovery, recheck | html, rest_json |
+| `open_web_search_api` | 3 | candidate_discovery, recheck | html, rest_json |
 | `paginated_listing_enumeration` | 3 | candidate_discovery, recheck | html, rest_json, rss_xml |
 | `rss_feed_poll` | 3 | candidate_discovery, official_ingestion | rest_json, rss_xml |
 | `rss_search` | 2 | candidate_discovery, community_discovery, recheck | html, rest_json, rss_xml |

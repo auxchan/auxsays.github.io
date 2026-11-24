@@ -33,8 +33,10 @@ from __future__ import annotations
 import argparse
 import fnmatch
 import json
+import os
 import subprocess
 import sys
+import time
 import uuid
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -53,7 +55,8 @@ from lib import recent_reports as l3  # noqa: E402
 # The resolution budget is ordered with the authority's OWN concreteness predicate, never a local
 # re-implementation: prioritisation must not be able to disagree with acceptance.
 from patch_collectors.microsoft_powerpoint import concrete_issue as ppt_concrete_issue  # noqa: E402
-from lib.method_routing import fallback_justified, plan_methods  # noqa: E402
+from lib.method_routing import effective_plan, fallback_justified, plan_methods  # noqa: E402
+from lib import acquisition_methods as method_registry  # noqa: E402
 from lib.patch_identity import is_build_aware, patch_key, require_build  # noqa: E402
 from lib.live_eligibility import load_run_context  # noqa: E402
 from lib.report_counts import (  # noqa: E402
@@ -531,9 +534,26 @@ class Pipeline:
         return state
 
     def plan_methods_node(self, state: OrchestrationState) -> OrchestrationState:
-        plans = {pid: plan_methods(pid) for pid in self.product_ids}
+        # ORDER FROM MEASURED HISTORY. The plan is the declared one with each role's methods put in
+        # the order the stored health rows say to try them (lib.method_routing.order_methods), and a
+        # switched-off method the re-probe step found answering returned as a bounded fallback.
+        # Nothing about acceptance moves: the same methods run through the same authority. If the
+        # stored telemetry cannot be read, or AUXSAYS_ADAPTIVE_ROUTING=0, the declared plan is used
+        # as written -- the behaviour before this existed.
+        plans = {pid: self._plan_from_history(pid) for pid in self.product_ids}
         state.method_plan.update({"plans": plans, "fallback_evaluated": False})
         return state
+
+    def _plan_from_history(self, product_id: str) -> dict[str, Any]:
+        if os.environ.get("AUXSAYS_ADAPTIVE_ROUTING", "1").strip().lower() in ("0", "false", "off"):
+            return plan_methods(product_id)
+        try:
+            from patch_collectors.base import load_method_health, load_method_probes
+            return effective_plan(product_id, load_method_health(self.health_path),
+                                  load_method_probes(self.health_path),
+                                  reprobe_refusal=method_registry.reprobe_refusal)
+        except Exception:  # noqa: BLE001 -- unreadable history must not stop collection
+            return plan_methods(product_id)
 
     def _run_methods(self, state: OrchestrationState, role: str) -> OrchestrationState:
         node = "RUN_PRIMARY_METHODS" if role == "primary" else "RUN_FALLBACK_METHODS"
@@ -575,12 +595,23 @@ class Pipeline:
                 t = {"update_version": target["update_version"], "target_build": target["target_build"],
                      "target_release_date": getattr(record, "update_published_at", ""),
                      "version_ambiguous": False}
+                method_started = time.monotonic()
                 accepted, rejected, health = fn(record, t, self.context, self._seen[key],
                                                self._run_urls, captured_at, attempted=attempted)
                 reasons: dict[str, int] = {}
                 for row in rejected:
                     r = str(row.get("exclusion_reason") or "?")
                     reasons[r] = reasons.get(r, 0) + 1
+                # MEASURED COST AND OUTCOME of this attempt, on the method's own health row. A
+                # method that was not attempted made no request and has no cost to report.
+                if attempted and isinstance(health, dict):
+                    health["duration_ms"] = int((time.monotonic() - method_started) * 1000)
+                    if reasons:
+                        health["rejection_reasons"] = dict(sorted(reasons.items()))
+                # The graph knows exactly which method produced each row, so it says so. The append
+                # boundary keeps the stamp only if this method has a health row for the row's patch.
+                for row in accepted:
+                    row["discovery_method_id"] = method_id
                 state.method_results.append({
                     "method_id": method_id, "role": role, "patch_key": key,
                     "attempted": attempted, "fallback_reason": reason,
@@ -894,7 +925,8 @@ class Pipeline:
             persisted: list[dict[str, Any]] = []
             already_held: list[dict[str, Any]] = []
             added, dupes, _ = append_evidence_rows(
-                counted, self.evidence_path, out_added=persisted, out_already_held=already_held) if counted \
+                counted, self.evidence_path, out_added=persisted, out_already_held=already_held,
+                method_health=health) if counted \
                 else (0, 0, load_evidence(self.evidence_path) if self.evidence_path.exists() else [])
             # Between the append and the upsert is the only moment the real delta is known and the
             # health rows are still mutable. See base.finalize_method_health_delta.

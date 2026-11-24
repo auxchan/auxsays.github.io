@@ -12,9 +12,14 @@ WHAT THIS IS NOT.
 
   * NOT runtime health. `_data/evidence_method_health.yml`, source health and the ingest health rows
     answer "what happened THIS run". This file answers "what CAN this method do, and how does it
-    tend to fail". Nothing here is updated by a run.
+    tend to fail". Nothing here is updated by a run. It is JOINED to runtime health, though: every
+    method id a health row names must be an entry here, every entry says which telemetry store it
+    reports to (`TELEMETRY_STORES` / `telemetry_store`), and every entry that says `method_health`
+    must actually have rows. The registry test fails on either side of that join.
   * NOT routing. `lib/method_routing.py` decides which method executes for a product and stays
-    authoritative for execution. This is a catalogue; it is not imported by any collector.
+    authoritative for execution. This is a catalogue. The one thing execution reads from it is the
+    RE-PROBE POLICY (`reprobe_refusal`): whether automation may ever re-test a switched-off method
+    is a fact about the source and its terms, which is what this file records.
   * NOT a scraping taxonomy. Every entry describes something this repository actually implements or
     has concretely measured. Unimplemented technology belongs in FUTURE_CAPABILITIES, which is
     deliberately separate so nothing unbuilt can read as operational.
@@ -2310,6 +2315,123 @@ METHODS: list[dict[str, Any]] = [
         "revisit_trigger": "An official Adobe route carrying Premiere release identity answers 200 from CI, or Adobe resumes public release posts (the GROWTH-2A reopen condition).",
         "evidence": "D:/Auxsays/.am/auxsays/scripts/adapters/adobe_release_notes.py:1-10, :53-56, :59-70, :144-154, :157-172, :232-240, :281-310, :336-338, :353-357; D:/Auxsays/.am/auxsays/_data/patch_ingestion_sources.yml:927 (adobe-premiere-pro block, incl....",
     },
+    {
+        "method_id": "creative_cow_forum_search",
+        "method_family": "html_link_enumeration",
+        "implementation": "creativecow_davinci_resolve_forum_listing_walk_with_thread_fetch",
+        "source_family": "creativecow_independent_editor_forum",
+        "status": "active",
+        "fallback_relationship": "independent_primary",
+        "purpose": ["candidate_discovery", "community_discovery"],
+        "discovery_model": ["enumeration"],
+        "transport": ["html"],
+        "health_statuses": ["blocked", "no_results", "partial", "success"],
+        "proven_on": ["blackmagic-davinci"],
+        "strengths": [
+        "The only DaVinci community source still answering automated requests after Reddit was switched off by access policy and the Blackmagic forum by refusal",
+        "A listing walk reaches a thread however it is worded; it asks the forum what is new rather than asking a search index for a phrasing",
+        "robots.txt (read 2026-11-24) disallows only /cdn-cgi/, /wp-admin/, /wp-json/ and query-string endpoints; the forum listing and thread paths are not disallowed and no crawl-delay is set",
+    ],
+        "blind_spots": [
+        "Low volume: the DaVinci Resolve board is slow, and very few threads name an exact point release",
+        "Enumeration is bounded by listing depth (max_pages) and a 25-thread cap per run, so an old thread that gains a decisive reply is not revisited",
+        "Thread text is cut at 4,000 characters; a version named only deep in a long thread is not seen",
+    ],
+        "failure_modes": [
+        "HTTP 429 Too Many Requests. Until the 2026-11-24 change the listing and up to 25 threads were re-fetched for EVERY record (123 records, up to ~3,690 requests a run), and the newest records -- walked first -- were the ones refused",
+        "creative_cow_thread_unparseable when a thread page has no extractable text",
+        "A listing page with no thread links yields no candidates and no error, which reads as no_results",
+    ],
+        "execution": "Keyless HTML over urllib. The listing pages and threads are fetched ONCE per run and shared by every record (patch_collectors/davinci.py creative_cow_forum_search_candidates); the per-record work is evaluation only.",
+        "evidence_rules": "Candidate discovery only. Every candidate passes DaVinci's ordinary acceptance authority (row_from_candidate): exact version, dated on or after the release, a specific thread URL, a concrete problem. Accepted rows are ordinary counted rows of source_type creator_forum_report, weight 1.",
+        "measured_notes": "_data/evidence_method_health.yml at 12d207ba (2026-11-24): 123 rows, 106 success, 7 partial, 10 blocked; 352 candidates, 1 accepted. All 10 blocked rows carry creative_cow_listing_fetch_failed:http_429 or creative_cow_thread_fetch_failed:http_429 and are among the 18 newest records. 4 counted creator_forum_report rows are stored for DaVinci in total (_data/consensus_evidence.yml).",
+        "revisit_trigger": "A run after the once-per-run fetch still reporting http_429, or the accepted count staying at 0 for a release that the forum demonstrably discusses.",
+        "evidence": "auxsays/scripts/patch_collectors/davinci.py:70-72 (source constants), creative_cow_forum_search_candidates, creative_cow_method_status; auxsays/scripts/tests/test_davinci_creative_cow_source.py; auxsays/_data/evidence_method_health.yml.",
+    },
+    {
+        "method_id": "vendor_forum_search",
+        "method_family": "html_search_result_scrape",
+        "implementation": "blackmagic_forum_phpbb_search_result_scrape",
+        "source_family": "forum.blackmagicdesign.com (Blackmagic Design's own phpBB forum)",
+        "status": "blocked",
+        "fallback_relationship": "none",
+        "purpose": ["candidate_discovery"],
+        "discovery_model": ["query_search"],
+        "transport": ["html"],
+        "health_statuses": ["blocked", "disabled", "low_confidence", "no_results", "partial", "success"],
+        "proven_on": ["blackmagic-davinci"],
+        "strengths": [
+        "The vendor's own forum is where DaVinci release threads live; 6 counted rows were collected from it in 2026-05 before the refusal began",
+    ],
+        "blind_spots": [
+        "A search route finds only what its query words anticipate",
+    ],
+        "failure_modes": [
+        "An AWS WAF challenge (window.gokuProps / awswaf) served in place of forum content, at HTTP 200 or 403/405 -- detected on CONTENT by blackmagic_access_challenge_reason",
+        "Measured 2026-08-01 to 2026-11-19: blocked on 6,725 of 6,725 executions (davinci.py AUX-117 note)",
+        "2026-11-24: even /robots.txt answers HTTP 403 from awselb/2.0",
+    ],
+        "execution": "Switched off (AUX-117): the adapter is kept but not called, and the method writes a fresh `disabled` row every cycle. It is the one method the re-probe step may re-test (see REPROBE): one robots.txt request, then at most one listing request, weekly at most, backing off to 30 days.",
+        "evidence_rules": "Candidate discovery only; when it ran, its candidates passed the same DaVinci acceptance authority as every other method. A challenge page is never a report.",
+        "measured_notes": "123 health rows, all `disabled` with blocked_reason blackmagic_forum_refuses_automated_requests (evidence_method_health.yml at 12d207ba). Probe 2026-11-24T06:56:34Z: GET /robots.txt -> 403.",
+        "revisit_trigger": "The re-probe record for (blackmagic-davinci, vendor_forum_search) reading `recovered`: robots.txt answers and does not disallow the listing, and the listing returns forum content rather than a challenge.",
+        "break_history": "Refused since at least 2026-08-01; switched off 2026-11-19 (#263, AUX-117).",
+        "evidence": "auxsays/scripts/patch_collectors/davinci.py:69 (FORUM_SEARCH), REFUSED_SOURCE_DISABLED_NOTE, vendor_forum_search_candidates, blackmagic_access_challenge_reason; docs/ENGINEERING_LEDGER.md AUX-117.",
+    },
+    {
+        "method_id": "known_watchlist",
+        "method_family": "known_url_recheck",
+        "implementation": "curated_watchlist_url_refetch",
+        "source_family": "hand-curated thread URLs (Blackmagic forum and Reddit for DaVinci; a retired curated list for OBS)",
+        "status": "disabled",
+        "fallback_relationship": "none",
+        "purpose": ["recheck"],
+        "discovery_model": ["known_url"],
+        "transport": ["html"],
+        "health_statuses": ["disabled", "partial", "blocked"],
+        "proven_on": ["blackmagic-davinci", "obs-studio"],
+        "strengths": [
+        "Re-reads specific threads a person already judged relevant, so it needs no discovery at all",
+    ],
+        "blind_spots": [
+        "Discovers nothing: a report nobody put on the list does not exist to it",
+        "A hand-kept list is a routine human step, which production must not depend on",
+    ],
+        "failure_modes": [
+        "DaVinci: no Blackmagic watchlist URL ever answered (AWS WAF); its only `partial` results came from Reddit URLs, which the access policy has skipped since 2026-11-04",
+    ],
+        "execution": "Not run. Emits a fresh `disabled` row every cycle on DaVinci and OBS so its last real row cannot sit frozen and read as current (AUX-026).",
+        "evidence_rules": "When it ran, a re-read thread passed the ordinary acceptance gates. It has no authority of its own.",
+        "measured_notes": "143 health rows, all `disabled` (123 DaVinci, 20 OBS) at 12d207ba.",
+        "break_history": "DaVinci: switched off 2026-11-19 with vendor_forum_search (#263, AUX-117). OBS: retired, kept emitting `disabled` (lib/collector_ownership.py).",
+        "evidence": "auxsays/scripts/patch_collectors/davinci.py (known_watchlist_candidates, REFUSED_SOURCE_DISABLED_METHODS); auxsays/scripts/lib/collector_ownership.py:76-78; docs/ENGINEERING_LEDGER.md AUX-117.",
+    },
+    {
+        "method_id": "web_search",
+        "method_family": "open_web_search_api",
+        "implementation": "davinci_web_search_placeholder_adapter",
+        "source_family": "general web search (no provider bound)",
+        "status": "disabled",
+        "fallback_relationship": "none",
+        "purpose": ["candidate_discovery"],
+        "discovery_model": ["query_search"],
+        "transport": ["html"],
+        "health_statuses": ["disabled"],
+        "proven_on": [],
+        "strengths": [
+        "None measured: it has never made a request",
+    ],
+        "blind_spots": [
+        "No provider is bound. The keyless routes that exist are catalogued under open_web_discovery; the paid one (brave_search_api) is blocked on a lapsed subscription",
+    ],
+        "failure_modes": [
+        "Returns no candidates by construction; its row is forced to `disabled` so an empty result cannot read as a healthy no_results",
+    ],
+        "execution": "A placeholder adapter that returns nothing. Listed so the 123 `disabled` rows it writes have a catalogue entry.",
+        "evidence_rules": "None: it yields no candidate.",
+        "measured_notes": "123 health rows, all `disabled` with blocked_reason web_search_adapter_disabled_in_phase_a (evidence_method_health.yml at 12d207ba).",
+        "evidence": "auxsays/scripts/patch_collectors/davinci.py (web_search_candidates; `if method_id == \"web_search\": status = \"disabled\"`).",
+    },
 ]
 
 # --- accessors ---------------------------------------------------------------------------------
@@ -2371,3 +2493,233 @@ FUTURE_CAPABILITIES: list[dict[str, str]] = [
                 "community fetches are never authenticated.",
     },
 ]
+
+
+# --- rights notes shared by a source's methods ---------------------------------------------------
+# Same pattern as _ADOBE_COMMUNITY_RIGHTS_NOTE: stated once, attached to every method whose requests
+# go to that source, so a reader of ANY of them sees the open question. `unresolved` is never a
+# clearance, and nothing here widens what runs today.
+_MICROSOFT_LEARN_RIGHTS_NOTE = (
+    "Unresolved. Microsoft Learn's terms of use describe personal, non-commercial use, and nothing "
+    "from Microsoft settles whether this collection fits. Owner decision O1 (ledger AUX-073): the "
+    "Q&A lanes that already run continue unchanged; NEW Microsoft Learn Q&A collection stays off -- "
+    "no new product, query, route or hydration. Automation never re-probes or re-enables a Learn "
+    "Q&A method on its own."
+)
+_REDDIT_RIGHTS_NOTE = (
+    "Unresolved. Reddit's terms require written permission for automated data access and AUXSAYS has "
+    "none, so every Reddit method is switched off by lib/reddit_access_policy.py (ledger AUX-064). "
+    "Only the owner can change that, in writing; automation never re-probes Reddit."
+)
+_RIGHTS_BY_METHOD: dict[str, str] = {
+    **{mid: _MICROSOFT_LEARN_RIGHTS_NOTE for mid in (
+        "learn_qna_search_rss", "learn_qna_powerpoint_tags", "learn_qna_question_hydration",
+        "learn_qna_segment_context", "learn_qna_thread_reply_harvest",
+        "open_web_provider_qna_search_rss")},
+    **{mid: _REDDIT_RIGHTS_NOTE for mid in (
+        "reddit_search", "reddit_listing_enumeration", "reddit_feed_fallback")},
+}
+for _entry in METHODS:
+    _note = _RIGHTS_BY_METHOD.get(_entry["method_id"])
+    if _note and "rights_status" not in _entry:
+        _entry["rights_status"] = "unresolved"
+        _entry["rights_note"] = _note
+del _entry, _note
+
+
+# --- telemetry: where each method reports ---------------------------------------------------------
+# The join between this catalogue and runtime health. Every method resolves to exactly one store:
+#
+#   method_health     emits rows under its OWN id in _data/evidence_method_health.yml
+#   parent:<id>       a step inside another method; its attempts are counted in that method's rows
+#   ingest_state      official-ingestion lane; reports per source in _data/patch_ingest_state.json
+#                     (a transient file, so this one is declared, not checked against a corpus)
+#   workflow_artifact runs only in a dispatch-only probe workflow; its result is that run's report
+#   none              does not run (blocked / disabled / staged / historical) and so reports nothing
+#
+# `method_health` is the checked one, both ways (tests/test_acquisition_method_registry.py R24-R27):
+# an id in the health file that is not in HEALTH_REPORTING_METHODS fails, and so does an id listed
+# here that has no row. An `active` method may never resolve to `none`: something that runs in
+# production and reports nowhere is exactly how DaVinci's only working method went uncatalogued.
+TELEMETRY_STORES = frozenset({"method_health", "ingest_state", "workflow_artifact", "none"})
+
+HEALTH_REPORTING_METHODS = frozenset({
+    "adobe_community_algolia_search", "adobe_community_bug_tab_index",
+    "adobe_community_known_url_recheck", "adobe_community_search", "brave_search_api",
+    "creative_cow_forum_search", "creativecow_brave_search", "creativecow_forum_index",
+    "github_issues", "github_officedev_issues", "known_watchlist", "learn_qna_powerpoint_tags",
+    "learn_qna_search_rss", "learn_qna_segment_context", "nvidia_forum_default_views", "obs_forum",
+    "open_web_discovery", "reddit_search", "stack_exchange_search", "tech_community_discussions",
+    "techcommunity_windows_sitemap", "vendor_forum_search", "wayback_snapshot_recheck", "web_search",
+})
+
+# Active sub-steps: each runs INSIDE the named method and has no row of its own.
+TELEMETRY_PARENTS: dict[str, str] = {
+    "learn_qna_question_hydration": "learn_qna_search_rss",
+    "learn_qna_thread_reply_harvest": "learn_qna_segment_context",
+    "github_officedev_symptom_search": "github_officedev_issues",
+    "open_web_provider_qna_search_rss": "open_web_discovery",
+    "open_web_provider_stack_exchange_api": "open_web_discovery",
+    "stack_exchange_question_refetch": "stack_exchange_search",
+    "stack_exchange_tag_listing": "stack_exchange_search",
+    "techcommunity_known_url_recheck": "tech_community_discussions",
+    "techcommunity_thread_hydration": "tech_community_discussions",
+}
+
+# Active methods that are neither health reporters, sub-steps nor official ingestion.
+TELEMETRY_OVERRIDES: dict[str, str] = {
+    # probe_photoshop_sources.py, run by the dispatch-only photoshop-source-probe workflow.
+    "official_source_transport_control_probe": "workflow_artifact",
+    # Feed discovery for an official source (Figma); the ingest lane records the source's bucket.
+    "rss_feed_html_autodiscovery": "ingest_state",
+}
+
+
+def telemetry_store(method_id: str) -> str:
+    """Where this method's runtime telemetry lives. Raises KeyError for an id not in the registry
+    and ValueError for an active method that would report nowhere -- both are registry defects."""
+    entry = by_id(method_id)
+    if entry is None:
+        raise KeyError(method_id)
+    mid = entry["method_id"]
+    if mid in HEALTH_REPORTING_METHODS:
+        return "method_health"
+    if mid in TELEMETRY_PARENTS:
+        return "parent:" + TELEMETRY_PARENTS[mid]
+    if mid in TELEMETRY_OVERRIDES:
+        return TELEMETRY_OVERRIDES[mid]
+    if entry["status"] != "active":
+        return "none"
+    if "official_ingestion" in (entry.get("purpose") or []):
+        return "ingest_state"
+    raise ValueError(f"active method {mid!r} declares no telemetry store")
+
+
+# --- re-probe policy -----------------------------------------------------------------------------
+# Whether automation may EVER re-test a method that is switched off, and how. Two layers, and the
+# first cannot be edited around by the second:
+#
+#   1. THE FLOOR (`_REPROBE_FLOOR`). A method whose id, source family or implementation names one of
+#      these sources is never re-probed, whatever its REPROBE entry says. These are the sources the
+#      owner or the source's own terms closed: Reddit (no written permission, AUX-064), Microsoft
+#      Learn Q&A (owner decision O1: no new collection, AUX-073), Adobe (terms unresolved: no new
+#      method, query, host or scope, AUX-113) and the paid search API (no spending approved). A
+#      method with a recorded `rights_status` is closed for the same reason.
+#   2. THE DECLARATION (`REPROBE`). Everything else is closed too unless it is declared `allowed`
+#      with a probe that can be answered in a couple of requests. Fail closed: no entry, no probe.
+#
+# A re-probe is not collection. It makes at most `max_requests` requests (robots.txt first, so the
+# source's own crawl rules are read before anything else is asked of it), stores no page content,
+# writes no evidence, and never works around a refusal: a challenge page is the answer `still_refused`.
+_REPROBE_FLOOR: tuple[tuple[str, str], ...] = (
+    ("reddit", "reddit_access_policy_no_written_permission_AUX-064"),
+    ("learn_qna", "microsoft_learn_qna_owner_decision_O1_AUX-073"),
+    ("learn.microsoft.com", "microsoft_learn_qna_owner_decision_O1_AUX-073"),
+    ("adobe", "adobe_terms_unresolved_no_expansion_AUX-113"),
+    ("helpx", "adobe_terms_unresolved_no_expansion_AUX-113"),
+    ("brave", "paid_search_api_no_spending_approved"),
+)
+
+REPROBE_COOLDOWN_HOURS_DEFAULT = 168      # one week between probes of one method
+REPROBE_COOLDOWN_HOURS_MAX = 720          # back-off ceiling: 30 days
+REPROBE_MAX_REQUESTS_PER_METHOD = 2       # robots.txt + one content request, never more
+
+REPROBE: dict[str, dict[str, Any]] = {
+    "vendor_forum_search": {
+        "policy": "allowed",
+        "basis": "Switched off for a TECHNICAL refusal (AWS WAF challenge), not for rights or an owner "
+                 "decision; AUX-117 records that it can be restored if the forum starts answering "
+                 "automated requests. The probe reads robots.txt first and stops there if the forum "
+                 "disallows the listing or still refuses.",
+        "robots_url": "https://forum.blackmagicdesign.com/robots.txt",
+        "url": "https://forum.blackmagicdesign.com/viewforum.php?f=21",
+        "expect_any": ["viewtopic.php"],
+        "refusal_markers": ["awswaf", "window.gokuprops"],
+        "cooldown_hours": REPROBE_COOLDOWN_HOURS_DEFAULT,
+        "max_requests": 2,
+    },
+    "known_watchlist": {
+        "policy": "never",
+        "basis": "A hand-curated URL list is a routine human step; half of DaVinci's list is Reddit. "
+                 "It returns only by a reviewed change, never by automation.",
+    },
+    "web_search": {
+        "policy": "never",
+        "basis": "A placeholder with no provider bound; the only search API is paid and no spending is approved.",
+    },
+    "creativecow_forum_index": {
+        "policy": "never",
+        "basis": "A Premiere Pro lane method. The Adobe lanes run under a temporary no-expansion "
+                 "position until the owner decides AUX-113, so nothing is restored to them automatically.",
+    },
+    "elevenforum_windows_listing": {
+        "policy": "never",
+        "basis": "Never activated. Activation needs the AUX-067 residual measured and an owner-reviewed "
+                 "change; it was not switched off for a refusal, so there is nothing to re-probe.",
+    },
+    "help_center_article_detail_sweep": {
+        "policy": "never",
+        "basis": "Official-ingestion method: the ingest lane already retries its source every run and "
+                 "records the result in patch_ingest_state.json. Not a community method.",
+    },
+    "help_center_section_link_enumeration": {
+        "policy": "never",
+        "basis": "Official-ingestion method: retried by the ingest lane every run. Not a community method.",
+    },
+    "html_changelog_link_crawl": {
+        "policy": "never",
+        "basis": "Disabled for a parser break (Netlify URL shape), not a refusal; a probe cannot fix a parser.",
+    },
+    "manual_watch_placeholder": {
+        "policy": "never",
+        "basis": "A no-op adapter for vendors with no machine-readable surface; there is no source to probe.",
+    },
+    "curl_subprocess_fallback": {
+        "policy": "never",
+        "basis": "A transport fallback for Adobe documentation hosts; closed with the Adobe lanes (AUX-113).",
+    },
+}
+
+
+def reprobe_refusal(method_id: str) -> str:
+    """'' when automation may re-probe this method; otherwise the reason it must not.
+
+    Fail closed at every step: an id the registry does not know, a floor source, a recorded rights
+    status, a missing or non-`allowed` declaration, or a declaration without a usable probe all
+    refuse. The floor is evaluated BEFORE the declaration, so editing REPROBE cannot open a source
+    the owner or its terms closed."""
+    entry = by_id(method_id)
+    if entry is None:
+        return "not_in_registry"
+    haystack = " ".join(str(entry.get(k) or "") for k in ("method_id", "source_family", "implementation")).lower()
+    for token, reason in _REPROBE_FLOOR:
+        if token in haystack:
+            return reason
+    if entry.get("rights_status"):
+        return "rights_status_" + str(entry["rights_status"])
+    spec = REPROBE.get(entry["method_id"])
+    if not spec:
+        return "no_reprobe_declared"
+    if spec.get("policy") != "allowed":
+        return "declared_never"
+    url = str(spec.get("url") or "")
+    robots = str(spec.get("robots_url") or "")
+    if not (url.startswith("https://") and robots.startswith("https://") and spec.get("expect_any")):
+        return "probe_incomplete"
+    for token, reason in _REPROBE_FLOOR:
+        if token in (url + " " + robots).lower():
+            return reason
+    return ""
+
+
+def reprobe_spec(method_id: str) -> dict[str, Any] | None:
+    """The probe of a method automation MAY re-test, with its bounds applied; None otherwise."""
+    if reprobe_refusal(method_id):
+        return None
+    spec = dict(REPROBE[method_id])
+    spec["max_requests"] = max(1, min(int(spec.get("max_requests") or REPROBE_MAX_REQUESTS_PER_METHOD),
+                                      REPROBE_MAX_REQUESTS_PER_METHOD))
+    spec["cooldown_hours"] = max(REPROBE_COOLDOWN_HOURS_DEFAULT,
+                                 min(int(spec.get("cooldown_hours") or REPROBE_COOLDOWN_HOURS_DEFAULT),
+                                     REPROBE_COOLDOWN_HOURS_MAX))
+    return spec
