@@ -60,7 +60,10 @@ jobs:
     # after the collection cap for QA, audit, EMH validation, transactional commit, push, explicit
     # Pages dispatch, and the final summary. 300 min stays under the GitHub 6h default and, with the
     # every-6-hours (360-min) cadence below, leaves 60 min before the next slot -- no overlap/queue.
-    timeout-minutes: 300
+    # AUX-137: +4 min for the maintainer-records refresh step, which is capped at exactly 4, so the job keeps the
+    # headroom test_deploy_verification_and_lost_race D4 measures (10.7 min, as before the step); 56 min remain
+    # before the next slot.
+    timeout-minutes: 304
     outputs:
       # G91: chain-ingest's `Cycle reached main` step reads these. This lane's cycle reached main
       # only when its writeback pushed or had nothing to push; empty (a skipped writeback after a
