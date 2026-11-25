@@ -1,0 +1,91 @@
+# What each issue tracker's own structure means (lib/assessment_facts, AUX-137). DATA, read by the weighing; the
+# weighing itself names no tracker and no label.
+#
+# One entry per tracker whose counted reports AUXSAYS reads a maintainer record for. A list that is ABSENT or EMPTY
+# means "this tracker has no such label that AUXSAYS has verified": the fact is then NOT ESTABLISHED for its reports.
+# In particular a tracker with no `confirmed` label can never show that its maintainers confirmed, or did not
+# confirm, a report: its records state where a report stands and never take the place of the report count.
+#
+# A label is listed only when it was MEASURED to be applied by hand by an account with triage rights, never by the
+# issue form or by automation. `verified_at` is the day the label names were last checked against the tracker's own
+# label list; `note` says what was measured. Edited by hand, reviewed like code; no tool writes this file.
+#
+# WHAT IS A MAINTAINER DECISION (owner ruling of 2026-11-24, section 2). ONLY a label listed here: on GitHub a label
+# needs triage rights. A closure is never one by itself: a reporter can close their own report with any reason, and
+# a closure by another account does not show who that account is. Whether a report was closed by its own reporter is
+# a separate stored fact (`closed_by_reporter`, true / false / unknown; the accounts are compared in memory when the
+# record is read and never stored). `dismissal` maps a label to how a closure is classified (duplicate, invalid,
+# unsupported, unreproducible, declined, administrative); `workaround` lists labels that document a workaround.
+# No dismissal is positive evidence. A "needs more information" label is a request, not a decision, and is not listed.
+#
+# Fields: authority (how a page names who applies the labels); confirmed, defect, regression, crash, workaround
+# (label names); dismissal (label name -> duplicate | invalid | unsupported | unreproducible | declined |
+# administrative);
+# platform (label name -> windows | macos | linux); form_os + os_values (the issue form's operating-system field
+# and its closed list: a whole-value pattern and the family it belongs to); form_crash (the form's crash-log
+# field); form_version + version_values (the form's version field and the whole-value pattern of a version it may
+# hold: any other value, "Other" included, is not read).
+schema_version: 2
+sources:
+  github.com/obsproject/obs-studio:
+    authority: the project's maintainers
+    verified_at: '2026-11-24'
+    note: >-
+      Label names checked against the tracker's label list on 2026-11-24. The issue form applies no label (91 of 266
+      counted reports were open with none), no labelling workflow is listed, and four sampled label histories show
+      every label applied by a user account. issue/confirmed is the tracker's own confirmation label; kind/bug,
+      kind/regression and kind/crash are type labels and are never read as a confirmation. The label list holds no
+      disposition label (needs/more-info and needs/repro are requests). Close reasons: an independent review on
+      2026-11-24 compared closer and reporter for the closed reports counted on the 32.1.1 page; all five closed
+      by their own reporter carried "completed" and no label. Close reasons are NOT read as authority (a reporter
+      can choose any reason); issue/workaround is the project's own label for a documented workaround.
+    confirmed: [issue/confirmed]
+    defect: [kind/bug]
+    regression: [kind/regression]
+    crash: [kind/crash]
+    workaround: [issue/workaround]
+    platform:
+      platform/windows: windows
+      platform/macos: macos
+      platform/linux: linux
+    form_os: Operating System Info
+    os_values:
+    - ['Windows 1[01]', windows]
+    - ['macOS [0-9]{2}', macos]
+    - ['Ubuntu [0-9]{2}\.[0-9]{2}', linux]
+    - ['Fedora Linux [0-9]{2}', linux]
+    - ['Other', other]
+    form_crash: OBS Studio Crash Log URL
+    form_version: OBS Studio Version
+    version_values: '[0-9]+\.[0-9]+(?:\.[0-9]+)?(?:-(?:beta|rc)[0-9]+)?'
+  github.com/comfy-org/comfyui:
+    authority: the project's maintainers
+    verified_at: '2026-11-24'
+    note: >-
+      No confirmation label is established. The issue form applies "Potential Bug" by itself (24 of 56 counted
+      reports), so that label confirms nothing; "Bug", "bug-cop:triaged" and "Cannot Reproduce" exist in the label
+      list but were not measured as applied by hand to counted reports, so none of them confirms. The dismissal
+      labels below are the project's own label names (label list read 2026-11-24); a label needs triage rights or
+      the project's own automation (Stale), so each classifies a closure and nothing more.
+    dismissal:
+      duplicate: duplicate
+      invalid: invalid
+      Cannot Reproduce: unreproducible
+      wontfix: declined
+      Stale: administrative
+  github.com/officedev/office-js:
+    authority: the project's maintainers
+    verified_at: '2026-11-24'
+    note: >-
+      No confirmation label is established (3 counted reports). "Accepted", "Type: product bug" and "regression"
+      exist in the label list but are not verified as applied by hand. The Resolution labels below classify a
+      closure (label list read 2026-11-24).
+    dismissal:
+      'Resolution: duplicate': duplicate
+      'Resolution: by design': invalid
+      'Resolution: external': unsupported
+      'Resolution: cannot repro': unreproducible
+      "Resolution: won't fix": declined
+      'Resolution: not actionable': administrative
+      'Status: no recent activity': administrative
+    workaround: ['Resolution: has workaround']

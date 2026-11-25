@@ -50,6 +50,12 @@ if str(SCRIPTS) not in sys.path:
 import yaml  # noqa: E402
 
 from lib import evidence_facts as ef  # noqa: E402
+from lib import assessment_output as _ao  # noqa: E402
+
+# AUX-137: this suite pins where a reviewed "fixed in" line prints UNDER THE VOLUME-BASED WAIT. A CURRENT stored
+# provisional assessment may decide the OBS pages otherwise, so the suite withholds the stored assessments: every page
+# then gets the volume rule exactly as one without a stored weighing, which is the placement this suite proves.
+_ao.use(None)
 from lib import evidence_overview as eo  # noqa: E402
 from lib import patch_decision as pd  # noqa: E402
 from lib import verdict_projection as vp  # noqa: E402

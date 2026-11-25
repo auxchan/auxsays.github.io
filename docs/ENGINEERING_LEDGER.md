@@ -108,6 +108,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-124 | Resolved | Verdict policy | Medium | Automatically drafted verdict reasons skipped the checks a reviewed reason meets, and a true official confirmation could take away a Windows entry's support |
 | AUX-127 | Resolved | Verdict policy | High | Pages with 30 or more accepted problem reports said INSUFFICIENT DATA, and a report posted before its release was counted |
 | AUX-134 | Open | Verdict policy | High | Thirty accepted reports give WAIT on the count alone and nothing said on what basis; the basis and each limit are now published, the WAIT itself is unchanged (owner decision pending) |
+| AUX-137 | Open | Verdict policy | High | At 30 accepted reports a page is assessed from its reports and the trackers' records; the weighing runs in a separate private step and the site reads its one output file, falling back to the count-based result while it is missing or stale |
 | AUX-132 | Resolved | Published claims | Medium | A reviewed problem's "fixed in" line printed straight after a note naming a different, newer release, where it read as a recommendation of that release |
 | AUX-065 | Resolved | Coverage | Medium | DaVinci Resolve versions never archived, so routine collection spent its whole budget on releases nobody installs |
 | AUX-075 | Resolved | CI governance | Medium | The DaVinci archive build check asserted the one-time migration, so it failed on every pull request after it ran |
@@ -515,6 +516,59 @@ current main with `--expected-store-sha256`.
 **Reopen only if** either row stops counting without its own audited withdrawal, a row is re-admitted without two
 CORRECT labels from two adjudicators, 25.001.21111 counts before its context is recovered through an authorised
 procedure, or a replay of the veto over stored rows flags a counted row this manifest does not name.
+
+---
+
+### AUX-137 — At 30 accepted reports a page is assessed from its reports and the trackers' records; the weighing runs in a separate private step and the site reads its one output file, falling back to the count-based result while it is missing or stale
+
+- **Status** Open (LOCAL ONLY until the owner's phase 2: the private repository, its write key and this PR) · **Area** Verdict policy · **Severity** High
+- **First seen** 2026-11-24 (owner's "Assessment Ruling": N=30 accepted reports trigger a provisional assessment;
+  maintainer decisions are supplementary). Publication boundary: the owner approved the output-only route on
+  2026-11-25; the boundary proof is the P5b canary run of 2026-11-24 (no marker in any public log, artifact, cache or
+  commit when only an output file crosses).
+
+**Symptom** AUX-134 published the basis of the volume-based WAIT but weighed nothing: no stored field said what a
+project did with a report, and the weighing that would replace the count is new proprietary logic the owner keeps
+out of the public repository.
+
+**Fix**
+- Data layer (public): `lib/assessment_facts` and `_data/report_source_facts.yml` store what each tracker's own
+  record of a counted report says (state, close reason, maintainer labels from a declared vocabulary in
+  `_data/report_source_vocabularies.yml`, the form's OS and version, a crash-log link), read by
+  `backfill_report_source_facts.py` (one writer) and refreshed by a bounded, non-fatal step of the OBS lane. Option B:
+  `closed_by_reporter` is true / false / "unknown", compared in memory; no account is stored. A closure is never a
+  maintainer decision by itself, no dismissal is positive evidence, and a form version is a relation, never an
+  exclusion. QA: `report_source_facts_invalid` / `_missing` / `report_source_vocabulary_invalid` (errors),
+  `report_source_facts_unread` and `report_source_facts_aging` (warnings), `report_source_facts_stale` (blocks a
+  deploy only where a stored weighing reads the records).
+- The weighing (private): computed by a scheduled step in a separate private repository, which pushes ONE file,
+  `_data/provisional_assessments.yml`. `lib/assessment_output` is its only reader, called once from
+  `lib/patch_decision.assess`. An entry is used only when the file's schema and the entry's checks pass AND its
+  fingerprint equals the fingerprint of the page's current inputs (its counted rows and identity, every page of the
+  same product, the tracker records of those rows, the vocabularies, the product's and the store's newest collection
+  days, and the public modules the weighing calls). Missing, stale or invalid: exactly the count-based result, plus
+  one Status sentence that the weighing is pending; QA `assessment_output_missing` / `_stale` / `_invalid` (warnings).
+  A current entry decides only under the authority's precedence (official facts first; an equally cautious reviewed
+  finding keeps its place).
+- One writer: `automation_writeback.SINGLE_WRITER_PATHS` stages the file only for a run that names it exactly and
+  never beside another path; no public lane names it. The publish gate (`ci/verify_published_payload.py`) refuses
+  `.pyc`, `.pyo`, `.so`, `.pyd`, the private component's file names and its reserved folders, in a built site, and
+  `test_assessment_output.py` refuses them in this repository's tree.
+
+**Effect** With no output file (the state until phase 2), 0 verdict changes against origin/main; every page at the
+trigger adds the pending sentence. Measured locally with the private step's output in place: see the branch's
+EXPOSURE/RESULT notes (no verdict change; assessment lines change on the pages at the trigger).
+
+**Not done** Phase 2 (the private repository, its deploy key, the first scheduled run); a public-side check that an
+output push touched only the output file (the writeback refuses it on the writer's side only).
+
+**Proof** `test_assessment_output.py` (28, synthetic stand-in output only: checks, fingerprint, fallback, decision,
+QA codes, single writer in a git round trip, publish gate, one call), `test_assessment_facts.py` (55, the data
+layer).
+
+**Reopen only if** a page prints a weighed verdict while its stored entry is missing, stale or invalid; a public lane
+writes `_data/provisional_assessments.yml`; or a file of the private component appears in this repository or a built
+site.
 
 ---
 

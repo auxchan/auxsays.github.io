@@ -12,7 +12,7 @@ from urllib.parse import urlparse
 
 import yaml
 
-from lib import evidence_facts, maturity, patch_decision, verdict_projection, verdict_reasons
+from lib import assessment_facts, assessment_output, evidence_facts, maturity, patch_decision, verdict_projection, verdict_reasons
 from lib import evidence_overview  # G82-A (AUX-123)
 from lib.patch_identity import patch_display_label, patch_key
 # The dedup identity the append path itself applies (base.evidence_key uses it), imported rather
@@ -375,6 +375,18 @@ def scan_verdict_policy(files: list[Path]) -> tuple[list[dict[str, str]], list[d
         AUX-097 the card printed a line only beside a stored summary, which only a writer stores (a
         page with reports), so 17 zero-report security updates and the withdrawn KB5079391 showed an
         "Insufficient data" pill and no verdict. The gate's row is read exactly as it will be printed.
+      * report_source_facts_stale (AUX-137) -- a page at the assessment trigger whose CURRENT stored provisional
+        assessment was weighed with tracker records read more than seven days before the newest collected report:
+        its verdict rests on a refresh that is failing. A warning for the writeback lane (its facts refresh stays
+        non-fatal), an error for the deploy. Without a current stored assessment the same finding is the warning
+        report_source_facts_aging (the verdict does not read the records then).
+
+    WARNINGS of the stored provisional assessment (AUX-137, lib/assessment_output), never publication-blocking: the
+    page is then decided by the count-based rule and says the weighing is pending, which is true and safe:
+      * assessment_output_invalid -- the file does not parse or its header is wrong (no page uses it), or one
+        page's entry fails its checks;
+      * assessment_output_missing -- a page at the trigger with no stored entry (or no file);
+      * assessment_output_stale -- a page whose stored entry was computed from inputs that have changed since.
 
     WARNINGS, never writer-blocking and never promoted for publication:
       * verdict_reason_unsupported -- an entry whose cited rows no longer all count on its page (an
@@ -418,6 +430,33 @@ def scan_verdict_policy(files: list[Path]) -> tuple[list[dict[str, str]], list[d
         reasons = []
     if lifecycle_problems:
         lifecycle = []
+    # AUX-137: the stored source records of reports (lib/assessment_facts). A malformed file supports nothing, so
+    # every page falls back to the rule without them; it is written by one tool only, so that is a hard error.
+    facts_problem = assessment_facts.stored_problem()
+    if facts_problem:
+        add(errors, assessment_facts.FACTS_PATH, "report_source_facts_invalid",
+            f"{facts_problem}. No page is weighed by its reports' maintainer records until "
+            "backfill_report_source_facts.py rewrites the file.")
+    # Review round 1, S6: the facts file is tracked and has ONE writer; when it disappears every page falls back
+    # to the count, and that must be named here, not inferred from drift warnings.
+    if assessment_facts.stored_missing():
+        add(errors, assessment_facts.FACTS_PATH, "report_source_facts_missing",
+            "the tracked facts file does not exist. No page is weighed by its reports' maintainer records; "
+            "restore the file, or run backfill_report_source_facts.py --write to rebuild it.")
+    vocabulary_problem = assessment_facts.sources_problem()
+    if vocabulary_problem:
+        add(errors, assessment_facts.VOCABULARY_PATH, "report_source_vocabulary_invalid",
+            f"{vocabulary_problem}. No tracker's record is read until the vocabulary file is corrected.")
+    # AUX-137: the stored provisional assessments (lib/assessment_output). A broken file is used for no page, so
+    # every page keeps the count-based rule and says the weighing is pending: a warning, never a blocked deploy.
+    output = assessment_output.status()
+    if output["status"] == "invalid":
+        add(warnings, assessment_output.OUTPUT_PATH, "assessment_output_invalid",
+            f"{output['problem']}. No page uses the stored provisional assessments until the scheduled step "
+            "rewrites the file.")
+    for bad_key, bad_problems in sorted(output["bad"].items()):
+        add(warnings, assessment_output.OUTPUT_PATH, "assessment_output_invalid",
+            f"the entry for {bad_key or '(no page key)'} is not used: {'; '.join(bad_problems[:2])}.")
     records = [(path, front_matter(path)) for path in files]
     entries = [(path, data) for path, data in records if data.get("update_entry") is True]
     fronts = [data for _path, data in entries]
@@ -464,6 +503,48 @@ def scan_verdict_policy(files: list[Path]) -> tuple[list[dict[str, str]], list[d
         want = patch_decision.decide(data, valid_reasons=valid.get(verdict_reasons.record_identity(data), []),
                                      lifecycle=lifecycle,
                                      counted_rows=groups.get(verdict_reasons.record_identity(data), []))
+        # AUX-137: records too old to use, and reports of a readable tracker with no record yet, are named under
+        # their own codes; neither is silent. Where a CURRENT stored provisional assessment decides the page, its
+        # verdict DEPENDS on those records, so the stale code is a PUBLICATION ERROR (PUBLICATION_BLOCKING_CODES): a
+        # warning for the writeback lane, whose facts refresh stays non-fatal, and an error under --publish-strict.
+        # Without one the verdict does not read the records (the count-based rule): the same finding is named
+        # under report_source_facts_aging, a warning that never blocks a deploy.
+        weighed = want.assessment.record_facts if want.assessment is not None else None
+        stored_weighing = want.assessment.weighing if want.assessment is not None else None
+        if weighed is not None and weighed.stale:
+            add(warnings, path, "report_source_facts_stale" if stored_weighing is not None
+                else "report_source_facts_aging",
+                f"{weighed.stale} of this page's {weighed.records} maintainer records were read more than "
+                f"{assessment_facts.STALE_AFTER_DAYS} days before the newest collected report "
+                f"({assessment_facts.stored_as_of() or 'no readable date'}) and are not used; the page keeps the "
+                "temporary volume-based WAIT on them. The scheduled refresh (backfill_report_source_facts.py) is "
+                "not reaching them.")
+        # AUX-137: a page at the trigger with no CURRENT stored provisional assessment is decided by the count-based
+        # rule and says the weighing is pending; named here so a stalled or broken scheduled step is seen.
+        if want.assessment is not None:
+            state = assessment_output.page_state(
+                data, groups.get(verdict_reasons.record_identity(data), []))
+            if state != "current":
+                add(warnings, path, f"assessment_output_{state}",
+                    {"missing": "no stored provisional assessment for this page",
+                     "stale": "the stored provisional assessment was computed from inputs that have changed since",
+                     "invalid": "the stored provisional assessment of this page (or the whole file) fails its checks",
+                     }[state] + "; the page is decided by the count-based rule and says the weighing is pending.")
+        # Review of 2026-11-24, F6: a confirmed regression whose form names a LATER version and whose text does not
+        # say it began with this version decides nothing on this page; it is named here so it reaches the audited
+        # withdrawal review instead of standing unexamined.
+        conflicts = stored_weighing.version_conflicts if stored_weighing is not None else []
+        if conflicts:
+            add(warnings, path, "version_conflict_confirmed_regression",
+                f"{len(conflicts)} confirmed regression(s) filed against a later version, whose text does not say "
+                f"the problem began with this version ({', '.join(conflicts)}): they decide nothing on this page. "
+                "Review each: withdraw a misattributed report through the audited withdrawal path, or record why it "
+                "belongs to this version.")
+        if weighed is not None and weighed.unread:
+            add(warnings, path, "report_source_facts_unread",
+                f"{weighed.unread} of this page's {weighed.reports} counted reports are issues of a tracker "
+                "AUXSAYS reads but have no maintainer record yet; they count toward no maintainer decision "
+                "until backfill_report_source_facts.py reads them.")
         factless = patch_decision.facts_withheld_volume(want)
         if factless:
             add(warnings, path, "volume_wait_withheld_report_facts",
@@ -1727,7 +1808,10 @@ PUBLICATION_BLOCKING_CODES = frozenset({"record_names_conflicting_actions",
                                         "evidence_overview_wait_next_action_mismatch",
                                         # AUX-134: a page at the assessment trigger with no printable
                                         # risk assessment, or one that names another verdict than the gate.
-                                        "evidence_overview_assessment_mismatch"})
+                                        "evidence_overview_assessment_mismatch",
+                                        # AUX-137: a page at the trigger whose (stored, weighed) verdict
+                                        # rests on tracker records too old to use (the refresh is failing).
+                                        "report_source_facts_stale"})
 
 
 def promote_for_publication(

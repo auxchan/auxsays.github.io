@@ -58,6 +58,12 @@ DENIED_SUFFIXES: tuple[str, ...] = (
     # verbatim because it carried no front matter -- which is how nine internal engineering
     # notes came to be served at the domain root, and which a path prefix would never catch.
     ".md",
+    # AUX-137 (P5 boundary proposals): compiled Python and native extensions, which carry implementation
+    # recoverably and are never a page asset.
+    ".pyc",
+    ".pyo",
+    ".so",
+    ".pyd",
 )
 
 # Exact basenames and suffix patterns that are internal regardless of directory.
@@ -81,6 +87,30 @@ PERMITTED_NOTICE_BASENAMES: frozenset[str] = frozenset({
 })
 
 
+# AUX-137: the weighing behind the stored provisional assessments runs in a separate PRIVATE repository and only
+# its output file enters this one. Its file names, its reserved folder name and its fixture folder are refused
+# wherever they appear, in a built site and in this repository's own tree (`private_component_findings`), so a
+# copy that leaked into either is caught before it is published. Compared on the path's segments and on the
+# basename's stem (the part before the first dot), so `provisional_assessment.cpython-312.pyc` is caught and the
+# public output file `provisional_assessments.yml` is not.
+PRIVATE_COMPONENT_DIRS: tuple[str, ...] = ("private_assessment", "provisional_history")
+PRIVATE_COMPONENT_STEMS: tuple[str, ...] = (
+    "provisional_assessment", "test_provisional_assessment", "run_provisional_assessment",
+)
+
+
+def private_component_findings(paths) -> list[tuple[str, str]]:
+    """(path, reason) for every path that names the private component's files or folders."""
+    found = []
+    for rel in paths:
+        parts = str(rel).replace("\\", "/").split("/")
+        if any(part in PRIVATE_COMPONENT_DIRS for part in parts[:-1]):
+            found.append((str(rel), "private component folder"))
+        elif parts[-1].split(".", 1)[0] in PRIVATE_COMPONENT_STEMS:
+            found.append((str(rel), "private component file"))
+    return found
+
+
 def findings_for(site: Path) -> list[tuple[str, str]]:
     """Return (relative_path, reason) for every published file that is internal by construction."""
     found: list[tuple[str, str]] = []
@@ -89,6 +119,10 @@ def findings_for(site: Path) -> list[tuple[str, str]]:
             continue
         rel = path.relative_to(site).as_posix()
         base = path.name
+        private = private_component_findings([rel])
+        if private:
+            found.extend(private)
+            continue
         if any(rel.startswith(prefix) for prefix in DENIED_PREFIXES):
             found.append((rel, "internal directory"))
             continue

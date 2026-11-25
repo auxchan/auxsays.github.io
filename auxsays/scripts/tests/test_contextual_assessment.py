@@ -58,6 +58,12 @@ if str(SCRIPTS) not in sys.path:
 import yaml  # noqa: E402
 
 import qa_patch_records as qa  # noqa: E402
+from lib import assessment_output as _ao  # noqa: E402
+
+# AUX-137: this suite pins the count-based assessment, which a page gets whenever no CURRENT stored provisional
+# assessment exists (lib/assessment_output). The stored assessments are withheld so the suite reads exactly that rule
+# whatever the tracked file holds; test_assessment_output.py pins what a current stored assessment changes.
+_ao.use(None)
 from lib import evidence_facts as ef  # noqa: E402
 from lib import evidence_overview as eo  # noqa: E402
 from lib import maturity  # noqa: E402
@@ -427,7 +433,7 @@ def check_scattered_favourable_health() -> None:
     check("H1 collection health, the clock, sentiment, maturity and the stored count are not inputs: the authority "
           "accepts none of them, and a record that stores a blocked collector decides exactly as a healthy one",
           params == {"record", "valid_reasons", "lifecycle", "counted_rows", "reviewed_reasons", "withdrawn",
-                     "security"}
+                     "security", "source_facts"}
           and (decide(stale, population).verdict, decide(stale, population).assessment.basis)
           == (decide(record, population).verdict, decide(record, population).assessment.basis)
           and lines_of(one(stale, population)).get("Collection health") == pd.ASSESS_COLLECTION
