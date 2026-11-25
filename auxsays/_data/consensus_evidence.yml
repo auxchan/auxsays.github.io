@@ -105458,3 +105458,553 @@ evidence:
   title_dedup_sha256: 95b2c0ec1f7300565b1fdff825bbc97b4e7ddffbe4f2fed05fe17caffe81ada1
   issue_bucket: startup or application crashes
   facts_rule_version: v1
+
+- id: acrobat-26-003-22110-adobe-community-bug-report-https-community-adobe-com-questions-9-pdfmaker-addin-crashes-when-dragging-office-documents-to-a
+  product_id: adobe-acrobat-pro
+  update_version: 26.003.22110
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/pdfmaker-addin-crashes-when-dragging-office-documents-to-acrobat-or-using-file-save-as-pdf-1657629
+  parent_title: PDFmaker addin crashes when dragging office documents to acrobat or using file -> save as PDF
+  report_title: PDFmaker addin crashes when dragging office documents to acrobat or using file -> save as PDF
+  report_text_excerpt: '...package-relative application ID: Faulting application name: Acrobat.exe, version: 26.3.22110.0, time stamp: 0x6afa446a Faulting module name: combase.dll, version: 10.0.26100.9711, time stamp: 0x15b851a4 Exception code: 0xc0000005 Fault offset: 0x000000000019e518...'
+  captured_at: '2026-11-24T22:23:11Z'
+  source_date: '2026-11-24'
+  target_release_date: '2026-11-16'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.3.22110.0
+  match_basis: exact_version_alias
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 37fc1c157f77edeada1eb2825983df00894824055836baf6794110d03ad9b585
+  title_dedup_sha256: 9df3e39329c40d8077d3410bcb340937fd4c031d5854fa0efacaef23393d427f
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+- id: acrobat-26-003-22110-adobe-community-bug-report-https-community-adobe-com-questions-9-recent-folders-in-save-dialog-no-longer-include-network-sh
+  product_id: adobe-acrobat-pro
+  update_version: 26.003.22110
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/recent-folders-in-save-dialog-no-longer-include-network-shared-folders-26-003-22110-windows-1657768
+  parent_title: Recent folders in Save dialog no longer include network/shared folders (26.003.22110, Windows)
+  report_title: Recent folders in Save dialog no longer include network/shared folders (26.003.22110, Windows)
+  report_text_excerpt: Recent folders in Save dialog no longer include network/shared folders (26.003.22110, Windows) Since a recent update, the "Save as PDF" dialog (Your Computer → recent folders) no longer adds any folder located on a network share. Local folders (Desktop, etc.) are added...
+  captured_at: '2026-11-24T22:23:11Z'
+  source_date: '2026-11-24'
+  target_release_date: '2026-11-16'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.003.22110
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified Acrobat issue
+  workflow_area: Acrobat workflow
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: d5b6e6260064c68d4b1c39b5902875ef7bb3ae3284e2e36dcb680db61706ffc6
+  title_dedup_sha256: 406fcf3ce30835a5b2c54b5013fa66d1791f4f079ef5a9aa6825b1211f70c692
+  issue_bucket: unspecified acrobat issue
+  facts_rule_version: v1
+
+- id: acrobat-26-003-22110-adobe-community-bug-report-https-community-adobe-com-questions-9-pdfmaker-addin-crashes-when-dragging-office-documents-to-a
+  product_id: adobe-acrobat-reader
+  update_version: 26.003.22110
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/pdfmaker-addin-crashes-when-dragging-office-documents-to-acrobat-or-using-file-save-as-pdf-1657629
+  parent_title: PDFmaker addin crashes when dragging office documents to acrobat or using file -> save as PDF
+  report_title: PDFmaker addin crashes when dragging office documents to acrobat or using file -> save as PDF
+  report_text_excerpt: '...package-relative application ID: Faulting application name: Acrobat.exe, version: 26.3.22110.0, time stamp: 0x6afa446a Faulting module name: combase.dll, version: 10.0.26100.9711, time stamp: 0x15b851a4 Exception code: 0xc0000005 Fault offset: 0x000000000019e518...'
+  captured_at: '2026-11-24T22:43:22Z'
+  source_date: '2026-11-24'
+  target_release_date: '2026-11-16'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.3.22110.0
+  match_basis: exact_version_alias
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 37fc1c157f77edeada1eb2825983df00894824055836baf6794110d03ad9b585
+  title_dedup_sha256: 9df3e39329c40d8077d3410bcb340937fd4c031d5854fa0efacaef23393d427f
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+
+- id: comfyui-0-45-0-github-issue-17968
+  product_id: comfyui
+  update_version: 0.45.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17968
+  parent_title: fast_disk is auto-enabled by disk type alone (no RAM check) - large checkpoints stall minutes in "Model Initializing"
+  report_title: fast_disk is auto-enabled by disk type alone (no RAM check) - large checkpoints stall minutes in "Model Initializing"
+  report_text_excerpt: 'fast_disk is auto-enabled by disk type alone (no RAM check) - large checkpoints stall minutes in "Model Initializing" ## Summary On ComfyUI **0.45.0**, loading large checkpoints (≥ ~13 GB) on a 16 GB GPU stalls at `Model Initializing` for **3–5 minutes with no log output**....'
+  captured_at: '2026-11-24T23:10:09Z'
+  source_date: '2026-11-24'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.45.0
+  match_basis: core_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or freeze
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: github_issues
+  matched_text: 0.45.0
+  matched_field: report_text
+  matched_context: '...arge checkpoints stall minutes in "Model Initializing" ## Summary On ComfyUI **0.45.0**, loading large checkpoints (≥ ~13 GB) on a 16 GB GPU stalls at `Model Initial...'
+  excerpt_norm_sha256: 5b8b0146489373dbe40f3a2f1127b2caac930fb4b6530f7532ac23087bb3f863
+  title_dedup_sha256: 3722fdf3693e8d22b7ffe280e7c4b6828021d1185983c407d169dd906e320b83
+  issue_bucket: crash or freeze
+  facts_rule_version: v1
+- id: comfyui-0-39-0-github-issue-17968
+  product_id: comfyui
+  update_version: 0.39.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17968
+  parent_title: fast_disk is auto-enabled by disk type alone (no RAM check) - large checkpoints stall minutes in "Model Initializing"
+  report_title: fast_disk is auto-enabled by disk type alone (no RAM check) - large checkpoints stall minutes in "Model Initializing"
+  report_text_excerpt: 'fast_disk is auto-enabled by disk type alone (no RAM check) - large checkpoints stall minutes in "Model Initializing" ## Summary On ComfyUI **0.45.0**, loading large checkpoints (≥ ~13 GB) on a 16 GB GPU stalls at `Model Initializing` for **3–5 minutes with no log output**....'
+  captured_at: '2026-11-24T23:10:09Z'
+  source_date: '2026-11-24'
+  target_release_date: '2026-10-05'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: version_not_core_identity
+  issue_theme: crash or freeze
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: github_issues
+  matched_text: 0.39.0
+  matched_field: report_text
+  matched_context: '...g output**. The same model, same disk, same machine loads in a few seconds on **0.39.0**. Root cause appears to be `fast_disk` being auto-enabled based on **disk typ...'
+  excerpt_norm_sha256: 5b8b0146489373dbe40f3a2f1127b2caac930fb4b6530f7532ac23087bb3f863
+  title_dedup_sha256: 3722fdf3693e8d22b7ffe280e7c4b6828021d1185983c407d169dd906e320b83
+  issue_bucket: crash or freeze
+  facts_rule_version: v1
+
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-update-qr-code-prot
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-update-qr-code-protection-for-messages-from-external-users/4568497
+  parent_title: 'Microsoft Teams update: QR code protection for messages from external users'
+  report_title: 'Microsoft Teams update: QR code protection for messages from external users'
+  report_text_excerpt: 'Microsoft Teams update: QR code protection for messages from external users Microsoft Teams is adding extra security to protect users from phishing and fraud. QR code images sent by external users will be hidden by default. Users can choose to reveal the image before viewing...'
+  captured_at: '2026-11-24T23:12:04Z'
+  source_date: '2026-10-28'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 7bc6e87ad54212f8a30ee4e7ec57180a2675f47e326ba92de06ffb83c6bf7283
+  title_dedup_sha256: 0c04e4d969df5981c08995325e988820d7b8416afeff291cac1b8f9a9d28870e
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-update-qr-code-prot
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-update-qr-code-protection-for-messages-from-external-users/4568497
+  parent_title: 'Microsoft Teams update: QR code protection for messages from external users'
+  report_title: 'Microsoft Teams update: QR code protection for messages from external users'
+  report_text_excerpt: 'Microsoft Teams update: QR code protection for messages from external users Microsoft Teams is adding extra security to protect users from phishing and fraud. QR code images sent by external users will be hidden by default. Users can choose to reveal the image before viewing...'
+  captured_at: '2026-11-24T23:12:04Z'
+  source_date: '2026-10-28'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 7bc6e87ad54212f8a30ee4e7ec57180a2675f47e326ba92de06ffb83c6bf7283
+  title_dedup_sha256: 0c04e4d969df5981c08995325e988820d7b8416afeff291cac1b8f9a9d28870e
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-update-qr-code-prot
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-update-qr-code-protection-for-messages-from-external-users/4568497
+  parent_title: 'Microsoft Teams update: QR code protection for messages from external users'
+  report_title: 'Microsoft Teams update: QR code protection for messages from external users'
+  report_text_excerpt: 'Microsoft Teams update: QR code protection for messages from external users Microsoft Teams is adding extra security to protect users from phishing and fraud. QR code images sent by external users will be hidden by default. Users can choose to reveal the image before viewing...'
+  captured_at: '2026-11-24T23:12:04Z'
+  source_date: '2026-10-28'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 7bc6e87ad54212f8a30ee4e7ec57180a2675f47e326ba92de06ffb83c6bf7283
+  title_dedup_sha256: 0c04e4d969df5981c08995325e988820d7b8416afeff291cac1b8f9a9d28870e
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-update-qr-code-prot
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-update-qr-code-protection-for-messages-from-external-users/4568497
+  parent_title: 'Microsoft Teams update: QR code protection for messages from external users'
+  report_title: 'Microsoft Teams update: QR code protection for messages from external users'
+  report_text_excerpt: 'Microsoft Teams update: QR code protection for messages from external users Microsoft Teams is adding extra security to protect users from phishing and fraud. QR code images sent by external users will be hidden by default. Users can choose to reveal the image before viewing...'
+  captured_at: '2026-11-24T23:12:04Z'
+  source_date: '2026-10-28'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 7bc6e87ad54212f8a30ee4e7ec57180a2675f47e326ba92de06ffb83c6bf7283
+  title_dedup_sha256: 0c04e4d969df5981c08995325e988820d7b8416afeff291cac1b8f9a9d28870e
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-update-qr-code-prot
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-update-qr-code-protection-for-messages-from-external-users/4568497
+  parent_title: 'Microsoft Teams update: QR code protection for messages from external users'
+  report_title: 'Microsoft Teams update: QR code protection for messages from external users'
+  report_text_excerpt: 'Microsoft Teams update: QR code protection for messages from external users Microsoft Teams is adding extra security to protect users from phishing and fraud. QR code images sent by external users will be hidden by default. Users can choose to reveal the image before viewing...'
+  captured_at: '2026-11-24T23:12:04Z'
+  source_date: '2026-10-28'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 7bc6e87ad54212f8a30ee4e7ec57180a2675f47e326ba92de06ffb83c6bf7283
+  title_dedup_sha256: 0c04e4d969df5981c08995325e988820d7b8416afeff291cac1b8f9a9d28870e
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-update-qr-code-prot
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-update-qr-code-protection-for-messages-from-external-users/4568497
+  parent_title: 'Microsoft Teams update: QR code protection for messages from external users'
+  report_title: 'Microsoft Teams update: QR code protection for messages from external users'
+  report_text_excerpt: 'Microsoft Teams update: QR code protection for messages from external users Microsoft Teams is adding extra security to protect users from phishing and fraud. QR code images sent by external users will be hidden by default. Users can choose to reveal the image before viewing...'
+  captured_at: '2026-11-24T23:12:04Z'
+  source_date: '2026-10-28'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 7bc6e87ad54212f8a30ee4e7ec57180a2675f47e326ba92de06ffb83c6bf7283
+  title_dedup_sha256: 0c04e4d969df5981c08995325e988820d7b8416afeff291cac1b8f9a9d28870e
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-update-qr-code-prot
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-update-qr-code-protection-for-messages-from-external-users/4568497
+  parent_title: 'Microsoft Teams update: QR code protection for messages from external users'
+  report_title: 'Microsoft Teams update: QR code protection for messages from external users'
+  report_text_excerpt: 'Microsoft Teams update: QR code protection for messages from external users Microsoft Teams is adding extra security to protect users from phishing and fraud. QR code images sent by external users will be hidden by default. Users can choose to reveal the image before viewing...'
+  captured_at: '2026-11-24T23:12:04Z'
+  source_date: '2026-10-28'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 7bc6e87ad54212f8a30ee4e7ec57180a2675f47e326ba92de06ffb83c6bf7283
+  title_dedup_sha256: 0c04e4d969df5981c08995325e988820d7b8416afeff291cac1b8f9a9d28870e
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-update-qr-code-prot
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-update-qr-code-protection-for-messages-from-external-users/4568497
+  parent_title: 'Microsoft Teams update: QR code protection for messages from external users'
+  report_title: 'Microsoft Teams update: QR code protection for messages from external users'
+  report_text_excerpt: 'Microsoft Teams update: QR code protection for messages from external users Microsoft Teams is adding extra security to protect users from phishing and fraud. QR code images sent by external users will be hidden by default. Users can choose to reveal the image before viewing...'
+  captured_at: '2026-11-24T23:12:04Z'
+  source_date: '2026-10-28'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 7bc6e87ad54212f8a30ee4e7ec57180a2675f47e326ba92de06ffb83c6bf7283
+  title_dedup_sha256: 0c04e4d969df5981c08995325e988820d7b8416afeff291cac1b8f9a9d28870e
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+
+- id: nvidia-geforce-game-ready-621-24-nvidia-forum-comment-3635317
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3635317
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'RTX 5080 Laptop: screen capture of fullscreen/borderless games gets a stale frame every ~3rd frame (Independent Flip only) SYSTEM Lenovo Legion 83F5, Core Ultra 9 275HX, RTX 5080 Laptop GPU, Windows 11 26H2 (26300.9818). External monitor: Samsung Odyssey G40B, 1080p @ 240 Hz,...'
+  captured_at: '2026-11-24T23:35:40Z'
+  source_date: '2026-11-23T21:20:36Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: notebook_driver_not_tracked
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: nvidia_forum_default_views
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '.... Reproduces in both Advanced Optimus and dGPU-only mode. DRIVER Reproduces on 621.24 and earlier releases; it has been present since day one on this laptop. The mea...'
+  excerpt_norm_sha256: 7a817039c0facfd208cd865e3e229547d5b7fe5733a6c6c61c7436142c15b9c6
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: crash or driver reset
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-01-nvidia-forum-comment-3635317
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.01'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3635317
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'RTX 5080 Laptop: screen capture of fullscreen/borderless games gets a stale frame every ~3rd frame (Independent Flip only) SYSTEM Lenovo Legion 83F5, Core Ultra 9 275HX, RTX 5080 Laptop GPU, Windows 11 26H2 (26300.9818). External monitor: Samsung Odyssey G40B, 1080p @ 240 Hz,...'
+  captured_at: '2026-11-24T23:35:40Z'
+  source_date: '2026-11-23T21:20:36Z'
+  target_release_date: '2026-10-21'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.01'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.01'
+  matched_field: report_text
+  matched_context: '...been present since day one on this laptop. The measurements below were taken on 621.01, because I rolled back from 621.24 to avoid the 30+ GB/day SSD log-writing bug....'
+  excerpt_norm_sha256: 7a817039c0facfd208cd865e3e229547d5b7fe5733a6c6c61c7436142c15b9c6
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: crash or driver reset
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-617-42-nvidia-forum-comment-3635315
+  product_id: nvidia-geforce-game-ready
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3635315
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'Note: The write bug appears in the Studio Driver as well. I thought my SSD was safe from this because all of the reports say "Game Ready" but it''s both drivers. Rolled back my 4080 to 617.42 and things are back to normal...for now. NVIDIA is getting to be as bad about updates...'
+  captured_at: '2026-11-24T23:35:40Z'
+  source_date: '2026-11-23T21:10:01Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_both_named
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: '...l of the reports say "Game Ready" but it''s both drivers. Rolled back my 4080 to 617.42 and things are back to normal...for now. NVIDIA is getting to be as bad about u...'
+  excerpt_norm_sha256: 0d770f4d0d74cf1886ce4c81c04e74bc79dd591a4096db0e64c3736b976dca51
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+
+- id: nvidia-studio-driver-621-24-nvidia-forum-comment-3635317
+  product_id: nvidia-studio-driver
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3635317
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'RTX 5080 Laptop: screen capture of fullscreen/borderless games gets a stale frame every ~3rd frame (Independent Flip only) SYSTEM Lenovo Legion 83F5, Core Ultra 9 275HX, RTX 5080 Laptop GPU, Windows 11 26H2 (26300.9818). External monitor: Samsung Odyssey G40B, 1080p @ 240 Hz,...'
+  captured_at: '2026-11-24T23:36:20Z'
+  source_date: '2026-11-23T21:20:36Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '.... Reproduces in both Advanced Optimus and dGPU-only mode. DRIVER Reproduces on 621.24 and earlier releases; it has been present since day one on this laptop. The mea...'
+  excerpt_norm_sha256: 7a817039c0facfd208cd865e3e229547d5b7fe5733a6c6c61c7436142c15b9c6
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: crash or driver reset
+  facts_rule_version: v1
+- id: nvidia-studio-driver-617-42-nvidia-forum-comment-3635315
+  product_id: nvidia-studio-driver
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3635315
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'Note: The write bug appears in the Studio Driver as well. I thought my SSD was safe from this because all of the reports say "Game Ready" but it''s both drivers. Rolled back my 4080 to 617.42 and things are back to normal...for now. NVIDIA is getting to be as bad about updates...'
+  captured_at: '2026-11-24T23:36:20Z'
+  source_date: '2026-11-23T21:10:01Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_both_named
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: '...l of the reports say "Game Ready" but it''s both drivers. Rolled back my 4080 to 617.42 and things are back to normal...for now. NVIDIA is getting to be as bad about u...'
+  excerpt_norm_sha256: 0d770f4d0d74cf1886ce4c81c04e74bc79dd591a4096db0e64c3736b976dca51
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: general workflow reports
+  facts_rule_version: v1

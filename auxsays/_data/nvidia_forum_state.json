@@ -1,8 +1,8 @@
 {
   "last_cycle": {
-    "at": "2026-11-24T01:09:48Z",
+    "at": "2026-11-24T23:34:59Z",
     "outcome": "ok",
-    "requests": 9
+    "requests": 11
   },
   "provenance": {
     "collection_authorization": "owner risk acceptance; NVIDIA permission not established",
@@ -23,6 +23,12 @@
         "replies_not_embedded"
       ],
       "created": 1768426006,
+      "deferred": {
+        "first_deferred_at": "2026-11-24T23:34:59Z",
+        "queued_at": "2026-11-24T23:34:59Z",
+        "reason": "thread_cap",
+        "times_deferred": 1
+      },
       "first_read_at": "2026-11-24T01:10:21Z",
       "gap_reasons": [],
       "last_activity": 1795289771,
@@ -117,12 +123,6 @@
       "community_slug": "studio-drivers",
       "coverage": [],
       "created": 1779883452,
-      "deferred": {
-        "first_deferred_at": "2026-11-23T08:59:25Z",
-        "queued_at": "2026-11-23T08:59:25Z",
-        "reason": "thread_cap",
-        "times_deferred": 2
-      },
       "first_read_at": "2026-11-22T20:46:51Z",
       "gap_reasons": [],
       "last_activity": 1793136765,
@@ -153,7 +153,7 @@
         "first_deferred_at": "2026-11-24T01:09:48Z",
         "queued_at": "2026-11-24T01:09:48Z",
         "reason": "thread_cap",
-        "times_deferred": 1
+        "times_deferred": 2
       },
       "first_read_at": "2026-11-23T08:59:53Z",
       "gap_reasons": [],
@@ -181,12 +181,6 @@
       "community_slug": "studio-drivers",
       "coverage": [],
       "created": 1788183673,
-      "deferred": {
-        "first_deferred_at": "2026-11-23T08:59:25Z",
-        "queued_at": "2026-11-23T08:59:25Z",
-        "reason": "thread_cap",
-        "times_deferred": 2
-      },
       "first_read_at": "2026-11-22T20:46:43Z",
       "gap_reasons": [],
       "last_activity": 1794576341,
@@ -216,6 +210,12 @@
         "replies_not_embedded"
       ],
       "created": 1788958802,
+      "deferred": {
+        "first_deferred_at": "2026-11-24T23:34:59Z",
+        "queued_at": "2026-11-24T23:34:59Z",
+        "reason": "thread_cap",
+        "times_deferred": 1
+      },
       "first_read_at": "2026-11-20T21:29:33Z",
       "gap_reasons": [],
       "last_activity": 1795144982,
@@ -334,6 +334,12 @@
       "community_slug": "studio-drivers",
       "coverage": [],
       "created": 1789060987,
+      "deferred": {
+        "first_deferred_at": "2026-11-24T23:34:59Z",
+        "queued_at": "2026-11-24T23:34:59Z",
+        "reason": "thread_cap",
+        "times_deferred": 1
+      },
       "first_read_at": "2026-11-22T20:46:19Z",
       "gap_reasons": [],
       "last_activity": 1795379979,
@@ -367,7 +373,7 @@
         "first_deferred_at": "2026-11-24T01:09:48Z",
         "queued_at": "2026-11-24T01:09:48Z",
         "reason": "thread_cap",
-        "times_deferred": 1
+        "times_deferred": 2
       },
       "last_activity": null,
       "staff": false,
@@ -389,7 +395,7 @@
         "first_deferred_at": "2026-11-24T01:09:48Z",
         "queued_at": "2026-11-24T01:09:48Z",
         "reason": "thread_cap",
-        "times_deferred": 1
+        "times_deferred": 2
       },
       "first_read_at": "2026-11-20T21:29:25Z",
       "gap_reasons": [],
@@ -508,19 +514,14 @@
       "community_id": 13,
       "community_slug": "game-ready-drivers",
       "coverage": [
-        "older_comments_outside_window"
+        "older_comments_outside_window",
+        "replies_not_embedded"
       ],
       "created": 1793800802,
-      "deferred": {
-        "first_deferred_at": "2026-11-24T01:09:48Z",
-        "queued_at": "2026-11-24T01:09:48Z",
-        "reason": "thread_cap",
-        "times_deferred": 1
-      },
       "first_read_at": "2026-11-19T21:42:45Z",
       "gap_reasons": [],
-      "last_activity": 1795296038,
-      "last_read_at": "2026-11-23T09:00:17Z",
+      "last_activity": 1795562125,
+      "last_read_at": "2026-11-24T23:35:40Z",
       "staff": true,
       "title": "GeForce GRD 621.14 Feedback Thread (Released 11/4/26)",
       "title_versions": [
@@ -635,6 +636,12 @@
       "community_slug": "game-ready-drivers",
       "coverage": [],
       "created": 1793807775,
+      "deferred": {
+        "first_deferred_at": "2026-11-24T23:34:59Z",
+        "queued_at": "2026-11-24T23:34:59Z",
+        "reason": "thread_cap",
+        "times_deferred": 1
+      },
       "first_read_at": "2026-11-21T20:35:34Z",
       "gap_reasons": [],
       "last_activity": 1795265450,
@@ -687,25 +694,33 @@
         "older_comments_outside_window"
       ],
       "created": 1794493802,
-      "deferred": {
-        "first_deferred_at": "2026-11-24T01:09:48Z",
-        "queued_at": "2026-11-24T01:09:48Z",
-        "reason": "thread_cap",
-        "times_deferred": 1
-      },
       "first_read_at": "2026-11-19T21:42:37Z",
-      "gap_reasons": [
-        "no_overlap_and_previous_newest_gone"
-      ],
-      "last_activity": 1795385301,
-      "last_read_at": "2026-11-23T09:00:09Z",
+      "gap_reasons": [],
+      "last_activity": 1795485865,
+      "last_read_at": "2026-11-24T23:35:32Z",
       "staff": true,
       "title": "GeForce GRD 621.24 Feedback Thread (Released 11/12/26)",
       "title_versions": [
         "621.24"
       ],
-      "total_rows": 102,
+      "total_rows": 106,
       "window": [
+        [
+          3635321,
+          1795476035
+        ],
+        [
+          3635317,
+          1795468836
+        ],
+        [
+          3635315,
+          1795468201
+        ],
+        [
+          3635258,
+          1795435356
+        ],
         [
           3635187,
           1795385301
@@ -789,22 +804,6 @@
         [
           3634731,
           1795100264
-        ],
-        [
-          3634718,
-          1795091808
-        ],
-        [
-          3634701,
-          1795081975
-        ],
-        [
-          3634689,
-          1795077228
-        ],
-        [
-          3634683,
-          1795068913
         ]
       ]
     },
@@ -815,6 +814,12 @@
         "replies_not_embedded"
       ],
       "created": 1794605793,
+      "deferred": {
+        "first_deferred_at": "2026-11-24T23:34:59Z",
+        "queued_at": "2026-11-24T23:34:59Z",
+        "reason": "thread_cap",
+        "times_deferred": 1
+      },
       "first_read_at": "2026-11-19T21:42:53Z",
       "gap_reasons": [],
       "last_activity": 1795321393,
@@ -956,12 +961,6 @@
       "community_slug": "game-ready-drivers",
       "coverage": [],
       "created": 1795265025,
-      "deferred": {
-        "first_deferred_at": "2026-11-23T08:59:25Z",
-        "queued_at": "2026-11-23T08:59:25Z",
-        "reason": "thread_cap",
-        "times_deferred": 2
-      },
       "first_read_at": "2026-11-22T20:46:35Z",
       "gap_reasons": [],
       "last_activity": 1795265025,
