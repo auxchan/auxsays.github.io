@@ -60,7 +60,10 @@ jobs:
     # after the collection cap for QA, audit, EMH validation, transactional commit, push, explicit
     # Pages dispatch, and the final summary. 300 min stays under the GitHub 6h default and, with the
     # every-6-hours (360-min) cadence below, leaves 60 min before the next slot -- no overlap/queue.
-    timeout-minutes: 300
+    # AUX-137: +4 min for the maintainer-records refresh step, which is capped at exactly 4, so the job keeps the
+    # headroom test_deploy_verification_and_lost_race D4 measures (10.7 min, as before the step); 56 min remain
+    # before the next slot.
+    timeout-minutes: 304
     outputs:
       # G91: chain-ingest's `Cycle reached main` step reads these. This lane's cycle reached main
       # only when its writeback pushed or had nothing to push; empty (a skipped writeback after a
@@ -288,6 +291,48 @@ jobs:
         id: consensus
         if: ${{ github.event.inputs.dry_run != 'true' }}
         run: python auxsays/scripts/build_consensus_from_evidence.py
+
+      - name: Refresh maintainer records of counted reports
+        # AUX-137. SELF-CONTAINED: this step and the one `--allow auxsays/_data/report_source_facts.yml` line of
+        # the writeback below are everything the facts refresh adds to this lane; nothing else here reads or
+        # depends on it, and removing both restores the lane exactly.
+        #
+        # It reads each issue tracker's OWN record (state, close reason, label names, three issue-form fields)
+        # of reports that are ALREADY counted rows, and rewrites auxsays/_data/report_source_facts.yml, of which
+        # backfill_report_source_facts.py is the only writer (lib/single_writer: lock, no stale overwrite,
+        # atomic replace). It collects nothing, changes no row, count or record, and stores no title, text or
+        # account. It must run AFTER collection (new counted reports need a record) and BEFORE the promotions
+        # (they call lib/patch_decision.decide, which reads the facts).
+        #
+        # Bounded and resumable: at most 60 GET requests to api.github.com per run, paced by lib/github_api
+        # (2.1 s apart), and the tool stops reading by itself after 150 seconds, writing everything read so far;
+        # the next run continues with the record read longest ago. An open report is due again after one day and
+        # a closed one after three; about 55 reads a run, four runs a day, re-read every record within about two
+        # days, well inside the seven days after which lib/assessment_facts stops using it. If this step does
+        # not run, the records age out and each page falls back to its volume-based WAIT (QA:
+        # report_source_facts_stale). A refusal is not a failure (the tool exits 0).
+        #
+        # NOT FATAL TO THE LANE (review round 2): `continue-on-error`. A crash of the tool, a malformed facts
+        # file or the 4-minute kill marks THIS step failed in the log (and the tool's non-zero exit prints a
+        # warning), and the promotions, both QA steps and the writeback still run, so a facts hiccup never
+        # costs the cycle's collected evidence. Nothing is hidden by that: the tool writes the file atomically
+        # or not at all, records it could not refresh age out and QA names them (report_source_facts_stale,
+        # report_source_facts_unread), and a malformed facts file is a QA ERROR (report_source_facts_invalid)
+        # in the QA steps below, which are not continue-on-error.
+        #
+        # THE CAP IS 4 MINUTES ON PURPOSE: this job's 300 minutes are spent (240 collection, about 25 measured
+        # after it, 20.5 confirming the deploy), and test_deploy_verification_and_lost_race D4 requires 10
+        # minutes to remain. The tool's own 150-second stop keeps a slow tracker from becoming a killed step.
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        timeout-minutes: 4
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! python auxsays/scripts/backfill_report_source_facts.py --write --max-requests 60 --max-seconds 150; then
+            echo "::warning title=Maintainer records not refreshed::The facts refresh failed; the lane continues with the records on file. A record older than seven days is not used and its page keeps the volume-based WAIT (QA: report_source_facts_stale)."
+            exit 1
+          fi
 
       - name: Promote Acrobat consensus to its counted population
         # Acrobat Pro and Reader had NO scoped promotion anywhere. Their projections were rebuilt
@@ -622,6 +667,7 @@ jobs:
             --allow 'auxsays/updates/generated/*geforce-game-ready-driver*.md' \
             --allow 'auxsays/updates/generated/*nvidia-studio-driver*.md' \
             --allow auxsays/_data/nvidia_forum_state.json \
+            --allow auxsays/_data/report_source_facts.yml \
             --validate 'python auxsays/scripts/qa_patch_records.py' \
             --validate 'python auxsays/scripts/audit_consensus_evidence.py' \
             --validate 'python auxsays/scripts/validate_evidence_method_health.py' \

@@ -70,7 +70,7 @@ from typing import Any
 # Three leaves of `lib`, standard library only: the report-URL identity every count and live check uses, the
 # vocabularies a row must carry to be published, and the stored duplicate-group fact of a row (G68). None
 # imports the collector package.
-from . import evidence_facts
+from . import assessment_output, evidence_facts
 from .evidence_classification import VALID_SENTIMENTS, VALID_SEVERITIES
 from .source_segments import report_url_key
 
@@ -676,9 +676,12 @@ def lifecycle_for(record: dict[str, Any] | None, lifecycle: Any = ()) -> dict[st
 # still give WAIT on the count alone: no assessed dimension can move the verdict word (a reviewed finding or a
 # vendor known issue changes only the `basis` label), and the one new condition can only REMOVE the WAIT.
 # Whether the volume-based WAIT stays where no cause is confirmed is owner decision D1 (pending); whether a
-# product outside VOLUME_PRODUCTS gets it is owner decision D2 (pending).
+# product outside VOLUME_PRODUCTS gets it is owner decision D2 (pending). AUX-137 (the block below): where a
+# CURRENT stored provisional assessment of the page exists, it is weighed in; without one, nothing here changes.
 # ---------------------------------------------------------------------------------------------
 ASSESSMENT_RULE = "contextual-assessment-1"
+# The rule name of an assessment that weighed a CURRENT stored provisional assessment (lib.assessment_output).
+ASSESSMENT_RULE_WEIGHED = "contextual-assessment-3"
 ASSESSMENT_MIN_REPORTS = VOLUME_MIN_REPORTS
 BASIS_OFFICIAL_WITHDRAWAL = "official_withdrawal"
 BASIS_OFFICIAL_SECURITY = "official_security_classification"
@@ -689,6 +692,24 @@ BASIS_REVIEWED = "reviewed_finding"
 BASIS_LIMITED = "limited_evidence"
 # The bases whose verdict is the volume-based WAIT. Every other basis leaves the count out of the verdict.
 VOLUME_BASES = frozenset({BASIS_REVIEWED_AND_VOLUME, BASIS_VENDOR_ISSUE_AND_VOLUME, BASIS_VOLUME})
+# AUX-137 (owner ruling of 2026-11-24; output-only design approved 2026-11-25): N >= ASSESSMENT_MIN_REPORTS accepted
+# reports TRIGGER A PROVISIONAL RISK ASSESSMENT for every product, and maintainer decisions are supplementary
+# evidence, never a prerequisite. The weighing of the page's reports is computed by a separate scheduled step and
+# stored in `_data/provisional_assessments.yml`; `lib.assessment_output.weighing_for` (called from ONE place:
+# `assess`) returns it only while it is CURRENT for the page's inputs, else None. A stored weighing may support a
+# recommendation of its own (`basis` in PROVISIONAL_BASES); a reviewed finding keeps its place where the stored
+# result is less cautious or the same (`stored_takes_page`: never narrower), and official facts still outrank
+# everything. Without a current stored weighing the page is decided exactly as
+# before (the count-based assessment) and its Status line says the weighing is pending (ASSESS_PENDING).
+BASIS_PROVISIONAL_MAINTAINER = assessment_output.BASIS_MAINTAINER_REGRESSION
+BASIS_PROVISIONAL_REGRESSION = assessment_output.BASIS_SEVERE_REGRESSION
+BASIS_PROVISIONAL_TEST_FIRST = assessment_output.BASIS_TEST_FIRST
+BASIS_REVIEWED_WEIGHED = "reviewed_finding_with_provisional_assessment"
+PROVISIONAL_BASES = frozenset(assessment_output.BASES)
+PROVISIONAL_RULES = {WAIT: "R3P", TEST_FIRST: "R4P"}
+# A limit that only says which products the VOLUME rule covers. It does not stop the provisional assessment, which
+# applies to every product; every other limit says the page has not shown thirty separate publishable reports.
+SCOPE_ONLY_LIMITS = frozenset({"not_promotion_product"})
 
 
 class Assessment:
@@ -698,11 +719,12 @@ class Assessment:
     `corroborated` count the supported reviewed WAIT and TEST FIRST entries on the page."""
 
     __slots__ = ("rule", "reports", "unique_urls", "independent", "limits", "result", "scope", "basis",
-                 "confirmed", "corroborated", "vendor_known_issue")
+                 "confirmed", "corroborated", "vendor_known_issue", "weighing", "corroborated_new", "record_facts")
 
     def __init__(self, *, reports: int, unique_urls: int, independent: int, limits: tuple, result: str,
-                 scope: str, basis: str, confirmed: int, corroborated: int, vendor_known_issue: bool) -> None:
-        self.rule = ASSESSMENT_RULE
+                 scope: str, basis: str, confirmed: int, corroborated: int, vendor_known_issue: bool,
+                 weighing: Any = None, corroborated_new: int = 0, record_facts: Any = None) -> None:
+        self.rule = ASSESSMENT_RULE_WEIGHED if weighing is not None else ASSESSMENT_RULE
         self.reports = reports
         self.unique_urls = unique_urls
         self.independent = independent
@@ -713,13 +735,33 @@ class Assessment:
         self.confirmed = confirmed
         self.corroborated = corroborated
         self.vendor_known_issue = vendor_known_issue
+        # AUX-137: the CURRENT stored provisional assessment of the page (lib.assessment_output), or None.
+        self.weighing = weighing
+        # What the stored tracker records of the page's reports establish (lib.assessment_facts.Weighing), read by
+        # QA whether or not a stored weighing is current.
+        self.record_facts = record_facts
+        # Review 2, R2-1: how many supported TEST FIRST entries are stored as new in this version.
+        self.corroborated_new = corroborated_new
 
     def __repr__(self) -> str:
         return f"Assessment({self.result!r}, {self.basis!r}, limits={self.limits!r})"
 
 
+def stored_takes_page(weighing: Any, reviewed_verdict: str, reviewed_scope: str) -> bool:
+    """Does a current stored result take the page from the page's most cautious reviewed finding (REVIEW3 F2)?
+    When it is MORE cautious; and, at EQUAL caution, whenever its scope is not the reviewed finding's own. A reviewed
+    finding is always scoped to a setup or situation (lib.verdict_reasons), so an equally cautious stored result for
+    every setup (a page-wide WAIT, a TEST FIRST before relying on this version) is the wider statement, and one for
+    another setup is a setup the reviewed finding does not cover: keeping the reviewed scope would narrow the page.
+    The reviewed finding is then printed beneath the stored result ("Also ..."), as under the volume-based WAIT. A
+    reviewed finding keeps the page only where the stored result is less cautious or says exactly the same, so its
+    line ("supports nothing more cautious") is true wherever it is printed."""
+    stored, reviewed = risk_rank(weighing.verdict), risk_rank(reviewed_verdict)
+    return stored < reviewed or (stored == reviewed and _text(weighing.scope) != _text(reviewed_scope))
+
+
 def assess(record: dict[str, Any] | None, reviewed_reasons: Any = (), counted_rows: Any = (), *,
-           withdrawn: bool = False, security: bool = False) -> Assessment | None:
+           withdrawn: bool = False, security: bool = False, source_facts: Any = None) -> Assessment | None:
     """The provisional contextual risk assessment for one page, or None below the trigger.
 
     `reviewed_reasons` are the page's SUPPORTED reason entries, most cautionary first (as `decide` orders
@@ -735,11 +777,28 @@ def assess(record: dict[str, Any] | None, reviewed_reasons: Any = (), counted_ro
     corroborated = sum(1 for e in reasons if _text(e.get("verdict")) == TEST_FIRST)
     known_issue = vendor_known_issue(rec)
     reviewed_verdict = _text(reasons[0].get("verdict")) if reasons else INSUFFICIENT_DATA
+    # THE ONE CALL for the stored provisional assessment (AUX-137): the page's weighing when a CURRENT one is
+    # stored for exactly these inputs, else None. `source_facts` None means the tracked facts file. No clock.
+    weighing = assessment_output.weighing_for(rec, rows, source_facts=source_facts)
+    structural = tuple(code for code in limits if code.partition(":")[0] not in SCOPE_ONLY_LIMITS)
     if withdrawn:
         result, scope, basis = AVOID, AVOID_SCOPE, BASIS_OFFICIAL_WITHDRAWAL
     elif security:
         result, scope, basis = SECURITY_UPDATE, "", BASIS_OFFICIAL_SECURITY
+    elif weighing is not None and not structural and weighing.verdict \
+            and (not (weighing.retain and not limits) or weighing.page_wide):
+        # The stored weighing supports a recommendation of its own. A scoped WAIT on a page whose REST keeps the
+        # volume-based WAIT (`retain`) does not narrow the page: where the product has the volume rule, the page-wide
+        # volume WAIT below covers it and its limiting evidence names why. A stored WAIT for the whole page
+        # (`page_wide`) is as cautious as the volume WAIT for every setup and states its cause, so it takes the page
+        # either way. Against a reviewed finding: `stored_takes_page`.
+        if stored_takes_page(weighing, reviewed_verdict, _text(reasons[0].get("scope")) if reasons else ""):
+            result, scope, basis = weighing.verdict, weighing.scope, weighing.basis
+        else:
+            result, scope, basis = reviewed_verdict, _text(reasons[0].get("scope")), BASIS_REVIEWED_WEIGHED
     elif not limits and risk_rank(WAIT) <= risk_rank(reviewed_verdict):
+        # No stored weighing supports a replacement (none current, or it keeps the rest of the page): the owner's
+        # temporary volume-based WAIT stays, and where a stored weighing says why, its limiting evidence says so.
         result, scope = WAIT, ""
         basis = (BASIS_REVIEWED_AND_VOLUME if confirmed or corroborated
                  else BASIS_VENDOR_ISSUE_AND_VOLUME if known_issue else BASIS_VOLUME)
@@ -750,13 +809,21 @@ def assess(record: dict[str, Any] | None, reviewed_reasons: Any = (), counted_ro
     keys = {k for k in (report_url_key(str(r.get("source_url") or "")) for r in rows) if k}
     return Assessment(reports=len(rows), unique_urls=len(keys), independent=independent_reports(rows)[0],
                       limits=limits, result=result, scope=scope, basis=basis, confirmed=confirmed,
-                      corroborated=corroborated, vendor_known_issue=known_issue)
+                      corroborated=corroborated, vendor_known_issue=known_issue, weighing=weighing,
+                      corroborated_new=sum(1 for e in reasons if _text(e.get("verdict")) == TEST_FIRST
+                                           and e.get("new_in_this_version") is True),
+                      record_facts=assessment_output.record_facts(rec, rows, source_facts=source_facts))
 
 
 # The assessment's public wording, ONE copy. lib/evidence_overview carries these lines to the page
 # (`risk_assessment` in its projection row) and _includes/patch-evidence-overview.html prints them; neither
 # words anything. No line states the trigger, a rate, a percentage or a share of installations.
 ASSESS_NOT_ESTABLISHED = "Not established."
+ASSESS_VOLUME_CONFIRMED = (
+    "WAIT. This is a risk-management recommendation: it rests on the number of accepted reports that name this exact "
+    "version. {authority} have confirmed some of these reports as defects (stated under problem confirmation), but no "
+    "confirmed defect is shown to explain the other reports, and the reports do not show how often installations "
+    "fail.")
 ASSESS_RECOMMENDATION = {
     BASIS_VOLUME: (
         "WAIT. This is a risk-management recommendation: it rests on the number of accepted reports that name "
@@ -831,6 +898,10 @@ ASSESS_REVIEWED_LEVEL = {
     TEST_FIRST: ("A reviewed finding advises TEST FIRST on a named setup; it does not confirm a problem new in "
                  "this version."),
 }
+# Review 2, R2-1: whether a reviewed problem is new in the version is its own stored field, and the schema lets a
+# TEST FIRST entry carry `true`. The TEST FIRST sentence above then denied what the reviewed line beneath it
+# said, so a page with such an entry gets the sentence that stops at the setup.
+ASSESS_REVIEWED_TEST_FIRST_NEW = "A reviewed finding advises TEST FIRST on a named setup."
 ASSESS_REVIEWED_TAIL = ("Each reviewed finding is stated with the verdict above. The other reports are not "
                         "confirmed as one problem.")
 ASSESS_FINDING_PREFIX = "Reviewed finding: "
@@ -845,6 +916,7 @@ ASSESS_SEVERITY = ("Not established. AUXSAYS holds no verified severity or data-
 ASSESS_SETUPS_REVIEWED = ("Each reviewed finding stated with the verdict above names the setup it applies to. For "
                           "the other reports: not established.")
 ASSESS_SETUPS = "Not established. AUXSAYS has not verified which platforms or workflows these reports concern."
+ASSESS_SETUPS_REVIEWED_TAIL = "Each reviewed finding stated with the verdict above names the setup it applies to."
 ASSESS_POSITIVE = ("Not established. AUXSAYS does not collect reports of successful installations, and a lack "
                    "of complaints is not evidence that a version is safe.")
 ASSESS_RELEASED = "Released {date}."
@@ -866,9 +938,30 @@ ASSESS_PROVISIONAL = ("Provisional. Recomputed on every site build from the acce
                       "findings and the vendor records on file; it changes when reports arrive or are "
                       "withdrawn, when a reviewed finding is added or removed, when the vendor documents a "
                       "known issue or withdraws the update, and when a newer release is recorded.")
-ASSESS_LABELS = ("Recommendation", "Limiting evidence", "Evidence maturity", "Problem confirmation",
+# AUX-137: a page that holds maintainer records also changes when the SCHEDULED read of the
+# tracker (the collection lane's facts refresh) finds a record changed. Said only where records are held, and
+# said as what it is: a scheduled read, not a live view.
+ASSESS_PROVISIONAL_RECORDS = (
+    "Provisional. Recomputed on every site build from the accepted reports, the reviewed findings, the vendor "
+    "records and the maintainer records on file; it changes when reports arrive or are withdrawn, when a reviewed "
+    "finding is added or removed, when the vendor documents a known issue or withdraws the update, when a "
+    "scheduled read of the tracker finds that the maintainers' record of a report changed or is too old to "
+    "use, and when a newer release is recorded.")
+# AUX-137: said on every page at the trigger that has no CURRENT stored provisional assessment (none computed yet,
+# or computed from evidence that has since changed). True in both cases; the page then shows the count-based result.
+ASSESS_PENDING = ("The weighing of these reports by failure, severity, setup and regression is pending: it has not "
+                  "been computed for the evidence now on file, so this page shows the count-based assessment until "
+                  "it is.")
+ASSESS_LABELS = ("Recommendation", "Limiting evidence", "Evidence maturity", "Representativeness",
+                 "Problem confirmation", "Independent corroboration", "Maintainer response", "Recurring problems",
                  "Vendor known issues", "Severity and data loss", "Affected setups", "Positive outcomes",
-                 "Release and alternatives", "Collection health", "Status")
+                 "Fixes and open problems", "Release and alternatives", "Collection health", "Status")
+# AUX-137: recommendation and evidence maturity are separate lines; this one says what the reports are a sample of.
+ASSESS_REPRESENTATIVENESS = ("These are public reports from people who chose to report a problem. They are not a "
+                             "sample of installations: they show that problems were reported, not how often an "
+                             "installation fails or which share of users is affected.")
+ASSESS_REVIEWED_WEIGHED = ("{phrase}. The reviewed finding stated with the verdict above decides this page; the "
+                           "provisional assessment of the accepted reports supports nothing more cautious.")
 _ISO_DATE_RE = re.compile(r"^(\d{4}-\d{2}-\d{2})(?:[T ]|$)", re.ASCII)
 
 
@@ -880,6 +973,10 @@ def assessment_limit_lines(assessment: Assessment, record: dict[str, Any] | None
     """The precise limiting evidence, one sentence per limit, or [] when the count stands or an official fact
     decides the page (the limits are then not what decides it). A code with no sentence is a programming
     error and raises, so a new limit can never be published as silence."""
+    weighing = assessment.weighing
+    if assessment.basis in VOLUME_BASES and weighing is not None and weighing.retain:
+        # AUX-137: why the stored weighing found no replacement for the temporary WAIT, in its own words.
+        return [weighing.retained()]
     if assessment.basis not in (BASIS_REVIEWED, BASIS_LIMITED):
         return []
     rec = record or {}
@@ -909,9 +1006,23 @@ def assessment_lines(assessment: Assessment, record: dict[str, Any] | None, *, f
             out.append({"label": label, "text": text})
 
     phrase = f"{assessment.result} {assessment.scope}".strip()
-    level = ASSESS_REVIEWED_LEVEL[WAIT if assessment.confirmed else TEST_FIRST]
-    add("Recommendation", ASSESS_RECOMMENDATION[assessment.basis].format(vendor=_vendor(rec), phrase=phrase,
-                                                                         level=level))
+    level = (ASSESS_REVIEWED_LEVEL[WAIT] if assessment.confirmed
+             else ASSESS_REVIEWED_TEST_FIRST_NEW if assessment.corroborated_new else ASSESS_REVIEWED_LEVEL[TEST_FIRST])
+    weighing = assessment.weighing
+    # The dimension lines the stored weighing words, by label; {} when there is none (the count-based wording).
+    facts = weighing.lines() if weighing is not None else {}
+    if weighing is not None:
+        facts["Representativeness"] = ASSESS_REPRESENTATIVENESS
+    if assessment.basis in PROVISIONAL_BASES:
+        add("Recommendation", weighing.recommendation(phrase))
+    elif assessment.basis == BASIS_REVIEWED_WEIGHED:
+        add("Recommendation", ASSESS_REVIEWED_WEIGHED.format(phrase=phrase))
+    elif assessment.basis == BASIS_VOLUME and weighing is not None and weighing.facts.confirmed:
+        # Review of 2026-11-24, N3: never "No single cause is confirmed" beside the maintainers' own confirmations.
+        add("Recommendation", ASSESS_VOLUME_CONFIRMED.format(authority=weighing.facts.cap()))
+    else:
+        add("Recommendation", ASSESS_RECOMMENDATION[assessment.basis].format(vendor=_vendor(rec), phrase=phrase,
+                                                                             level=level))
     add("Limiting evidence", " ".join(assessment_limit_lines(assessment, rec)))
     maturity = ASSESS_MATURITY.format(n=assessment.reports, u=assessment.unique_urls)
     if exclusive is not None:
@@ -919,21 +1030,40 @@ def assessment_lines(assessment: Assessment, record: dict[str, Any] | None, *, f
         maturity += " " + (ASSESS_EXCLUSIVE_SOME.format(x=int(exclusive), y=shared) if shared
                            else ASSESS_EXCLUSIVE_ALL)
     add("Evidence maturity", maturity)
+    add("Representativeness", facts.get("Representativeness", ""))
     reviewed = bool(assessment.confirmed or assessment.corroborated)
-    add("Problem confirmation", f"{level} {ASSESS_REVIEWED_TAIL}" if reviewed
-        else f"{ASSESS_FINDING_PREFIX}{finding}" if finding else ASSESS_UNCONFIRMED)
+    confirmation = (f"{level} {ASSESS_REVIEWED_TAIL}" if reviewed
+                    else f"{ASSESS_FINDING_PREFIX}{finding}" if finding else ASSESS_UNCONFIRMED)
+    if weighing is not None and weighing.facts.confirmed:
+        # The maintainers' own confirmations are a stored fact; the reviewed sentence, where there is one, follows.
+        f = weighing.facts
+        confirmation = (f"{f.cap()} have confirmed {f.confirmed} of the accepted reports as "
+                        f"{'a defect' if f.confirmed == 1 else 'defects'} and label {f.regressions or 'none'} of them a "
+                        f"regression; filed against an earlier version: {f.confirmed_earlier}, against a later "
+                        f"version: {f.confirmed_later}. A confirmation says the maintainers treat a report as a real "
+                        f"defect, not how many users it affects. {f.dated()}".strip()
+                        + (f" {level} {ASSESS_REVIEWED_TAIL}" if reviewed else ""))
+    add("Problem confirmation", confirmation)
+    add("Independent corroboration", facts.get("Independent corroboration", ""))
+    add("Maintainer response", facts.get("Maintainer response", ""))
+    add("Recurring problems", facts.get("Recurring problems", ""))
     add("Vendor known issues", ASSESS_VENDOR_DECLARED.format(vendor=_vendor(rec))
         if assessment.vendor_known_issue else ASSESS_VENDOR_NONE)
-    add("Severity and data loss", ASSESS_SEVERITY)
-    add("Affected setups", ASSESS_SETUPS_REVIEWED if reviewed else ASSESS_SETUPS)
-    add("Positive outcomes", ASSESS_POSITIVE)
+    add("Severity and data loss", facts.get("Severity and data loss", ASSESS_SEVERITY))
+    setups = ASSESS_SETUPS_REVIEWED if reviewed else ASSESS_SETUPS
+    if "Affected setups" in facts:
+        setups = facts["Affected setups"] + (f" {ASSESS_SETUPS_REVIEWED_TAIL}" if reviewed else "")
+    add("Affected setups", setups)
+    add("Positive outcomes", facts.get("Positive outcomes", ASSESS_POSITIVE))
+    add("Fixes and open problems", facts.get("Fixes and open problems", ""))
     released = _ISO_DATE_RE.match(_text(rec.get("update_published_at")))
     release = [ASSESS_RELEASED.format(date=released.group(1))] if released else []
     if release_kind:
         release.append(ASSESS_RELEASE[release_kind].format(identity=newer_identity))
     add("Release and alternatives", " ".join(release))
-    add("Collection health", ASSESS_COLLECTION)
-    add("Status", ASSESS_PROVISIONAL)
+    add("Collection health", facts.get("Collection health", ASSESS_COLLECTION))
+    add("Status", ASSESS_PROVISIONAL_RECORDS if weighing is not None and weighing.facts.records
+        else ASSESS_PROVISIONAL if weighing is not None else f"{ASSESS_PROVISIONAL} {ASSESS_PENDING}")
     return out
 
 
@@ -978,6 +1108,11 @@ class Decision:
         return self.verdict == WAIT and self.reason_code == VOLUME_REASON_CODE
 
     @property
+    def facts(self) -> bool:
+        """Is this a verdict the provisional assessment of the page's reports decides (AUX-137)?"""
+        return self.reason_code in PROVISIONAL_BASES
+
+    @property
     def qualifier(self) -> str:
         """What every surface prints beside the verdict word: the setup scope, or -- for the volume-based
         precaution, which has none -- its label."""
@@ -985,13 +1120,15 @@ class Decision:
 
 
 def decide(record: dict[str, Any] | None, *, valid_reasons: Any = (), lifecycle: Any = (),
-           counted_rows: Any = ()) -> Decision:
+           counted_rows: Any = (), source_facts: Any = None) -> Decision:
     """THE decision for one patch. `valid_reasons` must already be the entries SUPPORTED by the
     page's counted rows (lib.verdict_reasons.valid_reasons_by_identity); `lifecycle` the validated
     lifecycle entries; `counted_rows` the page's canonical counted population
     (lib.report_counts.counted_evidence_rows for this identity), read ONLY by the volume rule. No stored
     count, sentiment, theme, severity, maturity, collection health or clock is accepted. A caller that
-    passes no rows gets no volume-based WAIT: it fails closed to the reviewed outcome. At
+    passes no rows gets no volume-based WAIT: it fails closed to the reviewed outcome. `source_facts` are the
+    stored source records of reports (lib.assessment_facts), None meaning the tracked file; they are read ONLY
+    at the trigger, by `assess`. At
     ASSESSMENT_MIN_REPORTS counted rows the result carries `assessment` (AUX-134): the provisional
     contextual risk assessment that reached this verdict, with its basis and its limits."""
     rec = record or {}
@@ -1004,7 +1141,7 @@ def decide(record: dict[str, Any] | None, *, valid_reasons: Any = (), lifecycle:
     # and the verdict below is the one it reached, with its basis and its limiting evidence; below the trigger
     # it is None and nothing here reads the count. With no limit its result is still the volume WAIT, on the
     # count alone (see WHAT THIS IS NOT above).
-    assessment = assess(rec, ordered, rows, withdrawn=bool(life), security=security)
+    assessment = assess(rec, ordered, rows, withdrawn=bool(life), security=security, source_facts=source_facts)
     if life:
         # Scoped like every non-default verdict: the withdrawal applies to INSTALLING the update,
         # not to a device that already has it (owner decision 2).
@@ -1015,6 +1152,12 @@ def decide(record: dict[str, Any] | None, *, valid_reasons: Any = (), lifecycle:
     if assessment is not None and assessment.basis in VOLUME_BASES:
         return Decision(WAIT, VOLUME_RULE, reasons=ordered, reason_code=VOLUME_REASON_CODE,
                         label=VOLUME_LABEL, reports=len(rows), assessment=assessment)
+    if assessment is not None and assessment.basis in PROVISIONAL_BASES:
+        # AUX-137: the provisional assessment of the page's reports decides. Scoped like every reasoned verdict;
+        # the reviewed entries it stands above stay printed beneath it.
+        return Decision(assessment.result, PROVISIONAL_RULES[assessment.result], scope=assessment.scope,
+                        reasons=ordered,
+                        reason_code=assessment.basis, reports=len(rows), assessment=assessment)
     if ordered:
         head = ordered[0]
         verdict = _text(head.get("verdict"))
@@ -1036,6 +1179,16 @@ def public_body(decision: Decision, record: dict[str, Any] | None, report_count:
         # The canonical count the decision rests on, never the caller's (a stored count can lag). The
         # reviewed entries it stands above follow with their own verdict, scope and wording.
         parts = [VOLUME_BODY.format(n=decision.reports)]
+        for other in decision.reasons:
+            parts.append(f"Also {_text(other.get('verdict'))} {_text(other.get('scope'))}: "
+                         f"{_text(other.get('reason'))}")
+        return " ".join(parts)
+    if decision.facts:
+        # Worded by the weighing module from the records it read; the reviewed entries follow as under a
+        # volume-based WAIT.
+        parts = [decision.assessment.weighing.body(decision.reports)]
+        if decision.verdict == TEST_FIRST:
+            parts.append(TEST_FIRST_TRY)
         for other in decision.reasons:
             parts.append(f"Also {_text(other.get('verdict'))} {_text(other.get('scope'))}: "
                          f"{_text(other.get('reason'))}")
@@ -1072,8 +1225,13 @@ def public_body(decision: Decision, record: dict[str, Any] | None, report_count:
             # Beside reports (or an "Also ... users independently report" reason) the usual line is
             # the true one (G35-04 review 1, LOW-5).
             alone = n == 0 and len({_text(e.get("reason_class")) for e in decision.reasons}) == 1
-            parts.append(OTHER_SETUPS_BY_CLASS.get(_text(head.get("reason_class")), OTHER_SETUPS) if alone
-                         else OTHER_SETUPS)
+            # AUX-137: where the maintainers' records are on file and confirm reports of their own, "no problem is
+            # independently reported yet" would be false beside them; the weighing words that sentence instead.
+            weighed = (decision.assessment.weighing.other_setups()
+                       if decision.assessment is not None and decision.assessment.basis == BASIS_REVIEWED_WEIGHED
+                       else "")
+            parts.append(weighed or (OTHER_SETUPS_BY_CLASS.get(_text(head.get("reason_class")), OTHER_SETUPS)
+                                     if alone else OTHER_SETUPS))
         return " ".join(parts)
     if n == 0:
         return ""

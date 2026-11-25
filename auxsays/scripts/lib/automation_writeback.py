@@ -79,6 +79,11 @@ FORBIDDEN_PATH_SUBSTRINGS = (
 FORBIDDEN_PATH_GLOBS = (
     "*.pyc", "*.tmp", "AGENTS.md", "CLAUDE.md", "**/AGENTS.md", "**/CLAUDE.md",
 )
+# AUX-137: files with exactly ONE writer, which is not a lane of this repository (the scheduled provisional-assessment
+# step; lib/assessment_output). Such a path is staged only by a run that names it EXACTLY in --allow (never through
+# a directory or a glob), and a commit that carries it carries nothing else. So no public lane can write it, and its
+# writer cannot use it to carry any other file.
+SINGLE_WRITER_PATHS = ("auxsays/_data/provisional_assessments.yml",)
 
 DEFAULT_PAGES_STATUS_CMD = (
     "gh run list --workflow pages.yml --branch main --limit 30 "
@@ -275,6 +280,20 @@ def _matches_any(path: str, patterns: list[str]) -> bool:
         if fnmatch.fnmatch(p, pat) or fnmatch.fnmatch(p, pat.rstrip("/") + "/*"):
             return True
     return False
+
+
+def _single_writer_problems(paths: list[str], allow: list[str]) -> list[str]:
+    """The staged (or committed) paths a run may not carry under the single-writer rule ([] when none)."""
+    norm = [p.replace("\\", "/") for p in paths]
+    named = {a.replace("\\", "/") for a in allow}
+    owned = [p for p in norm if p in SINGLE_WRITER_PATHS]
+    if not owned:
+        return []
+    bad = [p for p in owned if p not in named]
+    if bad:
+        return sorted(bad)                 # reached through a directory or a glob: not its writer
+    others = [p for p in norm if p not in SINGLE_WRITER_PATHS]
+    return sorted(others)                  # its writer may carry nothing else
 
 
 def _emit(result: WritebackResult, token: str) -> None:
@@ -916,6 +935,7 @@ def _run_writeback(cfg: WritebackConfig) -> WritebackResult:
     staged = _staged_paths(repo)
 
     bad = [p for p in staged if _is_forbidden(p) or not _matches_any(p, cfg.allow)]
+    bad += [p for p in _single_writer_problems(staged, cfg.allow) if p not in bad]
     if bad:
         _git(repo, "reset", "-q")
         result.conflicting_paths = sorted(bad)
@@ -998,6 +1018,7 @@ def _run_writeback(cfg: WritebackConfig) -> WritebackResult:
                 _emit(result, VALIDATION_SUCCESS_AFTER_REBASE)
             rebased_files = _commit_paths(repo, "HEAD")
             bad = [p for p in rebased_files if _is_forbidden(p) or not _matches_any(p, cfg.allow)]
+            bad += [p for p in _single_writer_problems(rebased_files, cfg.allow) if p not in bad]
             if bad:
                 _git(repo, "reset", "--hard", result.local_commit_sha, check=False)
                 result.conflicting_paths = sorted(bad)

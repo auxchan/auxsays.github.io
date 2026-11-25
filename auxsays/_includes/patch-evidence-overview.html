@@ -121,6 +121,11 @@
         <p class="update-risk-assessment__limit"><strong>Limiting evidence:</strong> {{ peo_ra_text | escape }}</p>
         {%- endif %}
         {%- endfor %}
+        {%- assign peo_ra_marked = peo_ra.confirmed_reports | default: empty -%}
+        {%- if peo_ra_marked.size > 0 %}
+        <p class="update-risk-assessment__confirmed"><strong>Reports the maintainers confirmed:</strong>
+          {%- for peo_ra_mark in peo_ra_marked %} <a href="{{ peo_ra_mark.url | escape }}" rel="nofollow noopener">{{ peo_ra_mark.text | escape }}</a> ({{ peo_ra_mark.note | escape }}){% unless forloop.last %};{% endunless %}{% endfor %}</p>
+        {%- endif %}
         <details class="update-risk-assessment__details">
           <summary>What this assessment checked</summary>
           <ul class="update-risk-assessment__lines">

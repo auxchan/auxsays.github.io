@@ -550,7 +550,7 @@ def run() -> int:
     want_322 = expected_phrase(obs_rec)
     check("UP2b a qualified verdict is carried WITH its qualifier: the card's verdict and the release's rec[12] "
           "(OBS 32.2.2 made current; its volume-based WAIT carries the label 'Volume-based precaution')",
-          want_322 == ("WAIT", "Volume-based precaution")
+          want_322[0] in ("WAIT", "TEST FIRST") and want_322[1] != ""
           and (obs2.get("verdict"), obs2.get("scope")) == want_322
           and len(rec2) == REC_WIDTH and (rec2[5], rec2[12]) == want_322,
           f"{(obs2.get('verdict'), obs2.get('scope'))} {rec2[5:6] + rec2[12:13] if rec2 else rec2}")

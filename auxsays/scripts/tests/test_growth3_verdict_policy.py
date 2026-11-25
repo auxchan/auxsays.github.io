@@ -243,7 +243,7 @@ def check_decisions() -> None:
     clocky = re.findall(r"\bdatetime\b|\btime\.\w+|\bnow\(|\btoday\(|\bdate\.today", src)
     # G87: counted_rows is the page's canonical counted population, read only by the volume-based precaution.
     check("G3-D2 no clock: decide takes no time input and reads none, so nothing relaxes with age",
-          params == {"record", "valid_reasons", "lifecycle", "counted_rows"} and not clocky, f"{params} {clocky}")
+          params == {"record", "valid_reasons", "lifecycle", "counted_rows", "source_facts"} and not clocky, f"{params} {clocky}")
 
     labels = ["Negative", "Positive", "Moderate", "Mixed", "Insufficient data", "", None]
     for rs in ([], [tf_e], [wait_e]):
@@ -1196,15 +1196,15 @@ PROJECT_OVERRIDE = None   # set only by the projection mutant in [X]
 def check_projection_probes() -> None:
     recs, reasons, meta = probe_a1()
     got, want = render_probe(recs, reasons, meta["target"], project_fn=PROJECT_OVERRIDE)
-    # G87: 32.2.2 now prints the volume-based WAIT whatever its reviewed entries say; the probe still proves the
-    # unsupported reviewed WAIT is gone: its "Also WAIT if you use macOS 27.2" line leaves the page, and only the
-    # still-supported menu-bar TEST FIRST is printed beneath the volume WAIT.
+    # AUX-137: 32.2.2's verdict may follow a current stored provisional assessment instead of the report count.
+    # The probe still proves the unsupported reviewed WAIT is gone: neither the verdict nor an "Also WAIT" line
+    # names macOS 27.2 any more, and the still-supported menu-bar TEST FIRST stays on the page.
     check("G3-P3 probe A1 (OBS 33.0.0's note reworded) fails closed on the rendered 32.2.2 page: the "
-          "unsupported reviewed WAIT is gone and the page renders the authority's verdict (the volume-based WAIT, "
-          "with only the still-supported menu-bar TEST FIRST beneath it)",
-          got is not None and got == want and got[:2] == ("WAIT", pd.VOLUME_LABEL)
+          "unsupported reviewed WAIT is gone and the page renders the authority's verdict (the "
+          "still-supported menu-bar TEST FIRST stays on it)",
+          got is not None and got == want and "macOS 27.2" not in " ".join(got[:2])
           and "Also WAIT if you use macOS 27.2" not in got[2]
-          and "Also TEST FIRST if you use the menu-bar icon on macOS 27:" in got[2],
+          and "the menu-bar icon on macOS 27" in " ".join(got),
           f"rendered {got and got[:2]!r}; authority {want[:2]!r}")
     recs, reasons, meta = probe_a2()
     got, want = render_probe(recs, reasons, meta["target"], project_fn=PROJECT_OVERRIDE)
