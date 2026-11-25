@@ -697,8 +697,9 @@ VOLUME_BASES = frozenset({BASIS_REVIEWED_AND_VOLUME, BASIS_VENDOR_ISSUE_AND_VOLU
 # evidence, never a prerequisite. The weighing of the page's reports is computed by a separate scheduled step and
 # stored in `_data/provisional_assessments.yml`; `lib.assessment_output.weighing_for` (called from ONE place:
 # `assess`) returns it only while it is CURRENT for the page's inputs, else None. A stored weighing may support a
-# recommendation of its own (`basis` in PROVISIONAL_BASES); a reviewed finding at least as cautious keeps its place,
-# and official facts still outrank everything. Without a current stored weighing the page is decided exactly as
+# recommendation of its own (`basis` in PROVISIONAL_BASES); a reviewed finding keeps its place where the stored
+# result is less cautious or the same (`stored_takes_page`: never narrower), and official facts still outrank
+# everything. Without a current stored weighing the page is decided exactly as
 # before (the count-based assessment) and its Status line says the weighing is pending (ASSESS_PENDING).
 BASIS_PROVISIONAL_MAINTAINER = assessment_output.BASIS_MAINTAINER_REGRESSION
 BASIS_PROVISIONAL_REGRESSION = assessment_output.BASIS_SEVERE_REGRESSION
@@ -746,6 +747,19 @@ class Assessment:
         return f"Assessment({self.result!r}, {self.basis!r}, limits={self.limits!r})"
 
 
+def stored_takes_page(weighing: Any, reviewed_verdict: str, reviewed_scope: str) -> bool:
+    """Does a current stored result take the page from the page's most cautious reviewed finding (REVIEW3 F2)?
+    When it is MORE cautious; and, at EQUAL caution, whenever its scope is not the reviewed finding's own. A reviewed
+    finding is always scoped to a setup or situation (lib.verdict_reasons), so an equally cautious stored result for
+    every setup (a page-wide WAIT, a TEST FIRST before relying on this version) is the wider statement, and one for
+    another setup is a setup the reviewed finding does not cover: keeping the reviewed scope would narrow the page.
+    The reviewed finding is then printed beneath the stored result ("Also ..."), as under the volume-based WAIT. A
+    reviewed finding keeps the page only where the stored result is less cautious or says exactly the same, so its
+    line ("supports nothing more cautious") is true wherever it is printed."""
+    stored, reviewed = risk_rank(weighing.verdict), risk_rank(reviewed_verdict)
+    return stored < reviewed or (stored == reviewed and _text(weighing.scope) != _text(reviewed_scope))
+
+
 def assess(record: dict[str, Any] | None, reviewed_reasons: Any = (), counted_rows: Any = (), *,
            withdrawn: bool = False, security: bool = False, source_facts: Any = None) -> Assessment | None:
     """The provisional contextual risk assessment for one page, or None below the trigger.
@@ -773,13 +787,12 @@ def assess(record: dict[str, Any] | None, reviewed_reasons: Any = (), counted_ro
         result, scope, basis = SECURITY_UPDATE, "", BASIS_OFFICIAL_SECURITY
     elif weighing is not None and not structural and weighing.verdict \
             and (not (weighing.retain and not limits) or weighing.page_wide):
-        # The stored weighing supports a recommendation of its own. It takes the page only when it is MORE
-        # cautious than the reviewed finding; an equally cautious reviewed finding is the more specific statement
-        # and keeps its place. A scoped WAIT on a page whose REST keeps the volume-based WAIT (`retain`) does not
-        # narrow the page: where the product has the volume rule, the page-wide volume WAIT below covers it and its
-        # limiting evidence names why. A stored WAIT for the whole page (`page_wide`) is as cautious as the volume
-        # WAIT for every setup and states its cause, so it takes the page either way.
-        if risk_rank(weighing.verdict) < risk_rank(reviewed_verdict):
+        # The stored weighing supports a recommendation of its own. A scoped WAIT on a page whose REST keeps the
+        # volume-based WAIT (`retain`) does not narrow the page: where the product has the volume rule, the page-wide
+        # volume WAIT below covers it and its limiting evidence names why. A stored WAIT for the whole page
+        # (`page_wide`) is as cautious as the volume WAIT for every setup and states its cause, so it takes the page
+        # either way. Against a reviewed finding: `stored_takes_page`.
+        if stored_takes_page(weighing, reviewed_verdict, _text(reasons[0].get("scope")) if reasons else ""):
             result, scope, basis = weighing.verdict, weighing.scope, weighing.basis
         else:
             result, scope, basis = reviewed_verdict, _text(reasons[0].get("scope")), BASIS_REVIEWED_WEIGHED

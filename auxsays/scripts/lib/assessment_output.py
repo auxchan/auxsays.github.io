@@ -45,7 +45,7 @@ OUTPUT_RELPATH = "auxsays/_data/" + OUTPUT_NAME
 ROOT = assessment_facts.ROOT
 OUTPUT_PATH = ROOT / "_data" / OUTPUT_NAME
 SCHEMA_VERSION = 1
-FINGERPRINT_RULE = "assessment-inputs-1"
+FINGERPRINT_RULE = "assessment-inputs-2"
 
 WAIT = "WAIT"
 TEST_FIRST = "TEST FIRST"
@@ -61,7 +61,8 @@ RETAIN_CODES = frozenset({"", "maintainer_records_not_current", "collection_stal
 LINE_LABELS = ("Independent corroboration", "Maintainer response", "Recurring problems", "Severity and data loss",
                "Affected setups", "Positive outcomes", "Fixes and open problems", "Collection health")
 # The record fields the weighing reads. Its own tests pin that it reads no other.
-RECORD_FIELDS = ("product_id", "update_version", "target_build", "update_product")
+# assessment-inputs-2: the release date is an input as well.
+RECORD_FIELDS = ("product_id", "update_version", "target_build", "update_product", "update_published_at")
 # The public modules whose code the weighing calls on these inputs; a change to one makes every entry stale.
 CODE_MODULES = ("assessment_facts.py", "evidence_facts.py", "source_segments.py")
 TEXT_FIELDS = ("recommendation", "body", "retained", "other_setups")
@@ -275,6 +276,10 @@ def entry_errors(entry: Any) -> list[str]:
         errors.append(f"retain {entry['retain']!r} is not a known code")
     if not isinstance(entry["page_wide"], bool) or (entry["page_wide"] and verdict != WAIT):
         errors.append("page_wide is not a boolean of a WAIT")
+    elif verdict == WAIT and entry["page_wide"] == str(entry["scope"]).startswith("if you use"):
+        # REVIEW3 F2: the precedence reads `page_wide` and `scope` together; a WAIT is page-wide exactly when its
+        # scope names no setup.
+        errors.append("page_wide contradicts the scope of the WAIT")
     conflicts = entry["version_conflicts"]
     if not isinstance(conflicts, list) or not all(isinstance(c, str) and _ISSUE_RE.match(c) for c in conflicts):
         errors.append("version_conflicts is not a list of tracker issue links")

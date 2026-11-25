@@ -202,6 +202,8 @@ def check_fingerprint() -> None:
         "a tracker record of a row": ao.fingerprint(r, rs, source_facts=af.DatedFacts(
             {rs[0]["source_url"]: {"key": rs[0]["source_url"], "state": "closed"}}, AS_OF), population=pop),
         "the reference date": ao.fingerprint(r, rs, source_facts=af.DatedFacts({}, "2026-11-22"), population=pop),
+        "the page's release date": ao.fingerprint({**r, "update_published_at": "2026-10-02T00:00:00Z"}, rs,
+                                                  source_facts=FACTS, population=pop),
     }
     same = ao.fingerprint(r, [dict(x) for x in reversed(rs)], source_facts=FACTS, population=ao.population_from(
         [(r, rs), (sibling, sib_rows), (other, other_rows[:-1])]))
@@ -210,7 +212,8 @@ def check_fingerprint() -> None:
     check("F2 the fingerprint changes with each of: " + ", ".join(variants),
           all(v != base for v in variants.values()), str({k: v == base for k, v in variants.items()}))
     check("F3 the record fields it reads are the page identity the weighing reads, and nothing volatile",
-          ao.RECORD_FIELDS == ("product_id", "update_version", "target_build", "update_product")
+          ao.RECORD_FIELDS == ("product_id", "update_version", "target_build", "update_product",
+                               "update_published_at")
           and ao.fingerprint({**r, "update_report_count": 99, "evidence_state": "x"}, rs, source_facts=FACTS,
                              population=pop) == base)
 
@@ -296,7 +299,62 @@ def check_decision() -> None:
     d4 = decide(withdrawn, rs, life=life)
     check("D9 an official withdrawal outranks a current stored WAIT", stored_current and d4.verdict == "AVOID",
           f"{stored_current} {d4}")
+    check_wider_result()
     ao.reset()
+
+
+def _reviewed(verdict: str, scope: str) -> dict:
+    return {"id": "rv", "product_id": PID, "update_version": VERSION, "verdict": verdict, "reason_class":
+            "regression" if verdict == "WAIT" else "corroborated_report", "scope": scope,
+            "reason": "Two users report the reviewed problem.", "new_in_this_version": verdict == "WAIT"}
+
+
+def check_wider_result() -> None:
+    """REVIEW3 F2: an equally cautious stored result that covers EVERY setup is wider than a reviewed finding scoped to
+    one; the page keeps the wider one, and the reviewed finding is printed beneath it, never the other way round."""
+    r, rs = rec(), rows(N)
+    with_population((r, rs))
+    reviewed_wait = _reviewed("WAIT", "if you use connected accounts on macOS")
+    wide = Stub("WAIT", ao.BASIS_SEVERE_REGRESSION, "until the reported regression is resolved", page_wide=True)
+    ao.use(stand_in([(r, rs, wide)]))
+    d = decide(r, rs, reasons=[reviewed_wait])
+    body, rec_line = pd.public_body(d, r, N), lines_of(d, r).get("Recommendation", "")
+    check("D10 (REVIEW3 F2) a stored page-wide WAIT beside a reviewed WAIT scoped to one setup keeps the page-wide WAIT "
+          "(R3P, its stored scope); the reviewed finding is printed beneath it, and no line says the assessment "
+          "supports nothing more cautious",
+          (d.verdict, d.rule, d.scope, d.reason_code) == ("WAIT", "R3P", wide.scope, ao.BASIS_SEVERE_REGRESSION)
+          and f"Also WAIT {reviewed_wait['scope']}: " in body and "nothing more cautious" not in rec_line + body,
+          f"{d} {rec_line[:160]}")
+    everyone = Stub("TEST FIRST", ao.BASIS_TEST_FIRST, "before relying on this version")
+    ao.use(stand_in([(r, rs, everyone)]))
+    d_tf = decide(r, rs, reasons=[_reviewed("TEST FIRST", "when installing it")])
+    check("D11 (REVIEW3 F2) the same for TEST FIRST: a stored TEST FIRST for every setup beside a reviewed TEST FIRST "
+          "scoped to installing it keeps the wider one, with the reviewed finding beneath",
+          (d_tf.verdict, d_tf.rule, d_tf.scope) == ("TEST FIRST", "R4P", everyone.scope)
+          and "Also TEST FIRST when installing it: " in pd.public_body(d_tf, r, N), str(d_tf))
+    scoped = Stub("WAIT", ao.BASIS_SEVERE_REGRESSION, "if you use Windows")
+    ao.use(stand_in([(r, rs, scoped)]))
+    d_sc = decide(r, rs, reasons=[reviewed_wait])
+    sc_line = lines_of(d_sc, r).get("Recommendation", "")
+    ao.use(stand_in([(r, rs, everyone)]))
+    d_less = decide(r, rs, reasons=[reviewed_wait])
+    less_line = lines_of(d_less, r).get("Recommendation", "")
+    check("D12 (REVIEW3 F2) an equally cautious stored WAIT scoped to ANOTHER setup is not dropped either: it takes the "
+          "page and the reviewed finding is printed beneath it (neither line claims the other supports nothing more "
+          "cautious); a reviewed finding keeps the page only beside a LESS cautious stored result, and then says so",
+          (d_sc.verdict, d_sc.scope, d_sc.rule) == ("WAIT", "if you use Windows", "R3P")
+          and f"Also WAIT {reviewed_wait['scope']}: " in pd.public_body(d_sc, r, N)
+          and "nothing more cautious" not in sc_line
+          and (d_less.verdict, d_less.scope, d_less.assessment.basis) == ("WAIT", reviewed_wait["scope"],
+                                                                         pd.BASIS_REVIEWED_WEIGHED)
+          and "supports nothing more cautious" in less_line, f"{d_sc} {sc_line[:120]} || {less_line[:200]}")
+    # The reader refuses a stored entry whose page-wide flag contradicts its scope (the private writer's contract).
+    entry = stand_in([(r, rs, wide)])["pages"][0]
+    check("D13 (REVIEW3 F2) a WAIT entry whose page-wide flag contradicts its scope is refused: marked page-wide with a "
+          "setup named, or not page-wide with none",
+          ao.entry_errors({**entry, "scope": "if you use Windows"}) != [] and ao.entry_errors(entry) == []
+          and ao.entry_errors({**entry, "page_wide": False}) != [],
+          str(ao.entry_errors({**entry, "scope": "if you use Windows"})))
 
 
 def _plain(record: dict, counted) -> tuple:

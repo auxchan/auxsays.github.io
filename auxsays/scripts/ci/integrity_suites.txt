@@ -686,7 +686,7 @@ auxsays/scripts/tests/test_assessment_facts.py = 55
 # basis and wording under the authority's precedence; QA's output codes never block a deploy; the single-writer rule
 # of the shared writeback in a real git round trip; the publish gate's refusal of compiled files and the private
 # component's names; one call site, no live weigher and no lane naming the file. Offline; needs git.
-auxsays/scripts/tests/test_assessment_output.py = 28
+auxsays/scripts/tests/test_assessment_output.py = 32
 # AUX-132 (G95): where a reviewed problem's "fixed in" line prints and when it credits the vendor. Rendered with the
 # shipped Liquid through the real patch page: once, in the verdict box, DIRECTLY AFTER the clause of the verdict line
 # that states its own finding, the rest of the verdict line continuing beneath it word for word (OBS 32.1.2, and
