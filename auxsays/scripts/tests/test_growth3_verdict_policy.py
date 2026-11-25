@@ -1196,7 +1196,7 @@ PROJECT_OVERRIDE = None   # set only by the projection mutant in [X]
 def check_projection_probes() -> None:
     recs, reasons, meta = probe_a1()
     got, want = render_probe(recs, reasons, meta["target"], project_fn=PROJECT_OVERRIDE)
-    # AUX-137: 32.2.2's verdict follows its reviewed entries and the maintainers' records, not the report count.
+    # AUX-137: 32.2.2's verdict may follow a current stored provisional assessment instead of the report count.
     # The probe still proves the unsupported reviewed WAIT is gone: neither the verdict nor an "Also WAIT" line
     # names macOS 27.2 any more, and the still-supported menu-bar TEST FIRST stays on the page.
     check("G3-P3 probe A1 (OBS 33.0.0's note reworded) fails closed on the rendered 32.2.2 page: the "

@@ -608,7 +608,7 @@ def run() -> int:  # noqa: PLR0915
                                                   "target_build": ""}, real_verdict["pages"])
     obs_volume = obs_printed is not None and verdict_projection.is_volume_row(obs_printed)
     assessed = eo.population_digest(obs_rows) == OBS_SHA and len(obs_rows) == 47
-    # AUX-137: 33.0.1 may print a verdict that is not the volume-based WAIT (its maintainers' records decide);
+    # AUX-137: 33.0.1 may print a verdict that is not the volume-based WAIT (a current stored assessment decides);
     # beside ANY printed verdict the universal clause never stands, and the finding stands only under a volume WAIT.
     expect = (FINDING if assessed and (obs_printed is None or obs_volume)
               else "" if obs_printed is not None else eo.UNIVERSAL_CLAUSE)
