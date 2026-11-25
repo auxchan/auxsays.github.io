@@ -18,8 +18,8 @@ update_version: Figma Sites on Starter and Education, with more ways to share, c
 update_logo_text: FIG
 update_published_at: '2025-09-18T00:00:00.000Z'
 update_last_checked: '2026-08-10T20:31:19Z'
-source_last_checked: '2026-10-15T00:29:15Z'
-official_body_last_checked: '2026-10-15T00:29:15Z'
+source_last_checked: '2026-11-25T01:31:19Z'
+official_body_last_checked: '2026-11-25T01:31:19Z'
 record_last_updated: '2026-08-10T20:31:19Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -84,6 +84,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-10-15T00:29:15Z'
+  url: https://www.figma.com/release-notes/?title=more-ways-to-share-customize-and-expand-your-reach-for-sites
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-25T01:31:19Z'
   url: https://www.figma.com/release-notes/?title=more-ways-to-share-customize-and-expand-your-reach-for-sites
   status: captured-from-rss-feed
   body_captured: true

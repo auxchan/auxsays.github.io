@@ -387,11 +387,9 @@
   category_key: dev-web
   source_url: https://github.blog/changelog/
   source_label: GitHub changelog
-  documented_update_count: 472
+  documented_update_count: 475
   coverage_state: documented
-  backfill_status: queued
-  backfill_executor: official_ingest_lane
-  backfill_blocker: records_deferred
+  backfill_status: complete
 - product_id: cloudflare
   company_id: cloudflare
   product_name: Cloudflare
@@ -412,11 +410,11 @@
   category_key: dev-web
   source_url: https://www.netlify.com/changelog/
   source_label: Netlify changelog
-  documented_update_count: 0
-  coverage_state: active_watch
+  documented_update_count: 2
+  coverage_state: documented
   backfill_status: queued
   backfill_executor: official_ingest_lane
-  backfill_blocker: extraction_mismatch
+  backfill_blocker: records_deferred
 - product_id: notion
   company_id: notion
   product_name: Notion

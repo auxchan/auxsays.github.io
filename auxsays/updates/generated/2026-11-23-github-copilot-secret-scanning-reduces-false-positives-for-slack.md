@@ -18,8 +18,8 @@ update_version: Secret scanning reduces false positives for Slack
 update_logo_text: GIT
 update_published_at: '2026-11-23T18:32:59Z'
 update_last_checked: '2026-11-24T03:01:46Z'
-source_last_checked: '2026-11-24T12:51:38Z'
-official_body_last_checked: '2026-11-24T12:51:38Z'
+source_last_checked: '2026-11-25T01:31:53Z'
+official_body_last_checked: '2026-11-25T01:31:53Z'
 record_last_updated: '2026-11-24T03:01:46Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -81,6 +81,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-11-24T12:51:38Z'
+  url: https://github.blog/changelog/2026-11-23-secret-scanning-reduces-false-positives-for-slack
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-25T01:31:53Z'
   url: https://github.blog/changelog/2026-11-23-secret-scanning-reduces-false-positives-for-slack
   status: captured-from-rss-feed
   body_captured: true
