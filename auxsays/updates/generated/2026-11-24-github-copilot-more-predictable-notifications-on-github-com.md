@@ -17,8 +17,8 @@ update_version: More predictable notifications on GitHub.com
 update_logo_text: GIT
 update_published_at: '2026-11-24T16:40:59Z'
 update_last_checked: '2026-11-25T01:31:53Z'
-source_last_checked: '2026-11-25T01:31:53Z'
-official_body_last_checked: '2026-11-25T01:31:53Z'
+source_last_checked: '2026-11-25T11:29:15Z'
+official_body_last_checked: '2026-11-25T11:29:15Z'
 record_last_updated: '2026-11-25T01:31:53Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -99,6 +99,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-11-25T01:31:53Z'
+  url: https://github.blog/changelog/2026-11-24-more-predictable-notifications-on-github-com
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-25T11:29:15Z'
   url: https://github.blog/changelog/2026-11-24-more-predictable-notifications-on-github-com
   status: captured-from-rss-feed
   body_captured: true

@@ -1,23 +1,11 @@
 {
-  "last_errors": [
-    {
-      "adapter": "nvidia_driver_lookup",
-      "error": "HTTP 504 while fetching official source \u2014 <html>\r\n<head><title>504 Gateway Time-out</title></head>\r\n<body>\r\n<center><h1>504 Gateway Time-out</h1></center>\r\n</body>\r\n</html>\r\n",
-      "product_id": "nvidia-geforce-game-ready"
-    },
-    {
-      "adapter": "nvidia_driver_lookup",
-      "error": "HTTP 504 while fetching official source \u2014 <html>\r\n<head><title>504 Gateway Time-out</title></head>\r\n<body>\r\n<center><h1>504 Gateway Time-out</h1></center>\r\n</body>\r\n</html>\r\n",
-      "product_id": "nvidia-studio-driver"
-    }
-  ],
+  "last_errors": [],
   "last_results": [
     {
       "adapter": "rss_feed",
       "candidate_count": 200,
       "created": 0,
       "deferred": [
-        "rss:figma:67e79efa-0659-4a3c-9669-e7e1fe0cad42",
         "rss:figma:9d57f4fd-b08b-43d1-a429-8cd26a7f113f",
         "rss:figma:39b73f46-bae3-449f-8726-e9263c2bf81d",
         "rss:figma:c1be0c2e-e3f3-4d10-9c5a-0022492c85c1",
@@ -31,10 +19,12 @@
         "rss:figma:e368f728-3880-4451-ae8c-bb11b1159e11",
         "rss:figma:41caa02e-728f-4db5-ae73-754d4580f9bc",
         "rss:figma:947a5378-bfb6-4f74-8e61-c3361a9fc2ce",
-        "rss:figma:85b8dac1-87aa-4b05-ab47-273f087faba7"
+        "rss:figma:85b8dac1-87aa-4b05-ab47-273f087faba7",
+        "rss:figma:f7119295-a67f-4c36-af99-75eb14c750a8",
+        "rss:figma:eba9b8e7-fdb1-4f3f-ae11-9a66660b86a5"
       ],
-      "deferred_count": 15,
-      "duration_ms": 1252,
+      "deferred_count": 16,
+      "duration_ms": 1117,
       "extraction_mismatch": false,
       "fetched": 200,
       "product_id": "figma",
@@ -52,13 +42,13 @@
         },
         {
           "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2025-09-18-figma-figma-sites-on-starter-and-education-with-more-ways-to-share-customize-and-expand-your-reach-for-sites.md",
-          "record_id": "rss:figma:25ecf51e-c20d-4dbf-80c2-f7e563d1968a"
+          "path": "auxsays/updates/generated/2026-08-14-figma-get-responsive-text-across-screens-with-text-wrap.md",
+          "record_id": "rss:figma:fdeb868a-690e-4286-9075-bc4d7fb7f1f9"
         },
         {
           "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2025-09-17-figma-new-publish-makes-and-sites-internally.md",
-          "record_id": "rss:figma:1783e987-4ce4-48d8-a5b6-b2ede3ae4aab"
+          "path": "auxsays/updates/generated/2025-09-17-figma-attach-images-as-references-for-your-ai-image-prompts.md",
+          "record_id": "rss:figma:67e79efa-0659-4a3c-9669-e7e1fe0cad42"
         }
       ],
       "scan_limit": 200,
@@ -198,10 +188,6 @@
         {
           "reason": "state-seen-outside-refresh-window",
           "record_id": "rss:figma:dece0d00-5f03-4a5d-aa04-3b0fad21b5eb"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "rss:figma:fdeb868a-690e-4286-9075-bc4d7fb7f1f9"
         },
         {
           "reason": "state-seen-outside-refresh-window",
@@ -657,11 +643,11 @@
         },
         {
           "reason": "state-seen-outside-refresh-window",
-          "record_id": "rss:figma:f7119295-a67f-4c36-af99-75eb14c750a8"
+          "record_id": "rss:figma:25ecf51e-c20d-4dbf-80c2-f7e563d1968a"
         },
         {
           "reason": "state-seen-outside-refresh-window",
-          "record_id": "rss:figma:eba9b8e7-fdb1-4f3f-ae11-9a66660b86a5"
+          "record_id": "rss:figma:1783e987-4ce4-48d8-a5b6-b2ede3ae4aab"
         },
         {
           "reason": "state-seen-outside-refresh-window",
@@ -788,7 +774,7 @@
           "record_id": "rss:figma:62cae844-6289-4bec-875e-a2e364d29be7"
         }
       ],
-      "skipped_existing": 181,
+      "skipped_existing": 180,
       "status": "success",
       "upstream_candidates": 0,
       "version_landings": [],
@@ -800,7 +786,7 @@
       "created": 0,
       "deferred": [],
       "deferred_count": 0,
-      "duration_ms": 882,
+      "duration_ms": 927,
       "extraction_mismatch": false,
       "fetched": 1,
       "primary_source_error": "HTTP 403 while fetching official Adobe source \u2014 <HTML><HEAD>\n<TITLE>Access Denied</TITLE>\n</HEAD><BODY>\n<H1>Access Denied</H1>\n \nYou don't have permission to access \"http&#58;&#47;&#47;helpx&#46;adobe&#46;com&#47;premiere&#47;desktop&#47;whats&#45;new&#47;release&#45;notes&#46;html\" on this server.<",
@@ -827,7 +813,7 @@
       "created": 0,
       "deferred": [],
       "deferred_count": 0,
-      "duration_ms": 867,
+      "duration_ms": 453,
       "extraction_mismatch": false,
       "fetched": 121,
       "product_id": "blackmagic-davinci",
@@ -1335,7 +1321,7 @@
       "created": 0,
       "deferred": [],
       "deferred_count": 0,
-      "duration_ms": 866,
+      "duration_ms": 821,
       "extraction_mismatch": false,
       "fetched": 14,
       "product_id": "obs-studio",
@@ -1410,12 +1396,152 @@
       "written": []
     },
     {
+      "adapter": "nvidia_driver_lookup",
+      "candidate_count": 12,
+      "created": 1,
+      "deferred": [],
+      "deferred_count": 0,
+      "duration_ms": 9217,
+      "extraction_mismatch": false,
+      "fetched": 12,
+      "product_id": "nvidia-geforce-game-ready",
+      "record_limit": 2,
+      "refreshed": [
+        {
+          "action": "freshness-updated",
+          "path": "auxsays/updates/generated/2026-11-04-geforce-game-ready-driver-621-14.md",
+          "record_id": "nvidia_driver_lookup:nvidia-geforce-game-ready:621.14"
+        },
+        {
+          "action": "freshness-updated",
+          "path": "auxsays/updates/generated/2026-10-21-geforce-game-ready-driver-621-01.md",
+          "record_id": "nvidia_driver_lookup:nvidia-geforce-game-ready:621.01"
+        }
+      ],
+      "scan_limit": 200,
+      "skipped": [
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "nvidia_driver_lookup:nvidia-geforce-game-ready:617.42"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "nvidia_driver_lookup:nvidia-geforce-game-ready:617.14"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "nvidia_driver_lookup:nvidia-geforce-game-ready:616.92"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "nvidia_driver_lookup:nvidia-geforce-game-ready:616.64"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "nvidia_driver_lookup:nvidia-geforce-game-ready:616.56"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "nvidia_driver_lookup:nvidia-geforce-game-ready:610.88"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "nvidia_driver_lookup:nvidia-geforce-game-ready:610.74"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "nvidia_driver_lookup:nvidia-geforce-game-ready:610.62"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "nvidia_driver_lookup:nvidia-geforce-game-ready:610.47"
+        }
+      ],
+      "skipped_existing": 9,
+      "status": "success",
+      "upstream_candidates": 12,
+      "version_landings": [],
+      "written": [
+        "auxsays/updates/generated/2026-11-24-geforce-game-ready-driver-621-40.md"
+      ]
+    },
+    {
+      "adapter": "nvidia_driver_lookup",
+      "candidate_count": 12,
+      "created": 1,
+      "deferred": [],
+      "deferred_count": 0,
+      "duration_ms": 8959,
+      "extraction_mismatch": false,
+      "fetched": 12,
+      "product_id": "nvidia-studio-driver",
+      "record_limit": 2,
+      "refreshed": [
+        {
+          "action": "freshness-updated",
+          "path": "auxsays/updates/generated/2026-11-04-nvidia-studio-driver-621-14.md",
+          "record_id": "nvidia_driver_lookup:nvidia-studio-driver:621.14"
+        },
+        {
+          "action": "freshness-updated",
+          "path": "auxsays/updates/generated/2026-10-06-nvidia-studio-driver-617-42.md",
+          "record_id": "nvidia_driver_lookup:nvidia-studio-driver:617.42"
+        }
+      ],
+      "scan_limit": 200,
+      "skipped": [
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "nvidia_driver_lookup:nvidia-studio-driver:616.92"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "nvidia_driver_lookup:nvidia-studio-driver:616.56"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "nvidia_driver_lookup:nvidia-studio-driver:610.88"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "nvidia_driver_lookup:nvidia-studio-driver:610.62"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "nvidia_driver_lookup:nvidia-studio-driver:610.47"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "nvidia_driver_lookup:nvidia-studio-driver:596.36"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "nvidia_driver_lookup:nvidia-studio-driver:595.79"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "nvidia_driver_lookup:nvidia-studio-driver:591.74"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "nvidia_driver_lookup:nvidia-studio-driver:591.44"
+        }
+      ],
+      "skipped_existing": 9,
+      "status": "success",
+      "upstream_candidates": 12,
+      "version_landings": [],
+      "written": [
+        "auxsays/updates/generated/2026-11-24-nvidia-studio-driver-621-40.md"
+      ]
+    },
+    {
       "adapter": "github_releases",
       "candidate_count": 30,
       "created": 0,
       "deferred": [],
       "deferred_count": 0,
-      "duration_ms": 845,
+      "duration_ms": 709,
       "extraction_mismatch": false,
       "fetched": 30,
       "product_id": "comfyui",
@@ -1556,10 +1682,10 @@
     {
       "adapter": "rss_feed",
       "candidate_count": 10,
-      "created": 1,
+      "created": 0,
       "deferred": [],
       "deferred_count": 0,
-      "duration_ms": 7421,
+      "duration_ms": 401,
       "extraction_mismatch": false,
       "fetched": 10,
       "product_id": "github",
@@ -1567,17 +1693,21 @@
       "refreshed": [
         {
           "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-11-23-github-copilot-issue-statuses-and-repository-boards-are-in-public-preview.md",
-          "record_id": "rss:github:https://github.blog/changelog/2026-11-23-issue-statuses-and-repository-boards-are-in-public-preview"
+          "path": "auxsays/updates/generated/2026-11-24-github-copilot-more-predictable-notifications-on-github-com.md",
+          "record_id": "rss:github:https://github.blog/changelog/2026-11-24-more-predictable-notifications-on-github-com"
         },
         {
           "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-11-23-github-copilot-secret-scanning-reduces-false-positives-for-slack.md",
-          "record_id": "rss:github:https://github.blog/changelog/2026-11-23-secret-scanning-reduces-false-positives-for-slack"
+          "path": "auxsays/updates/generated/2026-11-23-github-copilot-issue-statuses-and-repository-boards-are-in-public-preview.md",
+          "record_id": "rss:github:https://github.blog/changelog/2026-11-23-issue-statuses-and-repository-boards-are-in-public-preview"
         }
       ],
       "scan_limit": 200,
       "skipped": [
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:github:https://github.blog/changelog/2026-11-23-secret-scanning-reduces-false-positives-for-slack"
+        },
         {
           "reason": "state-seen-outside-refresh-window",
           "record_id": "rss:github:https://github.blog/changelog/2026-11-23-code-coverage-uploads-now-flag-invalid-report-formats"
@@ -1607,34 +1737,41 @@
           "record_id": "rss:github:https://github.blog/changelog/2026-11-19-improvements-on-the-pull-request-overview-in-public-preview"
         }
       ],
-      "skipped_existing": 7,
+      "skipped_existing": 8,
       "status": "success",
       "upstream_candidates": 0,
       "version_landings": [],
-      "written": [
-        "auxsays/updates/generated/2026-11-24-github-copilot-more-predictable-notifications-on-github-com.md"
-      ]
+      "written": []
     },
     {
       "adapter": "html_changelog",
       "candidate_count": 9,
       "created": 2,
       "deferred": [
-        "html:netlify:3fc4d26c765a099e",
-        "html:netlify:1ca6905dfe70da1d",
         "html:netlify:665502325f5a6c70",
         "html:netlify:4eb103bed85b82b8",
         "html:netlify:4a2f196e687098ce",
         "html:netlify:740c0ab018fcae1a",
         "html:netlify:e3e731c0ea4dfbaf"
       ],
-      "deferred_count": 7,
-      "duration_ms": 15595,
+      "deferred_count": 5,
+      "duration_ms": 19720,
       "extraction_mismatch": false,
       "fetched": 9,
       "product_id": "netlify",
       "record_limit": 2,
-      "refreshed": [],
+      "refreshed": [
+        {
+          "action": "freshness-updated",
+          "path": "auxsays/updates/generated/2026-11-23-netlify-improved-formatting-for-pull-requests-from-agent-runners.md",
+          "record_id": "html:netlify:a4dda58fd9f8f1e3"
+        },
+        {
+          "action": "freshness-updated",
+          "path": "auxsays/updates/generated/2026-11-20-netlify-improved-context-for-agent-runners.md",
+          "record_id": "html:netlify:464b057ebefd770c"
+        }
+      ],
       "scan_limit": 200,
       "skipped": [],
       "skipped_existing": 0,
@@ -1642,8 +1779,8 @@
       "upstream_candidates": 9,
       "version_landings": [],
       "written": [
-        "auxsays/updates/generated/2026-11-23-netlify-improved-formatting-for-pull-requests-from-agent-runners.md",
-        "auxsays/updates/generated/2026-11-20-netlify-improved-context-for-agent-runners.md"
+        "auxsays/updates/generated/2026-11-20-netlify-domain-capture-for-enterprise-plans.md",
+        "auxsays/updates/generated/2026-11-20-netlify-organization-webhooks-for-project-creation-and-publishing.md"
       ]
     },
     {
@@ -1652,7 +1789,7 @@
       "created": 0,
       "deferred": [],
       "deferred_count": 0,
-      "duration_ms": 148,
+      "duration_ms": 204,
       "extraction_mismatch": false,
       "fetched": 199,
       "product_id": "adobe-acrobat-reader",
@@ -2472,7 +2609,7 @@
       "created": 0,
       "deferred": [],
       "deferred_count": 0,
-      "duration_ms": 24,
+      "duration_ms": 30,
       "extraction_mismatch": false,
       "fetched": 199,
       "product_id": "adobe-acrobat-pro",
@@ -3292,24 +3429,24 @@
       "created": 0,
       "deferred": [],
       "deferred_count": 0,
-      "duration_ms": 2497,
+      "duration_ms": 2320,
       "extraction_mismatch": false,
       "fetched": 105,
       "product_id": "microsoft-windows-11",
       "record_limit": 70,
       "refreshed": [
         {
-          "action": "refreshed",
+          "action": "freshness-updated",
           "path": "auxsays/updates/generated/2026-11-19-windows-11-26h2-26300-10075.md",
           "record_id": "microsoft:microsoft-windows-11:26H2:4f84ea087168a6ac"
         },
         {
-          "action": "refreshed",
+          "action": "freshness-updated",
           "path": "auxsays/updates/generated/2026-11-19-windows-11-26h1-28000-3620.md",
           "record_id": "microsoft:microsoft-windows-11:26H1:7713dfb26710e716"
         },
         {
-          "action": "refreshed",
+          "action": "freshness-updated",
           "path": "auxsays/updates/generated/2026-11-19-windows-11-25h2-26200-10075.md",
           "record_id": "microsoft:microsoft-windows-11:25H2:f1e0c3e2b7ae1b76"
         },
@@ -3329,12 +3466,12 @@
           "record_id": "microsoft:microsoft-windows-11:25H2:388962cb9d7c4b9c"
         },
         {
-          "action": "refreshed",
+          "action": "freshness-updated",
           "path": "auxsays/updates/generated/2026-11-10-windows-11-24h2-26100-9974.md",
           "record_id": "microsoft:microsoft-windows-11:24H2:a934385ff1248fb2"
         },
         {
-          "action": "refreshed",
+          "action": "freshness-updated",
           "path": "auxsays/updates/generated/2026-11-10-windows-11-23h2-22631-7711.md",
           "record_id": "microsoft:microsoft-windows-11:23H2:a17ad66f177fc6de"
         },
@@ -3801,10 +3938,10 @@
     {
       "adapter": "microsoft_office_updates",
       "candidate_count": 8,
-      "created": 1,
+      "created": 0,
       "deferred": [],
       "deferred_count": 0,
-      "duration_ms": 21376,
+      "duration_ms": 8611,
       "extraction_mismatch": false,
       "fetched": 8,
       "product_id": "microsoft-teams",
@@ -3812,17 +3949,21 @@
       "refreshed": [
         {
           "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-11-05-microsoft-teams-26288-2004-5269-3420.md",
-          "record_id": "microsoft:microsoft-teams:26288.2004.5269.3420:0387e4b6473cfc8c"
+          "path": "auxsays/updates/generated/2026-11-23-microsoft-teams-26304-1207-5384-858.md",
+          "record_id": "microsoft:microsoft-teams:26304.1207.5384.858:889fad70d29533e3"
         },
         {
           "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-10-22-microsoft-teams-26276-513-5241-9675.md",
-          "record_id": "microsoft:microsoft-teams:26276.513.5241.9675:f5e08ffbcfc2edd3"
+          "path": "auxsays/updates/generated/2026-11-05-microsoft-teams-26288-2004-5269-3420.md",
+          "record_id": "microsoft:microsoft-teams:26288.2004.5269.3420:0387e4b6473cfc8c"
         }
       ],
       "scan_limit": 200,
       "skipped": [
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "microsoft:microsoft-teams:26276.513.5241.9675:f5e08ffbcfc2edd3"
+        },
         {
           "reason": "state-seen-outside-refresh-window",
           "record_id": "microsoft:microsoft-teams:26260.1717.5229.7049:8ceedde589c1ef2f"
@@ -3844,21 +3985,19 @@
           "record_id": "microsoft:microsoft-teams:26198.304.4946.9672:738c1264b9d553ad"
         }
       ],
-      "skipped_existing": 5,
+      "skipped_existing": 6,
       "status": "success",
       "upstream_candidates": 0,
       "version_landings": [],
-      "written": [
-        "auxsays/updates/generated/2026-11-23-microsoft-teams-26304-1207-5384-858.md"
-      ]
+      "written": []
     },
     {
       "adapter": "microsoft_office_updates",
       "candidate_count": 19,
-      "created": 1,
+      "created": 0,
       "deferred": [],
       "deferred_count": 0,
-      "duration_ms": 7753,
+      "duration_ms": 338,
       "extraction_mismatch": false,
       "fetched": 19,
       "product_id": "microsoft-powerpoint",
@@ -3866,17 +4005,21 @@
       "refreshed": [
         {
           "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-11-17-microsoft-powerpoint-2611-20625-20108.md",
-          "record_id": "microsoft:microsoft-powerpoint:2611:67be0b8c63b9547b"
+          "path": "auxsays/updates/generated/2026-11-23-microsoft-powerpoint-2611-20625-20142.md",
+          "record_id": "microsoft:microsoft-powerpoint:2611:467e0cfa7011c8c7"
         },
         {
           "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-11-10-microsoft-powerpoint-2610-20527-20196.md",
-          "record_id": "microsoft:microsoft-powerpoint:2610:059309e03a22d69b"
+          "path": "auxsays/updates/generated/2026-11-17-microsoft-powerpoint-2611-20625-20108.md",
+          "record_id": "microsoft:microsoft-powerpoint:2611:67be0b8c63b9547b"
         }
       ],
       "scan_limit": 200,
       "skipped": [
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "microsoft:microsoft-powerpoint:2610:059309e03a22d69b"
+        },
         {
           "reason": "state-seen-outside-refresh-window",
           "record_id": "microsoft:microsoft-powerpoint:2610:1aa38fc5e9c8a463"
@@ -3942,13 +4085,11 @@
           "record_id": "microsoft:microsoft-powerpoint:2607:f3cea3049f3ce8c7"
         }
       ],
-      "skipped_existing": 16,
+      "skipped_existing": 17,
       "status": "success",
       "upstream_candidates": 0,
       "version_landings": [],
-      "written": [
-        "auxsays/updates/generated/2026-11-23-microsoft-powerpoint-2611-20625-20142.md"
-      ]
+      "written": []
     },
     {
       "adapter": "microsoft_office_updates",
@@ -3956,14 +4097,14 @@
       "created": 0,
       "deferred": [],
       "deferred_count": 0,
-      "duration_ms": 7667,
+      "duration_ms": 8560,
       "extraction_mismatch": false,
       "fetched": 1,
       "product_id": "microsoft-365-apps",
       "record_limit": 2,
       "refreshed": [
         {
-          "action": "refreshed",
+          "action": "freshness-updated",
           "path": "auxsays/updates/generated/2026-11-17-microsoft-365-apps-2611.md",
           "record_id": "microsoft:microsoft-365-apps:2611:76a079e6003212a6"
         }
@@ -3982,7 +4123,7 @@
       "created": 0,
       "deferred": [],
       "deferred_count": 0,
-      "duration_ms": 682,
+      "duration_ms": 645,
       "extraction_mismatch": false,
       "fetched": 52,
       "product_id": "elgato-stream-deck",
@@ -4214,7 +4355,7 @@
       "created": 0,
       "deferred": [],
       "deferred_count": 0,
-      "duration_ms": 482,
+      "duration_ms": 517,
       "extraction_mismatch": false,
       "fetched": 41,
       "product_id": "elgato-wave-link",
@@ -4402,7 +4543,7 @@
       "created": 0,
       "deferred": [],
       "deferred_count": 0,
-      "duration_ms": 386,
+      "duration_ms": 591,
       "extraction_mismatch": false,
       "fetched": 26,
       "product_id": "elgato-camera-hub",
@@ -4530,7 +4671,7 @@
       "created": 0,
       "deferred": [],
       "deferred_count": 0,
-      "duration_ms": 340,
+      "duration_ms": 403,
       "extraction_mismatch": false,
       "fetched": 20,
       "product_id": "elgato-4k-capture-utility",
@@ -4629,12 +4770,12 @@
       "written": []
     }
   ],
-  "last_run_finished_at": "2026-11-25T01:32:58Z",
+  "last_run_finished_at": "2026-11-25T11:29:58Z",
   "last_run_health": "degraded",
   "last_run_source_health": [
     {
       "adapter": "rss_feed",
-      "checked_at": "2026-11-25T01:31:19Z",
+      "checked_at": "2026-11-25T11:28:53Z",
       "company_id": "figma",
       "consecutive_empty_extractions": 0,
       "consecutive_failures": 0,
@@ -4643,8 +4784,8 @@
       "error_type": "",
       "extraction_mismatch": false,
       "health_note": "Fetch succeeded.",
-      "last_extraction_at": "2026-11-25T01:31:19Z",
-      "last_success_at": "2026-11-25T01:31:19Z",
+      "last_extraction_at": "2026-11-25T11:28:53Z",
+      "last_success_at": "2026-11-25T11:28:53Z",
       "product_id": "figma",
       "records_fetched": 200,
       "records_written": 0,
@@ -4655,7 +4796,7 @@
     },
     {
       "adapter": "adobe_release_notes",
-      "checked_at": "2026-11-25T01:31:20Z",
+      "checked_at": "2026-11-25T11:28:54Z",
       "company_id": "adobe",
       "consecutive_empty_extractions": 0,
       "consecutive_failures": 0,
@@ -4664,8 +4805,8 @@
       "error_type": "",
       "extraction_mismatch": false,
       "health_note": "The primary official source failed on this check (blocked). Only the fallback source answered, so this check does not show whether newer releases exist.",
-      "last_extraction_at": "2026-11-25T01:31:20Z",
-      "last_success_at": "2026-11-25T01:31:20Z",
+      "last_extraction_at": "2026-11-25T11:28:54Z",
+      "last_success_at": "2026-11-25T11:28:54Z",
       "primary_source_error": "HTTP 403 while fetching official Adobe source \u2014 <HTML><HEAD>\n<TITLE>Access Denied</TITLE>\n</HEAD><BODY>\n<H1>Access Denied</H1>\n \nYou don't have permission to access \"http&#58;&#47;&#47;helpx&#46;adobe&#46;com&#47;premiere&#47;desktop&#47;whats&#45;new&#47;release&#45;notes&#46;html\" on this server.<",
       "product_id": "adobe-premiere-pro",
       "records_fetched": 1,
@@ -4677,7 +4818,7 @@
     },
     {
       "adapter": "blackmagic_support_downloads",
-      "checked_at": "2026-11-25T01:31:21Z",
+      "checked_at": "2026-11-25T11:28:55Z",
       "company_id": "blackmagic-design",
       "consecutive_empty_extractions": 0,
       "consecutive_failures": 0,
@@ -4686,8 +4827,8 @@
       "error_type": "",
       "extraction_mismatch": false,
       "health_note": "Fetch succeeded.",
-      "last_extraction_at": "2026-11-25T01:31:21Z",
-      "last_success_at": "2026-11-25T01:31:21Z",
+      "last_extraction_at": "2026-11-25T11:28:55Z",
+      "last_success_at": "2026-11-25T11:28:55Z",
       "product_id": "blackmagic-davinci",
       "records_fetched": 121,
       "records_written": 0,
@@ -4698,7 +4839,7 @@
     },
     {
       "adapter": "github_releases",
-      "checked_at": "2026-11-25T01:31:22Z",
+      "checked_at": "2026-11-25T11:28:56Z",
       "company_id": "obs-project",
       "consecutive_empty_extractions": 0,
       "consecutive_failures": 0,
@@ -4707,8 +4848,8 @@
       "error_type": "",
       "extraction_mismatch": false,
       "health_note": "Fetch succeeded.",
-      "last_extraction_at": "2026-11-25T01:31:22Z",
-      "last_success_at": "2026-11-25T01:31:22Z",
+      "last_extraction_at": "2026-11-25T11:28:56Z",
+      "last_success_at": "2026-11-25T11:28:56Z",
       "product_id": "obs-studio",
       "records_fetched": 14,
       "records_written": 0,
@@ -4719,49 +4860,49 @@
     },
     {
       "adapter": "nvidia_driver_lookup",
-      "checked_at": "2026-11-25T01:31:38Z",
+      "checked_at": "2026-11-25T11:28:56Z",
       "company_id": "nvidia",
-      "consecutive_empty_extractions": 1,
-      "consecutive_failures": 1,
+      "consecutive_empty_extractions": 0,
+      "consecutive_failures": 0,
       "enabled": true,
-      "error": "HTTP 504 while fetching official source \u2014 <html>\r\n<head><title>504 Gateway Time-out</title></head>\r\n<body>\r\n<center><h1>504 Gateway Time-out</h1></center>\r\n</body>\r\n</html>\r\n",
-      "error_type": "error",
+      "error": "",
+      "error_type": "",
       "extraction_mismatch": false,
-      "health_note": "Fetch failed. Review source availability, adapter timeout, or parser behavior.",
-      "last_extraction_at": "2026-11-24T12:51:28Z",
-      "last_success_at": "2026-11-24T12:51:28Z",
+      "health_note": "Fetch succeeded.",
+      "last_extraction_at": "2026-11-25T11:28:56Z",
+      "last_success_at": "2026-11-25T11:28:56Z",
       "product_id": "nvidia-geforce-game-ready",
-      "records_fetched": 0,
-      "records_written": 0,
+      "records_fetched": 12,
+      "records_written": 1,
       "source_id": "nvidia-geforce-game-ready",
       "source_type": "download_portal",
-      "status": "failing",
-      "upstream_candidates": 0
+      "status": "healthy",
+      "upstream_candidates": 12
     },
     {
       "adapter": "nvidia_driver_lookup",
-      "checked_at": "2026-11-25T01:31:53Z",
+      "checked_at": "2026-11-25T11:29:06Z",
       "company_id": "nvidia",
-      "consecutive_empty_extractions": 1,
-      "consecutive_failures": 1,
+      "consecutive_empty_extractions": 0,
+      "consecutive_failures": 0,
       "enabled": true,
-      "error": "HTTP 504 while fetching official source \u2014 <html>\r\n<head><title>504 Gateway Time-out</title></head>\r\n<body>\r\n<center><h1>504 Gateway Time-out</h1></center>\r\n</body>\r\n</html>\r\n",
-      "error_type": "error",
+      "error": "",
+      "error_type": "",
       "extraction_mismatch": false,
-      "health_note": "Fetch failed. Review source availability, adapter timeout, or parser behavior.",
-      "last_extraction_at": "2026-11-24T12:51:33Z",
-      "last_success_at": "2026-11-24T12:51:33Z",
+      "health_note": "Fetch succeeded.",
+      "last_extraction_at": "2026-11-25T11:29:06Z",
+      "last_success_at": "2026-11-25T11:29:06Z",
       "product_id": "nvidia-studio-driver",
-      "records_fetched": 0,
-      "records_written": 0,
+      "records_fetched": 12,
+      "records_written": 1,
       "source_id": "nvidia-studio-driver",
       "source_type": "download_portal",
-      "status": "failing",
-      "upstream_candidates": 0
+      "status": "healthy",
+      "upstream_candidates": 12
     },
     {
       "adapter": "github_releases",
-      "checked_at": "2026-11-25T01:31:53Z",
+      "checked_at": "2026-11-25T11:29:15Z",
       "company_id": "comfyui",
       "consecutive_empty_extractions": 0,
       "consecutive_failures": 0,
@@ -4770,8 +4911,8 @@
       "error_type": "",
       "extraction_mismatch": false,
       "health_note": "Fetch succeeded.",
-      "last_extraction_at": "2026-11-25T01:31:53Z",
-      "last_success_at": "2026-11-25T01:31:53Z",
+      "last_extraction_at": "2026-11-25T11:29:15Z",
+      "last_success_at": "2026-11-25T11:29:15Z",
       "product_id": "comfyui",
       "records_fetched": 30,
       "records_written": 0,
@@ -4782,7 +4923,7 @@
     },
     {
       "adapter": "rss_feed",
-      "checked_at": "2026-11-25T01:31:53Z",
+      "checked_at": "2026-11-25T11:29:15Z",
       "company_id": "github",
       "consecutive_empty_extractions": 0,
       "consecutive_failures": 0,
@@ -4791,11 +4932,11 @@
       "error_type": "",
       "extraction_mismatch": false,
       "health_note": "Fetch succeeded.",
-      "last_extraction_at": "2026-11-25T01:31:53Z",
-      "last_success_at": "2026-11-25T01:31:53Z",
+      "last_extraction_at": "2026-11-25T11:29:15Z",
+      "last_success_at": "2026-11-25T11:29:15Z",
       "product_id": "github",
       "records_fetched": 10,
-      "records_written": 1,
+      "records_written": 0,
       "source_id": "github",
       "source_type": "rss",
       "status": "healthy",
@@ -4803,7 +4944,7 @@
     },
     {
       "adapter": "html_changelog",
-      "checked_at": "2026-11-25T01:32:01Z",
+      "checked_at": "2026-11-25T11:29:16Z",
       "company_id": "netlify",
       "consecutive_empty_extractions": 0,
       "consecutive_failures": 0,
@@ -4812,8 +4953,8 @@
       "error_type": "",
       "extraction_mismatch": false,
       "health_note": "Fetch succeeded.",
-      "last_extraction_at": "2026-11-25T01:32:01Z",
-      "last_success_at": "2026-11-25T01:32:01Z",
+      "last_extraction_at": "2026-11-25T11:29:16Z",
+      "last_success_at": "2026-11-25T11:29:16Z",
       "product_id": "netlify",
       "records_fetched": 9,
       "records_written": 2,
@@ -4824,7 +4965,7 @@
     },
     {
       "adapter": "adobe_acrobat",
-      "checked_at": "2026-11-25T01:32:16Z",
+      "checked_at": "2026-11-25T11:29:35Z",
       "company_id": "adobe",
       "consecutive_empty_extractions": 0,
       "consecutive_failures": 0,
@@ -4833,8 +4974,8 @@
       "error_type": "",
       "extraction_mismatch": false,
       "health_note": "Fetch succeeded.",
-      "last_extraction_at": "2026-11-25T01:32:16Z",
-      "last_success_at": "2026-11-25T01:32:16Z",
+      "last_extraction_at": "2026-11-25T11:29:35Z",
+      "last_success_at": "2026-11-25T11:29:35Z",
       "product_id": "adobe-acrobat-reader",
       "records_fetched": 199,
       "records_written": 0,
@@ -4845,7 +4986,7 @@
     },
     {
       "adapter": "adobe_acrobat",
-      "checked_at": "2026-11-25T01:32:17Z",
+      "checked_at": "2026-11-25T11:29:36Z",
       "company_id": "adobe",
       "consecutive_empty_extractions": 0,
       "consecutive_failures": 0,
@@ -4854,8 +4995,8 @@
       "error_type": "",
       "extraction_mismatch": false,
       "health_note": "Fetch succeeded.",
-      "last_extraction_at": "2026-11-25T01:32:17Z",
-      "last_success_at": "2026-11-25T01:32:17Z",
+      "last_extraction_at": "2026-11-25T11:29:36Z",
+      "last_success_at": "2026-11-25T11:29:36Z",
       "product_id": "adobe-acrobat-pro",
       "records_fetched": 199,
       "records_written": 0,
@@ -4866,7 +5007,7 @@
     },
     {
       "adapter": "microsoft_release_health",
-      "checked_at": "2026-11-25T01:32:17Z",
+      "checked_at": "2026-11-25T11:29:36Z",
       "company_id": "microsoft",
       "consecutive_empty_extractions": 0,
       "consecutive_failures": 0,
@@ -4875,8 +5016,8 @@
       "error_type": "",
       "extraction_mismatch": false,
       "health_note": "Fetch succeeded.",
-      "last_extraction_at": "2026-11-25T01:32:17Z",
-      "last_success_at": "2026-11-25T01:32:17Z",
+      "last_extraction_at": "2026-11-25T11:29:36Z",
+      "last_success_at": "2026-11-25T11:29:36Z",
       "product_id": "microsoft-windows-11",
       "records_fetched": 105,
       "records_written": 0,
@@ -4887,7 +5028,7 @@
     },
     {
       "adapter": "microsoft_office_updates",
-      "checked_at": "2026-11-25T01:32:19Z",
+      "checked_at": "2026-11-25T11:29:38Z",
       "company_id": "microsoft",
       "consecutive_empty_extractions": 0,
       "consecutive_failures": 0,
@@ -4896,11 +5037,11 @@
       "error_type": "",
       "extraction_mismatch": false,
       "health_note": "Fetch succeeded.",
-      "last_extraction_at": "2026-11-25T01:32:19Z",
-      "last_success_at": "2026-11-25T01:32:19Z",
+      "last_extraction_at": "2026-11-25T11:29:38Z",
+      "last_success_at": "2026-11-25T11:29:38Z",
       "product_id": "microsoft-teams",
       "records_fetched": 8,
-      "records_written": 1,
+      "records_written": 0,
       "source_id": "microsoft-teams",
       "source_type": "html_release_notes",
       "status": "healthy",
@@ -4908,7 +5049,7 @@
     },
     {
       "adapter": "microsoft_office_updates",
-      "checked_at": "2026-11-25T01:32:40Z",
+      "checked_at": "2026-11-25T11:29:47Z",
       "company_id": "microsoft",
       "consecutive_empty_extractions": 0,
       "consecutive_failures": 0,
@@ -4917,11 +5058,11 @@
       "error_type": "",
       "extraction_mismatch": false,
       "health_note": "Fetch succeeded.",
-      "last_extraction_at": "2026-11-25T01:32:40Z",
-      "last_success_at": "2026-11-25T01:32:40Z",
+      "last_extraction_at": "2026-11-25T11:29:47Z",
+      "last_success_at": "2026-11-25T11:29:47Z",
       "product_id": "microsoft-powerpoint",
       "records_fetched": 19,
-      "records_written": 1,
+      "records_written": 0,
       "source_id": "microsoft-powerpoint",
       "source_type": "html_release_notes",
       "status": "healthy",
@@ -4929,7 +5070,7 @@
     },
     {
       "adapter": "microsoft_office_updates",
-      "checked_at": "2026-11-25T01:32:48Z",
+      "checked_at": "2026-11-25T11:29:47Z",
       "company_id": "microsoft",
       "consecutive_empty_extractions": 0,
       "consecutive_failures": 0,
@@ -4938,8 +5079,8 @@
       "error_type": "",
       "extraction_mismatch": false,
       "health_note": "Fetch succeeded.",
-      "last_extraction_at": "2026-11-25T01:32:48Z",
-      "last_success_at": "2026-11-25T01:32:48Z",
+      "last_extraction_at": "2026-11-25T11:29:47Z",
+      "last_success_at": "2026-11-25T11:29:47Z",
       "product_id": "microsoft-365-apps",
       "records_fetched": 1,
       "records_written": 0,
@@ -4950,7 +5091,7 @@
     },
     {
       "adapter": "zendesk_help_center",
-      "checked_at": "2026-11-25T01:32:56Z",
+      "checked_at": "2026-11-25T11:29:55Z",
       "company_id": "elgato",
       "consecutive_empty_extractions": 0,
       "consecutive_failures": 0,
@@ -4959,8 +5100,8 @@
       "error_type": "",
       "extraction_mismatch": false,
       "health_note": "Fetch succeeded.",
-      "last_extraction_at": "2026-11-25T01:32:56Z",
-      "last_success_at": "2026-11-25T01:32:56Z",
+      "last_extraction_at": "2026-11-25T11:29:55Z",
+      "last_success_at": "2026-11-25T11:29:55Z",
       "product_id": "elgato-stream-deck",
       "records_fetched": 52,
       "records_written": 0,
@@ -4971,7 +5112,7 @@
     },
     {
       "adapter": "zendesk_help_center",
-      "checked_at": "2026-11-25T01:32:57Z",
+      "checked_at": "2026-11-25T11:29:56Z",
       "company_id": "elgato",
       "consecutive_empty_extractions": 0,
       "consecutive_failures": 0,
@@ -4980,8 +5121,8 @@
       "error_type": "",
       "extraction_mismatch": false,
       "health_note": "Fetch succeeded.",
-      "last_extraction_at": "2026-11-25T01:32:57Z",
-      "last_success_at": "2026-11-25T01:32:57Z",
+      "last_extraction_at": "2026-11-25T11:29:56Z",
+      "last_success_at": "2026-11-25T11:29:56Z",
       "product_id": "elgato-wave-link",
       "records_fetched": 41,
       "records_written": 0,
@@ -4992,7 +5133,7 @@
     },
     {
       "adapter": "zendesk_help_center",
-      "checked_at": "2026-11-25T01:32:57Z",
+      "checked_at": "2026-11-25T11:29:57Z",
       "company_id": "elgato",
       "consecutive_empty_extractions": 0,
       "consecutive_failures": 0,
@@ -5001,8 +5142,8 @@
       "error_type": "",
       "extraction_mismatch": false,
       "health_note": "Fetch succeeded.",
-      "last_extraction_at": "2026-11-25T01:32:57Z",
-      "last_success_at": "2026-11-25T01:32:57Z",
+      "last_extraction_at": "2026-11-25T11:29:57Z",
+      "last_success_at": "2026-11-25T11:29:57Z",
       "product_id": "elgato-camera-hub",
       "records_fetched": 26,
       "records_written": 0,
@@ -5013,7 +5154,7 @@
     },
     {
       "adapter": "zendesk_help_center",
-      "checked_at": "2026-11-25T01:32:57Z",
+      "checked_at": "2026-11-25T11:29:57Z",
       "company_id": "elgato",
       "consecutive_empty_extractions": 0,
       "consecutive_failures": 0,
@@ -5022,8 +5163,8 @@
       "error_type": "",
       "extraction_mismatch": false,
       "health_note": "Fetch succeeded.",
-      "last_extraction_at": "2026-11-25T01:32:57Z",
-      "last_success_at": "2026-11-25T01:32:57Z",
+      "last_extraction_at": "2026-11-25T11:29:57Z",
+      "last_success_at": "2026-11-25T11:29:57Z",
       "product_id": "elgato-4k-capture-utility",
       "records_fetched": 20,
       "records_written": 0,
@@ -5033,25 +5174,25 @@
       "upstream_candidates": 0
     }
   ],
-  "last_run_started_at": "2026-11-25T01:31:19Z",
+  "last_run_started_at": "2026-11-25T11:28:53Z",
   "sources": {
     "adobe-acrobat-pro": {
       "consecutive_empty_extractions": 0,
       "consecutive_failures": 0,
       "extraction_mismatch": false,
       "last_adapter": "adobe_acrobat",
-      "last_checked_at": "2026-11-25T01:32:17Z",
+      "last_checked_at": "2026-11-25T11:29:36Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
-      "last_extraction_at": "2026-11-25T01:32:17Z",
+      "last_extraction_at": "2026-11-25T11:29:36Z",
       "last_extraction_records": 199,
       "last_health_note": "Fetch succeeded.",
       "last_records_fetched": 199,
       "last_records_skipped": 197,
       "last_records_written": 2,
-      "last_run_duration_ms": 24,
-      "last_success_at": "2026-11-25T01:32:17Z",
+      "last_run_duration_ms": 30,
+      "last_success_at": "2026-11-25T11:29:36Z",
       "last_upstream_candidates": 0,
       "previous_consecutive_failures": 0,
       "seen": [
@@ -5262,18 +5403,18 @@
       "consecutive_failures": 0,
       "extraction_mismatch": false,
       "last_adapter": "adobe_acrobat",
-      "last_checked_at": "2026-11-25T01:32:16Z",
+      "last_checked_at": "2026-11-25T11:29:35Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
-      "last_extraction_at": "2026-11-25T01:32:16Z",
+      "last_extraction_at": "2026-11-25T11:29:35Z",
       "last_extraction_records": 199,
       "last_health_note": "Fetch succeeded.",
       "last_records_fetched": 199,
       "last_records_skipped": 197,
       "last_records_written": 2,
-      "last_run_duration_ms": 148,
-      "last_success_at": "2026-11-25T01:32:16Z",
+      "last_run_duration_ms": 204,
+      "last_success_at": "2026-11-25T11:29:35Z",
       "last_upstream_candidates": 0,
       "previous_consecutive_failures": 0,
       "seen": [
@@ -5544,18 +5685,18 @@
       "consecutive_failures": 0,
       "extraction_mismatch": false,
       "last_adapter": "adobe_release_notes",
-      "last_checked_at": "2026-11-25T01:31:20Z",
+      "last_checked_at": "2026-11-25T11:28:54Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
-      "last_extraction_at": "2026-11-25T01:31:20Z",
+      "last_extraction_at": "2026-11-25T11:28:54Z",
       "last_extraction_records": 1,
       "last_health_note": "The primary official source failed on this check (blocked). Only the fallback source answered, so this check does not show whether newer releases exist.",
       "last_records_fetched": 1,
       "last_records_skipped": 0,
       "last_records_written": 1,
-      "last_run_duration_ms": 882,
-      "last_success_at": "2026-11-25T01:31:20Z",
+      "last_run_duration_ms": 927,
+      "last_success_at": "2026-11-25T11:28:54Z",
       "last_upstream_candidates": 0,
       "previous_consecutive_failures": 0,
       "primary_last_success_at": "",
@@ -5572,18 +5713,18 @@
       "consecutive_failures": 0,
       "extraction_mismatch": false,
       "last_adapter": "blackmagic_support_downloads",
-      "last_checked_at": "2026-11-25T01:31:21Z",
+      "last_checked_at": "2026-11-25T11:28:55Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
-      "last_extraction_at": "2026-11-25T01:31:21Z",
+      "last_extraction_at": "2026-11-25T11:28:55Z",
       "last_extraction_records": 121,
       "last_health_note": "Fetch succeeded.",
       "last_records_fetched": 121,
       "last_records_skipped": 119,
       "last_records_written": 2,
-      "last_run_duration_ms": 867,
-      "last_success_at": "2026-11-25T01:31:21Z",
+      "last_run_duration_ms": 453,
+      "last_success_at": "2026-11-25T11:28:55Z",
       "last_upstream_candidates": 0,
       "previous_consecutive_failures": 0,
       "seen": [
@@ -5717,18 +5858,18 @@
       "consecutive_failures": 0,
       "extraction_mismatch": false,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-11-25T01:31:53Z",
+      "last_checked_at": "2026-11-25T11:29:15Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
-      "last_extraction_at": "2026-11-25T01:31:53Z",
+      "last_extraction_at": "2026-11-25T11:29:15Z",
       "last_extraction_records": 30,
       "last_health_note": "Fetch succeeded.",
       "last_records_fetched": 30,
       "last_records_skipped": 28,
       "last_records_written": 2,
-      "last_run_duration_ms": 845,
-      "last_success_at": "2026-11-25T01:31:53Z",
+      "last_run_duration_ms": 709,
+      "last_success_at": "2026-11-25T11:29:15Z",
       "last_upstream_candidates": 0,
       "previous_consecutive_failures": 0,
       "seen": [
@@ -5790,18 +5931,18 @@
       "consecutive_failures": 0,
       "extraction_mismatch": false,
       "last_adapter": "zendesk_help_center",
-      "last_checked_at": "2026-11-25T01:32:57Z",
+      "last_checked_at": "2026-11-25T11:29:57Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
-      "last_extraction_at": "2026-11-25T01:32:57Z",
+      "last_extraction_at": "2026-11-25T11:29:57Z",
       "last_extraction_records": 20,
       "last_health_note": "Fetch succeeded.",
       "last_records_fetched": 20,
       "last_records_skipped": 18,
       "last_records_written": 2,
-      "last_run_duration_ms": 340,
-      "last_success_at": "2026-11-25T01:32:57Z",
+      "last_run_duration_ms": 403,
+      "last_success_at": "2026-11-25T11:29:57Z",
       "last_upstream_candidates": 0,
       "previous_consecutive_failures": 0,
       "scan": {
@@ -5845,18 +5986,18 @@
       "consecutive_failures": 0,
       "extraction_mismatch": false,
       "last_adapter": "zendesk_help_center",
-      "last_checked_at": "2026-11-25T01:32:57Z",
+      "last_checked_at": "2026-11-25T11:29:57Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
-      "last_extraction_at": "2026-11-25T01:32:57Z",
+      "last_extraction_at": "2026-11-25T11:29:57Z",
       "last_extraction_records": 26,
       "last_health_note": "Fetch succeeded.",
       "last_records_fetched": 26,
       "last_records_skipped": 24,
       "last_records_written": 2,
-      "last_run_duration_ms": 386,
-      "last_success_at": "2026-11-25T01:32:57Z",
+      "last_run_duration_ms": 591,
+      "last_success_at": "2026-11-25T11:29:57Z",
       "last_upstream_candidates": 0,
       "previous_consecutive_failures": 0,
       "scan": {
@@ -5922,18 +6063,18 @@
       "consecutive_failures": 0,
       "extraction_mismatch": false,
       "last_adapter": "zendesk_help_center",
-      "last_checked_at": "2026-11-25T01:32:56Z",
+      "last_checked_at": "2026-11-25T11:29:55Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
-      "last_extraction_at": "2026-11-25T01:32:56Z",
+      "last_extraction_at": "2026-11-25T11:29:55Z",
       "last_extraction_records": 52,
       "last_health_note": "Fetch succeeded.",
       "last_records_fetched": 52,
       "last_records_skipped": 50,
       "last_records_written": 2,
-      "last_run_duration_ms": 682,
-      "last_success_at": "2026-11-25T01:32:56Z",
+      "last_run_duration_ms": 645,
+      "last_success_at": "2026-11-25T11:29:55Z",
       "last_upstream_candidates": 0,
       "previous_consecutive_failures": 0,
       "scan": {
@@ -6026,18 +6167,18 @@
       "consecutive_failures": 0,
       "extraction_mismatch": false,
       "last_adapter": "zendesk_help_center",
-      "last_checked_at": "2026-11-25T01:32:57Z",
+      "last_checked_at": "2026-11-25T11:29:56Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
-      "last_extraction_at": "2026-11-25T01:32:57Z",
+      "last_extraction_at": "2026-11-25T11:29:56Z",
       "last_extraction_records": 41,
       "last_health_note": "Fetch succeeded.",
       "last_records_fetched": 41,
       "last_records_skipped": 39,
       "last_records_written": 2,
-      "last_run_duration_ms": 482,
-      "last_success_at": "2026-11-25T01:32:57Z",
+      "last_run_duration_ms": 517,
+      "last_success_at": "2026-11-25T11:29:56Z",
       "last_upstream_candidates": 0,
       "previous_consecutive_failures": 0,
       "scan": {
@@ -6103,21 +6244,23 @@
       "consecutive_failures": 0,
       "extraction_mismatch": false,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-11-25T01:31:19Z",
+      "last_checked_at": "2026-11-25T11:28:53Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
-      "last_extraction_at": "2026-11-25T01:31:19Z",
+      "last_extraction_at": "2026-11-25T11:28:53Z",
       "last_extraction_records": 200,
       "last_health_note": "Fetch succeeded.",
       "last_records_fetched": 200,
-      "last_records_skipped": 181,
+      "last_records_skipped": 180,
       "last_records_written": 4,
-      "last_run_duration_ms": 1252,
-      "last_success_at": "2026-11-25T01:31:19Z",
+      "last_run_duration_ms": 1117,
+      "last_success_at": "2026-11-25T11:28:53Z",
       "last_upstream_candidates": 0,
       "previous_consecutive_failures": 0,
       "seen": [
+        "rss:figma:67e79efa-0659-4a3c-9669-e7e1fe0cad42",
+        "rss:figma:fdeb868a-690e-4286-9075-bc4d7fb7f1f9",
         "rss:figma:1783e987-4ce4-48d8-a5b6-b2ede3ae4aab",
         "rss:figma:25ecf51e-c20d-4dbf-80c2-f7e563d1968a",
         "rss:figma:0531eabd-e735-45c2-8a40-6f71717b00df",
@@ -6315,9 +6458,7 @@
         "rss:figma:439bfbe9-beee-4b1c-87b7-e50eb73f3f37",
         "rss:figma:a0be0e34-d6c9-4346-8895-91f14f3a8957",
         "rss:figma:76462df0-a8da-46cd-9a9a-659f26a2bac1",
-        "rss:figma:eda634b0-7907-4fbe-9f7a-a5b39432132c",
-        "rss:figma:eba9b8e7-fdb1-4f3f-ae11-9a66660b86a5",
-        "rss:figma:f7119295-a67f-4c36-af99-75eb14c750a8"
+        "rss:figma:eda634b0-7907-4fbe-9f7a-a5b39432132c"
       ],
       "status": "healthy"
     },
@@ -6326,18 +6467,18 @@
       "consecutive_failures": 0,
       "extraction_mismatch": false,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-11-25T01:31:53Z",
+      "last_checked_at": "2026-11-25T11:29:15Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
-      "last_extraction_at": "2026-11-25T01:31:53Z",
+      "last_extraction_at": "2026-11-25T11:29:15Z",
       "last_extraction_records": 10,
       "last_health_note": "Fetch succeeded.",
       "last_records_fetched": 10,
-      "last_records_skipped": 7,
-      "last_records_written": 3,
-      "last_run_duration_ms": 7421,
-      "last_success_at": "2026-11-25T01:31:53Z",
+      "last_records_skipped": 8,
+      "last_records_written": 2,
+      "last_run_duration_ms": 401,
+      "last_success_at": "2026-11-25T11:29:15Z",
       "last_upstream_candidates": 0,
       "previous_consecutive_failures": 0,
       "seen": [
@@ -6549,18 +6690,18 @@
       "consecutive_failures": 0,
       "extraction_mismatch": false,
       "last_adapter": "microsoft_office_updates",
-      "last_checked_at": "2026-11-25T01:32:48Z",
+      "last_checked_at": "2026-11-25T11:29:47Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
-      "last_extraction_at": "2026-11-25T01:32:48Z",
+      "last_extraction_at": "2026-11-25T11:29:47Z",
       "last_extraction_records": 1,
       "last_health_note": "Fetch succeeded.",
       "last_records_fetched": 1,
       "last_records_skipped": 0,
       "last_records_written": 1,
-      "last_run_duration_ms": 7667,
-      "last_success_at": "2026-11-25T01:32:48Z",
+      "last_run_duration_ms": 8560,
+      "last_success_at": "2026-11-25T11:29:47Z",
       "last_upstream_candidates": 0,
       "previous_consecutive_failures": 0,
       "seen": [
@@ -6594,18 +6735,18 @@
       "consecutive_failures": 0,
       "extraction_mismatch": false,
       "last_adapter": "microsoft_office_updates",
-      "last_checked_at": "2026-11-25T01:32:40Z",
+      "last_checked_at": "2026-11-25T11:29:47Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
-      "last_extraction_at": "2026-11-25T01:32:40Z",
+      "last_extraction_at": "2026-11-25T11:29:47Z",
       "last_extraction_records": 19,
       "last_health_note": "Fetch succeeded.",
       "last_records_fetched": 19,
-      "last_records_skipped": 16,
-      "last_records_written": 3,
-      "last_run_duration_ms": 7753,
-      "last_success_at": "2026-11-25T01:32:40Z",
+      "last_records_skipped": 17,
+      "last_records_written": 2,
+      "last_run_duration_ms": 338,
+      "last_success_at": "2026-11-25T11:29:47Z",
       "last_upstream_candidates": 0,
       "previous_consecutive_failures": 0,
       "seen": [
@@ -6655,18 +6796,18 @@
       "consecutive_failures": 0,
       "extraction_mismatch": false,
       "last_adapter": "microsoft_office_updates",
-      "last_checked_at": "2026-11-25T01:32:19Z",
+      "last_checked_at": "2026-11-25T11:29:38Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
-      "last_extraction_at": "2026-11-25T01:32:19Z",
+      "last_extraction_at": "2026-11-25T11:29:38Z",
       "last_extraction_records": 8,
       "last_health_note": "Fetch succeeded.",
       "last_records_fetched": 8,
-      "last_records_skipped": 5,
-      "last_records_written": 3,
-      "last_run_duration_ms": 21376,
-      "last_success_at": "2026-11-25T01:32:19Z",
+      "last_records_skipped": 6,
+      "last_records_written": 2,
+      "last_run_duration_ms": 8611,
+      "last_success_at": "2026-11-25T11:29:38Z",
       "last_upstream_candidates": 0,
       "previous_consecutive_failures": 0,
       "seen": [
@@ -6687,18 +6828,18 @@
       "consecutive_failures": 0,
       "extraction_mismatch": false,
       "last_adapter": "microsoft_release_health",
-      "last_checked_at": "2026-11-25T01:32:17Z",
+      "last_checked_at": "2026-11-25T11:29:36Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
-      "last_extraction_at": "2026-11-25T01:32:17Z",
+      "last_extraction_at": "2026-11-25T11:29:36Z",
       "last_extraction_records": 105,
       "last_health_note": "Fetch succeeded.",
       "last_records_fetched": 105,
       "last_records_skipped": 35,
       "last_records_written": 70,
-      "last_run_duration_ms": 2497,
-      "last_success_at": "2026-11-25T01:32:17Z",
+      "last_run_duration_ms": 2320,
+      "last_success_at": "2026-11-25T11:29:36Z",
       "last_upstream_candidates": 0,
       "previous_consecutive_failures": 0,
       "seen": [
@@ -6815,45 +6956,47 @@
       "consecutive_failures": 0,
       "extraction_mismatch": false,
       "last_adapter": "html_changelog",
-      "last_checked_at": "2026-11-25T01:32:01Z",
+      "last_checked_at": "2026-11-25T11:29:16Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
-      "last_extraction_at": "2026-11-25T01:32:01Z",
+      "last_extraction_at": "2026-11-25T11:29:16Z",
       "last_extraction_records": 9,
       "last_health_note": "Fetch succeeded.",
       "last_records_fetched": 9,
       "last_records_skipped": 0,
-      "last_records_written": 2,
-      "last_run_duration_ms": 15595,
-      "last_success_at": "2026-11-25T01:32:01Z",
+      "last_records_written": 4,
+      "last_run_duration_ms": 19720,
+      "last_success_at": "2026-11-25T11:29:16Z",
       "last_upstream_candidates": 9,
       "previous_consecutive_failures": 0,
       "seen": [
+        "html:netlify:1ca6905dfe70da1d",
+        "html:netlify:3fc4d26c765a099e",
         "html:netlify:464b057ebefd770c",
         "html:netlify:a4dda58fd9f8f1e3"
       ],
       "status": "healthy"
     },
     "nvidia-geforce-game-ready": {
-      "consecutive_empty_extractions": 1,
-      "consecutive_failures": 1,
+      "consecutive_empty_extractions": 0,
+      "consecutive_failures": 0,
       "extraction_mismatch": false,
       "last_adapter": "nvidia_driver_lookup",
-      "last_checked_at": "2026-11-25T01:31:38Z",
-      "last_error": "HTTP 504 while fetching official source \u2014 <html>\r\n<head><title>504 Gateway Time-out</title></head>\r\n<body>\r\n<center><h1>504 Gateway Time-out</h1></center>\r\n</body>\r\n</html>\r\n",
-      "last_error_at": "2026-11-25T01:31:38Z",
-      "last_error_type": "error",
-      "last_extraction_at": "2026-11-24T12:51:28Z",
+      "last_checked_at": "2026-11-25T11:28:56Z",
+      "last_error": "",
+      "last_error_at": "",
+      "last_error_type": "",
+      "last_extraction_at": "2026-11-25T11:28:56Z",
       "last_extraction_records": 12,
-      "last_health_note": "Fetch failed. Review source availability, adapter timeout, or parser behavior.",
-      "last_records_fetched": 0,
-      "last_records_skipped": 0,
-      "last_records_written": 0,
-      "last_run_duration_ms": 0,
-      "last_success_at": "2026-11-24T12:51:28Z",
-      "last_upstream_candidates": 0,
-      "previous_consecutive_failures": 0,
+      "last_health_note": "Fetch succeeded.",
+      "last_records_fetched": 12,
+      "last_records_skipped": 9,
+      "last_records_written": 3,
+      "last_run_duration_ms": 9217,
+      "last_success_at": "2026-11-25T11:28:56Z",
+      "last_upstream_candidates": 12,
+      "previous_consecutive_failures": 1,
       "provenance": {
         "collection_authorization": "owner risk acceptance; NVIDIA permission not established",
         "collection_method": "public driver-lookup endpoint",
@@ -6861,6 +7004,7 @@
       },
       "scan": {
         "details_verified": [
+          "288689",
           "271418",
           "272764",
           "274187",
@@ -6876,6 +7020,7 @@
         ]
       },
       "seen": [
+        "nvidia_driver_lookup:nvidia-geforce-game-ready:621.40",
         "nvidia_driver_lookup:nvidia-geforce-game-ready:610.47",
         "nvidia_driver_lookup:nvidia-geforce-game-ready:610.62",
         "nvidia_driver_lookup:nvidia-geforce-game-ready:610.74",
@@ -6889,27 +7034,27 @@
         "nvidia_driver_lookup:nvidia-geforce-game-ready:621.14",
         "nvidia_driver_lookup:nvidia-geforce-game-ready:621.24"
       ],
-      "status": "degraded"
+      "status": "healthy"
     },
     "nvidia-studio-driver": {
-      "consecutive_empty_extractions": 1,
-      "consecutive_failures": 1,
+      "consecutive_empty_extractions": 0,
+      "consecutive_failures": 0,
       "extraction_mismatch": false,
       "last_adapter": "nvidia_driver_lookup",
-      "last_checked_at": "2026-11-25T01:31:53Z",
-      "last_error": "HTTP 504 while fetching official source \u2014 <html>\r\n<head><title>504 Gateway Time-out</title></head>\r\n<body>\r\n<center><h1>504 Gateway Time-out</h1></center>\r\n</body>\r\n</html>\r\n",
-      "last_error_at": "2026-11-25T01:31:53Z",
-      "last_error_type": "error",
-      "last_extraction_at": "2026-11-24T12:51:33Z",
+      "last_checked_at": "2026-11-25T11:29:06Z",
+      "last_error": "",
+      "last_error_at": "",
+      "last_error_type": "",
+      "last_extraction_at": "2026-11-25T11:29:06Z",
       "last_extraction_records": 12,
-      "last_health_note": "Fetch failed. Review source availability, adapter timeout, or parser behavior.",
-      "last_records_fetched": 0,
-      "last_records_skipped": 0,
-      "last_records_written": 0,
-      "last_run_duration_ms": 0,
-      "last_success_at": "2026-11-24T12:51:33Z",
-      "last_upstream_candidates": 0,
-      "previous_consecutive_failures": 0,
+      "last_health_note": "Fetch succeeded.",
+      "last_records_fetched": 12,
+      "last_records_skipped": 9,
+      "last_records_written": 3,
+      "last_run_duration_ms": 8959,
+      "last_success_at": "2026-11-25T11:29:06Z",
+      "last_upstream_candidates": 12,
+      "previous_consecutive_failures": 1,
       "provenance": {
         "collection_authorization": "owner risk acceptance; NVIDIA permission not established",
         "collection_method": "public driver-lookup endpoint",
@@ -6917,6 +7062,7 @@
       },
       "scan": {
         "details_verified": [
+          "288692",
           "258747",
           "260362",
           "265478",
@@ -6932,6 +7078,7 @@
         ]
       },
       "seen": [
+        "nvidia_driver_lookup:nvidia-studio-driver:621.40",
         "nvidia_driver_lookup:nvidia-studio-driver:591.44",
         "nvidia_driver_lookup:nvidia-studio-driver:591.74",
         "nvidia_driver_lookup:nvidia-studio-driver:595.79",
@@ -6945,25 +7092,25 @@
         "nvidia_driver_lookup:nvidia-studio-driver:621.14",
         "nvidia_driver_lookup:nvidia-studio-driver:621.24"
       ],
-      "status": "degraded"
+      "status": "healthy"
     },
     "obs-studio": {
       "consecutive_empty_extractions": 0,
       "consecutive_failures": 0,
       "extraction_mismatch": false,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-11-25T01:31:22Z",
+      "last_checked_at": "2026-11-25T11:28:56Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
-      "last_extraction_at": "2026-11-25T01:31:22Z",
+      "last_extraction_at": "2026-11-25T11:28:56Z",
       "last_extraction_records": 14,
       "last_health_note": "Fetch succeeded.",
       "last_records_fetched": 14,
       "last_records_skipped": 12,
       "last_records_written": 2,
-      "last_run_duration_ms": 866,
-      "last_success_at": "2026-11-25T01:31:22Z",
+      "last_run_duration_ms": 821,
+      "last_success_at": "2026-11-25T11:28:56Z",
       "last_upstream_candidates": 0,
       "previous_consecutive_failures": 0,
       "seen": [

@@ -18,8 +18,8 @@ update_version: Issue statuses and repository boards are in public preview
 update_logo_text: GIT
 update_published_at: '2026-11-23T20:37:11Z'
 update_last_checked: '2026-11-24T03:01:46Z'
-source_last_checked: '2026-11-25T01:31:53Z'
-official_body_last_checked: '2026-11-25T01:31:53Z'
+source_last_checked: '2026-11-25T11:29:15Z'
+official_body_last_checked: '2026-11-25T11:29:15Z'
 record_last_updated: '2026-11-24T03:01:46Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -103,6 +103,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-11-25T01:31:53Z'
+  url: https://github.blog/changelog/2026-11-23-issue-statuses-and-repository-boards-are-in-public-preview
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-25T11:29:15Z'
   url: https://github.blog/changelog/2026-11-23-issue-statuses-and-repository-boards-are-in-public-preview
   status: captured-from-rss-feed
   body_captured: true
