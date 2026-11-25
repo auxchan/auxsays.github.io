@@ -4,11 +4,11 @@ note: Concrete PowerPoint problems reported while a release was current. These a
   and these rows are excluded from every consensus calculation.
 reports:
 - attribution_state: not_established
-  captured_at: '2026-11-25T01:12:29Z'
+  captured_at: '2026-11-25T11:15:14Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
-  release_window_key: microsoft-powerpoint|2611|20625.20108
+  release_window_key: microsoft-powerpoint|2611|20625.20142
   report_date: '2026-11-24'
   report_excerpt: Error will open the power point Error will open the power point Why is my PowerPoint
     application not working properly now? When I first open a file or the PowerPoint icon, an error message
@@ -20,15 +20,15 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/6081448/error-will-open-the-power-point
   strict_exclusion_reason: missing_powerpoint_version
-  window_build: '20625.20108'
-  window_start: '2026-11-17'
+  window_build: '20625.20142'
+  window_start: '2026-11-23'
   window_version: '2611'
 - attribution_state: not_established
-  captured_at: '2026-11-25T01:12:29Z'
+  captured_at: '2026-11-25T11:15:14Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
-  release_window_key: microsoft-powerpoint|2611|20625.20108
+  release_window_key: microsoft-powerpoint|2611|20625.20142
   report_date: '2026-11-24'
   report_excerpt: i cannot open Microsoft Office Powerpoint and Word. It say it has run into an error
     that is preventing it from working correctly. i cannot open Microsoft Office Powerpoint and Word.
@@ -41,11 +41,11 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/6080659/i-cannot-open-microsoft-office-powerpoint-and-word
   strict_exclusion_reason: missing_powerpoint_version
-  window_build: '20625.20108'
-  window_start: '2026-11-17'
+  window_build: '20625.20142'
+  window_start: '2026-11-23'
   window_version: '2611'
 - attribution_state: not_established
-  captured_at: '2026-11-25T01:12:29Z'
+  captured_at: '2026-11-25T11:15:14Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -62,10 +62,11 @@ reports:
   source_url: https://techcommunity.microsoft.com/discussions/microsoft-365/powerpoint-slide-show-ignores-animation-timings-advances-to-end/4575215
   strict_exclusion_reason: missing_powerpoint_version
   window_build: '20625.20108'
+  window_end: '2026-11-23'
   window_start: '2026-11-17'
   window_version: '2611'
 - attribution_state: not_established
-  captured_at: '2026-11-25T01:12:29Z'
+  captured_at: '2026-11-25T11:15:14Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -81,10 +82,11 @@ reports:
   source_url: https://learn.microsoft.com/en-us/answers/questions/6077146/i-cant-open-my-powerpoint-application
   strict_exclusion_reason: missing_powerpoint_version
   window_build: '20625.20108'
+  window_end: '2026-11-23'
   window_start: '2026-11-17'
   window_version: '2611'
 - attribution_state: not_established
-  captured_at: '2026-11-25T01:12:29Z'
+  captured_at: '2026-11-25T11:15:14Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -100,10 +102,11 @@ reports:
   source_url: https://learn.microsoft.com/en-us/answers/questions/6076075/powerpoint-not-working
   strict_exclusion_reason: missing_powerpoint_version
   window_build: '20625.20108'
+  window_end: '2026-11-23'
   window_start: '2026-11-17'
   window_version: '2611'
 - attribution_state: not_established
-  captured_at: '2026-11-25T01:12:29Z'
+  captured_at: '2026-11-25T11:15:14Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -119,6 +122,7 @@ reports:
   source_url: https://learn.microsoft.com/en-us/answers/questions/6075009/powerpoint-error
   strict_exclusion_reason: missing_powerpoint_version
   window_build: '20625.20108'
+  window_end: '2026-11-23'
   window_start: '2026-11-17'
   window_version: '2611'
 - attribution_state: not_established
@@ -141,7 +145,7 @@ reports:
   window_start: '2026-11-10'
   window_version: '2610'
 - attribution_state: not_established
-  captured_at: '2026-11-25T01:12:29Z'
+  captured_at: '2026-11-25T11:15:14Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -158,10 +162,11 @@ reports:
   source_url: https://learn.microsoft.com/en-us/answers/questions/6073732/the-sun-button-in-powerpoint-is-not-working
   strict_exclusion_reason: missing_powerpoint_version
   window_build: '20625.20108'
+  window_end: '2026-11-23'
   window_start: '2026-11-17'
   window_version: '2611'
 - attribution_state: not_established
-  captured_at: '2026-11-25T01:12:29Z'
+  captured_at: '2026-11-25T11:15:14Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -181,7 +186,7 @@ reports:
   window_start: '2026-11-10'
   window_version: '2610'
 - attribution_state: not_established
-  captured_at: '2026-11-25T01:12:29Z'
+  captured_at: '2026-11-25T11:15:14Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -202,7 +207,7 @@ reports:
   window_start: '2026-11-10'
   window_version: '2610'
 - attribution_state: not_established
-  captured_at: '2026-11-25T01:12:29Z'
+  captured_at: '2026-11-25T11:15:14Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -222,7 +227,7 @@ reports:
   window_start: '2026-11-10'
   window_version: '2610'
 - attribution_state: not_established
-  captured_at: '2026-11-25T01:12:29Z'
+  captured_at: '2026-11-25T11:15:14Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -243,7 +248,7 @@ reports:
   window_start: '2026-11-10'
   window_version: '2610'
 - attribution_state: not_established
-  captured_at: '2026-11-25T01:12:29Z'
+  captured_at: '2026-11-25T11:15:14Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -265,7 +270,7 @@ reports:
   window_start: '2026-11-10'
   window_version: '2610'
 - attribution_state: not_established
-  captured_at: '2026-11-25T01:12:29Z'
+  captured_at: '2026-11-25T11:15:14Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -286,7 +291,7 @@ reports:
   window_start: '2026-11-10'
   window_version: '2610'
 - attribution_state: not_established
-  captured_at: '2026-11-25T01:12:29Z'
+  captured_at: '2026-11-25T11:15:14Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -307,7 +312,7 @@ reports:
   window_start: '2026-11-04'
   window_version: '2610'
 - attribution_state: not_established
-  captured_at: '2026-11-25T01:12:29Z'
+  captured_at: '2026-11-25T11:15:14Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -329,7 +334,7 @@ reports:
   window_start: '2026-11-04'
   window_version: '2610'
 - attribution_state: not_established
-  captured_at: '2026-11-25T01:12:29Z'
+  captured_at: '2026-11-25T11:15:14Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -350,7 +355,7 @@ reports:
   window_start: '2026-10-28'
   window_version: '2610'
 - attribution_state: not_established
-  captured_at: '2026-11-25T01:12:29Z'
+  captured_at: '2026-11-25T11:15:14Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -370,7 +375,7 @@ reports:
   window_start: '2026-10-28'
   window_version: '2610'
 - attribution_state: not_established
-  captured_at: '2026-10-27T07:57:59Z'
+  captured_at: '2026-11-25T11:15:14Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -387,6 +392,7 @@ reports:
   source_url: https://learn.microsoft.com/en-us/answers/questions/6050306/power-point-freezes
   strict_exclusion_reason: missing_powerpoint_version
   window_build: '20527.20088'
+  window_end: '2026-10-28'
   window_start: '2026-10-21'
   window_version: '2610'
 - attribution_state: not_established
@@ -951,7 +957,7 @@ reports:
   window_start: '2025-07-22'
   window_version: '2506'
 - attribution_state: not_established
-  captured_at: '2026-11-25T01:12:29Z'
+  captured_at: '2026-11-25T11:15:14Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -973,7 +979,7 @@ reports:
   window_start: '2025-07-22'
   window_version: '2506'
 - attribution_state: not_established
-  captured_at: '2026-11-25T01:12:29Z'
+  captured_at: '2026-11-25T11:15:14Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -1016,7 +1022,7 @@ reports:
   window_start: '2025-01-30'
   window_version: '2501'
 - attribution_state: not_established
-  captured_at: '2026-11-25T01:12:29Z'
+  captured_at: '2026-11-25T11:15:14Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -1037,7 +1043,7 @@ reports:
   window_start: '2024-12-05'
   window_version: '2411'
 - attribution_state: not_established
-  captured_at: '2026-11-25T01:12:29Z'
+  captured_at: '2026-11-25T11:15:14Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -1101,7 +1107,7 @@ reports:
   window_start: '2024-11-12'
   window_version: '2410'
 - attribution_state: not_established
-  captured_at: '2026-11-25T01:12:29Z'
+  captured_at: '2026-11-25T11:15:14Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -1122,7 +1128,7 @@ reports:
   window_start: '2024-05-14'
   window_version: '2404'
 - attribution_state: not_established
-  captured_at: '2026-11-25T01:12:29Z'
+  captured_at: '2026-11-25T11:15:14Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
