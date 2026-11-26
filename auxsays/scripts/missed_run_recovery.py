@@ -37,11 +37,12 @@ LANE: collection (obs-evidence-collection.yml, '17 */6', a member of the writer 
   own free-lane rule, so this never adds a third entrant to the one-deep queue).
   `gate` is the in-run half: a cron run, a bot dispatch without `recovery_of`, or the reaper's
   re-dispatch of an EVICTED (zero-job) run stands down when an earlier routine run created in its own
-  window COLLECTED, whatever its outcome (its `collect` job ran), or when COLLECTION_DAILY_CAP routine
-  cycles already collected in the 24 h before it. A lost cycle is repaired by G91's one re-run, which
+  window COLLECTED, whatever its outcome (its `collect` job ran). It applies no rolling-24-h cap (that
+  would stand down a window's first cycle when its cron is earlier than yesterday's); the check's own
+  dispatches carry COLLECTION_DAILY_CAP. A lost cycle is repaired by G91's one re-run, which
   is never gated (nor is any operator dispatch); G91 judges a stood-down run as skipped, so the lost
   run before it stays the one it re-runs. Together: at most one routine collection per window and 4
-  per rolling 24 h, plus G91's one re-run per lost cycle, exactly as before this change. Any doubt (an
+  per aligned day (one per window; recovery dispatches also capped at 4 per rolling 24 h), plus G91's one re-run per lost cycle, exactly as before this change. Any doubt (an
   unreadable API) proceeds: the guard can only remove a duplicate, never a cycle.
 
 Telemetry: one fixed line per lane, `FRESHNESS: lane=<lane> state=<state> ...`, in the log and the
@@ -191,25 +192,22 @@ def gate_collection(event: str, actor: str, own_id: str, own_created: datetime, 
     if runs is None:
         return True, "collection runs could not be read; proceeding"
     ws = window_start(own_created, COLLECTION_PERIOD, COLLECTION_OFFSET)
-    day_ago = own_created - timedelta(hours=24)
-    worked_day = 0
+    # No rolling-24-h cap here (review A2): windows do not line up with a rolling day, so a cap would stand
+    # down the FIRST cycle of a window whose cron came a few minutes earlier than yesterday's, and nothing
+    # would recover it. One routine collection per window already bounds the day to 4 aligned windows.
     for r in runs:
         created = _t(r, "created_at")
-        if str(r.get("id")) == str(own_id) or created is None or not (day_ago < created < own_created):
+        if str(r.get("id")) == str(own_id) or created is None or not (ws <= created < own_created):
             continue
         if not wcr.is_routine(r) or r.get("status") != "completed":
             continue
         jobs = jobs_of(str(r.get("id")))
         if jobs is None or not did_work(r, jobs):      # unreadable: ignored (the guard fails open)
             continue
-        if created >= ws:
-            # Whatever its outcome: a lost cycle is G91's one re-run (never gated), not a second
-            # routine collection in the same window.
-            return False, (f"run {r.get('id')} already collected in window {ws:%Y-%m-%dT%H:%M:%SZ} "
-                           f"({r.get('conclusion')})")
-        worked_day += 1
-    if worked_day >= COLLECTION_DAILY_CAP:
-        return False, f"{worked_day} routine cycles already collected in the 24 h before this run"
+        # Whatever its outcome: a lost cycle is G91's one re-run (never gated), not a second routine
+        # collection in the same window.
+        return False, (f"run {r.get('id')} already collected in window {ws:%Y-%m-%dT%H:%M:%SZ} "
+                       f"({r.get('conclusion')})")
     return True, f"no earlier routine run collected in window {ws:%Y-%m-%dT%H:%M:%SZ}"
 
 

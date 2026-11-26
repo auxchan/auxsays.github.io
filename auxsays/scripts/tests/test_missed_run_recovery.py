@@ -278,10 +278,38 @@ def main() -> int:
     day = [run(300 + i, iso(late - timedelta(hours=6 * i - 1)), event="workflow_dispatch", actor=BOT)
            for i in range(1, 5)]
     p, why = gate({str(300 + i): reached for i in range(1, 5)}, runs=day)
-    check("4l A1/S1 the daily cap applies inside the gate: 4 cycles in the previous 24 h stand a 5th (a cron) down",
-          p is False and "24 h" in why, why)
+    check("4l A2 the gate applies NO rolling-24-h cap: 4 cycles in the previous 24 h (other windows) do not stand "
+          "this window's first run down", p is True, why)
     p, why = gate({str(300 + i): reached for i in range(1, 4)}, runs=day[:3])
     check("4l2 three cycles in the previous 24 h and none in this window -> proceeds", p is True, why)
+    # The reviewer's probe (A2): every cron within minutes of its slot; today's 18:17-window cron is 5 minutes
+    # EARLIER in its window than yesterday's.
+    probe = [run(1, "2026-11-26T18:25:00Z"), run(2, "2026-11-27T00:21:00Z"), run(3, "2026-11-27T06:19:00Z"),
+             run(4, "2026-11-27T12:22:00Z")]
+    pj = {str(i): reached for i in range(1, 5)}
+    p, why = mrr.gate_collection("schedule", "auxchan", "99", T("2026-11-27T18:20:00Z"), "", probe, lambda i: pj.get(str(i)))
+    check("4n A2 PROBE: a cron 5 min earlier in its window than yesterday's is the window's first cycle and proceeds",
+          p is True, why)
+    # Varied cron delays over consecutive days (earlier, later, the same): the first run of EVERY window proceeds and
+    # a second run in the same window stands down.
+    delays = [8, 3, 3, 12, 1, 40, 2, 2, 25, 0, 5, 59, 7, 7, 1, 30]          # minutes after each slot, 4 days
+    hist, js, firsts, seconds = [], {}, [], []
+    for k, dmin in enumerate(delays):
+        slot = T("2026-11-27T00:17:00Z") + timedelta(hours=6 * k)
+        first = run(500 + 2 * k, iso(slot + timedelta(minutes=dmin)))
+        ok1, _ = mrr.gate_collection("schedule", "auxchan", str(first["id"]), T(first["created_at"]), "", list(hist),
+                                     lambda i: js.get(str(i)))
+        firsts.append(ok1)
+        hist.insert(0, first)
+        js[str(first["id"])] = reached
+        dup = run(501 + 2 * k, iso(slot + timedelta(minutes=dmin + 90)))
+        ok2, _ = mrr.gate_collection("schedule", "auxchan", str(dup["id"]), T(dup["created_at"]), "", list(hist),
+                                     lambda i: js.get(str(i)))
+        seconds.append(ok2)
+        hist.insert(0, dup)
+        js[str(dup["id"])] = stood
+    check("4o A2 VARIED DELAYS over 4 days: the first run of every window proceeds", all(firsts), str(firsts))
+    check("4p A2 VARIED DELAYS: a second run in the same window always stands down", not any(seconds), str(seconds))
     xl = run(401, "2026-11-26T18:50:00Z", conclusion="failure", event="workflow_dispatch", actor=BOT)
     xs = run(402, "2026-11-26T21:27:30Z")
     xr = run(400, "2026-11-26T12:40:00Z")
@@ -431,7 +459,8 @@ def main() -> int:
     check("6c PERSISTENT FAILURE: never more than 4 attempts per day (no retry storm)",
           max(worked.values()) <= 4 and n <= 12 and max(per_window.values()) == 1, f"{worked} dispatches={n}")
     for k_crons in ([(6, 17), (18, 17)], [(0, 17), (6, 17), (12, 17), (18, 17)]):
-        worked, n = simulate(3, crons_at=k_crons, cron_delay=timedelta(hours=3, minutes=10), conclusion="failure")
+        worked, n = simulate(3, crons_at=k_crons, cron_delay=timedelta(hours=3, minutes=10), conclusion="failure",
+                             steady=True)
         check(f"6c2 A1/S1 LATE CRONS + EVERY CYCLE LOST ({len(k_crons)} crons/day): one collection per window, "
               "never above 4 per day (G91's one re-run is the repair, not a second routine cycle)",
               max(worked.values()) <= 4 and max(per_window.values()) == 1, f"{worked} {per_window}")

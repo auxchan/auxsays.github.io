@@ -57,7 +57,7 @@ jobs:
     # missed-run-recovery.yml dispatches a routine run when a window has none; the window's cron, arriving late,
     # must then not collect a second time. A cron run, a bot dispatch without recovery_of, or the reaper's
     # re-dispatch of an evicted run stands down here when an earlier routine run in its window already collected
-    # (any outcome) or 4 cycles collected in the previous 24 h; `collect`, the PowerPoint job and chain-ingest are
+    # (any outcome), so at most one routine collection per window; `collect`, the PowerPoint job and chain-ingest are
     # then skipped and the run ends `success`. G91 judges such a run as skipped (writer_cycle_recovery.stood_down),
     # so a lost earlier cycle still gets its one re-run, which, like every operator dispatch, is never gated. Any
     # API doubt proceeds.
