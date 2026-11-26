@@ -49,6 +49,7 @@ Run standalone. Deterministic, offline, writes nothing.
 """
 from __future__ import annotations
 
+import re
 import sys
 from pathlib import Path
 
@@ -56,6 +57,9 @@ REPO = Path(__file__).resolve().parents[3]
 WORKFLOWS = REPO / ".github" / "workflows"
 
 sys.path.insert(0, str(REPO / "auxsays" / "scripts"))
+sys.path.insert(0, str(REPO / "auxsays" / "scripts" / "lib"))
+
+from automation_writeback import SINGLE_WRITER_PATHS  # noqa: E402  (a bare script in production)
 
 try:
     import yaml
@@ -240,7 +244,15 @@ def main() -> int:
     docs = load_workflows()
     raws = {n: (WORKFLOWS / n).read_text(encoding="utf-8") for n in docs}
 
-    writers = {n: d for n, d in docs.items() if writes_repo(n, d, raws[n])}
+    all_writers = {n: d for n, d in docs.items() if writes_repo(n, d, raws[n])}
+    # R3-SEC: a SINGLE-PATH writer stages only files the shared writeback reserves to one named writer
+    # (automation_writeback.SINGLE_WRITER_PATHS: no other lane may stage them, so its rebase can never meet a
+    # group member's change). It need not hold the one-deep queue, and must not: joining it would let its cron
+    # evict a queued collection run. Derived from the EXECUTED shell's `--allow` arguments, never from prose.
+    single_path = {n: d for n, d in all_writers.items()
+                   if (allows := re.findall(r"--allow\s+['\"]?([^\s'\"]+)", effective_shell(d)))
+                   and set(allows) <= set(SINGLE_WRITER_PATHS)}
+    writers = {n: d for n, d in all_writers.items() if n not in single_path}
     members = {n: d for n, d in docs.items() if concurrency_of(d)[0] == WRITER_GROUP}
     scheduled_writers = {n: crons_of(d) for n, d in writers.items() if crons_of(d)}
 
@@ -279,6 +291,11 @@ def main() -> int:
               name in writers, "non-writer holding the writer lane")
     check("2e the model never runs two writers at once",
           replay([("arrive", "a"), ("arrive", "b"), ("arrive", "c")]).running == "a")
+    for name in sorted(single_path):
+        group, cancel = concurrency_of(docs[name])
+        check(f"2f single-path writer {name}: its own group (never the queue), never cancels itself, deploys",
+              group and group != WRITER_GROUP and cancel is False and "pages.yml" in effective_shell(docs[name]),
+              f"group={group!r} cancel-in-progress={cancel!r}")
 
     # -----------------------------------------------------------------------------------------
     print(NEWLINE + "[3] A/C -- scheduled writers must not be able to evict one another")

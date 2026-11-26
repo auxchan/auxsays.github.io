@@ -1147,7 +1147,8 @@ def section_wiring() -> None:
         doc = load_wf(path.name)
         for jname, job, step, argv in script_invocations(doc, "automation_writeback.py"):
             lanes.setdefault(path.name, []).append((jname, job, step, parser.parse_args(argv)))
-    expected = {EVIDENCE_WF, INGEST_WF, "davinci-updates.yml", "promote-davinci-verified-reports.yml"}
+    expected = {EVIDENCE_WF, INGEST_WF, "davinci-updates.yml", "promote-davinci-verified-reports.yml",
+                "assessment-import.yml"}
     check("D0 every CLI writer lane is found (closed world)", set(lanes) == expected, str(sorted(lanes)))
     collect_args = None
     for name in sorted(expected):

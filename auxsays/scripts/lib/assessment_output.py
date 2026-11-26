@@ -22,8 +22,11 @@ published with a weighed verdict: it gets the count-based result and the pending
 ASSESS_PENDING). QA names every such page (`assessment_output_missing`, `assessment_output_stale`) and a broken
 file (`assessment_output_invalid`).
 
-ONE WRITER. Only the private step writes the file, through lib/automation_writeback.py, which stages it only for
-a lane that names it exactly and never beside any other path (SINGLE_WRITER_PATHS there). No public lane names it.
+ONE WRITER. The step publishes the file in a separate output-only repository; this repository's import lane
+(.github/workflows/assessment-import.yml, import_assessment_output.py) reads it with no credential, checks it here
+and commits it through lib/automation_writeback.py, which stages it only for a lane that names it exactly and never
+beside any other path (SINGLE_WRITER_PATHS there). No other lane names it, and no credential held outside this
+repository can write here.
 
 The step itself calls `install_weigher` (never a public lane): the call site then weighs live and the step records
 each result with `entry_from` and `fingerprint`, so the file is written by the same contract this module reads.
