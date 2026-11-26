@@ -293,7 +293,7 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 evidence_last_checked: '2026-10-31T22:24:20Z'
-record_last_updated: '2026-11-24T12:10:00.870823Z'
+record_last_updated: '2026-11-25T23:51:53.642750Z'
 intelligence_stage: pilot
 evidence_samples:
 - source_name: r/davinciresolve
@@ -941,6 +941,7 @@ accepted_report_sources:
   workflow_area: application stability
 evidence_source_limitations:
 - Current reports are Reddit-heavy, so production users should test before updating.
+- Some community sources were unavailable during the last check; unavailable sources were not counted as reports.
 practical_recommendations:
 - Test on copied projects before moving client work to this version.
 - Keep a known-good Resolve version available.

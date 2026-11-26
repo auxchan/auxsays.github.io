@@ -20,7 +20,7 @@ update_published_at: '2025-12-18T00:00:00Z'
 update_last_checked: '2026-05-14T04:15:50Z'
 source_last_checked: '2026-05-20T20:31:58Z'
 official_body_last_checked: '2026-05-20T20:31:58Z'
-record_last_updated: '2026-11-24T11:32:56.836040Z'
+record_last_updated: '2026-11-25T23:51:21.926251Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
@@ -355,6 +355,7 @@ accepted_report_sources:
   workflow_area: timeline / GPU performance
 evidence_source_limitations:
 - Current reports are Reddit-heavy, so production users should test before updating.
+- Some community sources were unavailable during the last check; unavailable sources were not counted as reports.
 practical_recommendations:
 - Test on copied projects before moving client work to this version.
 - Keep a known-good Resolve version available.

@@ -16,7 +16,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/16827
   source: github.com/comfy-org/comfyui
@@ -28,7 +28,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/16896
   source: github.com/comfy-org/comfyui
@@ -40,7 +40,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/16912
   source: github.com/comfy-org/comfyui
@@ -52,7 +52,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/16924
   source: github.com/comfy-org/comfyui
@@ -64,7 +64,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/16946
   source: github.com/comfy-org/comfyui
@@ -75,7 +75,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/16964
   source: github.com/comfy-org/comfyui
@@ -87,7 +87,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/16971
   source: github.com/comfy-org/comfyui
@@ -98,7 +98,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/16991
   source: github.com/comfy-org/comfyui
@@ -109,7 +109,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/17014
   source: github.com/comfy-org/comfyui
@@ -121,7 +121,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/17060
   source: github.com/comfy-org/comfyui
@@ -132,7 +132,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/17063
   source: github.com/comfy-org/comfyui
@@ -143,7 +143,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/17098
   source: github.com/comfy-org/comfyui
@@ -155,7 +155,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/17115
   source: github.com/comfy-org/comfyui
@@ -167,7 +167,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/17167
   source: github.com/comfy-org/comfyui
@@ -191,7 +191,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/17198
   source: github.com/comfy-org/comfyui
@@ -203,7 +203,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/17245
   source: github.com/comfy-org/comfyui
@@ -215,7 +215,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/17248
   source: github.com/comfy-org/comfyui
@@ -239,7 +239,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/17325
   source: github.com/comfy-org/comfyui
@@ -250,7 +250,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/17326
   source: github.com/comfy-org/comfyui
@@ -274,7 +274,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/17370
   source: github.com/comfy-org/comfyui
@@ -285,7 +285,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/17399
   source: github.com/comfy-org/comfyui
@@ -297,7 +297,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/17415
   source: github.com/comfy-org/comfyui
@@ -308,7 +308,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/17422
   source: github.com/comfy-org/comfyui
@@ -320,7 +320,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/17436
   source: github.com/comfy-org/comfyui
@@ -331,7 +331,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/17494
   source: github.com/comfy-org/comfyui
@@ -354,7 +354,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/17499
   source: github.com/comfy-org/comfyui
@@ -366,7 +366,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/17500
   source: github.com/comfy-org/comfyui
@@ -377,7 +377,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/17515
   source: github.com/comfy-org/comfyui
@@ -388,7 +388,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/17516
   source: github.com/comfy-org/comfyui
@@ -411,7 +411,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/17552
   source: github.com/comfy-org/comfyui
@@ -422,7 +422,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/17559
   source: github.com/comfy-org/comfyui
@@ -444,7 +444,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/17624
   source: github.com/comfy-org/comfyui
@@ -455,7 +455,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/17626
   source: github.com/comfy-org/comfyui
@@ -467,7 +467,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/17628
   source: github.com/comfy-org/comfyui
@@ -479,7 +479,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/17656
   source: github.com/comfy-org/comfyui
@@ -490,7 +490,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/17690
   source: github.com/comfy-org/comfyui
@@ -501,7 +501,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/17700
   source: github.com/comfy-org/comfyui
@@ -512,7 +512,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/17701
   source: github.com/comfy-org/comfyui
@@ -523,7 +523,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/17702
   source: github.com/comfy-org/comfyui
@@ -534,7 +534,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/17703
   source: github.com/comfy-org/comfyui
@@ -545,7 +545,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/17704
   source: github.com/comfy-org/comfyui
@@ -556,7 +556,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/17713
   source: github.com/comfy-org/comfyui
@@ -567,7 +567,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/17732
   source: github.com/comfy-org/comfyui
@@ -578,7 +578,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/17736
   source: github.com/comfy-org/comfyui
@@ -589,7 +589,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/17739
   source: github.com/comfy-org/comfyui
@@ -600,7 +600,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/17753
   source: github.com/comfy-org/comfyui
@@ -612,7 +612,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/17807
   source: github.com/comfy-org/comfyui
@@ -624,7 +624,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/17814
   source: github.com/comfy-org/comfyui
@@ -635,7 +635,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/17846
   source: github.com/comfy-org/comfyui
@@ -647,7 +647,18 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
+  rule: source-facts-3
+- key: https://github.com/comfy-org/comfyui/issues/17968
+  source: github.com/comfy-org/comfyui
+  state: closed
+  state_reason: completed
+  labels: []
+  os: ''
+  crash_log: null
+  form_version: ''
+  closed_by_reporter: true
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13286
   source: github.com/obsproject/obs-studio
@@ -658,7 +669,7 @@ facts:
   crash_log: false
   form_version: 32.1.1
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13287
   source: github.com/obsproject/obs-studio
@@ -691,7 +702,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13293
   source: github.com/obsproject/obs-studio
@@ -703,7 +714,7 @@ facts:
   crash_log: false
   form_version: 32.1.1
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13297
   source: github.com/obsproject/obs-studio
@@ -715,7 +726,7 @@ facts:
   crash_log: false
   form_version: 32.1.1
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13298
   source: github.com/obsproject/obs-studio
@@ -759,7 +770,7 @@ facts:
   crash_log: true
   form_version: 32.1.1
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13310
   source: github.com/obsproject/obs-studio
@@ -781,7 +792,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13316
   source: github.com/obsproject/obs-studio
@@ -792,7 +803,7 @@ facts:
   crash_log: false
   form_version: 32.1.1
   closed_by_reporter: unknown
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13317
   source: github.com/obsproject/obs-studio
@@ -3643,6 +3654,28 @@ facts:
   form_version: ''
   closed_by_reporter: unknown
   checked_at: '2026-11-24'
+  rule: source-facts-3
+- key: https://github.com/obsproject/obs-studio/issues/14256
+  source: github.com/obsproject/obs-studio
+  state: closed
+  state_reason: duplicate
+  labels: []
+  os: other
+  crash_log: false
+  form_version: 32.2.2
+  closed_by_reporter: false
+  checked_at: '2026-11-25'
+  rule: source-facts-3
+- key: https://github.com/obsproject/obs-studio/issues/14257
+  source: github.com/obsproject/obs-studio
+  state: closed
+  state_reason: not_planned
+  labels: []
+  os: ''
+  crash_log: null
+  form_version: ''
+  closed_by_reporter: false
+  checked_at: '2026-11-25'
   rule: source-facts-3
 - key: https://github.com/officedev/office-js/issues/5680
   source: github.com/officedev/office-js

@@ -44,7 +44,7 @@ reports:
   window_start: '2026-11-02'
   window_version: 26.003.22075
 - attribution_state: not_established
-  captured_at: '2026-11-25T08:26:57Z'
+  captured_at: '2026-11-25T21:38:56Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -63,7 +63,7 @@ reports:
   window_start: '2026-09-08'
   window_version: 26.002.21901
 - attribution_state: not_established
-  captured_at: '2026-11-25T08:26:57Z'
+  captured_at: '2026-11-25T21:38:56Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -624,7 +624,7 @@ reports:
   window_start: '2017-02-21'
   window_version: 15.023.20070
 - attribution_state: not_established
-  captured_at: '2026-11-25T08:46:58Z'
+  captured_at: '2026-11-25T22:00:51Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
@@ -683,7 +683,7 @@ reports:
   window_start: '2026-11-02'
   window_version: 26.003.22075
 - attribution_state: not_established
-  captured_at: '2026-11-25T08:46:58Z'
+  captured_at: '2026-11-25T22:00:51Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true

@@ -1,8 +1,8 @@
 {
   "last_cycle": {
-    "at": "2026-11-24T23:34:59Z",
+    "at": "2026-11-25T23:07:40Z",
     "outcome": "ok",
-    "requests": 11
+    "requests": 12
   },
   "provenance": {
     "collection_authorization": "owner risk acceptance; NVIDIA permission not established",
@@ -27,7 +27,7 @@
         "first_deferred_at": "2026-11-24T23:34:59Z",
         "queued_at": "2026-11-24T23:34:59Z",
         "reason": "thread_cap",
-        "times_deferred": 1
+        "times_deferred": 2
       },
       "first_read_at": "2026-11-24T01:10:21Z",
       "gap_reasons": [],
@@ -123,6 +123,12 @@
       "community_slug": "studio-drivers",
       "coverage": [],
       "created": 1779883452,
+      "deferred": {
+        "first_deferred_at": "2026-11-25T23:07:40Z",
+        "queued_at": "2026-11-25T23:07:40Z",
+        "reason": "thread_cap",
+        "times_deferred": 1
+      },
       "first_read_at": "2026-11-22T20:46:51Z",
       "gap_reasons": [],
       "last_activity": 1793136765,
@@ -144,43 +150,17 @@
         ]
       ]
     },
-    "588913": {
-      "community_id": 39,
-      "community_slug": "studio-drivers",
-      "coverage": [],
-      "created": 1785317555,
-      "deferred": {
-        "first_deferred_at": "2026-11-24T01:09:48Z",
-        "queued_at": "2026-11-24T01:09:48Z",
-        "reason": "thread_cap",
-        "times_deferred": 2
-      },
-      "first_read_at": "2026-11-23T08:59:53Z",
-      "gap_reasons": [],
-      "last_activity": 1791590772,
-      "last_read_at": "2026-11-23T08:59:53Z",
-      "staff": false,
-      "title": "BSOD 0x7F double-fault — kernel-stack overflow from unbounded recursion in nvlddmkm.sys (610.62) on",
-      "title_versions": [
-        "610.62"
-      ],
-      "total_rows": 2,
-      "window": [
-        [
-          3628858,
-          1791590772
-        ],
-        [
-          3618915,
-          1785497841
-        ]
-      ]
-    },
     "590188": {
       "community_id": 39,
       "community_slug": "studio-drivers",
       "coverage": [],
       "created": 1788183673,
+      "deferred": {
+        "first_deferred_at": "2026-11-25T23:07:40Z",
+        "queued_at": "2026-11-25T23:07:40Z",
+        "reason": "thread_cap",
+        "times_deferred": 1
+      },
       "first_read_at": "2026-11-22T20:46:43Z",
       "gap_reasons": [],
       "last_activity": 1794576341,
@@ -210,12 +190,6 @@
         "replies_not_embedded"
       ],
       "created": 1788958802,
-      "deferred": {
-        "first_deferred_at": "2026-11-24T23:34:59Z",
-        "queued_at": "2026-11-24T23:34:59Z",
-        "reason": "thread_cap",
-        "times_deferred": 1
-      },
       "first_read_at": "2026-11-20T21:29:33Z",
       "gap_reasons": [],
       "last_activity": 1795144982,
@@ -338,7 +312,7 @@
         "first_deferred_at": "2026-11-24T23:34:59Z",
         "queued_at": "2026-11-24T23:34:59Z",
         "reason": "thread_cap",
-        "times_deferred": 1
+        "times_deferred": 2
       },
       "first_read_at": "2026-11-22T20:46:19Z",
       "gap_reasons": [],
@@ -365,24 +339,6 @@
         ]
       ]
     },
-    "590759": {
-      "community_id": 39,
-      "community_slug": "studio-drivers",
-      "created": 1789403037,
-      "deferred": {
-        "first_deferred_at": "2026-11-24T01:09:48Z",
-        "queued_at": "2026-11-24T01:09:48Z",
-        "reason": "thread_cap",
-        "times_deferred": 2
-      },
-      "last_activity": null,
-      "staff": false,
-      "title": "DisplayPort No Signal / Black Screen after Sleep Mode (NVIDIA Driver 616.92)",
-      "title_versions": [
-        "616.92"
-      ],
-      "window": []
-    },
     "591981": {
       "community_id": 13,
       "community_slug": "game-ready-drivers",
@@ -391,12 +347,6 @@
         "replies_not_embedded"
       ],
       "created": 1792587602,
-      "deferred": {
-        "first_deferred_at": "2026-11-24T01:09:48Z",
-        "queued_at": "2026-11-24T01:09:48Z",
-        "reason": "thread_cap",
-        "times_deferred": 2
-      },
       "first_read_at": "2026-11-20T21:29:25Z",
       "gap_reasons": [],
       "last_activity": 1795191770,
@@ -518,6 +468,12 @@
         "replies_not_embedded"
       ],
       "created": 1793800802,
+      "deferred": {
+        "first_deferred_at": "2026-11-25T23:07:40Z",
+        "queued_at": "2026-11-25T23:07:40Z",
+        "reason": "thread_cap",
+        "times_deferred": 1
+      },
       "first_read_at": "2026-11-19T21:42:45Z",
       "gap_reasons": [],
       "last_activity": 1795562125,
@@ -636,23 +592,21 @@
       "community_slug": "game-ready-drivers",
       "coverage": [],
       "created": 1793807775,
-      "deferred": {
-        "first_deferred_at": "2026-11-24T23:34:59Z",
-        "queued_at": "2026-11-24T23:34:59Z",
-        "reason": "thread_cap",
-        "times_deferred": 1
-      },
       "first_read_at": "2026-11-21T20:35:34Z",
       "gap_reasons": [],
-      "last_activity": 1795265450,
-      "last_read_at": "2026-11-21T20:35:34Z",
+      "last_activity": 1795626967,
+      "last_read_at": "2026-11-25T23:08:24Z",
       "staff": false,
       "title": "621.14 not showing WoW: Forever",
       "title_versions": [
         "621.14"
       ],
-      "total_rows": 8,
+      "total_rows": 9,
       "window": [
+        [
+          3635570,
+          1795626967
+        ],
         [
           3633544,
           1794500034
@@ -694,6 +648,12 @@
         "older_comments_outside_window"
       ],
       "created": 1794493802,
+      "deferred": {
+        "first_deferred_at": "2026-11-25T23:07:40Z",
+        "queued_at": "2026-11-25T23:07:40Z",
+        "reason": "thread_cap",
+        "times_deferred": 1
+      },
       "first_read_at": "2026-11-19T21:42:37Z",
       "gap_reasons": [],
       "last_activity": 1795485865,
@@ -818,7 +778,7 @@
         "first_deferred_at": "2026-11-24T23:34:59Z",
         "queued_at": "2026-11-24T23:34:59Z",
         "reason": "thread_cap",
-        "times_deferred": 1
+        "times_deferred": 2
       },
       "first_read_at": "2026-11-19T21:42:53Z",
       "gap_reasons": [],
@@ -971,6 +931,24 @@
         "596.36"
       ],
       "total_rows": 0,
+      "window": []
+    },
+    "593258": {
+      "community_id": 13,
+      "community_slug": "game-ready-drivers",
+      "created": 1795528802,
+      "deferred": {
+        "first_deferred_at": "2026-11-25T23:07:40Z",
+        "queued_at": "2026-11-25T23:07:40Z",
+        "reason": "thread_cap",
+        "times_deferred": 1
+      },
+      "last_activity": null,
+      "staff": true,
+      "title": "GeForce GRD 621.40 Feedback Thread (Released 11/24/26)",
+      "title_versions": [
+        "621.40"
+      ],
       "window": []
     }
   }

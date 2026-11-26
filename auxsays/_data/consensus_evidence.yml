@@ -107986,3 +107986,998 @@ evidence:
   title_dedup_sha256: b69228a4f31c7ea1004853a179147b44be89ddb4f40b041cec2e24cdb73dceb2
   issue_bucket: plugin or setup compatibility
   facts_rule_version: v1
+- id: comfyui-0-46-0-github-issue-17991
+  product_id: comfyui
+  update_version: 0.46.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17991
+  parent_title: '[bug?] MMH3 BlockSparseAttention produces nondeterministic result when block 49 is sparse'
+  report_title: '[bug?] MMH3 BlockSparseAttention produces nondeterministic result when block 49 is sparse'
+  report_text_excerpt: '[bug?] MMH3 BlockSparseAttention produces nondeterministic result when block 49 is sparse ### Custom Node Testing - [x] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-...'
+  captured_at: '2026-11-25T22:32:04Z'
+  source_date: '2026-11-25'
+  target_release_date: '2026-11-18'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: core_version_untagged_build
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.46.0
+  matched_field: report_text
+  matched_context: '...### Other Idk if this is a bug or this is how MMH3 supposed to work? ComfyUI v0.46.0-32-g4708f03f6 PyTorch 2.13.0+cu130 comfy-kitchen 0.2.42 Model: MiniMax H3 INT8...'
+  excerpt_norm_sha256: a6dcffd64c6d683310d34d328e8d44a209950d8bc3af45285da9d1af77f0192a
+  title_dedup_sha256: 73b50a85d8b5b313548e8b545d16ec2b1baab8d4588ebecd44d456d2100b5d61
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26304-1207-5384-858-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6060066-audio-files-of-team-meeting-recordings
+  product_id: microsoft-teams
+  update_version: 26304.1207.5384.858
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6060066/audio-files-of-team-meeting-recordings
+  parent_title: Audio files of Team Meeting recordings - Microsoft Q&A
+  report_title: Audio files of Team Meeting recordings - Microsoft Q&A
+  report_text_excerpt: Audio files of Team Meeting recordings What format is the audio files when you record a meeting in MS Teams, please.
+  captured_at: '2026-11-25T22:33:40Z'
+  source_date: '2026-11-03'
+  target_release_date: '2026-11-23'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: f8a961ba8c3e4e3d24ede871e8af888ea2ff13b3ae7c05b0a883ec8bc355b2bc
+  title_dedup_sha256: 7712d82fba93e4f5dc9cf07c9fb71bc1788e91fef7a688aa01ba13a6f22c2678
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26304-1207-5384-858-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6044321-the-audio-portion-of-a-teams-meeting-f
+  product_id: microsoft-teams
+  update_version: 26304.1207.5384.858
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6044321/the-audio-portion-of-a-teams-meeting-from-the-atte
+  parent_title: the audio portion of a teams meeting from the attendees is cackling and unintelligable, how can I fix this - Microsoft Q&A
+  report_title: the audio portion of a teams meeting from the attendees is cackling and unintelligable, how can I fix this - Microsoft Q&A
+  report_text_excerpt: the audio portion of a teams meeting from the attendees is cackling and unintelligable, how can I fix this I cannot understand any audio from callers on teams meeting as there is constant crackling.... I have deleted and re downloaded the app, I have checked the audio settings...
+  captured_at: '2026-11-25T22:33:40Z'
+  source_date: '2026-10-20'
+  target_release_date: '2026-11-23'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: d4d5f343637a1ed22ee4e95af36f96d1722d79a0ae4e2ada71061a7c61bfdf0d
+  title_dedup_sha256: cc4be0e1f626f8f04d0acce91ef33931600d7d11b846fe3efc1ab34dc90c7879
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26304-1207-5384-858-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6037373-after-joing-team-meeting-can-not-scree
+  product_id: microsoft-teams
+  update_version: 26304.1207.5384.858
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6037373/after-joing-team-meeting-can-not-screen-sharing
+  parent_title: after joing team meeting can not screen sharing - Microsoft Q&A
+  report_title: after joing team meeting can not screen sharing - Microsoft Q&A
+  report_text_excerpt: after joing team meeting can not screen sharing Hi, When join team meeting, I can not share screen sharing to another people, how to check whether I can have permission or not? Thanks.
+  captured_at: '2026-11-25T22:33:40Z'
+  source_date: '2026-10-14'
+  target_release_date: '2026-11-23'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: screen sharing failure
+  workflow_area: screen sharing
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 1f2c524d876747620f191d6c792d6353aa22767ca3d486a6f9d92ff388b4e5e3
+  title_dedup_sha256: 8468bf0dbb2ad8594f469eaa545e5785f6e671130b536216455fd4846e3e62f0
+  issue_bucket: screen sharing failure
+  facts_rule_version: v1
+- id: microsoft-teams-26304-1207-5384-858-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6047593-not-able-to-create-teams-profiles
+  product_id: microsoft-teams
+  update_version: 26304.1207.5384.858
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6047593/not-able-to-create-teams-profiles
+  parent_title: not able to create teams profiles - Microsoft Q&A
+  report_title: not able to create teams profiles - Microsoft Q&A
+  report_text_excerpt: not able to create teams profiles I wanted to create a new account on my personal PC, as a login is required for the Teams app. I either misunderstood the "prove you're not a robot" verification (the "press and hold" step), or it didn't work correctly on my PC
+  captured_at: '2026-11-25T22:33:40Z'
+  source_date: '2026-10-23'
+  target_release_date: '2026-11-23'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: d6523f6336b0aa2e5da7112b9ec416bac4c20bacd4148890621d662fdef05a8e
+  title_dedup_sha256: a069666ac3c84c859e72becda66dd334124db05b8e69bc4dcbedd83af44afcfa
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26304-1207-5384-858-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-approvals-api-only-working-in-the-d
+  product_id: microsoft-teams
+  update_version: 26304.1207.5384.858
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/approvals-api-only-working-in-the-default-environment/4576405
+  parent_title: Approvals API only working in the default environment
+  report_title: Approvals API only working in the default environment
+  report_text_excerpt: Approvals API only working in the default environment The approvals are created by a Power Automate flow with the Approvals connector (Create an approval).We want to complete or cancel the approval from outside Power Automate. For this we call the beta Graph approvals API from...
+  captured_at: '2026-11-25T22:33:40Z'
+  source_date: '2026-11-24'
+  target_release_date: '2026-11-23'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: fbfda8bd8ee055fab56e835e3e762e653dd0b5ad00a5cd7444f102001af8131b
+  title_dedup_sha256: 2a70119bb6a07a1ccfa4bd943654764c01d4994e7a138137c2099ce910f99023
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26304-1207-5384-858-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-to-disable-not-show-up-facilita
+  product_id: microsoft-teams
+  update_version: 26304.1207.5384.858
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-to-disable--not-show-up-facilitator-at-microsoft-teams-room-ui/4575779
+  parent_title: How to disable / not show up Facilitator at Microsoft Teams room UI?
+  report_title: How to disable / not show up Facilitator at Microsoft Teams room UI?
+  report_text_excerpt: How to disable / not show up Facilitator at Microsoft Teams room UI? Since latest updates, Facilitator icon show up at each Microsoft Teams rooms. we have disabled facilitator in teams admin and do not want end user to use it. Inmeetings as self facilitator does not show up,...
+  captured_at: '2026-11-25T22:33:40Z'
+  source_date: '2026-11-23'
+  target_release_date: '2026-11-23'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 78a81efbd50da73a6dfae9d0bf963cfba30ce582661de15d7d37b6c556954020
+  title_dedup_sha256: 2b694d3fc2b0ddcf97d66f6d8d1a700395a64d0f4bb59fc65b56d2cc25527a66
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26304-1207-5384-858-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-translate-captions-in-teams-meeting
+  product_id: microsoft-teams
+  update_version: 26304.1207.5384.858
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/translate-captions-in-teams-meetings/4576365
+  parent_title: Translate Captions in Teams Meetings
+  report_title: Translate Captions in Teams Meetings
+  report_text_excerpt: Translate Captions in Teams Meetings Hello,I think I&apos;m close to getting translated captions to work in Teams meetings but must be something.Meeting organizer has a Teams Premium license and enables Multilingual in the settings for the meetingParticipants turn on Captions...
+  captured_at: '2026-11-25T22:33:40Z'
+  source_date: '2026-11-24'
+  target_release_date: '2026-11-23'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 2e1a868a5def91dd0b4028bf02a525a3c3c2ed0b7ae21aef5cad76f571f8e8ba
+  title_dedup_sha256: 6f4676bf6595796faa3069799d3424bc39132e071e1440db09d0c53c53680bfb
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-approvals-api-only-working-in-the-d
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/approvals-api-only-working-in-the-default-environment/4576405
+  parent_title: Approvals API only working in the default environment
+  report_title: Approvals API only working in the default environment
+  report_text_excerpt: Approvals API only working in the default environment The approvals are created by a Power Automate flow with the Approvals connector (Create an approval).We want to complete or cancel the approval from outside Power Automate. For this we call the beta Graph approvals API from...
+  captured_at: '2026-11-25T22:33:40Z'
+  source_date: '2026-11-24'
+  target_release_date: '2026-11-05'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: fbfda8bd8ee055fab56e835e3e762e653dd0b5ad00a5cd7444f102001af8131b
+  title_dedup_sha256: 2a70119bb6a07a1ccfa4bd943654764c01d4994e7a138137c2099ce910f99023
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-to-disable-not-show-up-facilita
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-to-disable--not-show-up-facilitator-at-microsoft-teams-room-ui/4575779
+  parent_title: How to disable / not show up Facilitator at Microsoft Teams room UI?
+  report_title: How to disable / not show up Facilitator at Microsoft Teams room UI?
+  report_text_excerpt: How to disable / not show up Facilitator at Microsoft Teams room UI? Since latest updates, Facilitator icon show up at each Microsoft Teams rooms. we have disabled facilitator in teams admin and do not want end user to use it. Inmeetings as self facilitator does not show up,...
+  captured_at: '2026-11-25T22:33:40Z'
+  source_date: '2026-11-23'
+  target_release_date: '2026-11-05'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 78a81efbd50da73a6dfae9d0bf963cfba30ce582661de15d7d37b6c556954020
+  title_dedup_sha256: 2b694d3fc2b0ddcf97d66f6d8d1a700395a64d0f4bb59fc65b56d2cc25527a66
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-translate-captions-in-teams-meeting
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/translate-captions-in-teams-meetings/4576365
+  parent_title: Translate Captions in Teams Meetings
+  report_title: Translate Captions in Teams Meetings
+  report_text_excerpt: Translate Captions in Teams Meetings Hello,I think I&apos;m close to getting translated captions to work in Teams meetings but must be something.Meeting organizer has a Teams Premium license and enables Multilingual in the settings for the meetingParticipants turn on Captions...
+  captured_at: '2026-11-25T22:33:40Z'
+  source_date: '2026-11-24'
+  target_release_date: '2026-11-05'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 2e1a868a5def91dd0b4028bf02a525a3c3c2ed0b7ae21aef5cad76f571f8e8ba
+  title_dedup_sha256: 6f4676bf6595796faa3069799d3424bc39132e071e1440db09d0c53c53680bfb
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-approvals-api-only-working-in-the-d
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/approvals-api-only-working-in-the-default-environment/4576405
+  parent_title: Approvals API only working in the default environment
+  report_title: Approvals API only working in the default environment
+  report_text_excerpt: Approvals API only working in the default environment The approvals are created by a Power Automate flow with the Approvals connector (Create an approval).We want to complete or cancel the approval from outside Power Automate. For this we call the beta Graph approvals API from...
+  captured_at: '2026-11-25T22:33:40Z'
+  source_date: '2026-11-24'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: fbfda8bd8ee055fab56e835e3e762e653dd0b5ad00a5cd7444f102001af8131b
+  title_dedup_sha256: 2a70119bb6a07a1ccfa4bd943654764c01d4994e7a138137c2099ce910f99023
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-to-disable-not-show-up-facilita
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-to-disable--not-show-up-facilitator-at-microsoft-teams-room-ui/4575779
+  parent_title: How to disable / not show up Facilitator at Microsoft Teams room UI?
+  report_title: How to disable / not show up Facilitator at Microsoft Teams room UI?
+  report_text_excerpt: How to disable / not show up Facilitator at Microsoft Teams room UI? Since latest updates, Facilitator icon show up at each Microsoft Teams rooms. we have disabled facilitator in teams admin and do not want end user to use it. Inmeetings as self facilitator does not show up,...
+  captured_at: '2026-11-25T22:33:40Z'
+  source_date: '2026-11-23'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 78a81efbd50da73a6dfae9d0bf963cfba30ce582661de15d7d37b6c556954020
+  title_dedup_sha256: 2b694d3fc2b0ddcf97d66f6d8d1a700395a64d0f4bb59fc65b56d2cc25527a66
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-translate-captions-in-teams-meeting
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/translate-captions-in-teams-meetings/4576365
+  parent_title: Translate Captions in Teams Meetings
+  report_title: Translate Captions in Teams Meetings
+  report_text_excerpt: Translate Captions in Teams Meetings Hello,I think I&apos;m close to getting translated captions to work in Teams meetings but must be something.Meeting organizer has a Teams Premium license and enables Multilingual in the settings for the meetingParticipants turn on Captions...
+  captured_at: '2026-11-25T22:33:40Z'
+  source_date: '2026-11-24'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 2e1a868a5def91dd0b4028bf02a525a3c3c2ed0b7ae21aef5cad76f571f8e8ba
+  title_dedup_sha256: 6f4676bf6595796faa3069799d3424bc39132e071e1440db09d0c53c53680bfb
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-approvals-api-only-working-in-the-d
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/approvals-api-only-working-in-the-default-environment/4576405
+  parent_title: Approvals API only working in the default environment
+  report_title: Approvals API only working in the default environment
+  report_text_excerpt: Approvals API only working in the default environment The approvals are created by a Power Automate flow with the Approvals connector (Create an approval).We want to complete or cancel the approval from outside Power Automate. For this we call the beta Graph approvals API from...
+  captured_at: '2026-11-25T22:33:40Z'
+  source_date: '2026-11-24'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: fbfda8bd8ee055fab56e835e3e762e653dd0b5ad00a5cd7444f102001af8131b
+  title_dedup_sha256: 2a70119bb6a07a1ccfa4bd943654764c01d4994e7a138137c2099ce910f99023
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-to-disable-not-show-up-facilita
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-to-disable--not-show-up-facilitator-at-microsoft-teams-room-ui/4575779
+  parent_title: How to disable / not show up Facilitator at Microsoft Teams room UI?
+  report_title: How to disable / not show up Facilitator at Microsoft Teams room UI?
+  report_text_excerpt: How to disable / not show up Facilitator at Microsoft Teams room UI? Since latest updates, Facilitator icon show up at each Microsoft Teams rooms. we have disabled facilitator in teams admin and do not want end user to use it. Inmeetings as self facilitator does not show up,...
+  captured_at: '2026-11-25T22:33:40Z'
+  source_date: '2026-11-23'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 78a81efbd50da73a6dfae9d0bf963cfba30ce582661de15d7d37b6c556954020
+  title_dedup_sha256: 2b694d3fc2b0ddcf97d66f6d8d1a700395a64d0f4bb59fc65b56d2cc25527a66
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-translate-captions-in-teams-meeting
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/translate-captions-in-teams-meetings/4576365
+  parent_title: Translate Captions in Teams Meetings
+  report_title: Translate Captions in Teams Meetings
+  report_text_excerpt: Translate Captions in Teams Meetings Hello,I think I&apos;m close to getting translated captions to work in Teams meetings but must be something.Meeting organizer has a Teams Premium license and enables Multilingual in the settings for the meetingParticipants turn on Captions...
+  captured_at: '2026-11-25T22:33:40Z'
+  source_date: '2026-11-24'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 2e1a868a5def91dd0b4028bf02a525a3c3c2ed0b7ae21aef5cad76f571f8e8ba
+  title_dedup_sha256: 6f4676bf6595796faa3069799d3424bc39132e071e1440db09d0c53c53680bfb
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-approvals-api-only-working-in-the-d
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/approvals-api-only-working-in-the-default-environment/4576405
+  parent_title: Approvals API only working in the default environment
+  report_title: Approvals API only working in the default environment
+  report_text_excerpt: Approvals API only working in the default environment The approvals are created by a Power Automate flow with the Approvals connector (Create an approval).We want to complete or cancel the approval from outside Power Automate. For this we call the beta Graph approvals API from...
+  captured_at: '2026-11-25T22:33:40Z'
+  source_date: '2026-11-24'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: fbfda8bd8ee055fab56e835e3e762e653dd0b5ad00a5cd7444f102001af8131b
+  title_dedup_sha256: 2a70119bb6a07a1ccfa4bd943654764c01d4994e7a138137c2099ce910f99023
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-to-disable-not-show-up-facilita
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-to-disable--not-show-up-facilitator-at-microsoft-teams-room-ui/4575779
+  parent_title: How to disable / not show up Facilitator at Microsoft Teams room UI?
+  report_title: How to disable / not show up Facilitator at Microsoft Teams room UI?
+  report_text_excerpt: How to disable / not show up Facilitator at Microsoft Teams room UI? Since latest updates, Facilitator icon show up at each Microsoft Teams rooms. we have disabled facilitator in teams admin and do not want end user to use it. Inmeetings as self facilitator does not show up,...
+  captured_at: '2026-11-25T22:33:40Z'
+  source_date: '2026-11-23'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 78a81efbd50da73a6dfae9d0bf963cfba30ce582661de15d7d37b6c556954020
+  title_dedup_sha256: 2b694d3fc2b0ddcf97d66f6d8d1a700395a64d0f4bb59fc65b56d2cc25527a66
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-translate-captions-in-teams-meeting
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/translate-captions-in-teams-meetings/4576365
+  parent_title: Translate Captions in Teams Meetings
+  report_title: Translate Captions in Teams Meetings
+  report_text_excerpt: Translate Captions in Teams Meetings Hello,I think I&apos;m close to getting translated captions to work in Teams meetings but must be something.Meeting organizer has a Teams Premium license and enables Multilingual in the settings for the meetingParticipants turn on Captions...
+  captured_at: '2026-11-25T22:33:40Z'
+  source_date: '2026-11-24'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 2e1a868a5def91dd0b4028bf02a525a3c3c2ed0b7ae21aef5cad76f571f8e8ba
+  title_dedup_sha256: 6f4676bf6595796faa3069799d3424bc39132e071e1440db09d0c53c53680bfb
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-approvals-api-only-working-in-the-d
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/approvals-api-only-working-in-the-default-environment/4576405
+  parent_title: Approvals API only working in the default environment
+  report_title: Approvals API only working in the default environment
+  report_text_excerpt: Approvals API only working in the default environment The approvals are created by a Power Automate flow with the Approvals connector (Create an approval).We want to complete or cancel the approval from outside Power Automate. For this we call the beta Graph approvals API from...
+  captured_at: '2026-11-25T22:33:40Z'
+  source_date: '2026-11-24'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: fbfda8bd8ee055fab56e835e3e762e653dd0b5ad00a5cd7444f102001af8131b
+  title_dedup_sha256: 2a70119bb6a07a1ccfa4bd943654764c01d4994e7a138137c2099ce910f99023
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-to-disable-not-show-up-facilita
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-to-disable--not-show-up-facilitator-at-microsoft-teams-room-ui/4575779
+  parent_title: How to disable / not show up Facilitator at Microsoft Teams room UI?
+  report_title: How to disable / not show up Facilitator at Microsoft Teams room UI?
+  report_text_excerpt: How to disable / not show up Facilitator at Microsoft Teams room UI? Since latest updates, Facilitator icon show up at each Microsoft Teams rooms. we have disabled facilitator in teams admin and do not want end user to use it. Inmeetings as self facilitator does not show up,...
+  captured_at: '2026-11-25T22:33:40Z'
+  source_date: '2026-11-23'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 78a81efbd50da73a6dfae9d0bf963cfba30ce582661de15d7d37b6c556954020
+  title_dedup_sha256: 2b694d3fc2b0ddcf97d66f6d8d1a700395a64d0f4bb59fc65b56d2cc25527a66
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-translate-captions-in-teams-meeting
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/translate-captions-in-teams-meetings/4576365
+  parent_title: Translate Captions in Teams Meetings
+  report_title: Translate Captions in Teams Meetings
+  report_text_excerpt: Translate Captions in Teams Meetings Hello,I think I&apos;m close to getting translated captions to work in Teams meetings but must be something.Meeting organizer has a Teams Premium license and enables Multilingual in the settings for the meetingParticipants turn on Captions...
+  captured_at: '2026-11-25T22:33:40Z'
+  source_date: '2026-11-24'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 2e1a868a5def91dd0b4028bf02a525a3c3c2ed0b7ae21aef5cad76f571f8e8ba
+  title_dedup_sha256: 6f4676bf6595796faa3069799d3424bc39132e071e1440db09d0c53c53680bfb
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-approvals-api-only-working-in-the-d
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/approvals-api-only-working-in-the-default-environment/4576405
+  parent_title: Approvals API only working in the default environment
+  report_title: Approvals API only working in the default environment
+  report_text_excerpt: Approvals API only working in the default environment The approvals are created by a Power Automate flow with the Approvals connector (Create an approval).We want to complete or cancel the approval from outside Power Automate. For this we call the beta Graph approvals API from...
+  captured_at: '2026-11-25T22:33:40Z'
+  source_date: '2026-11-24'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: fbfda8bd8ee055fab56e835e3e762e653dd0b5ad00a5cd7444f102001af8131b
+  title_dedup_sha256: 2a70119bb6a07a1ccfa4bd943654764c01d4994e7a138137c2099ce910f99023
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-to-disable-not-show-up-facilita
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-to-disable--not-show-up-facilitator-at-microsoft-teams-room-ui/4575779
+  parent_title: How to disable / not show up Facilitator at Microsoft Teams room UI?
+  report_title: How to disable / not show up Facilitator at Microsoft Teams room UI?
+  report_text_excerpt: How to disable / not show up Facilitator at Microsoft Teams room UI? Since latest updates, Facilitator icon show up at each Microsoft Teams rooms. we have disabled facilitator in teams admin and do not want end user to use it. Inmeetings as self facilitator does not show up,...
+  captured_at: '2026-11-25T22:33:40Z'
+  source_date: '2026-11-23'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 78a81efbd50da73a6dfae9d0bf963cfba30ce582661de15d7d37b6c556954020
+  title_dedup_sha256: 2b694d3fc2b0ddcf97d66f6d8d1a700395a64d0f4bb59fc65b56d2cc25527a66
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-translate-captions-in-teams-meeting
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/translate-captions-in-teams-meetings/4576365
+  parent_title: Translate Captions in Teams Meetings
+  report_title: Translate Captions in Teams Meetings
+  report_text_excerpt: Translate Captions in Teams Meetings Hello,I think I&apos;m close to getting translated captions to work in Teams meetings but must be something.Meeting organizer has a Teams Premium license and enables Multilingual in the settings for the meetingParticipants turn on Captions...
+  captured_at: '2026-11-25T22:33:40Z'
+  source_date: '2026-11-24'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 2e1a868a5def91dd0b4028bf02a525a3c3c2ed0b7ae21aef5cad76f571f8e8ba
+  title_dedup_sha256: 6f4676bf6595796faa3069799d3424bc39132e071e1440db09d0c53c53680bfb
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-approvals-api-only-working-in-the-d
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/approvals-api-only-working-in-the-default-environment/4576405
+  parent_title: Approvals API only working in the default environment
+  report_title: Approvals API only working in the default environment
+  report_text_excerpt: Approvals API only working in the default environment The approvals are created by a Power Automate flow with the Approvals connector (Create an approval).We want to complete or cancel the approval from outside Power Automate. For this we call the beta Graph approvals API from...
+  captured_at: '2026-11-25T22:33:40Z'
+  source_date: '2026-11-24'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: fbfda8bd8ee055fab56e835e3e762e653dd0b5ad00a5cd7444f102001af8131b
+  title_dedup_sha256: 2a70119bb6a07a1ccfa4bd943654764c01d4994e7a138137c2099ce910f99023
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-to-disable-not-show-up-facilita
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-to-disable--not-show-up-facilitator-at-microsoft-teams-room-ui/4575779
+  parent_title: How to disable / not show up Facilitator at Microsoft Teams room UI?
+  report_title: How to disable / not show up Facilitator at Microsoft Teams room UI?
+  report_text_excerpt: How to disable / not show up Facilitator at Microsoft Teams room UI? Since latest updates, Facilitator icon show up at each Microsoft Teams rooms. we have disabled facilitator in teams admin and do not want end user to use it. Inmeetings as self facilitator does not show up,...
+  captured_at: '2026-11-25T22:33:40Z'
+  source_date: '2026-11-23'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 78a81efbd50da73a6dfae9d0bf963cfba30ce582661de15d7d37b6c556954020
+  title_dedup_sha256: 2b694d3fc2b0ddcf97d66f6d8d1a700395a64d0f4bb59fc65b56d2cc25527a66
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-translate-captions-in-teams-meeting
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/translate-captions-in-teams-meetings/4576365
+  parent_title: Translate Captions in Teams Meetings
+  report_title: Translate Captions in Teams Meetings
+  report_text_excerpt: Translate Captions in Teams Meetings Hello,I think I&apos;m close to getting translated captions to work in Teams meetings but must be something.Meeting organizer has a Teams Premium license and enables Multilingual in the settings for the meetingParticipants turn on Captions...
+  captured_at: '2026-11-25T22:33:40Z'
+  source_date: '2026-11-24'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 2e1a868a5def91dd0b4028bf02a525a3c3c2ed0b7ae21aef5cad76f571f8e8ba
+  title_dedup_sha256: 6f4676bf6595796faa3069799d3424bc39132e071e1440db09d0c53c53680bfb
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-approvals-api-only-working-in-the-d
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/approvals-api-only-working-in-the-default-environment/4576405
+  parent_title: Approvals API only working in the default environment
+  report_title: Approvals API only working in the default environment
+  report_text_excerpt: Approvals API only working in the default environment The approvals are created by a Power Automate flow with the Approvals connector (Create an approval).We want to complete or cancel the approval from outside Power Automate. For this we call the beta Graph approvals API from...
+  captured_at: '2026-11-25T22:33:40Z'
+  source_date: '2026-11-24'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: fbfda8bd8ee055fab56e835e3e762e653dd0b5ad00a5cd7444f102001af8131b
+  title_dedup_sha256: 2a70119bb6a07a1ccfa4bd943654764c01d4994e7a138137c2099ce910f99023
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-to-disable-not-show-up-facilita
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-to-disable--not-show-up-facilitator-at-microsoft-teams-room-ui/4575779
+  parent_title: How to disable / not show up Facilitator at Microsoft Teams room UI?
+  report_title: How to disable / not show up Facilitator at Microsoft Teams room UI?
+  report_text_excerpt: How to disable / not show up Facilitator at Microsoft Teams room UI? Since latest updates, Facilitator icon show up at each Microsoft Teams rooms. we have disabled facilitator in teams admin and do not want end user to use it. Inmeetings as self facilitator does not show up,...
+  captured_at: '2026-11-25T22:33:40Z'
+  source_date: '2026-11-23'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 78a81efbd50da73a6dfae9d0bf963cfba30ce582661de15d7d37b6c556954020
+  title_dedup_sha256: 2b694d3fc2b0ddcf97d66f6d8d1a700395a64d0f4bb59fc65b56d2cc25527a66
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-translate-captions-in-teams-meeting
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/translate-captions-in-teams-meetings/4576365
+  parent_title: Translate Captions in Teams Meetings
+  report_title: Translate Captions in Teams Meetings
+  report_text_excerpt: Translate Captions in Teams Meetings Hello,I think I&apos;m close to getting translated captions to work in Teams meetings but must be something.Meeting organizer has a Teams Premium license and enables Multilingual in the settings for the meetingParticipants turn on Captions...
+  captured_at: '2026-11-25T22:33:40Z'
+  source_date: '2026-11-24'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 2e1a868a5def91dd0b4028bf02a525a3c3c2ed0b7ae21aef5cad76f571f8e8ba
+  title_dedup_sha256: 6f4676bf6595796faa3069799d3424bc39132e071e1440db09d0c53c53680bfb
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6081681-question-6081681
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6081681/problems-with-installing-kb5132061
+  parent_title: Problems with installing KB5132061 - Microsoft Q&A
+  report_title: Problems with installing KB5132061 - Microsoft Q&A
+  report_text_excerpt: Problems with installing KB5132061 - Microsoft Q&A Hello I use version 25H2 Home. The installation of KB5132061 got into endless loop, I used point-in-time restore to go to Windows, and KB5132061 was in the list of installed updates. The next day it came back, I installed and...
+  captured_at: '2026-11-25T22:44:37Z'
+  source_date: '2026-11-25'
+  target_release_date: '2026-11-19'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5132057
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5132057
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.10075'
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: 4b7ccb5298e5df5fea6cf576eaf60de16a30286366ab8b357809bfcef6e07b90
+  title_dedup_sha256: dba84353e070b265737972c0b9bf0bcc71bfa46ccad516e21a804e22bb15ca3c
+  issue_bucket: update/install failure
+  facts_rule_version: v1
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6081719-question-6081719
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6081719/how-to-fix-2026-11-preview-update-kb5132057-26300
+  parent_title: How to fix 2026-11 Preview Update (KB5132057) (26300.10075 Install error - 0x800f081f) - Microsoft Q&A
+  report_title: How to fix 2026-11 Preview Update (KB5132057) (26300.10075 Install error - 0x800f081f) - Microsoft Q&A
+  report_text_excerpt: How to fix 2026-11 Preview Update (KB5132057) (26300.10075 Install error - 0x800f081f) - Microsoft Q&A Windows 11 Pro - Version 26H2 - How to fix 2026-11 Preview Update (KB5132057) (26300.10075 Install error - 0x800f081f)
+  captured_at: '2026-11-25T22:44:37Z'
+  source_date: '2026-11-24'
+  target_release_date: '2026-11-19'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.10075'
+  match_basis: exact_os_build
+  matched_kb: KB5132057
+  matched_os_build: '26300.10075'
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.10075'
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: 3b539c2ddae5c3daa59a4a79830c3c151ca2af49c93b004ee6354a2f2edab191
+  title_dedup_sha256: 559000bedcbdc1051057f8d0bf1ffc5769b1a45d27840c58bb47c5a4e0ae645f
+  issue_bucket: update/install failure
+  facts_rule_version: v1
+- id: obs-studio-33-0-3-github-issue-14257
+  product_id: obs-studio
+  update_version: 33.0.3
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14257
+  parent_title: Impossible to capture a window in Wayland (Ubuntu 26.04)
+  report_title: Impossible to capture a window in Wayland (Ubuntu 26.04)
+  report_text_excerpt: 'Budgie 26.04 ### OBS Studio Version Other ### OBS Studio Version (Other) 33.0.0 (native) 33.0.3 (flatpak) ### OBS Studio Log URL https://obsproject.com/logs/H9YfXEjrrlMWwtsz ### Expected Behavior Add source > A source allows me to capture a window Add source > A source allows me'
+  captured_at: '2026-11-25T23:14:20Z'
+  source_date: '2026-11-25'
+  patch_version_matched: true
+  matched_version: 33.0.3
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: linux
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: github_issues
+  excerpt_norm_sha256: 2403776b8b797247f263a346c6571e1ad93d519f971d9ec977b5d3e2fbd30f40
+  title_dedup_sha256: 2e8e90ef22e3f9212ff481113e6d809677cc5cf3be4ba49d99f283d903837f24
+  issue_bucket: audio mixer or routing issues
+  facts_rule_version: v1
