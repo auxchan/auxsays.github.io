@@ -106,6 +106,11 @@ def check_validation() -> None:
     named = text([entry(retained="The file provisional_assessments.yml is public.")])
     check("V14 a text naming the private component is refused; the public output's own name is not",
           errors(leak) == ["names_private_component"] and errors(named) == [], str((errors(leak), errors(named))))
+    listed = text([entry(page=["example-app|1.2.3|"])])
+    impossible = text([entry()], generated_at="2026-13-45T99:99:99Z")
+    check("V15 an entry shape the contract did not foresee, or an impossible stamp, is a refusal, never a crash",
+          (errors(listed), errors(impossible)) == (["entry_invalid"], ["header_invalid"]),
+          str((errors(listed), errors(impossible))))
 
 
 # ------------------------------------------------------------------------------------------------ [I]
@@ -143,6 +148,16 @@ def check_install(tmp: Path) -> None:
                         capture_output=True, text=True, cwd=str(tmp))
     check("I6 run as a bare script on an identical file: exit 0, `unchanged`",
           ok.returncode == 0 and ok.stdout.strip() == "IMPORT_STATUS: unchanged", ok.stdout + ok.stderr)
+    older = tmp / "older.yml"
+    older.write_bytes((text([entry()], generated_at="2025-12-31T00:00:00Z")).encode("utf-8"))
+    before = target.read_bytes()
+    back = imp.install(older, target, now=NOW)
+    newer = tmp / "newer.yml"
+    newer.write_bytes((text([entry()], generated_at="2026-01-02T00:00:00Z")).encode("utf-8"))
+    forward = imp.install(newer, target, now=NOW)
+    check("I7 a valid file generated EARLIER than the installed one is refused (no silent revert); a newer one installs",
+          back == (imp.REFUSED, ["older_than_installed"]) and forward == (imp.INSTALLED, [])
+          and target.read_bytes() == newer.read_bytes(), str((back, forward, before == target.read_bytes())))
 
 
 # ------------------------------------------------------------------------------------------------ [F]
@@ -184,6 +199,14 @@ def check_workflow() -> None:
           len(order) == 2 and order[0] < order[1], str(order))
     check("F8 every multi-command step that pipes sets pipefail",
           all("set -euo pipefail" in r for r in runs if "|" in r.replace("||", "") and "\n" in r.strip()))
+    steps = [st for job in doc["jobs"].values() for st in job.get("steps", [])]
+    wb = [st for st in steps if "automation_writeback.py" in str(st.get("run", ""))]
+    lead = str(wb[0]["run"]).split("automation_writeback.py")[0] if wb else ""
+    lead = "\n".join(ln for ln in lead.splitlines() if not ln.lstrip().startswith("#"))
+    check("F10 the writeback runs on EVERY run that passed the check (no step condition, no early exit), so its "
+          "no-change deploy recovery is reachable",
+          len(wb) == 1 and "if" not in wb[0] and not re.search(r"\bexit\b", lead)
+          and "--deploy-recovery" in str(wb[0]["run"]), lead[-300:])
     names = sorted(p.name for p in WORKFLOW.parent.glob("*.y*ml") if ao.OUTPUT_NAME in p.read_text(encoding="utf-8"))
     check("F9 it is the ONLY workflow of this repository that names the output file", names == [WORKFLOW.name],
           str(names))

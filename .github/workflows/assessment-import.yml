@@ -7,14 +7,17 @@ name: Import the stored provisional assessments
 # through the shared conflict-safe writeback, which stages this one path and nothing else. No credential held
 # outside this repository can write here.
 #
-# Hourly, so a new output arrives within about an hour of being computed; a run whose file is unchanged commits
-# nothing. Public-repository minutes are free. Its own concurrency group, never auxsays-main-writeback: that
-# group queues only one run, and a third entrant would cancel a queued collection run (the writeback itself is
-# safe against concurrent pushes: it rebases and retries).
+# Every 15 minutes, so a new output arrives soon after it is computed (the private step's own schedule is late
+# and lossy); a run whose file is unchanged commits nothing, but still calls the writeback so its no-change
+# deploy recovery re-dispatches Pages for this lane's last commit if that deployment was lost. Public-repository
+# minutes are free. Its own concurrency group, never auxsays-main-writeback: that group queues only one run, and
+# a third entrant would cancel a queued collection run (the writeback itself is safe against concurrent pushes:
+# it rebases and retries). Do not assume a push to the output repository starts anything here: only this
+# schedule (or a dispatch) does.
 
 on:
   schedule:
-    - cron: "37 * * * *"
+    - cron: "7,22,37,52 * * * *"
   workflow_dispatch:
 
 env:
@@ -70,10 +73,8 @@ jobs:
       - name: Commit it (the shared conflict-safe writeback; it stages ONLY this path)
         run: |
           set -euo pipefail
-          if grep -q '^IMPORT_STATUS: unchanged$' "$RUNNER_TEMP/import.out"; then
-            echo "unchanged: nothing to commit"
-            exit 0
-          fi
+          # Always called, also when the import reported `unchanged`: on no change the writeback commits nothing
+          # and runs its deploy recovery for this lane's last commit (--recovery-*).
           python auxsays/scripts/lib/automation_writeback.py \
             --repo . --branch main --remote origin \
             --message "Update the stored provisional assessments" \

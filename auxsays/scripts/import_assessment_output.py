@@ -15,7 +15,10 @@ THE CHECKS (all must hold, else nothing is installed and the lane fails):
   * it is byte-for-byte the canonical text `assessment_output.render` gives for its own content, so it carries
     no comment, anchor, alias, tag or layout of its own;
   * `generated_at` is not in the future (CLOCK_SKEW of slack);
-  * it names none of the private component's files or folders (the publish gate's own list).
+  * it names none of the private component's files or folders (the publish gate's own list);
+  * (install only) it is not generated earlier than the file already installed.
+The private step runs this same script with --check-only BEFORE it publishes the file, so a refusal here is
+normally caught before the file ever reaches the public output repository.
 A fingerprint that does not match the current tree is NOT a refusal: the reader already treats such an entry as
 stale and the page shows the count-based result, exactly as with no file.
 
@@ -70,14 +73,19 @@ def candidate_errors(raw: bytes, *, now: datetime | None = None) -> list[str]:
     pages = doc["pages"]
     if len(pages) > MAX_PAGES:
         return ["too_many_pages"]
+    try:
+        if any(ao.entry_errors(e) for e in pages):
+            return ["entry_invalid"]
+        keys = [e["page"] for e in pages]
+        twice = len(keys) != len(set(keys))
+    except Exception:  # noqa: BLE001 - an entry shape the contract did not foresee is a refusal, never a crash
+        return ["entry_invalid"]
+    if twice:
+        return ["page_listed_twice"]
+    stamp = generated_at(doc)
+    if stamp is None:
+        return ["header_invalid"]
     errors = []
-    if any(ao.entry_errors(e) for e in pages):
-        errors.append("entry_invalid")
-    keys = [e.get("page") for e in pages if isinstance(e, dict)]
-    if len(keys) != len(set(keys)):
-        errors.append("page_listed_twice")
-    if errors:
-        return errors
     try:
         canonical = ao.render(pages, rule_version=doc["rule_version"], generated_at=doc["generated_at"],
                               source_commit=doc["source_commit"])
@@ -85,7 +93,6 @@ def candidate_errors(raw: bytes, *, now: datetime | None = None) -> list[str]:
         return ["not_renderable"]
     if canonical != text:
         errors.append("not_canonical")
-    stamp = datetime.strptime(doc["generated_at"], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc)
     if stamp > (now or datetime.now(timezone.utc)) + CLOCK_SKEW:
         errors.append("generated_in_future")
     if _PRIVATE_NAME_RE.search(text):
@@ -93,8 +100,28 @@ def candidate_errors(raw: bytes, *, now: datetime | None = None) -> list[str]:
     return errors
 
 
+def generated_at(doc: Any) -> datetime | None:
+    """The document's `generated_at` as an aware UTC time, or None when it is missing or not a real time."""
+    try:
+        return datetime.strptime(doc["generated_at"], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc)
+    except Exception:  # noqa: BLE001 - a regex-valid but impossible stamp (month 13) is simply not a time
+        return None
+
+
+def _installed_stamp(current: bytes) -> datetime | None:
+    """`generated_at` of the installed file, or None when there is none to compare with (never a refusal)."""
+    try:
+        return generated_at(yaml.load(current.decode("utf-8"), Loader=yaml.SafeLoader))
+    except Exception:  # noqa: BLE001
+        return None
+
+
 def install(candidate: Path, target: Path, *, now: datetime | None = None) -> tuple[str, list[str]]:
-    """(status, reasons). Writes `target` only when the candidate passes and differs from it."""
+    """(status, reasons). Writes `target` only when the candidate passes and differs from it.
+
+    A valid candidate generated EARLIER than the installed file is refused (`older_than_installed`): an accidental
+    revert of the output repository, or a replay of an old file, never silently moves the site backwards. A newer
+    run of the private step always supersedes it, so this never blocks the normal flow."""
     try:
         raw = Path(candidate).read_bytes()
     except OSError:
@@ -110,6 +137,11 @@ def install(candidate: Path, target: Path, *, now: datetime | None = None) -> tu
         current = None
     if current == raw:
         return UNCHANGED, []
+    if current is not None:
+        before = _installed_stamp(current)
+        after = generated_at(yaml.load(raw.decode("utf-8"), Loader=yaml.SafeLoader))
+        if before is not None and after is not None and after < before:
+            return REFUSED, ["older_than_installed"]
     Path(target).parent.mkdir(parents=True, exist_ok=True)
     Path(target).write_bytes(raw)
     return INSTALLED, []
