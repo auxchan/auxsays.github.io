@@ -33,6 +33,7 @@ Read-only local dry-run (never writes evidence or records):
 """
 from __future__ import annotations
 
+import copy
 import os
 import re
 from typing import Any
@@ -908,6 +909,13 @@ MAX_SYMPTOM_QUERIES = 5
 # the process, which is the natural scope of one collection run. Identity-first queries are NOT
 # cached -- those genuinely differ per record.
 _SYMPTOM_CACHE: dict[str, list[dict[str, Any]]] = {}
+# The open-web lane's run caches, one entry per QUERY and per URL rather than per record's whole
+# query list. Its query set mixes record-specific and product-level questions, so a whole-list key
+# never matched twice and every record re-sent the shared searches and re-fetched the same pages:
+# on 2026-11-25 about 38 x (8 searches, 16 Stack Exchange calls, 120 page fetches) a run, and the
+# newest records -- walked last -- were refused (`rate_limited`) on 22 of 38 records.
+_OPEN_WEB_QUERY_CACHE: dict[tuple[str, str], tuple[str, Any]] = {}
+_OPEN_WEB_PAGE_CACHE: dict[str, tuple[str, Any]] = {}
 
 
 def reset_symptom_cache() -> None:
@@ -918,6 +926,8 @@ def reset_symptom_cache() -> None:
     session) must not serve one run's discoveries to the next.
     """
     _SYMPTOM_CACHE.clear()
+    _OPEN_WEB_QUERY_CACHE.clear()
+    _OPEN_WEB_PAGE_CACHE.clear()
 
 
 def cached_product_candidates(namespace: str, key_parts: list[str], produce):
@@ -1479,29 +1489,32 @@ def run_open_web_method(record: PatchRecord, target: dict[str, Any], context: Co
     queries = open_web_source.build_queries(version=version, build=build,
                                             max_queries=OPEN_WEB_MAX_QUERIES)
 
-    def _discover() -> list[dict[str, Any]]:
-        found, telemetry = open_web_source.discover_urls(
-            queries, errors=ow_errors, max_requests=OPEN_WEB_MAX_REQUESTS)
-        return [{"__telemetry__": telemetry}] + found
-
-    discovered = cached_product_candidates("open_web_discovery", queries, _discover)
-    telemetry = (discovered[0].get("__telemetry__") if discovered else {}) or {}
-    rows = [r for r in discovered if "__telemetry__" not in r]
-
-    def _hydrate() -> list[dict[str, Any]]:
-        built: list[dict[str, Any]] = []
-        for row in rows[:OPEN_WEB_MAX_HYDRATIONS]:
+    # Each query is asked once per run and each page fetched once per run (the caches above); a
+    # record still walks its own query list, under its own budget, and hydrates its own first
+    # OPEN_WEB_MAX_HYDRATIONS URLs, so its candidate list is the one a fresh run would build. A
+    # cached refusal is replayed into this record's errors: the status still reports it.
+    rows, telemetry = open_web_source.discover_urls(
+        queries, errors=ow_errors, max_requests=OPEN_WEB_MAX_REQUESTS, cache=_OPEN_WEB_QUERY_CACHE)
+    telemetry = telemetry or {}
+    candidates: list[dict[str, Any]] = []
+    pages_fetched = pages_reused = 0
+    for row in rows[:OPEN_WEB_MAX_HYDRATIONS]:
+        url = str(row.get("source_url") or "")
+        outcome = _OPEN_WEB_PAGE_CACHE.get(url)
+        if outcome is None:
+            pages_fetched += 1
             try:
-                candidate = hydrate_discovered_url(row)
+                outcome = ("page", hydrate_discovered_url(row))
             except Exception as exc:  # noqa: BLE001 - recorded for method health
-                ow_errors.append({"source_url": row.get("source_url"),
-                                  "reason": open_web_source.error_reason(exc)})
-                continue
-            if candidate:
-                built.append(candidate)
-        return built
-
-    candidates = cached_product_candidates("open_web_hydration", queries, _hydrate)
+                outcome = ("refused", open_web_source.error_reason(exc))
+            _OPEN_WEB_PAGE_CACHE[url] = outcome
+        else:
+            pages_reused += 1
+        if outcome[0] == "refused":
+            ow_errors.append({"source_url": row.get("source_url"), "reason": outcome[1]})
+            continue
+        if outcome[1]:
+            candidates.append(copy.deepcopy(outcome[1]))
     accepted, rejected = evaluate_candidates(record, target, list(candidates), captured_at,
                                              seen, run_accepted_urls)
     status = qna_tag_method_status(list(candidates), accepted, rejected, ow_errors,
@@ -1511,6 +1524,9 @@ def run_open_web_method(record: PatchRecord, target: dict[str, Any], context: Co
         f"Queries {telemetry.get('queries', 0)}, requests {telemetry.get('requests', 0)}, "
         f"results {telemetry.get('raw_results', 0)}, supported URLs {len(rows)}, "
         f"hydrated {len(candidates)}, accepted {len(accepted)}, rejected {len(rejected)}. "
+        f"Sent this record: {telemetry.get('network_requests', 0)} searches and {pages_fetched} page "
+        f"fetches; reused from earlier records this run: {telemetry.get('reused', 0)} searches and "
+        f"{pages_reused} pages. "
         + (f"Top rejections: {format_rejection_counts(rejected)}. " if rejected else "")
         + "General web indexes are not used: one serves a bot challenge, two forbid /search in "
           "robots.txt and one requires a paid key. Search output supplies URLs only -- every page "
