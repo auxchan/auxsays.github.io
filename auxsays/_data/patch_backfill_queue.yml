@@ -387,7 +387,7 @@
   category_key: dev-web
   source_url: https://github.blog/changelog/
   source_label: GitHub changelog
-  documented_update_count: 475
+  documented_update_count: 476
   coverage_state: documented
   backfill_status: complete
 - product_id: cloudflare
@@ -410,7 +410,7 @@
   category_key: dev-web
   source_url: https://www.netlify.com/changelog/
   source_label: Netlify changelog
-  documented_update_count: 4
+  documented_update_count: 6
   coverage_state: documented
   backfill_status: queued
   backfill_executor: official_ingest_lane
