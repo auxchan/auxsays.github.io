@@ -1,0 +1,104 @@
+name: Import the stored provisional assessments
+
+# The provisional assessments are computed outside this repository and published as ONE file in the PUBLIC
+# output-only repository named below. This lane is the file's only writer here: it reads the file anonymously
+# (no credential to anything), checks it with this repository's own code (import_assessment_output.py: size,
+# schema, every entry, byte-canonical form, no private names), and commits it with this repository's own token
+# through the shared conflict-safe writeback, which stages this one path and nothing else. No credential held
+# outside this repository can write here.
+#
+# Hourly, so a new output arrives within about an hour of being computed; a run whose file is unchanged commits
+# nothing. Public-repository minutes are free. Its own concurrency group, never auxsays-main-writeback: that
+# group queues only one run, and a third entrant would cancel a queued collection run (the writeback itself is
+# safe against concurrent pushes: it rebases and retries).
+
+on:
+  schedule:
+    - cron: "37 * * * *"
+  workflow_dispatch:
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: assessment-import
+  cancel-in-progress: false
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      OUTPUT_REPO: auxchan/auxsays-assessment-output
+      OUTPUT_FILE: provisional_assessments.yml
+      GITHUB_TOKEN: ${{ github.token }}
+      GH_TOKEN: ${{ github.token }}
+      PYTHONDONTWRITEBYTECODE: "1"
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v7
+        with:
+          ref: main
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r auxsays/scripts/requirements-ingest.txt
+
+      - name: Read the output file anonymously (one blob, no checkout, no credential)
+        run: |
+          set -euo pipefail
+          git init --quiet "$RUNNER_TEMP/output"
+          git -C "$RUNNER_TEMP/output" -c credential.helper= -c http.extraHeader= \
+            fetch --quiet --depth 1 --no-tags "https://github.com/${OUTPUT_REPO}.git" main
+          git -C "$RUNNER_TEMP/output" show "FETCH_HEAD:${OUTPUT_FILE}" > "$RUNNER_TEMP/candidate.yml"
+          echo "OUTPUT_REPO_COMMIT: $(git -C "$RUNNER_TEMP/output" rev-parse FETCH_HEAD)"
+
+      - name: Check and install it (fixed status lines only)
+        run: |
+          set -euo pipefail
+          python auxsays/scripts/import_assessment_output.py --candidate "$RUNNER_TEMP/candidate.yml" \
+            | tee "$RUNNER_TEMP/import.out"
+
+      - name: Commit it (the shared conflict-safe writeback; it stages ONLY this path)
+        run: |
+          set -euo pipefail
+          if grep -q '^IMPORT_STATUS: unchanged$' "$RUNNER_TEMP/import.out"; then
+            echo "unchanged: nothing to commit"
+            exit 0
+          fi
+          python auxsays/scripts/lib/automation_writeback.py \
+            --repo . --branch main --remote origin \
+            --message "Update the stored provisional assessments" \
+            --allow auxsays/_data/provisional_assessments.yml \
+            --validate 'python auxsays/scripts/qa_patch_records.py' \
+            --validate-before-commit \
+            --max-retries 5 \
+            --pages-cmd 'gh workflow run pages.yml --ref main' \
+            --pages-max-attempts 3 --pages-backoff 5,15 \
+            --pages-confirm-build --pages-confirm-attempts 40 --pages-confirm-interval 30 \
+            --deploy-recovery \
+            --recovery-site-path auxsays/_data/provisional_assessments.yml \
+            --recovery-commit-grep 'Update the stored provisional assessments' \
+            --json-out "$RUNNER_TEMP/writeback.json"
+
+      - name: Job summary (fixed lines only)
+        if: always()
+        run: |
+          {
+            echo "### Import the stored provisional assessments"
+            grep -h '^IMPORT_STATUS: ' "$RUNNER_TEMP/import.out" 2>/dev/null || echo "IMPORT_STATUS: not reached"
+            python3 -c 'import json, sys
+          try:
+              d = json.load(open(sys.argv[1]))
+              print("WRITEBACK: outcome=%s pushed=%s sha=%s" % (d.get("outcome"), d.get("pushed"), d.get("pushed_sha")))
+          except Exception:
+              print("WRITEBACK: not reached")' "$RUNNER_TEMP/writeback.json"
+          } >> "$GITHUB_STEP_SUMMARY"

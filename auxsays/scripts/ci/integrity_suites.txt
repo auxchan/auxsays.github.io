@@ -54,7 +54,7 @@ auxsays/scripts/tests/test_automation_writeback.py = 152
 # script against a fake gh serving raw API JSON, and tick by tick through a six- and a fifteen-day
 # outage. At most one recovery dispatch per lost cycle: the eviction step treats an evicted run as
 # covered once a recovery naming its cycle has started, ticked through 7- and 30-day simulations.
-auxsays/scripts/tests/test_deploy_verification_and_lost_race.py = 218
+auxsays/scripts/tests/test_deploy_verification_and_lost_race.py = 222
 # A stored evidence row may not disappear, and may stop being accepted only by an audited in-place
 # withdrawal. Every in-tree gate compares the records against the SAME store a purge rewrote, so a
 # coherent 98% DaVinci deletion passed QA, the audit and this whole manifest, and the real writeback
@@ -694,8 +694,13 @@ auxsays/scripts/tests/test_assessment_facts.py = 55
 # invalid entry each give exactly the count-based result plus the pending line; a current entry decides by its stored
 # basis and wording under the authority's precedence; QA's output codes never block a deploy; the single-writer rule
 # of the shared writeback in a real git round trip; the publish gate's refusal of compiled files and the private
-# component's names; one call site, no live weigher and no lane naming the file. Offline; needs git.
+# component's names; one call site, no live weigher and only the import lane naming the file. Offline; needs git.
 auxsays/scripts/tests/test_assessment_output.py = 32
+# The import lane of that file (R3-SEC): installed only when every independent check passes (whole file refused for
+# one bad entry, byte-canonical, no private names), a refusal never touches the tracked file, bare-script run with
+# fixed status lines, and the workflow reads it with no credential, names it as its ONLY writeback path, references
+# no secret and stays out of the shared writer queue. Offline.
+auxsays/scripts/tests/test_import_assessment_output.py = 29
 # AUX-132 (G95): where a reviewed problem's "fixed in" line prints and when it credits the vendor. Rendered with the
 # shipped Liquid through the real patch page: once, in the verdict box, DIRECTLY AFTER the clause of the verdict line
 # that states its own finding, the rest of the verdict line continuing beneath it word for word (OBS 32.1.2, and
@@ -949,7 +954,7 @@ auxsays/scripts/tests/test_structured_evidence_facts.py = 40
 # left it fully green, because every token it looked for survived in the prose describing those
 # guards. It now asserts against `run:` scalars with comments stripped. The sabotage that used to
 # pass now fails 10 checks.
-auxsays/scripts/tests/test_writer_queue_concurrency.py = 72
+auxsays/scripts/tests/test_writer_queue_concurrency.py = 73
 # The reaper's shell, EXECUTED against a scripted fake `gh` rather than grepped -- extracted
 # from the workflow YAML so it cannot drift from what CI runs. The sabotage that the
 # structural suite originally missed fails 6 checks here. Needs `bash`, which ubuntu-latest

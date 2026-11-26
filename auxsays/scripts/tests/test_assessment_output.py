@@ -479,8 +479,8 @@ def check_one_call() -> None:
           str(installers))
     workflows = {p.name: p.read_text(encoding="utf-8") for p in (REPO / ".github" / "workflows").glob("*.y*ml")}
     naming = sorted(n for n, t in workflows.items() if ao.OUTPUT_NAME in t)
-    check("C3 no workflow of this repository names the output file (its one writer is outside it)", naming == [],
-          str(naming))
+    check("C3 exactly one workflow of this repository names the output file: its import lane, the one writer",
+          naming == ["assessment-import.yml"], str(naming))
     shipped = ao.OUTPUT_PATH
     ok = True
     if shipped.is_file():
