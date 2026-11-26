@@ -101,4 +101,8 @@
   </div>
   {%- endfor %}
   <p class="home-findings-note">Ordered by release date, newest first. AUXSAYS keeps no history of verdict changes, so this list shows the verdicts as they stand today.</p>
+  {%- comment -%} R3-RET: the way back. The feed of every product is found by its front matter, as the head's
+    autodiscovery finds it, so a build without one prints no feed link rather than a dead one. {%- endcomment -%}
+  {%- assign hf_feed_all = site.pages | where: 'feed_scope', 'all' | first %}
+  <p class="home-findings-follow" data-home-findings-follow>{% if hf_feed_all %}Follow new verdicts in a feed reader: <a href="{{ hf_feed_all.url | relative_url }}">Atom feed of every product</a>, or a product's own feed from its page. {% endif %}<a href="{{ '/updates/my-stack/' | relative_url }}">My Patch Stack</a> shows what is new for the products you watch since your last visit.</p>
 </section>

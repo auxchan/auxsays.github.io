@@ -52,6 +52,10 @@ permalink: /updates/my-stack/
     {%- comment -%} The vendor publishes some release notes per platform, so the installed-version
       comparison fails closed for this product (official_notes_by_platform). {%- endcomment -%}
     ,"split": {% if product.official_notes_by_platform %}true{% else %}false{% endif %}
+    {%- comment -%} R3-RET: this product's Atom verdict feed, found by its front matter exactly as the
+      page head's autodiscovery finds it, never by a constructed path, so a missing feed is no link. {%- endcomment -%}
+    {%- assign p_feed = site.pages | where: 'feed_product_id', p_id | first -%}
+    ,"feed": {% if p_feed %}{{ p_feed.url | jsonify }}{% else %}""{% endif %}
     {%- if chosen -%}
       {%- comment -%} Same fallback chain as patch-table-row.html, in the same order. {%- endcomment -%}
       {%- assign verdict_text = chosen.quick_verdict -%}
@@ -271,6 +275,25 @@ permalink: /updates/my-stack/
       {%- endcomment -%}
       <span><strong data-stack-count-newer>0</strong> have newer tracked releases</span>
     </p>
+  </section>
+
+  {%- comment -%}
+    SINCE YOUR LAST VISIT (R3-RET). Filled by auxsays.js from two things only: the payload above and
+    what THIS browser stored when the reader last opened this page (`auxsays.stackVisits.v1`). Nothing
+    is fetched or sent. It stays hidden on a first visit, without storage, and when storage throws.
+
+    AUXSAYS keeps no history of verdict changes, so "was" is what this page showed this browser last
+    time, never a site-wide claim. Every verdict printed is the payload's, which is the gate's output
+    for that record, the same text its patch page prints. The feed of every product is found by its
+    front matter, like the head's autodiscovery; without one the attribute is empty and no link prints.
+  {%- endcomment -%}
+  {%- assign stack_feed_all = site.pages | where: 'feed_scope', 'all' | first %}
+  <section class="panel patch-stack-since" data-stack-since data-feed-all="{% if stack_feed_all %}{{ stack_feed_all.url | relative_url }}{% endif %}" aria-labelledby="stack-since-title" hidden>
+    <div class="section-head">
+      <div class="eyebrow">Since your last visit</div>
+      <h2 id="stack-since-title">What changed for your products</h2>
+    </div>
+    <div class="patch-stack-since__body" data-stack-since-body></div>
   </section>
 
   <section class="panel patch-stack-empty" data-stack-empty hidden>
