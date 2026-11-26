@@ -1,0 +1,64 @@
+name: Missed Run Recovery
+
+# GitHub delivers each scheduled workflow here about twice a day, hours late, whatever its cron says, and a
+# scheduled run it never creates leaves nothing for the writer-queue reaper (evicted runs) or G91 (runs that lost
+# their cycle) to repair. This check notices a missed cycle from elapsed time against the last successful work
+# and dispatches ONE run of the latest necessary work: the import lane when the output repository holds a commit
+# no successful import has started after, and the collection lane when its current 6-hour window has no routine
+# run at all. Rules, bounds and their tests: auxsays/scripts/missed_run_recovery.py and
+# test_missed_run_recovery.py.
+#
+# It runs on EVENTS GitHub does deliver (every requested and completed run of the workflows below on main: Pages alone ran 96
+# times 11-19..11-26), on its own cron as one more chance, and on dispatch. It is NOT a writer: it never commits,
+# never joins auxsays-main-writeback, and adds a collection run only when the whole writer group is free.
+
+on:
+  workflow_run:
+    workflows:
+      - Build and Deploy Chirpy Site
+      - Patch Evidence Collection
+      - AUXSAYS Patch Ingestion
+      - Writer Queue Reaper
+      - Import the stored provisional assessments
+      - CI integrity
+    # `requested` too: on a quiet day the first event after an upstream change can be a run's START (11-26: no
+    # run on main completed between 15:47Z and the collection cron's request at 21:27Z).
+    types: [requested, completed]
+    branches: [main]
+  schedule:
+    - cron: '29 */2 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: write
+
+concurrency:
+  # Checks serialise, so two triggers at once dispatch once: the second reads the first's dispatched run as
+  # active. A superseded pending check is an idempotent re-read, never lost work.
+  group: auxsays-missed-run-recovery
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+      # Every member of the writer concurrency group (the reaper's GROUP_MEMBERS; a test asserts both lists equal
+      # the workflows whose concurrency group is auxsays-main-writeback).
+      GROUP_MEMBERS: >-
+        obs-evidence-collection.yml patch-ingest.yml
+        davinci-updates.yml promote-davinci-verified-reports.yml
+    steps:
+      - name: Checkout the scripts
+        uses: actions/checkout@v7
+        with:
+          ref: main
+          sparse-checkout: auxsays/scripts
+
+      - name: Recover a missed cycle (import, collection)
+        run: |
+          python3 auxsays/scripts/missed_run_recovery.py check \
+            --repo "${{ github.repository }}" --lanes import,collection \
+            --group-members "${GROUP_MEMBERS}"
