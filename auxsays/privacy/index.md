@@ -34,7 +34,7 @@ permalink: /privacy/
 
     <article class="methodology-card">
       <h2>Kept only in your browser</h2>
-      <p>The products you watch and the versions you mark as installed in My Patch Stack are saved in your browser's local storage. They are not sent to AUXSAYS or to Google. Clearing this site's data in your browser removes them.</p>
+      <p>The products you watch and the versions you mark as installed in My Patch Stack are saved in your browser's local storage, together with the time of your last visit to My Patch Stack and the patches and verdicts it showed you then, so it can show what changed since. They are not sent to AUXSAYS or to Google. Clearing this site's data in your browser removes them.</p>
     </article>
 
     <article class="methodology-card">

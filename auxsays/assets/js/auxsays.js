@@ -806,6 +806,202 @@ document.addEventListener('DOMContentLoaded', () => {
       return url.startsWith('/') && !url.startsWith('//') ? url : '';
     };
 
+    // SINCE YOUR LAST VISIT (R3-RET) -- BEGIN pure functions. scripts/tests/test_since_last_visit.py
+    // runs this region as shipped under node, so nothing in it touches the DOM or storage.
+    //
+    // WHAT IS COMPARED: the payload this page was built with against a snapshot THIS BROWSER stored
+    // the last time the reader opened the page -- per watched product, the identity (patch-page path),
+    // verdict, scope and release date of each record the payload carried. Nothing is fetched or sent,
+    // and AUXSAYS keeps no verdict history, so "was" is only ever what this page showed this browser.
+    //
+    // A VISIT, NOT A PAGE VIEW: the stored snapshot becomes the baseline once it is VISIT_GAP_MS old,
+    // so a reload or a re-render inside one visit keeps showing the same changes instead of clearing
+    // them the moment they are first seen.
+    //
+    // IDENTITY, NOT ORDER: a record is new when its path is absent from the baseline -- never because
+    // of where it sits in an array. When the baseline's window was full (VISIT_RECS records, so older
+    // ones existed beyond it), a record is new only if it is strictly newer than the oldest record the
+    // baseline held: one that re-enters the bounded window from below (an archived sibling dropping
+    // out, or two same-day records swapping places at the boundary) is not announced. Silence over a
+    // false claim. When every record of the current window is new and older ones exist, the count is
+    // a lower bound and is printed as "at least".
+    const VISITS_KEY = 'auxsays.stackVisits.v1';
+    const VISIT_GAP_MS = 30 * 60 * 1000;
+    const VISIT_RECS = 24;
+    const VISIT_PRODUCTS = 200;
+    const SINCE_ROWS = 6;
+
+    const visitText = (value, max) => (typeof value === 'string' ? value.slice(0, max) : '');
+
+    // One stored snapshot {t, s}, or null. Anything malformed is dropped, never trusted or thrown.
+    const cleanVisit = (value) => {
+      if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+      const t = Number(value.t);
+      // A time outside the Date range (|t| > 8.64e15) would throw at toISOString: reject it here.
+      if (!Number.isFinite(t) || t <= 0 || !Number.isFinite(new Date(t).getTime())) return null;
+      const src = value.s;
+      if (!src || typeof src !== 'object' || Array.isArray(src)) return null;
+      const s = {};
+      Object.keys(src).slice(0, VISIT_PRODUCTS).forEach((key) => {
+        const id = String(key).toLowerCase();
+        if (!PRODUCT_ID_RE.test(id) || !Array.isArray(src[key])) return;
+        s[id] = src[key].slice(0, VISIT_RECS)
+          .filter((row) => Array.isArray(row) && typeof row[0] === 'string'
+            && row[0].startsWith('/') && !row[0].startsWith('//'))
+          .map((row) => [visitText(row[0], 300), visitText(row[1], 60), visitText(row[2], 160), visitText(row[3], 10)]);
+      });
+      return { t, s };
+    };
+
+    const parseVisits = (raw) => {
+      const none = { prev: null, cur: null };
+      if (!raw || typeof raw !== 'string') return none;
+      let parsed = null;
+      try {
+        parsed = JSON.parse(raw);
+      } catch (error) {
+        return none;
+      }
+      if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return none;
+      return { prev: cleanVisit(parsed.prev), cur: cleanVisit(parsed.cur) };
+    };
+
+    // The baseline for this visit: the last snapshot once it is a visit old, otherwise the baseline
+    // this visit already chose. A clock that moved backwards also starts a new visit.
+    const visitBaseline = (stored, now) => {
+      const cur = stored && stored.cur;
+      if (cur && Math.abs(now - cur.t) >= VISIT_GAP_MS) return cur;
+      return (stored && stored.prev) || null;
+    };
+
+    const visitSnapshot = (products) => {
+      const s = {};
+      products.slice(0, VISIT_PRODUCTS).forEach((p) => {
+        s[String(p.id).toLowerCase()] = (Array.isArray(p.recs) ? p.recs : []).slice(0, VISIT_RECS)
+          .filter((r) => Array.isArray(r) && typeof r[3] === 'string')
+          .map((r) => [r[3], String(r[5] == null ? '' : r[5]), String(r[12] == null ? '' : r[12]),
+            String(r[2] == null ? '' : r[2])]);
+      });
+      return s;
+    };
+
+    // Per watched product the baseline knew: records new since then, and records whose verdict or
+    // scope now differs from what this page showed then. A product the baseline did not know (watched
+    // since) is skipped: every record of it would read as new, and none of that would be news.
+    const sinceChanges = (baseline, products) => {
+      const out = [];
+      if (!baseline || !baseline.s) return out;
+      products.forEach((p) => {
+        const before = baseline.s[String(p.id).toLowerCase()];
+        if (!Array.isArray(before)) return;
+        const known = new Map(before.map((row) => [row[0], row]));
+        const knownDates = before.map((row) => row[3]).filter(Boolean).sort();
+        // A shorter window had nothing beyond it, so it has no floor.
+        const floor = before.length >= VISIT_RECS && knownDates.length ? knownDates[0] : '';
+        const added = [];
+        const changed = [];
+        let anyKnown = false;
+        (Array.isArray(p.recs) ? p.recs : []).forEach((r) => {
+          if (!Array.isArray(r) || typeof r[3] !== 'string') return;
+          const was = known.get(r[3]);
+          const verdict = String(r[5] == null ? '' : r[5]);
+          const scope = String(r[12] == null ? '' : r[12]);
+          if (!was) {
+            if (!floor || String(r[2] == null ? '' : r[2]) > floor) added.push(r);
+          } else {
+            anyKnown = true;
+            if (was[1] !== verdict || was[2] !== scope) changed.push({ rec: r, was: [was[1], was[2]] });
+          }
+        });
+        // No record of this window was known and older ones exist beyond it: more may be new.
+        const atLeast = added.length > 0 && !anyKnown && Number(p.more) > 0;
+        if (added.length || changed.length) out.push({ product: p, added, changed, atLeast });
+      });
+      return out;
+    };
+
+    const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const visitDay = (t) => {
+      const d = new Date(t);
+      return `${MONTHS[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
+    };
+    const releaseDay = (iso) => {
+      const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(iso || ''));
+      return m ? `${MONTHS[Number(m[2]) - 1]} ${Number(m[3])}, ${m[1]}` : '';
+    };
+    // The verdict exactly as the payload carries it (the gate's word and scope, as on its patch page).
+    // A record with no verdict says so in the homepage's words rather than printing nothing.
+    const sinceVerdict = (verdict, scope, rank) => (String(verdict == null ? '' : verdict)
+      ? verdictHtml(verdict, scope, rank)
+      : '<span class="patch-stack-since__none">no verdict yet</span>');
+    const sinceLabel = (r) => esc(r[0]) + (r[1] ? ` <span class="patch-stack-since__build">build ${esc(r[1])}</span>` : '');
+
+    const sinceHtml = (baseline, changes, products, feedAll) => {
+      const parts = [];
+      const iso = new Date(baseline.t).toISOString();
+      parts.push(`<p class="patch-stack-since__when">Your last visit in this browser: <time datetime="${esc(iso)}">`
+        + `${esc(visitDay(baseline.t))}</time>. Compared with what this page showed you then.</p>`);
+      if (!changes.length) {
+        parts.push('<p class="patch-stack-none" data-since-nothing>Nothing new for the products you watch since then:'
+          + ' no new patch records and no verdict changes.</p>');
+      } else {
+        const added = changes.reduce((n, c) => n + c.added.length, 0);
+        const changed = changes.reduce((n, c) => n + c.changed.length, 0);
+        const said = [];
+        const atLeast = changes.some((c) => c.atLeast) ? 'at least ' : '';
+        if (added) said.push(`${atLeast}${added} new patch record${added === 1 ? '' : 's'}`);
+        if (changed) said.push(`${changed} verdict change${changed === 1 ? '' : 's'}`);
+        parts.push(`<p class="patch-stack-since__summary" data-since-summary>${said.join(' and ')} across `
+          + `${changes.length} of your products.</p>`);
+        changes.forEach(({ product, added: newRecs, changed: moved, atLeast: lower }) => {
+          const hist = esc(safeHref(product.hist));
+          const name = esc(product.name || product.id);
+          const rows = [];
+          // Newest release first for reading; equal dates keep payload order. Display only: nothing
+          // here decides which record is newer than another.
+          newRecs.slice().sort((a, b) => String(b[2] || '').localeCompare(String(a[2] || ''))).forEach((r) => {
+            const day = releaseDay(r[2]);
+            rows.push(`<li class="patch-stack-since__item" data-since-kind="new" data-since-href="${esc(safeHref(r[3]))}">`
+              + '<span class="patch-stack-since__tag">New patch</span> '
+              + `<a href="${esc(safeHref(r[3]))}">${sinceLabel(r)}</a>`
+              + (day ? ` <span class="patch-stack-since__date">released ${esc(day)}</span>` : '')
+              + ` <span class="patch-stack-since__verdict" data-since-verdict>${sinceVerdict(r[5], r[12], r[6])}</span></li>`);
+          });
+          moved.forEach(({ rec: r, was }) => {
+            rows.push(`<li class="patch-stack-since__item" data-since-kind="changed" data-since-href="${esc(safeHref(r[3]))}">`
+              + '<span class="patch-stack-since__tag">Verdict changed</span> '
+              + `<a href="${esc(safeHref(r[3]))}">${sinceLabel(r)}</a>`
+              + ` <span class="patch-stack-since__verdict" data-since-verdict>now ${sinceVerdict(r[5], r[12], r[6])}</span>`
+              + ` <span class="patch-stack-since__was">was ${was[0] ? esc(scopedVerdict(was[0], was[1])) : 'no verdict yet'}</span></li>`);
+          });
+          const more = rows.length - SINCE_ROWS;
+          const moreText = lower ? 'and at least' : 'and';
+          parts.push(`<div class="patch-stack-since__product" data-since-product="${esc(product.id)}">`
+            + `<h3 class="patch-stack-since__name">${hist ? `<a href="${hist}">${name}</a>` : name}</h3>`
+            + `<ul class="patch-stack-since__list">${rows.slice(0, SINCE_ROWS).join('')}</ul>`
+            + (more > 0
+              ? `<p class="patch-stack-since__more">${moreText} ${more} more${hist ? ` in its <a href="${hist}">patch history</a>` : ''}.</p>`
+              : (lower
+                ? `<p class="patch-stack-since__more">and possibly more${hist ? ` in its <a href="${hist}">patch history</a>` : ''}.</p>`
+                : ''))
+            + '</div>');
+        });
+      }
+      // Subscribing is the way back that needs no visit: the per-product Atom verdict feeds (P8).
+      const feeds = products
+        .filter((p) => safeHref(p.feed))
+        .map((p) => `<a href="${esc(safeHref(p.feed))}" data-since-feed>${esc(p.name || p.id)}</a>`);
+      const all = safeHref(feedAll);
+      if (feeds.length || all) {
+        parts.push('<p class="patch-stack-since__feeds">Get these verdicts in a feed reader without visiting: '
+          + (feeds.length ? `the Atom feed for ${feeds.join(', ')}` : '')
+          + (all ? `${feeds.length ? ', or ' : ''}<a href="${esc(all)}" data-since-feed-all>the feed of every product</a>` : '')
+          + '.</p>');
+      }
+      return parts.join('');
+    };
+    // SINCE YOUR LAST VISIT (R3-RET) -- END pure functions.
+
     const cardHtml = (entry, reason) => {
       const name = esc(entry.name || entry.id);
       const hist = esc(safeHref(entry.hist));
@@ -1076,6 +1272,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (emptyPanel) emptyPanel.hidden = !isEmpty;
       if (body) body.hidden = isEmpty;
       if (strip) strip.hidden = isEmpty;
+      renderSince(watched);
 
       if (isEmpty) {
         if (chooserTags && !chooserTags.childElementCount) {
@@ -1117,6 +1314,47 @@ document.addEventListener('DOMContentLoaded', () => {
       setCount('[data-stack-count-evidence]', withEvidence.length);
       setCount('[data-stack-count-versions]', versionsSet.length);
       setCount('[data-stack-count-newer]', haveNewer.length);
+    };
+
+    // Since your last visit (defined before renderStack's first call, after its definition so the
+    // card probe's slice of the helpers above stays DOM-free): storage is read ONCE per page load to pick this visit's baseline, and the
+    // snapshot is written after every render. Every access is wrapped: no storage, a throwing
+    // accessor or a malformed value all mean no block and no error, and the rest of the page renders.
+    const sincePanel = document.querySelector('[data-stack-since]');
+    const sinceBody = document.querySelector('[data-stack-since-body]');
+    let sinceStored = { prev: null, cur: null };
+    let sinceReadable = false;
+    try {
+      sinceStored = parseVisits(window.localStorage.getItem(VISITS_KEY));
+      sinceReadable = true;
+    } catch (error) {
+      sinceReadable = false;
+    }
+    const sinceNow = Date.now();
+    const sinceBase = sinceReadable ? visitBaseline(sinceStored, sinceNow) : null;
+
+    const renderSince = (watched) => {
+      if (!sincePanel || !sinceBody) return;
+      let markup = '';
+      if (sinceBase && watched.length > 0) {
+        // An optional block: whatever goes wrong in it hides it, and the cards still draw.
+        try {
+          markup = sinceHtml(sinceBase, sinceChanges(sinceBase, watched), watched, sincePanel.dataset.feedAll || '');
+        } catch (error) {
+          markup = '';
+        }
+      }
+      sinceBody.innerHTML = markup;
+      sincePanel.hidden = !markup;
+      if (!sinceReadable) return;
+      try {
+        window.localStorage.setItem(VISITS_KEY, JSON.stringify({
+          prev: sinceBase,
+          cur: { t: Date.now(), s: visitSnapshot(watched) },
+        }));
+      } catch (error) {
+        // Fail soft: this visit still shows its changes; the next one simply has no baseline.
+      }
     };
 
     document.addEventListener('click', (event) => {

@@ -509,6 +509,16 @@ auxsays/scripts/tests/test_patch_watchlist.py = 35
 # 113 -> 116 (GROWTH-3 review 1): the card, every upgrade-path release (rec[12]) and the attention
 # reason carry the verdict's scope (UP2b, PS-21, PS-22), against the authority's projection.
 auxsays/scripts/tests/test_patch_stack_dashboard.py = 116
+# R3-RET: My Patch Stack "Since your last visit". Renders the shipped page with liquid (each product's Atom
+# feed found by front matter; a hidden block) and runs the shipped JavaScript under node: no storage, a throwing
+# accessor and malformed values give no block and no error; a second visit lists records new by IDENTITY and
+# verdicts this browser saw differently, each verdict the authority's for that record; a reload keeps the
+# baseline; the homepage findings note links the feed of every product. Needs node and ruby + liquid.
+# 31 -> 38 (R3-RET review A1): a stored time outside the Date range and a defect inside the block hide it and
+# throw nothing (N7, N8); a same-day 24/25 boundary tie is not "new", a short window has no floor (V12, V16);
+# a whole new window with older records beyond it says "at least" (V13); scope-only change and product-name
+# escaping are pinned (V14, V15).
+auxsays/scripts/tests/test_since_last_visit.py = 38
 # G93: Acrobat's Continuous and Classic tracks are serviced side by side, and both newer-release selectors
 # (the patch page's note, lib/evidence_overview.update_available, and My Patch Stack's installedState)
 # pointed all 62 Classic pages that had a target at a Continuous release. One fixture set drives the

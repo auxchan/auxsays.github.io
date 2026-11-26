@@ -260,7 +260,7 @@ def run() -> int:
           len(entries) == len(products), f"{len(entries)} entries vs {len(products)} products")
 
     allowed = {"id", "name", "hist", "href", "ver", "date", "verdict", "scope", "rank", "ev", "n",
-               "checked", "mon", "oa", "os", "recs", "more", "split", "plat"}
+               "checked", "mon", "oa", "os", "recs", "more", "split", "plat", "feed"}
     extra = sorted({k for e in entries for k in e} - allowed)
     check("P5 the payload carries only dashboard fields, not whole records", not extra, str(extra))
 
