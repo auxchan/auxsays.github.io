@@ -162,6 +162,9 @@ auxsays/scripts/tests/test_davinci_refused_methods_disabled.py = 46
 # AUX-117 (G67): the PowerPoint tag lane's notes carry the admitted total and the hydration-cap overflow;
 # status, counters, the 45 cap and the walk are unchanged (compared against a run with the note suppressed).
 auxsays/scripts/tests/test_powerpoint_hydration_cap_telemetry.py = 20
+# The PowerPoint open-web lane asks each question once a run and fetches each page once a run (per-query
+# and per-URL run caches); every record's outcome equals an empty-cache run, refusals are replayed.
+auxsays/scripts/tests/test_powerpoint_open_web_request_dedup.py = 23
 
 # The two repairs AUX-027 made after a targeted collector dispatch was used to clear the AUX-026
 # health backlog. That was the wrong mechanism -- a full collector dispatch DISCOVERS EVIDENCE --

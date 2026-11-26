@@ -45,6 +45,10 @@ REQUEST_TIMEOUT = 25
 MAX_BYTES = 1_500_000
 _MIN_REQUEST_INTERVAL = 1.1          # general indexes throttle far harder than product APIs
 _last_request_at = 0.0
+# Every network call this module's providers make passes through _pace() first, so this counter is
+# the number of requests actually sent (a Stack Exchange question costs two, one per site), which is
+# what discover_urls reports as `network_requests`.
+_network_calls = 0
 
 # Hosts this repo can actually fetch and attribute. The value is the source_type the resulting
 # evidence row carries, so a report found by search is indistinguishable downstream from the same
@@ -91,7 +95,8 @@ def error_reason(exc: Exception) -> str:
 
 
 def _pace() -> None:
-    global _last_request_at
+    global _last_request_at, _network_calls
+    _network_calls += 1
     delta = time.monotonic() - _last_request_at
     if delta < _MIN_REQUEST_INTERVAL:
         time.sleep(_MIN_REQUEST_INTERVAL - delta)
@@ -242,16 +247,29 @@ def build_queries(*, version: str = "", build: str = "", max_queries: int = 12) 
 
 # --------------------------------------------------------------------------- discovery
 def discover_urls(queries: list[str], *, errors: list[dict[str, Any]],
-                  max_requests: int = 14) -> tuple[list[dict[str, str]], dict[str, Any]]:
+                  max_requests: int = 14,
+                  cache: dict[tuple[str, str], tuple[str, Any]] | None = None,
+                  ) -> tuple[list[dict[str, str]], dict[str, Any]]:
     """Run the query set across providers and return canonical, de-duplicated candidate URLs.
 
     Only the URL survives. Titles and summaries produced by the index are never returned, so there
     is no path by which a snippet becomes evidence.
+
+    `cache` (one collection run's lifetime, owned by the caller) holds each (provider, query)
+    outcome: the hits, or the refusal reason. Most of a record's query set is PRODUCT-level and
+    identical for every record (build_queries), so without it the same searches were sent once per
+    record -- 38 records a run, against a keyless Stack Exchange quota of about 300 a day, and the
+    records walked last (the newest releases) were the ones refused. A reused outcome is the SAME
+    answer, not a new one: the record's walk, its request budget (`requests` counts the provider
+    slots the record used, as before) and its candidate list are exactly what a fresh run would
+    produce, and a refusal is replayed into the record's own errors, so its health status still says
+    the query was refused. `network_requests` is what was actually sent; `reused` the answered slots.
     """
     found: dict[str, dict[str, str]] = {}
     telemetry = {"queries": 0, "requests": 0, "raw_results": 0,
                  "supported": 0, "uningestable": 0, "unsupported": 0,
-                 "providers_ok": [], "providers_failed": []}
+                 "providers_ok": [], "providers_failed": [],
+                 "network_requests": 0, "reused": 0}
     requests_made = 0
     for query in queries:
         if requests_made >= max_requests:
@@ -264,14 +282,26 @@ def discover_urls(queries: list[str], *, errors: list[dict[str, Any]],
                 break
             requests_made += 1
             telemetry["requests"] = requests_made
-            try:
-                hits = provider(query)
-            except Exception as exc:  # noqa: BLE001 - recorded for method health
+            key = (provider_name, query)
+            outcome = cache.get(key) if cache is not None else None
+            if outcome is None:
+                sent_before = _network_calls
+                try:
+                    outcome = ("hits", list(provider(query)))
+                except Exception as exc:  # noqa: BLE001 - recorded for method health
+                    outcome = ("refused", error_reason(exc))
+                telemetry["network_requests"] += _network_calls - sent_before
+                if cache is not None:
+                    cache[key] = outcome
+            else:
+                telemetry["reused"] += 1
+            if outcome[0] == "refused":
                 errors.append({"source_url": f"{ENDPOINT_FAMILY}:{provider_name}",
-                               "reason": error_reason(exc)})
+                               "reason": outcome[1]})
                 if provider_name not in telemetry["providers_failed"]:
                     telemetry["providers_failed"].append(provider_name)
                 continue
+            hits = list(outcome[1])
             if provider_name not in telemetry["providers_ok"]:
                 telemetry["providers_ok"].append(provider_name)
             telemetry["raw_results"] += len(hits)
