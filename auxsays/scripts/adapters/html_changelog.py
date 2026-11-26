@@ -10,7 +10,7 @@ import re
 from urllib.parse import urljoin, urlparse
 
 from lib.http import fetch_text
-from lib.normalize import strip_tags, normalize_date, first_nonempty
+from lib.normalize import strip_tags, normalize_date, first_nonempty, strict_date
 
 DATE_RE = re.compile(r"([A-Z][a-z]{2,8}\s+\d{1,2},\s+\d{4}|\d{4}-\d{2}-\d{2})")
 NETLIFY_DETAIL_RE = re.compile(r"/changelog/\d{4}/\d{1,2}/\d{1,2}/[^/?#]+/?$", re.I)
@@ -56,9 +56,40 @@ def _title_from_html(html: str) -> str:
     return "Official changelog update"
 
 
+TEXT_DATE_PARTS_RE = re.compile(r"^([A-Za-z]{3,9})\.?\s+(\d{1,2}),\s+(\d{4})$")
+
+
+def _iso_date(text: str) -> str:
+    """A DATE_RE match as an ISO instant ("2026-11-18T00:00:00Z"), or "".
+
+    Never `normalize_date` here: it returns text it cannot parse VERBATIM, and the writer takes a
+    record's filename from the first ten characters of its date. "November 18, 2026" became the
+    file "November 1-netlify-....md" on 2026-11-26 (3c107ec0) and broke the picker's date order.
+    A full month name goes through `strict_date`; an abbreviation is accepted only when it is a
+    prefix of exactly one month name ("Nov", "Sept"), so nothing date-shaped is guessed."""
+    text = (text or "").strip()
+    iso = strict_date(text)
+    if iso:
+        return iso
+    m = TEXT_DATE_PARTS_RE.match(text)
+    if not m:
+        return ""
+    word = m.group(1).lower()
+    months = [name for name in MONTHS if name.startswith(word)]
+    if len(months) != 1:
+        return ""
+    return strict_date(f"{months[0]} {int(m.group(2))}, {m.group(3)}")
+
+
 def _date_from_html(html: str) -> str:
     text = strip_tags(html[:8000])
     m = DATE_RE.search(text)
+    if m:
+        iso = _iso_date(m.group(1))
+        if iso:
+            return iso
+    # Unchanged fallback (verbatim text, or "now" when nothing is date-shaped). A verbatim value is
+    # refused per record by the ingest's write-side guard (write_update_record.publication_date_problem).
     return normalize_date(m.group(1) if m else "")
 
 
@@ -284,7 +315,7 @@ def fetch(source: dict, limit: int = 3, probe: dict | None = None) -> list[dict]
         # The entry's own date: the one its URL states, else the one that opens its article. Only
         # then the page-level search, which on a long page finds nothing and falls back to "now".
         lead = DATE_RE.search(body[:400])
-        date = (_date_from_entry_url(link) or (normalize_date(lead.group(1)) if lead else "")
+        date = (_date_from_entry_url(link) or (_iso_date(lead.group(1)) if lead else "")
                 or _date_from_html(detail))
         digest = hashlib.sha256((link + title + date).encode("utf-8")).hexdigest()[:16]
         records.append({

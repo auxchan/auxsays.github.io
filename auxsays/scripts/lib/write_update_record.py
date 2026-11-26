@@ -1,6 +1,8 @@
 """Write Jekyll Markdown update records from normalized official source data."""
 from __future__ import annotations
 
+import datetime as dt
+import re
 from pathlib import Path
 from typing import Any
 import yaml
@@ -211,6 +213,36 @@ class MissingPublicationDate(ValueError):
     """
 
 
+class InvalidPublicationDate(MissingPublicationDate):
+    """Raised when a record's publication date is present but not ISO (YYYY-MM-DD...).
+
+    The filename is the date's first ten characters, so "November 18, 2026" wrote the file
+    "November 1-netlify-....md" (3c107ec0, 2026-11-26): a malformed name, a non-ISO
+    `update_published_at`, and a picker no longer in date order. patch_ingest refuses such a record
+    per record, with a logged reason, before it reaches here; this is the writer's own backstop."""
+
+
+_ISO_PUBLISHED_RE = re.compile(r"^(\d{4}-\d{2}-\d{2})(?:$|[T ])")
+
+
+def publication_date_problem(record: dict[str, Any]) -> str:
+    """Why this record's `published_at` cannot be written, or "" when it can.
+
+    Accepted: "YYYY-MM-DD" alone or followed by "T..." (or a space) where YYYY-MM-DD is a real calendar date.
+    Everything else -- empty, "November 18, 2026", "2026-02-30" -- is a reason string."""
+    published = str(record.get("published_at") or "").strip()
+    if not published:
+        return "missing publication date"
+    m = _ISO_PUBLISHED_RE.match(published)
+    if not m:
+        return "non-ISO publication date %r" % published
+    try:
+        dt.date.fromisoformat(m.group(1))
+    except ValueError:
+        return "impossible publication date %r" % published
+    return ""
+
+
 def _require_published(record: dict[str, Any]) -> str:
     published = str(record.get("published_at") or "").strip()
     if not published:
@@ -218,6 +250,11 @@ def _require_published(record: dict[str, Any]) -> str:
             "record %r (%s) has no publication date; an adapter must drop an undated candidate "
             "rather than let the writer invent one"
             % (record.get("record_id") or record.get("version"), record.get("product_id")))
+    problem = publication_date_problem(record)
+    if problem:
+        raise InvalidPublicationDate(
+            "record %r (%s): %s; the filename and update_published_at must start YYYY-MM-DD"
+            % (record.get("record_id") or record.get("version"), record.get("product_id"), problem))
     return published
 
 

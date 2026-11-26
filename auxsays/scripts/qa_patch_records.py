@@ -701,6 +701,14 @@ def scan_record(path: Path) -> tuple[list[dict[str, str]], list[dict[str, str]]]
 
     if not title:
         add(errors, path, "empty_title", "Generated record title is empty.")
+    # NON-ISO DATE (R4-FIX, 3c107ec0 wrote "November 1-netlify-....md" from "November 18, 2026").
+    # The ingest now refuses such a record before writing; this finds one already on disk. A warning,
+    # not an error: an error here would wedge the scheduled lane (memory producer-fix-needs-corpus-guard).
+    published_text = str(data.get("update_published_at") or "").strip()
+    if (data.get("update_entry") and not re.match(r"^\d{4}-\d{2}-\d{2}(?:$|[T ])", published_text)) or (
+            path.parent.name == "generated" and not re.match(r"^\d{4}-\d{2}-\d{2}-", path.name)):
+        add(warnings, path, "non_iso_publication_date",
+            f"update_published_at {published_text!r} or the filename does not start YYYY-MM-DD.")
     if not summary:
         add(warnings, path, "empty_summary", "Generated record has no useful summary/description.")
 
