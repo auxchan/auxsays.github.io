@@ -241,7 +241,7 @@ def main() -> int:
     collect_ran = {"name": "collect", "conclusion": "success", "steps": [{"name": "Checkout", "conclusion": "success"}]}
     reached = {"total_count": 3, "jobs": [collect_ran, {"name": "chain-ingest", "steps": [{"name": wcr.CYCLE_MARKER_STEP, "conclusion": "success"}]}]}
     lost = {"total_count": 3, "jobs": [collect_ran, {"name": "chain-ingest", "steps": [{"name": wcr.CYCLE_MARKER_STEP, "conclusion": "skipped"}]}]}
-    stood = {"total_count": 4, "jobs": [{"name": "gate", "steps": [{"name": "x", "conclusion": "success"}]},
+    stood = {"total_count": 4, "jobs": [{"name": "gate", "conclusion": "success", "steps": [{"name": "x", "conclusion": "success"}]},
                                         {"name": "collect", "conclusion": "skipped", "steps": []},
                                         {"name": "chain-ingest", "conclusion": "skipped", "steps": []}]}
     rec = run(100, "2026-11-26T18:50:00Z", event="workflow_dispatch", actor=BOT)
@@ -254,7 +254,8 @@ def main() -> int:
     p, why = gate({"100": reached})
     check("4a a late cron after the recovery put the window's cycle on main -> stands down", p is False, why)
     p, why = gate({"100": lost})
-    check("4b a late cron after a recovery that LOST its cycle -> proceeds (the window's retry)", p is True, why)
+    check("4b A1/S1 a late cron after a recovery that LOST its cycle stands down too (the loss is G91's one re-run)",
+          p is False, why)
     p, why = gate({"100": reached, "555": {"total_count": 3, "jobs": []}}, event="workflow_dispatch", actor=BOT, recovery_of="555")
     check("4c a G91 re-run of a run that started and lost is never gated", p is True, why)
     p, why = gate({"100": reached, "556": {"total_count": 0, "jobs": []}}, event="workflow_dispatch", actor=BOT, recovery_of="556")
@@ -266,11 +267,30 @@ def main() -> int:
     p2, why2 = mrr.gate_collection("schedule", OWNER["login"], "200", late, "", None, lambda i: None)
     check("4g unreadable runs proceed (the guard only removes duplicates)", p2 is True, why2)
     p, why = gate({"101": stood}, runs=[run(101, "2026-11-26T19:00:00Z")])
-    check("4h an earlier stood-down run (success, no marker) still means the cycle is on main", p is False, why)
+    check("4h a stood-down run (it collected nothing) is not the window's cycle by itself", p is True, why)
     p, why = gate({"100": reached}, runs=[run(100, "2026-11-26T22:00:00Z", event="workflow_dispatch", actor=BOT)])
     check("4i a run created AFTER this one never stands it down", p is True, why)
+    p, why = gate({"100": {"total_count": 0, "jobs": []}}, runs=[run(100, "2026-11-26T18:50:00Z", conclusion="cancelled")])
+    check("4j an evicted earlier run (cancelled, no jobs) does not count", p is True, why)
     p, why = gate({"100": reached}, runs=[run(100, "2026-11-26T18:50:00Z", conclusion="cancelled")])
-    check("4j a cancelled earlier run does not count", p is True, why)
+    check("4j2 A1/S1 an earlier run cancelled AFTER it collected (e.g. its time limit) counts as the window's cycle",
+          p is False, why)
+    day = [run(300 + i, iso(late - timedelta(hours=6 * i - 1)), event="workflow_dispatch", actor=BOT)
+           for i in range(1, 5)]
+    p, why = gate({str(300 + i): reached for i in range(1, 5)}, runs=day)
+    check("4l A1/S1 the daily cap applies inside the gate: 4 cycles in the previous 24 h stand a 5th (a cron) down",
+          p is False and "24 h" in why, why)
+    p, why = gate({str(300 + i): reached for i in range(1, 4)}, runs=day[:3])
+    check("4l2 three cycles in the previous 24 h and none in this window -> proceeds", p is True, why)
+    xl = run(401, "2026-11-26T18:50:00Z", conclusion="failure", event="workflow_dispatch", actor=BOT)
+    xs = run(402, "2026-11-26T21:27:30Z")
+    xr = run(400, "2026-11-26T12:40:00Z")
+    g91 = {"401": lost, "402": stood, "400": reached}
+    lane = wcr.decide_lane("obs-evidence-collection.yml", [xs, xl, xr], lambda i: g91.get(str(i)), lambda j: [],
+                           T("2026-11-26T22:00:00Z"))
+    check("4m A1/S1 G91 judges a stood-down run as skipped, so the lost run before it still gets its one re-run",
+          wcr.judge(xs, lambda i: g91.get(str(i)), lambda j: []).state == "skip"
+          and lane.dispatch_recovery_of == "401", f"{lane}")
     cr = {"name": "collect", "conclusion": "success"}
     check("4k did_work: a run whose collect ran counts; a stood-down or evicted one does not; doubt counts",
           mrr.did_work(run(1, "t"), {"jobs": [cr]}) and not mrr.did_work(run(1, "t"), stood)
@@ -343,8 +363,12 @@ def main() -> int:
               r.returncode == 0 and out.strip() == "proceed=false", r.stdout + r.stderr + out)
         g["jobs"] = {"100": lost}
         r, out = run_gate(g)
-        check("5i EXECUTED gate: after a lost cycle it writes proceed=true", r.returncode == 0 and out.strip() == "proceed=true",
-              r.stdout + r.stderr + out)
+        check("5i EXECUTED gate: after a LOST cycle in its window it also writes proceed=false (A1/S1)",
+              r.returncode == 0 and out.strip() == "proceed=false", r.stdout + r.stderr + out)
+        g["runs"]["obs-evidence-collection.yml"] = [own, run(100, "2026-11-26T12:50:00Z", event="workflow_dispatch", actor=BOT)]
+        r, out = run_gate(g)
+        check("5i2 EXECUTED gate: with only the previous window's cycle it writes proceed=true",
+              r.returncode == 0 and out.strip() == "proceed=true", r.stdout + r.stderr + out)
         r, out = run_gate(g, interpreter="false")
         check("5j EXECUTED gate: a crashed guard still writes proceed=true and the step succeeds",
               r.returncode == 0 and "proceed=true" in out, r.stdout + r.stderr + out)
@@ -406,6 +430,11 @@ def main() -> int:
     worked, n = simulate(3, conclusion="failure")
     check("6c PERSISTENT FAILURE: never more than 4 attempts per day (no retry storm)",
           max(worked.values()) <= 4 and n <= 12 and max(per_window.values()) == 1, f"{worked} dispatches={n}")
+    for k_crons in ([(6, 17), (18, 17)], [(0, 17), (6, 17), (12, 17), (18, 17)]):
+        worked, n = simulate(3, crons_at=k_crons, cron_delay=timedelta(hours=3, minutes=10), conclusion="failure")
+        check(f"6c2 A1/S1 LATE CRONS + EVERY CYCLE LOST ({len(k_crons)} crons/day): one collection per window, "
+              "never above 4 per day (G91's one re-run is the repair, not a second routine cycle)",
+              max(worked.values()) <= 4 and max(per_window.values()) == 1, f"{worked} {per_window}")
 
     s = state("2026-11-26T17:20:00Z", runs={imp: list(live)}, output_commit="2026-11-26T17:07:30Z")
     dispatches_seen = 0
@@ -417,6 +446,16 @@ def main() -> int:
                 r.update(status="completed", conclusion="failure")
         check_once(s, ["import"])
     check("6d IMPORT OUTAGE over 24 h: exactly 2 dispatches, then held", s["dispatches"].count(imp) == 2, str(s["dispatches"]))
+    s = state("2026-11-26T17:20:00Z", runs={imp: list(live)}, output_commit="2026-11-26T17:07:30Z")
+    for k in range(96):
+        now = T("2026-11-26T17:20:00Z") + timedelta(minutes=15 * k)
+        s["now"] = iso(now)
+        for r in s["runs"][imp]:
+            if r["status"] == "queued":
+                r.update(status="completed", conclusion="cancelled")
+        check_once(s, ["import"])
+    check("6d2 A1/M1 HANGING IMPORT (each run hits its time limit, ends `cancelled`): 2 dispatches, then held",
+          s["dispatches"].count(imp) == 2, str(s["dispatches"]))
     s = state("2026-11-26T22:12:21Z", runs={imp: list(live)}, output_commit="2026-11-26T17:07:30Z")
     for k in range(8):
         now = T("2026-11-26T22:12:21Z") + timedelta(minutes=15 * k)
@@ -468,6 +507,9 @@ def main() -> int:
           and genv.get("RECOVERY_OF") == "${{ github.event.inputs.recovery_of }}", str(genv))
     check("7m the gate's fallback proceeds when the script fails",
           '|| echo "proceed=true" >> "$GITHUB_OUTPUT"' in strip_comments(ev["gate"]["steps"][1]["run"]))
+
+    check("7n A1/S2 the gate job holds a read-only token (contents: read, actions: read)",
+          ev["gate"].get("permissions") == {"contents": "read", "actions": "read"}, str(ev["gate"].get("permissions")))
 
     total = _passed + _failed
     print(f"\nResults: {_passed}/{total} passed, {_failed} failed")

@@ -37,10 +37,12 @@ LANE: collection (obs-evidence-collection.yml, '17 */6', a member of the writer 
   own free-lane rule, so this never adds a third entrant to the one-deep queue).
   `gate` is the in-run half: a cron run, a bot dispatch without `recovery_of`, or the reaper's
   re-dispatch of an EVICTED (zero-job) run stands down when an earlier routine run created in its own
-  window completed with its cycle on main, read exactly as G91 reads it (the marker step succeeded,
-  or no marker and `success`). A G91 re-run of a run that started and lost, and every operator
-  dispatch, always proceeds. Any doubt (an unreadable API) proceeds: the guard can only remove a
-  duplicate, never a cycle.
+  window COLLECTED, whatever its outcome (its `collect` job ran), or when COLLECTION_DAILY_CAP routine
+  cycles already collected in the 24 h before it. A lost cycle is repaired by G91's one re-run, which
+  is never gated (nor is any operator dispatch); G91 judges a stood-down run as skipped, so the lost
+  run before it stays the one it re-runs. Together: at most one routine collection per window and 4
+  per rolling 24 h, plus G91's one re-run per lost cycle, exactly as before this change. Any doubt (an
+  unreadable API) proceeds: the guard can only remove a duplicate, never a cycle.
 
 Telemetry: one fixed line per lane, `FRESHNESS: lane=<lane> state=<state> ...`, in the log and the
 job summary; `::warning` for a held or unreadable lane. Nothing here writes the repository.
@@ -111,7 +113,9 @@ def decide_import(now: datetime, output_commit: datetime | None, runs: list[dict
                         f"output {output_commit:%Y-%m-%dT%H:%M:%SZ} picked up by the run started {last_success:%Y-%m-%dT%H:%M:%SZ}")
     if now - output_commit < IMPORT_GRACE:
         return Decision("import", "grace", f"output committed {output_commit:%Y-%m-%dT%H:%M:%SZ}, inside the grace")
-    failed = [r for r in runs if r.get("conclusion") in FAILED
+    # `cancelled` counts too: a job that hits its time limit ends the run `cancelled`, not `timed_out`
+    # (writer_cycle_recovery.TIMEOUT_ANNOTATION), and a hanging import must not re-dispatch itself forever.
+    failed = [r for r in runs if (r.get("conclusion") in FAILED or r.get("conclusion") == "cancelled")
               and (_t(r, "run_started_at") or _t(r, "created_at") or now) >= output_commit]
     if len(failed) >= IMPORT_FAILURE_CAP:
         return Decision("import", "held",
@@ -187,19 +191,26 @@ def gate_collection(event: str, actor: str, own_id: str, own_created: datetime, 
     if runs is None:
         return True, "collection runs could not be read; proceeding"
     ws = window_start(own_created, COLLECTION_PERIOD, COLLECTION_OFFSET)
+    day_ago = own_created - timedelta(hours=24)
+    worked_day = 0
     for r in runs:
         created = _t(r, "created_at")
-        if str(r.get("id")) == str(own_id) or created is None or not (ws <= created < own_created):
+        if str(r.get("id")) == str(own_id) or created is None or not (day_ago < created < own_created):
             continue
-        if not wcr.is_routine(r) or r.get("status") != "completed" or r.get("conclusion") in ("cancelled", "skipped"):
+        if not wcr.is_routine(r) or r.get("status") != "completed":
             continue
         jobs = jobs_of(str(r.get("id")))
-        if jobs is None:
+        if jobs is None or not did_work(r, jobs):      # unreadable: ignored (the guard fails open)
             continue
-        reached = wcr.marker_reached(jobs) or (not wcr.marker_listed(jobs) and r.get("conclusion") == "success")
-        if reached:
-            return False, f"run {r.get('id')} already put window {ws:%Y-%m-%dT%H:%M:%SZ}'s cycle on main"
-    return True, f"no earlier routine run put window {ws:%Y-%m-%dT%H:%M:%SZ}'s cycle on main"
+        if created >= ws:
+            # Whatever its outcome: a lost cycle is G91's one re-run (never gated), not a second
+            # routine collection in the same window.
+            return False, (f"run {r.get('id')} already collected in window {ws:%Y-%m-%dT%H:%M:%SZ} "
+                           f"({r.get('conclusion')})")
+        worked_day += 1
+    if worked_day >= COLLECTION_DAILY_CAP:
+        return False, f"{worked_day} routine cycles already collected in the 24 h before this run"
+    return True, f"no earlier routine run collected in window {ws:%Y-%m-%dT%H:%M:%SZ}"
 
 
 # --------------------------------------------------------------------------------------------------

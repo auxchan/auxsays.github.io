@@ -56,12 +56,17 @@ jobs:
     # ONE CYCLE PER 6-HOUR WINDOW (missed-run recovery). GitHub creates this cron hours late or not at all, so
     # missed-run-recovery.yml dispatches a routine run when a window has none; the window's cron, arriving late,
     # must then not collect a second time. A cron run, a bot dispatch without recovery_of, or the reaper's
-    # re-dispatch of an evicted run stands down here when an earlier routine run in its window already put the
-    # cycle on main; `collect`, the PowerPoint job and chain-ingest are then skipped and the run ends `success`
-    # with no cycle marker, which G91 reads as reached (true: the window's cycle is on main). A G91 re-run of a
-    # run that lost its cycle and every operator dispatch always proceed; any API doubt proceeds.
+    # re-dispatch of an evicted run stands down here when an earlier routine run in its window already collected
+    # (any outcome) or 4 cycles collected in the previous 24 h; `collect`, the PowerPoint job and chain-ingest are
+    # then skipped and the run ends `success`. G91 judges such a run as skipped (writer_cycle_recovery.stood_down),
+    # so a lost earlier cycle still gets its one re-run, which, like every operator dispatch, is never gated. Any
+    # API doubt proceeds.
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    # Read-only: the guard only reads runs and jobs (the workflow-level token can write).
+    permissions:
+      contents: read
+      actions: read
     outputs:
       proceed: ${{ steps.gate.outputs.proceed }}
     steps:
