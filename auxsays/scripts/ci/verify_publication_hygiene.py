@@ -24,9 +24,9 @@ WHAT IT CHECKS, on the built site. ERROR blocks the deploy; WARN is printed and 
                    entity (a <script> element is raw text, so "&amp;" there is five characters, not
                    "&"); and that block states the page's own title, description and canonical URL.
                    A page with no block is fine: structured data is not required where a page needs none.
-            ERROR  (R3-SEO) that block's dateModified is the sitemap lastmod of the same URL (both are the
-                   record's stored record_last_updated, else its release date, under the same tests), or
-                   both are absent; its breadcrumb is a BreadcrumbList numbered 1..n whose every item is
+            ERROR  (R3-SEO) for a page the sitemap lists under its own URL, that block's dateModified is the
+                   sitemap lastmod of that URL (both are the record's stored record_last_updated, else its
+                   release date, under the same tests), or both are absent; its breadcrumb is a BreadcrumbList numbered 1..n whose every item is
                    a built https://auxsays.com page and whose last item is the page's own canonical URL;
                    and no block on any page states a Review, Rating or AggregateRating (AUXSAYS publishes
                    verdicts, not scores).
@@ -46,7 +46,8 @@ WHAT IT CHECKS, on the built site. ERROR blocks the deploy; WARN is printed and 
   FINDINGS  ERROR  (R3-SEO) every row of the homepage's "What AUXSAYS found" section links a built patch
                    page that prints the same verdict word and the same scope under its "AUXSAYS verdict"
                    eyebrow, and the row's line is a word-for-word prefix of that page's verdict line.
-                   Every row sits in the group of its own verdict.
+                   Every row sits in the group of its own verdict, and every finding anchor on the homepage
+                   is one this check parsed (markup drift fails closed, never "0 rows checked").
   MOJIBAKE  WARN   a title, description, h1 or JSON-LD value carrying the UTF-8-read-as-cp1252
                    pattern ("â€™"). Heuristic, so it never blocks: a source may publish such text.
 
@@ -105,6 +106,7 @@ PATCH_SEARCH_MARKER = "<!-- Patch page search metadata"
 # R3-SEO: the homepage findings rows and the patch page's own verdict box, as the templates write them.
 FINDING_RE = re.compile(r'<a class="home-finding" href="([^"]*)" data-home-finding data-finding-verdict="([^"]*)" '
                         r'data-finding-scope="([^"]*)">(.*?)</a>', re.S)
+FINDING_ANCHOR_RE = re.compile(r"<a\b[^>]*\bdata-home-finding(?=[\s>/])", re.I)
 FINDING_LINE_RE = re.compile(r'<span class="home-finding__line" data-finding-line>(.*?)</span>', re.S)
 FINDING_GROUP_RE = re.compile(r'<div class="home-findings-group" data-home-findings-group="([^"]*)">(.*?)</ul>', re.S)
 PAGE_VERDICT_RE = re.compile(r'<span class="update-decision-eyebrow">AUXSAYS verdict</span>\s*<strong>(.*?)</strong>'
@@ -390,6 +392,12 @@ def finding_problems(home_raw: str, files: dict[str, Path]) -> tuple[list[str], 
         if not stem or not page_line.startswith(stem):
             problems.append(f"FINDINGS {href}: the homepage line {line[:80]!r} is not how its page's verdict line "
                             f"begins ({page_line[:80]!r})")
+    # Fail closed on markup drift: a row this check cannot parse is a row it cannot hold to its page, so it
+    # is an error, never a silent skip (an unparsed row once read as "0 rows checked", clean).
+    anchors = len(FINDING_ANCHOR_RE.findall(home_raw))
+    if anchors != rows:
+        problems.append(f"FINDINGS the homepage carries {anchors} finding rows but this check parsed {rows}: "
+                        f"the row markup and FINDING_RE disagree")
     return problems, rows
 
 
@@ -501,7 +509,10 @@ def verify(site_dir: Path, source: Path | None) -> tuple[list[str], list[str], d
                     errors.append(f"JSONLD {url} states values its page does not: "
                                   + "; ".join(f"{k} {got!r} vs page {exp!r}" for k, (got, exp) in wrong.items()))
                 canon = page.canonicals[0] if page.canonicals else None
-                if web[0].get("dateModified") != lastmods.get(canon):
+                # Only a page the sitemap lists under its own URL has a lastmod to agree with; a page kept out
+                # of the sitemap, or canonical to another URL, is not refused for stating its stored date.
+                if (url in in_sitemap and canon == ORIGIN + url
+                        and web[0].get("dateModified") != lastmods.get(canon)):
                     errors.append(f"JSONLD {url} states dateModified {web[0].get('dateModified')!r}, its sitemap "
                                   f"lastmod is {lastmods.get(canon)!r}")
                 if "breadcrumb" in web[0]:

@@ -344,6 +344,26 @@ def section_r3() -> None:
     variant("R3-12 a finding linking a page no built file serves fails FINDINGS", 1,
             "is listed on the homepage but no built page serves it", with_finding(href="/updates/acme/tool/9-9/"))
 
+    def drifted(p):  # noqa: ANN001 -- a row the check cannot parse (one extra attribute), and it is wrong
+        p[PATCH]["body_html"] = VERDICT_BOX
+        p["/"]["body_html"] = finding(verdict="WAIT").replace('<a class="home-finding" ',
+                                                              '<a class="home-finding" data-x="1" ')
+    variant("R3-13 a finding row the check cannot parse fails FINDINGS instead of reading as 0 rows checked "
+            "(markup drift fails closed; review S2)", 1,
+            "FINDINGS the homepage carries 1 finding rows but this check parsed 0", drifted)
+    variant("R3-14 a patch page the sitemap does not list may state its stored dateModified: there is no lastmod "
+            "to disagree with, so a benign unlisted page never refuses a deploy (review N1)", 0,
+            "verify_publication_hygiene: clean (0 warning(s))",
+            lambda p: p[PATCH].update(jsonld=patch_ld(dateModified=STAMP)),
+            sitemap=["/", COMPANY, PRODUCT])
+    def multiline(p):  # noqa: ANN001 -- the page prints a reason with a newline and a <br> inside its first sentence
+        p[PATCH]["body_html"] = VERDICT_BOX.replace("report that installing", "report that\ninstalling").replace(
+            " Install it", "<br>Install it")
+        p["/"]["body_html"] = finding(line="Two users report that installing it fails.")
+    variant("R3-15 a page whose verdict line holds a newline or a <br> is read with one space there, as the homepage "
+            "writes it, so a multi-line reason passes (review S1)", 0, "homepage findings rows checked against their "
+            "pages 1", multiline)
+
 
 # --------------------------------------------------------------------------------------------------
 # [JL] the include's bytes

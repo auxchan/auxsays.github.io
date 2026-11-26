@@ -7,9 +7,12 @@
   same record and the same report count the patch page passes it. This file decides nothing, counts
   nothing the gate did not print, and adds no claim of its own:
     - the verdict word and its scope are printed exactly as the page prints them;
-    - the line is the FIRST SENTENCE of the page's own verdict line, the same cut the page's search
-      description uses (patch-search-meta.html), so it is always a word-for-word prefix of what the
-      page says;
+    - the line is the FIRST SENTENCE of the gate's verdict line (cut at the first ". "), so it is always a
+      word-for-word prefix of the verdict text the page prints, read across all of its verdict
+      paragraphs (a WAIT page may split that line around a reviewed fix; the first sentence is still its
+      start). Before the cut every tag and every run of whitespace, newlines included, becomes one
+      space, exactly as the deploy check reads the page, so a multi-line reason never glues two words;
+
     - the date is the stored release date the page prints as its "Release date".
   scripts/ci/verify_publication_hygiene.py FINDINGS refuses a deploy in which any row here disagrees
   with the page it links (verdict, scope or line), so the two cannot drift.
@@ -74,7 +77,7 @@
       {%- for hf_item in hf_group limit: hf_limit -%}
         {%- assign hf_count = hf_item.update_report_count | default: 0 | plus: 0 -%}
         {%- capture hf_gate -%}{%- include patch-verdict-gate.html record=hf_item count=hf_count -%}{%- endcapture -%}
-        {%- assign hf_line = gate_body | strip_html | strip_newlines | strip | split: '. ' | first | strip -%}
+        {%- assign hf_line = gate_body | replace: '<', ' <' | strip_html | split: ' ' | join: ' ' | split: '. ' | first | strip -%}
         {%- if hf_line != '' -%}
           {%- assign hf_last = hf_line | slice: -1 -%}
           {%- unless hf_last == '.' or hf_last == '!' or hf_last == '?' -%}{%- assign hf_line = hf_line | append: '.' -%}{%- endunless -%}

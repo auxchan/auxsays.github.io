@@ -354,7 +354,10 @@ auxsays/scripts/tests/test_davinci_archive_check.py = 76
 # mutant X8 (the old title) is caught.
 # 211 -> 213 (G43): a stored title that repeats its product label shows the label once in the heading,
 # the citation, the search title and the JSON-LD headline (S27), and an unaffected title is shown as stored (S28).
-auxsays/scripts/tests/test_patch_decision_authority.py = 216
+# 213 -> 217 (R3-SEO): the patch WebPage block carries the breadcrumb of built trackers (S29), dateModified from the
+# stored date under the sitemap's tests (S30), no invented level and no rating (S31), and no company crumb without
+# a built hub and no dateModified on a page kept out of the sitemap (S32).
+auxsays/scripts/tests/test_patch_decision_authority.py = 217
 # GROWTH-3 (owner decisions 1-3, 2026-11-06) moved the verdict policy into lib/patch_decision.decide:
 # an official withdrawal (AVOID), Microsoft's monthly security classification (SECURITY UPDATE), or a
 # reviewed reason entry the page's counted rows still support (WAIT / TEST FIRST); else INSUFFICIENT
@@ -549,7 +552,10 @@ auxsays/scripts/tests/test_feed_discovery.py = 73
 # 38 -> 42: [SM] renders auxsays/sitemap.xml with the Liquid gem (ruby + liquid required): the plugin's URL set
 # (SM1), a stored date on a record, tracker, post and stamped page (SM2), a stored value that is not a date
 # listed with no lastmod instead of failing the build (SM3), and no build time or file time anywhere (SM4).
-auxsays/scripts/tests/test_publication_hygiene.py = 54
+# 42 -> 57 (R3-SEO): [R3] the gate's dateModified/lastmod, breadcrumb, no-rating and FINDINGS checks over synthetic
+# sites (R3-1..12), an unparsed finding row fails closed (R3-13), an unlisted page may state its date (R3-14), and
+# a multi-line verdict line is read with single spaces (R3-15).
+auxsays/scripts/tests/test_publication_hygiene.py = 57
 # P8: the per-product patch verdict Atom feeds. Renders the shipped feed include, layout and aux-base's
 # autodiscovery block with the Liquid gem (ruby + liquid required): valid Atom; only that product's pages,
 # newest release first, archived/hidden/undated left out, the limit kept; the verdict gate's verdict, never a
@@ -1069,7 +1075,10 @@ auxsays/scripts/tests/test_product_page_layout.py = 54
 # [D] pins the patch-first entrance: the question h1, the heading outline, one link per product
 # tracker with records (derived), and the signals ahead of everything else.
 # Needs ruby + liquid; without them the render checks fail rather than skip.
-auxsays/scripts/tests/test_homepage_signals.py = 81
+# 73 -> 83 (R3-SEO): [F] "What AUXSAYS found" lists exactly the pages printing an actionable verdict with their own
+# verdict, scope and first sentence (F1-F8), a multi-line reason is cut without glued words (F9), and the deploy
+# check's own FINDING_RE parses every rendered row (F10).
+auxsays/scripts/tests/test_homepage_signals.py = 83
 auxsays/scripts/tests/test_promote_local_playwright_captures.py = 36
 # The public projection of how evidence was gathered. The methodology page rendered the whole
 # method-health store (1,554,238 bytes; reddit_search 1,064 times) and the per-patch card

@@ -1118,16 +1118,30 @@ FINDING_GROUP_RE = re.compile(r'<div class="home-findings-group" data-home-findi
 ACTIONABLE = ("AVOID", "WAIT", "TEST FIRST", "SECURITY UPDATE")
 
 
+def _hygiene_gate():  # noqa: ANN202
+    import sys  # noqa: PLC0415
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    from ci import verify_publication_hygiene  # noqa: PLC0415
+    return verify_publication_hygiene
+
+
 def findings_jobs() -> tuple[dict, dict]:
     site = {"data": {"patch_verdicts": VERDICTS, "live_eligibility": VERDICT_LIVE, **VERDICT_FACTS},
             "time": FIXED_TIME}
     recs = [r for group in verdict_records() for r in group]
-    jobs = {"findings:verdict": {"template": "{% include home-findings.html pages=site.pages %}",
+    multi = {"verdict": "TEST FIRST", "scope": "when installing it",
+             "body": "Two users report that\ninstalling it\tfails.<br>Install it\non one machine first."}
+    multi_site = {"data": {"patch_verdicts": VERDICTS, "verdict_projection": {"pages": {"v-multi|1.0|": multi}}},
+                  "time": FIXED_TIME}
+    jobs = {"findings:multi": {"template": "{% include home-findings.html pages=site.pages %}",
+                               "corpus": "findings:multi", "site": multi_site},
+            "findings:verdict": {"template": "{% include home-findings.html pages=site.pages %}",
                                  "corpus": "findings:all", "site": site},
             "findings:none": {"template": "{% include home-findings.html pages=site.pages %}",
                               "corpus": "findings:all", "site": {"data": {"patch_verdicts": VERDICTS},
                                                                  "time": FIXED_TIME}}}
-    return jobs, {"findings:all": recs}
+    return jobs, {"findings:all": recs,
+                  "findings:multi": [rec("v-multi", BASE_T, product_id="v-multi", update_version="1.0")]}
 
 
 def section_f(out: dict) -> None:
@@ -1190,6 +1204,30 @@ def section_f(out: dict) -> None:
         r"\b(changed|new verdict|upgraded|downgraded|safer|now safe|safe to install)\b", visible, re.I)})
     check("F7 the copy around the rows claims no verdict change and nothing safer, and says it keeps no history",
           not history and "keeps no history of verdict changes" in visible, str(history))
+    # Review S1: a reason written over several lines (or with a <br>) is cut after the same whitespace
+    # folding the deploy check applies to the page, so no two words are glued and FINDINGS accepts the row.
+    gate = _hygiene_gate()
+    multi_html = out.get("findings:multi", {}).get("html", "")
+    multi_rows = gate.FINDING_RE.findall(multi_html)
+    multi_line = _norm(htmlmod.unescape(re.sub(r"<[^>]+>", " ", (FINDING_LINE_RE.search(
+        multi_rows[0][3]) or [None, ""])[1]))) if multi_rows else ""
+    with tempfile.TemporaryDirectory() as td:
+        page = Path(td) / "page.html"
+        page.write_text('<span class="update-decision-eyebrow">AUXSAYS verdict</span><strong>TEST FIRST</strong> '
+                        '<span class="update-decision-scope">when installing it</span>'
+                        '<p class="update-decision-recommendation">Two users report that\ninstalling it\tfails.'
+                        '<br>Install it\non one machine first.</p>', encoding="utf-8")
+        found, n = gate.finding_problems(multi_html, {"/updates/t/v-multi/": page})
+    check("F9 a multi-line or <br> verdict line is cut with single spaces (no glued words), and the deploy check "
+          "accepts the row against a page printing that line (review S1)",
+          multi_line == "Two users report that installing it fails." and n == 1 and not found,
+          f"{multi_line!r} rows={n} problems={found}")
+    # Review S2: the deploy check's own row pattern must parse every row the shipped include renders, so a
+    # markup edit that only this test followed cannot leave FINDINGS checking nothing.
+    anchors = len(gate.FINDING_ANCHOR_RE.findall(html))
+    parsed = gate.FINDING_RE.findall(html)
+    check("F10 the deploy check's own FINDING_RE parses every row the shipped include renders (S2: no silent skip)",
+          anchors >= 2 and len(parsed) == anchors == len(rows), f"anchors={anchors} parsed={len(parsed)} rows={len(rows)}")
     real = out.get("page:real", {}).get("html", "")
     at = {m: real.find(m) for m in ('class="home-signals-column"', "data-home-findings", "data-home-signal-list")}
     check("F8 on the real homepage the section opens the main column, ahead of the signal list",

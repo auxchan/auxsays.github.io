@@ -180,7 +180,8 @@
           and the release date is the vendor's date, not the page's.
         - breadcrumb: Patch Feed, then the company tracker and the product tracker the page itself links (its
           back link and its Product pill read the same company_url and product_url from _data), then this
-          page. A level whose name or URL is missing is left out, never invented; JSONLD refuses a deploy
+          page. A level whose name or URL is missing, or a company whose hub page is not built, is left out,
+          never invented; a page with sitemap false states no dateModified (no lastmod). JSONLD refuses a deploy
           where a breadcrumb URL is not a built page. Names go through the same JSON escaping as above.
       No Review, Rating or AggregateRating: AUXSAYS publishes verdicts, not scores.
     {%- endcomment -%}
@@ -193,13 +194,19 @@
     {%- if psm_stamp_shape == '-' and psm_stamp_seconds >= psm_floor and psm_stamp_seconds <= psm_now -%}
       {%- assign psm_modified = psm_stamp | date: '%Y-%m-%dT%H:%M:%S%:z' -%}
     {%- endif -%}
+    {%- comment -%} A page kept out of the sitemap has no lastmod to agree with, so it states no dateModified. {%- endcomment -%}
+    {%- if psm_record.sitemap == false -%}{%- assign psm_modified = '' -%}{%- endif -%}
     {%- assign psm_crumb_n = 1 -%}
     {%- assign psm_feed_url = '/updates/' | absolute_url -%}
     {%- capture psm_crumbs -%}{"@type":"ListItem","position":1,"name":"Patch Feed","item":{{ psm_feed_url | jsonify }}}{%- endcapture -%}
     {%- assign psm_company = site.data.patch_companies | where: 'id', psm_record.company_id | first -%}
     {%- assign psm_company_name = psm_company.display_name | default: psm_company.company_name | default: '' | append: '' | strip -%}
     {%- assign psm_company_url = psm_company.company_url | default: '' | append: '' | strip -%}
-    {%- if psm_company_name != '' and psm_company_url != '' -%}
+    {%- comment -%} The company level only when its hub page is built: a new company row with no hub yet is left out
+      rather than naming a page that does not exist (QA checks product routes, not company hubs). {%- endcomment -%}
+    {%- assign psm_company_hub = nil -%}
+    {%- if psm_company_url != '' -%}{%- assign psm_company_hub = site.pages | where: 'url', psm_company_url | first -%}{%- endif -%}
+    {%- if psm_company_name != '' and psm_company_url != '' and psm_company_hub -%}
       {%- assign psm_crumb_n = psm_crumb_n | plus: 1 -%}
       {%- assign psm_crumb_name = psm_company_name | jsonify | replace: '<', '\u003c' | replace: '>', '\u003e' | replace: '&', '\u0026' -%}
       {%- capture psm_crumbs -%}{{ psm_crumbs }},{"@type":"ListItem","position":{{ psm_crumb_n }},"name":{{ psm_crumb_name }},"item":{{ psm_company_url | absolute_url | jsonify }}}{%- endcapture -%}

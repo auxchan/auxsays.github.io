@@ -1430,11 +1430,15 @@ def _search_cases() -> dict:
         "crumbs_future": {"page": search_page(company_id="obs-project", record_last_updated="2027-01-01T00:00:00Z"),
                           "site": crumb_site()},
         "crumbs_released": {"page": search_page(company_id="nobody"), "site": search_site()},
+        "crumbs_no_hub": {"page": search_page(company_id="obs-project", record_last_updated="2026-11-01T10:20:30Z"),
+                          "site": crumb_site(hub=False)},
+        "crumbs_unlisted": {"page": search_page(company_id="obs-project", record_last_updated="2026-11-01T10:20:30Z",
+                                                sitemap=False), "site": crumb_site()},
     }
 
 
-def crumb_site() -> dict:
-    site = search_site()
+def crumb_site(hub: bool = True) -> dict:
+    site = search_site(pages=[{"url": "/updates/obs-project/", "layout": "aux-patch-company"}] if hub else [])
     site["data"] = dict(site["data"],
                         patch_companies=[{"id": "obs-project", "display_name": "OBS & Project",
                                           "company_url": "/updates/obs-project/"}],
@@ -1744,6 +1748,14 @@ def check_search_snippets() -> None:
     check("S31 a level with no company or product data is left out, never invented, and no case states a "
           "Review or Rating", released == [(1, "Patch Feed"), (2, "OBS Studio 99.0.0")] and not rated,
           f"{released} rated={rated}")
+    no_hub = [(i.get("position"), i.get("name")) for i in
+              ((block("crumbs_no_hub").get("breadcrumb") or {}).get("itemListElement") or [])]
+    check("S32 a company whose hub page is not built is left out of the breadcrumb, and a page kept out of the "
+          "sitemap states no dateModified, so neither benign state can refuse a deploy (review N1, N5)",
+          no_hub == [(1, "Patch Feed"), (2, "OBS Studio"), (3, "OBS Studio 99.0.0")]
+          and "dateModified" not in block("crumbs_unlisted")
+          and block("crumbs_no_hub").get("dateModified") == "2026-11-01T10:20:30+00:00",
+          f"{no_hub} unlisted={block('crumbs_unlisted').get('dateModified')!r}")
 
 
 # ---------------------------------------------------------------- [R]/[N] regeneration repairs
