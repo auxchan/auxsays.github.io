@@ -819,9 +819,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // them the moment they are first seen.
     //
     // IDENTITY, NOT ORDER: a record is new when its path is absent from the baseline -- never because
-    // of where it sits in an array -- and only if it is not older than the oldest record the baseline
-    // held, so a record that re-enters the bounded 24-record window from below (an archived sibling
-    // dropping out) is not announced as new.
+    // of where it sits in an array. When the baseline's window was full (VISIT_RECS records, so older
+    // ones existed beyond it), a record is new only if it is strictly newer than the oldest record the
+    // baseline held: one that re-enters the bounded window from below (an archived sibling dropping
+    // out, or two same-day records swapping places at the boundary) is not announced. Silence over a
+    // false claim. When every record of the current window is new and older ones exist, the count is
+    // a lower bound and is printed as "at least".
     const VISITS_KEY = 'auxsays.stackVisits.v1';
     const VISIT_GAP_MS = 30 * 60 * 1000;
     const VISIT_RECS = 24;
@@ -834,7 +837,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const cleanVisit = (value) => {
       if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
       const t = Number(value.t);
-      if (!Number.isFinite(t) || t <= 0) return null;
+      // A time outside the Date range (|t| > 8.64e15) would throw at toISOString: reject it here.
+      if (!Number.isFinite(t) || t <= 0 || !Number.isFinite(new Date(t).getTime())) return null;
       const src = value.s;
       if (!src || typeof src !== 'object' || Array.isArray(src)) return null;
       const s = {};
@@ -892,21 +896,26 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!Array.isArray(before)) return;
         const known = new Map(before.map((row) => [row[0], row]));
         const knownDates = before.map((row) => row[3]).filter(Boolean).sort();
-        const floor = knownDates.length ? knownDates[0] : '';
+        // A shorter window had nothing beyond it, so it has no floor.
+        const floor = before.length >= VISIT_RECS && knownDates.length ? knownDates[0] : '';
         const added = [];
         const changed = [];
+        let anyKnown = false;
         (Array.isArray(p.recs) ? p.recs : []).forEach((r) => {
           if (!Array.isArray(r) || typeof r[3] !== 'string') return;
           const was = known.get(r[3]);
           const verdict = String(r[5] == null ? '' : r[5]);
           const scope = String(r[12] == null ? '' : r[12]);
           if (!was) {
-            if (!floor || String(r[2] == null ? '' : r[2]) >= floor) added.push(r);
-          } else if (was[1] !== verdict || was[2] !== scope) {
-            changed.push({ rec: r, was: [was[1], was[2]] });
+            if (!floor || String(r[2] == null ? '' : r[2]) > floor) added.push(r);
+          } else {
+            anyKnown = true;
+            if (was[1] !== verdict || was[2] !== scope) changed.push({ rec: r, was: [was[1], was[2]] });
           }
         });
-        if (added.length || changed.length) out.push({ product: p, added, changed });
+        // No record of this window was known and older ones exist beyond it: more may be new.
+        const atLeast = added.length > 0 && !anyKnown && Number(p.more) > 0;
+        if (added.length || changed.length) out.push({ product: p, added, changed, atLeast });
       });
       return out;
     };
@@ -939,11 +948,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const added = changes.reduce((n, c) => n + c.added.length, 0);
         const changed = changes.reduce((n, c) => n + c.changed.length, 0);
         const said = [];
-        if (added) said.push(`${added} new patch record${added === 1 ? '' : 's'}`);
+        const atLeast = changes.some((c) => c.atLeast) ? 'at least ' : '';
+        if (added) said.push(`${atLeast}${added} new patch record${added === 1 ? '' : 's'}`);
         if (changed) said.push(`${changed} verdict change${changed === 1 ? '' : 's'}`);
         parts.push(`<p class="patch-stack-since__summary" data-since-summary>${said.join(' and ')} across `
           + `${changes.length} of your products.</p>`);
-        changes.forEach(({ product, added: newRecs, changed: moved }) => {
+        changes.forEach(({ product, added: newRecs, changed: moved, atLeast: lower }) => {
           const hist = esc(safeHref(product.hist));
           const name = esc(product.name || product.id);
           const rows = [];
@@ -965,12 +975,15 @@ document.addEventListener('DOMContentLoaded', () => {
               + ` <span class="patch-stack-since__was">was ${was[0] ? esc(scopedVerdict(was[0], was[1])) : 'no verdict yet'}</span></li>`);
           });
           const more = rows.length - SINCE_ROWS;
+          const moreText = lower ? 'and at least' : 'and';
           parts.push(`<div class="patch-stack-since__product" data-since-product="${esc(product.id)}">`
             + `<h3 class="patch-stack-since__name">${hist ? `<a href="${hist}">${name}</a>` : name}</h3>`
             + `<ul class="patch-stack-since__list">${rows.slice(0, SINCE_ROWS).join('')}</ul>`
             + (more > 0
-              ? `<p class="patch-stack-since__more">and ${more} more${hist ? ` in its <a href="${hist}">patch history</a>` : ''}.</p>`
-              : '')
+              ? `<p class="patch-stack-since__more">${moreText} ${more} more${hist ? ` in its <a href="${hist}">patch history</a>` : ''}.</p>`
+              : (lower
+                ? `<p class="patch-stack-since__more">and possibly more${hist ? ` in its <a href="${hist}">patch history</a>` : ''}.</p>`
+                : ''))
             + '</div>');
         });
       }
@@ -1322,11 +1335,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const renderSince = (watched) => {
       if (!sincePanel || !sinceBody) return;
-      const show = !!sinceBase && watched.length > 0;
-      sinceBody.innerHTML = show
-        ? sinceHtml(sinceBase, sinceChanges(sinceBase, watched), watched, sincePanel.dataset.feedAll || '')
-        : '';
-      sincePanel.hidden = !show;
+      let markup = '';
+      if (sinceBase && watched.length > 0) {
+        // An optional block: whatever goes wrong in it hides it, and the cards still draw.
+        try {
+          markup = sinceHtml(sinceBase, sinceChanges(sinceBase, watched), watched, sincePanel.dataset.feedAll || '');
+        } catch (error) {
+          markup = '';
+        }
+      }
+      sinceBody.innerHTML = markup;
+      sincePanel.hidden = !markup;
       if (!sinceReadable) return;
       try {
         window.localStorage.setItem(VISITS_KEY, JSON.stringify({

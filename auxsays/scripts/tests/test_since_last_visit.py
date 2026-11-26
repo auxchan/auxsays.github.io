@@ -7,12 +7,15 @@ renders the shipped page with the Liquid gem and runs the shipped JavaScript und
 
   [L] the payload names each product's Atom feed by its front matter (never a built path) and the
       page carries a hidden block with the feed of every product; without feed pages, no feed links.
-  [N] no storage, a throwing accessor and malformed values mean no block and no error; a first visit
+  [N] no storage, a throwing accessor and malformed values (a time outside the Date range included)
+      mean no block and no error; a defect inside the block hides it and throws nothing; a first visit
       shows nothing and stores a snapshot; a reload inside the same visit keeps the same baseline.
   [V] a second visit lists the records new since the baseline and the verdicts that changed, by
       identity (patch-page path), never by array position; every verdict it prints is the one the
       authority gives that record, i.e. the text its own patch page prints; a record re-entering the
-      bounded window from below and a product watched since are not announced; stored text is escaped.
+      bounded window from below (a same-day boundary tie included) and a product watched since are not
+      announced, a short window has no floor; a whole new window with older records beyond it is "at
+      least N"; a scope-only change counts as changed; stored text and product names are escaped.
   [F] the block links each watched product's feed and the feed of every product.
   [H] the homepage findings section links the feed of every product (only where a feed page exists)
       and My Patch Stack.
@@ -129,16 +132,20 @@ const results = SCENARIOS.map((cfg) => {
   };
   Date.now = () => cfg.now;
   let error = '';
+  // `poison` makes the block's renderer throw, standing in for any future defect in it.
+  const code = cfg.poison
+    ? CODE.replace('const sinceHtml = (baseline, changes, products, feedAll) => {', "$& throw new Error('poisoned');")
+    : CODE;
   try {
     const api = (new Function('window', 'document', 'PRODUCT_ID_RE', 'CustomEvent',
-      CODE + '\nreturn { renderSince };'))(win, doc, PRODUCT_ID_RE, CustomEvent);
+      code + '\nreturn { renderSince };'))(win, doc, PRODUCT_ID_RE, CustomEvent);
     api.renderSince(cfg.watched);
   } catch (e) {
     error = String((e && e.stack) || e);
   }
   Date.now = realNow;
   carried = store;
-  return { hidden: panel.hidden, html: body.innerHTML, store, error };
+  return { hidden: panel.hidden, html: body.innerHTML, store, error, poisoned: code !== CODE };
 });
 console.log(JSON.stringify(results));
 """
@@ -230,8 +237,17 @@ def run() -> int:
     usable = [e for e in entries if len(e.get("recs", [])) >= 4]
     a = usable[0] if usable else {"id": "none", "recs": []}
     b = usable[1] if len(usable) > 1 else {"id": "none2", "recs": []}
-    # A product whose two oldest window records have different dates, for the window-churn case.
-    churn = next((e for e in usable if e["recs"][-1][2] < e["recs"][-2][2]), a)
+    full = [e for e in usable if len(e["recs"]) >= 24]
+
+    def oldest_two(e: dict) -> tuple[int, str]:
+        """(index of the oldest record by date, the next-oldest date) -- by date, never by position."""
+        dates = sorted(r[2] for r in e["recs"])
+        idx = min(range(len(e["recs"])), key=lambda i: e["recs"][i][2])
+        return idx, dates[1]
+
+    # A full-window product whose oldest record is the only one on its date, for the window-churn case.
+    churn = next((e for e in full if sorted(r[2] for r in e["recs"])[0] < sorted(r[2] for r in e["recs"])[1]),
+                 full[0] if full else a)
     now = 1_790_000_000_000
     day = 86_400_000
 
@@ -240,9 +256,34 @@ def run() -> int:
     flip_from = "SAFE ENOUGH" if b["recs"][1][5] != "SAFE ENOUGH" else "WAIT"
     base_b[1] = [base_b[1][0], flip_from, "", base_b[1][3]]  # this browser was shown another verdict
     second = {a["id"]: base_a, b["id"]: base_b}
-    churn_base = {churn["id"]: snapshot([churn])[churn["id"]][:-1]}
+    # The last visit held a full window: every current record but the oldest, plus a sibling since
+    # archived, dated on the next-oldest day -- so the oldest current record re-enters from below.
+    c_idx, c_next = oldest_two(churn)
+    churn_rows = [row for i, row in enumerate(snapshot([churn])[churn["id"]]) if i != c_idx]
+    churn_base = {churn["id"]: churn_rows + [["/updates/archived-sibling/", "SAFE ENOUGH", "", c_next]]}
+    # The same, but the archived sibling shares the re-entering record's date (a 24/25 boundary tie).
+    tie = full[0] if full else a
+    t_idx = oldest_two(tie)[0]
+    tie_rows = [row for i, row in enumerate(snapshot([tie])[tie["id"]]) if i != t_idx]
+    tie_base = {tie["id"]: tie_rows + [["/updates/archived-sibling/", "SAFE ENOUGH", "", tie["recs"][t_idx][2]]]}
+    # A product with older records beyond its window, whose whole window is new since the last visit.
+    deep = next((e for e in full if int(e.get("more") or 0) > 0), a)
+    deep_base = {deep["id"]: [[f"/updates/old-{i}/", "SAFE ENOUGH", "", "2000-01-01"] for i in range(24)]}
+    # This browser saw the same verdict word with a different scope.
+    s_rec = b["recs"][2]
+    scope_base = {b["id"]: [[row[0], row[1], ("" if s_rec[12] else "for some setups") if i == 2 else row[2], row[3]]
+                            for i, row in enumerate(snapshot([b])[b["id"]])]}
+    # A product with a short window (nothing beyond it): the last visit lacked its oldest record.
+    short = next((e for e in usable if len(e["recs"]) < 24), None)
+    s_idx = oldest_two(short)[0] if short else 0
+    short_base = ({short["id"]: [row for i, row in enumerate(snapshot([short])[short["id"]]) if i != s_idx]}
+                  if short else {})
+    named = dict(a, name='A <script>alert(1)</script> & B')
     hostile = {a["id"]: [[r[0], '<img src=x onerror=alert(1)>', '', r[3]] if i == 3 else r
                          for i, r in enumerate(snapshot([a])[a["id"]])]}
+    huge_cur = {"auxsays.stackVisits.v1": json.dumps({"prev": None, "cur": {"t": 1e20, "s": snapshot([a])}})}
+    huge_prev = {"auxsays.stackVisits.v1": json.dumps({"prev": {"t": 9e15, "s": snapshot([a])},
+                                                       "cur": {"t": now - 60_000, "s": snapshot([a])}})}
 
     scenarios = [
         {"name": "absent", "mode": "absent", "now": now, "watched": [a, b], "feedAll": all_feed},
@@ -263,6 +304,17 @@ def run() -> int:
          "now": now, "watched": [a, b], "feedAll": all_feed},
         {"name": "hostile", "mode": "ok", "store": store_with(now - 2 * day, hostile), "now": now, "watched": [a]},
         {"name": "unwatched", "mode": "ok", "store": store_with(now - 2 * day, second), "now": now, "watched": []},
+        {"name": "huge-cur", "mode": "ok", "store": huge_cur, "now": now, "watched": [a]},
+        {"name": "huge-prev", "mode": "ok", "store": huge_prev, "now": now, "watched": [a]},
+        {"name": "poison", "mode": "ok", "store": store_with(now - 2 * day, second), "now": now,
+         "watched": [a, b], "feedAll": all_feed, "poison": True},
+        {"name": "tie", "mode": "ok", "store": store_with(now - 2 * day, tie_base), "now": now, "watched": [tie]},
+        {"name": "deep", "mode": "ok", "store": store_with(now - 2 * day, deep_base), "now": now, "watched": [deep]},
+        {"name": "scope-only", "mode": "ok", "store": store_with(now - 2 * day, scope_base), "now": now, "watched": [b]},
+        {"name": "named", "mode": "ok", "store": store_with(now - 2 * day, {a["id"]: base_a}), "now": now,
+         "watched": [named]},
+        {"name": "short", "mode": "ok", "store": store_with(now - 2 * day, short_base), "now": now,
+         "watched": [short] if short else []},
     ]
     print("\n[N] storage: absent, throwing, malformed, first visit, reload")
     results = run_probe(scenarios)
@@ -288,6 +340,20 @@ def run() -> int:
     check("N5 a reload inside the same visit still has no earlier visit to compare with",
           r("reload")["hidden"] and not r("reload")["error"])
     check("N6 a list with nothing watched shows no block", r("unwatched")["hidden"] and not r("unwatched")["error"])
+
+    def stored_of(name: str) -> dict:
+        return json.loads(r(name)["store"].get("auxsays.stackVisits.v1", "{}") or "{}")
+
+    def restored(name: str) -> bool:
+        return (stored_of(name).get("cur") or {}).get("t") == now
+    check("N7 a stored time outside the Date range (cur 1e20; prev 9e15 inside the visit): no block, no error,"
+          " and the bad value is replaced",
+          all(r(n)["hidden"] and r(n)["html"] == "" and not r(n)["error"] and restored(n)
+              and "prev" in stored_of(n) and stored_of(n)["prev"] is None for n in ("huge-cur", "huge-prev")),
+          str([r(n)["error"][:120] for n in ("huge-cur", "huge-prev")]))
+    check("N8 a defect inside the block's renderer hides the block and throws nothing (the cards still draw)",
+          r("poison").get("poisoned") is True and r("poison")["hidden"] and r("poison")["html"] == ""
+          and not r("poison")["error"] and restored("poison"), r("poison")["error"][:200])
 
     print("\n[V] a second visit")
     sec_rows = rows_of(r("second")["html"])
@@ -321,7 +387,8 @@ def run() -> int:
           not r("nothing")["hidden"] and "data-since-nothing" in r("nothing")["html"]
           and not rows_of(r("nothing")["html"]))
     check("V8 a record re-entering the window from below is not announced as new",
-          churn["recs"][-1][3] not in {h for _, h, _ in rows_of(r("churn")["html"])}, churn["id"])
+          len(churn["recs"]) >= 24 and not r("churn")["error"]
+          and churn["recs"][c_idx][3] not in {h for _, h, _ in rows_of(r("churn")["html"])}, churn["id"])
     check("V9 a product watched since the last visit is not announced at all",
           not any(h.startswith("/") and by_url.get(h, {}).get("product_id") == b["id"]
                   for _, h, _ in rows_of(r("watched-since")["html"])), b["id"])
@@ -331,6 +398,27 @@ def run() -> int:
     last_day = datetime.fromtimestamp((now - 2 * day) / 1000, tz=timezone.utc).strftime("%Y-%m-%d")
     check("V11 the block says when the last visit was", bool(when) and when.group(1).startswith(last_day),
           when.group(1) if when else "")
+    check("V12 a record sliding in at the 24/25 boundary on the same day as the last visit's oldest"
+          " is not announced as new", len(tie["recs"]) >= 24 and not r("tie")["error"]
+          and tie["recs"][t_idx][3] not in {h for _, h, _ in rows_of(r("tie")["html"])},
+          f'{tie["id"]} {tie["recs"][t_idx][2]}')
+    deep_html = r("deep")["html"]
+    check("V13 a whole window new with older records beyond it is counted as a lower bound ('at least')",
+          int(deep.get("more") or 0) > 0 and len(rows_of(deep_html)) == 6
+          and "at least 24 new patch records across 1 of your products" in deep_html
+          and ">and at least 18 more in its " in deep_html, deep_html[:400])
+    scope_rows = rows_of(r("scope-only")["html"])
+    check("V14 a verdict whose scope alone differs from what this browser saw is listed as changed",
+          [(k, h) for k, h, _ in scope_rows] == [("changed", s_rec[3])] and not r("scope-only")["error"],
+          str(scope_rows)[:300])
+    name_html = r("named")["html"]
+    check("V15 a product name is escaped, never markup",
+          "<script>" not in name_html and "A &lt;script&gt;alert(1)&lt;/script&gt; &amp; B</a></h3>" in name_html,
+          name_html[:300])
+    check("V16 a short window has no floor: a record absent from it is new whatever its date",
+          short is not None and not r("short")["error"]
+          and short["recs"][s_idx][3] in {h for k, h, _ in rows_of(r("short")["html"]) if k == "new"},
+          short["id"] if short else "no product with a short window")
 
     print("\n[F] the way back without a visit")
     feed_links = re.findall(r'<a href="([^"]*)" data-since-feed>', r("second")["html"])
