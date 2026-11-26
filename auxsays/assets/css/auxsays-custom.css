@@ -5604,3 +5604,32 @@ h2.home-section-label { margin-top: 0; line-height: 1.3; font-family: inherit; }
 .patch-pagination-step a:hover,
 .patch-page-note a:hover { text-decoration: underline; }
 .patch-page-note { margin-top: .6rem; }
+
+/* R3-SEO homepage: "What AUXSAYS found". Every row is a patch page's own verdict word, scope and first
+   sentence (_includes/home-findings.html). Meaning is carried by the words; the verdict word is not
+   colour-coded, so no colour reads as safer than another. */
+.home-signals-column { display: grid; gap: 1.2rem; align-content: start; }
+.home-findings { padding: 1.1rem 1.15rem 1.2rem; display: grid; gap: .85rem; min-width: 0; }
+.home-findings .home-patch-head { display: grid; gap: .35rem; }
+.home-findings-summary,
+.home-findings-note,
+.home-findings-empty { margin: 0; color: var(--text-1); font-size: .88rem; line-height: 1.5; }
+.home-findings-note { color: var(--text-2); font-size: .8rem; }
+.home-findings-group { display: grid; gap: .35rem; min-width: 0; }
+.home-findings-group__title { margin: 0; color: var(--text-0); font-family: inherit; font-size: .95rem; letter-spacing: .06em; line-height: 1.3; }
+.home-findings-group__count { margin-left: .35rem; color: var(--text-2); font-size: .8rem; font-weight: 500; letter-spacing: 0; }
+.home-findings-list { list-style: none; margin: 0; padding: 0; display: grid; }
+.home-finding {
+  display: grid; gap: .12rem; padding: .62rem 0; min-width: 0;
+  border-top: 1px solid rgba(255,255,255,.055); color: var(--text-0);
+}
+.home-finding:hover .home-finding__title,
+.home-finding:focus-visible .home-finding__title { color: var(--cyan-1); }
+.home-finding:focus-visible { outline: 2px solid var(--accent-1); outline-offset: 3px; }
+.home-finding__title { font-size: .96rem; line-height: 1.2; overflow-wrap: anywhere; transition: color .2s ease; }
+.home-finding__kb { color: var(--text-2); font-weight: 600; font-size: .82rem; }
+.home-finding__verdict { font-size: .84rem; line-height: 1.35; }
+.home-finding__word { font-weight: 800; letter-spacing: .04em; }
+.home-finding__scope { color: var(--text-1); }
+.home-finding__line { color: var(--text-1); font-size: .84rem; line-height: 1.45; }
+.home-finding__date { color: var(--text-2); font-size: .76rem; }

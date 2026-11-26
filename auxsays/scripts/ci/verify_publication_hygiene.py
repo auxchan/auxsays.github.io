@@ -24,6 +24,12 @@ WHAT IT CHECKS, on the built site. ERROR blocks the deploy; WARN is printed and 
                    entity (a <script> element is raw text, so "&amp;" there is five characters, not
                    "&"); and that block states the page's own title, description and canonical URL.
                    A page with no block is fine: structured data is not required where a page needs none.
+            ERROR  (R3-SEO) for a page the sitemap lists under its own URL, that block's dateModified is the
+                   sitemap lastmod of that URL (both are the record's stored record_last_updated, else its
+                   release date, under the same tests), or both are absent; its breadcrumb is a BreadcrumbList numbered 1..n whose every item is
+                   a built https://auxsays.com page and whose last item is the page's own canonical URL;
+                   and no block on any page states a Review, Rating or AggregateRating (AUXSAYS publishes
+                   verdicts, not scores).
             WARN   an HTML entity in a block the site-wide SEO tag wrote (jekyll-seo-tag escapes the
                    title before it builds its JSON-LD, so any page title with "&" or an apostrophe gets
                    one). None does today; an editorial title must not be able to stop every deploy,
@@ -37,6 +43,11 @@ WHAT IT CHECKS, on the built site. ERROR blocks the deploy; WARN is printed and 
                    lacks the live words the layout reads, so a certified page renders live.
             WARN   ... and from its company hub page (a company hub may summarise; the product
                    tracker is the page that must list it).
+  FINDINGS  ERROR  (R3-SEO) every row of the homepage's "What AUXSAYS found" section links a built patch
+                   page that prints the same verdict word and the same scope under its "AUXSAYS verdict"
+                   eyebrow, and the row's line is a word-for-word prefix of that page's verdict line.
+                   Every row sits in the group of its own verdict, and every finding anchor on the homepage
+                   is one this check parsed (markup drift fails closed, never "0 rows checked").
   MOJIBAKE  WARN   a title, description, h1 or JSON-LD value carrying the UTF-8-read-as-cp1252
                    pattern ("â€™"). Heuristic, so it never blocks: a source may publish such text.
 
@@ -92,6 +103,17 @@ H1_RE = re.compile(r"<h1\b[^>]*>(.*?)</h1>", re.I | re.S)
 BODY_CLASS_RE = re.compile(r"<body class=\"aux-page ([^\"]*)\"")
 LIVE_BOX = 'class="update-decision-box update-decision-box--live"'
 PATCH_SEARCH_MARKER = "<!-- Patch page search metadata"
+# R3-SEO: the homepage findings rows and the patch page's own verdict box, as the templates write them.
+FINDING_RE = re.compile(r'<a class="home-finding" href="([^"]*)" data-home-finding data-finding-verdict="([^"]*)" '
+                        r'data-finding-scope="([^"]*)">(.*?)</a>', re.S)
+FINDING_ANCHOR_RE = re.compile(r"<a\b[^>]*\bdata-home-finding(?=[\s>/])", re.I)
+FINDING_LINE_RE = re.compile(r'<span class="home-finding__line" data-finding-line>(.*?)</span>', re.S)
+FINDING_GROUP_RE = re.compile(r'<div class="home-findings-group" data-home-findings-group="([^"]*)">(.*?)</ul>', re.S)
+PAGE_VERDICT_RE = re.compile(r'<span class="update-decision-eyebrow">AUXSAYS verdict</span>\s*<strong>(.*?)</strong>'
+                             r'(?:\s*<span class="update-decision-scope">(.*?)</span>)?', re.S)
+PAGE_LINE_RE = re.compile(r'<p class="update-decision-recommendation(?: update-decision-continued)?">(.*?)</p>', re.S)
+RATING_TYPES = {"Review", "Rating", "AggregateRating"}
+LASTMOD_TAG_RE = re.compile(r"<url>\s*<loc>([^<]*)</loc>\s*(?:<lastmod>([^<]*)</lastmod>)?", re.S)
 # An HTML character reference, named or numeric. Inside JSON-LD it is never decoded.
 ENTITY_RE = re.compile(r"&(?:[A-Za-z][A-Za-z0-9]{1,31}|#[0-9]{1,7}|#[xX][0-9A-Fa-f]{1,6});")
 # UTF-8 bytes read as cp1252: a lead byte (0xE2 for typographic punctuation such as the curly quote and the
@@ -289,6 +311,96 @@ def _strings(value) -> list[str]:  # noqa: ANN001
     return [value] if isinstance(value, str) else []
 
 
+def sitemap_lastmods(site: Path) -> dict[str, str]:
+    """{sitemap loc: its lastmod text} for every listed URL that carries one (R3-SEO)."""
+    f = site / "sitemap.xml"
+    if not f.is_file():
+        return {}
+    text = f.read_text(encoding="utf-8", errors="replace")
+    return {html.unescape(loc.strip()): mod.strip() for loc, mod in LASTMOD_TAG_RE.findall(text) if mod.strip()}
+
+
+def _types(value) -> set[str]:  # noqa: ANN001
+    """Every @type stated anywhere in a JSON-LD document."""
+    out: set[str] = set()
+    if isinstance(value, dict):
+        t = value.get("@type")
+        out |= {t} if isinstance(t, str) else {x for x in t if isinstance(x, str)} if isinstance(t, list) else set()
+        for v in value.values():
+            out |= _types(v)
+    elif isinstance(value, list):
+        for v in value:
+            out |= _types(v)
+    return out
+
+
+def breadcrumb_problems(crumb, canonical: str | None, pages: dict, site_dir: Path) -> list[str]:  # noqa: ANN001
+    """What is wrong with a patch page's breadcrumb, or [] (R3-SEO)."""
+    if not isinstance(crumb, dict) or crumb.get("@type") != "BreadcrumbList":
+        return ["breadcrumb is not a BreadcrumbList"]
+    items = crumb.get("itemListElement")
+    if not isinstance(items, list) or len(items) < 2:
+        return ["breadcrumb lists fewer than 2 items"]
+    out = []
+    for i, it in enumerate(items, 1):
+        if not isinstance(it, dict) or it.get("@type") != "ListItem" or it.get("position") != i:
+            out.append(f"breadcrumb item {i} is not ListItem position {i}")
+            continue
+        name, target = it.get("name"), it.get("item")
+        if not isinstance(name, str) or not name.strip():
+            out.append(f"breadcrumb item {i} has no name")
+        path = _url_path(target) if isinstance(target, str) else None
+        if path is None:
+            out.append(f"breadcrumb item {i} names {target!r}, not an https://{SITE_HOST} URL")
+        elif path not in pages and not (site_dir / path.lstrip("/")).is_file():
+            out.append(f"breadcrumb item {i} names {target}, which no built file serves")
+    if isinstance(items[-1], dict) and items[-1].get("item") != canonical:
+        out.append(f"breadcrumb ends at {items[-1].get('item')!r}, not the page's canonical {canonical!r}")
+    return out
+
+
+def finding_problems(home_raw: str, files: dict[str, Path]) -> tuple[list[str], int]:
+    """Every homepage finding row that says something its linked patch page does not (R3-SEO)."""
+    problems: list[str] = []
+    rows = 0
+    grouped: dict[str, str] = {}
+    for group, body in FINDING_GROUP_RE.findall(home_raw):
+        for href, *_rest in FINDING_RE.findall(body):
+            grouped[href] = html.unescape(group)
+    for href, verdict, scope, inner in FINDING_RE.findall(home_raw):
+        rows += 1
+        verdict, scope = html.unescape(verdict), html.unescape(scope)
+        line_m = FINDING_LINE_RE.search(inner)
+        line = _text(line_m.group(1)) if line_m else ""
+        if grouped.get(href) != verdict:
+            problems.append(f"FINDINGS {href} is listed under {grouped.get(href)!r} but its row says {verdict!r}")
+        f = files.get(href)
+        if f is None:
+            problems.append(f"FINDINGS {href} is listed on the homepage but no built page serves it")
+            continue
+        raw = f.read_text(encoding="utf-8", errors="replace")
+        boxes = PAGE_VERDICT_RE.findall(raw)
+        if len(boxes) != 1:
+            problems.append(f"FINDINGS {href}: its page carries {len(boxes)} verdict boxes, not 1")
+            continue
+        page_verdict, page_scope = _text(boxes[0][0]), _text(boxes[0][1])
+        page_line = " ".join(_text(t) for t in PAGE_LINE_RE.findall(raw))
+        if page_verdict != verdict or page_scope != _text(scope):
+            problems.append(f"FINDINGS {href}: the homepage says {verdict!r} {scope!r}, its page says "
+                            f"{page_verdict!r} {page_scope!r}")
+        stem = line[:-1] if line.endswith(".") else line
+        if not stem or not page_line.startswith(stem):
+            problems.append(f"FINDINGS {href}: the homepage line {line[:80]!r} is not how its page's verdict line "
+                            f"begins ({page_line[:80]!r})")
+    # Fail closed on markup drift: a row this check cannot parse is a row it cannot hold to its page, so it
+    # is an error, never a silent skip (an unparsed row once read as "0 rows checked", clean).
+    anchors = len(FINDING_ANCHOR_RE.findall(home_raw))
+    if anchors != rows:
+        problems.append(f"FINDINGS the homepage carries {anchors} finding rows but this check parsed {rows}: "
+                        f"the row markup and FINDING_RE disagree")
+    return problems, rows
+
+
 def verify(site_dir: Path, source: Path | None) -> tuple[list[str], list[str], dict]:
     errors: list[str] = []
     warnings: list[str] = []
@@ -363,8 +475,9 @@ def verify(site_dir: Path, source: Path | None) -> tuple[list[str], list[str], d
     stats["noindex_pages"] = noindex
 
     # JSONLD
-    blocks = parsed_ok = 0
+    blocks = parsed_ok = crumbed = 0
     entity_pages: list[str] = []
+    lastmods = sitemap_lastmods(site_dir)
     for url, page in sorted(pages.items()):
         docs = []
         for raw in page.jsonld:
@@ -395,11 +508,33 @@ def verify(site_dir: Path, source: Path | None) -> tuple[list[str], list[str], d
                 if wrong:
                     errors.append(f"JSONLD {url} states values its page does not: "
                                   + "; ".join(f"{k} {got!r} vs page {exp!r}" for k, (got, exp) in wrong.items()))
+                canon = page.canonicals[0] if page.canonicals else None
+                # Only a page the sitemap lists under its own URL has a lastmod to agree with; a page kept out
+                # of the sitemap, or canonical to another URL, is not refused for stating its stored date.
+                if (url in in_sitemap and canon == ORIGIN + url
+                        and web[0].get("dateModified") != lastmods.get(canon)):
+                    errors.append(f"JSONLD {url} states dateModified {web[0].get('dateModified')!r}, its sitemap "
+                                  f"lastmod is {lastmods.get(canon)!r}")
+                if "breadcrumb" in web[0]:
+                    crumbed += 1
+                    for problem in breadcrumb_problems(web[0]["breadcrumb"], canon, pages, site_dir):
+                        errors.append(f"JSONLD {url}: {problem}")
+        rated = sorted(t for d in docs for t in _types(d) if t in RATING_TYPES)
+        if rated:
+            errors.append(f"JSONLD {url} states {rated!r}: AUXSAYS publishes verdicts, not ratings")
         for s in [*page.titles, *page.descriptions, page.h1, *(s for d in docs for s in _strings(d))]:
             if s and MOJIBAKE_RE.search(s):
                 warnings.append(f"MOJIBAKE {url}: {MOJIBAKE_RE.search(s).group(0)!r} in {s[:90]!r}")
                 break
-    stats.update(jsonld_blocks=blocks, jsonld_parsed=parsed_ok, jsonld_entity_pages=len(entity_pages))
+    stats.update(jsonld_blocks=blocks, jsonld_parsed=parsed_ok, jsonld_entity_pages=len(entity_pages),
+                 jsonld_breadcrumb_pages=crumbed)
+
+    # FINDINGS (R3-SEO)
+    home = files.get("/")
+    found_problems, finding_rows = finding_problems(
+        home.read_text(encoding="utf-8", errors="replace") if home else "", files)
+    errors.extend(found_problems)
+    stats["finding_rows"] = finding_rows
 
     # HUBS
     site = Site(site_dir)
@@ -463,7 +598,8 @@ def main(argv: list[str] | None = None) -> int:
           f"{stats['with_canonical']}; noindex pages {stats['noindex_pages']}; explicit robots policies "
           f"{stats['explicit_policies'] if source is not None else 'not checked (no source)'}")
     print(f"JSON-LD blocks {stats['jsonld_blocks']}, parsed {stats['jsonld_parsed']}, pages with HTML entities "
-          f"{stats['jsonld_entity_pages']}")
+          f"{stats['jsonld_entity_pages']}; patch pages with a breadcrumb {stats['jsonld_breadcrumb_pages']}")
+    print(f"homepage findings rows checked against their pages {stats['finding_rows']}")
     certified = stats["live_certified"]
     print(f"live-consensus pages {stats['live_pages']} (the deploy-time projection certifies "
           f"{certified if certified is not None else 'n/a: not present'}); linked from their product hub "

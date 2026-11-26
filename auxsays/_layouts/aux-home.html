@@ -65,6 +65,13 @@ layout: aux-base
   </nav>
 
   <div class="home-signals-column">
+    {%- comment -%}
+      R3-SEO: what AUXSAYS found, first in the main column. The same visible set the signals below list
+      (not archived, not hidden from the feed), newest release first; every word in it comes from the
+      verdict gate the patch pages print (_includes/home-findings.html).
+    {%- endcomment -%}
+    {%- assign home_findings_pages = site.pages | where: "update_entry", true | where_exp: "item", "item.update_status != 'archived' and item.feed_hidden != true" | sort: "update_published_at" | reverse -%}
+    {% include home-findings.html pages=home_findings_pages %}
     <section class="panel home-patch-feed home-patch-feed--signals" aria-labelledby="home-signals-title">
       <div class="home-patch-head">
         <div>
