@@ -988,6 +988,17 @@ auxsays/scripts/tests/test_coverage_aware_zero_report.py = 26
 # flags, missing-capability reasons, detection latency and no-false-alarm cases.
 auxsays/scripts/tests/test_coverage_governance.py = 101
 
+# --- R4-ACR: Acrobat rotating record coverage --------------------------------------
+# The newest-first walk reached ~10 of 199 records a run and left 202 Acrobat pages COLLECTION
+# STALE and 153 never attempted. Pins the rotation's pure order (stored timestamps, never array
+# position; missing/future stamps first; only the primary method's row is a check), a replay over
+# the REAL corpus and stored rows (every record within the computed 25-run bound, recent releases
+# every 2 runs, the old walk reaching 10 of 199), the record cap that keeps Adobe requests per run
+# at or below the old volume, unchanged targeted dispatches, the per-row and per-run telemetry,
+# unchanged acceptance (vendor announcements, Reader/Pro) and an N+1 write replay in a temp store.
+# Nine single mutants each fail named checks (listed in the PR that added this suite).
+auxsays/scripts/tests/test_acrobat_rotation_coverage.py = 46
+
 [diagnostic]
 # Deterministic and offline; broader surface or presentation-level. Also blocking in CI --
 # "diagnostic" names the domain, not a weaker guarantee.

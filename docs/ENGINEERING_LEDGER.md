@@ -109,6 +109,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-127 | Resolved | Verdict policy | High | Pages with 30 or more accepted problem reports said INSUFFICIENT DATA, and a report posted before its release was counted |
 | AUX-134 | Open | Verdict policy | High | Thirty accepted reports give WAIT on the count alone and nothing said on what basis; the basis and each limit are now published, the WAIT itself is unchanged (owner decision pending) |
 | AUX-137 | Open | Verdict policy | High | At 30 accepted reports a page is assessed from its reports and the trackers' records; the weighing runs in a separate private step and the site reads its one output file, falling back to the count-based result while it is missing or stale |
+| AUX-138 | Resolved | Collector coverage | High | The Acrobat walk reached the newest ~10 of 199 records a run; 202 pages read COLLECTION STALE and 153 had never been attempted |
 | AUX-132 | Resolved | Published claims | Medium | A reviewed problem's "fixed in" line printed straight after a note naming a different, newer release, where it read as a recommendation of that release |
 | AUX-065 | Resolved | Coverage | Medium | DaVinci Resolve versions never archived, so routine collection spent its whole budget on releases nobody installs |
 | AUX-075 | Resolved | CI governance | Medium | The DaVinci archive build check asserted the one-time migration, so it failed on every pull request after it ran |
@@ -8619,6 +8620,31 @@ owned (product, method) pair has no committed telemetry row one scheduled cycle 
 (the suite's corpus guard warns), or if a method is owned for a product whose production path never emits it.
 
 ---
+
+### AUX-138 — The Acrobat walk reached the newest ~10 of 199 records a run; 202 pages read COLLECTION STALE and 153 had never been attempted
+
+- **Status** Resolved · **Area** Collector coverage · **Severity** High
+- **First seen** 2026-09-09 (run 34344932980: 183/184 records unvisited) · **Resolved** 2026-11-26
+
+**Symptom** The Acrobat collector walked newest-first and stopped on its 1200 s deadline. Twelve scheduled runs
+(2026-11-20..26) attempted 11.0 Pro and 10.1 Reader records on average, always the same head. On 2026-11-26, 202 of
+398 Acrobat pages read COLLECTION STALE (last reached by one-off dispatches in August-October) and 153 more had no
+Algolia attempt at all.
+
+**Fix** `lib/acrobat_rotation.py`, used by the Acrobat collector for untargeted runs only: the 2 least-recently-
+checked of the 4 newest records, then every other record least-recently-checked first, keyed on the `last_run` of
+the stored `adobe_community_algolia_search` row (missing, unparseable or future = never; ties by release date then
+version; never array position). Capped at 10 records per edition per run (`AUXSAYS_ACROBAT_MAX_RECORDS_PER_RUN`,
+can only be lowered), so Adobe Community requests per run cannot rise (5 per record: 1 searchToken, 3 Algolia,
+1 getTopics). Worst-case revisit 25 runs (about 12 days at the delivered 2.1 runs/day). Each Algolia row now
+carries `requests`, `duration_ms` and `rejection_reasons`; each run emits an `acrobat_coverage` event. Targeted
+dispatches keep the newest-first order with no cap. Acceptance and attribution are unchanged.
+
+**Test** `test_acrobat_rotation_coverage.py` (replay over the real corpus and stored rows, cap and request ceiling,
+N+1 write replay in a temporary store).
+
+**Reopen only if** a scheduled run's `acrobat_coverage` event shows `requests_total` above 100 for both editions
+together, or any Acrobat record goes more than 25 runs without an Algolia attempt while runs commit.
 
 ## Adding an entry
 
