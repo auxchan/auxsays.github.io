@@ -169,6 +169,52 @@
     {%- assign psm_json_description = psm_text_description | jsonify | replace: '<', '\u003c' | replace: '>', '\u003e' | replace: '&', '\u0026' -%}
     {%- assign psm_json_headline = psm_text_headline | jsonify | replace: '<', '\u003c' | replace: '>', '\u003e' | replace: '&', '\u0026' -%}
     {%- assign psm_json_url = psm_text_url | jsonify | replace: '<', '\u003c' | replace: '>', '\u003e' | replace: '&', '\u0026' -%}
+    {%- comment -%}
+      DATE AND PLACE IN THE STRUCTURED DATA (R3-SEO). Two more facts go into the same single WebPage block,
+      both stored, neither decided here:
+        - dateModified: the record's record_last_updated, else its release date update_published_at, under
+          the sitemap's three tests (written as a date, readable, between 2000 and this build). It is the
+          very value sitemap.xml prints as this URL's lastmod, and verify_publication_hygiene.py JSONLD
+          refuses a deploy where the two differ. A record with neither stamp gets no dateModified, never the
+          build time. No datePublished is stated: no field stores when the page itself was first published,
+          and the release date is the vendor's date, not the page's.
+        - breadcrumb: Patch Feed, then the company tracker and the product tracker the page itself links (its
+          back link and its Product pill read the same company_url and product_url from _data), then this
+          page. A level whose name or URL is missing is left out, never invented; JSONLD refuses a deploy
+          where a breadcrumb URL is not a built page. Names go through the same JSON escaping as above.
+      No Review, Rating or AggregateRating: AUXSAYS publishes verdicts, not scores.
+    {%- endcomment -%}
+    {%- assign psm_modified = '' -%}
+    {%- assign psm_floor = 946684800 -%}
+    {%- assign psm_now = site.time | date: '%s' | plus: 0 -%}
+    {%- assign psm_stamp = psm_record.record_last_updated | default: psm_record.update_published_at | default: '' -%}
+    {%- assign psm_stamp_shape = psm_stamp | append: '' | slice: 4, 1 -%}
+    {%- assign psm_stamp_seconds = psm_stamp | date: '%s' | plus: 0 -%}
+    {%- if psm_stamp_shape == '-' and psm_stamp_seconds >= psm_floor and psm_stamp_seconds <= psm_now -%}
+      {%- assign psm_modified = psm_stamp | date: '%Y-%m-%dT%H:%M:%S%:z' -%}
+    {%- endif -%}
+    {%- assign psm_crumb_n = 1 -%}
+    {%- assign psm_feed_url = '/updates/' | absolute_url -%}
+    {%- capture psm_crumbs -%}{"@type":"ListItem","position":1,"name":"Patch Feed","item":{{ psm_feed_url | jsonify }}}{%- endcapture -%}
+    {%- assign psm_company = site.data.patch_companies | where: 'id', psm_record.company_id | first -%}
+    {%- assign psm_company_name = psm_company.display_name | default: psm_company.company_name | default: '' | append: '' | strip -%}
+    {%- assign psm_company_url = psm_company.company_url | default: '' | append: '' | strip -%}
+    {%- if psm_company_name != '' and psm_company_url != '' -%}
+      {%- assign psm_crumb_n = psm_crumb_n | plus: 1 -%}
+      {%- assign psm_crumb_name = psm_company_name | jsonify | replace: '<', '\u003c' | replace: '>', '\u003e' | replace: '&', '\u0026' -%}
+      {%- capture psm_crumbs -%}{{ psm_crumbs }},{"@type":"ListItem","position":{{ psm_crumb_n }},"name":{{ psm_crumb_name }},"item":{{ psm_company_url | absolute_url | jsonify }}}{%- endcapture -%}
+    {%- endif -%}
+    {%- assign psm_product_row = site.data.patch_products | where: 'id', psm_record.product_id | first -%}
+    {%- assign psm_product_name = psm_product_row.product_name | default: '' | append: '' | strip -%}
+    {%- assign psm_product_url = psm_product_row.product_url | default: '' | append: '' | strip -%}
+    {%- if psm_product_name != '' and psm_product_url != '' -%}
+      {%- assign psm_crumb_n = psm_crumb_n | plus: 1 -%}
+      {%- assign psm_crumb_name = psm_product_name | jsonify | replace: '<', '\u003c' | replace: '>', '\u003e' | replace: '&', '\u0026' -%}
+      {%- capture psm_crumbs -%}{{ psm_crumbs }},{"@type":"ListItem","position":{{ psm_crumb_n }},"name":{{ psm_crumb_name }},"item":{{ psm_product_url | absolute_url | jsonify }}}{%- endcapture -%}
+    {%- endif -%}
+    {%- assign psm_crumb_n = psm_crumb_n | plus: 1 -%}
+    {%- assign psm_crumb_name = psm_identity | strip_html | strip_newlines | strip | replace: '&quot;', '"' | replace: '&#39;', "'" | replace: '&lt;', '<' | replace: '&gt;', '>' | replace: '&amp;', '&' | jsonify | replace: '<', '\u003c' | replace: '>', '\u003e' | replace: '&', '\u0026' -%}
+    {%- capture psm_crumbs -%}{{ psm_crumbs }},{"@type":"ListItem","position":{{ psm_crumb_n }},"name":{{ psm_crumb_name }},"item":{{ psm_json_url }}}{%- endcapture -%}
     {%- assign patch_search_emitted = true -%}
 <!-- Patch page search metadata: title and description from the page's own verdict -->
 <title>{{ psm_title }} | {{ psm_site_title }}</title>
@@ -187,7 +233,7 @@
 <meta name="google-site-verification" content="{{ psm_google_verification }}" />
 {%- endif %}
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebPage","description":{{ psm_json_description }},"headline":{{ psm_json_headline }},"url":{{ psm_json_url }}}</script>
+{"@context":"https://schema.org","@type":"WebPage","description":{{ psm_json_description }},"headline":{{ psm_json_headline }},"url":{{ psm_json_url }}{% if psm_modified != '' %},"dateModified":{{ psm_modified | jsonify }}{% endif %},"breadcrumb":{"@type":"BreadcrumbList","itemListElement":[{{ psm_crumbs }}]}}</script>
 <!-- End patch page search metadata -->
   {%- endif -%}
 {%- endif -%}

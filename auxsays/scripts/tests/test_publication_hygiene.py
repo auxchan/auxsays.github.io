@@ -99,7 +99,8 @@ def check(label: str, condition: bool, detail: str = "") -> None:
 
 def page_html(url: str, *, layout: str = "aux-base", title: str = "A page", canonical: str | None = "self",
               canonicals: int = 1, robots: list[str] = (), jsonld: list[str] | None = None, live: bool = False,
-              links: list[str] = (), patch: bool = False, description: str = "A description.") -> str:
+              links: list[str] = (), patch: bool = False, description: str = "A description.",
+              body_html: str = "") -> str:
     canon = ORIGIN + url if canonical == "self" else canonical
     head = [f"<title>{title} | AUXSAYS</title>", f'<meta name="description" content="{description}" />']
     if patch:
@@ -111,7 +112,7 @@ def page_html(url: str, *, layout: str = "aux-base", title: str = "A page", cano
         jsonld = [json.dumps({"@context": "https://schema.org", "@type": "WebPage", "headline": title,
                               "description": description, "url": canon})]
     head += [f'<script type="application/ld+json">\n{b}</script>' for b in jsonld]
-    body = [f'<a href="{h}">link</a>' for h in links]
+    body = [f'<a href="{h}">link</a>' for h in links] + ([body_html] if body_html else [])
     if live:
         body.append('<div id="verdict" class="update-decision-box update-decision-box--live"></div>')
     return ("<!doctype html><html><head>" + "\n".join(head) + f'</head><body class="aux-page {layout}">'
@@ -140,6 +141,7 @@ def base_pages() -> dict[str, dict]:
 
 
 def make_site(root: Path, pages: dict[str, dict], *, sitemap: list[str] | None = None,
+              lastmods: dict[str, str] | None = None,
               robots_txt: str = "User-agent: *\nDisallow: /norobots/\n",
               policies: dict[str, str] | None = None,
               certified: list[str] | None = (PATCH,)) -> tuple[Path, Path]:
@@ -152,7 +154,9 @@ def make_site(root: Path, pages: dict[str, dict], *, sitemap: list[str] | None =
         sitemap = [u for u in pages if u not in (NOTICE_URL, BARE)]
     (site / "sitemap.xml").write_text(
         '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
-        + "".join(f"<url><loc>{ORIGIN}{u}</loc></url>" for u in sitemap) + "</urlset>", encoding="utf-8")
+        + "".join(f"<url><loc>{ORIGIN}{u}</loc>"
+                  + (f"<lastmod>{(lastmods or {})[u]}</lastmod>" if u in (lastmods or {}) else "") + "</url>"
+                  for u in sitemap) + "</urlset>", encoding="utf-8")
     (site / "robots.txt").write_text(robots_txt, encoding="utf-8")
     source = root / "src"
     source.mkdir()
@@ -262,6 +266,83 @@ def section_v() -> None:
     variant("V22 a page the projection certifies live that no built page serves fails HUBS", 1,
             "HUBS the deploy-time projection certifies /updates/acme/tool/2-0/ live, but no built page serves it",
             certified=[PATCH, "/updates/acme/tool/2-0/"])
+
+
+# --------------------------------------------------------------------------------------------------
+# [R3] R3-SEO: stored dates, breadcrumbs, no ratings, and homepage findings that match their pages
+# --------------------------------------------------------------------------------------------------
+
+STAMP = "2026-11-15T07:50:17+00:00"
+PATCH_TITLE = "Tool 1.0: no verdict yet"
+
+
+def crumb(*items) -> dict:  # noqa: ANN002
+    return {"@type": "BreadcrumbList", "itemListElement": [
+        {"@type": "ListItem", "position": i, "name": n, "item": u} for i, (n, u) in enumerate(items, 1)]}
+
+
+def patch_ld(**extra) -> list[str]:  # noqa: ANN003
+    return [json.dumps({"@context": "https://schema.org", "@type": "WebPage", "headline": PATCH_TITLE,
+                        "description": "A description.", "url": ORIGIN + PATCH, **extra})]
+
+
+GOOD_CRUMB = crumb(("Acme", ORIGIN + COMPANY), ("Tool", ORIGIN + PRODUCT), ("Tool 1.0", ORIGIN + PATCH))
+VERDICT_BOX = ('<div class="update-decision-box__header"><span class="update-decision-eyebrow">AUXSAYS verdict</span>'
+               '\n<strong>TEST FIRST</strong> <span class="update-decision-scope">when installing it</span>'
+               '\n<p class="update-decision-recommendation">Two users report that installing it fails. Install it '
+               'on one machine first.</p></div>')
+
+
+def finding(verdict="TEST FIRST", scope="when installing it", line="Two users report that installing it fails.",
+            group=None, href=PATCH) -> str:  # noqa: ANN001
+    return (f'<div class="home-findings-group" data-home-findings-group="{group or verdict}"><ul>'
+            f'<li><a class="home-finding" href="{href}" data-home-finding data-finding-verdict="{verdict}" '
+            f'data-finding-scope="{scope}"><strong>Tool 1.0</strong>'
+            f'<span class="home-finding__line" data-finding-line>{line}</span></a></li></ul></div>')
+
+
+def with_finding(**kw):  # noqa: ANN003, ANN201
+    def mutate(p):  # noqa: ANN001
+        p[PATCH]["body_html"] = VERDICT_BOX
+        p["/"]["body_html"] = finding(**kw)
+    return mutate
+
+
+def section_r3() -> None:
+    print("\n[R3] R3-SEO: stored dates, breadcrumbs, no ratings, homepage findings")
+    good = {PATCH: STAMP}
+    variant("R3-1 a patch page whose dateModified is its sitemap lastmod, with a breadcrumb of built pages ending at "
+            "itself, is clean", 0, "patch pages with a breadcrumb 1",
+            lambda p: p[PATCH].update(jsonld=patch_ld(dateModified=STAMP, breadcrumb=GOOD_CRUMB)), lastmods=good)
+    variant("R3-2 a dateModified that is not the sitemap lastmod of the same URL fails JSONLD", 1,
+            "states dateModified '2026-11-16T00:00:00+00:00', its sitemap lastmod is",
+            lambda p: p[PATCH].update(jsonld=patch_ld(dateModified="2026-11-16T00:00:00+00:00")), lastmods=good)
+    variant("R3-3 a sitemap lastmod the patch block does not state fails JSONLD (both read the same stored date)", 1,
+            "states dateModified None", lastmods=good)
+    variant("R3-4 a breadcrumb naming a page no built file serves fails JSONLD", 1,
+            "breadcrumb item 2 names https://auxsays.com/updates/acme/gone/, which no built file serves",
+            lambda p: p[PATCH].update(jsonld=patch_ld(breadcrumb=crumb(
+                ("Acme", ORIGIN + COMPANY), ("Gone", ORIGIN + "/updates/acme/gone/"), ("Tool 1.0", ORIGIN + PATCH)))))
+    variant("R3-5 a breadcrumb that does not end at the page's own canonical fails JSONLD", 1,
+            "breadcrumb ends at 'https://auxsays.com/updates/acme/tool/'",
+            lambda p: p[PATCH].update(jsonld=patch_ld(breadcrumb=crumb(("Acme", ORIGIN + COMPANY),
+                                                                       ("Tool", ORIGIN + PRODUCT)))))
+    variant("R3-6 a rating anywhere in any page's structured data fails JSONLD", 1,
+            "states ['AggregateRating']: AUXSAYS publishes verdicts, not ratings",
+            lambda p: p[BARE].update(jsonld=[json.dumps({"@type": "WebPage", "aggregateRating": {
+                "@type": "AggregateRating", "ratingValue": 4}})]))
+    variant("R3-7 a homepage finding that states its page's verdict, scope and first sentence is clean", 0,
+            "homepage findings rows checked against their pages 1", with_finding())
+    variant("R3-8 a finding whose verdict is not its page's fails FINDINGS", 1,
+            "the homepage says 'WAIT' 'when installing it', its page says 'TEST FIRST'", with_finding(verdict="WAIT"))
+    variant("R3-9 a finding whose scope is not its page's fails FINDINGS", 1,
+            "its page says 'TEST FIRST' 'when installing it'", with_finding(scope="if you use macOS"))
+    variant("R3-10 a finding whose line is not how its page's verdict line begins fails FINDINGS", 1,
+            "is not how its page's verdict line begins", with_finding(line="Many users report problems."))
+    variant("R3-11 a finding listed under another verdict's group fails FINDINGS", 1,
+            "is listed under 'AVOID' but its row says 'TEST FIRST'", with_finding(group="AVOID"))
+    variant("R3-12 a finding linking a page no built file serves fails FINDINGS", 1,
+            "is listed on the homepage but no built page serves it", with_finding(href="/updates/acme/tool/9-9/"))
 
 
 # --------------------------------------------------------------------------------------------------
@@ -652,6 +733,7 @@ def section_w() -> None:
 
 def main() -> int:
     section_v()
+    section_r3()
     section_jl()
     section_rb()
     section_css()

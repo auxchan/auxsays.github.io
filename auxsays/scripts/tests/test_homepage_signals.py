@@ -38,6 +38,12 @@ WHAT IS PINNED HERE.
       and neither layout keeps a verdict or evidence-state decision of its own.
   [T] GROWTH-1C: each product tracker names, inside its one link, the source its updates come from
       (the product's own source_label); and every signal row sits under a tracker the page links.
+  [F] R3-SEO: "What AUXSAYS found" (_includes/home-findings.html) lists exactly the updates whose patch
+      page prints AVOID, WAIT, TEST FIRST or SECURITY UPDATE, each under its own verdict, with that page's
+      verdict word and scope and, as its line, the first sentence of that page's verdict line; its
+      counts add up to the records it was given; it decides nothing (the verdict gate is its only
+      source) and claims no verdict history. verify_publication_hygiene.py FINDINGS holds the same rows
+      against the built patch pages at deploy.
 
 Needs ruby + the liquid gem (CI installs liquid 4.0.4); without them the render checks FAIL.
 
@@ -793,7 +799,8 @@ def section_d(out: dict, real: list[dict]) -> None:
     check(f"D2 the heading outline never skips a level ({len(levels)} headings)", levels[:1] == [1] and not jumps,
           f"levels={levels}")
     h2 = [norm(t) for lvl, t in o.headings if lvl == 2]
-    want_h2 = ["Tracked software", "Latest patch signals", "U.S. Systems Monitor", "Core Coverage", "Recent Articles"]
+    want_h2 = ["Tracked software", "What AUXSAYS found", "Latest patch signals", "U.S. Systems Monitor",
+               "Core Coverage", "Recent Articles"]
     check("D3 the sections are real headings: trackers, signals, then everything else", h2 == want_h2, str(h2))
 
     links = [(h, norm(t), a, primary) for h, t, a, primary in o.links]
@@ -828,8 +835,10 @@ def section_d(out: dict, real: list[dict]) -> None:
     check("D10 Systems Monitor and Articles stay reachable from the page body too",
           any(h == "/systems-monitor/" and not p for h, _t, _a, p in links)
           and any(h.startswith("/articles/") and not p for h, _t, _a, p in links))
-    # The words inside the signal rows are held by [V]; the copy written around them claims no certainty.
+    # The words inside the signal rows are held by [V], and inside the finding rows by [F] (each is its
+    # patch page's own text); the copy written around them claims no certainty.
     written = re.sub(r"<a [^>]*data-home-patch-signal.*?</a>", "", html, flags=re.S)
+    written = re.sub(r'<a class="home-finding" .*?</a>', "", written, flags=re.S)
     visible = re.sub(r"<[^>]+>", " ", re.sub(r"<(script|style)\b.*?</\1>", "", written, flags=re.S))
     hits = sorted(set(m.group(0).lower() for m in NO_CERTAINTY.finditer(visible)))
     check("D11 the homepage copy outside the signal rows claims no certainty (verified, confirmed, ...)",
@@ -1100,6 +1109,93 @@ def verdict_jobs() -> tuple[dict, dict]:
     return jobs, corpora
 
 
+# ------------------------------------------------------------------------------- [F] findings
+FINDINGS_INCLUDE = _INCLUDES / "home-findings.html"
+FINDING_ROW_RE = re.compile(r'<a class="home-finding" href="([^"]*)" data-home-finding data-finding-verdict="([^"]*)" '
+                            r'data-finding-scope="([^"]*)">(.*?)</a>', re.S)
+FINDING_LINE_RE = re.compile(r'<span class="home-finding__line" data-finding-line>(.*?)</span>', re.S)
+FINDING_GROUP_RE = re.compile(r'<div class="home-findings-group" data-home-findings-group="([^"]*)">(.*?)</ul>', re.S)
+ACTIONABLE = ("AVOID", "WAIT", "TEST FIRST", "SECURITY UPDATE")
+
+
+def findings_jobs() -> tuple[dict, dict]:
+    site = {"data": {"patch_verdicts": VERDICTS, "live_eligibility": VERDICT_LIVE, **VERDICT_FACTS},
+            "time": FIXED_TIME}
+    recs = [r for group in verdict_records() for r in group]
+    jobs = {"findings:verdict": {"template": "{% include home-findings.html pages=site.pages %}",
+                                 "corpus": "findings:all", "site": site},
+            "findings:none": {"template": "{% include home-findings.html pages=site.pages %}",
+                              "corpus": "findings:all", "site": {"data": {"patch_verdicts": VERDICTS},
+                                                                 "time": FIXED_TIME}}}
+    return jobs, {"findings:all": recs}
+
+
+def section_f(out: dict) -> None:
+    import html as htmlmod  # noqa: PLC0415
+    print("\n[F] what AUXSAYS found: each row is its patch page's own verdict, scope and first sentence")
+    html = out.get("findings:verdict", {}).get("html", "<<missing>>")
+    rows = {h: (htmlmod.unescape(v), htmlmod.unescape(sc), _norm(htmlmod.unescape(
+        re.sub(r"<[^>]+>", " ", (FINDING_LINE_RE.search(inner) or [None, ""])[1]))))
+        for h, v, sc, inner in FINDING_ROW_RE.findall(html)}
+    pages = {f"/updates/t/v-{name}/": page_verdict(out.get(f"verdict:page:{name}", {}).get("html", ""))
+             for name in VERDICT_CASES}
+    want = {u: got[0] for u, got in pages.items() if got and got[0] in ACTIONABLE}
+    check(f"F1 the section lists exactly the updates whose page prints an actionable verdict, with that verdict "
+          f"({len(want)} of {len(pages)} cases)",
+          len(want) >= 2 and {u: r[0] for u, r in rows.items()} == want, f"rows={rows} want={want}")
+    proj = VERDICT_FACTS["verdict_projection"]["pages"]
+    by_url = {}
+    for r in (r for group in verdict_records() for r in group):
+        key = f"{r.get('product_id', '')}|{r.get('update_version', '')}|{r.get('target_build', '')}"
+        if key in proj:
+            by_url[r["url"]] = proj[key]
+    bad = []
+    for url, (verdict, scope, line) in rows.items():
+        row = by_url.get(url) or {}
+        body = " ".join(str(row.get("body", "")).split())
+        first = body.split(". ")[0].strip()
+        first = first if first.endswith((".", "!", "?")) else first + "."
+        if scope != str(row.get("scope") or "") or line != first or not body.startswith(line.rstrip(".")):
+            bad.append((url, scope, line, row.get("scope"), body[:90]))
+    check("F2 ...each with the page's own scope and, as its line, the first sentence of the page's verdict line",
+          bool(rows) and not bad, str(bad)[:600])
+    groups = [(htmlmod.unescape(g), [htmlmod.unescape(v) for _h, v, _s, _i in FINDING_ROW_RE.findall(b)])
+              for g, b in FINDING_GROUP_RE.findall(html)]
+    order = [g for g, _ in groups]
+    check("F3 every row sits under its own verdict, and the groups follow the published risk order",
+          bool(groups) and all(set(vs) == {g} for g, vs in groups)
+          and order == [v for v in VERDICTS["risk_order"] if v in order], str(groups))
+    summary = _norm(re.sub(r"<[^>]+>", " ", (re.search(r"data-home-findings-summary>(.*?)</p>", html, re.S)
+                                             or [None, ""])[1]))
+    n_total = len(VERDICT_CASES)
+    counts = {v: sum(1 for x in want.values() if x == v) for v in ACTIONABLE}
+    expect = (f"Of the {n_total} updates in the Patch Feed, {counts['AVOID']} carry the verdict AVOID, "
+              f"{counts['WAIT']} WAIT, {counts['TEST FIRST']} TEST FIRST and {counts['SECURITY UPDATE']} SECURITY "
+              f"UPDATE. The other {n_total - len(want)} have no verdict yet.")
+    check("F4 the summary counts the records it was given by the verdict each page prints, and adds up",
+          summary.startswith(expect), f"{summary[:300]!r} vs {expect!r}")
+    none = out.get("findings:none", {}).get("html", "<<missing>>")
+    check("F5 with no verdict projection (a local render) nothing is listed and every update reads as no verdict yet",
+          "data-home-finding " not in none and f"The other {n_total} have no verdict yet." in _norm(none)
+          and "No update carries a verdict right now." in none, _norm(none)[:300])
+    src = COMMENT_RE.sub("", FINDINGS_INCLUDE.read_text(encoding="utf-8"))
+    inc = re.findall(r"\{%-?\s*include\s+([\w.-]+)", src)
+    own = [t for t in ("verdict_projection", "update_decision_label", "update_consensus_summary", "quick_verdict",
+                       "update_consensus_label", "evidence_state") if t in src]
+    check("F6 the section decides nothing: the verdict gate is its only verdict source, and it reads no stored "
+          "label, sentiment or projection itself",
+          sorted(set(inc)) == ["patch-display-title.html", "patch-verdict-gate.html"] and not own, f"{inc} {own}")
+    visible = _norm(re.sub(r"<[^>]+>", " ", re.sub(r'<a class="home-finding" .*?</a>', "", html, flags=re.S)))
+    history = sorted({m.group(0).lower() for m in re.finditer(
+        r"\b(changed|new verdict|upgraded|downgraded|safer|now safe|safe to install)\b", visible, re.I)})
+    check("F7 the copy around the rows claims no verdict change and nothing safer, and says it keeps no history",
+          not history and "keeps no history of verdict changes" in visible, str(history))
+    real = out.get("page:real", {}).get("html", "")
+    at = {m: real.find(m) for m in ('class="home-signals-column"', "data-home-findings", "data-home-signal-list")}
+    check("F8 on the real homepage the section opens the main column, ahead of the signal list",
+          0 <= at['class="home-signals-column"'] < at["data-home-findings"] < at["data-home-signal-list"], str(at))
+
+
 PROBE = ("{% assign g = list | group_by_exp: \"x\", \"x.k | downcase | replace: ' ', '-'\" %}"
          "[{% for e in g %}{{ e.name }}:{{ e.size }}{% unless forloop.last %}|{% endunless %}{% endfor %}]"
          "{% assign one = 'x' | split: ',' %}{% assign two = one | push: 'y' %}"
@@ -1135,6 +1231,9 @@ def main() -> int:
     v_jobs, v_corpora = verdict_jobs()
     jobs.update(v_jobs)
     corpora.update(v_corpora)
+    f_jobs, f_corpora = findings_jobs()
+    jobs.update(f_jobs)
+    corpora.update(f_corpora)
     out = render(jobs, corpora)
 
     section_h(out)
@@ -1144,6 +1243,7 @@ def main() -> int:
     section_d(out, real)
     section_v(out)
     section_t(out, real)
+    section_f(out)
     print("\n  (render seconds: " + ", ".join(f"{k}={v.get('seconds', 0):.1f}" for k, v in out.items())
           + f"; total {time.time() - started:.1f}s)")
     print()

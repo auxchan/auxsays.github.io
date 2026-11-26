@@ -1,0 +1,101 @@
+{%- comment -%}
+  WHAT AUXSAYS FOUND (R3-SEO). The homepage section that says, at build time, which updates carry a
+  verdict today and why, each linking to its patch page.
+
+  NO SECOND VERDICT AUTHORITY. Every verdict, scope and line here comes from patch-verdict-gate.html,
+  the file the patch page's own verdict box renders (through patch-decision.html), called with the
+  same record and the same report count the patch page passes it. This file decides nothing, counts
+  nothing the gate did not print, and adds no claim of its own:
+    - the verdict word and its scope are printed exactly as the page prints them;
+    - the line is the FIRST SENTENCE of the page's own verdict line, the same cut the page's search
+      description uses (patch-search-meta.html), so it is always a word-for-word prefix of what the
+      page says;
+    - the date is the stored release date the page prints as its "Release date".
+  scripts/ci/verify_publication_hygiene.py FINDINGS refuses a deploy in which any row here disagrees
+  with the page it links (verdict, scope or line), so the two cannot drift.
+
+  WHICH UPDATES. The same set the Patch Feed and the Latest patch signals list: every patch page that
+  is not archived and not hidden from the feed (include.pages, already newest release first). The
+  summary counts are counts of that set by the verdict the gate printed; a page with no verdict is
+  counted as "no verdict yet", the words the page's search title uses, never as safe.
+
+  NO VERDICT HISTORY IS CLAIMED. AUXSAYS stores no history of verdict changes (patch-atom-feed.html),
+  so nothing here says a verdict changed or is new: rows are ordered by release date and say so.
+
+  BOUNDED. One pass over the pages inside a capture that prints nothing, then at most
+  hf_row_limit rows per verdict. Security updates are usually many (one per Windows build each
+  month), so that group shows its newest rows and its full count.
+
+  Input:  include.pages  the visible patch pages, newest release first
+  No literal Liquid tag appears in this comment on purpose: a comment block still parses tags.
+{%- endcomment -%}
+{%- assign hf_pages = include.pages -%}
+{%- assign hf_row_limit = 6 -%}
+{%- assign hf_security_limit = 3 -%}
+{%- assign hf_avoid = '' | split: '' -%}
+{%- assign hf_wait = '' | split: '' -%}
+{%- assign hf_test = '' | split: '' -%}
+{%- assign hf_security = '' | split: '' -%}
+{%- assign hf_total = 0 -%}
+{%- assign hf_none = 0 -%}
+{%- capture hf_scan -%}
+  {%- for hf_item in hf_pages -%}
+    {%- assign hf_total = hf_total | plus: 1 -%}
+    {%- assign hf_count = hf_item.update_report_count | default: 0 | plus: 0 -%}
+    {%- include patch-verdict-gate.html record=hf_item count=hf_count -%}
+    {%- if gate_label == 'AVOID' -%}{%- assign hf_avoid = hf_avoid | push: hf_item -%}
+    {%- elsif gate_label == 'WAIT' -%}{%- assign hf_wait = hf_wait | push: hf_item -%}
+    {%- elsif gate_label == 'TEST FIRST' -%}{%- assign hf_test = hf_test | push: hf_item -%}
+    {%- elsif gate_label == 'SECURITY UPDATE' -%}{%- assign hf_security = hf_security | push: hf_item -%}
+    {%- else -%}{%- assign hf_none = hf_none | plus: 1 -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endcapture -%}
+{%- assign hf_called = hf_avoid.size | plus: hf_wait.size | plus: hf_test.size -%}
+<section class="panel home-findings" aria-labelledby="home-findings-title" data-home-findings>
+  <div class="home-patch-head">
+    <h2 class="home-section-label home-section-label--inline" id="home-findings-title"><span>What AUXSAYS found</span></h2>
+    <p class="home-findings-summary" data-home-findings-summary>Of the {{ hf_total }} updates in the Patch Feed, {{ hf_avoid.size }} carry the verdict AVOID, {{ hf_wait.size }} WAIT, {{ hf_test.size }} TEST FIRST and {{ hf_security.size }} SECURITY UPDATE. The other {{ hf_none }} have no verdict yet. Each line below is the first sentence of that update's own verdict; open it for the full reason and the reports behind it.</p>
+  </div>
+  {%- if hf_called == 0 and hf_security.size == 0 %}
+  <p class="home-findings-empty">No update carries a verdict right now.</p>
+  {%- endif -%}
+  {%- for hf_group_name in site.data.patch_verdicts.risk_order -%}
+    {%- if hf_group_name == 'AVOID' -%}{%- assign hf_group = hf_avoid -%}{%- assign hf_limit = hf_row_limit -%}
+    {%- elsif hf_group_name == 'WAIT' -%}{%- assign hf_group = hf_wait -%}{%- assign hf_limit = hf_row_limit -%}
+    {%- elsif hf_group_name == 'TEST FIRST' -%}{%- assign hf_group = hf_test -%}{%- assign hf_limit = hf_row_limit -%}
+    {%- elsif hf_group_name == 'SECURITY UPDATE' -%}{%- assign hf_group = hf_security -%}{%- assign hf_limit = hf_security_limit -%}
+    {%- else -%}{%- continue -%}
+    {%- endif -%}
+    {%- if hf_group.size == 0 -%}{%- continue -%}{%- endif %}
+  <div class="home-findings-group" data-home-findings-group="{{ hf_group_name }}">
+    <h3 class="home-findings-group__title">{{ hf_group_name }} <span class="home-findings-group__count">{{ hf_group.size }} update{% unless hf_group.size == 1 %}s{% endunless %}{% if hf_group.size > hf_limit %}, newest {{ hf_limit }} shown{% endif %}</span></h3>
+    <ul class="home-findings-list">
+      {%- for hf_item in hf_group limit: hf_limit -%}
+        {%- assign hf_count = hf_item.update_report_count | default: 0 | plus: 0 -%}
+        {%- capture hf_gate -%}{%- include patch-verdict-gate.html record=hf_item count=hf_count -%}{%- endcapture -%}
+        {%- assign hf_line = gate_body | strip_html | strip_newlines | strip | split: '. ' | first | strip -%}
+        {%- if hf_line != '' -%}
+          {%- assign hf_last = hf_line | slice: -1 -%}
+          {%- unless hf_last == '.' or hf_last == '!' or hf_last == '?' -%}{%- assign hf_line = hf_line | append: '.' -%}{%- endunless -%}
+        {%- endif -%}
+        {%- assign hf_title = hf_item.update_feed_title | default: hf_item.update_detail_title | default: hf_item.title -%}
+        {%- capture hf_title_render -%}{% include patch-display-title.html title=hf_title product=hf_item.update_product %}{%- endcapture -%}
+        {%- assign hf_title = patch_display_title | default: hf_title -%}
+        {%- assign hf_kb = hf_item.target_kb | default: '' | strip %}
+      <li class="home-findings-item">
+        <a class="home-finding" href="{{ hf_item.url | relative_url }}" data-home-finding data-finding-verdict="{{ gate_label }}" data-finding-scope="{{ gate_scope | escape }}">
+          <strong class="home-finding__title">{{ hf_title }}{% if hf_kb != '' %} <span class="home-finding__kb">{{ hf_kb }}</span>{% endif %}</strong>
+          <span class="home-finding__verdict"><span class="home-finding__word">{{ gate_label }}</span>{% if gate_scope != '' %} <span class="home-finding__scope">{{ gate_scope }}</span>{% endif %}</span>
+          <span class="home-finding__line" data-finding-line>{{ hf_line }}</span>
+          {%- if hf_item.update_published_at %}
+          <time class="home-finding__date" datetime="{{ hf_item.update_published_at | date: '%Y-%m-%d' }}">Released {{ hf_item.update_published_at | date: "%b %-d, %Y" }}</time>
+          {%- endif %}
+        </a>
+      </li>
+      {%- endfor %}
+    </ul>
+  </div>
+  {%- endfor %}
+  <p class="home-findings-note">Ordered by release date, newest first. AUXSAYS keeps no history of verdict changes, so this list shows the verdicts as they stand today.</p>
+</section>

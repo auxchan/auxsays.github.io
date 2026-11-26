@@ -1424,7 +1424,23 @@ def _search_cases() -> dict:
         "unreadable_page": {"page": search_page(), "site": search_site(), "content": "<p>no verdict</p>"},
         "two_verdicts": {"page": search_page(), "site": search_site(),
                          "content": synthetic_content("pilot", verdicts=2)},
+        # R3-SEO: the stored record date and the trackers the page links, in the one WebPage block.
+        "crumbs": {"page": search_page(company_id="obs-project", record_last_updated="2026-11-01T10:20:30Z"),
+                   "site": crumb_site()},
+        "crumbs_future": {"page": search_page(company_id="obs-project", record_last_updated="2027-01-01T00:00:00Z"),
+                          "site": crumb_site()},
+        "crumbs_released": {"page": search_page(company_id="nobody"), "site": search_site()},
     }
+
+
+def crumb_site() -> dict:
+    site = search_site()
+    site["data"] = dict(site["data"],
+                        patch_companies=[{"id": "obs-project", "display_name": "OBS & Project",
+                                          "company_url": "/updates/obs-project/"}],
+                        patch_products=[{"id": OBS, "product_name": "OBS Studio",
+                                         "product_url": "/updates/obs-project/obs-studio/"}])
+    return site
 
 
 FALLBACK_CASES = ("not_a_patch_page", "unreadable_page", "two_verdicts")
@@ -1700,6 +1716,34 @@ def check_search_snippets() -> None:
           and early_title.startswith("OBS Studio 99.0.0: ")
           and (heads["escaping"]["titles"] or [""])[0].startswith('Copilot "agent" & tools 1.0: '),
           f"{early_title!r} {(heads['escaping']['titles'] or [''])[0]!r}")
+
+    # R3-SEO: dateModified is the stored stamp under the sitemap's tests; the breadcrumb is the trackers the
+    # page links, read from _data, ending at the page; a level with no data is left out; no rating anywhere.
+    def block(name):  # noqa: ANN001, ANN202
+        return heads[name]["jsonld"] or {}
+    crumbs = block("crumbs")
+    items = (crumbs.get("breadcrumb") or {}).get("itemListElement") or []
+    want = [(1, "Patch Feed", SITE_URL + "/updates/"), (2, "OBS & Project", SITE_URL + "/updates/obs-project/"),
+            (3, "OBS Studio", SITE_URL + "/updates/obs-project/obs-studio/"), (4, "OBS Studio 99.0.0", url_of("crumbs"))]
+    got = [(i.get("position"), i.get("name"), i.get("item")) for i in items]
+    raw = "".join(heads["crumbs"]["jsonld_raw"])
+    check("S29 the WebPage block carries a BreadcrumbList of the trackers the page links, read from _data and "
+          "ending at the page itself, with names JSON-escaped like every other value",
+          crumbs.get("@type") == "WebPage" and (crumbs.get("breadcrumb") or {}).get("@type") == "BreadcrumbList"
+          and got == want and "OBS \\u0026 Project" in raw and "&amp;" not in raw, f"{got} {raw[-300:]!r}")
+    check("S30 dateModified is the stored record_last_updated (else the release date), and a stamp later than "
+          "the build prints none, exactly as the sitemap's lastmod",
+          crumbs.get("dateModified") == "2026-11-01T10:20:30+00:00"
+          and "dateModified" not in block("crumbs_future")
+          and block("crumbs_released").get("dateModified") == "2026-10-01T00:00:00+00:00",
+          f"{crumbs.get('dateModified')!r} {block('crumbs_future').get('dateModified')!r} "
+          f"{block('crumbs_released').get('dateModified')!r}")
+    released = [(i.get("position"), i.get("name")) for i in
+                ((block("crumbs_released").get("breadcrumb") or {}).get("itemListElement") or [])]
+    rated = [n for n in heads if re.search(r"Rating|Review", "".join(heads[n]["jsonld_raw"]))]
+    check("S31 a level with no company or product data is left out, never invented, and no case states a "
+          "Review or Rating", released == [(1, "Patch Feed"), (2, "OBS Studio 99.0.0")] and not rated,
+          f"{released} rated={rated}")
 
 
 # ---------------------------------------------------------------- [R]/[N] regeneration repairs
