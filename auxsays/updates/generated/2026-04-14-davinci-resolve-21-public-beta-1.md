@@ -1,8 +1,8 @@
 ---
 layout: aux-update
 title: DaVinci Resolve 21 Public Beta 1 official update breakdown
-description: Published Apr 14, 2026. Blackmagic Design announced DaVinci Resolve 21 Public Beta 1 and made it available for
-  download.
+description: Published Apr 14, 2026. Blackmagic Design announced DaVinci Resolve 21 Public Beta 1 and made it available
+  for download.
 permalink: /updates/blackmagic-design/davinci-resolve/21-public-beta-1/
 update_entry: true
 update_product: DaVinci Resolve
@@ -19,9 +19,9 @@ update_status: current
 update_feed_title: DaVinci Resolve 21 Public Beta 1
 update_detail_title: DaVinci Resolve 21 Public Beta 1
 update_consensus_label: Negative
-update_consensus_summary: 'INSUFFICIENT DATA: DaVinci Resolve 21 Public Beta 1. 15 user reports are matched to this exact
-  update, but no problem in them is confirmed as reported independently by two or more users. If one matches your setup, test
-  before relying on this update.'
+update_consensus_summary: 'INSUFFICIENT DATA: DaVinci Resolve 21 Public Beta 1. 15 user reports are matched to this
+  exact update, but no problem in them is confirmed as reported independently by two or more users. If one matches
+  your setup, test before relying on this update.'
 update_report_count: 15
 update_consensus_confidence: Low-Medium
 status_change_type: new
@@ -37,18 +37,20 @@ patch_file_size_status: not_provided_by_source
 release_channel_label: Public beta
 quick_verdict: 'INSUFFICIENT DATA: DaVinci Resolve 21 Public Beta 1 is a beta build with 15 user reports found.'
 update_decision_label: INSUFFICIENT DATA
-update_decision_body: 'No verdict yet: 15 user reports are matched to this exact update, but no problem in them is confirmed
-  as reported independently by two or more users. If one matches your setup, test before relying on this update.'
+update_decision_body: 'No verdict yet: 15 user reports are matched to this exact update, but no problem in them
+  is confirmed as reported independently by two or more users. If one matches your setup, test before relying on
+  this update.'
 source_freshness_note: ''
-record_note: This page covers DaVinci Resolve 21 Public Beta 1. Stable/Studio reports are excluded and tracked on the separate
-  stable page.
-official_summary: DaVinci Resolve 21 Public Beta 1 is a public beta release and should be treated differently from a stable
-  production build. The key user decision is not simply whether the release is new, but whether the new Resolve 21 feature
-  set is worth testing in a non-critical environment. For production work, the practical read is to keep existing stable projects
-  on a known-good version unless a specific Resolve 21 feature is needed and the project can tolerate beta risk.
-consensus_report: '15 user reports found for DaVinci Resolve 21 Public Beta 1. Current reports mention startup or application
-  crashes, Magic Mask crashes, and performance slowdowns. Current reports are Reddit-heavy, so production users should test
-  before updating. Sources represented: Blackmagic Design Community Forum and r/davinciresolve.'
+record_note: This page covers DaVinci Resolve 21 Public Beta 1. Stable/Studio reports are excluded and tracked on
+  the separate stable page.
+official_summary: DaVinci Resolve 21 Public Beta 1 is a public beta release and should be treated differently from
+  a stable production build. The key user decision is not simply whether the release is new, but whether the new
+  Resolve 21 feature set is worth testing in a non-critical environment. For production work, the practical read
+  is to keep existing stable projects on a known-good version unless a specific Resolve 21 feature is needed and
+  the project can tolerate beta risk.
+consensus_report: '15 user reports found for DaVinci Resolve 21 Public Beta 1. Current reports mention startup or
+  application crashes, Magic Mask crashes, and performance slowdowns. Current reports are Reddit-heavy, so production
+  users should test before updating. Sources represented: Blackmagic Design Community Forum and r/davinciresolve.'
 complaint_themes:
 - theme: Beta setup questions
   frequency: Medium
@@ -139,10 +141,11 @@ legacy_consensus_score: 6
 legacy_consensus_score_percent: 53
 official_patch_notes_source_url: https://www.blackmagicdesign.com/media/release/20260414-01
 official_patch_notes_body: ''
-release_summary: DaVinci Resolve 21 Public Beta 1 is a public beta release and should be treated differently from a stable
-  production build. The key user decision is not simply whether the release is new, but whether the new Resolve 21 feature
-  set is worth testing in a non-critical environment. For production work, the practical read is to keep existing stable projects
-  on a known-good version unless a specific Resolve 21 feature is needed and the project can tolerate beta risk.
+release_summary: DaVinci Resolve 21 Public Beta 1 is a public beta release and should be treated differently from
+  a stable production build. The key user decision is not simply whether the release is new, but whether the new
+  Resolve 21 feature set is worth testing in a non-critical environment. For production work, the practical read
+  is to keep existing stable projects on a known-good version unless a specific Resolve 21 feature is needed and
+  the project can tolerate beta risk.
 practical_recommendations:
 - 'This is a beta build: keep it off active client projects and test it in disposable projects.'
 - Keep a known-good stable Resolve version available.
@@ -157,8 +160,8 @@ evidence_state_label: Verified reports
 official_source_captured: true
 confirmed_patch_specific_report_count: 15
 legacy_manual_report_count: 7
-legacy_manual_report_count_note: Previous 7-report value appears to be a pre-evidence/manual/pilot estimate. It is not currently
-  backed by structured consensus_evidence.yml rows and should not be rendered as verified reports.
+legacy_manual_report_count_note: Previous 7-report value appears to be a pre-evidence/manual/pilot estimate. It
+  is not currently backed by structured consensus_evidence.yml rows and should not be rendered as verified reports.
 known_issues_present: true
 official_checksums_body: ''
 intelligence_stage: pilot
@@ -193,7 +196,7 @@ official_source_attempts:
   body_captured: false
   checksums_captured: false
 evidence_last_checked: '2026-06-14T06:05:56Z'
-record_last_updated: '2026-11-25T23:51:56.338855Z'
+record_last_updated: '2026-11-26T23:10:14.635549Z'
 evidence_samples:
 - source_name: Blackmagic Design Community Forum
   source_url: https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235117
@@ -348,8 +351,8 @@ accepted_report_sources:
 - source_name: r/davinciresolve
   source_type: reddit community report
   source_url: https://www.reddit.com/r/davinciresolve/comments/1tfnqne/davinci_resolve_21_beta_crache_à_78_au_chargement/
-  source_title: DaVinci Resolve 21 Beta crache à 78% au chargement – Projet corrompu pour la 2e fois, mémoire saturée, besoin
-    d'aide avancée
+  source_title: DaVinci Resolve 21 Beta crache à 78% au chargement – Projet corrompu pour la 2e fois, mémoire saturée,
+    besoin d'aide avancée
   source_date: '2026-05-17'
   version_matched: DaVinci Resolve 21 beta
   patch_version_matched: true
@@ -367,8 +370,8 @@ accepted_report_sources:
 - source_name: r/davinciresolve
   source_type: reddit community report
   source_url: https://www.reddit.com/r/davinciresolve/comments/1u4pcsr/im_having_a_strange_davinci_resolve_studio/
-  source_title: I’m having a strange DaVinci Resolve Studio licensing issue and I’m wondering if anyone has encountered this
-    before.
+  source_title: I’m having a strange DaVinci Resolve Studio licensing issue and I’m wondering if anyone has encountered
+    this before.
   source_date: '2026-06-13'
   version_matched: Resolve 21 beta
   patch_version_matched: true
@@ -376,5 +379,4 @@ accepted_report_sources:
   workflow_area: application stability
 evidence_source_limitations:
 - Current reports are Reddit-heavy, so production users should test before updating.
-- Some community sources were unavailable during the last check; unavailable sources were not counted as reports.
 ---

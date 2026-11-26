@@ -109092,3 +109092,2453 @@ evidence:
   title_dedup_sha256: 2e8e90ef22e3f9212ff481113e6d809677cc5cf3be4ba49d99f283d903837f24
   issue_bucket: audio mixer or routing issues
   facts_rule_version: v1
+- id: microsoft-teams-26304-1207-5384-858-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082077-teams-turns-off-flickers-capture-card
+  product_id: microsoft-teams
+  update_version: 26304.1207.5384.858
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082077/teams-turns-off-flickers-capture-card-video-when-b
+  parent_title: Teams turns off / flickers capture-card video when bitrate drops quickly (still image or low-complexity content) - Microsoft Q&A
+  report_title: Teams turns off / flickers capture-card video when bitrate drops quickly (still image or low-complexity content) - Microsoft Q&A
+  report_text_excerpt: Teams turns off / flickers capture-card video when bitrate drops quickly (still image or low-complexity content) Hi everyone, we use Teams for professional live productions and see a reproducible video issue with a capture device used as a webcam. Setup Blackmagic Web...
+  captured_at: '2026-11-26T22:13:42Z'
+  source_date: '2026-11-25'
+  target_release_date: '2026-11-23'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: audio / video failure
+  workflow_area: meeting audio and video
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: ed1585ec89fa170ee3766665cb4c8a3c3b62b8b53b117e297a746395e14418ba
+  title_dedup_sha256: a304c29af3ab7eb5573a62f0383570bebc3c3258707366723482b171db4b8ae9
+  issue_bucket: audio / video failure
+  facts_rule_version: v1
+- id: microsoft-teams-26304-1207-5384-858-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082748-new-teams-cant-sign-in
+  product_id: microsoft-teams
+  update_version: 26304.1207.5384.858
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082748/new-teams-cant-sign-in
+  parent_title: New Teams can't sign in - Microsoft Q&A
+  report_title: New Teams can't sign in - Microsoft Q&A
+  report_text_excerpt: 'New Teams can''t sign in After entering my email to sign in to Teams a screen flashes a few times and I am back at the Welcome to Teams screen. I have tried: Clearing Teams cache Running a Teams repair Running a Teams reset Reinstalling Teams Clearing the Edge cache Checking...'
+  captured_at: '2026-11-26T22:13:42Z'
+  source_date: '2026-11-25'
+  target_release_date: '2026-11-23'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: b7d27e757ddedc8af1d66d090e25f6f47fa644a93b5be5e999f7754dcf987177
+  title_dedup_sha256: af83a69b71ab8ee123036f51d1e1cbcaddabbb8e4341c9c7d629ce69af26dafd
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26304-1207-5384-858-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082748-new-teams-cant-sign-in-answer-13064833
+  product_id: microsoft-teams
+  update_version: 26304.1207.5384.858
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082748/new-teams-cant-sign-in#answer-13064833
+  parent_title: New Teams can't sign in - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: Dear YajairaC , As a forum moderator, I genuinely wish I could directly review your account's sign-in activity or your device's settings to diagnose and fix this for you. Unfortunately, my role here is limited to providing general guidance and solutions that can be applied by...
+  captured_at: '2026-11-26T22:13:42Z'
+  source_date: '2026-11-25T18:30:33.0366667+00:00'
+  target_release_date: '2026-11-23'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 5076cfa685d67eb2938dcef6a3893ced00b243c71f99614ca4fdcfb005dc1a3d
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26304-1207-5384-858-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082748-new-teams-cant-sign-in-answer-2898846
+  product_id: microsoft-teams
+  update_version: 26304.1207.5384.858
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082748/new-teams-cant-sign-in#answer-2898846
+  parent_title: New Teams can't sign in - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: data="0" class="margin-top-xxs is-unstyled padding-block-xxs " > Kai-L • Follow 22,040 Reputation points • Microsoft External Staff • Moderator 2026-11-26T21:07:49.06+00:00 Dear YajairaC , It has been a while and I am writing to see how things are going with this issue. If...
+  captured_at: '2026-11-26T22:13:42Z'
+  source_date: '2026-11-26T21:07:49.06'
+  target_release_date: '2026-11-23'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 754d756d0adc83879efde8354d20c0880ec27a7473463475a7472c1ca0a57a29
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082748-new-teams-cant-sign-in
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082748/new-teams-cant-sign-in
+  parent_title: New Teams can't sign in - Microsoft Q&A
+  report_title: New Teams can't sign in - Microsoft Q&A
+  report_text_excerpt: 'New Teams can''t sign in After entering my email to sign in to Teams a screen flashes a few times and I am back at the Welcome to Teams screen. I have tried: Clearing Teams cache Running a Teams repair Running a Teams reset Reinstalling Teams Clearing the Edge cache Checking...'
+  captured_at: '2026-11-26T22:13:42Z'
+  source_date: '2026-11-25'
+  target_release_date: '2026-11-05'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: b7d27e757ddedc8af1d66d090e25f6f47fa644a93b5be5e999f7754dcf987177
+  title_dedup_sha256: af83a69b71ab8ee123036f51d1e1cbcaddabbb8e4341c9c7d629ce69af26dafd
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082748-new-teams-cant-sign-in-answer-13064833
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082748/new-teams-cant-sign-in#answer-13064833
+  parent_title: New Teams can't sign in - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: Dear YajairaC , As a forum moderator, I genuinely wish I could directly review your account's sign-in activity or your device's settings to diagnose and fix this for you. Unfortunately, my role here is limited to providing general guidance and solutions that can be applied by...
+  captured_at: '2026-11-26T22:13:42Z'
+  source_date: '2026-11-25T18:30:33.0366667+00:00'
+  target_release_date: '2026-11-05'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 5076cfa685d67eb2938dcef6a3893ced00b243c71f99614ca4fdcfb005dc1a3d
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082748-new-teams-cant-sign-in-answer-2898846
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082748/new-teams-cant-sign-in#answer-2898846
+  parent_title: New Teams can't sign in - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: data="0" class="margin-top-xxs is-unstyled padding-block-xxs " > Kai-L • Follow 22,040 Reputation points • Microsoft External Staff • Moderator 2026-11-26T21:07:49.06+00:00 Dear YajairaC , It has been a while and I am writing to see how things are going with this issue. If...
+  captured_at: '2026-11-26T22:13:42Z'
+  source_date: '2026-11-26T21:07:49.06'
+  target_release_date: '2026-11-05'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 754d756d0adc83879efde8354d20c0880ec27a7473463475a7472c1ca0a57a29
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082748-new-teams-cant-sign-in
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082748/new-teams-cant-sign-in
+  parent_title: New Teams can't sign in - Microsoft Q&A
+  report_title: New Teams can't sign in - Microsoft Q&A
+  report_text_excerpt: 'New Teams can''t sign in After entering my email to sign in to Teams a screen flashes a few times and I am back at the Welcome to Teams screen. I have tried: Clearing Teams cache Running a Teams repair Running a Teams reset Reinstalling Teams Clearing the Edge cache Checking...'
+  captured_at: '2026-11-26T22:13:42Z'
+  source_date: '2026-11-25'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: b7d27e757ddedc8af1d66d090e25f6f47fa644a93b5be5e999f7754dcf987177
+  title_dedup_sha256: af83a69b71ab8ee123036f51d1e1cbcaddabbb8e4341c9c7d629ce69af26dafd
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082748-new-teams-cant-sign-in-answer-13064833
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082748/new-teams-cant-sign-in#answer-13064833
+  parent_title: New Teams can't sign in - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: Dear YajairaC , As a forum moderator, I genuinely wish I could directly review your account's sign-in activity or your device's settings to diagnose and fix this for you. Unfortunately, my role here is limited to providing general guidance and solutions that can be applied by...
+  captured_at: '2026-11-26T22:13:42Z'
+  source_date: '2026-11-25T18:30:33.0366667+00:00'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: 5076cfa685d67eb2938dcef6a3893ced00b243c71f99614ca4fdcfb005dc1a3d
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082748-new-teams-cant-sign-in-answer-2898846
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082748/new-teams-cant-sign-in#answer-2898846
+  parent_title: New Teams can't sign in - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: data="0" class="margin-top-xxs is-unstyled padding-block-xxs " > Kai-L • Follow 22,040 Reputation points • Microsoft External Staff • Moderator 2026-11-26T21:07:49.06+00:00 Dear YajairaC , It has been a while and I am writing to see how things are going with this issue. If...
+  captured_at: '2026-11-26T22:13:42Z'
+  source_date: '2026-11-26T21:07:49.06'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: 754d756d0adc83879efde8354d20c0880ec27a7473463475a7472c1ca0a57a29
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082748-new-teams-cant-sign-in
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082748/new-teams-cant-sign-in
+  parent_title: New Teams can't sign in - Microsoft Q&A
+  report_title: New Teams can't sign in - Microsoft Q&A
+  report_text_excerpt: 'New Teams can''t sign in After entering my email to sign in to Teams a screen flashes a few times and I am back at the Welcome to Teams screen. I have tried: Clearing Teams cache Running a Teams repair Running a Teams reset Reinstalling Teams Clearing the Edge cache Checking...'
+  captured_at: '2026-11-26T22:13:42Z'
+  source_date: '2026-11-25'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: b7d27e757ddedc8af1d66d090e25f6f47fa644a93b5be5e999f7754dcf987177
+  title_dedup_sha256: af83a69b71ab8ee123036f51d1e1cbcaddabbb8e4341c9c7d629ce69af26dafd
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082748-new-teams-cant-sign-in-answer-13064833
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082748/new-teams-cant-sign-in#answer-13064833
+  parent_title: New Teams can't sign in - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: Dear YajairaC , As a forum moderator, I genuinely wish I could directly review your account's sign-in activity or your device's settings to diagnose and fix this for you. Unfortunately, my role here is limited to providing general guidance and solutions that can be applied by...
+  captured_at: '2026-11-26T22:13:42Z'
+  source_date: '2026-11-25T18:30:33.0366667+00:00'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: 5076cfa685d67eb2938dcef6a3893ced00b243c71f99614ca4fdcfb005dc1a3d
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082748-new-teams-cant-sign-in-answer-2898846
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082748/new-teams-cant-sign-in#answer-2898846
+  parent_title: New Teams can't sign in - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: data="0" class="margin-top-xxs is-unstyled padding-block-xxs " > Kai-L • Follow 22,040 Reputation points • Microsoft External Staff • Moderator 2026-11-26T21:07:49.06+00:00 Dear YajairaC , It has been a while and I am writing to see how things are going with this issue. If...
+  captured_at: '2026-11-26T22:13:42Z'
+  source_date: '2026-11-26T21:07:49.06'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: 754d756d0adc83879efde8354d20c0880ec27a7473463475a7472c1ca0a57a29
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082748-new-teams-cant-sign-in
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082748/new-teams-cant-sign-in
+  parent_title: New Teams can't sign in - Microsoft Q&A
+  report_title: New Teams can't sign in - Microsoft Q&A
+  report_text_excerpt: 'New Teams can''t sign in After entering my email to sign in to Teams a screen flashes a few times and I am back at the Welcome to Teams screen. I have tried: Clearing Teams cache Running a Teams repair Running a Teams reset Reinstalling Teams Clearing the Edge cache Checking...'
+  captured_at: '2026-11-26T22:13:42Z'
+  source_date: '2026-11-25'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: b7d27e757ddedc8af1d66d090e25f6f47fa644a93b5be5e999f7754dcf987177
+  title_dedup_sha256: af83a69b71ab8ee123036f51d1e1cbcaddabbb8e4341c9c7d629ce69af26dafd
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082748-new-teams-cant-sign-in-answer-13064833
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082748/new-teams-cant-sign-in#answer-13064833
+  parent_title: New Teams can't sign in - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: Dear YajairaC , As a forum moderator, I genuinely wish I could directly review your account's sign-in activity or your device's settings to diagnose and fix this for you. Unfortunately, my role here is limited to providing general guidance and solutions that can be applied by...
+  captured_at: '2026-11-26T22:13:42Z'
+  source_date: '2026-11-25T18:30:33.0366667+00:00'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 5076cfa685d67eb2938dcef6a3893ced00b243c71f99614ca4fdcfb005dc1a3d
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082748-new-teams-cant-sign-in-answer-2898846
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082748/new-teams-cant-sign-in#answer-2898846
+  parent_title: New Teams can't sign in - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: data="0" class="margin-top-xxs is-unstyled padding-block-xxs " > Kai-L • Follow 22,040 Reputation points • Microsoft External Staff • Moderator 2026-11-26T21:07:49.06+00:00 Dear YajairaC , It has been a while and I am writing to see how things are going with this issue. If...
+  captured_at: '2026-11-26T22:13:42Z'
+  source_date: '2026-11-26T21:07:49.06'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 754d756d0adc83879efde8354d20c0880ec27a7473463475a7472c1ca0a57a29
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082748-new-teams-cant-sign-in
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082748/new-teams-cant-sign-in
+  parent_title: New Teams can't sign in - Microsoft Q&A
+  report_title: New Teams can't sign in - Microsoft Q&A
+  report_text_excerpt: 'New Teams can''t sign in After entering my email to sign in to Teams a screen flashes a few times and I am back at the Welcome to Teams screen. I have tried: Clearing Teams cache Running a Teams repair Running a Teams reset Reinstalling Teams Clearing the Edge cache Checking...'
+  captured_at: '2026-11-26T22:13:42Z'
+  source_date: '2026-11-25'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: b7d27e757ddedc8af1d66d090e25f6f47fa644a93b5be5e999f7754dcf987177
+  title_dedup_sha256: af83a69b71ab8ee123036f51d1e1cbcaddabbb8e4341c9c7d629ce69af26dafd
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082748-new-teams-cant-sign-in-answer-13064833
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082748/new-teams-cant-sign-in#answer-13064833
+  parent_title: New Teams can't sign in - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: Dear YajairaC , As a forum moderator, I genuinely wish I could directly review your account's sign-in activity or your device's settings to diagnose and fix this for you. Unfortunately, my role here is limited to providing general guidance and solutions that can be applied by...
+  captured_at: '2026-11-26T22:13:42Z'
+  source_date: '2026-11-25T18:30:33.0366667+00:00'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 5076cfa685d67eb2938dcef6a3893ced00b243c71f99614ca4fdcfb005dc1a3d
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082748-new-teams-cant-sign-in-answer-2898846
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082748/new-teams-cant-sign-in#answer-2898846
+  parent_title: New Teams can't sign in - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: data="0" class="margin-top-xxs is-unstyled padding-block-xxs " > Kai-L • Follow 22,040 Reputation points • Microsoft External Staff • Moderator 2026-11-26T21:07:49.06+00:00 Dear YajairaC , It has been a while and I am writing to see how things are going with this issue. If...
+  captured_at: '2026-11-26T22:13:42Z'
+  source_date: '2026-11-26T21:07:49.06'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 754d756d0adc83879efde8354d20c0880ec27a7473463475a7472c1ca0a57a29
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082748-new-teams-cant-sign-in
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082748/new-teams-cant-sign-in
+  parent_title: New Teams can't sign in - Microsoft Q&A
+  report_title: New Teams can't sign in - Microsoft Q&A
+  report_text_excerpt: 'New Teams can''t sign in After entering my email to sign in to Teams a screen flashes a few times and I am back at the Welcome to Teams screen. I have tried: Clearing Teams cache Running a Teams repair Running a Teams reset Reinstalling Teams Clearing the Edge cache Checking...'
+  captured_at: '2026-11-26T22:13:42Z'
+  source_date: '2026-11-25'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: b7d27e757ddedc8af1d66d090e25f6f47fa644a93b5be5e999f7754dcf987177
+  title_dedup_sha256: af83a69b71ab8ee123036f51d1e1cbcaddabbb8e4341c9c7d629ce69af26dafd
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082748-new-teams-cant-sign-in-answer-13064833
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082748/new-teams-cant-sign-in#answer-13064833
+  parent_title: New Teams can't sign in - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: Dear YajairaC , As a forum moderator, I genuinely wish I could directly review your account's sign-in activity or your device's settings to diagnose and fix this for you. Unfortunately, my role here is limited to providing general guidance and solutions that can be applied by...
+  captured_at: '2026-11-26T22:13:42Z'
+  source_date: '2026-11-25T18:30:33.0366667+00:00'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: 5076cfa685d67eb2938dcef6a3893ced00b243c71f99614ca4fdcfb005dc1a3d
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082748-new-teams-cant-sign-in-answer-2898846
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082748/new-teams-cant-sign-in#answer-2898846
+  parent_title: New Teams can't sign in - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: data="0" class="margin-top-xxs is-unstyled padding-block-xxs " > Kai-L • Follow 22,040 Reputation points • Microsoft External Staff • Moderator 2026-11-26T21:07:49.06+00:00 Dear YajairaC , It has been a while and I am writing to see how things are going with this issue. If...
+  captured_at: '2026-11-26T22:13:42Z'
+  source_date: '2026-11-26T21:07:49.06'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: 754d756d0adc83879efde8354d20c0880ec27a7473463475a7472c1ca0a57a29
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082748-new-teams-cant-sign-in
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082748/new-teams-cant-sign-in
+  parent_title: New Teams can't sign in - Microsoft Q&A
+  report_title: New Teams can't sign in - Microsoft Q&A
+  report_text_excerpt: 'New Teams can''t sign in After entering my email to sign in to Teams a screen flashes a few times and I am back at the Welcome to Teams screen. I have tried: Clearing Teams cache Running a Teams repair Running a Teams reset Reinstalling Teams Clearing the Edge cache Checking...'
+  captured_at: '2026-11-26T22:13:42Z'
+  source_date: '2026-11-25'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: b7d27e757ddedc8af1d66d090e25f6f47fa644a93b5be5e999f7754dcf987177
+  title_dedup_sha256: af83a69b71ab8ee123036f51d1e1cbcaddabbb8e4341c9c7d629ce69af26dafd
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082748-new-teams-cant-sign-in-answer-13064833
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082748/new-teams-cant-sign-in#answer-13064833
+  parent_title: New Teams can't sign in - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: Dear YajairaC , As a forum moderator, I genuinely wish I could directly review your account's sign-in activity or your device's settings to diagnose and fix this for you. Unfortunately, my role here is limited to providing general guidance and solutions that can be applied by...
+  captured_at: '2026-11-26T22:13:42Z'
+  source_date: '2026-11-25T18:30:33.0366667+00:00'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 5076cfa685d67eb2938dcef6a3893ced00b243c71f99614ca4fdcfb005dc1a3d
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082748-new-teams-cant-sign-in-answer-2898846
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082748/new-teams-cant-sign-in#answer-2898846
+  parent_title: New Teams can't sign in - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: data="0" class="margin-top-xxs is-unstyled padding-block-xxs " > Kai-L • Follow 22,040 Reputation points • Microsoft External Staff • Moderator 2026-11-26T21:07:49.06+00:00 Dear YajairaC , It has been a while and I am writing to see how things are going with this issue. If...
+  captured_at: '2026-11-26T22:13:42Z'
+  source_date: '2026-11-26T21:07:49.06'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 754d756d0adc83879efde8354d20c0880ec27a7473463475a7472c1ca0a57a29
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082748-new-teams-cant-sign-in
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082748/new-teams-cant-sign-in
+  parent_title: New Teams can't sign in - Microsoft Q&A
+  report_title: New Teams can't sign in - Microsoft Q&A
+  report_text_excerpt: 'New Teams can''t sign in After entering my email to sign in to Teams a screen flashes a few times and I am back at the Welcome to Teams screen. I have tried: Clearing Teams cache Running a Teams repair Running a Teams reset Reinstalling Teams Clearing the Edge cache Checking...'
+  captured_at: '2026-11-26T22:13:42Z'
+  source_date: '2026-11-25'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: b7d27e757ddedc8af1d66d090e25f6f47fa644a93b5be5e999f7754dcf987177
+  title_dedup_sha256: af83a69b71ab8ee123036f51d1e1cbcaddabbb8e4341c9c7d629ce69af26dafd
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082748-new-teams-cant-sign-in-answer-13064833
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082748/new-teams-cant-sign-in#answer-13064833
+  parent_title: New Teams can't sign in - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: Dear YajairaC , As a forum moderator, I genuinely wish I could directly review your account's sign-in activity or your device's settings to diagnose and fix this for you. Unfortunately, my role here is limited to providing general guidance and solutions that can be applied by...
+  captured_at: '2026-11-26T22:13:42Z'
+  source_date: '2026-11-25T18:30:33.0366667+00:00'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 5076cfa685d67eb2938dcef6a3893ced00b243c71f99614ca4fdcfb005dc1a3d
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082748-new-teams-cant-sign-in-answer-2898846
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082748/new-teams-cant-sign-in#answer-2898846
+  parent_title: New Teams can't sign in - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: data="0" class="margin-top-xxs is-unstyled padding-block-xxs " > Kai-L • Follow 22,040 Reputation points • Microsoft External Staff • Moderator 2026-11-26T21:07:49.06+00:00 Dear YajairaC , It has been a while and I am writing to see how things are going with this issue. If...
+  captured_at: '2026-11-26T22:13:42Z'
+  source_date: '2026-11-26T21:07:49.06'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 754d756d0adc83879efde8354d20c0880ec27a7473463475a7472c1ca0a57a29
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6082727-question-6082727
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082727/task-manager-issues
+  parent_title: Task Manager Issues - Microsoft Q&A
+  report_title: Task Manager Issues - Microsoft Q&A
+  report_text_excerpt: Task Manager Issues - Microsoft Q&A After this latest update, System Idle Process always shows 0 CPU even when nothing is running and CPU Speed does not show the correct speed, even when I have it overclocked. I have run Scannow and DISM. Repairs were made, but this is not...
+  captured_at: '2026-11-26T22:22:56Z'
+  source_date: '2026-11-25'
+  target_release_date: '2026-11-19'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.10075'
+  match_basis: exact_os_build
+  matched_os_build: '26300.10075'
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified Windows issue
+  workflow_area: Windows workflow
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.10075'
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: cd0c67d870ca1dd505eb2b53f464f06d86b01235b7705dda7a9820f5fc9bba68
+  title_dedup_sha256: 7c2fb14b2c5233f692b5328df747520c26acc6597d34c76bbeb4ce5b213e1d05
+  issue_bucket: unspecified windows issue
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-40-nvidia-forum-comment-3635604
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.40'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635604
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: 'Hi all, GPU: Asus Astral OC RTX 5080 CPU: AMD Ryzen 9 9950x3d Display Configuration - Display port Asus VG279q 1080p at 144Hz / LG G5 65TV 4k @user HDMI 2.1 Operating System: Win11 pro Driver Regression - on 621.40 Affected Applications/Games: all Issue Description - as soon...'
+  captured_at: '2026-11-26T22:37:17Z'
+  source_date: '2026-11-25T22:06:32Z'
+  target_release_date: '2026-11-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.40'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: nvidia_forum_default_views
+  matched_text: '621.40'
+  matched_field: report_text
+  matched_context: '...LG G5 65TV 4k @user HDMI 2.1 Operating System: Win11 pro Driver Regression - on 621.40 Affected Applications/Games: all Issue Description - as soon as I switch to ex...'
+  excerpt_norm_sha256: f5f63c31c8ef2c82d0d4c658fe710e8db9fb81e6bfbea5fc6a4998e9685f139f
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-40-nvidia-forum-comment-3635503
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.40'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635503
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: 'Driver Version: 621.40 WHQL (related to bug [7116722]) [screenshot: [link]] GPU: asus rog strix scar 3 with 2070 RTX OS: Windows 10 Issue Summary: After updating to GeForce Driver 621.40, NVDisplay.Container.exe (NVIDIA Display Container LS) continues to perform persistent...'
+  captured_at: '2026-11-26T22:37:17Z'
+  source_date: '2026-11-25T07:32:55Z'
+  target_release_date: '2026-11-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.40'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: nvidia_forum_default_views
+  matched_text: '621.40'
+  matched_field: report_text
+  matched_context: 'Driver Version: 621.40 WHQL (related to bug [7116722]) [screenshot: [link]] GPU: asus rog strix scar 3...'
+  excerpt_norm_sha256: 43b00f5042bf3bfc92355bc023df17ec6a108032de782750a3fb97688ac4fd54
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: excessive disk writes
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-40-nvidia-forum-comment-3635703
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.40'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635703
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: The latest Nvidia driver 621.40 is causing screen flickering and the screen shutting off randomly. One time, it appeared grey. I9 14900k 5090 Aorus Master Ice 64gb RAM
+  captured_at: '2026-11-26T22:37:17Z'
+  source_date: '2026-11-26T18:21:30Z'
+  target_release_date: '2026-11-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.40'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: not_a_real_issue_report
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: nvidia_forum_default_views
+  matched_text: '621.40'
+  matched_field: report_text
+  matched_context: The latest Nvidia driver 621.40 is causing screen flickering and the screen shutting off randomly. One time, it...
+  excerpt_norm_sha256: 96d4687f2569c6ffd49e4b5cc1007b6cf99a8653fb14962429266de5559d8b3f
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: flicker or wrong colors
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-40-nvidia-forum-comment-3635620
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.40'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635620
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: 10-bit color output is broken (falls back to 8-bit / wrong color output despite 10 bpc being selected in NVCP/NVIDIA App) in all drivers after 617.42 (tested up to 621.40). Rolling back to 617.42 fixes it immediately. model code LS32CG554EUXEN s/n 09CMHK2Y400484J...
+  captured_at: '2026-11-26T22:37:17Z'
+  source_date: '2026-11-26T04:01:41Z'
+  target_release_date: '2026-11-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.40'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: multiple_tracked_versions_named
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: nvidia_forum_default_views
+  matched_text: '621.40'
+  matched_field: report_text
+  matched_context: '...pc being selected in NVCP/NVIDIA App) in all drivers after 617.42 (tested up to 621.40). Rolling back to 617.42 fixes it immediately. model code LS32CG554EUXEN s/n 0...'
+  excerpt_norm_sha256: bccfa0b63eca4c1b6e4be485fd25b2b08d9080ebe54b8413f1458ff4ec2c3489
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: flicker or wrong colors
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-40-nvidia-forum-comment-3635601
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.40'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635601
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: Hi everyone, First of all, thank you to the NVIDIA team for continuing to look into this issue. Hopefully we're finally getting somewhere with the excessive SSD writes that so many of us have been concerned about. I'm just wondering whether anyone who has installed driver...
+  captured_at: '2026-11-26T22:37:17Z'
+  source_date: '2026-11-25T21:16:36Z'
+  target_release_date: '2026-11-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.40'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: multiple_tracked_versions_named
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: nvidia_forum_default_views
+  matched_text: '621.40'
+  matched_field: report_text
+  matched_context: '...en concerned about. I''m just wondering whether anyone who has installed driver 621.40 can confirm if the issue has genuinely been resolved, particularly the excessiv...'
+  excerpt_norm_sha256: ba582e3fee0b712d25ef80af851195ad6a50ac61561866597fe32261ffcce549
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: excessive disk writes
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-40-nvidia-forum-comment-3635610
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.40'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635610
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: I have a similar system with 5080. went from 610.88 to 621.40 and after 24 hours uptime, the file is 874Kb. According to resource monitor nothing nvidia related is writing to the drive during idle - it is mostly NTFS file system and google chrome that constantly writes to the...
+  captured_at: '2026-11-26T22:37:17Z'
+  source_date: '2026-11-25T23:43:22Z'
+  target_release_date: '2026-11-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.40'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: multiple_tracked_versions_named
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: nvidia_forum_default_views
+  matched_text: '621.40'
+  matched_field: report_text
+  matched_context: I have a similar system with 5080. went from 610.88 to 621.40 and after 24 hours uptime, the file is 874Kb. According to resource monitor no...
+  excerpt_norm_sha256: be7bea1f2c9bef5960d07ad6cc27c19fdcca3662b195cbc95ac27873ba62f942
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: excessive disk writes
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-40-nvidia-forum-comment-3635592
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.40'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635592
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: 'Hello I am reporting a persistent black screen (No Signal) issue immediately after installing driver version 621.40 on my RTX 5060. - GPU: NVIDIA GeForce RTX 5060 - CPU: AMD Ryzen 5 PRO 5650G - Monitor: MSI PRO MP251 - Connection Type: HDMI - OS: Windows 11 26H2 9974 - Driver...'
+  captured_at: '2026-11-26T22:37:17Z'
+  source_date: '2026-11-25T20:04:30Z'
+  target_release_date: '2026-11-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.40'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_conflicts_with_thread
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: nvidia_forum_default_views
+  matched_text: '621.40'
+  matched_field: report_text
+  matched_context: '...tent black screen (No Signal) issue immediately after installing driver version 621.40 on my RTX 5060. - GPU: NVIDIA GeForce RTX 5060 - CPU: AMD Ryzen 5 PRO 5650G -...'
+  excerpt_norm_sha256: 833dc73b06801d12dce8a373d050af80dd328768ec6c01735b571203b4612d39
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-40-nvidia-forum-comment-3635568
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.40'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635568
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: Hi. Can you guys please fix the issue when I restart a PC and instant replay toggle gets reset to OFF? I didn't report that thing because I thought it's a long known issue. But it's another driver release and the issue is still there. RTX 5080FE, driver 621.40, app 11.0.9.585,...
+  captured_at: '2026-11-26T22:37:17Z'
+  source_date: '2026-11-25T17:04:37Z'
+  target_release_date: '2026-11-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.40'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_version_environment_only
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: nvidia_forum_default_views
+  matched_text: '621.40'
+  matched_field: report_text
+  matched_context: '...ut it''s another driver release and the issue is still there. RTX 5080FE, driver 621.40, app 11.0.9.585, windows 11'
+  excerpt_norm_sha256: 8c1ec2aa408997a7e1ef36bcf024d0feae60bd49c887a0c57efb5436062f8e06
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: crash or driver reset
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-40-nvidia-forum-comment-3635554
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.40'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635554
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: 'Another driver release, yet still no documented fix for the persistent display failures reported after 610.88. For months, users across multiple GPU generations and monitor manufacturers have reported: - Black screens and signal loss - Display detection failures - Fullscreen...'
+  captured_at: '2026-11-26T22:37:17Z'
+  source_date: '2026-11-25T15:35:48Z'
+  target_release_date: '2026-11-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.40'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: notebook_driver_not_tracked
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: nvidia_forum_default_views
+  matched_text: '621.40'
+  matched_field: report_text
+  matched_context: '...leshooting and repeated unsuccessful driver updates. For those who have tested 621.40, have any of these longstanding issues finally been resolved? More importantly...'
+  excerpt_norm_sha256: 707dc178866125e946782b3d1705ac9a6e21194268601c1db277a71e2df3b4dc
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-40-nvidia-forum-comment-3635519
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.40'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635519
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: Same stuttering, crashes and freezing as last driver update. Both 621.24 and 621.40 Game ready drivers have made gaming annoying or impossible. Both Ark and Destiny 2, have issues. CPU Ryzen 5 5500 GPU RTX 3060
+  captured_at: '2026-11-26T22:37:17Z'
+  source_date: '2026-11-25T10:57:16Z'
+  target_release_date: '2026-11-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.40'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: multiple_tracked_versions_named
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: nvidia_forum_default_views
+  matched_text: '621.40'
+  matched_field: report_text
+  matched_context: Same stuttering, crashes and freezing as last driver update. Both 621.24 and 621.40 Game ready drivers have made gaming annoying or impossible. Both Ark and Desti...
+  excerpt_norm_sha256: 3e117e8fb2a72821f4de4a4578f057d857e40718c1d3f4e926c91979dcac655b
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: crash or driver reset
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-24-nvidia-forum-comment-3635615
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635615
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: Hey everyone! I need some help. I have an NVIDIA GeForce RTX 2060 SUPER, (W11) and I'm experiencing black screen issues when launching games that use EasyAnti-Cheat. My monitor loses signal (both DisplayPort and HDMI), the audio stops, and my PC becomes completely...
+  captured_at: '2026-11-26T22:37:17Z'
+  source_date: '2026-11-26T01:29:53Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: nvidia_forum_default_views
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...drivers using DDU and installing older driver versions, but the issue persists (621.24, 621.01). Windows also reports a LiveKernelEvent 141 error. Other games that d...'
+  excerpt_norm_sha256: 967bdb6286c5feb39a9aaae5edf7f78d850e0c08366c6cf844c993340c0810c6
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: crash or driver reset
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-24-nvidia-forum-comment-3635601
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635601
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: Hi everyone, First of all, thank you to the NVIDIA team for continuing to look into this issue. Hopefully we're finally getting somewhere with the excessive SSD writes that so many of us have been concerned about. I'm just wondering whether anyone who has installed driver...
+  captured_at: '2026-11-26T22:37:17Z'
+  source_date: '2026-11-25T21:16:36Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: nvidia_forum_default_views
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...ething I''d really like to avoid. I originally experienced concerns with driver 621.24 and have since rolled back to 619.42, where my system has been behaving much mo...'
+  excerpt_norm_sha256: ba582e3fee0b712d25ef80af851195ad6a50ac61561866597fe32261ffcce549
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: excessive disk writes
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-24-nvidia-forum-comment-3635592
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635592
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: 'Hello I am reporting a persistent black screen (No Signal) issue immediately after installing driver version 621.40 on my RTX 5060. - GPU: NVIDIA GeForce RTX 5060 - CPU: AMD Ryzen 5 PRO 5650G - Monitor: MSI PRO MP251 - Connection Type: HDMI - OS: Windows 11 26H2 9974 - Driver...'
+  captured_at: '2026-11-26T22:37:17Z'
+  source_date: '2026-11-25T20:04:30Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: nvidia_forum_default_views
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...e, ran DDU to completely remove 621.40, and rolled back to NVIDIA Studio Driver 621.24. With 621.24 installed, the HDMI signal works immediately and the system is 100...'
+  excerpt_norm_sha256: 833dc73b06801d12dce8a373d050af80dd328768ec6c01735b571203b4612d39
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-24-nvidia-forum-comment-3635554
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635554
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: 'Another driver release, yet still no documented fix for the persistent display failures reported after 610.88. For months, users across multiple GPU generations and monitor manufacturers have reported: - Black screens and signal loss - Display detection failures - Fullscreen...'
+  captured_at: '2026-11-26T22:37:17Z'
+  source_date: '2026-11-25T15:35:48Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: nvidia_forum_default_views
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...[RTX 5090 + triple LG C4 OLED — NVIDIA Surround failures across 616.92 through 621.24; 610.88 works.]([link]) - [RTX 4080 SUPER + high-refresh ultrawide — persistent...'
+  excerpt_norm_sha256: 707dc178866125e946782b3d1705ac9a6e21194268601c1db277a71e2df3b4dc
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-24-nvidia-forum-comment-3635519
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635519
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: Same stuttering, crashes and freezing as last driver update. Both 621.24 and 621.40 Game ready drivers have made gaming annoying or impossible. Both Ark and Destiny 2, have issues. CPU Ryzen 5 5500 GPU RTX 3060
+  captured_at: '2026-11-26T22:37:17Z'
+  source_date: '2026-11-25T10:57:16Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: multiple_tracked_versions_named
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: nvidia_forum_default_views
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: Same stuttering, crashes and freezing as last driver update. Both 621.24 and 621.40 Game ready drivers have made gaming annoying or impossible. Both Ar...
+  excerpt_norm_sha256: 3e117e8fb2a72821f4de4a4578f057d857e40718c1d3f4e926c91979dcac655b
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: crash or driver reset
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-14-nvidia-forum-comment-3635681
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635681
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: I don't see many people talking about this, but advanced shader delivery doesn't work anymore with the latest two drivers. I tested this with FF7 remake, the feature works fine via the 621.14 driver but as soon as I updated my drivers and downloaded the update via the Xbox app...
+  captured_at: '2026-11-26T22:37:17Z'
+  source_date: '2026-11-26T13:40:17Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '...test two drivers. I tested this with FF7 remake, the feature works fine via the 621.14 driver but as soon as I updated my drivers and downloaded the update via the Xb...'
+  excerpt_norm_sha256: 389790cde3d2916cec8f477823d6eac8296eb9e79b2d5cdedb528c31f1df372a
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-14-nvidia-forum-comment-3635554
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635554
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: 'Another driver release, yet still no documented fix for the persistent display failures reported after 610.88. For months, users across multiple GPU generations and monitor manufacturers have reported: - Black screens and signal loss - Display detection failures - Fullscreen...'
+  captured_at: '2026-11-26T22:37:17Z'
+  source_date: '2026-11-25T15:35:48Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '...) - [RTX 4080 SUPER + high-refresh ultrawide — persistent black screens through 621.14; WinDbg/ETW diagnostics provided; 610.88 works.]([link]) - [RTX 5070 + Samsung...'
+  excerpt_norm_sha256: 707dc178866125e946782b3d1705ac9a6e21194268601c1db277a71e2df3b4dc
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-01-nvidia-forum-comment-3635615
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.01'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635615
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: Hey everyone! I need some help. I have an NVIDIA GeForce RTX 2060 SUPER, (W11) and I'm experiencing black screen issues when launching games that use EasyAnti-Cheat. My monitor loses signal (both DisplayPort and HDMI), the audio stops, and my PC becomes completely...
+  captured_at: '2026-11-26T22:37:17Z'
+  source_date: '2026-11-26T01:29:53Z'
+  target_release_date: '2026-10-21'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.01'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.01'
+  matched_field: report_text
+  matched_context: '...using DDU and installing older driver versions, but the issue persists (621.24, 621.01). Windows also reports a LiveKernelEvent 141 error. Other games that don''t use...'
+  excerpt_norm_sha256: 967bdb6286c5feb39a9aaae5edf7f78d850e0c08366c6cf844c993340c0810c6
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: crash or driver reset
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-617-42-nvidia-forum-comment-3635620
+  product_id: nvidia-geforce-game-ready
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635620
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: 10-bit color output is broken (falls back to 8-bit / wrong color output despite 10 bpc being selected in NVCP/NVIDIA App) in all drivers after 617.42 (tested up to 621.40). Rolling back to 617.42 fixes it immediately. model code LS32CG554EUXEN s/n 09CMHK2Y400484J...
+  captured_at: '2026-11-26T22:37:17Z'
+  source_date: '2026-11-26T04:01:41Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: '...r output despite 10 bpc being selected in NVCP/NVIDIA App) in all drivers after 617.42 (tested up to 621.40). Rolling back to 617.42 fixes it immediately. model code...'
+  excerpt_norm_sha256: bccfa0b63eca4c1b6e4be485fd25b2b08d9080ebe54b8413f1458ff4ec2c3489
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: flicker or wrong colors
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-617-42-nvidia-forum-comment-3635604
+  product_id: nvidia-geforce-game-ready
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635604
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: 'Hi all, GPU: Asus Astral OC RTX 5080 CPU: AMD Ryzen 9 9950x3d Display Configuration - Display port Asus VG279q 1080p at 144Hz / LG G5 65TV 4k @user HDMI 2.1 Operating System: Win11 pro Driver Regression - on 621.40 Affected Applications/Games: all Issue Description - as soon...'
+  captured_at: '2026-11-26T22:37:17Z'
+  source_date: '2026-11-25T22:06:32Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: '...a single display setup asus monitor locks in black screen I had to roll back to 617.42, no issues in that version. Steps to Reproduce - Put display settings in extend...'
+  excerpt_norm_sha256: f5f63c31c8ef2c82d0d4c658fe710e8db9fb81e6bfbea5fc6a4998e9685f139f
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-617-42-nvidia-forum-comment-3634925
+  product_id: nvidia-geforce-game-ready
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3634925
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: '[RESOLVED - not a driver bug] DLSS Frame Generation slowdown caused by non-clean driver installs (Phantom Blade Zero) BODY: GPU: RTX 4070 SUPER 12GB CPU: AMD Ryzen 7 9700X (8C/16T) Display Configuration: TITAN ARMY P27H2V, 3840x2160 @ 120Hz, DP Operating System: Windows 10 Pro...'
+  captured_at: '2026-11-26T22:37:17Z'
+  source_date: '2026-11-21T01:25:35Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: '...roken) - 621.24, DDU clean install -> GPU 99%, ~120 FPS (fixed) - 617.42, over-the-top install -> broken - 617.42, DDU clean install -> f...'
+  excerpt_norm_sha256: ad70c6303cff69c8bf40b513830a5516b765c5f33a3863e900d8d36536e0b6f4
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: flicker or wrong colors
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-616-92-nvidia-forum-comment-3635554
+  product_id: nvidia-geforce-game-ready
+  update_version: '616.92'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635554
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: 'Another driver release, yet still no documented fix for the persistent display failures reported after 610.88. For months, users across multiple GPU generations and monitor manufacturers have reported: - Black screens and signal loss - Display detection failures - Fullscreen...'
+  captured_at: '2026-11-26T22:37:17Z'
+  source_date: '2026-11-25T15:35:48Z'
+  target_release_date: '2026-09-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.92'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '616.92'
+  matched_field: report_text
+  matched_context: '...r reference: - [RTX 5090 + triple LG C4 OLED — NVIDIA Surround failures across 616.92 through 621.24; 610.88 works.]([link]) - [RTX 4080 SUPER + high-refresh ultrawi...'
+  excerpt_norm_sha256: 707dc178866125e946782b3d1705ac9a6e21194268601c1db277a71e2df3b4dc
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-616-56-nvidia-forum-comment-3635554
+  product_id: nvidia-geforce-game-ready
+  update_version: '616.56'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635554
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: 'Another driver release, yet still no documented fix for the persistent display failures reported after 610.88. For months, users across multiple GPU generations and monitor manufacturers have reported: - Black screens and signal loss - Display detection failures - Fullscreen...'
+  captured_at: '2026-11-26T22:37:17Z'
+  source_date: '2026-11-25T15:35:48Z'
+  target_release_date: '2026-08-26'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.56'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '616.56'
+  matched_field: report_text
+  matched_context: '...0 + BenQ — black-screen and high-refresh initialization failures dating back to 616.56; 610.88 works.]([link]) - [My RTX 5080 Laptop + LG UltraGear — fullscreen, reso...'
+  excerpt_norm_sha256: 707dc178866125e946782b3d1705ac9a6e21194268601c1db277a71e2df3b4dc
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-610-88-nvidia-forum-comment-3635629
+  product_id: nvidia-geforce-game-ready
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635629
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: Hi! Try 610.88 version. On this version all is fine.
+  captured_at: '2026-11-26T22:37:17Z'
+  source_date: '2026-11-26T06:17:43Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: Hi! Try 610.88 version. On this version all is fine.
+  excerpt_norm_sha256: 5e6823ff838c5fd04425dc6ef5e651485672dda8fe89cffac335014d569a9311
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-610-88-nvidia-forum-comment-3635610
+  product_id: nvidia-geforce-game-ready
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635610
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: I have a similar system with 5080. went from 610.88 to 621.40 and after 24 hours uptime, the file is 874Kb. According to resource monitor nothing nvidia related is writing to the drive during idle - it is mostly NTFS file system and google chrome that constantly writes to the...
+  captured_at: '2026-11-26T22:37:17Z'
+  source_date: '2026-11-25T23:43:22Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: I have a similar system with 5080. went from 610.88 to 621.40 and after 24 hours uptime, the file is 874Kb. According to resource...
+  excerpt_norm_sha256: be7bea1f2c9bef5960d07ad6cc27c19fdcca3662b195cbc95ac27873ba62f942
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: excessive disk writes
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-610-88-nvidia-forum-comment-3635554
+  product_id: nvidia-geforce-game-ready
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635554
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: 'Another driver release, yet still no documented fix for the persistent display failures reported after 610.88. For months, users across multiple GPU generations and monitor manufacturers have reported: - Black screens and signal loss - Display detection failures - Fullscreen...'
+  captured_at: '2026-11-26T22:37:17Z'
+  source_date: '2026-11-25T15:35:48Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: '...yet still no documented fix for the persistent display failures reported after 610.88. For months, users across multiple GPU generations and monitor manufacturers h...'
+  excerpt_norm_sha256: 707dc178866125e946782b3d1705ac9a6e21194268601c1db277a71e2df3b4dc
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-40-nvidia-forum-comment-3635703
+  product_id: nvidia-studio-driver
+  update_version: '621.40'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635703
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: The latest Nvidia driver 621.40 is causing screen flickering and the screen shutting off randomly. One time, it appeared grey. I9 14900k 5090 Aorus Master Ice 64gb RAM
+  captured_at: '2026-11-26T22:38:21Z'
+  source_date: '2026-11-26T18:21:30Z'
+  target_release_date: '2026-11-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.40'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.40'
+  matched_field: report_text
+  matched_context: The latest Nvidia driver 621.40 is causing screen flickering and the screen shutting off randomly. One time, it...
+  excerpt_norm_sha256: 96d4687f2569c6ffd49e4b5cc1007b6cf99a8653fb14962429266de5559d8b3f
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: flicker or wrong colors
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-40-nvidia-forum-comment-3635620
+  product_id: nvidia-studio-driver
+  update_version: '621.40'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635620
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: 10-bit color output is broken (falls back to 8-bit / wrong color output despite 10 bpc being selected in NVCP/NVIDIA App) in all drivers after 617.42 (tested up to 621.40). Rolling back to 617.42 fixes it immediately. model code LS32CG554EUXEN s/n 09CMHK2Y400484J...
+  captured_at: '2026-11-26T22:38:21Z'
+  source_date: '2026-11-26T04:01:41Z'
+  target_release_date: '2026-11-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.40'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.40'
+  matched_field: report_text
+  matched_context: '...pc being selected in NVCP/NVIDIA App) in all drivers after 617.42 (tested up to 621.40). Rolling back to 617.42 fixes it immediately. model code LS32CG554EUXEN s/n 0...'
+  excerpt_norm_sha256: bccfa0b63eca4c1b6e4be485fd25b2b08d9080ebe54b8413f1458ff4ec2c3489
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: flicker or wrong colors
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-40-nvidia-forum-comment-3635604
+  product_id: nvidia-studio-driver
+  update_version: '621.40'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635604
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: 'Hi all, GPU: Asus Astral OC RTX 5080 CPU: AMD Ryzen 9 9950x3d Display Configuration - Display port Asus VG279q 1080p at 144Hz / LG G5 65TV 4k @user HDMI 2.1 Operating System: Win11 pro Driver Regression - on 621.40 Affected Applications/Games: all Issue Description - as soon...'
+  captured_at: '2026-11-26T22:38:21Z'
+  source_date: '2026-11-25T22:06:32Z'
+  target_release_date: '2026-11-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.40'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.40'
+  matched_field: report_text
+  matched_context: '...LG G5 65TV 4k @user HDMI 2.1 Operating System: Win11 pro Driver Regression - on 621.40 Affected Applications/Games: all Issue Description - as soon as I switch to ex...'
+  excerpt_norm_sha256: f5f63c31c8ef2c82d0d4c658fe710e8db9fb81e6bfbea5fc6a4998e9685f139f
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-40-nvidia-forum-comment-3635601
+  product_id: nvidia-studio-driver
+  update_version: '621.40'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635601
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: Hi everyone, First of all, thank you to the NVIDIA team for continuing to look into this issue. Hopefully we're finally getting somewhere with the excessive SSD writes that so many of us have been concerned about. I'm just wondering whether anyone who has installed driver...
+  captured_at: '2026-11-26T22:38:21Z'
+  source_date: '2026-11-25T21:16:36Z'
+  target_release_date: '2026-11-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.40'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.40'
+  matched_field: report_text
+  matched_context: '...en concerned about. I''m just wondering whether anyone who has installed driver 621.40 can confirm if the issue has genuinely been resolved, particularly the excessiv...'
+  excerpt_norm_sha256: ba582e3fee0b712d25ef80af851195ad6a50ac61561866597fe32261ffcce549
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: excessive disk writes
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-40-nvidia-forum-comment-3635610
+  product_id: nvidia-studio-driver
+  update_version: '621.40'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635610
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: I have a similar system with 5080. went from 610.88 to 621.40 and after 24 hours uptime, the file is 874Kb. According to resource monitor nothing nvidia related is writing to the drive during idle - it is mostly NTFS file system and google chrome that constantly writes to the...
+  captured_at: '2026-11-26T22:38:21Z'
+  source_date: '2026-11-25T23:43:22Z'
+  target_release_date: '2026-11-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.40'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.40'
+  matched_field: report_text
+  matched_context: I have a similar system with 5080. went from 610.88 to 621.40 and after 24 hours uptime, the file is 874Kb. According to resource monitor no...
+  excerpt_norm_sha256: be7bea1f2c9bef5960d07ad6cc27c19fdcca3662b195cbc95ac27873ba62f942
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: excessive disk writes
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-40-nvidia-forum-comment-3635592
+  product_id: nvidia-studio-driver
+  update_version: '621.40'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635592
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: 'Hello I am reporting a persistent black screen (No Signal) issue immediately after installing driver version 621.40 on my RTX 5060. - GPU: NVIDIA GeForce RTX 5060 - CPU: AMD Ryzen 5 PRO 5650G - Monitor: MSI PRO MP251 - Connection Type: HDMI - OS: Windows 11 26H2 9974 - Driver...'
+  captured_at: '2026-11-26T22:38:21Z'
+  source_date: '2026-11-25T20:04:30Z'
+  target_release_date: '2026-11-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.40'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_conflicts_with_thread
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.40'
+  matched_field: report_text
+  matched_context: '...tent black screen (No Signal) issue immediately after installing driver version 621.40 on my RTX 5060. - GPU: NVIDIA GeForce RTX 5060 - CPU: AMD Ryzen 5 PRO 5650G -...'
+  excerpt_norm_sha256: 833dc73b06801d12dce8a373d050af80dd328768ec6c01735b571203b4612d39
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-40-nvidia-forum-comment-3635568
+  product_id: nvidia-studio-driver
+  update_version: '621.40'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635568
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: Hi. Can you guys please fix the issue when I restart a PC and instant replay toggle gets reset to OFF? I didn't report that thing because I thought it's a long known issue. But it's another driver release and the issue is still there. RTX 5080FE, driver 621.40, app 11.0.9.585,...
+  captured_at: '2026-11-26T22:38:21Z'
+  source_date: '2026-11-25T17:04:37Z'
+  target_release_date: '2026-11-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.40'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.40'
+  matched_field: report_text
+  matched_context: '...ut it''s another driver release and the issue is still there. RTX 5080FE, driver 621.40, app 11.0.9.585, windows 11'
+  excerpt_norm_sha256: 8c1ec2aa408997a7e1ef36bcf024d0feae60bd49c887a0c57efb5436062f8e06
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: crash or driver reset
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-40-nvidia-forum-comment-3635554
+  product_id: nvidia-studio-driver
+  update_version: '621.40'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635554
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: 'Another driver release, yet still no documented fix for the persistent display failures reported after 610.88. For months, users across multiple GPU generations and monitor manufacturers have reported: - Black screens and signal loss - Display detection failures - Fullscreen...'
+  captured_at: '2026-11-26T22:38:21Z'
+  source_date: '2026-11-25T15:35:48Z'
+  target_release_date: '2026-11-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.40'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.40'
+  matched_field: report_text
+  matched_context: '...leshooting and repeated unsuccessful driver updates. For those who have tested 621.40, have any of these longstanding issues finally been resolved? More importantly...'
+  excerpt_norm_sha256: 707dc178866125e946782b3d1705ac9a6e21194268601c1db277a71e2df3b4dc
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-40-nvidia-forum-comment-3635519
+  product_id: nvidia-studio-driver
+  update_version: '621.40'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635519
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: Same stuttering, crashes and freezing as last driver update. Both 621.24 and 621.40 Game ready drivers have made gaming annoying or impossible. Both Ark and Destiny 2, have issues. CPU Ryzen 5 5500 GPU RTX 3060
+  captured_at: '2026-11-26T22:38:21Z'
+  source_date: '2026-11-25T10:57:16Z'
+  target_release_date: '2026-11-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.40'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.40'
+  matched_field: report_text
+  matched_context: Same stuttering, crashes and freezing as last driver update. Both 621.24 and 621.40 Game ready drivers have made gaming annoying or impossible. Both Ark and Desti...
+  excerpt_norm_sha256: 3e117e8fb2a72821f4de4a4578f057d857e40718c1d3f4e926c91979dcac655b
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: crash or driver reset
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-40-nvidia-forum-comment-3635503
+  product_id: nvidia-studio-driver
+  update_version: '621.40'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635503
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: 'Driver Version: 621.40 WHQL (related to bug [7116722]) [screenshot: [link]] GPU: asus rog strix scar 3 with 2070 RTX OS: Windows 10 Issue Summary: After updating to GeForce Driver 621.40, NVDisplay.Container.exe (NVIDIA Display Container LS) continues to perform persistent...'
+  captured_at: '2026-11-26T22:38:21Z'
+  source_date: '2026-11-25T07:32:55Z'
+  target_release_date: '2026-11-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.40'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.40'
+  matched_field: report_text
+  matched_context: 'Driver Version: 621.40 WHQL (related to bug [7116722]) [screenshot: [link]] GPU: asus rog strix scar 3...'
+  excerpt_norm_sha256: 43b00f5042bf3bfc92355bc023df17ec6a108032de782750a3fb97688ac4fd54
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: excessive disk writes
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-24-nvidia-forum-comment-3635615
+  product_id: nvidia-studio-driver
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635615
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: Hey everyone! I need some help. I have an NVIDIA GeForce RTX 2060 SUPER, (W11) and I'm experiencing black screen issues when launching games that use EasyAnti-Cheat. My monitor loses signal (both DisplayPort and HDMI), the audio stops, and my PC becomes completely...
+  captured_at: '2026-11-26T22:38:21Z'
+  source_date: '2026-11-26T01:29:53Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...drivers using DDU and installing older driver versions, but the issue persists (621.24, 621.01). Windows also reports a LiveKernelEvent 141 error. Other games that d...'
+  excerpt_norm_sha256: 967bdb6286c5feb39a9aaae5edf7f78d850e0c08366c6cf844c993340c0810c6
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: crash or driver reset
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-24-nvidia-forum-comment-3635601
+  product_id: nvidia-studio-driver
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635601
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: Hi everyone, First of all, thank you to the NVIDIA team for continuing to look into this issue. Hopefully we're finally getting somewhere with the excessive SSD writes that so many of us have been concerned about. I'm just wondering whether anyone who has installed driver...
+  captured_at: '2026-11-26T22:38:21Z'
+  source_date: '2026-11-25T21:16:36Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...ething I''d really like to avoid. I originally experienced concerns with driver 621.24 and have since rolled back to 619.42, where my system has been behaving much mo...'
+  excerpt_norm_sha256: ba582e3fee0b712d25ef80af851195ad6a50ac61561866597fe32261ffcce549
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: excessive disk writes
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-24-nvidia-forum-comment-3635592
+  product_id: nvidia-studio-driver
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635592
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: 'Hello I am reporting a persistent black screen (No Signal) issue immediately after installing driver version 621.40 on my RTX 5060. - GPU: NVIDIA GeForce RTX 5060 - CPU: AMD Ryzen 5 PRO 5650G - Monitor: MSI PRO MP251 - Connection Type: HDMI - OS: Windows 11 26H2 9974 - Driver...'
+  captured_at: '2026-11-26T22:38:21Z'
+  source_date: '2026-11-25T20:04:30Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: version_role_rollback_target
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...e, ran DDU to completely remove 621.40, and rolled back to NVIDIA Studio Driver 621.24. With 621.24 installed, the HDMI signal works immediately and the system is 100...'
+  excerpt_norm_sha256: 833dc73b06801d12dce8a373d050af80dd328768ec6c01735b571203b4612d39
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-24-nvidia-forum-comment-3635554
+  product_id: nvidia-studio-driver
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635554
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: 'Another driver release, yet still no documented fix for the persistent display failures reported after 610.88. For months, users across multiple GPU generations and monitor manufacturers have reported: - Black screens and signal loss - Display detection failures - Fullscreen...'
+  captured_at: '2026-11-26T22:38:21Z'
+  source_date: '2026-11-25T15:35:48Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...[RTX 5090 + triple LG C4 OLED — NVIDIA Surround failures across 616.92 through 621.24; 610.88 works.]([link]) - [RTX 4080 SUPER + high-refresh ultrawide — persistent...'
+  excerpt_norm_sha256: 707dc178866125e946782b3d1705ac9a6e21194268601c1db277a71e2df3b4dc
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-24-nvidia-forum-comment-3635519
+  product_id: nvidia-studio-driver
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635519
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: Same stuttering, crashes and freezing as last driver update. Both 621.24 and 621.40 Game ready drivers have made gaming annoying or impossible. Both Ark and Destiny 2, have issues. CPU Ryzen 5 5500 GPU RTX 3060
+  captured_at: '2026-11-26T22:38:21Z'
+  source_date: '2026-11-25T10:57:16Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: Same stuttering, crashes and freezing as last driver update. Both 621.24 and 621.40 Game ready drivers have made gaming annoying or impossible. Both Ar...
+  excerpt_norm_sha256: 3e117e8fb2a72821f4de4a4578f057d857e40718c1d3f4e926c91979dcac655b
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: crash or driver reset
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-14-nvidia-forum-comment-3635681
+  product_id: nvidia-studio-driver
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635681
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: I don't see many people talking about this, but advanced shader delivery doesn't work anymore with the latest two drivers. I tested this with FF7 remake, the feature works fine via the 621.14 driver but as soon as I updated my drivers and downloaded the update via the Xbox app...
+  captured_at: '2026-11-26T22:38:21Z'
+  source_date: '2026-11-26T13:40:17Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '...test two drivers. I tested this with FF7 remake, the feature works fine via the 621.14 driver but as soon as I updated my drivers and downloaded the update via the Xb...'
+  excerpt_norm_sha256: 389790cde3d2916cec8f477823d6eac8296eb9e79b2d5cdedb528c31f1df372a
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-14-nvidia-forum-comment-3635554
+  product_id: nvidia-studio-driver
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635554
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: 'Another driver release, yet still no documented fix for the persistent display failures reported after 610.88. For months, users across multiple GPU generations and monitor manufacturers have reported: - Black screens and signal loss - Display detection failures - Fullscreen...'
+  captured_at: '2026-11-26T22:38:21Z'
+  source_date: '2026-11-25T15:35:48Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '...) - [RTX 4080 SUPER + high-refresh ultrawide — persistent black screens through 621.14; WinDbg/ETW diagnostics provided; 610.88 works.]([link]) - [RTX 5070 + Samsung...'
+  excerpt_norm_sha256: 707dc178866125e946782b3d1705ac9a6e21194268601c1db277a71e2df3b4dc
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-studio-driver-617-42-nvidia-forum-comment-3635620
+  product_id: nvidia-studio-driver
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635620
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: 10-bit color output is broken (falls back to 8-bit / wrong color output despite 10 bpc being selected in NVCP/NVIDIA App) in all drivers after 617.42 (tested up to 621.40). Rolling back to 617.42 fixes it immediately. model code LS32CG554EUXEN s/n 09CMHK2Y400484J...
+  captured_at: '2026-11-26T22:38:21Z'
+  source_date: '2026-11-26T04:01:41Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: '...r output despite 10 bpc being selected in NVCP/NVIDIA App) in all drivers after 617.42 (tested up to 621.40). Rolling back to 617.42 fixes it immediately. model code...'
+  excerpt_norm_sha256: bccfa0b63eca4c1b6e4be485fd25b2b08d9080ebe54b8413f1458ff4ec2c3489
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: flicker or wrong colors
+  facts_rule_version: v1
+- id: nvidia-studio-driver-617-42-nvidia-forum-comment-3635604
+  product_id: nvidia-studio-driver
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635604
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: 'Hi all, GPU: Asus Astral OC RTX 5080 CPU: AMD Ryzen 9 9950x3d Display Configuration - Display port Asus VG279q 1080p at 144Hz / LG G5 65TV 4k @user HDMI 2.1 Operating System: Win11 pro Driver Regression - on 621.40 Affected Applications/Games: all Issue Description - as soon...'
+  captured_at: '2026-11-26T22:38:21Z'
+  source_date: '2026-11-25T22:06:32Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: '...a single display setup asus monitor locks in black screen I had to roll back to 617.42, no issues in that version. Steps to Reproduce - Put display settings in extend...'
+  excerpt_norm_sha256: f5f63c31c8ef2c82d0d4c658fe710e8db9fb81e6bfbea5fc6a4998e9685f139f
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-studio-driver-617-42-nvidia-forum-comment-3634925
+  product_id: nvidia-studio-driver
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3634925
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: '[RESOLVED - not a driver bug] DLSS Frame Generation slowdown caused by non-clean driver installs (Phantom Blade Zero) BODY: GPU: RTX 4070 SUPER 12GB CPU: AMD Ryzen 7 9700X (8C/16T) Display Configuration: TITAN ARMY P27H2V, 3840x2160 @ 120Hz, DP Operating System: Windows 10 Pro...'
+  captured_at: '2026-11-26T22:38:21Z'
+  source_date: '2026-11-21T01:25:35Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: '...roken) - 621.24, DDU clean install -> GPU 99%, ~120 FPS (fixed) - 617.42, over-the-top install -> broken - 617.42, DDU clean install -> f...'
+  excerpt_norm_sha256: ad70c6303cff69c8bf40b513830a5516b765c5f33a3863e900d8d36536e0b6f4
+  title_dedup_sha256: 308af678672c73415c31387f01d6d5582a0b2787adb289b69e8d3efbf315492b
+  issue_bucket: flicker or wrong colors
+  facts_rule_version: v1
+- id: nvidia-studio-driver-616-92-nvidia-forum-comment-3635554
+  product_id: nvidia-studio-driver
+  update_version: '616.92'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635554
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: 'Another driver release, yet still no documented fix for the persistent display failures reported after 610.88. For months, users across multiple GPU generations and monitor manufacturers have reported: - Black screens and signal loss - Display detection failures - Fullscreen...'
+  captured_at: '2026-11-26T22:38:21Z'
+  source_date: '2026-11-25T15:35:48Z'
+  target_release_date: '2026-09-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.92'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '616.92'
+  matched_field: report_text
+  matched_context: '...r reference: - [RTX 5090 + triple LG C4 OLED — NVIDIA Surround failures across 616.92 through 621.24; 610.88 works.]([link]) - [RTX 4080 SUPER + high-refresh ultrawi...'
+  excerpt_norm_sha256: 707dc178866125e946782b3d1705ac9a6e21194268601c1db277a71e2df3b4dc
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-studio-driver-616-56-nvidia-forum-comment-3635554
+  product_id: nvidia-studio-driver
+  update_version: '616.56'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635554
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: 'Another driver release, yet still no documented fix for the persistent display failures reported after 610.88. For months, users across multiple GPU generations and monitor manufacturers have reported: - Black screens and signal loss - Display detection failures - Fullscreen...'
+  captured_at: '2026-11-26T22:38:21Z'
+  source_date: '2026-11-25T15:35:48Z'
+  target_release_date: '2026-08-26'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.56'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '616.56'
+  matched_field: report_text
+  matched_context: '...0 + BenQ — black-screen and high-refresh initialization failures dating back to 616.56; 610.88 works.]([link]) - [My RTX 5080 Laptop + LG UltraGear — fullscreen, reso...'
+  excerpt_norm_sha256: 707dc178866125e946782b3d1705ac9a6e21194268601c1db277a71e2df3b4dc
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-studio-driver-610-88-nvidia-forum-comment-3635629
+  product_id: nvidia-studio-driver
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635629
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: Hi! Try 610.88 version. On this version all is fine.
+  captured_at: '2026-11-26T22:38:21Z'
+  source_date: '2026-11-26T06:17:43Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: Hi! Try 610.88 version. On this version all is fine.
+  excerpt_norm_sha256: 5e6823ff838c5fd04425dc6ef5e651485672dda8fe89cffac335014d569a9311
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: nvidia-studio-driver-610-88-nvidia-forum-comment-3635610
+  product_id: nvidia-studio-driver
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635610
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: I have a similar system with 5080. went from 610.88 to 621.40 and after 24 hours uptime, the file is 874Kb. According to resource monitor nothing nvidia related is writing to the drive during idle - it is mostly NTFS file system and google chrome that constantly writes to the...
+  captured_at: '2026-11-26T22:38:21Z'
+  source_date: '2026-11-25T23:43:22Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: I have a similar system with 5080. went from 610.88 to 621.40 and after 24 hours uptime, the file is 874Kb. According to resource...
+  excerpt_norm_sha256: be7bea1f2c9bef5960d07ad6cc27c19fdcca3662b195cbc95ac27873ba62f942
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: excessive disk writes
+  facts_rule_version: v1
+- id: nvidia-studio-driver-610-88-nvidia-forum-comment-3635554
+  product_id: nvidia-studio-driver
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635554
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: 'Another driver release, yet still no documented fix for the persistent display failures reported after 610.88. For months, users across multiple GPU generations and monitor manufacturers have reported: - Black screens and signal loss - Display detection failures - Fullscreen...'
+  captured_at: '2026-11-26T22:38:21Z'
+  source_date: '2026-11-25T15:35:48Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: '...yet still no documented fix for the persistent display failures reported after 610.88. For months, users across multiple GPU generations and monitor manufacturers h...'
+  excerpt_norm_sha256: 707dc178866125e946782b3d1705ac9a6e21194268601c1db277a71e2df3b4dc
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: obs-studio-33-0-3-obs-forum-thread-196989
+  product_id: obs-studio
+  update_version: 33.0.3
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/virtual-camera-in-obs-studio-33-0-3-is-crashing-both-32-and-64-bit-modes.196989/
+  parent_title: Virtual camera in OBS studio 33.0.3 is crashing both 32 and 64 bit modes
+  report_title: Virtual camera in OBS studio 33.0.3 is crashing both 32 and 64 bit modes
+  report_text_excerpt: 'I have carefully uninstalled and re-registered camera module. Both 32 and 64 bit plugins are crashing. I am observing this crash for 64 bit module: > obs-virtualcam-module64.dll!nv12_do_scale() + 0xe7 bytes obs-virtualcam-...'
+  captured_at: '2026-11-26T22:42:02Z'
+  source_date: '2026-11-26'
+  patch_version_matched: true
+  matched_version: 33.0.3
+  match_basis: title
+  counted: true
+  exclusion_reason: null
+  issue_theme: camera/source regression
+  workflow_area: camera source workflow
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: obs_forum
+  excerpt_norm_sha256: 5a67c250792a33b3ecbb88dcdf49f8decc1408fddd2c87b73b00e79845c35cdc
+  title_dedup_sha256: 68fd6de8be0329642763127818a070873ee8a6128da6e673df9a0cb5426a9f34
+  issue_bucket: capture-source issues
+  facts_rule_version: v1
