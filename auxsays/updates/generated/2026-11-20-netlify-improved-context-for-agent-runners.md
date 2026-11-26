@@ -17,8 +17,8 @@ update_version: Improved context for Agent Runners
 update_logo_text: NET
 update_published_at: '2026-11-20T00:00:00Z'
 update_last_checked: '2026-11-25T01:32:01Z'
-source_last_checked: '2026-11-26T01:35:11Z'
-official_body_last_checked: '2026-11-26T01:35:11Z'
+source_last_checked: '2026-11-26T11:02:28Z'
+official_body_last_checked: '2026-11-26T11:02:28Z'
 record_last_updated: '2026-11-25T01:32:01Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -82,6 +82,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-11-26T01:35:11Z'
+  url: https://www.netlify.com/changelog/2026-11-20-agent-runners-improved-context/
+  status: captured-from-official-html
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-26T11:02:28Z'
   url: https://www.netlify.com/changelog/2026-11-20-agent-runners-improved-context/
   status: captured-from-official-html
   body_captured: true
