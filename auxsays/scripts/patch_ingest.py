@@ -35,7 +35,7 @@ from lib.http import fetch_text
 from lib.normalize import split_front_matter, strip_tags, utc_now
 from lib.state import load_state, save_state, is_seen, mark_seen, update_source_success, update_source_error, source_state, SEEN_RETENTION, record_provenance
 from lib import ingest_health
-from lib.write_update_record import refresh_existing_record, write_record
+from lib.write_update_record import publication_date_problem, refresh_existing_record, write_record
 from lib.version_landing import ensure_for_record
 
 DEFAULT_CONFIG = Path("auxsays/_data/patch_ingestion_sources.yml")
@@ -345,6 +345,19 @@ def run_source(source: dict[str, Any], args: argparse.Namespace, state: dict[str
         if not record_id:
             record_id = f"{product_id}:{record.get('source_url') or record.get('title') or record.get('version')}"
             record["record_id"] = record_id
+
+        # WRITE-SIDE DATE GUARD. A present-but-non-ISO date ("November 18, 2026") becomes the
+        # record's filename prefix and its update_published_at (3c107ec0 wrote "November 1-....md").
+        # Refuse THAT record, say why, keep the rest of the run; it takes no creation slot and is not
+        # marked seen, so a fixed adapter creates it on a later run. Checked before the selection so
+        # a dry run reports it exactly as a write run would. An EMPTY date is not handled here: the
+        # writer's MissingPublicationDate stays loud on purpose.
+        date_problem = publication_date_problem(record) if str(record.get("published_at") or "").strip() else ""
+        if date_problem:
+            skipped.append({"record_id": record_id, "reason": "refused-invalid-publication-date",
+                            "detail": date_problem})
+            print(f"[WARN] {product_id}: refused record {record_id}: {date_problem}", file=sys.stderr)
+            continue
 
         # State/ordering for progressive backfill (records arrive newest-first):
         #   - already-ingested records: refresh only the newest `per_run_limit` (keeps their
