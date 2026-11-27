@@ -17,8 +17,8 @@ update_version: '621.40'
 update_logo_text: NSD
 update_published_at: '2026-11-24T00:00:00Z'
 update_last_checked: '2026-11-25T11:29:06Z'
-source_last_checked: '2026-11-27T00:11:28Z'
-official_body_last_checked: '2026-11-27T00:11:28Z'
+source_last_checked: '2026-11-27T11:08:49Z'
+official_body_last_checked: '2026-11-27T11:08:49Z'
 record_last_updated: '2026-11-25T11:29:06Z'
 patch_file_size: 1.04 GB
 patch_file_size_note: Installer size as NVIDIA lists it for the Windows desktop DCH package.
@@ -94,6 +94,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-11-27T00:11:28Z'
+  url: https://www.nvidia.com/en-us/drivers/details/288692/
+  status: captured-from-official-nvidia-driver-listing
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-27T11:08:49Z'
   url: https://www.nvidia.com/en-us/drivers/details/288692/
   status: captured-from-official-nvidia-driver-listing
   body_captured: true
