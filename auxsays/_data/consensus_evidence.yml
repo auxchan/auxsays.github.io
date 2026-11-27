@@ -113110,3 +113110,704 @@ evidence:
   title_dedup_sha256: 67bf28e23f9fa417215417e84bb798810a9aec506eebc1c4d7cc95528951afb4
   issue_bucket: audio mixer or routing issues
   facts_rule_version: v1
+- id: acrobat-23-008-20470-adobe-community-bug-report-https-community-adobe-com-questions-9-inserting-pages-to-a-large-pdf-hangs-1290775
+  product_id: adobe-acrobat-pro
+  update_version: 23.008.20470
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/inserting-pages-to-a-large-pdf-hangs-1290775
+  parent_title: inserting pages to a (large) pdf hangs
+  report_title: inserting pages to a (large) pdf hangs
+  report_text_excerpt: inserting pages to a (large) pdf hangs it's been like this since v11.0.23 on Win 10 pro and it remains the same now that I'm upgraded to 2023.008.20470 on Win 11 pro... when I try to insert a smaller pdf (a few hundred KB) into a larger one (a few MB), acrobat hangs probably 3...
+  captured_at: '2026-11-27T21:12:54Z'
+  source_date: '2024-02-28'
+  target_release_date: '2024-01-16'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 2023.008.20470
+  match_basis: exact_version_alias
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 8843faa89346ac8b4eb227d372b5b4bd7566a9707be0c6fc65ef48adc0116aa8
+  title_dedup_sha256: 43a9da09dba6840f364a24dc20dd958c4a9f9938f6c21a2ac0319823961544dd
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+- id: acrobat-23-008-20470-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-crash-randomly-after-update-23-008-20470-1289731
+  product_id: adobe-acrobat-pro
+  update_version: 23.008.20470
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-crash-randomly-after-update-23-008-20470-1289731
+  parent_title: Acrobat crash randomly after update 23.008.20470
+  report_title: Acrobat crash randomly after update 23.008.20470
+  report_text_excerpt: Acrobat crash randomly after update 23.008.20470 After updating to 23.008.20470, Acrobat crashes randomly when I open or right-click to print a PDF, even with the same file. Any ideas?
+  captured_at: '2026-11-27T21:12:54Z'
+  source_date: '2024-01-29'
+  target_release_date: '2024-01-16'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 23.008.20470
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: e56b163aa937ca61ef5735ffe3954a81613abf6e1e04aa5e1f70fcd29c6c1749
+  title_dedup_sha256: dc7c5f9a7d2161868ee34c32435a24af0c2098cd15782647294620789d97db6b
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+- id: acrobat-23-008-20458-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-pro-rev-23-008-20458-still-freeze-1289104
+  product_id: adobe-acrobat-pro
+  update_version: 23.008.20458
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-pro-rev-23-008-20458-still-freeze-1289104
+  parent_title: acrobat pro  rev 23.008.20458 still freeze
+  report_title: acrobat pro  rev 23.008.20458 still freeze
+  report_text_excerpt: acrobat pro rev 23.008.20458 still freeze I have upgraded my acrobat pro with the last rev 23.008.20458 but it's still freezing while opening files, printing pages.
+  captured_at: '2026-11-27T21:12:54Z'
+  source_date: '2024-01-10'
+  target_release_date: '2024-01-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 23.008.20458
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 5ede3be6bf6264ecd2362baed394825cb74c554794daa1aee02076f0d3af82f5
+  title_dedup_sha256: 82fa5f8b910de3b6bbde6c3930905a9500505bc990157b919b7c807f658f38cd
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+- id: acrobat-25-001-20428-adobe-community-bug-report-https-community-adobe-com-questions-624-unable-to-update-acrobat-dc-by-acrobatdcupd2500120428-dm
+  product_id: adobe-acrobat-reader
+  update_version: 25.001.20428
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-624/unable-to-update-acrobat-dc-by-acrobatdcupd2500120428-dmg-682584
+  parent_title: Unable to update Acrobat DC by AcrobatDCUpd2500120428.dmg
+  report_title: Unable to update Acrobat DC by AcrobatDCUpd2500120428.dmg
+  report_text_excerpt: Unable to update Acrobat DC by AcrobatDCUpd2500120428.dmg Hi there, I'd like to update Acrobat DC to the version 25.001.20428 by https://ardownload2.adobe.com/pub/adobe/acrobat/mac/AcrobatDC/2500120428/AcrobatDCUpd2500120428.dmg . However the AcrobatDCUpd2500120428.pkg cannot...
+  captured_at: '2026-11-27T21:35:31Z'
+  source_date: '2025-03-05'
+  target_release_date: '2025-03-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 25.001.20428
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified Acrobat issue
+  workflow_area: Acrobat workflow
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 04e824447d3140b09bd5d0cf7a5e040dcc7f2f2a920572a48e68bb5e4bbd12ff
+  title_dedup_sha256: 95f8a9498a3b53694fbd431c258ec5d336d9966c619d03b49dc96aabd2937f73
+  issue_bucket: unspecified acrobat issue
+  facts_rule_version: v1
+- id: acrobat-24-005-20421-adobe-community-bug-report-https-community-adobe-com-questions-9-unable-to-open-pdf-something-went-wrong-a-running-instance
+  product_id: adobe-acrobat-reader
+  update_version: 24.005.20421
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/unable-to-open-pdf-something-went-wrong-a-running-instance-of-acrobat-has-caused-an-error-1300631
+  parent_title: Unable to open PDF. Something went wrong. A running instance of Acrobat has caused an error.
+  report_title: Unable to open PDF. Something went wrong. A running instance of Acrobat has caused an error.
+  report_text_excerpt: 'Unable to open PDF. Something went wrong. A running instance of Acrobat has caused an error. Bug summary : There is an ongoing issue with the most recent update for Acrobat (version 24.005.20421) that may prevent you from opening PDFs after they have been saved to a network...'
+  captured_at: '2026-11-27T21:35:31Z'
+  source_date: '2025-02-27'
+  target_release_date: '2025-02-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 24.005.20421
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified Acrobat issue
+  workflow_area: Acrobat workflow
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 1ba9175b09585df7f21c632cbb6adf481db89dfb0f3b15e71145ede61ce78daf
+  title_dedup_sha256: 1009e74a0ebd527ea9bba3de8129a184786ed5746267e35379cbce82690747d9
+  issue_bucket: unspecified acrobat issue
+  facts_rule_version: v1
+- id: comfyui-0-46-0-github-issue-18028
+  product_id: comfyui
+  update_version: 0.46.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/18028
+  parent_title: 'DynamicVRAM on ROCm: Flux.1-dev bf16 renders solid black (NaN) at 20 steps when the model doesn''t fit in VRAM'
+  report_title: 'DynamicVRAM on ROCm: Flux.1-dev bf16 renders solid black (NaN) at 20 steps when the model doesn''t fit in VRAM'
+  report_text_excerpt: 'DynamicVRAM on ROCm: Flux.1-dev bf16 renders solid black (NaN) at 20 steps when the model doesn''t fit in VRAM ### Custom Node Testing - [x] I have tried disabling custom nodes and the issue persists (see [how to disable custom...'
+  captured_at: '2026-11-27T22:06:46Z'
+  source_date: '2026-11-27'
+  target_release_date: '2026-11-18'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.46.0
+  match_basis: core_version_declaration
+  counted: true
+  exclusion_reason: null
+  issue_theme: wrong or corrupted output
+  workflow_area: generation output
+  platform: linux
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: github_issues
+  matched_text: 0.46.0
+  matched_field: report_text
+  matched_context: '...checks against `>= (7, 14)`. - torch 2.15.0+rocm10.0, Python 3.13.18 - ComfyUI 0.46.0 (commit 2b33af494), comfy-aimdo 0.6.0, comfy-kitchen 0.2.42 - Launch flags duri...'
+  excerpt_norm_sha256: 670c49330059f78924f1fc9ffcc1107ef1908a678d69841e690f72df0c316644
+  title_dedup_sha256: f0ec994f22c1d13d21ab093b1e9b8f52fde31ea6fcb82106c0dd1cc05ac161b2
+  issue_bucket: wrong or corrupted output
+  facts_rule_version: v1
+- id: microsoft-teams-26304-1207-5384-858-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6083750-after-i-made-some-edits-email-in-meeti
+  product_id: microsoft-teams
+  update_version: 26304.1207.5384.858
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6083750/after-i-made-some-edits-email-in-meeting-interface
+  parent_title: After I made some edits email in  meeting interface, I suddenly couldn't hear any audio during the meeting. - Microsoft Q&A
+  report_title: After I made some edits email in  meeting interface, I suddenly couldn't hear any audio during the meeting. - Microsoft Q&A
+  report_text_excerpt: After I made some edits email in meeting interface, I suddenly couldn't hear any audio during the meeting. Previously, I couldn't edit emails during web meetings; now, after the fix, it’s stopped picking up audio. what a nuisance.
+  captured_at: '2026-11-27T22:10:05Z'
+  source_date: '2026-11-26'
+  target_release_date: '2026-11-23'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: audio / video failure
+  workflow_area: meeting audio and video
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 755d914ec56600cd5e406421a313780c691598f741dbf9f25d9f66561ebfb4f9
+  title_dedup_sha256: 1517e9b83991aba8c727e60ca8ca3a78494c07be2a04906c22cd93566821d5be
+  issue_bucket: audio / video failure
+  facts_rule_version: v1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6083750-after-i-made-some-edits-email-in-meeti
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6083750/after-i-made-some-edits-email-in-meeting-interface
+  parent_title: After I made some edits email in  meeting interface, I suddenly couldn't hear any audio during the meeting. - Microsoft Q&A
+  report_title: After I made some edits email in  meeting interface, I suddenly couldn't hear any audio during the meeting. - Microsoft Q&A
+  report_text_excerpt: After I made some edits email in meeting interface, I suddenly couldn't hear any audio during the meeting. Previously, I couldn't edit emails during web meetings; now, after the fix, it’s stopped picking up audio. what a nuisance.
+  captured_at: '2026-11-27T22:10:05Z'
+  source_date: '2026-11-26'
+  target_release_date: '2026-11-05'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: audio / video failure
+  workflow_area: meeting audio and video
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 755d914ec56600cd5e406421a313780c691598f741dbf9f25d9f66561ebfb4f9
+  title_dedup_sha256: 1517e9b83991aba8c727e60ca8ca3a78494c07be2a04906c22cd93566821d5be
+  issue_bucket: audio / video failure
+  facts_rule_version: v1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6083750-after-i-made-some-edits-email-in-meeti
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6083750/after-i-made-some-edits-email-in-meeting-interface
+  parent_title: After I made some edits email in  meeting interface, I suddenly couldn't hear any audio during the meeting. - Microsoft Q&A
+  report_title: After I made some edits email in  meeting interface, I suddenly couldn't hear any audio during the meeting. - Microsoft Q&A
+  report_text_excerpt: After I made some edits email in meeting interface, I suddenly couldn't hear any audio during the meeting. Previously, I couldn't edit emails during web meetings; now, after the fix, it’s stopped picking up audio. what a nuisance.
+  captured_at: '2026-11-27T22:10:05Z'
+  source_date: '2026-11-26'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: audio / video failure
+  workflow_area: meeting audio and video
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: 755d914ec56600cd5e406421a313780c691598f741dbf9f25d9f66561ebfb4f9
+  title_dedup_sha256: 1517e9b83991aba8c727e60ca8ca3a78494c07be2a04906c22cd93566821d5be
+  issue_bucket: audio / video failure
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6083750-after-i-made-some-edits-email-in-meeti
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6083750/after-i-made-some-edits-email-in-meeting-interface
+  parent_title: After I made some edits email in  meeting interface, I suddenly couldn't hear any audio during the meeting. - Microsoft Q&A
+  report_title: After I made some edits email in  meeting interface, I suddenly couldn't hear any audio during the meeting. - Microsoft Q&A
+  report_text_excerpt: After I made some edits email in meeting interface, I suddenly couldn't hear any audio during the meeting. Previously, I couldn't edit emails during web meetings; now, after the fix, it’s stopped picking up audio. what a nuisance.
+  captured_at: '2026-11-27T22:10:05Z'
+  source_date: '2026-11-26'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: audio / video failure
+  workflow_area: meeting audio and video
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: 755d914ec56600cd5e406421a313780c691598f741dbf9f25d9f66561ebfb4f9
+  title_dedup_sha256: 1517e9b83991aba8c727e60ca8ca3a78494c07be2a04906c22cd93566821d5be
+  issue_bucket: audio / video failure
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6083750-after-i-made-some-edits-email-in-meeti
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6083750/after-i-made-some-edits-email-in-meeting-interface
+  parent_title: After I made some edits email in  meeting interface, I suddenly couldn't hear any audio during the meeting. - Microsoft Q&A
+  report_title: After I made some edits email in  meeting interface, I suddenly couldn't hear any audio during the meeting. - Microsoft Q&A
+  report_text_excerpt: After I made some edits email in meeting interface, I suddenly couldn't hear any audio during the meeting. Previously, I couldn't edit emails during web meetings; now, after the fix, it’s stopped picking up audio. what a nuisance.
+  captured_at: '2026-11-27T22:10:05Z'
+  source_date: '2026-11-26'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: audio / video failure
+  workflow_area: meeting audio and video
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 755d914ec56600cd5e406421a313780c691598f741dbf9f25d9f66561ebfb4f9
+  title_dedup_sha256: 1517e9b83991aba8c727e60ca8ca3a78494c07be2a04906c22cd93566821d5be
+  issue_bucket: audio / video failure
+  facts_rule_version: v1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6083750-after-i-made-some-edits-email-in-meeti
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6083750/after-i-made-some-edits-email-in-meeting-interface
+  parent_title: After I made some edits email in  meeting interface, I suddenly couldn't hear any audio during the meeting. - Microsoft Q&A
+  report_title: After I made some edits email in  meeting interface, I suddenly couldn't hear any audio during the meeting. - Microsoft Q&A
+  report_text_excerpt: After I made some edits email in meeting interface, I suddenly couldn't hear any audio during the meeting. Previously, I couldn't edit emails during web meetings; now, after the fix, it’s stopped picking up audio. what a nuisance.
+  captured_at: '2026-11-27T22:10:05Z'
+  source_date: '2026-11-26'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: audio / video failure
+  workflow_area: meeting audio and video
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 755d914ec56600cd5e406421a313780c691598f741dbf9f25d9f66561ebfb4f9
+  title_dedup_sha256: 1517e9b83991aba8c727e60ca8ca3a78494c07be2a04906c22cd93566821d5be
+  issue_bucket: audio / video failure
+  facts_rule_version: v1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6083750-after-i-made-some-edits-email-in-meeti
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6083750/after-i-made-some-edits-email-in-meeting-interface
+  parent_title: After I made some edits email in  meeting interface, I suddenly couldn't hear any audio during the meeting. - Microsoft Q&A
+  report_title: After I made some edits email in  meeting interface, I suddenly couldn't hear any audio during the meeting. - Microsoft Q&A
+  report_text_excerpt: After I made some edits email in meeting interface, I suddenly couldn't hear any audio during the meeting. Previously, I couldn't edit emails during web meetings; now, after the fix, it’s stopped picking up audio. what a nuisance.
+  captured_at: '2026-11-27T22:10:05Z'
+  source_date: '2026-11-26'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: audio / video failure
+  workflow_area: meeting audio and video
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: 755d914ec56600cd5e406421a313780c691598f741dbf9f25d9f66561ebfb4f9
+  title_dedup_sha256: 1517e9b83991aba8c727e60ca8ca3a78494c07be2a04906c22cd93566821d5be
+  issue_bucket: audio / video failure
+  facts_rule_version: v1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6083750-after-i-made-some-edits-email-in-meeti
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6083750/after-i-made-some-edits-email-in-meeting-interface
+  parent_title: After I made some edits email in  meeting interface, I suddenly couldn't hear any audio during the meeting. - Microsoft Q&A
+  report_title: After I made some edits email in  meeting interface, I suddenly couldn't hear any audio during the meeting. - Microsoft Q&A
+  report_text_excerpt: After I made some edits email in meeting interface, I suddenly couldn't hear any audio during the meeting. Previously, I couldn't edit emails during web meetings; now, after the fix, it’s stopped picking up audio. what a nuisance.
+  captured_at: '2026-11-27T22:10:05Z'
+  source_date: '2026-11-26'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: audio / video failure
+  workflow_area: meeting audio and video
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 755d914ec56600cd5e406421a313780c691598f741dbf9f25d9f66561ebfb4f9
+  title_dedup_sha256: 1517e9b83991aba8c727e60ca8ca3a78494c07be2a04906c22cd93566821d5be
+  issue_bucket: audio / video failure
+  facts_rule_version: v1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6083750-after-i-made-some-edits-email-in-meeti
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6083750/after-i-made-some-edits-email-in-meeting-interface
+  parent_title: After I made some edits email in  meeting interface, I suddenly couldn't hear any audio during the meeting. - Microsoft Q&A
+  report_title: After I made some edits email in  meeting interface, I suddenly couldn't hear any audio during the meeting. - Microsoft Q&A
+  report_text_excerpt: After I made some edits email in meeting interface, I suddenly couldn't hear any audio during the meeting. Previously, I couldn't edit emails during web meetings; now, after the fix, it’s stopped picking up audio. what a nuisance.
+  captured_at: '2026-11-27T22:10:05Z'
+  source_date: '2026-11-26'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: audio / video failure
+  workflow_area: meeting audio and video
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 755d914ec56600cd5e406421a313780c691598f741dbf9f25d9f66561ebfb4f9
+  title_dedup_sha256: 1517e9b83991aba8c727e60ca8ca3a78494c07be2a04906c22cd93566821d5be
+  issue_bucket: audio / video failure
+  facts_rule_version: v1
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6083884-question-6083884
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6083884/2026-11-preview-update-kb5132057-26300-10075-not-d
+  parent_title: 2026-11 Preview Update (KB5132057) (26300.10075) not downloading anymore - Microsoft Q&A
+  report_title: 2026-11 Preview Update (KB5132057) (26300.10075) not downloading anymore - Microsoft Q&A
+  report_text_excerpt: 2026-11 Preview Update (KB5132057) (26300.10075) not downloading anymore - Microsoft Q&A This update takes for ever to start downloading then stops many times then will not install. I've done everything suggested with command prompt & have rebooted & trying to install this...
+  captured_at: '2026-11-27T22:22:19Z'
+  source_date: '2026-11-27'
+  target_release_date: '2026-11-19'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.10075'
+  match_basis: exact_os_build
+  matched_kb: KB5132057
+  matched_os_build: '26300.10075'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.10075'
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: 8459f4c6be7c01e9a986e901cf279c321f071d00023e64f1ccbd24164fd8770b
+  title_dedup_sha256: eaeb5f498c9f6d780a4430ee85529a1a7654ebaef9e8641b3896294e252ae64e
+  issue_bucket: update/install failure
+  facts_rule_version: v1
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-learn-6084107-question-6084107
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6084107/how-to-fix-windows-security-update-refusing-to-ins
+  parent_title: How to fix Windows "Security Update" refusing to install - Microsoft Q&A
+  report_title: How to fix Windows "Security Update" refusing to install - Microsoft Q&A
+  report_text_excerpt: 'How to fix Windows "Security Update" refusing to install - Microsoft Q&A Security Update: 2026-11 Preview Update (KB5132057) (26200.10075) Install error - 0x800f0993 has been happening for a week now.'
+  captured_at: '2026-11-27T22:22:41Z'
+  source_date: '2026-11-27'
+  target_release_date: '2026-11-19'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.10075'
+  match_basis: exact_os_build
+  matched_kb: KB5132057
+  matched_os_build: '26200.10075'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.10075'
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: 4aadf3be477c6c8947e2d767d5f594b5b0aa24888546c8e6f4857cf5d6654163
+  title_dedup_sha256: 3ed3bf5a7c4e3ab8af70e256e7c8578a773d5b6dc0aa82a3ff3b4ee0d6d15600
+  issue_bucket: update/install failure
+  facts_rule_version: v1
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6083828-question-6083828
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6083828/how-to-fix-2026-11-security-update-kb5132061-26300
+  parent_title: How to fix 2026-11 Security Update (KB5132061) (26300.9974) Install error - 0x800f081f - Microsoft Q&A
+  report_title: How to fix 2026-11 Security Update (KB5132061) (26300.9974) Install error - 0x800f081f - Microsoft Q&A
+  report_text_excerpt: How to fix 2026-11 Security Update (KB5132061) (26300.9974) Install error - 0x800f081f - Microsoft Q&A i have this error installing my windows today - when i download it downloads but doesn't install the update and gives error - 0x800f081f
+  captured_at: '2026-11-27T22:22:52Z'
+  source_date: '2026-11-27'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9974'
+  match_basis: exact_os_build
+  matched_kb: KB5132061
+  matched_os_build: '26300.9974'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9974'
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: a8d784ff07019cb0ff906cc03232d219241d3f750cde682e4232b5be10a7f217
+  title_dedup_sha256: 2692ac3cb4afd2a32ecbc4c0f19531448ab972dce75b39c31f07b9e14607ec93
+  issue_bucket: update/install failure
+  facts_rule_version: v1
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6083831-question-6083831
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6083831/hoe-los-ik-het-installeren-van-2026-11-beveiliging
+  parent_title: Hoe los ik het installeren van 2026-11 Beveiligingsupdate (KB5132061) (26300.9974) met installatiefout 0x800f081f - Microsoft Q&A
+  report_title: Hoe los ik het installeren van 2026-11 Beveiligingsupdate (KB5132061) (26300.9974) met installatiefout 0x800f081f - Microsoft Q&A
+  report_text_excerpt: Hoe los ik het installeren van 2026-11 Beveiligingsupdate (KB5132061) (26300.9974) met installatiefout 0x800f081f - Microsoft Q&A De installatie mislukt steeds en geeft de installatiefout aan 0x800f081f
+  captured_at: '2026-11-27T22:22:52Z'
+  source_date: '2026-11-26'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9974'
+  match_basis: exact_os_build
+  matched_kb: KB5132061
+  matched_os_build: '26300.9974'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9974'
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: 46e373982126f9283d2c1c0d72abfa992a1196dfb7fda0229cc74b75f3785b23
+  title_dedup_sha256: be85ddc709971ea2d6e1b7d460584d62b087463424237141b91f891dc082da5d
+  issue_bucket: update/install failure
+  facts_rule_version: v1
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-learn-6083669-question-6083669
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6083669/issue-with-safenet-etoken-authentication-after-nov
+  parent_title: Issue with SafeNet Etoken authentication after November cumulative patch KB5132061 - Microsoft Q&A
+  report_title: Issue with SafeNet Etoken authentication after November cumulative patch KB5132061 - Microsoft Q&A
+  report_text_excerpt: Issue with SafeNet Etoken authentication after November cumulative patch KB5132061 - Microsoft Q&A I`m facing Etoken authentication issues after KB was installed. Only with Etoken Hardware version 12.0. With 16.0 everything works perfectly. safenet.jpg I checked with SafeNet...
+  captured_at: '2026-11-27T22:23:15Z'
+  source_date: '2026-11-26'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5132061
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5132061
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9974'
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: cae576de0c3fcf9bd7beef7c57696a0c0b8886352119dcd897ecc3c972a231ea
+  title_dedup_sha256: 26d6ac5d9f7b03e78ea5ce333203bf62258af5c828a66f75e8505cc232a81447
+  issue_bucket: update/install failure
+  facts_rule_version: v1
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6083860-question-6083860
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6083860/windows-11-boot-failure-after-installing-update-kb
+  parent_title: Windows 11 Boot Failure after installing update KB5127648 - Microsoft Q&A
+  report_title: Windows 11 Boot Failure after installing update KB5127648 - Microsoft Q&A
+  report_text_excerpt: Windows 11 Boot Failure after installing update KB5127648 - Microsoft Q&A Windows stopped booting normally immediately after installing update KB5127648 . Normal startup fails before the desktop with error 0xc0000001 . Safe Mode works, including Safe Mode with Networking....
+  captured_at: '2026-11-27T22:25:20Z'
+  source_date: '2026-11-27'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9711'
+  match_basis: exact_os_build
+  matched_kb: KB5127648
+  matched_os_build: '26300.9711'
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9711'
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: 06ba28f4f364c90c092e2a1c5428606228377ec715c6f2e7ca3f57752b729cb9
+  title_dedup_sha256: f523c8e2d03ea7a2b1d0fdb940eeb6e387957805e5f3142aef5e6d6be69f8d97
+  issue_bucket: update/install failure
+  facts_rule_version: v1
+- id: obs-studio-33-0-3-github-issue-14267
+  product_id: obs-studio
+  update_version: 33.0.3
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14267
+  parent_title: Crash when rename or remove a scene collection
+  report_title: Crash when rename or remove a scene collection
+  report_text_excerpt: '### Operating System Info Windows 11 ### OBS Studio Version 33.0.3 ### OBS Studio Log URL https://obsproject.com/logs/oAN6SP7LB7bvbGlT'
+  captured_at: '2026-11-27T22:51:54Z'
+  source_date: '2026-11-27'
+  patch_version_matched: true
+  matched_version: 33.0.3
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+  discovery_method_id: github_issues
+  excerpt_norm_sha256: 5453cfd5e87fbc21ec7b669fea74376648e5d8e49a26b804724d578cd3ece84b
+  title_dedup_sha256: f8110d21cd19447580ee8abd72d12c98e30f586dfb22cec6cbbf6dcc2d28939f
+  issue_bucket: crash or stability problems
+  facts_rule_version: v1
+- id: obs-studio-32-2-2-github-issue-14262
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14262
+  parent_title: Crash on exit in VolumeControl::onSourceActiveChanged (dangling const char *uuid)
+  report_title: Crash on exit in VolumeControl::onSourceActiveChanged (dangling const char *uuid)
+  report_text_excerpt: 'S Studio Version Other ### OBS Studio Version (Other) 33.0.3 (also happened on 33.0.0 and 32.2.2) ### OBS Studio Log URL https://obsproject.com/logs/hCo3tiG1lh20pjXE ### OBS Studio Crash Log URL https://obsproject.com/logs/crashes/t77RNJt8gErjBJrw ### Expected Behavior OBS Studio'
+  captured_at: '2026-11-27T23:00:53Z'
+  source_date: '2026-11-27'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: github_issues
+  excerpt_norm_sha256: af4f2d9ac7ac8f941d79522ec9570a3385ecd18840445647f2bcf258de92b58a
+  title_dedup_sha256: 67bf28e23f9fa417215417e84bb798810a9aec506eebc1c4d7cc95528951afb4
+  issue_bucket: audio mixer or routing issues
+  facts_rule_version: v1

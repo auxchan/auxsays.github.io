@@ -1,8 +1,8 @@
 {
   "last_cycle": {
-    "at": "2026-11-26T22:36:29Z",
+    "at": "2026-11-27T22:45:36Z",
     "outcome": "ok",
-    "requests": 13
+    "requests": 9
   },
   "provenance": {
     "collection_authorization": "owner risk acceptance; NVIDIA permission not established",
@@ -117,12 +117,6 @@
       "community_slug": "studio-drivers",
       "coverage": [],
       "created": 1779883452,
-      "deferred": {
-        "first_deferred_at": "2026-11-25T23:07:40Z",
-        "queued_at": "2026-11-25T23:07:40Z",
-        "reason": "thread_cap",
-        "times_deferred": 2
-      },
       "first_read_at": "2026-11-22T20:46:51Z",
       "gap_reasons": [],
       "last_activity": 1793136765,
@@ -152,7 +146,7 @@
         "first_deferred_at": "2026-11-26T22:36:29Z",
         "queued_at": "2026-11-26T22:36:29Z",
         "reason": "thread_cap",
-        "times_deferred": 1
+        "times_deferred": 2
       },
       "last_activity": null,
       "staff": false,
@@ -167,12 +161,6 @@
       "community_slug": "studio-drivers",
       "coverage": [],
       "created": 1788183673,
-      "deferred": {
-        "first_deferred_at": "2026-11-25T23:07:40Z",
-        "queued_at": "2026-11-25T23:07:40Z",
-        "reason": "thread_cap",
-        "times_deferred": 2
-      },
       "first_read_at": "2026-11-22T20:46:43Z",
       "gap_reasons": [],
       "last_activity": 1794576341,
@@ -202,12 +190,6 @@
         "replies_not_embedded"
       ],
       "created": 1788958802,
-      "deferred": {
-        "first_deferred_at": "2026-11-26T22:36:29Z",
-        "queued_at": "2026-11-26T22:36:29Z",
-        "reason": "thread_cap",
-        "times_deferred": 1
-      },
       "first_read_at": "2026-11-20T21:29:33Z",
       "gap_reasons": [],
       "last_activity": 1795144982,
@@ -326,6 +308,12 @@
       "community_slug": "studio-drivers",
       "coverage": [],
       "created": 1789060987,
+      "deferred": {
+        "first_deferred_at": "2026-11-27T22:45:36Z",
+        "queued_at": "2026-11-27T22:45:36Z",
+        "reason": "thread_cap",
+        "times_deferred": 1
+      },
       "first_read_at": "2026-11-22T20:46:19Z",
       "gap_reasons": [],
       "last_activity": 1795379979,
@@ -359,7 +347,7 @@
         "first_deferred_at": "2026-11-26T22:36:29Z",
         "queued_at": "2026-11-26T22:36:29Z",
         "reason": "thread_cap",
-        "times_deferred": 1
+        "times_deferred": 2
       },
       "last_activity": null,
       "staff": false,
@@ -377,12 +365,6 @@
         "replies_not_embedded"
       ],
       "created": 1792587602,
-      "deferred": {
-        "first_deferred_at": "2026-11-26T22:36:29Z",
-        "queued_at": "2026-11-26T22:36:29Z",
-        "reason": "thread_cap",
-        "times_deferred": 1
-      },
       "first_read_at": "2026-11-20T21:29:25Z",
       "gap_reasons": [],
       "last_activity": 1795191770,
@@ -504,12 +486,6 @@
         "replies_not_embedded"
       ],
       "created": 1793800802,
-      "deferred": {
-        "first_deferred_at": "2026-11-25T23:07:40Z",
-        "queued_at": "2026-11-25T23:07:40Z",
-        "reason": "thread_cap",
-        "times_deferred": 2
-      },
       "first_read_at": "2026-11-19T21:42:45Z",
       "gap_reasons": [],
       "last_activity": 1795562125,
@@ -632,7 +608,7 @@
         "first_deferred_at": "2026-11-26T22:36:29Z",
         "queued_at": "2026-11-26T22:36:29Z",
         "reason": "thread_cap",
-        "times_deferred": 1
+        "times_deferred": 2
       },
       "first_read_at": "2026-11-21T20:35:34Z",
       "gap_reasons": [],
@@ -690,6 +666,12 @@
         "older_comments_outside_window"
       ],
       "created": 1794493802,
+      "deferred": {
+        "first_deferred_at": "2026-11-27T22:45:36Z",
+        "queued_at": "2026-11-27T22:45:36Z",
+        "reason": "thread_cap",
+        "times_deferred": 1
+      },
       "first_read_at": "2026-11-19T21:42:37Z",
       "gap_reasons": [],
       "last_activity": 1795596236,
@@ -810,6 +792,12 @@
         "replies_not_embedded"
       ],
       "created": 1794605793,
+      "deferred": {
+        "first_deferred_at": "2026-11-27T22:45:36Z",
+        "queued_at": "2026-11-27T22:45:36Z",
+        "reason": "thread_cap",
+        "times_deferred": 1
+      },
       "first_read_at": "2026-11-19T21:42:53Z",
       "gap_reasons": [],
       "last_activity": 1795619080,
@@ -971,6 +959,12 @@
         "replies_not_embedded"
       ],
       "created": 1795528802,
+      "deferred": {
+        "first_deferred_at": "2026-11-27T22:45:36Z",
+        "queued_at": "2026-11-27T22:45:36Z",
+        "reason": "thread_cap",
+        "times_deferred": 1
+      },
       "first_read_at": "2026-11-26T22:37:09Z",
       "gap_reasons": [],
       "last_activity": 1795720100,
@@ -1092,7 +1086,7 @@
         "first_deferred_at": "2026-11-26T22:36:29Z",
         "queued_at": "2026-11-26T22:36:29Z",
         "reason": "thread_cap",
-        "times_deferred": 1
+        "times_deferred": 2
       },
       "last_activity": null,
       "staff": false,

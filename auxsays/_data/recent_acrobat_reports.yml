@@ -703,7 +703,7 @@ reports:
   window_start: '2026-11-02'
   window_version: 26.003.22075
 - attribution_state: not_established
-  captured_at: '2026-11-26T21:48:04Z'
+  captured_at: '2026-11-27T21:35:31Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
@@ -1063,6 +1063,26 @@ reports:
   window_end: '2025-04-15'
   window_start: '2025-03-11'
   window_version: 25.001.20432
+- attribution_state: not_established
+  captured_at: '2026-11-27T21:35:31Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|25.001.20428|25.001.20428
+  report_date: '2025-03-05'
+  report_excerpt: 'Acrobat Reader error 0:521 Hello, I''m experiencing a recurring Error 0:521 with specific
+    and reproducible symptoms, hoping someone can provide insights or potential solutions. Error Specifics:
+    Error Code: 0:521 Affected Software: Adobe Reader Operating System: Windows 10 or...'
+  report_id: adobe-acrobat-reader:262410ecdfedb3f4
+  report_title: Acrobat Reader error 0:521
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-12/acrobat-reader-error-0-521-1506517
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 25.001.20428
+  window_end: '2025-03-11'
+  window_start: '2025-03-04'
+  window_version: 25.001.20428
 - attribution_state: not_established
   captured_at: '2026-09-09T06:55:24Z'
   classification: recent_report
