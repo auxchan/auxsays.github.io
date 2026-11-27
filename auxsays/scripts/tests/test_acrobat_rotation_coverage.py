@@ -11,6 +11,8 @@ transport is a stub, and every write in Part E goes to a temporary directory.
   C  the collector: the cap holds, Adobe requests per run cannot rise, targeted runs are unchanged,
      telemetry lands on the rows and in the coverage event and can be rebuilt from the rows
   D  the acceptance gates are untouched: vendor announcements never count, Reader/Pro stay separate
+  S  review follow-ups: measured per-record cost varies, broken searches are not successful, low caps
+     never starve the corpus, the design limit is stated and warned, undated records do not crash
   E  N+1: a second rotation run that moves on to other records loses no counted row
 
 Run with: PYTHONDONTWRITEBYTECODE=1 python auxsays/scripts/tests/test_acrobat_rotation_coverage.py
@@ -168,9 +170,14 @@ def part_b() -> None:
               f"{math.ceil(rot.RECENT_WINDOW / rot.RECENT_SLOTS)} runs (worst {recent_gap})",
               recent_gap <= math.ceil(rot.RECENT_WINDOW / rot.RECENT_SLOTS)
               and all(len(visits[v]) >= (3 * bound) // 2 for v in recent))
-        days = bound / 2.1
-        check(f"B5 {pid}: at the delivered ~2.1 runs/day the bound is {days:.1f} days, inside the 14-day freshness window",
-              days < mh.load_thresholds(base.ROOT / "_config.yml").max_age_days)
+        # Derived from THIS corpus and cap, so corpus growth cannot turn it red: the stated days are the
+        # bound over the delivered cadence, and the warning fires exactly when they outgrow the window.
+        # (The fixed design limit itself is pinned on synthetic sizes in part S.)
+        days = rot.revisit_bound_days(bound, rot.DELIVERED_RUNS_PER_DAY)
+        window_days = mh.load_thresholds(base.ROOT / "_config.yml").max_age_days
+        check(f"B5 {pid}: bound {bound} runs = {days} days at {rot.DELIVERED_RUNS_PER_DAY}/day "
+              f"(window {window_days}; warns: {days > window_days})",
+              days == round(bound / rot.DELIVERED_RUNS_PER_DAY, 1) and bound == rot.revisit_bound_runs(n, cap))
         # The measured per-run attempts (12 scheduled runs, 2026-11-20..26), capped: the deadline can
         # stop a run early, so the bound must also hold on the real throughput, with a little slack.
         series = {P: [11, 9, 9, 9, 16, 9, 11, 16, 13, 14, 5, 10],
@@ -298,7 +305,9 @@ def part_c() -> None:
         check("C7 the coverage event reports the run",
               event["order"] == "rotation" and event["records_attempted"] == cap and event["records_total"] == 30
               and event["recent_attempted"] == rot.RECENT_SLOTS and event["successful_searches"] == cap
-              and event["revisit_bound_runs"] == rot.revisit_bound_runs(30, cap), str(event))
+              and event["revisit_bound_runs"] == rot.revisit_bound_runs(30, cap)
+              and event["revisit_bound_days_at_delivered_cadence"]
+              == rot.revisit_bound_days(rot.revisit_bound_runs(30, cap), rot.DELIVERED_RUNS_PER_DAY) and "warning" not in event, str(event))
         check("C8 never-attempted remaining drops by the records this run reached for the first time",
               event["never_attempted_remaining"] == 10 - sum(1 for v in expected[:cap]
                                                              if v not in {r["update_version"] for r in stored})
@@ -320,6 +329,103 @@ def part_c() -> None:
         check("C12 the request counter restarts with each invocation (no leak between Reader and Pro)",
               collector2.last_coverage["requests_total"] == 12 * rot.MAX_REQUESTS_PER_RECORD)
         check("C13 a rotation run never starts more records than the cap even with no deadline", len(results) <= cap)
+
+
+# --- S. review follow-ups: varied cost, low caps, design limit, undated records ----------------
+def part_s() -> None:
+    print("\n-- S. measured cost varies, low caps never starve, the design limit is stated --")
+    recs3 = synthetic(P, 3)            # all inside the recent window: walked newest first
+    newest, middle, oldest = sorted(recs3, key=lambda r: r.update_published_at, reverse=True)
+    calls = {"token": 0}
+
+    def varied(url, *, budget, endpoint_family="", headers=None, data=None, method=None, max_bytes=0):
+        if "searchToken" in url:
+            calls["token"] += 1
+            if calls["token"] == 3:    # the third record's token answers garbage -> broken, 1 request
+                resp = _Resp({})
+                resp.body = b"<html>not json</html>"
+                return resp
+        if "algolia.net" in url and middle.update_version in data.decode():
+            return _Resp({"hits": []})  # no hits -> no getTopics -> 4 requests
+        return _fake_request(url, budget=budget, endpoint_family=endpoint_family, headers=headers,
+                             data=data, method=method, max_bytes=max_bytes)
+    with _Patched(ac__generated_records=lambda pid, tv=None, include_archived=False: list(recs3),
+                  ac__load_method_health=lambda path=None: [], ac___now=lambda: NOW,
+                  ac__utc_now=lambda: CAPTURED, rb__bounded_request=varied):
+        collector = ac.AdobeAcrobatCollector(P)
+        results = collector.collect(_Ctx())
+        event = collector.last_coverage
+    rows = {r["version"]: next(x for x in r["method_health"] if x["method_id"] == rot.PRIMARY_METHOD)
+            for r in results}
+    check("S1 per-row requests are measured, not assumed: [5, 4, 1] for hits / no hits / failed token",
+          [rows[v.update_version].get("requests") for v in (newest, middle, oldest)] == [5, 4, 1],
+          str({v: r.get("requests") for v, r in rows.items()}))
+    check("S2 the run's requests_total is the sum of what was sent (10), not cap x 5",
+          event["requests_total"] == 10 and event["requests_by_host"].get("community.adobe.com") == 4
+          and event["requests_by_host"].get("app-dsn.algolia.net") == 6, str(event))
+    check("S3 a broken search is not a successful one (2 of 3)",
+          rows[oldest.update_version]["status"] == "broken" and event["successful_searches"] == 2, str(event))
+    check("S4 decided: a failed attempt still stamps last_run (honest health; no budget spent re-trying a refusing source)",
+          rows[oldest.update_version]["last_run"] == CAPTURED
+          and rot.last_checked(P, list(rows.values()), NOW) == {
+              (P, v.update_version, ""): datetime.fromisoformat(CAPTURED.replace("Z", "+00:00")).timestamp()
+              for v in recs3})
+
+    recs = synthetic(P, 30)
+    for cap in (1, 2):
+        bound = rot.revisit_bound_runs(len(recs), cap)
+        visits, _ = simulate(recs, [], runs=2 * bound, per_run=lambda i, c=cap: c, start=NOW, step_hours=12,
+                             order_fn=lambda rs, rows_, now_, c=cap: rot.rotation_order(rs, rows_, now_, cap=c))
+        first = max(v[0] if v else 10 ** 6 for v in visits.values())
+        worst = 0
+        for seen in visits.values():
+            seq = [-1] + seen
+            worst = max([worst] + [b - a for a, b in zip(seq, seq[1:])] + ([2 * bound + 1] if not seen else []))
+        check(f"S5 cap {cap}: every one of 30 records (newest included) is reached within the bound {bound} "
+              f"(last first visit run {first + 1}, worst gap {worst})", first < bound and worst <= bound)
+    check("S6 at cap 2 one slot still goes to the newest releases; at cap 1 the corpus is one pool",
+          rot.recent_slots_for(2) == 1 and rot.recent_slots_for(1) == 0 and rot.recent_slots_for(10) == 2
+          and rot.recent_slots_for(None) == 2)
+    check("S7 the default order is unchanged by passing the default cap",
+          versions(rot.rotation_order(recs, [], NOW)) == versions(rot.rotation_order(recs, [], NOW, cap=10)))
+    check("S8 the bound is finite for every cap the env can set (1..10) on a 199-record edition",
+          all(isinstance(rot.revisit_bound_runs(199, c), int) for c in range(1, 11))
+          and [rot.revisit_bound_runs(199, c) for c in (1, 2, 3, 10)] == [199, 195, 195, 25])
+    # The stated design limit, on synthetic sizes (never the live corpus, which grows).
+    d199 = rot.revisit_bound_days(rot.revisit_bound_runs(199, 10), rot.DELIVERED_RUNS_PER_DAY)
+    d237 = rot.revisit_bound_days(rot.revisit_bound_runs(237, 10), rot.DELIVERED_RUNS_PER_DAY)
+    check(f"S9 design limit: 199 records -> {d199} days, inside 14; 237 records -> {d237} days, outside",
+          d199 < 14 < d237)
+    big = synthetic(P, 300)
+    with _Patched(ac__generated_records=lambda pid, tv=None, include_archived=False: list(big),
+                  ac__load_method_health=lambda path=None: [], ac___now=lambda: NOW,
+                  ac__utc_now=lambda: CAPTURED, rb__bounded_request=_fake_request):
+        c = ac.AdobeAcrobatCollector(P)
+        c.collect(_Ctx())
+    check("S10 past the limit the run event says so (warning, bound in days, the window)",
+          c.last_coverage.get("warning") == "revisit_bound_exceeds_freshness_window"
+          and c.last_coverage.get("freshness_window_days") == 14, str({k: c.last_coverage.get(k) for k in
+                                                                   ("warning", "revisit_bound_runs")}))
+    # generated_records turns a missing date into "" (str(... or "")), so that is what a run can meet;
+    # None is exercised directly on the event below.
+    undated = synthetic(P, 5) + [PatchRecord(P, "24.009.29999", Path("x.md"), "", "current", P)]
+    with _Patched(ac__generated_records=lambda pid, tv=None, include_archived=False: list(undated),
+                  ac__load_method_health=lambda path=None: [], ac___now=lambda: NOW,
+                  ac__utc_now=lambda: CAPTURED, rb__bounded_request=_fake_request):
+        c2 = ac.AdobeAcrobatCollector(P)
+        try:
+            res = c2.collect(_Ctx())
+            ok = len(res) == 6 and c2.last_coverage["records_attempted"] == 6
+        except Exception as exc:  # noqa: BLE001
+            ok, res = False, repr(exc)
+    check("S11 a record with no release date neither crashes the run nor its coverage event", ok, str(res)[:200])
+    try:
+        ev = c2._emit_coverage(synthetic(P, 3) + [PatchRecord(P, "24.009.29998", Path("y.md"), None, "current", P)],
+                               [], cap=10, stored=None, now=None)
+        ok2 = ev["records_total"] == 4
+    except Exception as exc:  # noqa: BLE001
+        ok2, ev = False, repr(exc)
+    check("S12 ...and the coverage event survives a None date (str-coerced sort key)", ok2, str(ev)[:200])
 
 
 # --- D + E. acceptance untouched; N+1 keeps counted rows --------------------------------------
@@ -394,6 +500,7 @@ def run() -> int:
     part_a()
     part_b()
     part_c()
+    part_s()
     part_de()
     print()
     print("=" * 60)

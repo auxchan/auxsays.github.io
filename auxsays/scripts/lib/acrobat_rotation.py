@@ -45,6 +45,9 @@ RECENT_WINDOW = 4
 RECENT_SLOTS = 2
 DEFAULT_MAX_RECORDS_PER_RUN = 10
 MAX_RECORDS_ENV = "AUXSAYS_ACROBAT_MAX_RECORDS_PER_RUN"
+# Scheduled runs GitHub actually delivered: 20 in 9.4 days (2026-11-17..26) = 2.1/day against a 4/day
+# cron; rounded down. Used only to state the revisit bound in days against the freshness window.
+DELIVERED_RUNS_PER_DAY = 2.0
 # Requests one record can cost the primary method: 1 searchToken + up to MAX_ALGOLIA_QUERIES (3)
 # Algolia queries + 1 getTopics batch. Stated here for the ceiling arithmetic; the collector's own
 # constants are what bound it, and the replay test pins that the two agree.
@@ -105,35 +108,63 @@ def _lru_sorted(records: Sequence[Any], checked: Mapping[tuple[str, str, str], f
     return sorted(by_release, key=lambda r: checked.get(_key(r), NEVER))
 
 
+def recent_slots_for(cap: int | None, slots: int = RECENT_SLOTS) -> int:
+    """Recent-window picks a run can afford while leaving at least ONE slot for the rest of the corpus.
+
+    A lowered cap (the documented way to shed Adobe load) must not hand every slot to the newest
+    records: at cap 1 or 2 with two recent picks the fill got nothing and 195 of 199 records were never
+    reached again. So the recent window keeps at most cap - 1 picks; at cap 1 it gets none and the
+    whole corpus is one least-recently-checked pool, the newest included, so nothing starves."""
+    if cap is None:
+        return max(0, slots)
+    return max(0, min(slots, cap - 1))
+
+
 def rotation_order(records: Sequence[Any], rows: Iterable[Mapping[str, Any]], now: datetime, *,
-                   window: int = RECENT_WINDOW, slots: int = RECENT_SLOTS) -> list[Any]:
+                   window: int = RECENT_WINDOW, slots: int = RECENT_SLOTS,
+                   cap: int | None = None) -> list[Any]:
     """Every record exactly once: recent picks, then the least-recently-checked fill, then the
-    recent-window members not picked this run. The caller's cap decides how far the walk gets."""
+    recent-window members not picked this run. The caller's cap decides how far the walk gets; passing
+    it here also keeps at least one fill slot (see `recent_slots_for`).
+
+    A FAILED attempt counts as a check. The collector stamps `last_run` on a blocked/broken row as on a
+    successful one, and the rotation does not move failed records to the front: a failure here is
+    almost always the source refusing or an outage, and re-trying the same records first would spend a
+    capped budget against a refusing source while the tail stalls. The failed row stays visible as
+    broken/blocked, and the record is retried within one revisit bound."""
     if not records:
         return []
     product_id = records[0].product_id
     checked = last_checked(product_id, rows, now)
+    picks_n = recent_slots_for(cap, slots)
+    if picks_n == 0 and cap is not None:
+        return _lru_sorted(list(records), checked)
     newest = sorted(records, key=_release_desc, reverse=True)
     recent = newest[:max(0, window)]
     recent_ids = {id(r) for r in recent}
     recent_lru = _lru_sorted(recent, checked)
-    picks, held = recent_lru[:max(0, slots)], recent_lru[max(0, slots):]
+    picks, held = recent_lru[:picks_n], recent_lru[picks_n:]
     fill = _lru_sorted([r for r in records if id(r) not in recent_ids], checked)
     return picks + fill + held
 
 
 def revisit_bound_runs(total: int, cap: int, *, window: int = RECENT_WINDOW,
-                       slots: int = RECENT_SLOTS) -> int | None:
+                       slots: int = RECENT_SLOTS) -> int:
     """Worst case, in runs, before a record outside the recent window is attempted again, when every
-    run attempts `cap` records. None when the cap leaves no fill slot (no bound exists)."""
+    run attempts `cap` records. Always finite for cap >= 1 (see `recent_slots_for`)."""
+    cap = max(1, int(cap))
     recent = min(window, total)
-    fill_slots = cap - min(slots, recent)
+    picks = min(recent_slots_for(cap, slots), recent)
+    if picks == 0:
+        return math.ceil(total / cap) if total else 0
     fill_population = total - recent
     if fill_population <= 0:
-        return math.ceil(recent / max(1, min(slots, cap))) if recent else 0
-    if fill_slots <= 0:
-        return None
-    return math.ceil(fill_population / fill_slots)
+        return math.ceil(recent / picks)
+    return math.ceil(fill_population / (cap - picks))
+
+
+def revisit_bound_days(bound_runs: int, runs_per_day: float) -> float:
+    return round(bound_runs / runs_per_day, 1) if runs_per_day > 0 else float("inf")
 
 
 def coverage_state(records: Sequence[Any], rows: Iterable[Mapping[str, Any]], now: datetime,

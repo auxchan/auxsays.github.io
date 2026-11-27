@@ -8636,7 +8636,10 @@ checked of the 4 newest records, then every other record least-recently-checked 
 the stored `adobe_community_algolia_search` row (missing, unparseable or future = never; ties by release date then
 version; never array position). Capped at 10 records per edition per run (`AUXSAYS_ACROBAT_MAX_RECORDS_PER_RUN`,
 can only be lowered), so Adobe Community requests per run cannot rise (5 per record: 1 searchToken, 3 Algolia,
-1 getTopics). Worst-case revisit 25 runs (about 12 days at the delivered 2.1 runs/day). Each Algolia row now
+1 getTopics). A lowered cap keeps at least one slot for the rest of the corpus (cap 1: one pool). Worst-case
+revisit 25 runs while the cap binds (12.5 days at 2 runs/day); when the deadline cuts runs to 5-10 records it is
+about 40 runs / 19 days at 2 runs/day (about 10 days at 4/day), and at 237+ records per edition it exceeds the
+14-day window even with the cap binding. The run event then carries `warning: revisit_bound_exceeds_freshness_window`. Each Algolia row now
 carries `requests`, `duration_ms` and `rejection_reasons`; each run emits an `acrobat_coverage` event. Targeted
 dispatches keep the newest-first order with no cap. Acceptance and attribution are unchanged.
 
@@ -8644,7 +8647,8 @@ dispatches keep the newest-first order with no cap. Acceptance and attribution a
 N+1 write replay in a temporary store).
 
 **Reopen only if** a scheduled run's `acrobat_coverage` event shows `requests_total` above 100 for both editions
-together, or any Acrobat record goes more than 25 runs without an Algolia attempt while runs commit.
+together, carries `warning: revisit_bound_exceeds_freshness_window`, or any Acrobat record goes more than 40 runs
+without an Algolia attempt while runs commit.
 
 ## Adding an entry
 

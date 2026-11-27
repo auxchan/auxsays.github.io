@@ -1201,7 +1201,8 @@ class AdobeAcrobatCollector(ProductCollector):
                 from lib import acrobat_rotation as rot  # noqa: PLC0415
                 now = _now()
                 stored = load_method_health(METHOD_HEALTH_PATH)
-                records, cap = rot.rotation_order(records, stored, now), rot.max_records_per_run()
+                cap = rot.max_records_per_run()
+                records = rot.rotation_order(records, stored, now, cap=cap)
             results = self._collect_records(records, context, captured_at, budget, results, cap=cap)
             self._emit_coverage(records, results, cap=cap, stored=stored, now=now)
             return results
@@ -1223,8 +1224,11 @@ class AdobeAcrobatCollector(ProductCollector):
                    and row.get("status") in {"success", "no_results", "partial", "low_confidence"}
                    for row in result.get("method_health") or ()):
                 successful += 1
-        recent = {r.update_version for r in sorted(records, key=lambda r: (r.update_published_at, r.update_version),
-                                                   reverse=True)[:rot.RECENT_WINDOW]}
+        # str()-coerced like the rotation module: a record with no date must not raise here, after all
+        # the network work, and roll the collector back.
+        recent = {r.update_version for r in sorted(
+            records, key=lambda r: (str(getattr(r, "update_published_at", "") or ""), str(r.update_version or "")),
+            reverse=True)[:rot.RECENT_WINDOW]}
         event: dict[str, Any] = {
             "order": "targeted" if cap is None else "rotation",
             "cap": cap,
@@ -1245,7 +1249,20 @@ class AdobeAcrobatCollector(ProductCollector):
                 fresh = [row for r in results for row in (r.get("method_health") or ())]
                 replaced = {(key_from(row), row.get("method_id")) for row in fresh}
                 after = [row for row in stored if (key_from(row), row.get("method_id")) not in replaced] + fresh
-                event.update(rot.coverage_state(records, after, now, mh.load_thresholds(ROOT / "_config.yml")))
+                thresholds = mh.load_thresholds(ROOT / "_config.yml")
+                event.update(rot.coverage_state(records, after, now, thresholds))
+                if cap:
+                    # The design limit, stated per run rather than assumed: when the worst-case revisit
+                    # at the delivered cadence outgrows the freshness window (corpus growth, a lowered
+                    # cap), pages will cycle back into COLLECTION STALE. Say so loudly.
+                    days = rot.revisit_bound_days(event["revisit_bound_runs"], rot.DELIVERED_RUNS_PER_DAY)
+                    event["revisit_bound_days_at_delivered_cadence"] = days
+                    event["freshness_window_days"] = thresholds.max_age_days
+                    if days > thresholds.max_age_days:
+                        event["warning"] = "revisit_bound_exceeds_freshness_window"
+                        rb.emit("acrobat_coverage_warning", product_id=self.product_id,
+                                reason=event["warning"], revisit_bound_runs=event["revisit_bound_runs"],
+                                revisit_bound_days=days, freshness_window_days=thresholds.max_age_days)
             except Exception as exc:  # noqa: BLE001 -- telemetry must never fail the collection
                 event["coverage_state_error"] = type(exc).__name__
         rb.emit("acrobat_coverage", product_id=self.product_id, **event)

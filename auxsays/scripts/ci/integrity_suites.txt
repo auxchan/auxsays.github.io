@@ -997,7 +997,7 @@ auxsays/scripts/tests/test_coverage_governance.py = 101
 # at or below the old volume, unchanged targeted dispatches, the per-row and per-run telemetry,
 # unchanged acceptance (vendor announcements, Reader/Pro) and an N+1 write replay in a temp store.
 # Nine single mutants each fail named checks (listed in the PR that added this suite).
-auxsays/scripts/tests/test_acrobat_rotation_coverage.py = 46
+auxsays/scripts/tests/test_acrobat_rotation_coverage.py = 59
 
 [diagnostic]
 # Deterministic and offline; broader surface or presentation-level. Also blocking in CI --
