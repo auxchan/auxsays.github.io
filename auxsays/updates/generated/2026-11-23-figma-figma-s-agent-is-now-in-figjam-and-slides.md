@@ -17,8 +17,8 @@ update_version: Figma’s agent is now in FigJam and Slides
 update_logo_text: FIG
 update_published_at: '2026-11-23T00:00:00.000Z'
 update_last_checked: '2026-11-24T03:01:28Z'
-source_last_checked: '2026-11-26T11:02:14Z'
-official_body_last_checked: '2026-11-26T11:02:14Z'
+source_last_checked: '2026-11-27T00:11:20Z'
+official_body_last_checked: '2026-11-27T00:11:20Z'
 record_last_updated: '2026-11-24T03:01:28Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -70,11 +70,6 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-11-24T12:51:25Z'
-  url: https://www.figma.com/release-notes/?title=figmas-agent-is-now-in-figjam-and-slides
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-11-25T01:31:19Z'
   url: https://www.figma.com/release-notes/?title=figmas-agent-is-now-in-figjam-and-slides
   status: captured-from-rss-feed
@@ -91,6 +86,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-11-26T11:02:14Z'
+  url: https://www.figma.com/release-notes/?title=figmas-agent-is-now-in-figjam-and-slides
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-27T00:11:20Z'
   url: https://www.figma.com/release-notes/?title=figmas-agent-is-now-in-figjam-and-slides
   status: captured-from-rss-feed
   body_captured: true
