@@ -365,6 +365,26 @@ reports:
   window_start: '2024-08-13'
   window_version: 24.002.21005
 - attribution_state: not_established
+  captured_at: '2026-11-27T08:22:55Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|24.002.20687|24.002.20687
+  report_date: '2024-04-19'
+  report_excerpt: Acrobat won't update with ai features When I relaunch Acrobat I should be able to have
+    "AI features". I have this prompt in the top of Acrobat, but relaunching makes no difference. I still
+    get the prompt. I have checke for Updates, but Acrobat is up-to-date. What to do? ....
+  report_id: adobe-acrobat-pro:5c9de972bd398d88
+  report_title: Acrobat won't update with ai features
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/acrobat-won-t-update-with-ai-features-1292389
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 24.002.20687
+  window_end: '2024-05-05'
+  window_start: '2024-04-12'
+  window_version: 24.002.20687
+- attribution_state: not_established
   captured_at: '2026-09-09T14:09:12Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
@@ -624,7 +644,7 @@ reports:
   window_start: '2017-02-21'
   window_version: 15.023.20070
 - attribution_state: not_established
-  captured_at: '2026-11-26T21:48:04Z'
+  captured_at: '2026-11-27T08:45:06Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
@@ -963,6 +983,86 @@ reports:
   window_end: '2025-11-20'
   window_start: '2025-11-13'
   window_version: 25.001.20918
+- attribution_state: not_established
+  captured_at: '2026-11-27T08:45:06Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|25.001.20577|25.001.20577
+  report_date: '2025-07-19'
+  report_excerpt: 'New Instalation - Error 100700 when trying to update I have a complete new instalation
+    of Acrobat Reader When I click on the Help -> Check for Updates menu item I get the following error:
+    Update Failed Updates have been disabled by your system policy. Error 100700 As I had a...'
+  report_id: adobe-acrobat-reader:8f1f247d10944d94
+  report_title: New Instalation - Error 100700 when trying to update
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-12/new-instalation-error-100700-when-trying-to-update-1506788
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 25.001.20577
+  window_end: '2025-08-11'
+  window_start: '2025-07-17'
+  window_version: 25.001.20577
+- attribution_state: not_established
+  captured_at: '2026-11-27T08:45:06Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|25.001.20458|25.001.20458
+  report_date: '2025-05-08'
+  report_excerpt: Adobe 2020 not responding after trying to merge files I am having trouble combining
+    files in Acrobat. When attempting to combine files, Acrobat freezes up and says not responding. I
+    have tried the steps found when using a google search such as checking for updates and...
+  report_id: adobe-acrobat-reader:156dac6a73a5c252
+  report_title: Adobe 2020 not responding after trying to merge files
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/adobe-2020-not-responding-after-trying-to-merge-files-1302262
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 25.001.20458
+  window_end: '2025-06-02'
+  window_start: '2025-04-15'
+  window_version: 25.001.20458
+- attribution_state: not_established
+  captured_at: '2026-11-27T08:45:06Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|25.001.20458|25.001.20458
+  report_date: '2025-04-19'
+  report_excerpt: 'Acrobat: unable to activate Despite my having a monthly subscription for Acrobat, I
+    am constantly prompted to activate/subscribe, spend yet more money for any type of operation I perform
+    within Acrobat (organise, combine, etc.). Please fix this - I am obviously paying for a...'
+  report_id: adobe-acrobat-reader:6650ab38cbf6b334
+  report_title: 'Acrobat: unable to activate'
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/acrobat-unable-to-activate-1301815
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 25.001.20458
+  window_end: '2025-06-02'
+  window_start: '2025-04-15'
+  window_version: 25.001.20458
+- attribution_state: not_established
+  captured_at: '2026-11-27T08:45:06Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|25.001.20432|25.001.20432
+  report_date: '2025-03-18'
+  report_excerpt: Adobe reader won't load data I am using my Macbook Air, running OS Sequoia 15.3.2..
+    All of a sudden, My Adobe Reader will not load the data, only the forms. I can see the data in the
+    preview thumbnail. It loads fine in a browser. It is from multiple companies (utility bills...
+  report_id: adobe-acrobat-reader:e17127c2f15b0ae4
+  report_title: Adobe reader won't load data
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-12/adobe-reader-won-t-load-data-1506549
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 25.001.20432
+  window_end: '2025-04-15'
+  window_start: '2025-03-11'
+  window_version: 25.001.20432
 - attribution_state: not_established
   captured_at: '2026-09-09T06:55:24Z'
   classification: recent_report

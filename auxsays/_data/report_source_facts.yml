@@ -179,7 +179,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/17188
   source: github.com/comfy-org/comfyui
@@ -227,7 +227,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/17264
   source: github.com/comfy-org/comfyui
@@ -262,7 +262,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/17327
   source: github.com/comfy-org/comfyui
@@ -343,7 +343,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: true
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/17495
   source: github.com/comfy-org/comfyui
@@ -399,7 +399,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/17545
   source: github.com/comfy-org/comfyui
@@ -433,7 +433,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: true
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/comfy-org/comfyui/issues/17597
   source: github.com/comfy-org/comfyui
@@ -660,6 +660,17 @@ facts:
   closed_by_reporter: true
   checked_at: '2026-11-25'
   rule: source-facts-3
+- key: https://github.com/comfy-org/comfyui/issues/18019
+  source: github.com/comfy-org/comfyui
+  state: open
+  state_reason: ''
+  labels: []
+  os: ''
+  crash_log: null
+  form_version: ''
+  closed_by_reporter: unknown
+  checked_at: '2026-11-27'
+  rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13286
   source: github.com/obsproject/obs-studio
   state: open
@@ -680,7 +691,7 @@ facts:
   crash_log: false
   form_version: 32.1.1
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13289
   source: github.com/obsproject/obs-studio
@@ -691,7 +702,7 @@ facts:
   crash_log: false
   form_version: 32.1.1
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13292
   source: github.com/obsproject/obs-studio
@@ -737,7 +748,7 @@ facts:
   crash_log: false
   form_version: 32.1.1
   closed_by_reporter: true
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13300
   source: github.com/obsproject/obs-studio
@@ -748,7 +759,7 @@ facts:
   crash_log: false
   form_version: 32.1.1
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13304
   source: github.com/obsproject/obs-studio
@@ -759,7 +770,7 @@ facts:
   crash_log: false
   form_version: 32.1.1
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13309
   source: github.com/obsproject/obs-studio
@@ -781,7 +792,7 @@ facts:
   crash_log: false
   form_version: 32.1.1
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13313
   source: github.com/obsproject/obs-studio
@@ -825,7 +836,7 @@ facts:
   crash_log: false
   form_version: 32.1.1
   closed_by_reporter: true
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13319
   source: github.com/obsproject/obs-studio
@@ -836,7 +847,7 @@ facts:
   crash_log: false
   form_version: 32.1.1
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13324
   source: github.com/obsproject/obs-studio
@@ -847,7 +858,7 @@ facts:
   crash_log: null
   form_version: 32.1.1
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13326
   source: github.com/obsproject/obs-studio
@@ -870,7 +881,7 @@ facts:
   crash_log: false
   form_version: 32.1.1
   closed_by_reporter: true
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13331
   source: github.com/obsproject/obs-studio
@@ -881,7 +892,7 @@ facts:
   crash_log: false
   form_version: 32.1.1
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13334
   source: github.com/obsproject/obs-studio
@@ -892,7 +903,7 @@ facts:
   crash_log: false
   form_version: 32.1.1
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13336
   source: github.com/obsproject/obs-studio
@@ -903,7 +914,7 @@ facts:
   crash_log: false
   form_version: 32.1.1
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13337
   source: github.com/obsproject/obs-studio
@@ -925,7 +936,7 @@ facts:
   crash_log: true
   form_version: 32.1.1
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13340
   source: github.com/obsproject/obs-studio
@@ -936,7 +947,7 @@ facts:
   crash_log: false
   form_version: 32.1.1
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13343
   source: github.com/obsproject/obs-studio
@@ -947,7 +958,7 @@ facts:
   crash_log: false
   form_version: 32.1.1
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13345
   source: github.com/obsproject/obs-studio
@@ -958,7 +969,7 @@ facts:
   crash_log: false
   form_version: 32.1.1
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13348
   source: github.com/obsproject/obs-studio
@@ -991,7 +1002,7 @@ facts:
   crash_log: true
   form_version: 32.1.1
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13353
   source: github.com/obsproject/obs-studio
@@ -1002,7 +1013,7 @@ facts:
   crash_log: false
   form_version: ''
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13355
   source: github.com/obsproject/obs-studio
@@ -1013,7 +1024,7 @@ facts:
   crash_log: false
   form_version: 32.1.1
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13358
   source: github.com/obsproject/obs-studio
@@ -1024,7 +1035,7 @@ facts:
   crash_log: false
   form_version: 32.1.1
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13360
   source: github.com/obsproject/obs-studio
@@ -1035,7 +1046,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13361
   source: github.com/obsproject/obs-studio
@@ -1046,7 +1057,7 @@ facts:
   crash_log: false
   form_version: 32.1.1
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13362
   source: github.com/obsproject/obs-studio
@@ -1057,7 +1068,7 @@ facts:
   crash_log: false
   form_version: ''
   closed_by_reporter: true
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13364
   source: github.com/obsproject/obs-studio
@@ -1140,7 +1151,7 @@ facts:
   crash_log: false
   form_version: 32.1.2
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13391
   source: github.com/obsproject/obs-studio
@@ -1151,7 +1162,7 @@ facts:
   crash_log: false
   form_version: 32.1.2
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13395
   source: github.com/obsproject/obs-studio
@@ -1162,7 +1173,7 @@ facts:
   crash_log: false
   form_version: 32.1.2
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13400
   source: github.com/obsproject/obs-studio
@@ -1173,7 +1184,7 @@ facts:
   crash_log: null
   form_version: 32.1.2
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13401
   source: github.com/obsproject/obs-studio
@@ -1198,7 +1209,7 @@ facts:
   crash_log: false
   form_version: 32.1.2
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13409
   source: github.com/obsproject/obs-studio
@@ -1209,7 +1220,7 @@ facts:
   crash_log: false
   form_version: ''
   closed_by_reporter: true
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13411
   source: github.com/obsproject/obs-studio
@@ -1220,7 +1231,7 @@ facts:
   crash_log: false
   form_version: 32.1.2
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13416
   source: github.com/obsproject/obs-studio
@@ -1253,7 +1264,7 @@ facts:
   crash_log: false
   form_version: 32.1.2
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13425
   source: github.com/obsproject/obs-studio
@@ -1264,7 +1275,7 @@ facts:
   crash_log: true
   form_version: 32.1.2
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13429
   source: github.com/obsproject/obs-studio
@@ -1286,7 +1297,7 @@ facts:
   crash_log: true
   form_version: 32.1.2
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13431
   source: github.com/obsproject/obs-studio
@@ -1320,7 +1331,7 @@ facts:
   crash_log: false
   form_version: 32.0.4
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13439
   source: github.com/obsproject/obs-studio
@@ -1331,7 +1342,7 @@ facts:
   crash_log: false
   form_version: 32.1.2
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13440
   source: github.com/obsproject/obs-studio
@@ -1342,7 +1353,7 @@ facts:
   crash_log: false
   form_version: 32.1.2
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13441
   source: github.com/obsproject/obs-studio
@@ -1364,7 +1375,7 @@ facts:
   crash_log: false
   form_version: 32.1.2
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13452
   source: github.com/obsproject/obs-studio
@@ -1386,7 +1397,7 @@ facts:
   crash_log: false
   form_version: 32.1.2
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13464
   source: github.com/obsproject/obs-studio
@@ -1420,7 +1431,7 @@ facts:
   crash_log: false
   form_version: 32.1.2
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13478
   source: github.com/obsproject/obs-studio
@@ -1431,7 +1442,7 @@ facts:
   crash_log: false
   form_version: ''
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13484
   source: github.com/obsproject/obs-studio
@@ -1453,7 +1464,7 @@ facts:
   crash_log: false
   form_version: 32.1.2
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13491
   source: github.com/obsproject/obs-studio
@@ -1464,7 +1475,7 @@ facts:
   crash_log: false
   form_version: 32.1.2
   closed_by_reporter: true
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13492
   source: github.com/obsproject/obs-studio
@@ -1475,7 +1486,7 @@ facts:
   crash_log: false
   form_version: 32.1.2
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13494
   source: github.com/obsproject/obs-studio
@@ -1509,7 +1520,7 @@ facts:
   crash_log: false
   form_version: 32.1.2
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13501
   source: github.com/obsproject/obs-studio
@@ -1520,7 +1531,7 @@ facts:
   crash_log: false
   form_version: 32.1.2
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13502
   source: github.com/obsproject/obs-studio
@@ -1531,7 +1542,7 @@ facts:
   crash_log: true
   form_version: 32.1.2
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13505
   source: github.com/obsproject/obs-studio
@@ -1542,7 +1553,7 @@ facts:
   crash_log: null
   form_version: ''
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13506
   source: github.com/obsproject/obs-studio
@@ -1576,7 +1587,7 @@ facts:
   crash_log: false
   form_version: 32.1.2
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13514
   source: github.com/obsproject/obs-studio
@@ -1598,7 +1609,7 @@ facts:
   crash_log: false
   form_version: 32.1.2
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13518
   source: github.com/obsproject/obs-studio
@@ -1609,7 +1620,7 @@ facts:
   crash_log: false
   form_version: 32.1.2
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13519
   source: github.com/obsproject/obs-studio
@@ -1620,7 +1631,7 @@ facts:
   crash_log: false
   form_version: 32.1.2
   closed_by_reporter: false
-  checked_at: '2026-11-24'
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/obsproject/obs-studio/issues/13526
   source: github.com/obsproject/obs-studio
@@ -3676,6 +3687,17 @@ facts:
   form_version: ''
   closed_by_reporter: false
   checked_at: '2026-11-25'
+  rule: source-facts-3
+- key: https://github.com/obsproject/obs-studio/issues/14262
+  source: github.com/obsproject/obs-studio
+  state: open
+  state_reason: ''
+  labels: []
+  os: windows
+  crash_log: true
+  form_version: ''
+  closed_by_reporter: unknown
+  checked_at: '2026-11-27'
   rule: source-facts-3
 - key: https://github.com/officedev/office-js/issues/5680
   source: github.com/officedev/office-js

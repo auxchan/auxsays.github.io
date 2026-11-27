@@ -111542,3 +111542,1571 @@ evidence:
   title_dedup_sha256: 68fd6de8be0329642763127818a070873ee8a6128da6e673df9a0cb5426a9f34
   issue_bucket: capture-source issues
   facts_rule_version: v1
+- id: acrobat-26-003-22110-adobe-community-bug-report-https-community-adobe-com-questions-9-saving-pdf-from-acrobat-pro-as-a-second-save-on-network-sh
+  product_id: adobe-acrobat-pro
+  update_version: 26.003.22110
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/saving-pdf-from-acrobat-pro-as-a-second-save-on-network-share-corrupts-file-with-error-26-1658085
+  parent_title: Saving PDF from Acrobat Pro as a second save on network share corrupts file with Error (26)
+  report_title: Saving PDF from Acrobat Pro as a second save on network share corrupts file with Error (26)
+  report_text_excerpt: 'Saving PDF from Acrobat Pro as a second save on network share corrupts file with Error (26) Environment: Acrobat Pro 26.003.22110 on Windows. The file is on an SMB network share, with no sync client involved. The form is a Reader-extended dynamic XFA form made in LiveCycle...'
+  captured_at: '2026-11-27T08:22:55Z'
+  source_date: '2026-11-26'
+  target_release_date: '2026-11-16'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.003.22110
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: PDF rendering regression
+  workflow_area: PDF rendering
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 7d2a9208249f6b3298cf43f204eed58e710d43d6f90cd8831867db427b4d6400
+  title_dedup_sha256: 0cc2ccd2fcc2235929f2d58bdb6f95ee192036b6607e4585d06ce202b4173452
+  issue_bucket: pdf rendering regression
+  facts_rule_version: v1
+- id: acrobat-24-002-20687-adobe-community-bug-report-https-community-adobe-com-questions-624-acrobat-pro-unable-to-open-pdf-files-after-closing-acrob
+  product_id: adobe-acrobat-pro
+  update_version: 24.002.20687
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-624/acrobat-pro-unable-to-open-pdf-files-after-closing-acrobat-window-681970
+  parent_title: Acrobat Pro unable to open PDF files after closing Acrobat Window
+  report_title: Acrobat Pro unable to open PDF files after closing Acrobat Window
+  report_text_excerpt: Acrobat Pro unable to open PDF files after closing Acrobat Window Hi, I have 5 users that have Acrobat Pro version 24.002.20687 with Windows 11. If they close out of a PDF file that was opened in Acrobat Pro, they have to wait about 10 minutes before trying to open up another...
+  captured_at: '2026-11-27T08:22:55Z'
+  source_date: '2024-05-14'
+  target_release_date: '2024-04-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 24.002.20687
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: c0c30786df4be890adb200aa30251e64e91d71e852a417a53aa0ad55a2cdca32
+  title_dedup_sha256: d979fb28ca68803f8b61436fd94b1377789b005871eb131920c2c370672992f5
+  issue_bucket: install/update failure
+  facts_rule_version: v1
+- id: acrobat-24-002-20687-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-64-bit-24-002-20687-unresponsive-1292954
+  product_id: adobe-acrobat-pro
+  update_version: 24.002.20687
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-64-bit-24-002-20687-unresponsive-1292954
+  parent_title: Adobe Acrobat (64-bit) 24.002.20687 - Unresponsive
+  report_title: Adobe Acrobat (64-bit) 24.002.20687 - Unresponsive
+  report_text_excerpt: Adobe Acrobat (64-bit) 24.002.20687 - Unresponsive I have a user who upon opening any PDFs will get notifed by Adobe that recovered files were found and she has 2 options review them or delete them, Either options will freeze her adobe and not allow her to to view the document...
+  captured_at: '2026-11-27T08:22:55Z'
+  source_date: '2024-05-07'
+  target_release_date: '2024-04-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 24.002.20687
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 4a605631b348908dfcb2f280c522c1b69bf411369b9b3052677e6c5b7b50a464
+  title_dedup_sha256: d1668dd841756eb4746317d849eeed54f962da42318e3e900e53f367fdc5b848
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+- id: acrobat-24-002-20687-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-pro-24-install-error-1624-with-languages-specified
+  product_id: adobe-acrobat-pro
+  update_version: 24.002.20687
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-pro-24-install-error-1624-with-languages-specified-in-setup-ini-and-custom-transform-1292794
+  parent_title: Acrobat Pro 24 install error 1624 with languages specified in setup.ini and custom transform
+  report_title: Acrobat Pro 24 install error 1624 with languages specified in setup.ini and custom transform
+  report_text_excerpt: '...MSI (c) (xx:xx) [xx:xx:xx:xxx]: Product: Adobe Acrobat (64-bit) - Update ''Adobe Acrobat (24.002.20687)'' could not be installed. Error code 1624. Additional information is available in the log file...'
+  captured_at: '2026-11-27T08:22:55Z'
+  source_date: '2024-05-01'
+  target_release_date: '2024-04-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 24.002.20687
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: a948131c14272d5dcc2544de05a8e8f484ebdc70edb4e3e8e774fa5a49d50b8b
+  title_dedup_sha256: 8e7d6ea9c35a5a31831c9bf6bdf1ba53389a29a4fa1bde4684bb11e1fa9dde35
+  issue_bucket: install/update failure
+  facts_rule_version: v1
+- id: acrobat-24-001-20615-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-pro-crash-exception-exception-access-violati
+  product_id: adobe-acrobat-pro
+  update_version: 24.001.20615
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-pro-crash-exception-exception-access-violation-1295276
+  parent_title: Adobe Acrobat Pro  - crash exception="EXCEPTION_ACCESS_VIOLATION"
+  report_title: Adobe Acrobat Pro  - crash exception="EXCEPTION_ACCESS_VIOLATION"
+  report_text_excerpt: '...24.001.20615" build="0" source="Windows-Client" crashType="n/a"> <time year="2024" month="7" day="29" hour="7" minute="41" second="12" timeoffset="60" timezone="Paris, Madrid (heure d’été)"/> <user guid="9b9acf07-6c94-4032-bf7e-fdaf6334f85b"/> <system platform="Windows 11...'
+  captured_at: '2026-11-27T08:22:55Z'
+  source_date: '2024-08-01'
+  target_release_date: '2024-03-20'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 24.001.20615
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 579b3f087f3618df139667baf9af7bb7173a698a4479a7a9ba04a090eddd634f
+  title_dedup_sha256: 958c074128ed89cf1e2ec3c515fa5bed71886e264c85dfc69ad0fa835242ee11
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+- id: acrobat-24-001-20615-adobe-community-bug-report-https-community-adobe-com-questions-9-crash-and-freeze-when-editing-pfd-in-fill-and-sign-1291636
+  product_id: adobe-acrobat-pro
+  update_version: 24.001.20615
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/crash-and-freeze-when-editing-pfd-in-fill-and-sign-1291636
+  parent_title: Crash and freeze when editing pfd in Fill and Sign
+  report_title: Crash and freeze when editing pfd in Fill and Sign
+  report_text_excerpt: '...applicationName="Adobe Acrobat" applicationVersion="24.001.20615" build="0" source="Windows-Client" crashType="n/a"> <time year="2024" month="3" day="27" hour="14" minute="20" second="6" timeoffset="-420" timezone="Mountain Daylight...'
+  captured_at: '2026-11-27T08:22:55Z'
+  source_date: '2024-03-27'
+  target_release_date: '2024-03-20'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 24.001.20615
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: f805f3dfe747ab2dc2dd5bf29700566cd2461d893b9637628cca01c45e129f36
+  title_dedup_sha256: df8a8e6ff23903e334b8c00a6880a0599c730dc0edce199b8518982d8b2416c8
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+- id: acrobat-23-008-20533-adobe-community-bug-report-https-community-adobe-com-questions-9-unable-to-preview-pdfs-from-file-explorer-1293750
+  product_id: adobe-acrobat-pro
+  update_version: 23.008.20533
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/unable-to-preview-pdfs-from-file-explorer-1293750
+  parent_title: Unable to Preview PDFs from File Explorer
+  report_title: Unable to Preview PDFs from File Explorer
+  report_text_excerpt: Unable to Preview PDFs from File Explorer Acrobat version 23.008.20533. The issue is the preview function has stopped working in Windows 10 File Explorer. After searching for a solution on here I can see this issue has been posted many times over the years. Most recently in...
+  captured_at: '2026-11-27T08:22:55Z'
+  source_date: '2024-06-05'
+  target_release_date: '2024-02-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 23.008.20533
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified Acrobat issue
+  workflow_area: Acrobat workflow
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 0a4385b8116928e568ef670b0d0da3106a5d47e377bc4bd18ebeb8b1ec524041
+  title_dedup_sha256: 86244b06aff9128795337bcc173b46c1c680b61d42fc54010e63e845a494fb7c
+  issue_bucket: unspecified acrobat issue
+  facts_rule_version: v1
+- id: acrobat-23-008-20533-adobe-community-bug-report-https-community-adobe-com-questions-12-arm-update-process-hitting-1612-when-trying-to-update-150
+  product_id: adobe-acrobat-pro
+  update_version: 23.008.20533
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/arm-update-process-hitting-1612-when-trying-to-update-1505448
+  parent_title: ARM update process? Hitting 1612 when trying to update
+  report_title: ARM update process? Hitting 1612 when trying to update
+  report_text_excerpt: '...ProductName: Adobe Acrobat (64-bit) [2024-04-29 15:05:20:0340] ProductVersion: 23.008.20533 [2024-04-29 15:05:20:0340] ProductUACPatching: enabled [2024-04-29 15:05:20:0340] Product UI Language: ENU [2024-04-29 15:05:20:0340] ProductLanguage installed: 0...'
+  captured_at: '2026-11-27T08:22:55Z'
+  source_date: '2024-04-29'
+  target_release_date: '2024-02-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 23.008.20533
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: aa098a90af6ad2d01a110379c156f960a48c16126db600e53e7731b9983f0720
+  title_dedup_sha256: a280cf88f92462097bb0fdfce7f2c381e569c4738a5a99cd7b6cb0293319d190
+  issue_bucket: install/update failure
+  facts_rule_version: v1
+- id: acrobat-23-008-20533-adobe-community-bug-report-https-community-adobe-com-questions-9-constant-embarrassing-errors-now-a-serious-acrobat-install
+  product_id: adobe-acrobat-pro
+  update_version: 23.008.20533
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/constant-embarrassing-errors-now-a-serious-acrobat-installation-problem-1290403
+  parent_title: Constant embarrassing errors. Now a serious ACROBAT installation problem.
+  report_title: Constant embarrassing errors. Now a serious ACROBAT installation problem.
+  report_text_excerpt: '...error after about 45% of installation: ----------- Payload: Adobe Acrobat 23.8.20533.0 Adobe Acrobat\Setup.exe_23.008.20533 ----------- ERROR: DW071: ERROR: DW003: Third party payload installer Adobe Acrobat\Setup.exe failed with exit code: 1603...'
+  captured_at: '2026-11-27T08:22:55Z'
+  source_date: '2024-02-18'
+  target_release_date: '2024-02-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 23.008.20533
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 0faec116e3feb8b8877ff2fd5f31bb6bc876b9bf56b245aea7864c7ab725fa10
+  title_dedup_sha256: 385bc70ca37c4019219cd87cca13b1049cef7a65c243ededa3c1f45fb5d8cfaa
+  issue_bucket: install/update failure
+  facts_rule_version: v1
+- id: acrobat-23-008-20533-adobe-community-bug-report-https-community-adobe-com-questions-9-issues-with-opening-adobe-acrobat-dc-and-reader-and-pdfs-o
+  product_id: adobe-acrobat-pro
+  update_version: 23.008.20533
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/issues-with-opening-adobe-acrobat-dc-and-reader-and-pdfs-on-mac-catalina-10-15-1290407
+  parent_title: Issues with Opening Adobe Acrobat DC and Reader and PDFs on Mac Catalina 10.15
+  report_title: Issues with Opening Adobe Acrobat DC and Reader and PDFs on Mac Catalina 10.15
+  report_text_excerpt: '...then goes away) Macbook Air Details: Mac OS Catalina 10.15.3 Intel iCore 5 Adobe Version: 23.008.20533 After the uninstalling and reinstalling I went to adobe website to look at error codes Adobe Installation Error Codes. However, I don''t think any of these codes are...'
+  captured_at: '2026-11-27T08:22:55Z'
+  source_date: '2024-02-18'
+  target_release_date: '2024-02-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 23.008.20533
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified Acrobat issue
+  workflow_area: Acrobat workflow
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: d7155eb422f7982d755cce53d6b1303380c817db5aacd9f0e5f5b52f053982b4
+  title_dedup_sha256: c1283f14415c56821c25bdf2c8932f3b5ee9d69b64e8fc5b9b46bde00fb8e62b
+  issue_bucket: unspecified acrobat issue
+  facts_rule_version: v1
+- id: acrobat-20-005-30574-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-pro-2020-crash-after-changing-font-or-text-size-12
+  product_id: adobe-acrobat-pro
+  update_version: 20.005.30574
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-pro-2020-crash-after-changing-font-or-text-size-1290795
+  parent_title: Acrobat Pro 2020 Crash after changing font or text size
+  report_title: Acrobat Pro 2020 Crash after changing font or text size
+  report_text_excerpt: 'Acrobat Pro 2020 Crash after changing font or text size Acrobat Pro 2020 Version 20.005.30574 on MacOS 14.2.1 (23C71) Architecture: x86_64 Build: 20.5.30574.10574 AGM: 4.30.119 CoolType: 5.14.5 JP2K: 1.2.3.54296 It crashes always, when i try to change the font or text size....'
+  captured_at: '2026-11-27T08:22:55Z'
+  source_date: '2024-02-29'
+  target_release_date: '2024-02-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.005.30574
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 729fd0deccdf097e6abb135305561509b539e177c92f95b4dd0296dc7d665c5d
+  title_dedup_sha256: c3e29d86fbe8e17b8ee14226aa3387947c0036045737ef66b05087f521390bb3
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+- id: acrobat-20-005-30574-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-pro-crashes-when-attempting-to-change-font-1290427
+  product_id: adobe-acrobat-pro
+  update_version: 20.005.30574
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-pro-crashes-when-attempting-to-change-font-1290427
+  parent_title: Acrobat Pro Crashes When Attempting to Change Font
+  report_title: Acrobat Pro Crashes When Attempting to Change Font
+  report_text_excerpt: Acrobat Pro Crashes When Attempting to Change Font Hello, I'm experiencing a significant issue with Adobe Acrobat Pro (version 20.005.30574) on Mac OS Sonoma Version 14.3.1. Whenever I try to change the font from Helvetica to another font in any document, Acrobat Pro...
+  captured_at: '2026-11-27T08:22:55Z'
+  source_date: '2024-02-19'
+  target_release_date: '2024-02-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.005.30574
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: b20bf90fdf730123225fe8055ccbd4f35077151143d9f7ccbaaa5609c17173ac
+  title_dedup_sha256: cafbf9936689c04480df1e9d9af0d0bfa0eee01b9d27dc48234ae92d789abd62
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+- id: acrobat-25-001-20577-adobe-community-bug-report-https-community-adobe-com-questions-9-how-to-troubleshoot-acrobat-not-responding-or-freezing-130
+  product_id: adobe-acrobat-reader
+  update_version: 25.001.20577
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/how-to-troubleshoot-acrobat-not-responding-or-freezing-1303492
+  parent_title: How to troubleshoot Acrobat not responding or freezing
+  report_title: How to troubleshoot Acrobat not responding or freezing
+  report_text_excerpt: How to troubleshoot Acrobat not responding or freezing Good afternoon, There seems to be an issue after the latest update (25.001.20577) with Adobe Acrobat not responding. Sometimes Acrobat will freeze and we'll need to use task manager to close it out. Most of the time...
+  captured_at: '2026-11-27T08:45:06Z'
+  source_date: '2025-07-18'
+  target_release_date: '2025-07-17'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 25.001.20577
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 260ed09f7dc3d46d1036090ed87f2de4d8a9d464cc5b50f8524dadebebf8c796
+  title_dedup_sha256: cf25fdb8c1a0196e4d05d4323e186e9adac852617eb62cc21b4cef38321645da
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+- id: acrobat-25-001-20577-adobe-community-bug-report-https-community-adobe-com-questions-9-shared-comments-do-not-load-in-desktop-acrobat-app-1303849
+  product_id: adobe-acrobat-reader
+  update_version: 25.001.20577
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/shared-comments-do-not-load-in-desktop-acrobat-app-1303849
+  parent_title: Shared Comments do not load in desktop Acrobat app
+  report_title: Shared Comments do not load in desktop Acrobat app
+  report_text_excerpt: '...Acrobat Acrobat has been reinstalled multiple times and is currently on the version 25.001.20577 but there have been updates since the issue began that have not fixed the issue.'' Uninstalling using Revo Uninstaller to remove remaining files and reg keys and...'
+  captured_at: '2026-11-27T08:45:06Z'
+  source_date: '2025-08-07'
+  target_release_date: '2025-07-17'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 25.001.20577
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified Acrobat issue
+  workflow_area: Acrobat workflow
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 65142f4e9f1141db54282aa2cb5f8476b8557013baaa34b2994db03013758ae5
+  title_dedup_sha256: 36d7167d8fa807b01c8c4994256f7b09122bf3a1471fc1ab48f8af91b8d0ead1
+  issue_bucket: unspecified acrobat issue
+  facts_rule_version: v1
+- id: acrobat-25-001-20458-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-2025-001-20458-keeps-crashing-1301880
+  product_id: adobe-acrobat-reader
+  update_version: 25.001.20458
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-2025-001-20458-keeps-crashing-1301880
+  parent_title: Adobe Acrobat 2025.001.20458 keeps crashing
+  report_title: Adobe Acrobat 2025.001.20458 keeps crashing
+  report_text_excerpt: Adobe Acrobat 2025.001.20458 keeps crashing I've seen this problem on three computers now where the latest update Adobe Acrobat 2025.001.20458 keeps crashing. It crashes after a 2 or more minutes when opening any pdf file. I've proved that it only happens on the latest update...
+  captured_at: '2026-11-27T08:45:06Z'
+  source_date: '2025-04-23'
+  target_release_date: '2025-04-15'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 25.001.20458
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 93dc5d0b22c73ec43976546bba46b809fdc1d9300fe72acde2dfd001aab3bbf9
+  title_dedup_sha256: e57aafb19c5428ec1b6223b777fdd50516bbef3247208bfc2e4723681f3b85e9
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+- id: comfyui-0-46-0-github-issue-18019
+  product_id: comfyui
+  update_version: 0.46.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/18019
+  parent_title: '[Bug] DynamicVRAM (aimdo): _lazy_load_from_state_dict allocates massive FP32 torch.zeros() on missing keys under strict=False (~22-28 GB RAM spike & Windows OOM)'
+  report_title: '[Bug] DynamicVRAM (aimdo): _lazy_load_from_state_dict allocates massive FP32 torch.zeros() on missing keys under strict=False (~22-28 GB RAM spike & Windows OOM)'
+  report_text_excerpt: '[Bug] DynamicVRAM (aimdo): _lazy_load_from_state_dict allocates massive FP32 torch.zeros() on missing keys under strict=False (~22-28 GB RAM spike & Windows OOM) ### Summary Under ComfyUI `v0.46.0` with DynamicVRAM (`comfy-aimdo`) enabled,...'
+  captured_at: '2026-11-27T09:03:40Z'
+  source_date: '2026-11-27'
+  target_release_date: '2026-11-18'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.46.0
+  match_basis: core_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: out of memory
+  workflow_area: GPU and system memory
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: github_issues
+  matched_text: 0.46.0
+  matched_field: report_text
+  matched_context: '...r strict=False (~22-28 GB RAM spike & Windows OOM) ### Summary Under ComfyUI `v0.46.0` with DynamicVRAM (`comfy-aimdo`) enabled, `comfy.ops.disable_weight_init.Linea...'
+  excerpt_norm_sha256: 3b75cac3c3018d32583bb2837549941c76c2d389b1acd950c82503fc4b21a7d1
+  title_dedup_sha256: 604cc568a954610386e4390e3cc2102acaf9b8b5741b69d0f24ea31a27e3ed5c
+  issue_bucket: out of memory
+  facts_rule_version: v1
+- id: microsoft-teams-26304-1207-5384-858-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082959-i-am-the-meeting-organizer-but-i-am-un
+  product_id: microsoft-teams
+  update_version: 26304.1207.5384.858
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082959/i-am-the-meeting-organizer-but-i-am-unable-to-acce
+  parent_title: I am the meeting organizer but I am unable to access the meeting options. - Microsoft Q&A
+  report_title: I am the meeting organizer but I am unable to access the meeting options. - Microsoft Q&A
+  report_text_excerpt: I am the meeting organizer but I am unable to access the meeting options. I created a Teams meeting through outlook signed into my primary account. I am the organizer of the meeting and am listed as such on the Teams meeting invite. When I click on the meeting options in...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-25'
+  target_release_date: '2026-11-23'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 6d7cfac88db5d1d50ae8e1598fd6d4fc906c87fecb2716be2bac1436a814e9af
+  title_dedup_sha256: 2b277f23955c8495b7e24f2c52751a426799819a72733f2ce333f7df5bd1014b
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26304-1207-5384-858-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6063464-how-to-completely-hide-or-auto-minimiz
+  product_id: microsoft-teams
+  update_version: 26304.1207.5384.858
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6063464/how-to-completely-hide-or-auto-minimize-the-floati
+  parent_title: How to completely hide or auto-minimize the floating screen-sharing toolbar - Microsoft Q&A
+  report_title: How to completely hide or auto-minimize the floating screen-sharing toolbar - Microsoft Q&A
+  report_text_excerpt: How to completely hide or auto-minimize the floating screen-sharing toolbar Currently, when sharing the screen in Microsoft Teams, the floating presenter toolbar ("You are sharing your screen") remains visible at the top and frequently blocks browser tabs, menu bars, and other...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-06'
+  target_release_date: '2026-11-23'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 2cb7c66886eb2e8cc22ab471262cc7bea5fdd9d1a264b4ff47f20502a53cf174
+  title_dedup_sha256: 891e62fdc6e352a89382d75519c3ddf1da61a0b231a2601bd23fdc869d10f3f0
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26304-1207-5384-858-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082748-new-teams-cant-sign-in-answer-13066686
+  product_id: microsoft-teams
+  update_version: 26304.1207.5384.858
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082748/new-teams-cant-sign-in#answer-13066686
+  parent_title: New Teams can't sign in - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: What are you using your Teams on? Windows 11, or macOS? Please provide the OS info. If it is Windows. can you go to Settings > Accounts > Your info, share a screenshot of this page, edit to mask your personal email address when you share.
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-27T03:10:37.47+00:00'
+  target_release_date: '2026-11-23'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 1ce0437ad93a1d6be84c555d2d91fa4c4f062604f4fd796359fe2b0801c247be
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26304-1207-5384-858-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-what-e2-80-99s-new-in-microsoft-tea
+  product_id: microsoft-teams
+  update_version: 26304.1207.5384.858
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/what%e2%80%99s-new-in-microsoft-teams-feature-spotlight-%e2%80%93-together-emojis/3822872
+  parent_title: What’s New in Microsoft Teams Feature Spotlight – Together Emojis
+  report_title: What’s New in Microsoft Teams Feature Spotlight – Together Emojis
+  report_text_excerpt: What’s New in Microsoft Teams Feature Spotlight – Together Emojis We’re discussing a new feature each week in Microsoft Teams and this week we’re looking at the new Together Emoji. &amp;nbsp; I start every work day with a &apos;Good Morning&apos; message to my team and I...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2023-05-16'
+  target_release_date: '2026-11-23'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: f71da46f59e8543f6a3db88492f5549d3835c656248a281d77d4529f40dd941e
+  title_dedup_sha256: ba31c3079ce51c1eecfcff6300018e899a83ec35225526b04f6bb4c54b395897
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082959-i-am-the-meeting-organizer-but-i-am-un
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082959/i-am-the-meeting-organizer-but-i-am-unable-to-acce
+  parent_title: I am the meeting organizer but I am unable to access the meeting options. - Microsoft Q&A
+  report_title: I am the meeting organizer but I am unable to access the meeting options. - Microsoft Q&A
+  report_text_excerpt: I am the meeting organizer but I am unable to access the meeting options. I created a Teams meeting through outlook signed into my primary account. I am the organizer of the meeting and am listed as such on the Teams meeting invite. When I click on the meeting options in...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-25'
+  target_release_date: '2026-11-05'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 6d7cfac88db5d1d50ae8e1598fd6d4fc906c87fecb2716be2bac1436a814e9af
+  title_dedup_sha256: 2b277f23955c8495b7e24f2c52751a426799819a72733f2ce333f7df5bd1014b
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6063464-how-to-completely-hide-or-auto-minimiz
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6063464/how-to-completely-hide-or-auto-minimize-the-floati
+  parent_title: How to completely hide or auto-minimize the floating screen-sharing toolbar - Microsoft Q&A
+  report_title: How to completely hide or auto-minimize the floating screen-sharing toolbar - Microsoft Q&A
+  report_text_excerpt: How to completely hide or auto-minimize the floating screen-sharing toolbar Currently, when sharing the screen in Microsoft Teams, the floating presenter toolbar ("You are sharing your screen") remains visible at the top and frequently blocks browser tabs, menu bars, and other...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-06'
+  target_release_date: '2026-11-05'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 2cb7c66886eb2e8cc22ab471262cc7bea5fdd9d1a264b4ff47f20502a53cf174
+  title_dedup_sha256: 891e62fdc6e352a89382d75519c3ddf1da61a0b231a2601bd23fdc869d10f3f0
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082748-new-teams-cant-sign-in-answer-13066686
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082748/new-teams-cant-sign-in#answer-13066686
+  parent_title: New Teams can't sign in - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: What are you using your Teams on? Windows 11, or macOS? Please provide the OS info. If it is Windows. can you go to Settings > Accounts > Your info, share a screenshot of this page, edit to mask your personal email address when you share.
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-27T03:10:37.47+00:00'
+  target_release_date: '2026-11-05'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 1ce0437ad93a1d6be84c555d2d91fa4c4f062604f4fd796359fe2b0801c247be
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-what-e2-80-99s-new-in-microsoft-tea
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/what%e2%80%99s-new-in-microsoft-teams-feature-spotlight-%e2%80%93-together-emojis/3822872
+  parent_title: What’s New in Microsoft Teams Feature Spotlight – Together Emojis
+  report_title: What’s New in Microsoft Teams Feature Spotlight – Together Emojis
+  report_text_excerpt: What’s New in Microsoft Teams Feature Spotlight – Together Emojis We’re discussing a new feature each week in Microsoft Teams and this week we’re looking at the new Together Emoji. &amp;nbsp; I start every work day with a &apos;Good Morning&apos; message to my team and I...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2023-05-16'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: f71da46f59e8543f6a3db88492f5549d3835c656248a281d77d4529f40dd941e
+  title_dedup_sha256: ba31c3079ce51c1eecfcff6300018e899a83ec35225526b04f6bb4c54b395897
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082959-i-am-the-meeting-organizer-but-i-am-un
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082959/i-am-the-meeting-organizer-but-i-am-unable-to-acce
+  parent_title: I am the meeting organizer but I am unable to access the meeting options. - Microsoft Q&A
+  report_title: I am the meeting organizer but I am unable to access the meeting options. - Microsoft Q&A
+  report_text_excerpt: I am the meeting organizer but I am unable to access the meeting options. I created a Teams meeting through outlook signed into my primary account. I am the organizer of the meeting and am listed as such on the Teams meeting invite. When I click on the meeting options in...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-25'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: 6d7cfac88db5d1d50ae8e1598fd6d4fc906c87fecb2716be2bac1436a814e9af
+  title_dedup_sha256: 2b277f23955c8495b7e24f2c52751a426799819a72733f2ce333f7df5bd1014b
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6063464-how-to-completely-hide-or-auto-minimiz
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6063464/how-to-completely-hide-or-auto-minimize-the-floati
+  parent_title: How to completely hide or auto-minimize the floating screen-sharing toolbar - Microsoft Q&A
+  report_title: How to completely hide or auto-minimize the floating screen-sharing toolbar - Microsoft Q&A
+  report_text_excerpt: How to completely hide or auto-minimize the floating screen-sharing toolbar Currently, when sharing the screen in Microsoft Teams, the floating presenter toolbar ("You are sharing your screen") remains visible at the top and frequently blocks browser tabs, menu bars, and other...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-06'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: 2cb7c66886eb2e8cc22ab471262cc7bea5fdd9d1a264b4ff47f20502a53cf174
+  title_dedup_sha256: 891e62fdc6e352a89382d75519c3ddf1da61a0b231a2601bd23fdc869d10f3f0
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082748-new-teams-cant-sign-in-answer-13066686
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082748/new-teams-cant-sign-in#answer-13066686
+  parent_title: New Teams can't sign in - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: What are you using your Teams on? Windows 11, or macOS? Please provide the OS info. If it is Windows. can you go to Settings > Accounts > Your info, share a screenshot of this page, edit to mask your personal email address when you share.
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-27T03:10:37.47+00:00'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: 1ce0437ad93a1d6be84c555d2d91fa4c4f062604f4fd796359fe2b0801c247be
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-what-e2-80-99s-new-in-microsoft-tea
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/what%e2%80%99s-new-in-microsoft-teams-feature-spotlight-%e2%80%93-together-emojis/3822872
+  parent_title: What’s New in Microsoft Teams Feature Spotlight – Together Emojis
+  report_title: What’s New in Microsoft Teams Feature Spotlight – Together Emojis
+  report_text_excerpt: What’s New in Microsoft Teams Feature Spotlight – Together Emojis We’re discussing a new feature each week in Microsoft Teams and this week we’re looking at the new Together Emoji. &amp;nbsp; I start every work day with a &apos;Good Morning&apos; message to my team and I...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2023-05-16'
+  target_release_date: '2026-10-22'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: f71da46f59e8543f6a3db88492f5549d3835c656248a281d77d4529f40dd941e
+  title_dedup_sha256: ba31c3079ce51c1eecfcff6300018e899a83ec35225526b04f6bb4c54b395897
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082959-i-am-the-meeting-organizer-but-i-am-un
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082959/i-am-the-meeting-organizer-but-i-am-unable-to-acce
+  parent_title: I am the meeting organizer but I am unable to access the meeting options. - Microsoft Q&A
+  report_title: I am the meeting organizer but I am unable to access the meeting options. - Microsoft Q&A
+  report_text_excerpt: I am the meeting organizer but I am unable to access the meeting options. I created a Teams meeting through outlook signed into my primary account. I am the organizer of the meeting and am listed as such on the Teams meeting invite. When I click on the meeting options in...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-25'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: 6d7cfac88db5d1d50ae8e1598fd6d4fc906c87fecb2716be2bac1436a814e9af
+  title_dedup_sha256: 2b277f23955c8495b7e24f2c52751a426799819a72733f2ce333f7df5bd1014b
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6063464-how-to-completely-hide-or-auto-minimiz
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6063464/how-to-completely-hide-or-auto-minimize-the-floati
+  parent_title: How to completely hide or auto-minimize the floating screen-sharing toolbar - Microsoft Q&A
+  report_title: How to completely hide or auto-minimize the floating screen-sharing toolbar - Microsoft Q&A
+  report_text_excerpt: How to completely hide or auto-minimize the floating screen-sharing toolbar Currently, when sharing the screen in Microsoft Teams, the floating presenter toolbar ("You are sharing your screen") remains visible at the top and frequently blocks browser tabs, menu bars, and other...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-06'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: 2cb7c66886eb2e8cc22ab471262cc7bea5fdd9d1a264b4ff47f20502a53cf174
+  title_dedup_sha256: 891e62fdc6e352a89382d75519c3ddf1da61a0b231a2601bd23fdc869d10f3f0
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082748-new-teams-cant-sign-in-answer-13066686
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082748/new-teams-cant-sign-in#answer-13066686
+  parent_title: New Teams can't sign in - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: What are you using your Teams on? Windows 11, or macOS? Please provide the OS info. If it is Windows. can you go to Settings > Accounts > Your info, share a screenshot of this page, edit to mask your personal email address when you share.
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-27T03:10:37.47+00:00'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: 1ce0437ad93a1d6be84c555d2d91fa4c4f062604f4fd796359fe2b0801c247be
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-what-e2-80-99s-new-in-microsoft-tea
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/what%e2%80%99s-new-in-microsoft-teams-feature-spotlight-%e2%80%93-together-emojis/3822872
+  parent_title: What’s New in Microsoft Teams Feature Spotlight – Together Emojis
+  report_title: What’s New in Microsoft Teams Feature Spotlight – Together Emojis
+  report_text_excerpt: What’s New in Microsoft Teams Feature Spotlight – Together Emojis We’re discussing a new feature each week in Microsoft Teams and this week we’re looking at the new Together Emoji. &amp;nbsp; I start every work day with a &apos;Good Morning&apos; message to my team and I...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2023-05-16'
+  target_release_date: '2026-10-15'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: f71da46f59e8543f6a3db88492f5549d3835c656248a281d77d4529f40dd941e
+  title_dedup_sha256: ba31c3079ce51c1eecfcff6300018e899a83ec35225526b04f6bb4c54b395897
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082959-i-am-the-meeting-organizer-but-i-am-un
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082959/i-am-the-meeting-organizer-but-i-am-unable-to-acce
+  parent_title: I am the meeting organizer but I am unable to access the meeting options. - Microsoft Q&A
+  report_title: I am the meeting organizer but I am unable to access the meeting options. - Microsoft Q&A
+  report_text_excerpt: I am the meeting organizer but I am unable to access the meeting options. I created a Teams meeting through outlook signed into my primary account. I am the organizer of the meeting and am listed as such on the Teams meeting invite. When I click on the meeting options in...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-25'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 6d7cfac88db5d1d50ae8e1598fd6d4fc906c87fecb2716be2bac1436a814e9af
+  title_dedup_sha256: 2b277f23955c8495b7e24f2c52751a426799819a72733f2ce333f7df5bd1014b
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6063464-how-to-completely-hide-or-auto-minimiz
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6063464/how-to-completely-hide-or-auto-minimize-the-floati
+  parent_title: How to completely hide or auto-minimize the floating screen-sharing toolbar - Microsoft Q&A
+  report_title: How to completely hide or auto-minimize the floating screen-sharing toolbar - Microsoft Q&A
+  report_text_excerpt: How to completely hide or auto-minimize the floating screen-sharing toolbar Currently, when sharing the screen in Microsoft Teams, the floating presenter toolbar ("You are sharing your screen") remains visible at the top and frequently blocks browser tabs, menu bars, and other...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-06'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 2cb7c66886eb2e8cc22ab471262cc7bea5fdd9d1a264b4ff47f20502a53cf174
+  title_dedup_sha256: 891e62fdc6e352a89382d75519c3ddf1da61a0b231a2601bd23fdc869d10f3f0
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082748-new-teams-cant-sign-in-answer-13066686
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082748/new-teams-cant-sign-in#answer-13066686
+  parent_title: New Teams can't sign in - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: What are you using your Teams on? Windows 11, or macOS? Please provide the OS info. If it is Windows. can you go to Settings > Accounts > Your info, share a screenshot of this page, edit to mask your personal email address when you share.
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-27T03:10:37.47+00:00'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 1ce0437ad93a1d6be84c555d2d91fa4c4f062604f4fd796359fe2b0801c247be
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-what-e2-80-99s-new-in-microsoft-tea
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/what%e2%80%99s-new-in-microsoft-teams-feature-spotlight-%e2%80%93-together-emojis/3822872
+  parent_title: What’s New in Microsoft Teams Feature Spotlight – Together Emojis
+  report_title: What’s New in Microsoft Teams Feature Spotlight – Together Emojis
+  report_text_excerpt: What’s New in Microsoft Teams Feature Spotlight – Together Emojis We’re discussing a new feature each week in Microsoft Teams and this week we’re looking at the new Together Emoji. &amp;nbsp; I start every work day with a &apos;Good Morning&apos; message to my team and I...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2023-05-16'
+  target_release_date: '2026-10-01'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: f71da46f59e8543f6a3db88492f5549d3835c656248a281d77d4529f40dd941e
+  title_dedup_sha256: ba31c3079ce51c1eecfcff6300018e899a83ec35225526b04f6bb4c54b395897
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082959-i-am-the-meeting-organizer-but-i-am-un
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082959/i-am-the-meeting-organizer-but-i-am-unable-to-acce
+  parent_title: I am the meeting organizer but I am unable to access the meeting options. - Microsoft Q&A
+  report_title: I am the meeting organizer but I am unable to access the meeting options. - Microsoft Q&A
+  report_text_excerpt: I am the meeting organizer but I am unable to access the meeting options. I created a Teams meeting through outlook signed into my primary account. I am the organizer of the meeting and am listed as such on the Teams meeting invite. When I click on the meeting options in...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-25'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 6d7cfac88db5d1d50ae8e1598fd6d4fc906c87fecb2716be2bac1436a814e9af
+  title_dedup_sha256: 2b277f23955c8495b7e24f2c52751a426799819a72733f2ce333f7df5bd1014b
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6063464-how-to-completely-hide-or-auto-minimiz
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6063464/how-to-completely-hide-or-auto-minimize-the-floati
+  parent_title: How to completely hide or auto-minimize the floating screen-sharing toolbar - Microsoft Q&A
+  report_title: How to completely hide or auto-minimize the floating screen-sharing toolbar - Microsoft Q&A
+  report_text_excerpt: How to completely hide or auto-minimize the floating screen-sharing toolbar Currently, when sharing the screen in Microsoft Teams, the floating presenter toolbar ("You are sharing your screen") remains visible at the top and frequently blocks browser tabs, menu bars, and other...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-06'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 2cb7c66886eb2e8cc22ab471262cc7bea5fdd9d1a264b4ff47f20502a53cf174
+  title_dedup_sha256: 891e62fdc6e352a89382d75519c3ddf1da61a0b231a2601bd23fdc869d10f3f0
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082748-new-teams-cant-sign-in-answer-13066686
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082748/new-teams-cant-sign-in#answer-13066686
+  parent_title: New Teams can't sign in - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: What are you using your Teams on? Windows 11, or macOS? Please provide the OS info. If it is Windows. can you go to Settings > Accounts > Your info, share a screenshot of this page, edit to mask your personal email address when you share.
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-27T03:10:37.47+00:00'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 1ce0437ad93a1d6be84c555d2d91fa4c4f062604f4fd796359fe2b0801c247be
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-what-e2-80-99s-new-in-microsoft-tea
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/what%e2%80%99s-new-in-microsoft-teams-feature-spotlight-%e2%80%93-together-emojis/3822872
+  parent_title: What’s New in Microsoft Teams Feature Spotlight – Together Emojis
+  report_title: What’s New in Microsoft Teams Feature Spotlight – Together Emojis
+  report_text_excerpt: What’s New in Microsoft Teams Feature Spotlight – Together Emojis We’re discussing a new feature each week in Microsoft Teams and this week we’re looking at the new Together Emoji. &amp;nbsp; I start every work day with a &apos;Good Morning&apos; message to my team and I...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2023-05-16'
+  target_release_date: '2026-09-24'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: f71da46f59e8543f6a3db88492f5549d3835c656248a281d77d4529f40dd941e
+  title_dedup_sha256: ba31c3079ce51c1eecfcff6300018e899a83ec35225526b04f6bb4c54b395897
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082959-i-am-the-meeting-organizer-but-i-am-un
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082959/i-am-the-meeting-organizer-but-i-am-unable-to-acce
+  parent_title: I am the meeting organizer but I am unable to access the meeting options. - Microsoft Q&A
+  report_title: I am the meeting organizer but I am unable to access the meeting options. - Microsoft Q&A
+  report_text_excerpt: I am the meeting organizer but I am unable to access the meeting options. I created a Teams meeting through outlook signed into my primary account. I am the organizer of the meeting and am listed as such on the Teams meeting invite. When I click on the meeting options in...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-25'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: 6d7cfac88db5d1d50ae8e1598fd6d4fc906c87fecb2716be2bac1436a814e9af
+  title_dedup_sha256: 2b277f23955c8495b7e24f2c52751a426799819a72733f2ce333f7df5bd1014b
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6063464-how-to-completely-hide-or-auto-minimiz
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6063464/how-to-completely-hide-or-auto-minimize-the-floati
+  parent_title: How to completely hide or auto-minimize the floating screen-sharing toolbar - Microsoft Q&A
+  report_title: How to completely hide or auto-minimize the floating screen-sharing toolbar - Microsoft Q&A
+  report_text_excerpt: How to completely hide or auto-minimize the floating screen-sharing toolbar Currently, when sharing the screen in Microsoft Teams, the floating presenter toolbar ("You are sharing your screen") remains visible at the top and frequently blocks browser tabs, menu bars, and other...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-06'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: 2cb7c66886eb2e8cc22ab471262cc7bea5fdd9d1a264b4ff47f20502a53cf174
+  title_dedup_sha256: 891e62fdc6e352a89382d75519c3ddf1da61a0b231a2601bd23fdc869d10f3f0
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082748-new-teams-cant-sign-in-answer-13066686
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082748/new-teams-cant-sign-in#answer-13066686
+  parent_title: New Teams can't sign in - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: What are you using your Teams on? Windows 11, or macOS? Please provide the OS info. If it is Windows. can you go to Settings > Accounts > Your info, share a screenshot of this page, edit to mask your personal email address when you share.
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-27T03:10:37.47+00:00'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: 1ce0437ad93a1d6be84c555d2d91fa4c4f062604f4fd796359fe2b0801c247be
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-what-e2-80-99s-new-in-microsoft-tea
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/what%e2%80%99s-new-in-microsoft-teams-feature-spotlight-%e2%80%93-together-emojis/3822872
+  parent_title: What’s New in Microsoft Teams Feature Spotlight – Together Emojis
+  report_title: What’s New in Microsoft Teams Feature Spotlight – Together Emojis
+  report_text_excerpt: What’s New in Microsoft Teams Feature Spotlight – Together Emojis We’re discussing a new feature each week in Microsoft Teams and this week we’re looking at the new Together Emoji. &amp;nbsp; I start every work day with a &apos;Good Morning&apos; message to my team and I...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2023-05-16'
+  target_release_date: '2026-09-08'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: f71da46f59e8543f6a3db88492f5549d3835c656248a281d77d4529f40dd941e
+  title_dedup_sha256: ba31c3079ce51c1eecfcff6300018e899a83ec35225526b04f6bb4c54b395897
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082959-i-am-the-meeting-organizer-but-i-am-un
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082959/i-am-the-meeting-organizer-but-i-am-unable-to-acce
+  parent_title: I am the meeting organizer but I am unable to access the meeting options. - Microsoft Q&A
+  report_title: I am the meeting organizer but I am unable to access the meeting options. - Microsoft Q&A
+  report_text_excerpt: I am the meeting organizer but I am unable to access the meeting options. I created a Teams meeting through outlook signed into my primary account. I am the organizer of the meeting and am listed as such on the Teams meeting invite. When I click on the meeting options in...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-25'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 6d7cfac88db5d1d50ae8e1598fd6d4fc906c87fecb2716be2bac1436a814e9af
+  title_dedup_sha256: 2b277f23955c8495b7e24f2c52751a426799819a72733f2ce333f7df5bd1014b
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6063464-how-to-completely-hide-or-auto-minimiz
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6063464/how-to-completely-hide-or-auto-minimize-the-floati
+  parent_title: How to completely hide or auto-minimize the floating screen-sharing toolbar - Microsoft Q&A
+  report_title: How to completely hide or auto-minimize the floating screen-sharing toolbar - Microsoft Q&A
+  report_text_excerpt: How to completely hide or auto-minimize the floating screen-sharing toolbar Currently, when sharing the screen in Microsoft Teams, the floating presenter toolbar ("You are sharing your screen") remains visible at the top and frequently blocks browser tabs, menu bars, and other...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-06'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 2cb7c66886eb2e8cc22ab471262cc7bea5fdd9d1a264b4ff47f20502a53cf174
+  title_dedup_sha256: 891e62fdc6e352a89382d75519c3ddf1da61a0b231a2601bd23fdc869d10f3f0
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082748-new-teams-cant-sign-in-answer-13066686
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082748/new-teams-cant-sign-in#answer-13066686
+  parent_title: New Teams can't sign in - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: What are you using your Teams on? Windows 11, or macOS? Please provide the OS info. If it is Windows. can you go to Settings > Accounts > Your info, share a screenshot of this page, edit to mask your personal email address when you share.
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-27T03:10:37.47+00:00'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 1ce0437ad93a1d6be84c555d2d91fa4c4f062604f4fd796359fe2b0801c247be
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-what-e2-80-99s-new-in-microsoft-tea
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/what%e2%80%99s-new-in-microsoft-teams-feature-spotlight-%e2%80%93-together-emojis/3822872
+  parent_title: What’s New in Microsoft Teams Feature Spotlight – Together Emojis
+  report_title: What’s New in Microsoft Teams Feature Spotlight – Together Emojis
+  report_text_excerpt: What’s New in Microsoft Teams Feature Spotlight – Together Emojis We’re discussing a new feature each week in Microsoft Teams and this week we’re looking at the new Together Emoji. &amp;nbsp; I start every work day with a &apos;Good Morning&apos; message to my team and I...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2023-05-16'
+  target_release_date: '2026-08-20'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: f71da46f59e8543f6a3db88492f5549d3835c656248a281d77d4529f40dd941e
+  title_dedup_sha256: ba31c3079ce51c1eecfcff6300018e899a83ec35225526b04f6bb4c54b395897
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082959-i-am-the-meeting-organizer-but-i-am-un
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082959/i-am-the-meeting-organizer-but-i-am-unable-to-acce
+  parent_title: I am the meeting organizer but I am unable to access the meeting options. - Microsoft Q&A
+  report_title: I am the meeting organizer but I am unable to access the meeting options. - Microsoft Q&A
+  report_text_excerpt: I am the meeting organizer but I am unable to access the meeting options. I created a Teams meeting through outlook signed into my primary account. I am the organizer of the meeting and am listed as such on the Teams meeting invite. When I click on the meeting options in...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-25'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 6d7cfac88db5d1d50ae8e1598fd6d4fc906c87fecb2716be2bac1436a814e9af
+  title_dedup_sha256: 2b277f23955c8495b7e24f2c52751a426799819a72733f2ce333f7df5bd1014b
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6063464-how-to-completely-hide-or-auto-minimiz
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6063464/how-to-completely-hide-or-auto-minimize-the-floati
+  parent_title: How to completely hide or auto-minimize the floating screen-sharing toolbar - Microsoft Q&A
+  report_title: How to completely hide or auto-minimize the floating screen-sharing toolbar - Microsoft Q&A
+  report_text_excerpt: How to completely hide or auto-minimize the floating screen-sharing toolbar Currently, when sharing the screen in Microsoft Teams, the floating presenter toolbar ("You are sharing your screen") remains visible at the top and frequently blocks browser tabs, menu bars, and other...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-06'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 2cb7c66886eb2e8cc22ab471262cc7bea5fdd9d1a264b4ff47f20502a53cf174
+  title_dedup_sha256: 891e62fdc6e352a89382d75519c3ddf1da61a0b231a2601bd23fdc869d10f3f0
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082748-new-teams-cant-sign-in-answer-13066686
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082748/new-teams-cant-sign-in#answer-13066686
+  parent_title: New Teams can't sign in - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: What are you using your Teams on? Windows 11, or macOS? Please provide the OS info. If it is Windows. can you go to Settings > Accounts > Your info, share a screenshot of this page, edit to mask your personal email address when you share.
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-27T03:10:37.47+00:00'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 1ce0437ad93a1d6be84c555d2d91fa4c4f062604f4fd796359fe2b0801c247be
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-what-e2-80-99s-new-in-microsoft-tea
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/what%e2%80%99s-new-in-microsoft-teams-feature-spotlight-%e2%80%93-together-emojis/3822872
+  parent_title: What’s New in Microsoft Teams Feature Spotlight – Together Emojis
+  report_title: What’s New in Microsoft Teams Feature Spotlight – Together Emojis
+  report_text_excerpt: What’s New in Microsoft Teams Feature Spotlight – Together Emojis We’re discussing a new feature each week in Microsoft Teams and this week we’re looking at the new Together Emoji. &amp;nbsp; I start every work day with a &apos;Good Morning&apos; message to my team and I...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2023-05-16'
+  target_release_date: '2026-08-03'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: f71da46f59e8543f6a3db88492f5549d3835c656248a281d77d4529f40dd941e
+  title_dedup_sha256: ba31c3079ce51c1eecfcff6300018e899a83ec35225526b04f6bb4c54b395897
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: obs-studio-33-0-3-github-issue-14262
+  product_id: obs-studio
+  update_version: 33.0.3
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14262
+  parent_title: Crash on exit in VolumeControl::onSourceActiveChanged (dangling const char *uuid)
+  report_title: Crash on exit in VolumeControl::onSourceActiveChanged (dangling const char *uuid)
+  report_text_excerpt: '11 ### Other OS _No response_ ### OBS Studio Version Other ### OBS Studio Version (Other) 33.0.3 (also happened on 33.0.0 and 32.2.2) ### OBS Studio Log URL https://obsproject.com/logs/hCo3tiG1lh20pjXE ### OBS Studio Crash Log URL https://obsproject.com/logs/crashes/t77RNJt8gErjB'
+  captured_at: '2026-11-27T09:39:59Z'
+  source_date: '2026-11-27'
+  patch_version_matched: true
+  matched_version: 33.0.3
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: github_issues
+  excerpt_norm_sha256: edef83e0d724fee814acb5d9fffa197abdef84945ca700107cf1674a9da79909
+  title_dedup_sha256: 67bf28e23f9fa417215417e84bb798810a9aec506eebc1c4d7cc95528951afb4
+  issue_bucket: audio mixer or routing issues
+  facts_rule_version: v1
+- id: obs-studio-33-0-0-github-issue-14262
+  product_id: obs-studio
+  update_version: 33.0.0
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14262
+  parent_title: Crash on exit in VolumeControl::onSourceActiveChanged (dangling const char *uuid)
+  report_title: Crash on exit in VolumeControl::onSourceActiveChanged (dangling const char *uuid)
+  report_text_excerpt: 'nse_ ### OBS Studio Version Other ### OBS Studio Version (Other) 33.0.3 (also happened on 33.0.0 and 32.2.2) ### OBS Studio Log URL https://obsproject.com/logs/hCo3tiG1lh20pjXE ### OBS Studio Crash Log URL https://obsproject.com/logs/crashes/t77RNJt8gErjBJrw ### Expected Behavior'
+  captured_at: '2026-11-27T09:50:01Z'
+  source_date: '2026-11-27'
+  patch_version_matched: true
+  matched_version: 33.0.0
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: github_issues
+  excerpt_norm_sha256: a49d4c47c4248bdd760d6b4a551375be1b117906d0698e1613eb74d5197b4c21
+  title_dedup_sha256: 67bf28e23f9fa417215417e84bb798810a9aec506eebc1c4d7cc95528951afb4
+  issue_bucket: audio mixer or routing issues
+  facts_rule_version: v1
