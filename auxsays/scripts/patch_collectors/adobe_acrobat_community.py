@@ -24,6 +24,7 @@ from __future__ import annotations
 import json
 import re
 import sys
+import time
 import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
@@ -48,6 +49,9 @@ from lib.target_outcome import (
 # Active RuntimeBudget for the collector currently running (set by AdobeAcrobatCollector.collect). Safe as
 # a module global because collectors run strictly serially (no concurrent repository writes / requests).
 _ACTIVE_BUDGET: Any = None
+# {host: requests sent} for the collector invocation in progress; reset by AdobeAcrobatCollector.collect.
+# Module global for the same reason as _ACTIVE_BUDGET: collectors run strictly serially.
+_REQUEST_COUNTS: dict[str, int] = {}
 
 
 def acrobat_version_aliases(version: str) -> tuple[str, ...]:
@@ -154,6 +158,11 @@ def _newest_first(records: list[Any]) -> list[Any]:
                   reverse=True)
 
 
+def _now() -> datetime:
+    """The instant the rotation orders against. A function so a replay can pin it."""
+    return datetime.now(timezone.utc)
+
+
 def _retired_methods_enabled() -> bool:
     """Re-enable the two blocked fallback methods, for a one-off reachability re-test.
 
@@ -188,8 +197,11 @@ from .base import (
     first_post_excerpt_span,
     generated_records,
     load_front_matter_and_body,
+    load_method_health,
     make_evidence_row,
     method_health_row,
+    METHOD_HEALTH_PATH,
+    rejection_reason_counts,
     slug,
     source_url_is_specific,
     utc_now,
@@ -581,6 +593,11 @@ def acrobat_classify(text: str, title: str = "") -> tuple[str, str, str, str, st
 
 # --- HTTP (Adobe Community) ---------------------------------------------------
 
+def _count_request(url: str) -> None:
+    host = urllib.parse.urlsplit(url).netloc.lower()
+    _REQUEST_COUNTS[host] = _REQUEST_COUNTS.get(host, 0) + 1
+
+
 def _bounded_fetch(url: str, *, budget: Any, headers: dict[str, str], data: bytes | None, method: str | None,
                    max_bytes: int, family: str) -> tuple[int, str, str]:
     """Hard-bounded (total wall-clock deadline, byte-capped) Acrobat Community/Algolia fetch. Converts a
@@ -590,6 +607,9 @@ def _bounded_fetch(url: str, *, budget: Any, headers: dict[str, str], data: byte
         budget.note_request()
     except rb.MethodBudgetExhausted as exc:
         raise AcrobatCommunityAccessError(f"budget_{exc.reason}") from exc
+    # Counted once the request is actually sent (a budget refusal above sends nothing), by host, so
+    # each record's method-health row and the run's coverage event carry the MEASURED Adobe cost.
+    _count_request(url)
     try:
         resp = rb.bounded_request(url, budget=budget, endpoint_family=family, headers=headers, data=data, method=method, max_bytes=max_bytes)
     except rb.RequestDeadlineExceeded as exc:
@@ -609,6 +629,7 @@ def _request_text(url: str, timeout: int = 30, max_bytes: int = 800000) -> str:
             raise AcrobatCommunityAccessError(signature, status=status)
         return body
     req = urllib.request.Request(url, headers=HEADERS)
+    _count_request(url)
     try:
         with urllib.request.urlopen(req, timeout=timeout) as response:
             status = getattr(response, "status", None)
@@ -664,6 +685,7 @@ def _request_json(url: str, *, headers: dict[str, str], data: bytes | None = Non
         except json.JSONDecodeError as exc:
             raise AcrobatCommunityAccessError("invalid_json") from exc
     req = urllib.request.Request(url, headers=headers, data=data, method=method)
+    _count_request(url)
     try:
         with urllib.request.urlopen(req, timeout=timeout) as response:
             status = getattr(response, "status", None)
@@ -1167,15 +1189,95 @@ class AdobeAcrobatCollector(ProductCollector):
         try:
             captured_at = utc_now()
             results: list[dict[str, Any]] = []
+            _REQUEST_COUNTS.clear()
             records = generated_records(self.product_id, context.target_versions, include_archived=bool(context.target_versions))
-            records = _newest_first(records)
-            return self._collect_records(records, context, captured_at, budget, results)
+            if context.target_versions:
+                # An operator's explicit version list keeps the old order and no record cap.
+                records, cap, stored, now = _newest_first(records), None, None, None
+            else:
+                # ROTATION (R4-ACR, lib/acrobat_rotation): recent releases first, then the records
+                # checked longest ago, capped so Adobe Community requests per run cannot rise. The
+                # cursor is the stored method-health `last_run`, which this collector already writes.
+                from lib import acrobat_rotation as rot  # noqa: PLC0415
+                now = _now()
+                stored = load_method_health(METHOD_HEALTH_PATH)
+                cap = rot.max_records_per_run()
+                records = rot.rotation_order(records, stored, now, cap=cap)
+            results = self._collect_records(records, context, captured_at, budget, results, cap=cap)
+            self._emit_coverage(records, results, cap=cap, stored=stored, now=now)
+            return results
         finally:
             _set_active_budget(None)
 
+    def _emit_coverage(self, records: list[Any], results: list[dict[str, Any]], *, cap: int | None,
+                       stored: list[dict[str, Any]] | None, now: datetime | None) -> dict[str, Any]:
+        """One `acrobat_coverage` event per run: what the walk reached and what it cost. Every
+        number is counted from this run's own results and request counter; stale/never-attempted
+        remaining are the monitoring ladder over the stored rows as this run leaves them."""
+        from lib import acrobat_rotation as rot  # noqa: PLC0415
+        reasons: dict[str, int] = {}
+        successful = 0
+        for result in results:
+            for code, n in (result.get("rejection_reasons") or {}).items():
+                reasons[code] = reasons.get(code, 0) + int(n)
+            if any(row.get("method_id") == rot.PRIMARY_METHOD
+                   and row.get("status") in {"success", "no_results", "partial", "low_confidence"}
+                   for row in result.get("method_health") or ()):
+                successful += 1
+        # str()-coerced like the rotation module: a record with no date must not raise here, after all
+        # the network work, and roll the collector back.
+        recent = {r.update_version for r in sorted(
+            records, key=lambda r: (str(getattr(r, "update_published_at", "") or ""), str(r.update_version or "")),
+            reverse=True)[:rot.RECENT_WINDOW]}
+        event: dict[str, Any] = {
+            "order": "targeted" if cap is None else "rotation",
+            "cap": cap,
+            "records_total": len(records),
+            "records_attempted": len(results),
+            "recent_attempted": sum(1 for r in results if r.get("version") in recent),
+            "successful_searches": successful,
+            "accepted_reports": sum(int(r.get("accepted_count") or 0) for r in results),
+            "rejection_reasons": dict(sorted(reasons.items())),
+            "requests_by_host": dict(sorted(_REQUEST_COUNTS.items())),
+            "requests_total": sum(_REQUEST_COUNTS.values()),
+            "revisit_bound_runs": rot.revisit_bound_runs(len(records), cap) if cap else None,
+        }
+        if stored is not None and now is not None:
+            try:
+                from lib import monitoring_health as mh  # noqa: PLC0415
+                from lib.patch_identity import key_from  # noqa: PLC0415
+                fresh = [row for r in results for row in (r.get("method_health") or ())]
+                replaced = {(key_from(row), row.get("method_id")) for row in fresh}
+                after = [row for row in stored if (key_from(row), row.get("method_id")) not in replaced] + fresh
+                thresholds = mh.load_thresholds(ROOT / "_config.yml")
+                event.update(rot.coverage_state(records, after, now, thresholds))
+                if cap:
+                    # The design limit, stated per run rather than assumed: when the worst-case revisit
+                    # at the delivered cadence outgrows the freshness window (corpus growth, a lowered
+                    # cap), pages will cycle back into COLLECTION STALE. Say so loudly.
+                    days = rot.revisit_bound_days(event["revisit_bound_runs"], rot.DELIVERED_RUNS_PER_DAY)
+                    event["revisit_bound_days_at_delivered_cadence"] = days
+                    event["freshness_window_days"] = thresholds.max_age_days
+                    if days > thresholds.max_age_days:
+                        event["warning"] = "revisit_bound_exceeds_freshness_window"
+                        rb.emit("acrobat_coverage_warning", product_id=self.product_id,
+                                reason=event["warning"], revisit_bound_runs=event["revisit_bound_runs"],
+                                revisit_bound_days=days, freshness_window_days=thresholds.max_age_days)
+            except Exception as exc:  # noqa: BLE001 -- telemetry must never fail the collection
+                event["coverage_state_error"] = type(exc).__name__
+        rb.emit("acrobat_coverage", product_id=self.product_id, **event)
+        self.last_coverage = event
+        return event
+
     def _collect_records(self, records: Any, context: CollectorContext, captured_at: str, budget: Any,
-                         results: list[dict[str, Any]]) -> list[dict[str, Any]]:
+                         results: list[dict[str, Any]], *, cap: int | None = None) -> list[dict[str, Any]]:
         for record in records:
+            # Record cap (rotation only): the per-run allowance that keeps Adobe Community requests
+            # at or below the newest-first walk's measured volume. A normal outcome, like the stop below.
+            if cap is not None and len(results) >= cap:
+                rb.emit("acrobat_record_cap_stop", product_id=self.product_id, cap=cap,
+                        remaining_records=len(records) - len(results))
+                break
             # Bounded stop: once the collector's discovery budget (deadline minus the reserved
             # finalization tail) is spent, stop processing further records and return what we have. This
             # is a NORMAL partial outcome -- prior records' evidence + health survive; the collector
@@ -1357,8 +1459,11 @@ class AdobeAcrobatCollector(ProductCollector):
             errors: list[dict[str, Any]] = []
             if budget is not None:
                 budget.start_method(method_id)  # per-method deadline (capped by remaining collector-finalize)
+            sent_before, started = sum(_REQUEST_COUNTS.values()), time.monotonic()
             candidates = fn(self.edition, record, context, errors)
+            requests_sent = sum(_REQUEST_COUNTS.values()) - sent_before
             accepted, rejected = evaluate_candidates(self.product_id, record, candidates, captured_at)
+            duration_ms = int((time.monotonic() - started) * 1000)
             for row in accepted:
                 url = str(row.get("source_url") or "").lower()
                 if url in accepted_urls:
@@ -1378,6 +1483,10 @@ class AdobeAcrobatCollector(ProductCollector):
                 blocked_reason=_blocked_reason(errors) or None,
                 last_run=captured_at,
                 notes=f"acrobat community collector; edition={self.product_id}",
+                # MEASURED cost and outcome of this attempt (optional fields the row already supports).
+                duration_ms=duration_ms,
+                requests=requests_sent,
+                rejection_reasons=rejection_reason_counts(rejected),
             ))
         # Each retired method still reports, with the one status that says what is true:
         # implemented, deliberately not executed. This is what stops its last real row from

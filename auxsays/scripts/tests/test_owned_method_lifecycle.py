@@ -174,6 +174,9 @@ TUNING = frozenset({
     # Order only: "0" tries a role's methods in declared order instead of history order. It cannot
     # switch a method on or off (lib.method_routing.order_methods is a permutation).
     "AUXSAYS_ADAPTIVE_ROUTING",
+    # Budget only: lowers the Acrobat rotation's records per run (it cannot raise it above 10, and it
+    # cannot switch a method on or off).
+    "AUXSAYS_ACROBAT_MAX_RECORDS_PER_RUN",
     "AUXSAYS_CHECKPOINT_DIR", "AUXSAYS_COLLECTOR_DEADLINE_SECONDS",
     "AUXSAYS_COLLECTOR_FINALIZE_RESERVE_SECONDS", "AUXSAYS_LEARN_QNA_REQUEST_DELAY_SECONDS",
     "AUXSAYS_LEARN_QNA_USER_AGENT", "AUXSAYS_MAX_REQUESTS_PER_METHOD",
