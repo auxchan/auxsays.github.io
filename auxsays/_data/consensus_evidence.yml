@@ -113811,7 +113811,6 @@ evidence:
   title_dedup_sha256: 67bf28e23f9fa417215417e84bb798810a9aec506eebc1c4d7cc95528951afb4
   issue_bucket: audio mixer or routing issues
   facts_rule_version: v1
-
 - id: acrobat-23-006-20380-adobe-community-bug-report-https-community-adobe-com-questions-9-nvda-and-adobe-acrobat-pro-crash-exception-exception-acces
   product_id: adobe-acrobat-pro
   update_version: 23.006.20380
@@ -113874,7 +113873,6 @@ evidence:
   title_dedup_sha256: dec350b1f1469d36ed49f5c2be2e032c58e716ea6d97a42be92b7ec3c06b576b
   issue_bucket: crash or launch failure
   facts_rule_version: v1
-
 - id: acrobat-20-005-30539-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-update-fail-error-1636-1289468
   product_id: adobe-acrobat-pro
   update_version: 20.005.30539
@@ -113906,7 +113904,6 @@ evidence:
   title_dedup_sha256: ccec42bf9014283078e941d986e01acfbf06174e2179581a0eecfd6854104557
   issue_bucket: install/update failure
   facts_rule_version: v1
-
 - id: acrobat-23-006-20360-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-acrobat-crashing-when-exiting-application-1504645
   product_id: adobe-acrobat-pro
   update_version: 23.006.20360
@@ -114062,7 +114059,6 @@ evidence:
   title_dedup_sha256: 28691891b7bd4e4ff6b4ded5258795b455df13efd529d69fd320b45633014268
   issue_bucket: unspecified acrobat issue
   facts_rule_version: v1
-
 - id: acrobat-23-006-20320-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-closes-crashes-when-ocr-optimize-starts-1285
   product_id: adobe-acrobat-pro
   update_version: 23.006.20320
@@ -114156,7 +114152,6 @@ evidence:
   title_dedup_sha256: 15da29ca69ba430e80327642b214c990010201a7586e44973d0afb3102555d9b
   issue_bucket: crash or launch failure
   facts_rule_version: v1
-
 - id: acrobat-24-005-20414-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-dc-won-t-open-mac-1300664
   product_id: adobe-acrobat-reader
   update_version: 24.005.20414
@@ -114188,7 +114183,6 @@ evidence:
   title_dedup_sha256: ff255154a4a683f82c00e23f8a70d227d452df9656ddf4a142c20287a5c1665a
   issue_bucket: crash or launch failure
   facts_rule_version: v1
-
 - id: acrobat-24-005-20320-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-64-bit-24-005-20320-windows-11-stucks-on-closing-1
   product_id: adobe-acrobat-reader
   update_version: 24.005.20320
@@ -114251,7 +114245,6 @@ evidence:
   title_dedup_sha256: 55c701e028c8581bfe169beec52ca7a9db05eed43dbf5f36641b06b6cfc7dbdf
   issue_bucket: signing/certificate failure
   facts_rule_version: v1
-
 - id: acrobat-24-005-20307-adobe-community-bug-report-https-community-adobe-com-questions-9-opening-a-file-in-acrobat-64-bit-24-005-20307-on-windows-1
   product_id: adobe-acrobat-reader
   update_version: 24.005.20307
@@ -114283,7 +114276,6 @@ evidence:
   title_dedup_sha256: 708e144a9b9e1c22f1463a16b63f4f284deb8acf74c71f4a5a59ac9285a95782
   issue_bucket: install/update failure
   facts_rule_version: v1
-
 - id: acrobat-24-004-20272-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-update-fails-on-macos-while-installing-25-001-2047
   product_id: adobe-acrobat-reader
   update_version: 24.004.20272

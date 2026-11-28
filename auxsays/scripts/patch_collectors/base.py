@@ -1101,7 +1101,11 @@ def append_evidence_rows(rows: list[dict[str, Any]], path: Path = EVIDENCE_PATH,
         # store, which is how the mandated telemetry fixtures found it.
         if path.exists() and len(existing) > added:
             existing_text = path.read_text(encoding="utf-8")
-            separator = "\n" if existing_text and existing_text.strip() else ""
+            # A newline only to END an unterminated last line. The store normally ends in one already,
+            # and a second would be a blank line before the batch: the stored format has none, and
+            # the text between two rows is read as the earlier row's facts (E8). Until R4-FIX2 this
+            # always added one, and the blank survived whenever no full rewrite followed in the run.
+            separator = "\n" if existing_text and not existing_text.endswith("\n") else ""
             atomic_write_text(path, existing_text + separator + serialized)
         else:
             write_evidence_file(existing, path)

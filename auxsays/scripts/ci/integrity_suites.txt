@@ -945,7 +945,7 @@ auxsays/scripts/tests/test_version_centred_excerpt.py = 70
 # unknown-version or other-rule fact never adds support; the live corpus decides exactly as the text
 # rule did), the zero-network migration's hash-proven scope, the replay tools, and three simulated
 # mutants. Reads the live store and reason file; writes only to a temporary directory.
-auxsays/scripts/tests/test_structured_evidence_facts.py = 40
+auxsays/scripts/tests/test_structured_evidence_facts.py = 42
 
 # --- writer-lane governance and the methodology Notes render -----------------------
 # Both were added with the writer-queue repair, and both are proven non-vacuous by MEASUREMENT

@@ -138,9 +138,34 @@ def simulate(records, rows, *, runs: int, per_run, start: datetime, step_hours: 
     return visits, rows
 
 
+def replay_start(rows) -> datetime:
+    """The replay's first clock: NOW, or one 12 h step after the newest primary-method stamp stored for
+    either edition, whichever is later.
+
+    A production run's clock always follows every stamp it reads (earlier runs wrote them). A clock pinned
+    BEHIND the stored stamps does not: once live rotation runs stamped records after NOW (b762d8d2c,
+    2471ee4e8), the replay read those stamps as future, i.e. never checked, visited the records at run 0-1,
+    and then met the same stamps again as a check ~2 runs later that no visit list records. That phantom
+    check pushed the next visit to run 27, a 26-run wait no production run can see (R4-FIX2). The bound
+    itself is unchanged: from a clock after every stamp the worst wait is exactly ceil((N - W) / (C - R))."""
+    newest = NOW
+    for row in rows:
+        if str(row.get("product_id") or "") not in (P, R) or row.get("method_id") != rot.PRIMARY_METHOD:
+            continue
+        try:
+            moment = datetime.fromisoformat(str(row.get("last_run") or "").replace("Z", "+00:00"))
+        except ValueError:
+            continue
+        moment = moment if moment.tzinfo else moment.replace(tzinfo=timezone.utc)
+        newest = max(newest, moment + timedelta(hours=12))
+    return newest
+
+
 def part_b() -> None:
     print("\n-- B. replay: real corpus + real stored rows at this checkout --")
     stored = base.load_method_health(base.METHOD_HEALTH_PATH)
+    start = replay_start(stored)
+    print(f"        replay clock starts {iso(start)} (after every stored stamp)")
     cap = rot.max_records_per_run({})
     for pid in (P, R):
         records = base.generated_records(pid)
@@ -148,7 +173,7 @@ def part_b() -> None:
         bound = rot.revisit_bound_runs(n, cap)
         check(f"B1 {pid}: a bound exists and equals ceil((N - W) / (C - R)) = {bound}",
               bound == math.ceil((n - rot.RECENT_WINDOW) / (cap - rot.RECENT_SLOTS)), f"n={n}")
-        visits, _ = simulate(records, stored, runs=3 * bound, per_run=lambda i: cap, start=NOW,
+        visits, _ = simulate(records, stored, runs=3 * bound, per_run=lambda i: cap, start=start,
                              step_hours=12, order_fn=rot.rotation_order)
         first = max(v[0] if v else 10 ** 6 for v in visits.values())
         check(f"B2 {pid}: every one of {n} records is attempted within {bound} runs (last first visit: run {first + 1})",
@@ -184,23 +209,23 @@ def part_b() -> None:
                   R: [11, 9, 9, 9, 13, 9, 11, 13, 11, 11, 5, 10]}[pid]
         measured = [min(cap, a) for a in series]
         visits_m, _ = simulate(records, stored, runs=60, per_run=lambda i: measured[i % len(measured)],
-                               start=NOW, step_hours=12, order_fn=rot.rotation_order)
+                               start=start, step_hours=12, order_fn=rot.rotation_order)
         fill_mean = sum(measured) / len(measured) - rot.RECENT_SLOTS
         bound_m = math.ceil((n - rot.RECENT_WINDOW) / fill_mean)
         first_m = max(v[0] if v else 10 ** 6 for v in visits_m.values())
         check(f"B6 {pid}: on the measured throughput every record is reached by run {first_m + 1} "
               f"(computed {bound_m})", first_m < bound_m + 2)
         old, _ = simulate(records, stored, runs=bound, per_run=lambda i: measured[i % len(measured)],
-                          start=NOW, step_hours=12, order_fn=lambda rs, _rows, _now: ac._newest_first(rs))
+                          start=start, step_hours=12, order_fn=lambda rs, _rows, _now: ac._newest_first(rs))
         reached_old = sum(1 for v in old.values() if v)
         check(f"B7 {pid}: the newest-first walk it replaces reaches only {reached_old} of {n} in the same {bound} runs",
               reached_old <= max(measured) and reached_old < n // 4)
         # Stale after one full bound of rotation at 12 h spacing, by the repo's own ladder.
-        end = NOW + timedelta(hours=12 * (bound - 1))
-        _v, rows_after = simulate(records, stored, runs=bound, per_run=lambda i: cap, start=NOW,
+        end = start + timedelta(hours=12 * (bound - 1))
+        _v, rows_after = simulate(records, stored, runs=bound, per_run=lambda i: cap, start=start,
                                   step_hours=12, order_fn=rot.rotation_order)
         state = rot.coverage_state(records, rows_after, end, mh.load_thresholds(base.ROOT / "_config.yml"))
-        before = rot.coverage_state(records, stored, NOW, mh.load_thresholds(base.ROOT / "_config.yml"))
+        before = rot.coverage_state(records, stored, start, mh.load_thresholds(base.ROOT / "_config.yml"))
         check(f"B8 {pid}: never-attempted {before['never_attempted_remaining']} -> {state['never_attempted_remaining']} "
               f"after {bound} runs", state["never_attempted_remaining"] == 0)
         print(f"        {pid}: stale {before['stale_remaining']} -> {state['stale_remaining']} "

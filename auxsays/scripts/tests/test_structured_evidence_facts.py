@@ -372,6 +372,22 @@ def part_b() -> None:
     check("B5 OBS's own writer (collect_obs_reports.write_evidence) writes the facts and leaves an existing row's alone",
           len(rows) == 2 and rows[0] == row1 and not ef.fact_problems(rows[0]) and not ef.fact_problems(rows[1])
           and rows[1][ef.EXCERPT_FACT] == ef.sha256_text("another report."), str(rows[1].get(ef.EXCERPT_FACT)))
+    # R4-FIX2: the byte-append joined a store that already ends in a newline with ANOTHER newline, so every
+    # batch began with a blank line, which E8 reads as a gap after the previous row's facts. The first append
+    # creates the store (full write); the next two are the byte-append path, back to back.
+    with tempfile.TemporaryDirectory() as tmp:
+        path = Path(tmp) / "consensus_evidence.yml"
+        for n in (1, 2, 3):
+            base.append_evidence_rows([dict(fresh, id=f"g68-seq-{n}", source_url=f"https://example.invalid/g68/s{n}",
+                                            report_text_excerpt=f"Report number {n}.")], path)
+        text = path.read_text(encoding="utf-8")
+    parsed = yaml.safe_load(text)["evidence"]
+    check("B6 two consecutive appends to a store ending in a newline leave no blank line: the file is byte-identical "
+          "to a canonical dump of its own rows", text.endswith("\n") and "\n\n" not in text and len(parsed) == 3
+          and text == _store_text(parsed), f"blank_lines={text.count(chr(10) * 2)}")
+    spans, leaked, gaps = block_fact_layout(text)
+    check("B7 E8 holds after two consecutive appends: every row's facts sit exactly between its block and the next",
+          len(spans) == 3 and not leaked and not gaps, f"leaked={len(leaked)} gaps={len(gaps)}")
 
 
 def part_c() -> None:
@@ -489,6 +505,16 @@ def _store_text(rows: list[dict]) -> str:
     return yaml.safe_dump({"schema_version": 1, "evidence": rows}, sort_keys=False, allow_unicode=True, width=1000)
 
 
+def block_fact_layout(text: str) -> tuple[list, list, list]:
+    """E8's reading of a store: (blocks, blocks whose audited text holds a fact line, blocks whose
+    following text is not exactly their four fact lines). A blank line between rows is a gap."""
+    spans = aux072.store_blocks(text)
+    leaked = [lo for lo, hi, _r in spans if ef._FACT_LINE.search(text[lo:hi])]
+    gaps = [lo for (lo, hi, _r), nxt in zip(spans, [s[0] for s in spans[1:]] + [len(text)])
+            if text[hi:nxt] != "".join(ef.fact_line(f, _r[f]) for f in ef.STORED_FIELDS)]
+    return spans, leaked, gaps
+
+
 def part_e() -> None:
     print("[E] coherence and the zero-network migration")
     data = live()
@@ -595,11 +621,7 @@ def part_e() -> None:
     check("E7 QA names rows without facts and rows whose fact differs from their own text, and nothing else",
           codes == ["evidence_facts_missing", "evidence_facts_stale"] and qa.scan_evidence_facts([clean]) == [],
           str(codes))
-    text = data["text"]
-    spans = aux072.store_blocks(text)
-    leaked = [lo for lo, hi, _r in spans if ef._FACT_LINE.search(text[lo:hi])]
-    gaps = [lo for (lo, hi, _r), nxt in zip(spans, [s[0] for s in spans[1:]] + [len(text)])
-            if text[hi:nxt] != "".join(ef.fact_line(f, _r[f]) for f in ef.STORED_FIELDS)]
+    spans, leaked, gaps = block_fact_layout(data["text"])
     check("E8 an audited block stops before its row's facts: every block hash a withdrawal manifest pinned before "
           "G68 still holds, and the facts sit exactly between the blocks",
           len(spans) == len(rows) and not leaked and not gaps, f"leaked={len(leaked)} gaps={len(gaps)}")
