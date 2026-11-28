@@ -18,8 +18,8 @@ update_version: Copilot code review billing will default to the organization
 update_logo_text: GIT
 update_published_at: '2026-11-25T22:18:03Z'
 update_last_checked: '2026-11-26T01:34:59Z'
-source_last_checked: '2026-11-27T11:08:53Z'
-official_body_last_checked: '2026-11-27T11:08:53Z'
+source_last_checked: '2026-11-28T00:39:49Z'
+official_body_last_checked: '2026-11-28T00:39:49Z'
 record_last_updated: '2026-11-26T01:34:59Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -98,6 +98,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-11-27T11:08:53Z'
+  url: https://github.blog/changelog/2026-11-25-copilot-code-review-billing-will-default-to-the-organization
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-28T00:39:49Z'
   url: https://github.blog/changelog/2026-11-25-copilot-code-review-billing-will-default-to-the-organization
   status: captured-from-rss-feed
   body_captured: true

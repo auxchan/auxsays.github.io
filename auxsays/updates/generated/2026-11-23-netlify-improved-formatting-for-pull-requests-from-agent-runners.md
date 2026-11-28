@@ -17,8 +17,8 @@ update_version: Improved formatting for pull requests from Agent Runners
 update_logo_text: NET
 update_published_at: '2026-11-23T00:00:00Z'
 update_last_checked: '2026-11-25T01:32:01Z'
-source_last_checked: '2026-11-27T11:08:53Z'
-official_body_last_checked: '2026-11-27T11:08:53Z'
+source_last_checked: '2026-11-28T00:39:49Z'
+official_body_last_checked: '2026-11-28T00:39:49Z'
 record_last_updated: '2026-11-25T01:32:01Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -71,11 +71,6 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-11-25T11:29:16Z'
-  url: https://www.netlify.com/changelog/2026-11-23-agent-runners-pull-request-improvements/
-  status: captured-from-official-html
-  body_captured: true
-  checksums_captured: false
 - at: '2026-11-26T01:35:11Z'
   url: https://www.netlify.com/changelog/2026-11-23-agent-runners-pull-request-improvements/
   status: captured-from-official-html
@@ -92,6 +87,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-11-27T11:08:53Z'
+  url: https://www.netlify.com/changelog/2026-11-23-agent-runners-pull-request-improvements/
+  status: captured-from-official-html
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-28T00:39:49Z'
   url: https://www.netlify.com/changelog/2026-11-23-agent-runners-pull-request-improvements/
   status: captured-from-official-html
   body_captured: true
