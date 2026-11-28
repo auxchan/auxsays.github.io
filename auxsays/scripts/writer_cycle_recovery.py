@@ -185,6 +185,18 @@ def marker_listed(jobs: dict) -> bool:
                for job in jobs.get("jobs") or [] for step in job.get("steps") or [])
 
 
+# The collection workflow's window gate (missed_run_recovery.py `gate`): a run whose job named
+# WINDOW_GATE_JOB succeeded and whose `collect` job was skipped was stood down and did nothing.
+WINDOW_GATE_JOB = "gate"
+STOOD_DOWN = "stood down by the window gate (an earlier run in its window collected)"
+
+
+def stood_down(jobs: dict) -> bool:
+    js = jobs.get("jobs") or []
+    return (any(j.get("name") == WINDOW_GATE_JOB and j.get("conclusion") == "success" for j in js)
+            and any(j.get("name") == "collect" and j.get("conclusion") == "skipped" for j in js))
+
+
 def failed_steps(jobs: dict) -> list[str]:
     out = []
     for job in jobs.get("jobs") or []:
@@ -220,6 +232,12 @@ def judge(run: dict, jobs_for: Callable[[str], dict | None],
     jobs = jobs_for(str(run.get("id")))
     if jobs is None:
         return None
+    if stood_down(jobs):
+        # The collection workflow's window gate stood this run down because an earlier routine run in
+        # its 6-hour window already collected (missed_run_recovery.py). It did nothing, so it is judged
+        # like a cancellation: the earlier run is the one that decides, and if THAT run lost its cycle
+        # it gets the one re-run as before.
+        return Judged(run, "skip", STOOD_DOWN)
     if conclusion == "success":
         if marker_reached(jobs) or not marker_listed(jobs):
             return Judged(run, "reached")
@@ -270,7 +288,7 @@ def decide_lane(workflow: str, runs: list[dict], jobs_for: Callable[[str], dict 
                                 pending=f"`{workflow}`: its run history could not be read; recovery cannot "
                                         "be established")
         if judged.state == "skip":
-            if judged.detail != "evicted" and recovery_of(run):
+            if judged.detail not in ("evicted", STOOD_DOWN) and recovery_of(run):
                 cancelled_recoveries.add(recovery_of(run))
             continue
         if head is None:

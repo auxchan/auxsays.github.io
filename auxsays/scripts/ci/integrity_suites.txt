@@ -972,6 +972,12 @@ auxsays/scripts/tests/test_writer_queue_concurrency.py = 73
 # and this repo's Windows dev setup both provide; it reports and fails if bash is absent
 # rather than passing vacuously.
 auxsays/scripts/tests/test_writer_queue_reaper_behaviour.py = 25
+# Missed-run recovery (R4-REC): a scheduled cycle GitHub never created is recovered once per designed
+# window and never above the cron's cadence; a late run whose window already collected (any outcome) stands
+# down. Decisions per lane, the bare script and the collection gate's shell EXECUTED against a fake
+# `gh`, simulated days (missing, late, failing crons, late crons with every cycle lost), the G91 reading
+# of a stood-down run and the job conditions. 16 mutants killed; review A1 (M1, S1, S2) adds 10 checks red on 3f626f26; A2 (no rolling cap in the gate) adds checks red on 5ef5591e.
+auxsays/scripts/tests/test_missed_run_recovery.py = 79
 # AUX-120: not monitored is not too few reports. 847 zero-report patch pages of products with no
 # community collection said "Too few reports for a verdict yet." and "Community signal: Not enough
 # reports". Real Liquid renders of the patch page over every coverage and community state the
