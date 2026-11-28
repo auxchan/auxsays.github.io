@@ -111542,3 +111542,2869 @@ evidence:
   title_dedup_sha256: 68fd6de8be0329642763127818a070873ee8a6128da6e673df9a0cb5426a9f34
   issue_bucket: capture-source issues
   facts_rule_version: v1
+- id: acrobat-26-003-22110-adobe-community-bug-report-https-community-adobe-com-questions-9-saving-pdf-from-acrobat-pro-as-a-second-save-on-network-sh
+  product_id: adobe-acrobat-pro
+  update_version: 26.003.22110
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/saving-pdf-from-acrobat-pro-as-a-second-save-on-network-share-corrupts-file-with-error-26-1658085
+  parent_title: Saving PDF from Acrobat Pro as a second save on network share corrupts file with Error (26)
+  report_title: Saving PDF from Acrobat Pro as a second save on network share corrupts file with Error (26)
+  report_text_excerpt: 'Saving PDF from Acrobat Pro as a second save on network share corrupts file with Error (26) Environment: Acrobat Pro 26.003.22110 on Windows. The file is on an SMB network share, with no sync client involved. The form is a Reader-extended dynamic XFA form made in LiveCycle...'
+  captured_at: '2026-11-27T08:22:55Z'
+  source_date: '2026-11-26'
+  target_release_date: '2026-11-16'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.003.22110
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: PDF rendering regression
+  workflow_area: PDF rendering
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 7d2a9208249f6b3298cf43f204eed58e710d43d6f90cd8831867db427b4d6400
+  title_dedup_sha256: 0cc2ccd2fcc2235929f2d58bdb6f95ee192036b6607e4585d06ce202b4173452
+  issue_bucket: pdf rendering regression
+  facts_rule_version: v1
+- id: acrobat-24-002-20687-adobe-community-bug-report-https-community-adobe-com-questions-624-acrobat-pro-unable-to-open-pdf-files-after-closing-acrob
+  product_id: adobe-acrobat-pro
+  update_version: 24.002.20687
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-624/acrobat-pro-unable-to-open-pdf-files-after-closing-acrobat-window-681970
+  parent_title: Acrobat Pro unable to open PDF files after closing Acrobat Window
+  report_title: Acrobat Pro unable to open PDF files after closing Acrobat Window
+  report_text_excerpt: Acrobat Pro unable to open PDF files after closing Acrobat Window Hi, I have 5 users that have Acrobat Pro version 24.002.20687 with Windows 11. If they close out of a PDF file that was opened in Acrobat Pro, they have to wait about 10 minutes before trying to open up another...
+  captured_at: '2026-11-27T08:22:55Z'
+  source_date: '2024-05-14'
+  target_release_date: '2024-04-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 24.002.20687
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: c0c30786df4be890adb200aa30251e64e91d71e852a417a53aa0ad55a2cdca32
+  title_dedup_sha256: d979fb28ca68803f8b61436fd94b1377789b005871eb131920c2c370672992f5
+  issue_bucket: install/update failure
+  facts_rule_version: v1
+- id: acrobat-24-002-20687-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-64-bit-24-002-20687-unresponsive-1292954
+  product_id: adobe-acrobat-pro
+  update_version: 24.002.20687
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-64-bit-24-002-20687-unresponsive-1292954
+  parent_title: Adobe Acrobat (64-bit) 24.002.20687 - Unresponsive
+  report_title: Adobe Acrobat (64-bit) 24.002.20687 - Unresponsive
+  report_text_excerpt: Adobe Acrobat (64-bit) 24.002.20687 - Unresponsive I have a user who upon opening any PDFs will get notifed by Adobe that recovered files were found and she has 2 options review them or delete them, Either options will freeze her adobe and not allow her to to view the document...
+  captured_at: '2026-11-27T08:22:55Z'
+  source_date: '2024-05-07'
+  target_release_date: '2024-04-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 24.002.20687
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 4a605631b348908dfcb2f280c522c1b69bf411369b9b3052677e6c5b7b50a464
+  title_dedup_sha256: d1668dd841756eb4746317d849eeed54f962da42318e3e900e53f367fdc5b848
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+- id: acrobat-24-002-20687-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-pro-24-install-error-1624-with-languages-specified
+  product_id: adobe-acrobat-pro
+  update_version: 24.002.20687
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-pro-24-install-error-1624-with-languages-specified-in-setup-ini-and-custom-transform-1292794
+  parent_title: Acrobat Pro 24 install error 1624 with languages specified in setup.ini and custom transform
+  report_title: Acrobat Pro 24 install error 1624 with languages specified in setup.ini and custom transform
+  report_text_excerpt: '...MSI (c) (xx:xx) [xx:xx:xx:xxx]: Product: Adobe Acrobat (64-bit) - Update ''Adobe Acrobat (24.002.20687)'' could not be installed. Error code 1624. Additional information is available in the log file...'
+  captured_at: '2026-11-27T08:22:55Z'
+  source_date: '2024-05-01'
+  target_release_date: '2024-04-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 24.002.20687
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: a948131c14272d5dcc2544de05a8e8f484ebdc70edb4e3e8e774fa5a49d50b8b
+  title_dedup_sha256: 8e7d6ea9c35a5a31831c9bf6bdf1ba53389a29a4fa1bde4684bb11e1fa9dde35
+  issue_bucket: install/update failure
+  facts_rule_version: v1
+- id: acrobat-24-001-20615-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-pro-crash-exception-exception-access-violati
+  product_id: adobe-acrobat-pro
+  update_version: 24.001.20615
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-pro-crash-exception-exception-access-violation-1295276
+  parent_title: Adobe Acrobat Pro  - crash exception="EXCEPTION_ACCESS_VIOLATION"
+  report_title: Adobe Acrobat Pro  - crash exception="EXCEPTION_ACCESS_VIOLATION"
+  report_text_excerpt: '...24.001.20615" build="0" source="Windows-Client" crashType="n/a"> <time year="2024" month="7" day="29" hour="7" minute="41" second="12" timeoffset="60" timezone="Paris, Madrid (heure d’été)"/> <user guid="9b9acf07-6c94-4032-bf7e-fdaf6334f85b"/> <system platform="Windows 11...'
+  captured_at: '2026-11-27T08:22:55Z'
+  source_date: '2024-08-01'
+  target_release_date: '2024-03-20'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 24.001.20615
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 579b3f087f3618df139667baf9af7bb7173a698a4479a7a9ba04a090eddd634f
+  title_dedup_sha256: 958c074128ed89cf1e2ec3c515fa5bed71886e264c85dfc69ad0fa835242ee11
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+- id: acrobat-24-001-20615-adobe-community-bug-report-https-community-adobe-com-questions-9-crash-and-freeze-when-editing-pfd-in-fill-and-sign-1291636
+  product_id: adobe-acrobat-pro
+  update_version: 24.001.20615
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/crash-and-freeze-when-editing-pfd-in-fill-and-sign-1291636
+  parent_title: Crash and freeze when editing pfd in Fill and Sign
+  report_title: Crash and freeze when editing pfd in Fill and Sign
+  report_text_excerpt: '...applicationName="Adobe Acrobat" applicationVersion="24.001.20615" build="0" source="Windows-Client" crashType="n/a"> <time year="2024" month="3" day="27" hour="14" minute="20" second="6" timeoffset="-420" timezone="Mountain Daylight...'
+  captured_at: '2026-11-27T08:22:55Z'
+  source_date: '2024-03-27'
+  target_release_date: '2024-03-20'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 24.001.20615
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: f805f3dfe747ab2dc2dd5bf29700566cd2461d893b9637628cca01c45e129f36
+  title_dedup_sha256: df8a8e6ff23903e334b8c00a6880a0599c730dc0edce199b8518982d8b2416c8
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+- id: acrobat-23-008-20533-adobe-community-bug-report-https-community-adobe-com-questions-9-unable-to-preview-pdfs-from-file-explorer-1293750
+  product_id: adobe-acrobat-pro
+  update_version: 23.008.20533
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/unable-to-preview-pdfs-from-file-explorer-1293750
+  parent_title: Unable to Preview PDFs from File Explorer
+  report_title: Unable to Preview PDFs from File Explorer
+  report_text_excerpt: Unable to Preview PDFs from File Explorer Acrobat version 23.008.20533. The issue is the preview function has stopped working in Windows 10 File Explorer. After searching for a solution on here I can see this issue has been posted many times over the years. Most recently in...
+  captured_at: '2026-11-27T08:22:55Z'
+  source_date: '2024-06-05'
+  target_release_date: '2024-02-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 23.008.20533
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified Acrobat issue
+  workflow_area: Acrobat workflow
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 0a4385b8116928e568ef670b0d0da3106a5d47e377bc4bd18ebeb8b1ec524041
+  title_dedup_sha256: 86244b06aff9128795337bcc173b46c1c680b61d42fc54010e63e845a494fb7c
+  issue_bucket: unspecified acrobat issue
+  facts_rule_version: v1
+- id: acrobat-23-008-20533-adobe-community-bug-report-https-community-adobe-com-questions-12-arm-update-process-hitting-1612-when-trying-to-update-150
+  product_id: adobe-acrobat-pro
+  update_version: 23.008.20533
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/arm-update-process-hitting-1612-when-trying-to-update-1505448
+  parent_title: ARM update process? Hitting 1612 when trying to update
+  report_title: ARM update process? Hitting 1612 when trying to update
+  report_text_excerpt: '...ProductName: Adobe Acrobat (64-bit) [2024-04-29 15:05:20:0340] ProductVersion: 23.008.20533 [2024-04-29 15:05:20:0340] ProductUACPatching: enabled [2024-04-29 15:05:20:0340] Product UI Language: ENU [2024-04-29 15:05:20:0340] ProductLanguage installed: 0...'
+  captured_at: '2026-11-27T08:22:55Z'
+  source_date: '2024-04-29'
+  target_release_date: '2024-02-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 23.008.20533
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: aa098a90af6ad2d01a110379c156f960a48c16126db600e53e7731b9983f0720
+  title_dedup_sha256: a280cf88f92462097bb0fdfce7f2c381e569c4738a5a99cd7b6cb0293319d190
+  issue_bucket: install/update failure
+  facts_rule_version: v1
+- id: acrobat-23-008-20533-adobe-community-bug-report-https-community-adobe-com-questions-9-constant-embarrassing-errors-now-a-serious-acrobat-install
+  product_id: adobe-acrobat-pro
+  update_version: 23.008.20533
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/constant-embarrassing-errors-now-a-serious-acrobat-installation-problem-1290403
+  parent_title: Constant embarrassing errors. Now a serious ACROBAT installation problem.
+  report_title: Constant embarrassing errors. Now a serious ACROBAT installation problem.
+  report_text_excerpt: '...error after about 45% of installation: ----------- Payload: Adobe Acrobat 23.8.20533.0 Adobe Acrobat\Setup.exe_23.008.20533 ----------- ERROR: DW071: ERROR: DW003: Third party payload installer Adobe Acrobat\Setup.exe failed with exit code: 1603...'
+  captured_at: '2026-11-27T08:22:55Z'
+  source_date: '2024-02-18'
+  target_release_date: '2024-02-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 23.008.20533
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 0faec116e3feb8b8877ff2fd5f31bb6bc876b9bf56b245aea7864c7ab725fa10
+  title_dedup_sha256: 385bc70ca37c4019219cd87cca13b1049cef7a65c243ededa3c1f45fb5d8cfaa
+  issue_bucket: install/update failure
+  facts_rule_version: v1
+- id: acrobat-23-008-20533-adobe-community-bug-report-https-community-adobe-com-questions-9-issues-with-opening-adobe-acrobat-dc-and-reader-and-pdfs-o
+  product_id: adobe-acrobat-pro
+  update_version: 23.008.20533
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/issues-with-opening-adobe-acrobat-dc-and-reader-and-pdfs-on-mac-catalina-10-15-1290407
+  parent_title: Issues with Opening Adobe Acrobat DC and Reader and PDFs on Mac Catalina 10.15
+  report_title: Issues with Opening Adobe Acrobat DC and Reader and PDFs on Mac Catalina 10.15
+  report_text_excerpt: '...then goes away) Macbook Air Details: Mac OS Catalina 10.15.3 Intel iCore 5 Adobe Version: 23.008.20533 After the uninstalling and reinstalling I went to adobe website to look at error codes Adobe Installation Error Codes. However, I don''t think any of these codes are...'
+  captured_at: '2026-11-27T08:22:55Z'
+  source_date: '2024-02-18'
+  target_release_date: '2024-02-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 23.008.20533
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified Acrobat issue
+  workflow_area: Acrobat workflow
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: d7155eb422f7982d755cce53d6b1303380c817db5aacd9f0e5f5b52f053982b4
+  title_dedup_sha256: c1283f14415c56821c25bdf2c8932f3b5ee9d69b64e8fc5b9b46bde00fb8e62b
+  issue_bucket: unspecified acrobat issue
+  facts_rule_version: v1
+- id: acrobat-20-005-30574-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-pro-2020-crash-after-changing-font-or-text-size-12
+  product_id: adobe-acrobat-pro
+  update_version: 20.005.30574
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-pro-2020-crash-after-changing-font-or-text-size-1290795
+  parent_title: Acrobat Pro 2020 Crash after changing font or text size
+  report_title: Acrobat Pro 2020 Crash after changing font or text size
+  report_text_excerpt: 'Acrobat Pro 2020 Crash after changing font or text size Acrobat Pro 2020 Version 20.005.30574 on MacOS 14.2.1 (23C71) Architecture: x86_64 Build: 20.5.30574.10574 AGM: 4.30.119 CoolType: 5.14.5 JP2K: 1.2.3.54296 It crashes always, when i try to change the font or text size....'
+  captured_at: '2026-11-27T08:22:55Z'
+  source_date: '2024-02-29'
+  target_release_date: '2024-02-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.005.30574
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 729fd0deccdf097e6abb135305561509b539e177c92f95b4dd0296dc7d665c5d
+  title_dedup_sha256: c3e29d86fbe8e17b8ee14226aa3387947c0036045737ef66b05087f521390bb3
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+- id: acrobat-20-005-30574-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-pro-crashes-when-attempting-to-change-font-1290427
+  product_id: adobe-acrobat-pro
+  update_version: 20.005.30574
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-pro-crashes-when-attempting-to-change-font-1290427
+  parent_title: Acrobat Pro Crashes When Attempting to Change Font
+  report_title: Acrobat Pro Crashes When Attempting to Change Font
+  report_text_excerpt: Acrobat Pro Crashes When Attempting to Change Font Hello, I'm experiencing a significant issue with Adobe Acrobat Pro (version 20.005.30574) on Mac OS Sonoma Version 14.3.1. Whenever I try to change the font from Helvetica to another font in any document, Acrobat Pro...
+  captured_at: '2026-11-27T08:22:55Z'
+  source_date: '2024-02-19'
+  target_release_date: '2024-02-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.005.30574
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: b20bf90fdf730123225fe8055ccbd4f35077151143d9f7ccbaaa5609c17173ac
+  title_dedup_sha256: cafbf9936689c04480df1e9d9af0d0bfa0eee01b9d27dc48234ae92d789abd62
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+- id: acrobat-25-001-20577-adobe-community-bug-report-https-community-adobe-com-questions-9-how-to-troubleshoot-acrobat-not-responding-or-freezing-130
+  product_id: adobe-acrobat-reader
+  update_version: 25.001.20577
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/how-to-troubleshoot-acrobat-not-responding-or-freezing-1303492
+  parent_title: How to troubleshoot Acrobat not responding or freezing
+  report_title: How to troubleshoot Acrobat not responding or freezing
+  report_text_excerpt: How to troubleshoot Acrobat not responding or freezing Good afternoon, There seems to be an issue after the latest update (25.001.20577) with Adobe Acrobat not responding. Sometimes Acrobat will freeze and we'll need to use task manager to close it out. Most of the time...
+  captured_at: '2026-11-27T08:45:06Z'
+  source_date: '2025-07-18'
+  target_release_date: '2025-07-17'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 25.001.20577
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 260ed09f7dc3d46d1036090ed87f2de4d8a9d464cc5b50f8524dadebebf8c796
+  title_dedup_sha256: cf25fdb8c1a0196e4d05d4323e186e9adac852617eb62cc21b4cef38321645da
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+- id: acrobat-25-001-20577-adobe-community-bug-report-https-community-adobe-com-questions-9-shared-comments-do-not-load-in-desktop-acrobat-app-1303849
+  product_id: adobe-acrobat-reader
+  update_version: 25.001.20577
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/shared-comments-do-not-load-in-desktop-acrobat-app-1303849
+  parent_title: Shared Comments do not load in desktop Acrobat app
+  report_title: Shared Comments do not load in desktop Acrobat app
+  report_text_excerpt: '...Acrobat Acrobat has been reinstalled multiple times and is currently on the version 25.001.20577 but there have been updates since the issue began that have not fixed the issue.'' Uninstalling using Revo Uninstaller to remove remaining files and reg keys and...'
+  captured_at: '2026-11-27T08:45:06Z'
+  source_date: '2025-08-07'
+  target_release_date: '2025-07-17'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 25.001.20577
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified Acrobat issue
+  workflow_area: Acrobat workflow
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 65142f4e9f1141db54282aa2cb5f8476b8557013baaa34b2994db03013758ae5
+  title_dedup_sha256: 36d7167d8fa807b01c8c4994256f7b09122bf3a1471fc1ab48f8af91b8d0ead1
+  issue_bucket: unspecified acrobat issue
+  facts_rule_version: v1
+- id: acrobat-25-001-20458-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-2025-001-20458-keeps-crashing-1301880
+  product_id: adobe-acrobat-reader
+  update_version: 25.001.20458
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-2025-001-20458-keeps-crashing-1301880
+  parent_title: Adobe Acrobat 2025.001.20458 keeps crashing
+  report_title: Adobe Acrobat 2025.001.20458 keeps crashing
+  report_text_excerpt: Adobe Acrobat 2025.001.20458 keeps crashing I've seen this problem on three computers now where the latest update Adobe Acrobat 2025.001.20458 keeps crashing. It crashes after a 2 or more minutes when opening any pdf file. I've proved that it only happens on the latest update...
+  captured_at: '2026-11-27T08:45:06Z'
+  source_date: '2025-04-23'
+  target_release_date: '2025-04-15'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 25.001.20458
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 93dc5d0b22c73ec43976546bba46b809fdc1d9300fe72acde2dfd001aab3bbf9
+  title_dedup_sha256: e57aafb19c5428ec1b6223b777fdd50516bbef3247208bfc2e4723681f3b85e9
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+- id: comfyui-0-46-0-github-issue-18019
+  product_id: comfyui
+  update_version: 0.46.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/18019
+  parent_title: '[Bug] DynamicVRAM (aimdo): _lazy_load_from_state_dict allocates massive FP32 torch.zeros() on missing keys under strict=False (~22-28 GB RAM spike & Windows OOM)'
+  report_title: '[Bug] DynamicVRAM (aimdo): _lazy_load_from_state_dict allocates massive FP32 torch.zeros() on missing keys under strict=False (~22-28 GB RAM spike & Windows OOM)'
+  report_text_excerpt: '[Bug] DynamicVRAM (aimdo): _lazy_load_from_state_dict allocates massive FP32 torch.zeros() on missing keys under strict=False (~22-28 GB RAM spike & Windows OOM) ### Summary Under ComfyUI `v0.46.0` with DynamicVRAM (`comfy-aimdo`) enabled,...'
+  captured_at: '2026-11-27T09:03:40Z'
+  source_date: '2026-11-27'
+  target_release_date: '2026-11-18'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.46.0
+  match_basis: core_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: out of memory
+  workflow_area: GPU and system memory
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: github_issues
+  matched_text: 0.46.0
+  matched_field: report_text
+  matched_context: '...r strict=False (~22-28 GB RAM spike & Windows OOM) ### Summary Under ComfyUI `v0.46.0` with DynamicVRAM (`comfy-aimdo`) enabled, `comfy.ops.disable_weight_init.Linea...'
+  excerpt_norm_sha256: 3b75cac3c3018d32583bb2837549941c76c2d389b1acd950c82503fc4b21a7d1
+  title_dedup_sha256: 604cc568a954610386e4390e3cc2102acaf9b8b5741b69d0f24ea31a27e3ed5c
+  issue_bucket: out of memory
+  facts_rule_version: v1
+- id: microsoft-teams-26304-1207-5384-858-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082959-i-am-the-meeting-organizer-but-i-am-un
+  product_id: microsoft-teams
+  update_version: 26304.1207.5384.858
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082959/i-am-the-meeting-organizer-but-i-am-unable-to-acce
+  parent_title: I am the meeting organizer but I am unable to access the meeting options. - Microsoft Q&A
+  report_title: I am the meeting organizer but I am unable to access the meeting options. - Microsoft Q&A
+  report_text_excerpt: I am the meeting organizer but I am unable to access the meeting options. I created a Teams meeting through outlook signed into my primary account. I am the organizer of the meeting and am listed as such on the Teams meeting invite. When I click on the meeting options in...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-25'
+  target_release_date: '2026-11-23'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 6d7cfac88db5d1d50ae8e1598fd6d4fc906c87fecb2716be2bac1436a814e9af
+  title_dedup_sha256: 2b277f23955c8495b7e24f2c52751a426799819a72733f2ce333f7df5bd1014b
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26304-1207-5384-858-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6063464-how-to-completely-hide-or-auto-minimiz
+  product_id: microsoft-teams
+  update_version: 26304.1207.5384.858
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6063464/how-to-completely-hide-or-auto-minimize-the-floati
+  parent_title: How to completely hide or auto-minimize the floating screen-sharing toolbar - Microsoft Q&A
+  report_title: How to completely hide or auto-minimize the floating screen-sharing toolbar - Microsoft Q&A
+  report_text_excerpt: How to completely hide or auto-minimize the floating screen-sharing toolbar Currently, when sharing the screen in Microsoft Teams, the floating presenter toolbar ("You are sharing your screen") remains visible at the top and frequently blocks browser tabs, menu bars, and other...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-06'
+  target_release_date: '2026-11-23'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 2cb7c66886eb2e8cc22ab471262cc7bea5fdd9d1a264b4ff47f20502a53cf174
+  title_dedup_sha256: 891e62fdc6e352a89382d75519c3ddf1da61a0b231a2601bd23fdc869d10f3f0
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26304-1207-5384-858-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082748-new-teams-cant-sign-in-answer-13066686
+  product_id: microsoft-teams
+  update_version: 26304.1207.5384.858
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082748/new-teams-cant-sign-in#answer-13066686
+  parent_title: New Teams can't sign in - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: What are you using your Teams on? Windows 11, or macOS? Please provide the OS info. If it is Windows. can you go to Settings > Accounts > Your info, share a screenshot of this page, edit to mask your personal email address when you share.
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-27T03:10:37.47+00:00'
+  target_release_date: '2026-11-23'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 1ce0437ad93a1d6be84c555d2d91fa4c4f062604f4fd796359fe2b0801c247be
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26304-1207-5384-858-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-what-e2-80-99s-new-in-microsoft-tea
+  product_id: microsoft-teams
+  update_version: 26304.1207.5384.858
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/what%e2%80%99s-new-in-microsoft-teams-feature-spotlight-%e2%80%93-together-emojis/3822872
+  parent_title: What’s New in Microsoft Teams Feature Spotlight – Together Emojis
+  report_title: What’s New in Microsoft Teams Feature Spotlight – Together Emojis
+  report_text_excerpt: What’s New in Microsoft Teams Feature Spotlight – Together Emojis We’re discussing a new feature each week in Microsoft Teams and this week we’re looking at the new Together Emoji. &amp;nbsp; I start every work day with a &apos;Good Morning&apos; message to my team and I...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2023-05-16'
+  target_release_date: '2026-11-23'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: f71da46f59e8543f6a3db88492f5549d3835c656248a281d77d4529f40dd941e
+  title_dedup_sha256: ba31c3079ce51c1eecfcff6300018e899a83ec35225526b04f6bb4c54b395897
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082959-i-am-the-meeting-organizer-but-i-am-un
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082959/i-am-the-meeting-organizer-but-i-am-unable-to-acce
+  parent_title: I am the meeting organizer but I am unable to access the meeting options. - Microsoft Q&A
+  report_title: I am the meeting organizer but I am unable to access the meeting options. - Microsoft Q&A
+  report_text_excerpt: I am the meeting organizer but I am unable to access the meeting options. I created a Teams meeting through outlook signed into my primary account. I am the organizer of the meeting and am listed as such on the Teams meeting invite. When I click on the meeting options in...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-25'
+  target_release_date: '2026-11-05'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 6d7cfac88db5d1d50ae8e1598fd6d4fc906c87fecb2716be2bac1436a814e9af
+  title_dedup_sha256: 2b277f23955c8495b7e24f2c52751a426799819a72733f2ce333f7df5bd1014b
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6063464-how-to-completely-hide-or-auto-minimiz
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6063464/how-to-completely-hide-or-auto-minimize-the-floati
+  parent_title: How to completely hide or auto-minimize the floating screen-sharing toolbar - Microsoft Q&A
+  report_title: How to completely hide or auto-minimize the floating screen-sharing toolbar - Microsoft Q&A
+  report_text_excerpt: How to completely hide or auto-minimize the floating screen-sharing toolbar Currently, when sharing the screen in Microsoft Teams, the floating presenter toolbar ("You are sharing your screen") remains visible at the top and frequently blocks browser tabs, menu bars, and other...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-06'
+  target_release_date: '2026-11-05'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 2cb7c66886eb2e8cc22ab471262cc7bea5fdd9d1a264b4ff47f20502a53cf174
+  title_dedup_sha256: 891e62fdc6e352a89382d75519c3ddf1da61a0b231a2601bd23fdc869d10f3f0
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082748-new-teams-cant-sign-in-answer-13066686
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082748/new-teams-cant-sign-in#answer-13066686
+  parent_title: New Teams can't sign in - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: What are you using your Teams on? Windows 11, or macOS? Please provide the OS info. If it is Windows. can you go to Settings > Accounts > Your info, share a screenshot of this page, edit to mask your personal email address when you share.
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-27T03:10:37.47+00:00'
+  target_release_date: '2026-11-05'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 1ce0437ad93a1d6be84c555d2d91fa4c4f062604f4fd796359fe2b0801c247be
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-what-e2-80-99s-new-in-microsoft-tea
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/what%e2%80%99s-new-in-microsoft-teams-feature-spotlight-%e2%80%93-together-emojis/3822872
+  parent_title: What’s New in Microsoft Teams Feature Spotlight – Together Emojis
+  report_title: What’s New in Microsoft Teams Feature Spotlight – Together Emojis
+  report_text_excerpt: What’s New in Microsoft Teams Feature Spotlight – Together Emojis We’re discussing a new feature each week in Microsoft Teams and this week we’re looking at the new Together Emoji. &amp;nbsp; I start every work day with a &apos;Good Morning&apos; message to my team and I...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2023-05-16'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: f71da46f59e8543f6a3db88492f5549d3835c656248a281d77d4529f40dd941e
+  title_dedup_sha256: ba31c3079ce51c1eecfcff6300018e899a83ec35225526b04f6bb4c54b395897
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082959-i-am-the-meeting-organizer-but-i-am-un
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082959/i-am-the-meeting-organizer-but-i-am-unable-to-acce
+  parent_title: I am the meeting organizer but I am unable to access the meeting options. - Microsoft Q&A
+  report_title: I am the meeting organizer but I am unable to access the meeting options. - Microsoft Q&A
+  report_text_excerpt: I am the meeting organizer but I am unable to access the meeting options. I created a Teams meeting through outlook signed into my primary account. I am the organizer of the meeting and am listed as such on the Teams meeting invite. When I click on the meeting options in...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-25'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: 6d7cfac88db5d1d50ae8e1598fd6d4fc906c87fecb2716be2bac1436a814e9af
+  title_dedup_sha256: 2b277f23955c8495b7e24f2c52751a426799819a72733f2ce333f7df5bd1014b
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6063464-how-to-completely-hide-or-auto-minimiz
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6063464/how-to-completely-hide-or-auto-minimize-the-floati
+  parent_title: How to completely hide or auto-minimize the floating screen-sharing toolbar - Microsoft Q&A
+  report_title: How to completely hide or auto-minimize the floating screen-sharing toolbar - Microsoft Q&A
+  report_text_excerpt: How to completely hide or auto-minimize the floating screen-sharing toolbar Currently, when sharing the screen in Microsoft Teams, the floating presenter toolbar ("You are sharing your screen") remains visible at the top and frequently blocks browser tabs, menu bars, and other...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-06'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: 2cb7c66886eb2e8cc22ab471262cc7bea5fdd9d1a264b4ff47f20502a53cf174
+  title_dedup_sha256: 891e62fdc6e352a89382d75519c3ddf1da61a0b231a2601bd23fdc869d10f3f0
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082748-new-teams-cant-sign-in-answer-13066686
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082748/new-teams-cant-sign-in#answer-13066686
+  parent_title: New Teams can't sign in - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: What are you using your Teams on? Windows 11, or macOS? Please provide the OS info. If it is Windows. can you go to Settings > Accounts > Your info, share a screenshot of this page, edit to mask your personal email address when you share.
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-27T03:10:37.47+00:00'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: 1ce0437ad93a1d6be84c555d2d91fa4c4f062604f4fd796359fe2b0801c247be
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-what-e2-80-99s-new-in-microsoft-tea
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/what%e2%80%99s-new-in-microsoft-teams-feature-spotlight-%e2%80%93-together-emojis/3822872
+  parent_title: What’s New in Microsoft Teams Feature Spotlight – Together Emojis
+  report_title: What’s New in Microsoft Teams Feature Spotlight – Together Emojis
+  report_text_excerpt: What’s New in Microsoft Teams Feature Spotlight – Together Emojis We’re discussing a new feature each week in Microsoft Teams and this week we’re looking at the new Together Emoji. &amp;nbsp; I start every work day with a &apos;Good Morning&apos; message to my team and I...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2023-05-16'
+  target_release_date: '2026-10-22'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: f71da46f59e8543f6a3db88492f5549d3835c656248a281d77d4529f40dd941e
+  title_dedup_sha256: ba31c3079ce51c1eecfcff6300018e899a83ec35225526b04f6bb4c54b395897
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082959-i-am-the-meeting-organizer-but-i-am-un
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082959/i-am-the-meeting-organizer-but-i-am-unable-to-acce
+  parent_title: I am the meeting organizer but I am unable to access the meeting options. - Microsoft Q&A
+  report_title: I am the meeting organizer but I am unable to access the meeting options. - Microsoft Q&A
+  report_text_excerpt: I am the meeting organizer but I am unable to access the meeting options. I created a Teams meeting through outlook signed into my primary account. I am the organizer of the meeting and am listed as such on the Teams meeting invite. When I click on the meeting options in...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-25'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: 6d7cfac88db5d1d50ae8e1598fd6d4fc906c87fecb2716be2bac1436a814e9af
+  title_dedup_sha256: 2b277f23955c8495b7e24f2c52751a426799819a72733f2ce333f7df5bd1014b
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6063464-how-to-completely-hide-or-auto-minimiz
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6063464/how-to-completely-hide-or-auto-minimize-the-floati
+  parent_title: How to completely hide or auto-minimize the floating screen-sharing toolbar - Microsoft Q&A
+  report_title: How to completely hide or auto-minimize the floating screen-sharing toolbar - Microsoft Q&A
+  report_text_excerpt: How to completely hide or auto-minimize the floating screen-sharing toolbar Currently, when sharing the screen in Microsoft Teams, the floating presenter toolbar ("You are sharing your screen") remains visible at the top and frequently blocks browser tabs, menu bars, and other...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-06'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: 2cb7c66886eb2e8cc22ab471262cc7bea5fdd9d1a264b4ff47f20502a53cf174
+  title_dedup_sha256: 891e62fdc6e352a89382d75519c3ddf1da61a0b231a2601bd23fdc869d10f3f0
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082748-new-teams-cant-sign-in-answer-13066686
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082748/new-teams-cant-sign-in#answer-13066686
+  parent_title: New Teams can't sign in - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: What are you using your Teams on? Windows 11, or macOS? Please provide the OS info. If it is Windows. can you go to Settings > Accounts > Your info, share a screenshot of this page, edit to mask your personal email address when you share.
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-27T03:10:37.47+00:00'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: 1ce0437ad93a1d6be84c555d2d91fa4c4f062604f4fd796359fe2b0801c247be
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-what-e2-80-99s-new-in-microsoft-tea
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/what%e2%80%99s-new-in-microsoft-teams-feature-spotlight-%e2%80%93-together-emojis/3822872
+  parent_title: What’s New in Microsoft Teams Feature Spotlight – Together Emojis
+  report_title: What’s New in Microsoft Teams Feature Spotlight – Together Emojis
+  report_text_excerpt: What’s New in Microsoft Teams Feature Spotlight – Together Emojis We’re discussing a new feature each week in Microsoft Teams and this week we’re looking at the new Together Emoji. &amp;nbsp; I start every work day with a &apos;Good Morning&apos; message to my team and I...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2023-05-16'
+  target_release_date: '2026-10-15'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: f71da46f59e8543f6a3db88492f5549d3835c656248a281d77d4529f40dd941e
+  title_dedup_sha256: ba31c3079ce51c1eecfcff6300018e899a83ec35225526b04f6bb4c54b395897
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082959-i-am-the-meeting-organizer-but-i-am-un
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082959/i-am-the-meeting-organizer-but-i-am-unable-to-acce
+  parent_title: I am the meeting organizer but I am unable to access the meeting options. - Microsoft Q&A
+  report_title: I am the meeting organizer but I am unable to access the meeting options. - Microsoft Q&A
+  report_text_excerpt: I am the meeting organizer but I am unable to access the meeting options. I created a Teams meeting through outlook signed into my primary account. I am the organizer of the meeting and am listed as such on the Teams meeting invite. When I click on the meeting options in...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-25'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 6d7cfac88db5d1d50ae8e1598fd6d4fc906c87fecb2716be2bac1436a814e9af
+  title_dedup_sha256: 2b277f23955c8495b7e24f2c52751a426799819a72733f2ce333f7df5bd1014b
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6063464-how-to-completely-hide-or-auto-minimiz
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6063464/how-to-completely-hide-or-auto-minimize-the-floati
+  parent_title: How to completely hide or auto-minimize the floating screen-sharing toolbar - Microsoft Q&A
+  report_title: How to completely hide or auto-minimize the floating screen-sharing toolbar - Microsoft Q&A
+  report_text_excerpt: How to completely hide or auto-minimize the floating screen-sharing toolbar Currently, when sharing the screen in Microsoft Teams, the floating presenter toolbar ("You are sharing your screen") remains visible at the top and frequently blocks browser tabs, menu bars, and other...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-06'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 2cb7c66886eb2e8cc22ab471262cc7bea5fdd9d1a264b4ff47f20502a53cf174
+  title_dedup_sha256: 891e62fdc6e352a89382d75519c3ddf1da61a0b231a2601bd23fdc869d10f3f0
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082748-new-teams-cant-sign-in-answer-13066686
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082748/new-teams-cant-sign-in#answer-13066686
+  parent_title: New Teams can't sign in - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: What are you using your Teams on? Windows 11, or macOS? Please provide the OS info. If it is Windows. can you go to Settings > Accounts > Your info, share a screenshot of this page, edit to mask your personal email address when you share.
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-27T03:10:37.47+00:00'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 1ce0437ad93a1d6be84c555d2d91fa4c4f062604f4fd796359fe2b0801c247be
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-what-e2-80-99s-new-in-microsoft-tea
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/what%e2%80%99s-new-in-microsoft-teams-feature-spotlight-%e2%80%93-together-emojis/3822872
+  parent_title: What’s New in Microsoft Teams Feature Spotlight – Together Emojis
+  report_title: What’s New in Microsoft Teams Feature Spotlight – Together Emojis
+  report_text_excerpt: What’s New in Microsoft Teams Feature Spotlight – Together Emojis We’re discussing a new feature each week in Microsoft Teams and this week we’re looking at the new Together Emoji. &amp;nbsp; I start every work day with a &apos;Good Morning&apos; message to my team and I...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2023-05-16'
+  target_release_date: '2026-10-01'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: f71da46f59e8543f6a3db88492f5549d3835c656248a281d77d4529f40dd941e
+  title_dedup_sha256: ba31c3079ce51c1eecfcff6300018e899a83ec35225526b04f6bb4c54b395897
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082959-i-am-the-meeting-organizer-but-i-am-un
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082959/i-am-the-meeting-organizer-but-i-am-unable-to-acce
+  parent_title: I am the meeting organizer but I am unable to access the meeting options. - Microsoft Q&A
+  report_title: I am the meeting organizer but I am unable to access the meeting options. - Microsoft Q&A
+  report_text_excerpt: I am the meeting organizer but I am unable to access the meeting options. I created a Teams meeting through outlook signed into my primary account. I am the organizer of the meeting and am listed as such on the Teams meeting invite. When I click on the meeting options in...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-25'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 6d7cfac88db5d1d50ae8e1598fd6d4fc906c87fecb2716be2bac1436a814e9af
+  title_dedup_sha256: 2b277f23955c8495b7e24f2c52751a426799819a72733f2ce333f7df5bd1014b
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6063464-how-to-completely-hide-or-auto-minimiz
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6063464/how-to-completely-hide-or-auto-minimize-the-floati
+  parent_title: How to completely hide or auto-minimize the floating screen-sharing toolbar - Microsoft Q&A
+  report_title: How to completely hide or auto-minimize the floating screen-sharing toolbar - Microsoft Q&A
+  report_text_excerpt: How to completely hide or auto-minimize the floating screen-sharing toolbar Currently, when sharing the screen in Microsoft Teams, the floating presenter toolbar ("You are sharing your screen") remains visible at the top and frequently blocks browser tabs, menu bars, and other...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-06'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 2cb7c66886eb2e8cc22ab471262cc7bea5fdd9d1a264b4ff47f20502a53cf174
+  title_dedup_sha256: 891e62fdc6e352a89382d75519c3ddf1da61a0b231a2601bd23fdc869d10f3f0
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082748-new-teams-cant-sign-in-answer-13066686
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082748/new-teams-cant-sign-in#answer-13066686
+  parent_title: New Teams can't sign in - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: What are you using your Teams on? Windows 11, or macOS? Please provide the OS info. If it is Windows. can you go to Settings > Accounts > Your info, share a screenshot of this page, edit to mask your personal email address when you share.
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-27T03:10:37.47+00:00'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 1ce0437ad93a1d6be84c555d2d91fa4c4f062604f4fd796359fe2b0801c247be
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-what-e2-80-99s-new-in-microsoft-tea
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/what%e2%80%99s-new-in-microsoft-teams-feature-spotlight-%e2%80%93-together-emojis/3822872
+  parent_title: What’s New in Microsoft Teams Feature Spotlight – Together Emojis
+  report_title: What’s New in Microsoft Teams Feature Spotlight – Together Emojis
+  report_text_excerpt: What’s New in Microsoft Teams Feature Spotlight – Together Emojis We’re discussing a new feature each week in Microsoft Teams and this week we’re looking at the new Together Emoji. &amp;nbsp; I start every work day with a &apos;Good Morning&apos; message to my team and I...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2023-05-16'
+  target_release_date: '2026-09-24'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: f71da46f59e8543f6a3db88492f5549d3835c656248a281d77d4529f40dd941e
+  title_dedup_sha256: ba31c3079ce51c1eecfcff6300018e899a83ec35225526b04f6bb4c54b395897
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082959-i-am-the-meeting-organizer-but-i-am-un
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082959/i-am-the-meeting-organizer-but-i-am-unable-to-acce
+  parent_title: I am the meeting organizer but I am unable to access the meeting options. - Microsoft Q&A
+  report_title: I am the meeting organizer but I am unable to access the meeting options. - Microsoft Q&A
+  report_text_excerpt: I am the meeting organizer but I am unable to access the meeting options. I created a Teams meeting through outlook signed into my primary account. I am the organizer of the meeting and am listed as such on the Teams meeting invite. When I click on the meeting options in...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-25'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: 6d7cfac88db5d1d50ae8e1598fd6d4fc906c87fecb2716be2bac1436a814e9af
+  title_dedup_sha256: 2b277f23955c8495b7e24f2c52751a426799819a72733f2ce333f7df5bd1014b
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6063464-how-to-completely-hide-or-auto-minimiz
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6063464/how-to-completely-hide-or-auto-minimize-the-floati
+  parent_title: How to completely hide or auto-minimize the floating screen-sharing toolbar - Microsoft Q&A
+  report_title: How to completely hide or auto-minimize the floating screen-sharing toolbar - Microsoft Q&A
+  report_text_excerpt: How to completely hide or auto-minimize the floating screen-sharing toolbar Currently, when sharing the screen in Microsoft Teams, the floating presenter toolbar ("You are sharing your screen") remains visible at the top and frequently blocks browser tabs, menu bars, and other...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-06'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: 2cb7c66886eb2e8cc22ab471262cc7bea5fdd9d1a264b4ff47f20502a53cf174
+  title_dedup_sha256: 891e62fdc6e352a89382d75519c3ddf1da61a0b231a2601bd23fdc869d10f3f0
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082748-new-teams-cant-sign-in-answer-13066686
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082748/new-teams-cant-sign-in#answer-13066686
+  parent_title: New Teams can't sign in - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: What are you using your Teams on? Windows 11, or macOS? Please provide the OS info. If it is Windows. can you go to Settings > Accounts > Your info, share a screenshot of this page, edit to mask your personal email address when you share.
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-27T03:10:37.47+00:00'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: 1ce0437ad93a1d6be84c555d2d91fa4c4f062604f4fd796359fe2b0801c247be
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-what-e2-80-99s-new-in-microsoft-tea
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/what%e2%80%99s-new-in-microsoft-teams-feature-spotlight-%e2%80%93-together-emojis/3822872
+  parent_title: What’s New in Microsoft Teams Feature Spotlight – Together Emojis
+  report_title: What’s New in Microsoft Teams Feature Spotlight – Together Emojis
+  report_text_excerpt: What’s New in Microsoft Teams Feature Spotlight – Together Emojis We’re discussing a new feature each week in Microsoft Teams and this week we’re looking at the new Together Emoji. &amp;nbsp; I start every work day with a &apos;Good Morning&apos; message to my team and I...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2023-05-16'
+  target_release_date: '2026-09-08'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: f71da46f59e8543f6a3db88492f5549d3835c656248a281d77d4529f40dd941e
+  title_dedup_sha256: ba31c3079ce51c1eecfcff6300018e899a83ec35225526b04f6bb4c54b395897
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082959-i-am-the-meeting-organizer-but-i-am-un
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082959/i-am-the-meeting-organizer-but-i-am-unable-to-acce
+  parent_title: I am the meeting organizer but I am unable to access the meeting options. - Microsoft Q&A
+  report_title: I am the meeting organizer but I am unable to access the meeting options. - Microsoft Q&A
+  report_text_excerpt: I am the meeting organizer but I am unable to access the meeting options. I created a Teams meeting through outlook signed into my primary account. I am the organizer of the meeting and am listed as such on the Teams meeting invite. When I click on the meeting options in...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-25'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 6d7cfac88db5d1d50ae8e1598fd6d4fc906c87fecb2716be2bac1436a814e9af
+  title_dedup_sha256: 2b277f23955c8495b7e24f2c52751a426799819a72733f2ce333f7df5bd1014b
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6063464-how-to-completely-hide-or-auto-minimiz
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6063464/how-to-completely-hide-or-auto-minimize-the-floati
+  parent_title: How to completely hide or auto-minimize the floating screen-sharing toolbar - Microsoft Q&A
+  report_title: How to completely hide or auto-minimize the floating screen-sharing toolbar - Microsoft Q&A
+  report_text_excerpt: How to completely hide or auto-minimize the floating screen-sharing toolbar Currently, when sharing the screen in Microsoft Teams, the floating presenter toolbar ("You are sharing your screen") remains visible at the top and frequently blocks browser tabs, menu bars, and other...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-06'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 2cb7c66886eb2e8cc22ab471262cc7bea5fdd9d1a264b4ff47f20502a53cf174
+  title_dedup_sha256: 891e62fdc6e352a89382d75519c3ddf1da61a0b231a2601bd23fdc869d10f3f0
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082748-new-teams-cant-sign-in-answer-13066686
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082748/new-teams-cant-sign-in#answer-13066686
+  parent_title: New Teams can't sign in - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: What are you using your Teams on? Windows 11, or macOS? Please provide the OS info. If it is Windows. can you go to Settings > Accounts > Your info, share a screenshot of this page, edit to mask your personal email address when you share.
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-27T03:10:37.47+00:00'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 1ce0437ad93a1d6be84c555d2d91fa4c4f062604f4fd796359fe2b0801c247be
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-what-e2-80-99s-new-in-microsoft-tea
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/what%e2%80%99s-new-in-microsoft-teams-feature-spotlight-%e2%80%93-together-emojis/3822872
+  parent_title: What’s New in Microsoft Teams Feature Spotlight – Together Emojis
+  report_title: What’s New in Microsoft Teams Feature Spotlight – Together Emojis
+  report_text_excerpt: What’s New in Microsoft Teams Feature Spotlight – Together Emojis We’re discussing a new feature each week in Microsoft Teams and this week we’re looking at the new Together Emoji. &amp;nbsp; I start every work day with a &apos;Good Morning&apos; message to my team and I...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2023-05-16'
+  target_release_date: '2026-08-20'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: f71da46f59e8543f6a3db88492f5549d3835c656248a281d77d4529f40dd941e
+  title_dedup_sha256: ba31c3079ce51c1eecfcff6300018e899a83ec35225526b04f6bb4c54b395897
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082959-i-am-the-meeting-organizer-but-i-am-un
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082959/i-am-the-meeting-organizer-but-i-am-unable-to-acce
+  parent_title: I am the meeting organizer but I am unable to access the meeting options. - Microsoft Q&A
+  report_title: I am the meeting organizer but I am unable to access the meeting options. - Microsoft Q&A
+  report_text_excerpt: I am the meeting organizer but I am unable to access the meeting options. I created a Teams meeting through outlook signed into my primary account. I am the organizer of the meeting and am listed as such on the Teams meeting invite. When I click on the meeting options in...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-25'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 6d7cfac88db5d1d50ae8e1598fd6d4fc906c87fecb2716be2bac1436a814e9af
+  title_dedup_sha256: 2b277f23955c8495b7e24f2c52751a426799819a72733f2ce333f7df5bd1014b
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6063464-how-to-completely-hide-or-auto-minimiz
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6063464/how-to-completely-hide-or-auto-minimize-the-floati
+  parent_title: How to completely hide or auto-minimize the floating screen-sharing toolbar - Microsoft Q&A
+  report_title: How to completely hide or auto-minimize the floating screen-sharing toolbar - Microsoft Q&A
+  report_text_excerpt: How to completely hide or auto-minimize the floating screen-sharing toolbar Currently, when sharing the screen in Microsoft Teams, the floating presenter toolbar ("You are sharing your screen") remains visible at the top and frequently blocks browser tabs, menu bars, and other...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-06'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 2cb7c66886eb2e8cc22ab471262cc7bea5fdd9d1a264b4ff47f20502a53cf174
+  title_dedup_sha256: 891e62fdc6e352a89382d75519c3ddf1da61a0b231a2601bd23fdc869d10f3f0
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6082748-new-teams-cant-sign-in-answer-13066686
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6082748/new-teams-cant-sign-in#answer-13066686
+  parent_title: New Teams can't sign in - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: What are you using your Teams on? Windows 11, or macOS? Please provide the OS info. If it is Windows. can you go to Settings > Accounts > Your info, share a screenshot of this page, edit to mask your personal email address when you share.
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2026-11-27T03:10:37.47+00:00'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 1ce0437ad93a1d6be84c555d2d91fa4c4f062604f4fd796359fe2b0801c247be
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-what-e2-80-99s-new-in-microsoft-tea
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/what%e2%80%99s-new-in-microsoft-teams-feature-spotlight-%e2%80%93-together-emojis/3822872
+  parent_title: What’s New in Microsoft Teams Feature Spotlight – Together Emojis
+  report_title: What’s New in Microsoft Teams Feature Spotlight – Together Emojis
+  report_text_excerpt: What’s New in Microsoft Teams Feature Spotlight – Together Emojis We’re discussing a new feature each week in Microsoft Teams and this week we’re looking at the new Together Emoji. &amp;nbsp; I start every work day with a &apos;Good Morning&apos; message to my team and I...
+  captured_at: '2026-11-27T09:06:01Z'
+  source_date: '2023-05-16'
+  target_release_date: '2026-08-03'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: f71da46f59e8543f6a3db88492f5549d3835c656248a281d77d4529f40dd941e
+  title_dedup_sha256: ba31c3079ce51c1eecfcff6300018e899a83ec35225526b04f6bb4c54b395897
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: obs-studio-33-0-3-github-issue-14262
+  product_id: obs-studio
+  update_version: 33.0.3
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14262
+  parent_title: Crash on exit in VolumeControl::onSourceActiveChanged (dangling const char *uuid)
+  report_title: Crash on exit in VolumeControl::onSourceActiveChanged (dangling const char *uuid)
+  report_text_excerpt: '11 ### Other OS _No response_ ### OBS Studio Version Other ### OBS Studio Version (Other) 33.0.3 (also happened on 33.0.0 and 32.2.2) ### OBS Studio Log URL https://obsproject.com/logs/hCo3tiG1lh20pjXE ### OBS Studio Crash Log URL https://obsproject.com/logs/crashes/t77RNJt8gErjB'
+  captured_at: '2026-11-27T09:39:59Z'
+  source_date: '2026-11-27'
+  patch_version_matched: true
+  matched_version: 33.0.3
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: github_issues
+  excerpt_norm_sha256: edef83e0d724fee814acb5d9fffa197abdef84945ca700107cf1674a9da79909
+  title_dedup_sha256: 67bf28e23f9fa417215417e84bb798810a9aec506eebc1c4d7cc95528951afb4
+  issue_bucket: audio mixer or routing issues
+  facts_rule_version: v1
+- id: obs-studio-33-0-0-github-issue-14262
+  product_id: obs-studio
+  update_version: 33.0.0
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14262
+  parent_title: Crash on exit in VolumeControl::onSourceActiveChanged (dangling const char *uuid)
+  report_title: Crash on exit in VolumeControl::onSourceActiveChanged (dangling const char *uuid)
+  report_text_excerpt: 'nse_ ### OBS Studio Version Other ### OBS Studio Version (Other) 33.0.3 (also happened on 33.0.0 and 32.2.2) ### OBS Studio Log URL https://obsproject.com/logs/hCo3tiG1lh20pjXE ### OBS Studio Crash Log URL https://obsproject.com/logs/crashes/t77RNJt8gErjBJrw ### Expected Behavior'
+  captured_at: '2026-11-27T09:50:01Z'
+  source_date: '2026-11-27'
+  patch_version_matched: true
+  matched_version: 33.0.0
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: github_issues
+  excerpt_norm_sha256: a49d4c47c4248bdd760d6b4a551375be1b117906d0698e1613eb74d5197b4c21
+  title_dedup_sha256: 67bf28e23f9fa417215417e84bb798810a9aec506eebc1c4d7cc95528951afb4
+  issue_bucket: audio mixer or routing issues
+  facts_rule_version: v1
+- id: acrobat-23-008-20470-adobe-community-bug-report-https-community-adobe-com-questions-9-inserting-pages-to-a-large-pdf-hangs-1290775
+  product_id: adobe-acrobat-pro
+  update_version: 23.008.20470
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/inserting-pages-to-a-large-pdf-hangs-1290775
+  parent_title: inserting pages to a (large) pdf hangs
+  report_title: inserting pages to a (large) pdf hangs
+  report_text_excerpt: inserting pages to a (large) pdf hangs it's been like this since v11.0.23 on Win 10 pro and it remains the same now that I'm upgraded to 2023.008.20470 on Win 11 pro... when I try to insert a smaller pdf (a few hundred KB) into a larger one (a few MB), acrobat hangs probably 3...
+  captured_at: '2026-11-27T21:12:54Z'
+  source_date: '2024-02-28'
+  target_release_date: '2024-01-16'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 2023.008.20470
+  match_basis: exact_version_alias
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 8843faa89346ac8b4eb227d372b5b4bd7566a9707be0c6fc65ef48adc0116aa8
+  title_dedup_sha256: 43a9da09dba6840f364a24dc20dd958c4a9f9938f6c21a2ac0319823961544dd
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+- id: acrobat-23-008-20470-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-crash-randomly-after-update-23-008-20470-1289731
+  product_id: adobe-acrobat-pro
+  update_version: 23.008.20470
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-crash-randomly-after-update-23-008-20470-1289731
+  parent_title: Acrobat crash randomly after update 23.008.20470
+  report_title: Acrobat crash randomly after update 23.008.20470
+  report_text_excerpt: Acrobat crash randomly after update 23.008.20470 After updating to 23.008.20470, Acrobat crashes randomly when I open or right-click to print a PDF, even with the same file. Any ideas?
+  captured_at: '2026-11-27T21:12:54Z'
+  source_date: '2024-01-29'
+  target_release_date: '2024-01-16'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 23.008.20470
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: e56b163aa937ca61ef5735ffe3954a81613abf6e1e04aa5e1f70fcd29c6c1749
+  title_dedup_sha256: dc7c5f9a7d2161868ee34c32435a24af0c2098cd15782647294620789d97db6b
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+- id: acrobat-23-008-20458-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-pro-rev-23-008-20458-still-freeze-1289104
+  product_id: adobe-acrobat-pro
+  update_version: 23.008.20458
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-pro-rev-23-008-20458-still-freeze-1289104
+  parent_title: acrobat pro  rev 23.008.20458 still freeze
+  report_title: acrobat pro  rev 23.008.20458 still freeze
+  report_text_excerpt: acrobat pro rev 23.008.20458 still freeze I have upgraded my acrobat pro with the last rev 23.008.20458 but it's still freezing while opening files, printing pages.
+  captured_at: '2026-11-27T21:12:54Z'
+  source_date: '2024-01-10'
+  target_release_date: '2024-01-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 23.008.20458
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 5ede3be6bf6264ecd2362baed394825cb74c554794daa1aee02076f0d3af82f5
+  title_dedup_sha256: 82fa5f8b910de3b6bbde6c3930905a9500505bc990157b919b7c807f658f38cd
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+- id: acrobat-25-001-20428-adobe-community-bug-report-https-community-adobe-com-questions-624-unable-to-update-acrobat-dc-by-acrobatdcupd2500120428-dm
+  product_id: adobe-acrobat-reader
+  update_version: 25.001.20428
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-624/unable-to-update-acrobat-dc-by-acrobatdcupd2500120428-dmg-682584
+  parent_title: Unable to update Acrobat DC by AcrobatDCUpd2500120428.dmg
+  report_title: Unable to update Acrobat DC by AcrobatDCUpd2500120428.dmg
+  report_text_excerpt: Unable to update Acrobat DC by AcrobatDCUpd2500120428.dmg Hi there, I'd like to update Acrobat DC to the version 25.001.20428 by https://ardownload2.adobe.com/pub/adobe/acrobat/mac/AcrobatDC/2500120428/AcrobatDCUpd2500120428.dmg . However the AcrobatDCUpd2500120428.pkg cannot...
+  captured_at: '2026-11-27T21:35:31Z'
+  source_date: '2025-03-05'
+  target_release_date: '2025-03-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 25.001.20428
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified Acrobat issue
+  workflow_area: Acrobat workflow
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 04e824447d3140b09bd5d0cf7a5e040dcc7f2f2a920572a48e68bb5e4bbd12ff
+  title_dedup_sha256: 95f8a9498a3b53694fbd431c258ec5d336d9966c619d03b49dc96aabd2937f73
+  issue_bucket: unspecified acrobat issue
+  facts_rule_version: v1
+- id: acrobat-24-005-20421-adobe-community-bug-report-https-community-adobe-com-questions-9-unable-to-open-pdf-something-went-wrong-a-running-instance
+  product_id: adobe-acrobat-reader
+  update_version: 24.005.20421
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/unable-to-open-pdf-something-went-wrong-a-running-instance-of-acrobat-has-caused-an-error-1300631
+  parent_title: Unable to open PDF. Something went wrong. A running instance of Acrobat has caused an error.
+  report_title: Unable to open PDF. Something went wrong. A running instance of Acrobat has caused an error.
+  report_text_excerpt: 'Unable to open PDF. Something went wrong. A running instance of Acrobat has caused an error. Bug summary : There is an ongoing issue with the most recent update for Acrobat (version 24.005.20421) that may prevent you from opening PDFs after they have been saved to a network...'
+  captured_at: '2026-11-27T21:35:31Z'
+  source_date: '2025-02-27'
+  target_release_date: '2025-02-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 24.005.20421
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified Acrobat issue
+  workflow_area: Acrobat workflow
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 1ba9175b09585df7f21c632cbb6adf481db89dfb0f3b15e71145ede61ce78daf
+  title_dedup_sha256: 1009e74a0ebd527ea9bba3de8129a184786ed5746267e35379cbce82690747d9
+  issue_bucket: unspecified acrobat issue
+  facts_rule_version: v1
+- id: comfyui-0-46-0-github-issue-18028
+  product_id: comfyui
+  update_version: 0.46.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/18028
+  parent_title: 'DynamicVRAM on ROCm: Flux.1-dev bf16 renders solid black (NaN) at 20 steps when the model doesn''t fit in VRAM'
+  report_title: 'DynamicVRAM on ROCm: Flux.1-dev bf16 renders solid black (NaN) at 20 steps when the model doesn''t fit in VRAM'
+  report_text_excerpt: 'DynamicVRAM on ROCm: Flux.1-dev bf16 renders solid black (NaN) at 20 steps when the model doesn''t fit in VRAM ### Custom Node Testing - [x] I have tried disabling custom nodes and the issue persists (see [how to disable custom...'
+  captured_at: '2026-11-27T22:06:46Z'
+  source_date: '2026-11-27'
+  target_release_date: '2026-11-18'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.46.0
+  match_basis: core_version_declaration
+  counted: true
+  exclusion_reason: null
+  issue_theme: wrong or corrupted output
+  workflow_area: generation output
+  platform: linux
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: github_issues
+  matched_text: 0.46.0
+  matched_field: report_text
+  matched_context: '...checks against `>= (7, 14)`. - torch 2.15.0+rocm10.0, Python 3.13.18 - ComfyUI 0.46.0 (commit 2b33af494), comfy-aimdo 0.6.0, comfy-kitchen 0.2.42 - Launch flags duri...'
+  excerpt_norm_sha256: 670c49330059f78924f1fc9ffcc1107ef1908a678d69841e690f72df0c316644
+  title_dedup_sha256: f0ec994f22c1d13d21ab093b1e9b8f52fde31ea6fcb82106c0dd1cc05ac161b2
+  issue_bucket: wrong or corrupted output
+  facts_rule_version: v1
+- id: microsoft-teams-26304-1207-5384-858-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6083750-after-i-made-some-edits-email-in-meeti
+  product_id: microsoft-teams
+  update_version: 26304.1207.5384.858
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6083750/after-i-made-some-edits-email-in-meeting-interface
+  parent_title: After I made some edits email in  meeting interface, I suddenly couldn't hear any audio during the meeting. - Microsoft Q&A
+  report_title: After I made some edits email in  meeting interface, I suddenly couldn't hear any audio during the meeting. - Microsoft Q&A
+  report_text_excerpt: After I made some edits email in meeting interface, I suddenly couldn't hear any audio during the meeting. Previously, I couldn't edit emails during web meetings; now, after the fix, it’s stopped picking up audio. what a nuisance.
+  captured_at: '2026-11-27T22:10:05Z'
+  source_date: '2026-11-26'
+  target_release_date: '2026-11-23'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: audio / video failure
+  workflow_area: meeting audio and video
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 755d914ec56600cd5e406421a313780c691598f741dbf9f25d9f66561ebfb4f9
+  title_dedup_sha256: 1517e9b83991aba8c727e60ca8ca3a78494c07be2a04906c22cd93566821d5be
+  issue_bucket: audio / video failure
+  facts_rule_version: v1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6083750-after-i-made-some-edits-email-in-meeti
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6083750/after-i-made-some-edits-email-in-meeting-interface
+  parent_title: After I made some edits email in  meeting interface, I suddenly couldn't hear any audio during the meeting. - Microsoft Q&A
+  report_title: After I made some edits email in  meeting interface, I suddenly couldn't hear any audio during the meeting. - Microsoft Q&A
+  report_text_excerpt: After I made some edits email in meeting interface, I suddenly couldn't hear any audio during the meeting. Previously, I couldn't edit emails during web meetings; now, after the fix, it’s stopped picking up audio. what a nuisance.
+  captured_at: '2026-11-27T22:10:05Z'
+  source_date: '2026-11-26'
+  target_release_date: '2026-11-05'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: audio / video failure
+  workflow_area: meeting audio and video
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 755d914ec56600cd5e406421a313780c691598f741dbf9f25d9f66561ebfb4f9
+  title_dedup_sha256: 1517e9b83991aba8c727e60ca8ca3a78494c07be2a04906c22cd93566821d5be
+  issue_bucket: audio / video failure
+  facts_rule_version: v1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6083750-after-i-made-some-edits-email-in-meeti
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6083750/after-i-made-some-edits-email-in-meeting-interface
+  parent_title: After I made some edits email in  meeting interface, I suddenly couldn't hear any audio during the meeting. - Microsoft Q&A
+  report_title: After I made some edits email in  meeting interface, I suddenly couldn't hear any audio during the meeting. - Microsoft Q&A
+  report_text_excerpt: After I made some edits email in meeting interface, I suddenly couldn't hear any audio during the meeting. Previously, I couldn't edit emails during web meetings; now, after the fix, it’s stopped picking up audio. what a nuisance.
+  captured_at: '2026-11-27T22:10:05Z'
+  source_date: '2026-11-26'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: audio / video failure
+  workflow_area: meeting audio and video
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: 755d914ec56600cd5e406421a313780c691598f741dbf9f25d9f66561ebfb4f9
+  title_dedup_sha256: 1517e9b83991aba8c727e60ca8ca3a78494c07be2a04906c22cd93566821d5be
+  issue_bucket: audio / video failure
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6083750-after-i-made-some-edits-email-in-meeti
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6083750/after-i-made-some-edits-email-in-meeting-interface
+  parent_title: After I made some edits email in  meeting interface, I suddenly couldn't hear any audio during the meeting. - Microsoft Q&A
+  report_title: After I made some edits email in  meeting interface, I suddenly couldn't hear any audio during the meeting. - Microsoft Q&A
+  report_text_excerpt: After I made some edits email in meeting interface, I suddenly couldn't hear any audio during the meeting. Previously, I couldn't edit emails during web meetings; now, after the fix, it’s stopped picking up audio. what a nuisance.
+  captured_at: '2026-11-27T22:10:05Z'
+  source_date: '2026-11-26'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: audio / video failure
+  workflow_area: meeting audio and video
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: 755d914ec56600cd5e406421a313780c691598f741dbf9f25d9f66561ebfb4f9
+  title_dedup_sha256: 1517e9b83991aba8c727e60ca8ca3a78494c07be2a04906c22cd93566821d5be
+  issue_bucket: audio / video failure
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6083750-after-i-made-some-edits-email-in-meeti
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6083750/after-i-made-some-edits-email-in-meeting-interface
+  parent_title: After I made some edits email in  meeting interface, I suddenly couldn't hear any audio during the meeting. - Microsoft Q&A
+  report_title: After I made some edits email in  meeting interface, I suddenly couldn't hear any audio during the meeting. - Microsoft Q&A
+  report_text_excerpt: After I made some edits email in meeting interface, I suddenly couldn't hear any audio during the meeting. Previously, I couldn't edit emails during web meetings; now, after the fix, it’s stopped picking up audio. what a nuisance.
+  captured_at: '2026-11-27T22:10:05Z'
+  source_date: '2026-11-26'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: audio / video failure
+  workflow_area: meeting audio and video
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 755d914ec56600cd5e406421a313780c691598f741dbf9f25d9f66561ebfb4f9
+  title_dedup_sha256: 1517e9b83991aba8c727e60ca8ca3a78494c07be2a04906c22cd93566821d5be
+  issue_bucket: audio / video failure
+  facts_rule_version: v1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6083750-after-i-made-some-edits-email-in-meeti
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6083750/after-i-made-some-edits-email-in-meeting-interface
+  parent_title: After I made some edits email in  meeting interface, I suddenly couldn't hear any audio during the meeting. - Microsoft Q&A
+  report_title: After I made some edits email in  meeting interface, I suddenly couldn't hear any audio during the meeting. - Microsoft Q&A
+  report_text_excerpt: After I made some edits email in meeting interface, I suddenly couldn't hear any audio during the meeting. Previously, I couldn't edit emails during web meetings; now, after the fix, it’s stopped picking up audio. what a nuisance.
+  captured_at: '2026-11-27T22:10:05Z'
+  source_date: '2026-11-26'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: audio / video failure
+  workflow_area: meeting audio and video
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 755d914ec56600cd5e406421a313780c691598f741dbf9f25d9f66561ebfb4f9
+  title_dedup_sha256: 1517e9b83991aba8c727e60ca8ca3a78494c07be2a04906c22cd93566821d5be
+  issue_bucket: audio / video failure
+  facts_rule_version: v1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6083750-after-i-made-some-edits-email-in-meeti
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6083750/after-i-made-some-edits-email-in-meeting-interface
+  parent_title: After I made some edits email in  meeting interface, I suddenly couldn't hear any audio during the meeting. - Microsoft Q&A
+  report_title: After I made some edits email in  meeting interface, I suddenly couldn't hear any audio during the meeting. - Microsoft Q&A
+  report_text_excerpt: After I made some edits email in meeting interface, I suddenly couldn't hear any audio during the meeting. Previously, I couldn't edit emails during web meetings; now, after the fix, it’s stopped picking up audio. what a nuisance.
+  captured_at: '2026-11-27T22:10:05Z'
+  source_date: '2026-11-26'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: audio / video failure
+  workflow_area: meeting audio and video
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: 755d914ec56600cd5e406421a313780c691598f741dbf9f25d9f66561ebfb4f9
+  title_dedup_sha256: 1517e9b83991aba8c727e60ca8ca3a78494c07be2a04906c22cd93566821d5be
+  issue_bucket: audio / video failure
+  facts_rule_version: v1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6083750-after-i-made-some-edits-email-in-meeti
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6083750/after-i-made-some-edits-email-in-meeting-interface
+  parent_title: After I made some edits email in  meeting interface, I suddenly couldn't hear any audio during the meeting. - Microsoft Q&A
+  report_title: After I made some edits email in  meeting interface, I suddenly couldn't hear any audio during the meeting. - Microsoft Q&A
+  report_text_excerpt: After I made some edits email in meeting interface, I suddenly couldn't hear any audio during the meeting. Previously, I couldn't edit emails during web meetings; now, after the fix, it’s stopped picking up audio. what a nuisance.
+  captured_at: '2026-11-27T22:10:05Z'
+  source_date: '2026-11-26'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: audio / video failure
+  workflow_area: meeting audio and video
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 755d914ec56600cd5e406421a313780c691598f741dbf9f25d9f66561ebfb4f9
+  title_dedup_sha256: 1517e9b83991aba8c727e60ca8ca3a78494c07be2a04906c22cd93566821d5be
+  issue_bucket: audio / video failure
+  facts_rule_version: v1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6083750-after-i-made-some-edits-email-in-meeti
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6083750/after-i-made-some-edits-email-in-meeting-interface
+  parent_title: After I made some edits email in  meeting interface, I suddenly couldn't hear any audio during the meeting. - Microsoft Q&A
+  report_title: After I made some edits email in  meeting interface, I suddenly couldn't hear any audio during the meeting. - Microsoft Q&A
+  report_text_excerpt: After I made some edits email in meeting interface, I suddenly couldn't hear any audio during the meeting. Previously, I couldn't edit emails during web meetings; now, after the fix, it’s stopped picking up audio. what a nuisance.
+  captured_at: '2026-11-27T22:10:05Z'
+  source_date: '2026-11-26'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: audio / video failure
+  workflow_area: meeting audio and video
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 755d914ec56600cd5e406421a313780c691598f741dbf9f25d9f66561ebfb4f9
+  title_dedup_sha256: 1517e9b83991aba8c727e60ca8ca3a78494c07be2a04906c22cd93566821d5be
+  issue_bucket: audio / video failure
+  facts_rule_version: v1
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6083884-question-6083884
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6083884/2026-11-preview-update-kb5132057-26300-10075-not-d
+  parent_title: 2026-11 Preview Update (KB5132057) (26300.10075) not downloading anymore - Microsoft Q&A
+  report_title: 2026-11 Preview Update (KB5132057) (26300.10075) not downloading anymore - Microsoft Q&A
+  report_text_excerpt: 2026-11 Preview Update (KB5132057) (26300.10075) not downloading anymore - Microsoft Q&A This update takes for ever to start downloading then stops many times then will not install. I've done everything suggested with command prompt & have rebooted & trying to install this...
+  captured_at: '2026-11-27T22:22:19Z'
+  source_date: '2026-11-27'
+  target_release_date: '2026-11-19'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.10075'
+  match_basis: exact_os_build
+  matched_kb: KB5132057
+  matched_os_build: '26300.10075'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.10075'
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: 8459f4c6be7c01e9a986e901cf279c321f071d00023e64f1ccbd24164fd8770b
+  title_dedup_sha256: eaeb5f498c9f6d780a4430ee85529a1a7654ebaef9e8641b3896294e252ae64e
+  issue_bucket: update/install failure
+  facts_rule_version: v1
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-learn-6084107-question-6084107
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6084107/how-to-fix-windows-security-update-refusing-to-ins
+  parent_title: How to fix Windows "Security Update" refusing to install - Microsoft Q&A
+  report_title: How to fix Windows "Security Update" refusing to install - Microsoft Q&A
+  report_text_excerpt: 'How to fix Windows "Security Update" refusing to install - Microsoft Q&A Security Update: 2026-11 Preview Update (KB5132057) (26200.10075) Install error - 0x800f0993 has been happening for a week now.'
+  captured_at: '2026-11-27T22:22:41Z'
+  source_date: '2026-11-27'
+  target_release_date: '2026-11-19'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.10075'
+  match_basis: exact_os_build
+  matched_kb: KB5132057
+  matched_os_build: '26200.10075'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.10075'
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: 4aadf3be477c6c8947e2d767d5f594b5b0aa24888546c8e6f4857cf5d6654163
+  title_dedup_sha256: 3ed3bf5a7c4e3ab8af70e256e7c8578a773d5b6dc0aa82a3ff3b4ee0d6d15600
+  issue_bucket: update/install failure
+  facts_rule_version: v1
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6083828-question-6083828
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6083828/how-to-fix-2026-11-security-update-kb5132061-26300
+  parent_title: How to fix 2026-11 Security Update (KB5132061) (26300.9974) Install error - 0x800f081f - Microsoft Q&A
+  report_title: How to fix 2026-11 Security Update (KB5132061) (26300.9974) Install error - 0x800f081f - Microsoft Q&A
+  report_text_excerpt: How to fix 2026-11 Security Update (KB5132061) (26300.9974) Install error - 0x800f081f - Microsoft Q&A i have this error installing my windows today - when i download it downloads but doesn't install the update and gives error - 0x800f081f
+  captured_at: '2026-11-27T22:22:52Z'
+  source_date: '2026-11-27'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9974'
+  match_basis: exact_os_build
+  matched_kb: KB5132061
+  matched_os_build: '26300.9974'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9974'
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: a8d784ff07019cb0ff906cc03232d219241d3f750cde682e4232b5be10a7f217
+  title_dedup_sha256: 2692ac3cb4afd2a32ecbc4c0f19531448ab972dce75b39c31f07b9e14607ec93
+  issue_bucket: update/install failure
+  facts_rule_version: v1
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6083831-question-6083831
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6083831/hoe-los-ik-het-installeren-van-2026-11-beveiliging
+  parent_title: Hoe los ik het installeren van 2026-11 Beveiligingsupdate (KB5132061) (26300.9974) met installatiefout 0x800f081f - Microsoft Q&A
+  report_title: Hoe los ik het installeren van 2026-11 Beveiligingsupdate (KB5132061) (26300.9974) met installatiefout 0x800f081f - Microsoft Q&A
+  report_text_excerpt: Hoe los ik het installeren van 2026-11 Beveiligingsupdate (KB5132061) (26300.9974) met installatiefout 0x800f081f - Microsoft Q&A De installatie mislukt steeds en geeft de installatiefout aan 0x800f081f
+  captured_at: '2026-11-27T22:22:52Z'
+  source_date: '2026-11-26'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9974'
+  match_basis: exact_os_build
+  matched_kb: KB5132061
+  matched_os_build: '26300.9974'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9974'
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: 46e373982126f9283d2c1c0d72abfa992a1196dfb7fda0229cc74b75f3785b23
+  title_dedup_sha256: be85ddc709971ea2d6e1b7d460584d62b087463424237141b91f891dc082da5d
+  issue_bucket: update/install failure
+  facts_rule_version: v1
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-learn-6083669-question-6083669
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6083669/issue-with-safenet-etoken-authentication-after-nov
+  parent_title: Issue with SafeNet Etoken authentication after November cumulative patch KB5132061 - Microsoft Q&A
+  report_title: Issue with SafeNet Etoken authentication after November cumulative patch KB5132061 - Microsoft Q&A
+  report_text_excerpt: Issue with SafeNet Etoken authentication after November cumulative patch KB5132061 - Microsoft Q&A I`m facing Etoken authentication issues after KB was installed. Only with Etoken Hardware version 12.0. With 16.0 everything works perfectly. safenet.jpg I checked with SafeNet...
+  captured_at: '2026-11-27T22:23:15Z'
+  source_date: '2026-11-26'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5132061
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5132061
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9974'
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: cae576de0c3fcf9bd7beef7c57696a0c0b8886352119dcd897ecc3c972a231ea
+  title_dedup_sha256: 26d6ac5d9f7b03e78ea5ce333203bf62258af5c828a66f75e8505cc232a81447
+  issue_bucket: update/install failure
+  facts_rule_version: v1
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6083860-question-6083860
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6083860/windows-11-boot-failure-after-installing-update-kb
+  parent_title: Windows 11 Boot Failure after installing update KB5127648 - Microsoft Q&A
+  report_title: Windows 11 Boot Failure after installing update KB5127648 - Microsoft Q&A
+  report_text_excerpt: Windows 11 Boot Failure after installing update KB5127648 - Microsoft Q&A Windows stopped booting normally immediately after installing update KB5127648 . Normal startup fails before the desktop with error 0xc0000001 . Safe Mode works, including Safe Mode with Networking....
+  captured_at: '2026-11-27T22:25:20Z'
+  source_date: '2026-11-27'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9711'
+  match_basis: exact_os_build
+  matched_kb: KB5127648
+  matched_os_build: '26300.9711'
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9711'
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: 06ba28f4f364c90c092e2a1c5428606228377ec715c6f2e7ca3f57752b729cb9
+  title_dedup_sha256: f523c8e2d03ea7a2b1d0fdb940eeb6e387957805e5f3142aef5e6d6be69f8d97
+  issue_bucket: update/install failure
+  facts_rule_version: v1
+- id: obs-studio-33-0-3-github-issue-14267
+  product_id: obs-studio
+  update_version: 33.0.3
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14267
+  parent_title: Crash when rename or remove a scene collection
+  report_title: Crash when rename or remove a scene collection
+  report_text_excerpt: '### Operating System Info Windows 11 ### OBS Studio Version 33.0.3 ### OBS Studio Log URL https://obsproject.com/logs/oAN6SP7LB7bvbGlT'
+  captured_at: '2026-11-27T22:51:54Z'
+  source_date: '2026-11-27'
+  patch_version_matched: true
+  matched_version: 33.0.3
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+  discovery_method_id: github_issues
+  excerpt_norm_sha256: 5453cfd5e87fbc21ec7b669fea74376648e5d8e49a26b804724d578cd3ece84b
+  title_dedup_sha256: f8110d21cd19447580ee8abd72d12c98e30f586dfb22cec6cbbf6dcc2d28939f
+  issue_bucket: crash or stability problems
+  facts_rule_version: v1
+- id: obs-studio-32-2-2-github-issue-14262
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14262
+  parent_title: Crash on exit in VolumeControl::onSourceActiveChanged (dangling const char *uuid)
+  report_title: Crash on exit in VolumeControl::onSourceActiveChanged (dangling const char *uuid)
+  report_text_excerpt: 'S Studio Version Other ### OBS Studio Version (Other) 33.0.3 (also happened on 33.0.0 and 32.2.2) ### OBS Studio Log URL https://obsproject.com/logs/hCo3tiG1lh20pjXE ### OBS Studio Crash Log URL https://obsproject.com/logs/crashes/t77RNJt8gErjBJrw ### Expected Behavior OBS Studio'
+  captured_at: '2026-11-27T23:00:53Z'
+  source_date: '2026-11-27'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: github_issues
+  excerpt_norm_sha256: af4f2d9ac7ac8f941d79522ec9570a3385ecd18840445647f2bcf258de92b58a
+  title_dedup_sha256: 67bf28e23f9fa417215417e84bb798810a9aec506eebc1c4d7cc95528951afb4
+  issue_bucket: audio mixer or routing issues
+  facts_rule_version: v1
+
+- id: acrobat-23-006-20380-adobe-community-bug-report-https-community-adobe-com-questions-9-nvda-and-adobe-acrobat-pro-crash-exception-exception-acces
+  product_id: adobe-acrobat-pro
+  update_version: 23.006.20380
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/nvda-and-adobe-acrobat-pro-crash-exception-exception-access-violation-1620470
+  parent_title: NVDA and Adobe Acrobat Pro - crash exception="EXCEPTION_ACCESS_VIOLATION"
+  report_title: NVDA and Adobe Acrobat Pro - crash exception="EXCEPTION_ACCESS_VIOLATION"
+  report_text_excerpt: '...clientVersion="4.8.0.7" applicationName="Adobe Acrobat" applicationVersion="23.006.20380" build="0" source="Windows-Client-WER" crashType="n/a"> <time year="2025" month="11" day="27" hour="11" minute="21" second="46" timeoffset="60" timezone="Romance Standard...'
+  captured_at: '2026-11-28T07:43:05Z'
+  source_date: '2025-11-27'
+  target_release_date: '2023-11-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 23.006.20380
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: c7c8cf16f70064fa54ec3d06c10a93a36c75583cda7a099887c109c7ab205e23
+  title_dedup_sha256: 91f6a2805d9b326deeb8f9b2ef9bdc2452e8c3e07b2409e2f0c98f111027eb60
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+- id: acrobat-23-006-20380-adobe-community-bug-report-https-community-adobe-com-questions-9-can-t-run-adobe-acrobat-on-mac-os-sonoma-14-1-2-1288396
+  product_id: adobe-acrobat-pro
+  update_version: 23.006.20380
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/can-t-run-adobe-acrobat-on-mac-os-sonoma-14-1-2-1288396
+  parent_title: Can't run Adobe Acrobat on Mac OS Sonoma 14.1.2
+  report_title: Can't run Adobe Acrobat on Mac OS Sonoma 14.1.2
+  report_text_excerpt: '...Acrobat.app/Contents/MacOS/AdobeAcrobat Identifier: com.adobe.Acrobat.Pro Version: 23.006.20380 (23.006.20380) Code Type: ARM-64 (Native) Parent Process: launchd [1] User ID: 501 Date/Time: 2023-12-10 11:33:35.6988 +0100 OS Version: macOS 14.1.2 (23B92) Report...'
+  captured_at: '2026-11-28T07:43:05Z'
+  source_date: '2023-12-10'
+  target_release_date: '2023-11-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 23.006.20380
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 79ef75c85722e51d3387cfec1a6c2dcc359b42068f8517fd8811ffdf36244af7
+  title_dedup_sha256: dec350b1f1469d36ed49f5c2be2e032c58e716ea6d97a42be92b7ec3c06b576b
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+
+- id: acrobat-20-005-30539-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-update-fail-error-1636-1289468
+  product_id: adobe-acrobat-pro
+  update_version: 20.005.30539
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-update-fail-error-1636-1289468
+  parent_title: Acrobat Update Fail - Error 1636
+  report_title: Acrobat Update Fail - Error 1636
+  report_text_excerpt: '...were selected to print). I even tried to open up a PDF in Photoshop, but it won''t open in Photoshop and I get an error message saying ICC profile description is invalid. I tried to manually update to the newest version 20.005.30539, but it freezes when it gets to the end....'
+  captured_at: '2026-11-28T07:43:05Z'
+  source_date: '2024-01-20'
+  target_release_date: '2023-11-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.005.30539
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: b9af5c023e5a2b6a01847c2752d76da63da0f12309ddc392befc63613d85bffd
+  title_dedup_sha256: ccec42bf9014283078e941d986e01acfbf06174e2179581a0eecfd6854104557
+  issue_bucket: install/update failure
+  facts_rule_version: v1
+
+- id: acrobat-23-006-20360-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-acrobat-crashing-when-exiting-application-1504645
+  product_id: adobe-acrobat-pro
+  update_version: 23.006.20360
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/adobe-acrobat-crashing-when-exiting-application-1504645
+  parent_title: Adobe Acrobat crashing when exiting application
+  report_title: Adobe Acrobat crashing when exiting application
+  report_text_excerpt: '...the application, no change Crash report shows the following at the bottom of the log <dumpType> Full </dumpType> <hbLogSessionDllStatus> ERROR_HB_UNABLE_TO_LOAD_DLL </hbLogSessionDllStatus> </crash> </crashreport> Device is a Win 11 machine, app version 23.006.20360'
+  captured_at: '2026-11-28T07:43:05Z'
+  source_date: '2023-10-24'
+  target_release_date: '2023-10-17'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 23.006.20360
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: b54da7ae7c5b3ab5183f4c2b9a0afe0fbe5d4f91798839c8be3aa1515027e9c8
+  title_dedup_sha256: 53f4039a736673069fa3f79d1eae31fe817df28b76b546ebefb1cfd56e44dfa8
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+- id: acrobat-23-006-20360-adobe-community-bug-report-https-community-adobe-com-questions-18-crashing-of-adobe-acrobat-on-sonoma-14-1-1-609923
+  product_id: adobe-acrobat-pro
+  update_version: 23.006.20360
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-18/crashing-of-adobe-acrobat-on-sonoma-14-1-1-609923
+  parent_title: Crashing of Adobe Acrobat on Sonoma 14.1.1.
+  report_title: Crashing of Adobe Acrobat on Sonoma 14.1.1.
+  report_text_excerpt: '...Acrobat.app/Contents/MacOS/AdobeAcrobat Identifier: com.adobe.Acrobat.Pro Version: 23.006.20360 (23.006.20360) Team ID: JQ525L2MZD Is First Party: No Resource Coalition ID: 2123 Architecture: x86_64 Parent: UNKNOWN [1] PID: 2202 Event: cpu usage Action taken: none...'
+  captured_at: '2026-11-28T07:43:05Z'
+  source_date: '2023-11-19'
+  target_release_date: '2023-10-17'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 23.006.20360
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: ca5b0b795ca1b72827a7c2d21ff1e49777ffa5a3d3946d47c88a2e5015408604
+  title_dedup_sha256: 48530f945fa23715af6c8a8f3036160ce3ab3a1e7456ea37c139e8fb983febef
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+- id: acrobat-23-006-20360-adobe-community-bug-report-https-community-adobe-com-questions-9-error-report-when-typing-typing-chinese-characters-1287553
+  product_id: adobe-acrobat-pro
+  update_version: 23.006.20360
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/error-report-when-typing-typing-chinese-characters-1287553
+  parent_title: Error Report- when typing typing Chinese characters
+  report_title: Error Report- when typing typing Chinese characters
+  report_text_excerpt: '...clientVersion="4.8.0.7" applicationName="Adobe Acrobat" applicationVersion="23.006.20360" build="0" source="Windows-Client" crashType="n/a"> <time year="2023" month="11" day="9" hour="8" minute="45" second="14" timeoffset="480"...'
+  captured_at: '2026-11-28T07:43:05Z'
+  source_date: '2023-11-09'
+  target_release_date: '2023-10-17'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 23.006.20360
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 7e352fa92b9c5ceac724ac0cefaa0e4690fedc42eb7900d165e3c15d34e0de82
+  title_dedup_sha256: e65982e75e8389a740a47dda1efc79d26ac750adaa4f7e1e413bf8d35e5b639c
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+- id: acrobat-23-006-20360-adobe-community-bug-report-https-community-adobe-com-questions-9-sonoma-cannot-print-pdf-within-acrobat-1287208
+  product_id: adobe-acrobat-pro
+  update_version: 23.006.20360
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/sonoma-cannot-print-pdf-within-acrobat-1287208
+  parent_title: 'Sonoma: cannot print PDF within Acrobat'
+  report_title: 'Sonoma: cannot print PDF within Acrobat'
+  report_text_excerpt: 'Sonoma: cannot print PDF within Acrobat With macOS Sonoma 14.1 , I cannot print a PDF within Adobe Acrobat Pro (version 23.006.20360 ) - I get the attached Page Setup box, then the dreaded whirling pizza. Eventually, I have to Force Quit, again as attached. But why has...'
+  captured_at: '2026-11-28T07:43:05Z'
+  source_date: '2023-10-29'
+  target_release_date: '2023-10-17'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 23.006.20360
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: printing regression
+  workflow_area: printing
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 55ee33fad40d723db8c579caa0de0442194d965f839d45e6bd4bcd505dec1fa1
+  title_dedup_sha256: 70fb284cc254751521581d9d1c838d6aa5ce6cb600ba0bdce1ff286913119134
+  issue_bucket: printing regression
+  facts_rule_version: v1
+- id: acrobat-23-006-20360-adobe-community-bug-report-https-community-adobe-com-questions-12-find-function-doesn-t-work-with-acrobat-23-006-20360-1504
+  product_id: adobe-acrobat-pro
+  update_version: 23.006.20360
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/find-function-doesn-t-work-with-acrobat-23-006-20360-1504671
+  parent_title: '"Find" function doesn''t work with acrobat 23.006.20360'
+  report_title: '"Find" function doesn''t work with acrobat 23.006.20360'
+  report_text_excerpt: '"Find" function doesn''t work with acrobat 23.006.20360 I bought an MAC with an M2 chip this month. After downloading the new edition, 23.006.20360, to it, every time I try to use the "find text" (com+f) function, Acrobat is frozen. I can''t use it anymore and have to force it...'
+  captured_at: '2026-11-28T07:43:05Z'
+  source_date: '2023-10-26'
+  target_release_date: '2023-10-17'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 23.006.20360
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified Acrobat issue
+  workflow_area: Acrobat workflow
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 0a3007875a5b4f030826bf65810b8abd3ff993beab2220d2f6963a1c20b8ca60
+  title_dedup_sha256: 28691891b7bd4e4ff6b4ded5258795b455df13efd529d69fd320b45633014268
+  issue_bucket: unspecified acrobat issue
+  facts_rule_version: v1
+
+- id: acrobat-23-006-20320-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-closes-crashes-when-ocr-optimize-starts-1285
+  product_id: adobe-acrobat-pro
+  update_version: 23.006.20320
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-closes-crashes-when-ocr-optimize-starts-1285607
+  parent_title: Adobe Acrobat closes/crashes when OCR/optimize starts
+  report_title: Adobe Acrobat closes/crashes when OCR/optimize starts
+  report_text_excerpt: Adobe Acrobat closes/crashes when OCR/optimize starts Adobe Acrobat keeps closing immediately after OCR (and optimize PDF) starts to run. This seems to be an issue with the newest version (23.006.20320), because I didn't encounter this problem a day or two ago. I've tried...
+  captured_at: '2026-11-28T07:43:05Z'
+  source_date: '2023-09-13'
+  target_release_date: '2023-09-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 23.006.20320
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 6536d066978fddd3fd0a81541a4e54bfb2bdb0c76515131555933fe98952a688
+  title_dedup_sha256: e1f0e428ac878d188339c67fe4b1d5992dfd0004235d606e1b7ae0f36ffefc0a
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+- id: acrobat-23-006-20320-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-crashes-before-app-can-open-mac-ventura-13-6
+  product_id: adobe-acrobat-pro
+  update_version: 23.006.20320
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-crashes-before-app-can-open-mac-ventura-13-6-1285940
+  parent_title: Adobe Acrobat Crashes before app can open Mac Ventura 13.6
+  report_title: Adobe Acrobat Crashes before app can open Mac Ventura 13.6
+  report_text_excerpt: '...Acrobat.app/Contents/MacOS/AdobeAcrobat Identifier: com.adobe.Acrobat.Pro Version: 23.006.20320 (23.006.20320) Code Type: ARM-64 (Native) Parent Process: launchd [1] User ID: 501 Date/Time: 2023-09-21 15:11:16.4421 -0500 OS Version: macOS 13.6 (22G120) Report Version...'
+  captured_at: '2026-11-28T07:43:05Z'
+  source_date: '2023-09-21'
+  target_release_date: '2023-09-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 23.006.20320
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 19204f1af699dfe31e0991703633a332201e2fa3224dc510fde3951a3ad72d8a
+  title_dedup_sha256: e287ca2623570f829d9c5941e4e9b8582d869f805737ad8c90629a40e60041a0
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+- id: acrobat-23-006-20320-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-23-006-20320-pdfs-created-with-scan-to-email
+  product_id: adobe-acrobat-pro
+  update_version: 23.006.20320
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-23-006-20320-pdfs-created-with-scan-to-email-feature-on-mfp-make-acrobat-hang-1285941
+  parent_title: Adobe Acrobat 23.006.20320 PDFs created with Scan to Email Feature on MFP Make Acrobat Hang
+  report_title: Adobe Acrobat 23.006.20320 PDFs created with Scan to Email Feature on MFP Make Acrobat Hang
+  report_text_excerpt: Adobe Acrobat 23.006.20320 PDFs created with Scan to Email Feature on MFP Make Acrobat Hang Adobe Acrobat 23.006.20320 Multiple computers, multiple HP MFPs PDFs created using the Scan to Email feature cause Acrobat Pro and Acrobat reader to stop responding. From a few of the...
+  captured_at: '2026-11-28T07:43:05Z'
+  source_date: '2023-09-21'
+  target_release_date: '2023-09-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 23.006.20320
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader + acrobat pro
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 7fdff0910fcaa1232f7e61d17cebc9b95601c7927e98028aa78e73fd4a742567
+  title_dedup_sha256: 15da29ca69ba430e80327642b214c990010201a7586e44973d0afb3102555d9b
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+
+- id: acrobat-24-005-20414-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-dc-won-t-open-mac-1300664
+  product_id: adobe-acrobat-reader
+  update_version: 24.005.20414
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-dc-won-t-open-mac-1300664
+  parent_title: Acrobat DC won't open Mac
+  report_title: Acrobat DC won't open Mac
+  report_text_excerpt: Acrobat DC won't open Mac Running Sequoia 15.3.1 Acrobat 24.005.20414 Mac Mini M2 Launch Acrobat, immediately closes and get Unexpectedly Quit notice. I uninstalled / reinstalled twice, but it's still not opening. I haven't loaded any new software, no updates or changes. Any...
+  captured_at: '2026-11-28T08:05:21Z'
+  source_date: '2025-02-28'
+  target_release_date: '2025-02-18'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 24.005.20414
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 60b164afc9e12248583c1eb451d5a5a4b75234f22e3cc2593819054a9e123d41
+  title_dedup_sha256: ff255154a4a683f82c00e23f8a70d227d452df9656ddf4a142c20287a5c1665a
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+
+- id: acrobat-24-005-20320-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-64-bit-24-005-20320-windows-11-stucks-on-closing-1
+  product_id: adobe-acrobat-reader
+  update_version: 24.005.20320
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-64-bit-24-005-20320-windows-11-stucks-on-closing-1299318
+  parent_title: Acrobat 64 bit 24.005.20320 (Windows 11) stucks on closing
+  report_title: Acrobat 64 bit 24.005.20320 (Windows 11) stucks on closing
+  report_text_excerpt: Acrobat 64 bit 24.005.20320 (Windows 11) stucks on closing Has anyone encountered this behavior on Acrobat 64 bit 24.005.20320 on Windows 11? The window of closing a file with saving changes loses resources, after which Acrobat hangs completely, and the only thing left is to...
+  captured_at: '2026-11-28T08:05:21Z'
+  source_date: '2025-01-03'
+  target_release_date: '2024-12-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 24.005.20320
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 95bf475078226ff22da0a1748036a170a8e39cda00659d60192732beba914479
+  title_dedup_sha256: bc465ea03be4a54ae14964fc8e985038194843e52c28f9a36a99ce83960a9718
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+- id: acrobat-24-005-20320-adobe-community-bug-report-https-community-adobe-com-questions-35-digitally-sign-sign-button-no-longer-working-20574
+  product_id: adobe-acrobat-reader
+  update_version: 24.005.20320
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-35/digitally-sign-sign-button-no-longer-working-20574
+  parent_title: digitally sign - sign button no longer working
+  report_title: digitally sign - sign button no longer working
+  report_text_excerpt: '...store (Current User - Personal) This is the latest version of Adobe Acrobat Reader (24.005.20320) and the case for any PDF, including one that we just made and that has no protection on it. What we''ve tried so far: 1-install the certificate in the Windows certificate...'
+  captured_at: '2026-11-28T08:05:21Z'
+  source_date: '2025-01-13'
+  target_release_date: '2024-12-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 24.005.20320
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: signing/certificate failure
+  workflow_area: e-signatures
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 0262e04794aca0ed2010e930b6af0f2dda5a3475cc1e33eb8e31c57bb59e168c
+  title_dedup_sha256: 55c701e028c8581bfe169beec52ca7a9db05eed43dbf5f36641b06b6cfc7dbdf
+  issue_bucket: signing/certificate failure
+  facts_rule_version: v1
+
+- id: acrobat-24-005-20307-adobe-community-bug-report-https-community-adobe-com-questions-9-opening-a-file-in-acrobat-64-bit-24-005-20307-on-windows-1
+  product_id: adobe-acrobat-reader
+  update_version: 24.005.20307
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/opening-a-file-in-acrobat-64-bit-24-005-20307-on-windows-10-1298857
+  parent_title: opening a file in Acrobat (64-bit) (24.005.20307) on Windows 10
+  report_title: opening a file in Acrobat (64-bit) (24.005.20307) on Windows 10
+  report_text_excerpt: opening a file in Acrobat (64-bit) (24.005.20307) on Windows 10 Is anyone having an issue when opening a second file in Adobe Acrobat? Starting last week when I click on a PDF file it opens fine in Acrobat. However when I try to open another file it will not open right away. I...
+  captured_at: '2026-11-28T08:05:21Z'
+  source_date: '2024-12-09'
+  target_release_date: '2024-12-03'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 24.005.20307
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: d4e2d4e1bf8a24a716f411404548f6837e56dbd3e2bc41e6aa36dd3d1d16c1e5
+  title_dedup_sha256: 708e144a9b9e1c22f1463a16b63f4f284deb8acf74c71f4a5a59ac9285a95782
+  issue_bucket: install/update failure
+  facts_rule_version: v1
+
+- id: acrobat-24-004-20272-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-update-fails-on-macos-while-installing-25-001-2047
+  product_id: adobe-acrobat-reader
+  update_version: 24.004.20272
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-update-fails-on-macos-while-installing-25-001-2047x-optional-update-apr-28-2025-1302625
+  parent_title: Acrobat Update Fails on macOS While Installing 25.001.2047x Optional Update – Apr 28, 2025
+  report_title: Acrobat Update Fails on macOS While Installing 25.001.2047x Optional Update – Apr 28, 2025
+  report_text_excerpt: '...cover all possible base versions): Successful Updates (Sample): 25.001.20438 25.001.20467 24.004.20272 Failed Updates (Sample): 24.005.20400 24.005.20320 We primarily used the Terminal for the installation. On machines where the update failed, we also attempted installation...'
+  captured_at: '2026-11-28T08:05:21Z'
+  source_date: '2025-05-29'
+  target_release_date: '2024-11-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 24.004.20272
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: ab0ae402f3757cbe504a0eca8311a6353113842e6b9d6312d4c626897797faa5
+  title_dedup_sha256: 1a38fb5700a5321aa1d3708739146f16464b2a8b59f483ec1bae4e5122006fb0
+  issue_bucket: install/update failure
+  facts_rule_version: v1
+- id: acrobat-24-004-20272-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-update-fails-on-mac-while-installing-25-001-2047x
+  product_id: adobe-acrobat-reader
+  update_version: 24.004.20272
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-update-fails-on-mac-while-installing-25-001-2047x-optional-update-1302866
+  parent_title: Acrobat Update Fails on mac While Installing 25.001.2047x Optional Update
+  report_title: Acrobat Update Fails on mac While Installing 25.001.2047x Optional Update
+  report_text_excerpt: '...this may not cover all possible base versions) Successful Updates (Sample): 25.001.20438 24.004.20272 Failed Updates (Sample): 24.005.20400 24.005.20320 We primarily used the Terminal for the installation. On machines where the update failed, we also attempted installation...'
+  captured_at: '2026-11-28T08:05:21Z'
+  source_date: '2025-06-10'
+  target_release_date: '2024-11-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 24.004.20272
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 0cb871381ea6a0614f668e1bf3a62bd9663152f3f205f5e28f3808b68dea431b
+  title_dedup_sha256: 2000e8c7b927784ae8ae606e38e28fabf3aa57c42e86d391a68d8e40b9252792
+  issue_bucket: install/update failure
+  facts_rule_version: v1
+- id: acrobat-24-004-20272-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-freezes-for-a-lot-of-users-1298493
+  product_id: adobe-acrobat-reader
+  update_version: 24.004.20272
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-freezes-for-a-lot-of-users-1298493
+  parent_title: Adobe Acrobat freezes for a lot of users
+  report_title: Adobe Acrobat freezes for a lot of users
+  report_text_excerpt: '...it is safe to set? Or do you have any other solutions yet? Current Version installed is 24.004.20272 32bit on Windows Server 2019 Also installed Extended Asian Language font pack for Adobe Acrobat Reader in Version: 23.008.20421 Didn''t find any Version 24 for this, think...'
+  captured_at: '2026-11-28T08:05:21Z'
+  source_date: '2024-11-20'
+  target_release_date: '2024-11-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 24.004.20272
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: b6eddc2991b331f04c8ae5f1536903b8a3186dfcda11d68df32ca2e86b37fbbb
+  title_dedup_sha256: d0904cf25bee20f5e63220e970fd20078ad680227a97cdd5e5c2a3902a96402f
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+- id: acrobat-24-004-20272-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-acrobat-reader-version-2024-004-20272-1506254
+  product_id: adobe-acrobat-reader
+  update_version: 24.004.20272
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/adobe-acrobat-reader-version-2024-004-20272-1506254
+  parent_title: Adobe Acrobat Reader Version 2024.004.20272
+  report_title: Adobe Acrobat Reader Version 2024.004.20272
+  report_text_excerpt: Adobe Acrobat Reader Version 2024.004.20272 Good day! Does someone know what kind of version 2024.004.20272 this is? I received an email from a company and they told me that I need to have a version of 6 or higher, to be able to open the pdf file they have sent to me....
+  captured_at: '2026-11-28T08:05:21Z'
+  source_date: '2024-11-26'
+  target_release_date: '2024-11-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 2024.004.20272
+  match_basis: exact_version_alias
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified Acrobat issue
+  workflow_area: Acrobat workflow
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 19fd742d2d8663fd68525c1e20e72e66e82bf879a216965968153464552634c7
+  title_dedup_sha256: bb7de267ea46fe0565af0cdd02fc12cf4748eb2b1bbd4616e8a1cc9337a3906e
+  issue_bucket: unspecified acrobat issue
+  facts_rule_version: v1

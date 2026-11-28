@@ -410,11 +410,9 @@
   category_key: dev-web
   source_url: https://www.netlify.com/changelog/
   source_label: Netlify changelog
-  documented_update_count: 8
+  documented_update_count: 9
   coverage_state: documented
-  backfill_status: queued
-  backfill_executor: official_ingest_lane
-  backfill_blocker: records_deferred
+  backfill_status: complete
 - product_id: notion
   company_id: notion
   product_name: Notion

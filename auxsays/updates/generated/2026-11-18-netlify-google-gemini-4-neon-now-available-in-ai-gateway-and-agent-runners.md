@@ -16,10 +16,10 @@ update_source_url: https://www.netlify.com/changelog/gemini-4-neon-ai-gateway-ag
 update_download_url: ''
 update_version: Google Gemini 4 Neon now available in AI Gateway and Agent Runners
 update_logo_text: NET
-update_published_at: November 18, 2026
+update_published_at: '2026-11-18T00:00:00Z'
 update_last_checked: '2026-11-26T11:02:28Z'
-source_last_checked: '2026-11-26T11:02:28Z'
-official_body_last_checked: '2026-11-26T11:02:28Z'
+source_last_checked: '2026-11-27T00:11:34Z'
+official_body_last_checked: '2026-11-27T00:11:34Z'
 record_last_updated: '2026-11-26T11:02:28Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -54,7 +54,7 @@ consensus_report_weighting: equal_per_confirmed_report
 consensus_low_context_policy: excluded
 complaint_themes: []
 status_events:
-- at: November 18, 2026
+- at: '2026-11-18T00:00:00Z'
   label: Published
   note: Official source entry detected.
 - at: '2026-11-26T11:02:37Z'
@@ -73,6 +73,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-11-26T11:02:28Z'
+  url: https://www.netlify.com/changelog/gemini-4-neon-ai-gateway-agent-runners/
+  status: captured-from-official-html
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-27T00:11:34Z'
   url: https://www.netlify.com/changelog/gemini-4-neon-ai-gateway-agent-runners/
   status: captured-from-official-html
   body_captured: true

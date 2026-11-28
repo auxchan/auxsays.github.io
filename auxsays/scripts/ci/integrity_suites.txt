@@ -993,6 +993,24 @@ auxsays/scripts/tests/test_coverage_aware_zero_report.py = 26
 # real Liquid renders of the product, company and latest-signals templates, and the daily assessment's
 # flags, missing-capability reasons, detection latency and no-false-alarm cases.
 auxsays/scripts/tests/test_coverage_governance.py = 101
+# R4-FIX: an official record is written only with an ISO publication date. 3c107ec0 wrote
+# "November 1-netlify-....md" from "November 18, 2026" (normalize_date passes unparseable text
+# through) and turned main red at dashboard IV2. Pins the Netlify adapter's conversion on the real
+# entry's text, the writer's InvalidPublicationDate backstop, patch_ingest's per-record refusal
+# (logged, run kept, not marked seen, same in a dry run), the in-place refresh of the repaired page
+# (no second page), the QA warning, and the corpus: no generated record with a non-ISO date or name.
+auxsays/scripts/tests/test_official_publication_date_guard.py = 30
+
+# --- R4-ACR: Acrobat rotating record coverage --------------------------------------
+# The newest-first walk reached ~10 of 199 records a run and left 202 Acrobat pages COLLECTION
+# STALE and 153 never attempted. Pins the rotation's pure order (stored timestamps, never array
+# position; missing/future stamps first; only the primary method's row is a check), a replay over
+# the REAL corpus and stored rows (every record within the computed 25-run bound, recent releases
+# every 2 runs, the old walk reaching 10 of 199), the record cap that keeps Adobe requests per run
+# at or below the old volume, unchanged targeted dispatches, the per-row and per-run telemetry,
+# unchanged acceptance (vendor announcements, Reader/Pro) and an N+1 write replay in a temp store.
+# Nine single mutants each fail named checks (listed in the PR that added this suite).
+auxsays/scripts/tests/test_acrobat_rotation_coverage.py = 59
 
 [diagnostic]
 # Deterministic and offline; broader surface or presentation-level. Also blocking in CI --

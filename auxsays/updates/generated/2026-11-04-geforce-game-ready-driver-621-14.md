@@ -17,8 +17,8 @@ update_version: '621.14'
 update_logo_text: GRD
 update_published_at: '2026-11-04T00:00:00Z'
 update_last_checked: '2026-11-19T10:05:12Z'
-source_last_checked: '2026-11-26T11:02:18Z'
-official_body_last_checked: '2026-11-26T11:02:18Z'
+source_last_checked: '2026-11-28T10:41:22Z'
+official_body_last_checked: '2026-11-28T10:41:22Z'
 record_last_updated: '2026-11-22T21:19:37.198976Z'
 patch_file_size: 1.04 GB
 patch_file_size_note: Installer size as NVIDIA lists it for the Windows desktop DCH package.
@@ -85,27 +85,27 @@ official_sources:
   trust_level: official
   extraction_status: linked_not_captured
 official_source_attempts:
-- at: '2026-11-24T03:01:39Z'
-  url: https://www.nvidia.com/en-us/drivers/details/283968/
-  status: captured-from-official-nvidia-driver-listing
-  body_captured: true
-  checksums_captured: false
-- at: '2026-11-24T12:51:28Z'
-  url: https://www.nvidia.com/en-us/drivers/details/283968/
-  status: captured-from-official-nvidia-driver-listing
-  body_captured: true
-  checksums_captured: false
-- at: '2026-11-25T11:28:56Z'
-  url: https://www.nvidia.com/en-us/drivers/details/283968/
-  status: captured-from-official-nvidia-driver-listing
-  body_captured: true
-  checksums_captured: false
-- at: '2026-11-26T01:34:50Z'
-  url: https://www.nvidia.com/en-us/drivers/details/283968/
-  status: captured-from-official-nvidia-driver-listing
-  body_captured: true
-  checksums_captured: false
 - at: '2026-11-26T11:02:18Z'
+  url: https://www.nvidia.com/en-us/drivers/details/283968/
+  status: captured-from-official-nvidia-driver-listing
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-27T00:11:23Z'
+  url: https://www.nvidia.com/en-us/drivers/details/283968/
+  status: captured-from-official-nvidia-driver-listing
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-27T11:08:46Z'
+  url: https://www.nvidia.com/en-us/drivers/details/283968/
+  status: captured-from-official-nvidia-driver-listing
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-28T00:39:40Z'
+  url: https://www.nvidia.com/en-us/drivers/details/283968/
+  status: captured-from-official-nvidia-driver-listing
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-28T10:41:22Z'
   url: https://www.nvidia.com/en-us/drivers/details/283968/
   status: captured-from-official-nvidia-driver-listing
   body_captured: true
