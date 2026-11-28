@@ -113811,3 +113811,600 @@ evidence:
   title_dedup_sha256: 67bf28e23f9fa417215417e84bb798810a9aec506eebc1c4d7cc95528951afb4
   issue_bucket: audio mixer or routing issues
   facts_rule_version: v1
+
+- id: acrobat-23-006-20380-adobe-community-bug-report-https-community-adobe-com-questions-9-nvda-and-adobe-acrobat-pro-crash-exception-exception-acces
+  product_id: adobe-acrobat-pro
+  update_version: 23.006.20380
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/nvda-and-adobe-acrobat-pro-crash-exception-exception-access-violation-1620470
+  parent_title: NVDA and Adobe Acrobat Pro - crash exception="EXCEPTION_ACCESS_VIOLATION"
+  report_title: NVDA and Adobe Acrobat Pro - crash exception="EXCEPTION_ACCESS_VIOLATION"
+  report_text_excerpt: '...clientVersion="4.8.0.7" applicationName="Adobe Acrobat" applicationVersion="23.006.20380" build="0" source="Windows-Client-WER" crashType="n/a"> <time year="2025" month="11" day="27" hour="11" minute="21" second="46" timeoffset="60" timezone="Romance Standard...'
+  captured_at: '2026-11-28T07:43:05Z'
+  source_date: '2025-11-27'
+  target_release_date: '2023-11-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 23.006.20380
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: c7c8cf16f70064fa54ec3d06c10a93a36c75583cda7a099887c109c7ab205e23
+  title_dedup_sha256: 91f6a2805d9b326deeb8f9b2ef9bdc2452e8c3e07b2409e2f0c98f111027eb60
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+- id: acrobat-23-006-20380-adobe-community-bug-report-https-community-adobe-com-questions-9-can-t-run-adobe-acrobat-on-mac-os-sonoma-14-1-2-1288396
+  product_id: adobe-acrobat-pro
+  update_version: 23.006.20380
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/can-t-run-adobe-acrobat-on-mac-os-sonoma-14-1-2-1288396
+  parent_title: Can't run Adobe Acrobat on Mac OS Sonoma 14.1.2
+  report_title: Can't run Adobe Acrobat on Mac OS Sonoma 14.1.2
+  report_text_excerpt: '...Acrobat.app/Contents/MacOS/AdobeAcrobat Identifier: com.adobe.Acrobat.Pro Version: 23.006.20380 (23.006.20380) Code Type: ARM-64 (Native) Parent Process: launchd [1] User ID: 501 Date/Time: 2023-12-10 11:33:35.6988 +0100 OS Version: macOS 14.1.2 (23B92) Report...'
+  captured_at: '2026-11-28T07:43:05Z'
+  source_date: '2023-12-10'
+  target_release_date: '2023-11-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 23.006.20380
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 79ef75c85722e51d3387cfec1a6c2dcc359b42068f8517fd8811ffdf36244af7
+  title_dedup_sha256: dec350b1f1469d36ed49f5c2be2e032c58e716ea6d97a42be92b7ec3c06b576b
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+
+- id: acrobat-20-005-30539-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-update-fail-error-1636-1289468
+  product_id: adobe-acrobat-pro
+  update_version: 20.005.30539
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-update-fail-error-1636-1289468
+  parent_title: Acrobat Update Fail - Error 1636
+  report_title: Acrobat Update Fail - Error 1636
+  report_text_excerpt: '...were selected to print). I even tried to open up a PDF in Photoshop, but it won''t open in Photoshop and I get an error message saying ICC profile description is invalid. I tried to manually update to the newest version 20.005.30539, but it freezes when it gets to the end....'
+  captured_at: '2026-11-28T07:43:05Z'
+  source_date: '2024-01-20'
+  target_release_date: '2023-11-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.005.30539
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: b9af5c023e5a2b6a01847c2752d76da63da0f12309ddc392befc63613d85bffd
+  title_dedup_sha256: ccec42bf9014283078e941d986e01acfbf06174e2179581a0eecfd6854104557
+  issue_bucket: install/update failure
+  facts_rule_version: v1
+
+- id: acrobat-23-006-20360-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-acrobat-crashing-when-exiting-application-1504645
+  product_id: adobe-acrobat-pro
+  update_version: 23.006.20360
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/adobe-acrobat-crashing-when-exiting-application-1504645
+  parent_title: Adobe Acrobat crashing when exiting application
+  report_title: Adobe Acrobat crashing when exiting application
+  report_text_excerpt: '...the application, no change Crash report shows the following at the bottom of the log <dumpType> Full </dumpType> <hbLogSessionDllStatus> ERROR_HB_UNABLE_TO_LOAD_DLL </hbLogSessionDllStatus> </crash> </crashreport> Device is a Win 11 machine, app version 23.006.20360'
+  captured_at: '2026-11-28T07:43:05Z'
+  source_date: '2023-10-24'
+  target_release_date: '2023-10-17'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 23.006.20360
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: b54da7ae7c5b3ab5183f4c2b9a0afe0fbe5d4f91798839c8be3aa1515027e9c8
+  title_dedup_sha256: 53f4039a736673069fa3f79d1eae31fe817df28b76b546ebefb1cfd56e44dfa8
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+- id: acrobat-23-006-20360-adobe-community-bug-report-https-community-adobe-com-questions-18-crashing-of-adobe-acrobat-on-sonoma-14-1-1-609923
+  product_id: adobe-acrobat-pro
+  update_version: 23.006.20360
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-18/crashing-of-adobe-acrobat-on-sonoma-14-1-1-609923
+  parent_title: Crashing of Adobe Acrobat on Sonoma 14.1.1.
+  report_title: Crashing of Adobe Acrobat on Sonoma 14.1.1.
+  report_text_excerpt: '...Acrobat.app/Contents/MacOS/AdobeAcrobat Identifier: com.adobe.Acrobat.Pro Version: 23.006.20360 (23.006.20360) Team ID: JQ525L2MZD Is First Party: No Resource Coalition ID: 2123 Architecture: x86_64 Parent: UNKNOWN [1] PID: 2202 Event: cpu usage Action taken: none...'
+  captured_at: '2026-11-28T07:43:05Z'
+  source_date: '2023-11-19'
+  target_release_date: '2023-10-17'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 23.006.20360
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: ca5b0b795ca1b72827a7c2d21ff1e49777ffa5a3d3946d47c88a2e5015408604
+  title_dedup_sha256: 48530f945fa23715af6c8a8f3036160ce3ab3a1e7456ea37c139e8fb983febef
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+- id: acrobat-23-006-20360-adobe-community-bug-report-https-community-adobe-com-questions-9-error-report-when-typing-typing-chinese-characters-1287553
+  product_id: adobe-acrobat-pro
+  update_version: 23.006.20360
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/error-report-when-typing-typing-chinese-characters-1287553
+  parent_title: Error Report- when typing typing Chinese characters
+  report_title: Error Report- when typing typing Chinese characters
+  report_text_excerpt: '...clientVersion="4.8.0.7" applicationName="Adobe Acrobat" applicationVersion="23.006.20360" build="0" source="Windows-Client" crashType="n/a"> <time year="2023" month="11" day="9" hour="8" minute="45" second="14" timeoffset="480"...'
+  captured_at: '2026-11-28T07:43:05Z'
+  source_date: '2023-11-09'
+  target_release_date: '2023-10-17'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 23.006.20360
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 7e352fa92b9c5ceac724ac0cefaa0e4690fedc42eb7900d165e3c15d34e0de82
+  title_dedup_sha256: e65982e75e8389a740a47dda1efc79d26ac750adaa4f7e1e413bf8d35e5b639c
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+- id: acrobat-23-006-20360-adobe-community-bug-report-https-community-adobe-com-questions-9-sonoma-cannot-print-pdf-within-acrobat-1287208
+  product_id: adobe-acrobat-pro
+  update_version: 23.006.20360
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/sonoma-cannot-print-pdf-within-acrobat-1287208
+  parent_title: 'Sonoma: cannot print PDF within Acrobat'
+  report_title: 'Sonoma: cannot print PDF within Acrobat'
+  report_text_excerpt: 'Sonoma: cannot print PDF within Acrobat With macOS Sonoma 14.1 , I cannot print a PDF within Adobe Acrobat Pro (version 23.006.20360 ) - I get the attached Page Setup box, then the dreaded whirling pizza. Eventually, I have to Force Quit, again as attached. But why has...'
+  captured_at: '2026-11-28T07:43:05Z'
+  source_date: '2023-10-29'
+  target_release_date: '2023-10-17'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 23.006.20360
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: printing regression
+  workflow_area: printing
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 55ee33fad40d723db8c579caa0de0442194d965f839d45e6bd4bcd505dec1fa1
+  title_dedup_sha256: 70fb284cc254751521581d9d1c838d6aa5ce6cb600ba0bdce1ff286913119134
+  issue_bucket: printing regression
+  facts_rule_version: v1
+- id: acrobat-23-006-20360-adobe-community-bug-report-https-community-adobe-com-questions-12-find-function-doesn-t-work-with-acrobat-23-006-20360-1504
+  product_id: adobe-acrobat-pro
+  update_version: 23.006.20360
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/find-function-doesn-t-work-with-acrobat-23-006-20360-1504671
+  parent_title: '"Find" function doesn''t work with acrobat 23.006.20360'
+  report_title: '"Find" function doesn''t work with acrobat 23.006.20360'
+  report_text_excerpt: '"Find" function doesn''t work with acrobat 23.006.20360 I bought an MAC with an M2 chip this month. After downloading the new edition, 23.006.20360, to it, every time I try to use the "find text" (com+f) function, Acrobat is frozen. I can''t use it anymore and have to force it...'
+  captured_at: '2026-11-28T07:43:05Z'
+  source_date: '2023-10-26'
+  target_release_date: '2023-10-17'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 23.006.20360
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified Acrobat issue
+  workflow_area: Acrobat workflow
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 0a3007875a5b4f030826bf65810b8abd3ff993beab2220d2f6963a1c20b8ca60
+  title_dedup_sha256: 28691891b7bd4e4ff6b4ded5258795b455df13efd529d69fd320b45633014268
+  issue_bucket: unspecified acrobat issue
+  facts_rule_version: v1
+
+- id: acrobat-23-006-20320-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-closes-crashes-when-ocr-optimize-starts-1285
+  product_id: adobe-acrobat-pro
+  update_version: 23.006.20320
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-closes-crashes-when-ocr-optimize-starts-1285607
+  parent_title: Adobe Acrobat closes/crashes when OCR/optimize starts
+  report_title: Adobe Acrobat closes/crashes when OCR/optimize starts
+  report_text_excerpt: Adobe Acrobat closes/crashes when OCR/optimize starts Adobe Acrobat keeps closing immediately after OCR (and optimize PDF) starts to run. This seems to be an issue with the newest version (23.006.20320), because I didn't encounter this problem a day or two ago. I've tried...
+  captured_at: '2026-11-28T07:43:05Z'
+  source_date: '2023-09-13'
+  target_release_date: '2023-09-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 23.006.20320
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 6536d066978fddd3fd0a81541a4e54bfb2bdb0c76515131555933fe98952a688
+  title_dedup_sha256: e1f0e428ac878d188339c67fe4b1d5992dfd0004235d606e1b7ae0f36ffefc0a
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+- id: acrobat-23-006-20320-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-crashes-before-app-can-open-mac-ventura-13-6
+  product_id: adobe-acrobat-pro
+  update_version: 23.006.20320
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-crashes-before-app-can-open-mac-ventura-13-6-1285940
+  parent_title: Adobe Acrobat Crashes before app can open Mac Ventura 13.6
+  report_title: Adobe Acrobat Crashes before app can open Mac Ventura 13.6
+  report_text_excerpt: '...Acrobat.app/Contents/MacOS/AdobeAcrobat Identifier: com.adobe.Acrobat.Pro Version: 23.006.20320 (23.006.20320) Code Type: ARM-64 (Native) Parent Process: launchd [1] User ID: 501 Date/Time: 2023-09-21 15:11:16.4421 -0500 OS Version: macOS 13.6 (22G120) Report Version...'
+  captured_at: '2026-11-28T07:43:05Z'
+  source_date: '2023-09-21'
+  target_release_date: '2023-09-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 23.006.20320
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 19204f1af699dfe31e0991703633a332201e2fa3224dc510fde3951a3ad72d8a
+  title_dedup_sha256: e287ca2623570f829d9c5941e4e9b8582d869f805737ad8c90629a40e60041a0
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+- id: acrobat-23-006-20320-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-23-006-20320-pdfs-created-with-scan-to-email
+  product_id: adobe-acrobat-pro
+  update_version: 23.006.20320
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-23-006-20320-pdfs-created-with-scan-to-email-feature-on-mfp-make-acrobat-hang-1285941
+  parent_title: Adobe Acrobat 23.006.20320 PDFs created with Scan to Email Feature on MFP Make Acrobat Hang
+  report_title: Adobe Acrobat 23.006.20320 PDFs created with Scan to Email Feature on MFP Make Acrobat Hang
+  report_text_excerpt: Adobe Acrobat 23.006.20320 PDFs created with Scan to Email Feature on MFP Make Acrobat Hang Adobe Acrobat 23.006.20320 Multiple computers, multiple HP MFPs PDFs created using the Scan to Email feature cause Acrobat Pro and Acrobat reader to stop responding. From a few of the...
+  captured_at: '2026-11-28T07:43:05Z'
+  source_date: '2023-09-21'
+  target_release_date: '2023-09-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 23.006.20320
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader + acrobat pro
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 7fdff0910fcaa1232f7e61d17cebc9b95601c7927e98028aa78e73fd4a742567
+  title_dedup_sha256: 15da29ca69ba430e80327642b214c990010201a7586e44973d0afb3102555d9b
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+
+- id: acrobat-24-005-20414-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-dc-won-t-open-mac-1300664
+  product_id: adobe-acrobat-reader
+  update_version: 24.005.20414
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-dc-won-t-open-mac-1300664
+  parent_title: Acrobat DC won't open Mac
+  report_title: Acrobat DC won't open Mac
+  report_text_excerpt: Acrobat DC won't open Mac Running Sequoia 15.3.1 Acrobat 24.005.20414 Mac Mini M2 Launch Acrobat, immediately closes and get Unexpectedly Quit notice. I uninstalled / reinstalled twice, but it's still not opening. I haven't loaded any new software, no updates or changes. Any...
+  captured_at: '2026-11-28T08:05:21Z'
+  source_date: '2025-02-28'
+  target_release_date: '2025-02-18'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 24.005.20414
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 60b164afc9e12248583c1eb451d5a5a4b75234f22e3cc2593819054a9e123d41
+  title_dedup_sha256: ff255154a4a683f82c00e23f8a70d227d452df9656ddf4a142c20287a5c1665a
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+
+- id: acrobat-24-005-20320-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-64-bit-24-005-20320-windows-11-stucks-on-closing-1
+  product_id: adobe-acrobat-reader
+  update_version: 24.005.20320
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-64-bit-24-005-20320-windows-11-stucks-on-closing-1299318
+  parent_title: Acrobat 64 bit 24.005.20320 (Windows 11) stucks on closing
+  report_title: Acrobat 64 bit 24.005.20320 (Windows 11) stucks on closing
+  report_text_excerpt: Acrobat 64 bit 24.005.20320 (Windows 11) stucks on closing Has anyone encountered this behavior on Acrobat 64 bit 24.005.20320 on Windows 11? The window of closing a file with saving changes loses resources, after which Acrobat hangs completely, and the only thing left is to...
+  captured_at: '2026-11-28T08:05:21Z'
+  source_date: '2025-01-03'
+  target_release_date: '2024-12-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 24.005.20320
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 95bf475078226ff22da0a1748036a170a8e39cda00659d60192732beba914479
+  title_dedup_sha256: bc465ea03be4a54ae14964fc8e985038194843e52c28f9a36a99ce83960a9718
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+- id: acrobat-24-005-20320-adobe-community-bug-report-https-community-adobe-com-questions-35-digitally-sign-sign-button-no-longer-working-20574
+  product_id: adobe-acrobat-reader
+  update_version: 24.005.20320
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-35/digitally-sign-sign-button-no-longer-working-20574
+  parent_title: digitally sign - sign button no longer working
+  report_title: digitally sign - sign button no longer working
+  report_text_excerpt: '...store (Current User - Personal) This is the latest version of Adobe Acrobat Reader (24.005.20320) and the case for any PDF, including one that we just made and that has no protection on it. What we''ve tried so far: 1-install the certificate in the Windows certificate...'
+  captured_at: '2026-11-28T08:05:21Z'
+  source_date: '2025-01-13'
+  target_release_date: '2024-12-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 24.005.20320
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: signing/certificate failure
+  workflow_area: e-signatures
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 0262e04794aca0ed2010e930b6af0f2dda5a3475cc1e33eb8e31c57bb59e168c
+  title_dedup_sha256: 55c701e028c8581bfe169beec52ca7a9db05eed43dbf5f36641b06b6cfc7dbdf
+  issue_bucket: signing/certificate failure
+  facts_rule_version: v1
+
+- id: acrobat-24-005-20307-adobe-community-bug-report-https-community-adobe-com-questions-9-opening-a-file-in-acrobat-64-bit-24-005-20307-on-windows-1
+  product_id: adobe-acrobat-reader
+  update_version: 24.005.20307
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/opening-a-file-in-acrobat-64-bit-24-005-20307-on-windows-10-1298857
+  parent_title: opening a file in Acrobat (64-bit) (24.005.20307) on Windows 10
+  report_title: opening a file in Acrobat (64-bit) (24.005.20307) on Windows 10
+  report_text_excerpt: opening a file in Acrobat (64-bit) (24.005.20307) on Windows 10 Is anyone having an issue when opening a second file in Adobe Acrobat? Starting last week when I click on a PDF file it opens fine in Acrobat. However when I try to open another file it will not open right away. I...
+  captured_at: '2026-11-28T08:05:21Z'
+  source_date: '2024-12-09'
+  target_release_date: '2024-12-03'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 24.005.20307
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: d4e2d4e1bf8a24a716f411404548f6837e56dbd3e2bc41e6aa36dd3d1d16c1e5
+  title_dedup_sha256: 708e144a9b9e1c22f1463a16b63f4f284deb8acf74c71f4a5a59ac9285a95782
+  issue_bucket: install/update failure
+  facts_rule_version: v1
+
+- id: acrobat-24-004-20272-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-update-fails-on-macos-while-installing-25-001-2047
+  product_id: adobe-acrobat-reader
+  update_version: 24.004.20272
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-update-fails-on-macos-while-installing-25-001-2047x-optional-update-apr-28-2025-1302625
+  parent_title: Acrobat Update Fails on macOS While Installing 25.001.2047x Optional Update – Apr 28, 2025
+  report_title: Acrobat Update Fails on macOS While Installing 25.001.2047x Optional Update – Apr 28, 2025
+  report_text_excerpt: '...cover all possible base versions): Successful Updates (Sample): 25.001.20438 25.001.20467 24.004.20272 Failed Updates (Sample): 24.005.20400 24.005.20320 We primarily used the Terminal for the installation. On machines where the update failed, we also attempted installation...'
+  captured_at: '2026-11-28T08:05:21Z'
+  source_date: '2025-05-29'
+  target_release_date: '2024-11-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 24.004.20272
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: ab0ae402f3757cbe504a0eca8311a6353113842e6b9d6312d4c626897797faa5
+  title_dedup_sha256: 1a38fb5700a5321aa1d3708739146f16464b2a8b59f483ec1bae4e5122006fb0
+  issue_bucket: install/update failure
+  facts_rule_version: v1
+- id: acrobat-24-004-20272-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-update-fails-on-mac-while-installing-25-001-2047x
+  product_id: adobe-acrobat-reader
+  update_version: 24.004.20272
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-update-fails-on-mac-while-installing-25-001-2047x-optional-update-1302866
+  parent_title: Acrobat Update Fails on mac While Installing 25.001.2047x Optional Update
+  report_title: Acrobat Update Fails on mac While Installing 25.001.2047x Optional Update
+  report_text_excerpt: '...this may not cover all possible base versions) Successful Updates (Sample): 25.001.20438 24.004.20272 Failed Updates (Sample): 24.005.20400 24.005.20320 We primarily used the Terminal for the installation. On machines where the update failed, we also attempted installation...'
+  captured_at: '2026-11-28T08:05:21Z'
+  source_date: '2025-06-10'
+  target_release_date: '2024-11-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 24.004.20272
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 0cb871381ea6a0614f668e1bf3a62bd9663152f3f205f5e28f3808b68dea431b
+  title_dedup_sha256: 2000e8c7b927784ae8ae606e38e28fabf3aa57c42e86d391a68d8e40b9252792
+  issue_bucket: install/update failure
+  facts_rule_version: v1
+- id: acrobat-24-004-20272-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-freezes-for-a-lot-of-users-1298493
+  product_id: adobe-acrobat-reader
+  update_version: 24.004.20272
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-freezes-for-a-lot-of-users-1298493
+  parent_title: Adobe Acrobat freezes for a lot of users
+  report_title: Adobe Acrobat freezes for a lot of users
+  report_text_excerpt: '...it is safe to set? Or do you have any other solutions yet? Current Version installed is 24.004.20272 32bit on Windows Server 2019 Also installed Extended Asian Language font pack for Adobe Acrobat Reader in Version: 23.008.20421 Didn''t find any Version 24 for this, think...'
+  captured_at: '2026-11-28T08:05:21Z'
+  source_date: '2024-11-20'
+  target_release_date: '2024-11-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 24.004.20272
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: b6eddc2991b331f04c8ae5f1536903b8a3186dfcda11d68df32ca2e86b37fbbb
+  title_dedup_sha256: d0904cf25bee20f5e63220e970fd20078ad680227a97cdd5e5c2a3902a96402f
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+- id: acrobat-24-004-20272-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-acrobat-reader-version-2024-004-20272-1506254
+  product_id: adobe-acrobat-reader
+  update_version: 24.004.20272
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/adobe-acrobat-reader-version-2024-004-20272-1506254
+  parent_title: Adobe Acrobat Reader Version 2024.004.20272
+  report_title: Adobe Acrobat Reader Version 2024.004.20272
+  report_text_excerpt: Adobe Acrobat Reader Version 2024.004.20272 Good day! Does someone know what kind of version 2024.004.20272 this is? I received an email from a company and they told me that I need to have a version of 6 or higher, to be able to open the pdf file they have sent to me....
+  captured_at: '2026-11-28T08:05:21Z'
+  source_date: '2024-11-26'
+  target_release_date: '2024-11-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 2024.004.20272
+  match_basis: exact_version_alias
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified Acrobat issue
+  workflow_area: Acrobat workflow
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 19fd742d2d8663fd68525c1e20e72e66e82bf879a216965968153464552634c7
+  title_dedup_sha256: bb7de267ea46fe0565af0cdd02fc12cf4748eb2b1bbd4616e8a1cc9337a3906e
+  issue_bucket: unspecified acrobat issue
+  facts_rule_version: v1

@@ -95,6 +95,28 @@ reports:
   update_link_evidence: until new upgrade
   update_link_reason: update_named_as_cause
   update_link_signal: explicit_update_attribution
+- associated_patch_key: adobe-acrobat-reader|24.004.20272|24.004.20272
+  associated_target_build: 24.004.20272
+  associated_update_version: 24.004.20272
+  association_basis: release_window_containment
+  captured_at: '2026-11-28T08:05:21Z'
+  classification: update_linked
+  confirmation_state: not_confirmed
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  report_date: '2024-11-20'
+  report_excerpt: Adobe Reader and macOS 15 Sequoia On the Adobe website below under Adobe Apps compatible
+    with macOS 15 Sequoia, Adobe Reader is not mentioned. Is Adobe Reader classed as an app? https://helpx.adobe.com
+    I have just updated to macOS 15 and now I am unable to print any PDF...
+  report_id: adobe-acrobat-reader:5d730c6c336ba4f0
+  report_title: Adobe Reader and macOS 15 Sequoia
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-12/adobe-reader-and-macos-15-sequoia-1506233
+  strict_exclusion_reason: missing_exact_patch_version_match
+  update_link_evidence: since updating
+  update_link_reason: update_named_as_cause
+  update_link_signal: explicit_update_attribution
 - associated_patch_key: adobe-acrobat-reader|20.009.20067|20.009.20067
   associated_target_build: 20.009.20067
   associated_update_version: 20.009.20067

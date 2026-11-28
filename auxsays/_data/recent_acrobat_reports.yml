@@ -385,6 +385,46 @@ reports:
   window_start: '2024-04-12'
   window_version: 24.002.20687
 - attribution_state: not_established
+  captured_at: '2026-11-28T07:43:05Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|23.006.20380|23.006.20380
+  report_date: '2023-12-19'
+  report_excerpt: Adobe Acrobat Freezing constantly. Over the last few days, everytime I and a few other
+    Adobe Acrobat users just open the app, it hangs and we need to wait for it to respond. Sometimes it
+    works, but it is unpredictable. This was not an issue last week. I have updated to the...
+  report_id: adobe-acrobat-pro:66bb2f2d8dee16b3
+  report_title: Adobe Acrobat Freezing constantly.
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-freezing-constantly-1288604
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 23.006.20380
+  window_end: '2024-01-04'
+  window_start: '2023-11-14'
+  window_version: 23.006.20380
+- attribution_state: not_established
+  captured_at: '2026-11-28T07:43:05Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|23.006.20380|23.006.20380
+  report_date: '2023-11-28'
+  report_excerpt: Adobe Acrobat Pro UNUSABLE!!! Since the last updates Adobe Acrobat Pro is UNUSABLE!!!
+    Even small pdfs with a size of DIN-A5 let Acrobat crash when zooming or the "zoom process" takes many
+    minutes! Frequent crashes even when scrolling! Unfortunately you can't install Adobe...
+  report_id: adobe-acrobat-pro:5c2a34e2d2924c5f
+  report_title: Adobe Acrobat Pro UNUSABLE!!!
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-pro-unusable-1288058
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 23.006.20380
+  window_end: '2024-01-04'
+  window_start: '2023-11-14'
+  window_version: 23.006.20380
+- attribution_state: not_established
   captured_at: '2026-09-09T14:09:12Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
@@ -644,7 +684,7 @@ reports:
   window_start: '2017-02-21'
   window_version: 15.023.20070
 - attribution_state: not_established
-  captured_at: '2026-11-27T08:45:06Z'
+  captured_at: '2026-11-28T08:05:21Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
@@ -1083,6 +1123,26 @@ reports:
   window_end: '2025-03-11'
   window_start: '2025-03-04'
   window_version: 25.001.20428
+- attribution_state: not_established
+  captured_at: '2026-11-28T08:05:21Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|24.005.20307|24.005.20307
+  report_date: '2024-12-09'
+  report_excerpt: Adobe Acrobat Reader shuts down after dragging a tab / an open file off the ruler Why
+    does Adobe Acrobat Reader shut down when I drag a tab / an open file off the ruler? I used to be able
+    to do that, and upon doing so Acrobat Reader would open that file in another Acrobat...
+  report_id: adobe-acrobat-reader:baf5a202ec4619b8
+  report_title: Adobe Acrobat Reader shuts down after dragging a tab / an open file off the ruler
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-12/adobe-acrobat-reader-shuts-down-after-dragging-a-tab-an-open-file-off-the-ruler-1506298
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 24.005.20307
+  window_end: '2024-12-10'
+  window_start: '2024-12-03'
+  window_version: 24.005.20307
 - attribution_state: not_established
   captured_at: '2026-09-09T06:55:24Z'
   classification: recent_report
