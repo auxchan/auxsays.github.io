@@ -69,10 +69,11 @@ Identity = tuple[str, str, str]
 
 
 def close_append_gap(path: Path) -> None:
-    """Remove the blank line the store's append path leaves before an appended batch.
+    """Remove any blank line directly before a row (a safety net since R4-FIX2).
 
-    `append_evidence_rows` joins the existing text and the new rows with a newline; on a store that
-    already ends in one, that is an empty line between two rows. The stored format has none, and
+    `append_evidence_rows` used to join the existing text and the new rows with a newline even on a
+    store that already ended in one, leaving an empty line between two rows; it no longer does, but a
+    store written before the fix (or by another writer) can still hold one. The stored format has none, and
     the text between two rows is read as the earlier row's facts. Only a blank line directly before
     a row is removed; no row changes.
     """
