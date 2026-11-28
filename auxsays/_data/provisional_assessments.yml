@@ -4,8 +4,8 @@
 schema_version: 1
 rule_version: provisional-assessment-7
 fingerprint_rule: assessment-inputs-2
-generated_at: '2026-11-27T16:51:23Z'
-source_commit: fc93aca2e65e8b15fe66a429fe2f5b4e4919b723
+generated_at: '2026-11-28T01:31:25Z'
+source_commit: 8f59b4be5fef20a047147b05aa396637db152aa4
 pages:
 - page: blackmagic-davinci|20.3.2|
   fingerprint: sha256:585a95d4907818b53bc82274cbe4eb8261dee3f7b437cf055859a00d7725b207
@@ -48,7 +48,7 @@ pages:
   retained: Collection for this product has added no accepted report since 2026-11-05, while the evidence store was collected up to 2026-11-27, so newer reports may be missing; AUXSAYS keeps its temporary volume-based precaution rather than relax on old evidence.
   other_setups: ''
 - page: microsoft-windows-11|25H2|26200.7462
-  fingerprint: sha256:18c9b86b7de154eba8681fb22a032f6ed051ab2f46508f88367af6c3808037e0
+  fingerprint: sha256:c824c22ceb1c13d182797ed2d7f2dcd7493f2c9e37f2f9e516c0181e6d1c7bd9
   reports: 49
   verdict: ''
   scope: ''
@@ -63,13 +63,13 @@ pages:
     Affected setups: 'Operating system named by the report or its tracker record: Windows 28; not named: 21. This is where problems were reported, not a measure of which systems are affected.'
     Maintainer response: 'Not established for this page. AUXSAYS holds no maintainer record for these reports: their sources publish none, or AUXSAYS does not read one yet.'
     Positive outcomes: 'Successful installations: not established. No source AUXSAYS reads records one, and a closed or dismissed report, or a lack of complaints, is not one. Resolutions the reporters write in their own words are not read: that reading is not validated on blind labels.'
-    Collection health: Newest accepted report for this product collected 2026-11-26; the evidence store's newest 2026-11-27. The failure is established for 0 of 49 separate reports.
+    Collection health: Newest accepted report for this product collected 2026-11-27; the evidence store's newest 2026-11-27. The failure is established for 0 of 49 separate reports.
   recommendation: ''
   body: ''
   retained: The failure described is established for 0 of the 49 separate reports, fewer than half, so AUXSAYS cannot weigh them yet; AUXSAYS keeps its temporary volume-based precaution. The reading of the failure in report text is not validated for microsoft sources, so it is not used there.
   other_setups: ''
 - page: microsoft-windows-11|25H2|26200.7623
-  fingerprint: sha256:70e7eb93b9d67d98a8b5328c1c621b80457adf2dbca45317bd8c09270fd94e4f
+  fingerprint: sha256:148507351869fcdd2cd4ccba8c1b92c313f014b21cc9bf7d5d5c71caf9d57957
   reports: 40
   verdict: ''
   scope: ''
@@ -84,13 +84,13 @@ pages:
     Affected setups: 'Operating system named by the report or its tracker record: Windows 20; not named: 20. This is where problems were reported, not a measure of which systems are affected.'
     Maintainer response: 'Not established for this page. AUXSAYS holds no maintainer record for these reports: their sources publish none, or AUXSAYS does not read one yet.'
     Positive outcomes: 'Successful installations: not established. No source AUXSAYS reads records one, and a closed or dismissed report, or a lack of complaints, is not one. Resolutions the reporters write in their own words are not read: that reading is not validated on blind labels.'
-    Collection health: Newest accepted report for this product collected 2026-11-26; the evidence store's newest 2026-11-27. The failure is established for 0 of 40 separate reports.
+    Collection health: Newest accepted report for this product collected 2026-11-27; the evidence store's newest 2026-11-27. The failure is established for 0 of 40 separate reports.
   recommendation: ''
   body: ''
   retained: The failure described is established for 0 of the 40 separate reports, fewer than half, so AUXSAYS cannot weigh them yet; AUXSAYS keeps its temporary volume-based precaution. The reading of the failure in report text is not validated for microsoft sources, so it is not used there.
   other_setups: ''
 - page: microsoft-windows-11|25H2|26200.7840
-  fingerprint: sha256:42962028477d4f0496c60a170d05694ce7cbf5e760e2176fcf27d2e22b05ae15
+  fingerprint: sha256:83e929dba0540ec2e8515d5dadfa0919e601e2f22823438b718799e259439720
   reports: 33
   verdict: ''
   scope: ''
@@ -105,14 +105,14 @@ pages:
     Affected setups: 'Operating system named by the report or its tracker record: Windows 16; not named: 17. This is where problems were reported, not a measure of which systems are affected.'
     Maintainer response: 'Not established for this page. AUXSAYS holds no maintainer record for these reports: their sources publish none, or AUXSAYS does not read one yet.'
     Positive outcomes: 'Successful installations: not established. No source AUXSAYS reads records one, and a closed or dismissed report, or a lack of complaints, is not one. Resolutions the reporters write in their own words are not read: that reading is not validated on blind labels.'
-    Collection health: Newest accepted report for this product collected 2026-11-26; the evidence store's newest 2026-11-27. The failure is established for 0 of 33 separate reports.
+    Collection health: Newest accepted report for this product collected 2026-11-27; the evidence store's newest 2026-11-27. The failure is established for 0 of 33 separate reports.
   recommendation: ''
   body: ''
   retained: The failure described is established for 0 of the 33 separate reports, fewer than half, so AUXSAYS cannot weigh them yet; AUXSAYS keeps its temporary volume-based precaution. The reading of the failure in report text is not validated for microsoft sources, so it is not used there.
   other_setups: ''
 - page: microsoft-windows-11|26H2|26300.9974
-  fingerprint: sha256:81bd9fc47e9e5883e74f36c6773bae65c125e0f81e469dcb42b105128c95a7e4
-  reports: 32
+  fingerprint: sha256:eaeb19546638845a6978ebc8132efa9153c84c3f15318e35633a4dfeb3d21745
+  reports: 34
   verdict: ''
   scope: ''
   basis: ''
@@ -120,19 +120,19 @@ pages:
   page_wide: false
   version_conflicts: []
   lines:
-    Independent corroboration: 32 separate reports (one per report link; reports with identical text are one reporter). No failure mode is established for more than one separate report.
-    Recurring problems: 'Failure modes established from the reports'' own text for 0 of 32: none. A shared failure mode is not proof of one shared defect. Evidence classes: none established (the failure is not established for any of the 32 separate reports).'
-    Severity and data loss: 'Not established. The failure described is not established for any report from a source whose reading is validated. Stated as beginning with this version by the report itself or confirmed as a regression by its tracker record: 0; not established: 32. The reading of that statement is not validated for microsoft sources, so their silence is not read as ''no regression''.'
-    Affected setups: 'Operating system named by the report or its tracker record: Windows 20; not named: 12. This is where problems were reported, not a measure of which systems are affected.'
+    Independent corroboration: 34 separate reports (one per report link; reports with identical text are one reporter). No failure mode is established for more than one separate report.
+    Recurring problems: 'Failure modes established from the reports'' own text for 0 of 34: none. A shared failure mode is not proof of one shared defect. Evidence classes: none established (the failure is not established for any of the 34 separate reports).'
+    Severity and data loss: 'Not established. The failure described is not established for any report from a source whose reading is validated. Stated as beginning with this version by the report itself or confirmed as a regression by its tracker record: 0; not established: 34. The reading of that statement is not validated for microsoft sources, so their silence is not read as ''no regression''.'
+    Affected setups: 'Operating system named by the report or its tracker record: Windows 21; not named: 13. This is where problems were reported, not a measure of which systems are affected.'
     Maintainer response: 'Not established for this page. AUXSAYS holds no maintainer record for these reports: their sources publish none, or AUXSAYS does not read one yet.'
     Positive outcomes: 'Successful installations: not established. No source AUXSAYS reads records one, and a closed or dismissed report, or a lack of complaints, is not one. Resolutions the reporters write in their own words are not read: that reading is not validated on blind labels.'
-    Collection health: Newest accepted report for this product collected 2026-11-26; the evidence store's newest 2026-11-27. The failure is established for 0 of 32 separate reports.
+    Collection health: Newest accepted report for this product collected 2026-11-27; the evidence store's newest 2026-11-27. The failure is established for 0 of 34 separate reports.
   recommendation: ''
   body: ''
-  retained: The failure described is established for 0 of the 32 separate reports, fewer than half, so AUXSAYS cannot weigh them yet; AUXSAYS keeps its temporary volume-based precaution. The reading of the failure in report text is not validated for microsoft sources, so it is not used there.
+  retained: The failure described is established for 0 of the 34 separate reports, fewer than half, so AUXSAYS cannot weigh them yet; AUXSAYS keeps its temporary volume-based precaution. The reading of the failure in report text is not validated for microsoft sources, so it is not used there.
   other_setups: ''
 - page: obs-studio|32.1.1|
-  fingerprint: sha256:5e0cbd5174f743e06960495f8005c8934547bd2d37e1dd9b3511da789e0b2af1
+  fingerprint: sha256:1b65e7b71ad5ef39a8e235cac5866c6953aaba50b220ad54e8e29ca0b09d70ad
   reports: 42
   verdict: ''
   scope: ''
@@ -154,7 +154,7 @@ pages:
   retained: The failure described is established for 5 of the 42 separate reports, fewer than half, so AUXSAYS cannot weigh them yet; AUXSAYS keeps its temporary volume-based precaution. The reading of the failure in report text is not validated for forum and tracker sources, so it is not used there.
   other_setups: ''
 - page: obs-studio|32.1.2|
-  fingerprint: sha256:ec23912884999f44dee7ec1d0259a5066fedfeb03693a5c77293753bfc214451
+  fingerprint: sha256:e06e7f55509b804ffc4b025b7c87a189a8ede5368e0958a7071b27b7aa784f75
   reports: 101
   verdict: ''
   scope: ''
@@ -167,7 +167,7 @@ pages:
     Recurring problems: 'Failure modes established from the reports'' own text for 6 of 101: crashes 6. A shared failure mode is not proof of one shared defect. Evidence classes: failures not shown to recur 6 (the failure of 95 of 101 reports is unknown); not classified 95 of 101 (failure not established).'
     Severity and data loss: 'Blocking failures (crash, hang, failed start or install, system failure, data loss): 6; a feature degraded: 0; not established: 95. Data loss is stated in 0. Stated as beginning with this version by the report itself or confirmed as a regression by its tracker record: 0; not established: 101. The reading of that statement is not validated for forum and tracker sources, so their silence is not read as ''no regression''.'
     Affected setups: 'Operating system named by the report or its tracker record: Windows 49, macOS 17, Linux 22; not named: 13. This is where problems were reported, not a measure of which systems are affected.'
-    Maintainer response: 'What the tracker shows for the 98 accepted reports with a current record: confirmed as a defect: 4 (labelled a regression: 0; still open: 2; closed as completed by another account: 2; closed another way: 0); closed by its own reporter: 4; closed as a duplicate: 5; closed administratively (not planned with no stated cause, or for inactivity): 36; closed as completed by another account with no maintainer label (what was done is not stated): 10; open with a maintainer label but not confirmed: 0; open without a maintainer label: 39. A closure is not a resolution and no dismissal counts as positive evidence; a closure by another account does not show that a maintainer was involved. Accepted reports without a current record: 3 of 101. Tracker records read between 2026-11-24 and 2026-11-27.'
+    Maintainer response: 'What the tracker shows for the 98 accepted reports with a current record: confirmed as a defect: 4 (labelled a regression: 0; still open: 2; closed as completed by another account: 2; closed another way: 0); closed by its own reporter: 4; closed as a duplicate: 5; closed administratively (not planned with no stated cause, or for inactivity): 36; closed as completed by another account with no maintainer label (what was done is not stated): 10; open with a maintainer label but not confirmed: 0; open without a maintainer label: 39. A closure is not a resolution and no dismissal counts as positive evidence; a closure by another account does not show that a maintainer was involved. Accepted reports without a current record: 3 of 101. Tracker records read between 2026-11-26 and 2026-11-27.'
     Positive outcomes: 'Successful installations: not established. No source AUXSAYS reads records one, and a closed or dismissed report, or a lack of complaints, is not one. Resolutions the reporters write in their own words are not read: that reading is not validated on blind labels. Confirmed resolutions: 2 confirmed reports were closed as completed by an account other than the reporter; the tracker does not name the release that contains the fix, so it is not assumed in this version.'
     Fixes and open problems: 'Confirmed and still open (unresolved): 2; confirmed and closed as completed by an account other than the reporter: 2. The tracker does not name the release that contains a fix, and a fix is not assumed to carry into a later release. Version conflicts, weighed with their provenance and not removed: issue 13436 (filed against an earlier version: 32.0.4; a confirmed problem still present here, not introduced by this version). The tracker''s milestone is not read. A report that is about another version leaves this count only through the audited withdrawal path.'
     Collection health: Newest accepted report for this product collected 2026-11-27; the evidence store's newest 2026-11-27. The failure is established for 6 of 101 separate reports.
@@ -176,8 +176,8 @@ pages:
   retained: The failure described is established for 6 of the 101 separate reports, fewer than half, so AUXSAYS cannot weigh them yet; AUXSAYS keeps its temporary volume-based precaution. The reading of the failure in report text is not validated for forum and tracker sources, so it is not used there.
   other_setups: ''
 - page: obs-studio|32.2.2|
-  fingerprint: sha256:e865fd255a0a97530c0013943f66cd6d7e276011511165825766d886095135fd
-  reports: 57
+  fingerprint: sha256:1a8b617bfc9111035b694797abcf3496cd4f59da4669977069d09b229a2576fb
+  reports: 58
   verdict: ''
   scope: ''
   basis: ''
@@ -185,20 +185,20 @@ pages:
   page_wide: false
   version_conflicts: []
   lines:
-    Independent corroboration: '57 separate reports (one per report link; reports with identical text are one reporter). Failure modes reported by more than one separate report: crashes (3).'
-    Recurring problems: 'Failure modes established from the reports'' own text for 3 of 57: crashes 3. A shared failure mode is not proof of one shared defect. Evidence classes: failures not shown to recur 3 (the failure of 54 of 57 reports is unknown); not classified 54 of 57 (failure not established).'
-    Severity and data loss: 'Blocking failures (crash, hang, failed start or install, system failure, data loss): 3; a feature degraded: 0; not established: 54. Data loss is stated in 0. Stated as beginning with this version by the report itself or confirmed as a regression by its tracker record: 0; not established: 57. The reading of that statement is not validated for forum and tracker sources, so their silence is not read as ''no regression''.'
-    Affected setups: 'Operating system named by the report or its tracker record: Windows 24, macOS 16, Linux 7; not named: 10. This is where problems were reported, not a measure of which systems are affected.'
-    Maintainer response: 'What the tracker shows for the 48 accepted reports with a current record: confirmed as a defect: 3 (labelled a regression: 0; still open: 3; closed as completed by another account: 0; closed another way: 0); closed by its own reporter: 2; closed as a duplicate: 5; closed administratively (not planned with no stated cause, or for inactivity): 12; closed as completed by another account with no maintainer label (what was done is not stated): 1; open with a maintainer label but not confirmed: 1; open without a maintainer label: 24. A closure is not a resolution and no dismissal counts as positive evidence; a closure by another account does not show that a maintainer was involved. Accepted reports without a current record: 9 of 57. Tracker records read between 2026-11-24 and 2026-11-26.'
+    Independent corroboration: '58 separate reports (one per report link; reports with identical text are one reporter). Failure modes reported by more than one separate report: crashes (4).'
+    Recurring problems: 'Failure modes established from the reports'' own text for 4 of 58: crashes 4. A shared failure mode is not proof of one shared defect. Evidence classes: failures not shown to recur 4 (the failure of 54 of 58 reports is unknown); not classified 54 of 58 (failure not established).'
+    Severity and data loss: 'Blocking failures (crash, hang, failed start or install, system failure, data loss): 4; a feature degraded: 0; not established: 54. Data loss is stated in 0. Stated as beginning with this version by the report itself or confirmed as a regression by its tracker record: 0; not established: 58. The reading of that statement is not validated for forum and tracker sources, so their silence is not read as ''no regression''.'
+    Affected setups: 'Operating system named by the report or its tracker record: Windows 25, macOS 16, Linux 7; not named: 10. This is where problems were reported, not a measure of which systems are affected.'
+    Maintainer response: 'What the tracker shows for the 49 accepted reports with a current record: confirmed as a defect: 3 (labelled a regression: 0; still open: 3; closed as completed by another account: 0; closed another way: 0); closed by its own reporter: 2; closed as a duplicate: 5; closed administratively (not planned with no stated cause, or for inactivity): 12; closed as completed by another account with no maintainer label (what was done is not stated): 1; open with a maintainer label but not confirmed: 1; open without a maintainer label: 25. A closure is not a resolution and no dismissal counts as positive evidence; a closure by another account does not show that a maintainer was involved. Accepted reports without a current record: 9 of 58. Tracker records read between 2026-11-24 and 2026-11-27.'
     Positive outcomes: 'Successful installations: not established. No source AUXSAYS reads records one, and a closed or dismissed report, or a lack of complaints, is not one. Resolutions the reporters write in their own words are not read: that reading is not validated on blind labels.'
     Fixes and open problems: 'Confirmed and still open (unresolved): 3; confirmed and closed as completed by an account other than the reporter: 0. The tracker does not name the release that contains a fix, and a fix is not assumed to carry into a later release.'
-    Collection health: Newest accepted report for this product collected 2026-11-27; the evidence store's newest 2026-11-27. The failure is established for 3 of 57 separate reports.
+    Collection health: Newest accepted report for this product collected 2026-11-27; the evidence store's newest 2026-11-27. The failure is established for 4 of 58 separate reports.
   recommendation: ''
   body: ''
-  retained: The failure described is established for 3 of the 57 separate reports, fewer than half, so AUXSAYS cannot weigh them yet; AUXSAYS keeps its temporary volume-based precaution. The reading of the failure in report text is not validated for forum and tracker sources, so it is not used there.
+  retained: The failure described is established for 4 of the 58 separate reports, fewer than half, so AUXSAYS cannot weigh them yet; AUXSAYS keeps its temporary volume-based precaution. The reading of the failure in report text is not validated for forum and tracker sources, so it is not used there.
   other_setups: ''
 - page: obs-studio|33.0.1|
-  fingerprint: sha256:3045c00351329622af5a21fddb393338ca727f8befa74eb5f374b848364842db
+  fingerprint: sha256:a25b41a0e2c1f200eedea04bc440eacf3ced828cf01c0c7b1e1af060c1c3e91a
   reports: 53
   verdict: WAIT
   scope: if you use macOS
