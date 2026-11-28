@@ -114400,3 +114400,2153 @@ evidence:
   title_dedup_sha256: bb7de267ea46fe0565af0cdd02fc12cf4748eb2b1bbd4616e8a1cc9337a3906e
   issue_bucket: unspecified acrobat issue
   facts_rule_version: v1
+- id: acrobat-23-003-20269-adobe-community-bug-report-https-community-adobe-com-questions-9-issue-with-opening-some-pdf-files-in-adobe-acrobat-pro-and
+  product_id: adobe-acrobat-pro
+  update_version: 23.003.20269
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/issue-with-opening-some-pdf-files-in-adobe-acrobat-pro-and-adobe-acrobat-reader-1288682
+  parent_title: Issue with opening some PDF files in Adobe Acrobat Pro and Adobe Acrobat Reader
+  report_title: Issue with opening some PDF files in Adobe Acrobat Pro and Adobe Acrobat Reader
+  report_text_excerpt: '...image can be edited in Adobe Acrobat. When opening the image in the Paint program, it loads correctly. This is a very peculiar issue, especially considering it works in browsers and other programs like, for example, Foxit PDF Reader. My Adobe acrobat version 23.003.20269'
+  captured_at: '2026-11-28T14:23:41Z'
+  source_date: '2023-12-22'
+  target_release_date: '2023-08-08'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 23.003.20269
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader + acrobat pro
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: PDF rendering regression
+  workflow_area: PDF rendering
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 2560292dad6a7af2513636993621dbc71b38017a7595d7e16c2117b29183a4ef
+  title_dedup_sha256: 93664b51b9a6d5fb5767e66146158a298762eaea1314b99b2544976d82207a25
+  issue_bucket: pdf rendering regression
+  facts_rule_version: v1
+- id: acrobat-23-003-20201-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-pro-dc-64-bit-23-003-20201-keeps-crashing-wh
+  product_id: adobe-acrobat-pro
+  update_version: 23.003.20201
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-pro-dc-64-bit-23-003-20201-keeps-crashing-when-users-try-to-combine-organize-edit-1282769
+  parent_title: Adobe Acrobat Pro DC 64 bit (23.003.20201) keeps crashing when users try to combine, organize edit
+  report_title: Adobe Acrobat Pro DC 64 bit (23.003.20201) keeps crashing when users try to combine, organize edit
+  report_text_excerpt: Adobe Acrobat Pro DC 64 bit (23.003.20201) keeps crashing when users try to combine, organize edit Adobe Acrobat Pro DC 64 bit (23.003.20201) crashes intermittently when users use tools to combine, organize and edit pdf files. This is happening to multiple users. All users...
+  captured_at: '2026-11-28T14:23:41Z'
+  source_date: '2023-06-13'
+  target_release_date: '2023-06-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 23.003.20201
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 00757aa51e8666f776dde656be880985b6563ff680c78efdbeaa239ad9b1323c
+  title_dedup_sha256: 602f395fa0446d07d4f300c71f23f208d1abe314ee4d647a23b0cdfbd7092a96
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+- id: acrobat-23-003-20201-adobe-community-bug-report-https-community-adobe-com-questions-9-new-bug-in-pdf-maker-removes-alt-text-1282553
+  product_id: adobe-acrobat-pro
+  update_version: 23.003.20201
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/new-bug-in-pdf-maker-removes-alt-text-1282553
+  parent_title: New bug in PDF Maker removes Alt Text.
+  report_title: New bug in PDF Maker removes Alt Text.
+  report_text_excerpt: New bug in PDF Maker removes Alt Text. Affects Windows Office users who use Adobe Acrobat PDF Maker (the Acrobat ribbon) to export PDFs from MS Office apps. With the new Acrobat relase on June 6 (Acrobat ver. 23.003.20201 with PDF Maker 23 and Library 23.3.223/23.2.162), Alt...
+  captured_at: '2026-11-28T14:23:41Z'
+  source_date: '2023-06-07'
+  target_release_date: '2023-06-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 23.003.20201
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified Acrobat issue
+  workflow_area: Acrobat workflow
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: e11124386e9668a68b27565f74220b7d09a33846faf61554c00643e1cea71a46
+  title_dedup_sha256: 555021ce753d925bec71718edda690a5a64b8245505349a0f879e64ca3e7c6d9
+  issue_bucket: unspecified acrobat issue
+  facts_rule_version: v1
+- id: acrobat-23-003-20201-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-crashes-when-clicking-pdf-links-to-download-other-pd
+  product_id: adobe-acrobat-pro
+  update_version: 23.003.20201
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-crashes-when-clicking-pdf-links-to-download-other-pdfs-1283022
+  parent_title: Adobe Crashes when clicking pdf links to download other pdfs.
+  report_title: Adobe Crashes when clicking pdf links to download other pdfs.
+  report_text_excerpt: Adobe Crashes when clicking pdf links to download other pdfs. <?xml version="1.0"?> <!DOCTYPE AdobeCrashReport SYSTEM "AdobeCrashReporter.dtd"> <crashreport serviceVersion="4.8.0.7" clientVersion="4.8.0.7" applicationName="Adobe Acrobat" applicationVersion="23.003.20201"...
+  captured_at: '2026-11-28T14:23:41Z'
+  source_date: '2023-06-21'
+  target_release_date: '2023-06-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 23.003.20201
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 56fca0c020babcd386918eb0c1e0a0579753942bb6194ad4068b898dcc91131e
+  title_dedup_sha256: 76a4d5a7a7bf2c1954a17ba0f8e55d5cf0ba78e5f2c8a6d5c78c4e593d2a1853
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+- id: acrobat-23-001-20143-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-crashing-using-fill-sign-tools-1283636
+  product_id: adobe-acrobat-pro
+  update_version: 23.001.20143
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-crashing-using-fill-sign-tools-1283636
+  parent_title: Acrobat crashing using Fill & Sign tools
+  report_title: Acrobat crashing using Fill & Sign tools
+  report_text_excerpt: '...clientVersion="4.8.0.7" applicationName="Adobe Acrobat" applicationVersion="23.001.20143" build="0" source="Windows-Client" crashType="n/a"> <time year="2023" month="7" day="5" hour="11" minute="1" second="41" timeoffset="-480" timezone="Pacific Daylight...'
+  captured_at: '2026-11-28T14:23:41Z'
+  source_date: '2023-07-12'
+  target_release_date: '2023-04-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 23.001.20143
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 86394b48231baf6f8eb34713b35d2fd95d8771a960dce826795fd80bd5b472b0
+  title_dedup_sha256: 77c9f6084c6fd060c718608594f70858dc9f79717dfe94c063f4d3a822bd70cd
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+- id: acrobat-23-001-20143-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-tools-freeze-when-outlook-is-open-1281610
+  product_id: adobe-acrobat-pro
+  update_version: 23.001.20143
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-tools-freeze-when-outlook-is-open-1281610
+  parent_title: Adobe Tools freeze when Outlook is open
+  report_title: Adobe Tools freeze when Outlook is open
+  report_text_excerpt: '...to be a bug and that when we close our Outlook application and drafts the the tools all of a sudden start working again. We are on the latest subscription version of Adobe Acrobat Pro: 23.001.20143.0 32-bit, and Microsoft Office 365 suite: 2304 build 16.0.16327.20200 64-bit...'
+  captured_at: '2026-11-28T14:23:41Z'
+  source_date: '2023-05-04'
+  target_release_date: '2023-04-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 23.001.20143.0
+  match_basis: exact_version_alias
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: b406a42474d0f87b36afb9ff40c83e809c7b8464512742a668973ae025f8fcc6
+  title_dedup_sha256: 04fe6e3a84d05773c70f88e4091e72e3691dec9a68521c1d82ead5a9d85defab
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+- id: acrobat-23-001-20143-adobe-community-bug-report-https-community-adobe-com-questions-9-application-hangs-when-hovering-over-user-profile-in-acrob
+  product_id: adobe-acrobat-pro
+  update_version: 23.001.20143
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/application-hangs-when-hovering-over-user-profile-in-acrobat-1281823
+  parent_title: Application hangs when Hovering Over User Profile in Acrobat.
+  report_title: Application hangs when Hovering Over User Profile in Acrobat.
+  report_text_excerpt: '...(Core Sync) 6.5.0.24 Creative Cloud Content Manager (CCX Process) 4.15.1.2 From the About Adobe Acrobat: Core Version 23.256 | 64-Bit JP2K Version 4.000.00000.52671 | 64-Bit Continuous Release | Version 2023.001.20143 | 64-Bit Version File Version: 23.001.20143.0 AGM...'
+  captured_at: '2026-11-28T14:23:41Z'
+  source_date: '2023-05-11'
+  target_release_date: '2023-04-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 2023.001.20143
+  match_basis: exact_version_alias
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: ffc288c8a78240cd8eefbb3fc387a16f0ba3fc89a53d3afc23ffce151cf466eb
+  title_dedup_sha256: e899350743a83fdb12b3f8ecd7d518bebf38a8bc4ccc21f05a1beec9fbbb6d7b
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+- id: acrobat-23-001-20143-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-23-001-20143-freezes-when-converting-a-jpg-v
+  product_id: adobe-acrobat-pro
+  update_version: 23.001.20143
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-23-001-20143-freezes-when-converting-a-jpg-via-context-menu-to-pdf-1281634
+  parent_title: Adobe Acrobat (23.001.20143) freezes when converting a jpg via context-menu to pdf...
+  report_title: Adobe Acrobat (23.001.20143) freezes when converting a jpg via context-menu to pdf...
+  report_text_excerpt: Adobe Acrobat (23.001.20143) freezes when converting a jpg via context-menu to pdf... Since the last update, my Adobe Acrobat freezes whenever I want to convert a JPG file into a PDF file via the context menu. If I want to open a JPG file via Acrobat or convert it to PDF via...
+  captured_at: '2026-11-28T14:23:41Z'
+  source_date: '2023-05-05'
+  target_release_date: '2023-04-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 23.001.20143
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: bac12d053bb87f3fea81599c73dcb8f1318a1f135b723f624cd4d8cce489742c
+  title_dedup_sha256: 850feb16d4c44efb71c76f45d4f7b516905556750855857c37142d292e77d927
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+- id: acrobat-23-001-20143-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-creative-cloude-acrobat-dc-error-136-1281187
+  product_id: adobe-acrobat-pro
+  update_version: 23.001.20143
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-creative-cloude-acrobat-dc-error-136-1281187
+  parent_title: Adobe Creative Cloude Acrobat DC error 136
+  report_title: Adobe Creative Cloude Acrobat DC error 136
+  report_text_excerpt: '...2 error(s) ----------- Payload: Adobe Acrobat 23.1.20143.0 Adobe Acrobat\Setup.exe_23.001.20143 ----------- ERROR: DW071: ERROR: DW003: Third party payload installer Adobe Acrobat\Setup.exe failed with exit code: 1603...'
+  captured_at: '2026-11-28T14:23:41Z'
+  source_date: '2023-04-21'
+  target_release_date: '2023-04-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 23.001.20143
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 8ccc6f05bc47ed4f9b5d48908ca377635174153c461a339439a15d3ba93afca3
+  title_dedup_sha256: 38e25fe59744a535028a3d050a66ac026dd56e822bd8b353955e65b18d89204c
+  issue_bucket: install/update failure
+  facts_rule_version: v1
+- id: acrobat-24-003-20180-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-crashing-when-using-redacting-tool-1298383
+  product_id: adobe-acrobat-reader
+  update_version: 24.003.20180
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-crashing-when-using-redacting-tool-1298383
+  parent_title: Adobe Acrobat crashing when using redacting tool
+  report_title: Adobe Acrobat crashing when using redacting tool
+  report_text_excerpt: '...also have a Windows remote server environment and the same issue occurs there. Version: 24.003.20180 <?xml version="1.0"?> <!DOCTYPE AdobeCrashReport SYSTEM "AdobeCrashReporter.dtd"> <crashreport serviceVersion="16.1.0.202403280551_9c717c1"...'
+  captured_at: '2026-11-28T14:48:02Z'
+  source_date: '2024-11-14'
+  target_release_date: '2024-10-03'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 24.003.20180
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 8f2ad4efc2d4aa64a180887c43dcc77cbac90b1cb7896c644f933c781e945cca
+  title_dedup_sha256: c3b46bbc9f725d01ff45f018fcd5418f833d4c1d7b1abf21755b1ade462d238e
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+- id: acrobat-24-003-20180-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-acrobat-freezing-constantly-1506152
+  product_id: adobe-acrobat-reader
+  update_version: 24.003.20180
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/adobe-acrobat-freezing-constantly-1506152
+  parent_title: Adobe Acrobat freezing constantly
+  report_title: Adobe Acrobat freezing constantly
+  report_text_excerpt: '...be unique to our setup. Do you have any suggestions for a solution? Has Adobe communicated any details if this is a widespread problem? Below are the Windows and Adobe Reader versions most of our users have: Adobe Reader : Version 24.004.202xx (LU) or 24.003.20180 Windows :...'
+  captured_at: '2026-11-28T14:48:02Z'
+  source_date: '2024-10-28'
+  target_release_date: '2024-10-03'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 24.003.20180
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: f4bc6f3dd3885896689f5b5742848d927178fc04e45dfbf9dbb8d50060dfee76
+  title_dedup_sha256: 8c1c8924b1c3ce5ac2c712c19f9067e8638fd76b689d4a36ed38070a9cdfd8f0
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+- id: acrobat-24-003-20180-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-24-003-20180-win11-freezing-problems-1297592
+  product_id: adobe-acrobat-reader
+  update_version: 24.003.20180
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-24-003-20180-win11-freezing-problems-1297592
+  parent_title: Adobe Acrobat 24.003.20180 WIN11 - freezing problems
+  report_title: Adobe Acrobat 24.003.20180 WIN11 - freezing problems
+  report_text_excerpt: Adobe Acrobat 24.003.20180 WIN11 - freezing problems Hi, as mentioned in Adobe Pro keeps crashing when opening some PDFs - Adobe Community - 14909692 I have the same issues here. Opening PDF files directly from Outlook, saving them on local SSD or network shares causing the...
+  captured_at: '2026-11-28T14:48:02Z'
+  source_date: '2024-10-15'
+  target_release_date: '2024-10-03'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 24.003.20180
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: a2d2b3be17af4e5a308a95b674649ef8e828c37b7701bae1f916b014f1c551e5
+  title_dedup_sha256: bcc4deda49329d5c0d45bdf16127d86eb71802ca4b111016c5816eb19bc511db
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+- id: acrobat-24-003-20112-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-24-003-20112-update-fails-with-error-code-1642-129
+  product_id: adobe-acrobat-reader
+  update_version: 24.003.20112
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-24-003-20112-update-fails-with-error-code-1642-1296735
+  parent_title: Acrobat 24.003.20112 update fails with error code 1642
+  report_title: Acrobat 24.003.20112 update fails with error code 1642
+  report_text_excerpt: 'Acrobat 24.003.20112 update fails with error code 1642 We are trying to deploy the latest Acrobat update 24.003.20112 using Microsoft Configuration Manager. About half of our devices the update fails with error code 1642: "The upgrade cannot be installed by the Windows...'
+  captured_at: '2026-11-28T14:48:02Z'
+  source_date: '2024-09-16'
+  target_release_date: '2024-09-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 24.003.20112
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 8efa9869ce93d01264e52a010b351a788e8fe1ea556ae3f1d2a35a06c7d68886
+  title_dedup_sha256: 464e18006ceafc4400f8089436922365f8512dbe6d36550964acb60d69b52c40
+  issue_bucket: install/update failure
+  facts_rule_version: v1
+- id: acrobat-24-003-20112-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-reader-crashing-1296989
+  product_id: adobe-acrobat-reader
+  update_version: 24.003.20112
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-reader-crashing-1296989
+  parent_title: Adobe Acrobat Reader Crashing
+  report_title: Adobe Acrobat Reader Crashing
+  report_text_excerpt: Adobe Acrobat Reader Crashing We have an end user running Adobe Acrobat Reader 24.003.20112. She said that at random intervals it will crash. She had this problem before very frequently and we found replacing her pc with a Windows 10 system instead of 11 which seemed to help....
+  captured_at: '2026-11-28T14:48:02Z'
+  source_date: '2024-09-24'
+  target_release_date: '2024-09-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 24.003.20112
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: adobe_community_algolia_search
+  excerpt_norm_sha256: 744d4eb2c210528f6aac4f3c2909ce2591aae5e6043217bbf0d70b84dbe38334
+  title_dedup_sha256: 9d73b84f46b1714715045161ba5614f963233b77d21fa7439fcfb357a9774a8c
+  issue_bucket: crash or launch failure
+  facts_rule_version: v1
+- id: microsoft-teams-26304-1207-5384-858-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6083624-cant-sign-in-to-teams
+  product_id: microsoft-teams
+  update_version: 26304.1207.5384.858
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6083624/cant-sign-in-to-teams
+  parent_title: Can't sign in to Teams. - Microsoft Q&A
+  report_title: Can't sign in to Teams. - Microsoft Q&A
+  report_text_excerpt: Can't sign in to Teams. Since yesterday, I can no longer dial in to Teams with my account. It says I don't have the permission. I am the overall license holder. I have assigned licenses to my profile, but they disappear immediately and are not saved. The automatic support is...
+  captured_at: '2026-11-28T15:15:41Z'
+  source_date: '2026-11-26'
+  target_release_date: '2026-11-23'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: fd7b764b1b43a7b81e72eb0c34caae5e2118d8123fd9466395380448e5912c80
+  title_dedup_sha256: 4eb3d5eeccb5677faec8ddf3fb90356569a2055343c426d272fd44008bc650a9
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26304-1207-5384-858-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6083624-cant-sign-in-to-teams-answer-13065977
+  product_id: microsoft-teams
+  update_version: 26304.1207.5384.858
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6083624/cant-sign-in-to-teams#answer-13065977
+  parent_title: Can't sign in to Teams. - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: Hi @Quantumdune , From your description, it sounds like you are still able to access the Microsoft 365 admin center and manage licenses. Could you please confirm what happens when you assign the license and click Save changes? Does the license disappear immediately afterward...
+  captured_at: '2026-11-28T15:15:41Z'
+  source_date: '2026-11-26T13:47:58.0433333+00:00'
+  target_release_date: '2026-11-23'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 34ab21d32ac34d2154b333de6edcab12cc860ec75acaa67df495a7a6f72ca247
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26304-1207-5384-858-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-is-there-a-good-way-to-build-an-emp
+  product_id: microsoft-teams
+  update_version: 26304.1207.5384.858
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/is-there-a-good-way-to-build-an-employee-feedback-system-in-teams/4577431
+  parent_title: Is there a good way to build an employee feedback system in Teams?
+  report_title: Is there a good way to build an employee feedback system in Teams?
+  report_text_excerpt: Is there a good way to build an employee feedback system in Teams? Is there a good way to build an employee feedback system in Teams without it just becoming another chat message? We’re trying to encourage more continuous feedback between managers and employees instead of only...
+  captured_at: '2026-11-28T15:15:41Z'
+  source_date: '2026-11-27'
+  target_release_date: '2026-11-23'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: performance regression
+  workflow_area: performance
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: b57f937076208928471cdb8431a61e5bd1bfe878257e9dd24eaf531d14ca2df7
+  title_dedup_sha256: dc57670f6d85e38f490ca94453f73df2982ece6fdb37c3332c1a13191959a7c7
+  issue_bucket: performance regression
+  facts_rule_version: v1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6083624-cant-sign-in-to-teams
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6083624/cant-sign-in-to-teams
+  parent_title: Can't sign in to Teams. - Microsoft Q&A
+  report_title: Can't sign in to Teams. - Microsoft Q&A
+  report_text_excerpt: Can't sign in to Teams. Since yesterday, I can no longer dial in to Teams with my account. It says I don't have the permission. I am the overall license holder. I have assigned licenses to my profile, but they disappear immediately and are not saved. The automatic support is...
+  captured_at: '2026-11-28T15:15:41Z'
+  source_date: '2026-11-26'
+  target_release_date: '2026-11-05'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: fd7b764b1b43a7b81e72eb0c34caae5e2118d8123fd9466395380448e5912c80
+  title_dedup_sha256: 4eb3d5eeccb5677faec8ddf3fb90356569a2055343c426d272fd44008bc650a9
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6083624-cant-sign-in-to-teams-answer-13065977
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6083624/cant-sign-in-to-teams#answer-13065977
+  parent_title: Can't sign in to Teams. - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: Hi @Quantumdune , From your description, it sounds like you are still able to access the Microsoft 365 admin center and manage licenses. Could you please confirm what happens when you assign the license and click Save changes? Does the license disappear immediately afterward...
+  captured_at: '2026-11-28T15:15:41Z'
+  source_date: '2026-11-26T13:47:58.0433333+00:00'
+  target_release_date: '2026-11-05'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 34ab21d32ac34d2154b333de6edcab12cc860ec75acaa67df495a7a6f72ca247
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-is-there-a-good-way-to-build-an-emp
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/is-there-a-good-way-to-build-an-employee-feedback-system-in-teams/4577431
+  parent_title: Is there a good way to build an employee feedback system in Teams?
+  report_title: Is there a good way to build an employee feedback system in Teams?
+  report_text_excerpt: Is there a good way to build an employee feedback system in Teams? Is there a good way to build an employee feedback system in Teams without it just becoming another chat message? We’re trying to encourage more continuous feedback between managers and employees instead of only...
+  captured_at: '2026-11-28T15:15:41Z'
+  source_date: '2026-11-27'
+  target_release_date: '2026-11-05'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: performance regression
+  workflow_area: performance
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: b57f937076208928471cdb8431a61e5bd1bfe878257e9dd24eaf531d14ca2df7
+  title_dedup_sha256: dc57670f6d85e38f490ca94453f73df2982ece6fdb37c3332c1a13191959a7c7
+  issue_bucket: performance regression
+  facts_rule_version: v1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6083624-cant-sign-in-to-teams
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6083624/cant-sign-in-to-teams
+  parent_title: Can't sign in to Teams. - Microsoft Q&A
+  report_title: Can't sign in to Teams. - Microsoft Q&A
+  report_text_excerpt: Can't sign in to Teams. Since yesterday, I can no longer dial in to Teams with my account. It says I don't have the permission. I am the overall license holder. I have assigned licenses to my profile, but they disappear immediately and are not saved. The automatic support is...
+  captured_at: '2026-11-28T15:15:41Z'
+  source_date: '2026-11-26'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: fd7b764b1b43a7b81e72eb0c34caae5e2118d8123fd9466395380448e5912c80
+  title_dedup_sha256: 4eb3d5eeccb5677faec8ddf3fb90356569a2055343c426d272fd44008bc650a9
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6083624-cant-sign-in-to-teams-answer-13065977
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6083624/cant-sign-in-to-teams#answer-13065977
+  parent_title: Can't sign in to Teams. - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: Hi @Quantumdune , From your description, it sounds like you are still able to access the Microsoft 365 admin center and manage licenses. Could you please confirm what happens when you assign the license and click Save changes? Does the license disappear immediately afterward...
+  captured_at: '2026-11-28T15:15:41Z'
+  source_date: '2026-11-26T13:47:58.0433333+00:00'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: 34ab21d32ac34d2154b333de6edcab12cc860ec75acaa67df495a7a6f72ca247
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-is-there-a-good-way-to-build-an-emp
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/is-there-a-good-way-to-build-an-employee-feedback-system-in-teams/4577431
+  parent_title: Is there a good way to build an employee feedback system in Teams?
+  report_title: Is there a good way to build an employee feedback system in Teams?
+  report_text_excerpt: Is there a good way to build an employee feedback system in Teams? Is there a good way to build an employee feedback system in Teams without it just becoming another chat message? We’re trying to encourage more continuous feedback between managers and employees instead of only...
+  captured_at: '2026-11-28T15:15:41Z'
+  source_date: '2026-11-27'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: performance regression
+  workflow_area: performance
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: b57f937076208928471cdb8431a61e5bd1bfe878257e9dd24eaf531d14ca2df7
+  title_dedup_sha256: dc57670f6d85e38f490ca94453f73df2982ece6fdb37c3332c1a13191959a7c7
+  issue_bucket: performance regression
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6083624-cant-sign-in-to-teams
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6083624/cant-sign-in-to-teams
+  parent_title: Can't sign in to Teams. - Microsoft Q&A
+  report_title: Can't sign in to Teams. - Microsoft Q&A
+  report_text_excerpt: Can't sign in to Teams. Since yesterday, I can no longer dial in to Teams with my account. It says I don't have the permission. I am the overall license holder. I have assigned licenses to my profile, but they disappear immediately and are not saved. The automatic support is...
+  captured_at: '2026-11-28T15:15:41Z'
+  source_date: '2026-11-26'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: fd7b764b1b43a7b81e72eb0c34caae5e2118d8123fd9466395380448e5912c80
+  title_dedup_sha256: 4eb3d5eeccb5677faec8ddf3fb90356569a2055343c426d272fd44008bc650a9
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6083624-cant-sign-in-to-teams-answer-13065977
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6083624/cant-sign-in-to-teams#answer-13065977
+  parent_title: Can't sign in to Teams. - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: Hi @Quantumdune , From your description, it sounds like you are still able to access the Microsoft 365 admin center and manage licenses. Could you please confirm what happens when you assign the license and click Save changes? Does the license disappear immediately afterward...
+  captured_at: '2026-11-28T15:15:41Z'
+  source_date: '2026-11-26T13:47:58.0433333+00:00'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: 34ab21d32ac34d2154b333de6edcab12cc860ec75acaa67df495a7a6f72ca247
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-is-there-a-good-way-to-build-an-emp
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/is-there-a-good-way-to-build-an-employee-feedback-system-in-teams/4577431
+  parent_title: Is there a good way to build an employee feedback system in Teams?
+  report_title: Is there a good way to build an employee feedback system in Teams?
+  report_text_excerpt: Is there a good way to build an employee feedback system in Teams? Is there a good way to build an employee feedback system in Teams without it just becoming another chat message? We’re trying to encourage more continuous feedback between managers and employees instead of only...
+  captured_at: '2026-11-28T15:15:41Z'
+  source_date: '2026-11-27'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: performance regression
+  workflow_area: performance
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: b57f937076208928471cdb8431a61e5bd1bfe878257e9dd24eaf531d14ca2df7
+  title_dedup_sha256: dc57670f6d85e38f490ca94453f73df2982ece6fdb37c3332c1a13191959a7c7
+  issue_bucket: performance regression
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6083624-cant-sign-in-to-teams
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6083624/cant-sign-in-to-teams
+  parent_title: Can't sign in to Teams. - Microsoft Q&A
+  report_title: Can't sign in to Teams. - Microsoft Q&A
+  report_text_excerpt: Can't sign in to Teams. Since yesterday, I can no longer dial in to Teams with my account. It says I don't have the permission. I am the overall license holder. I have assigned licenses to my profile, but they disappear immediately and are not saved. The automatic support is...
+  captured_at: '2026-11-28T15:15:41Z'
+  source_date: '2026-11-26'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: fd7b764b1b43a7b81e72eb0c34caae5e2118d8123fd9466395380448e5912c80
+  title_dedup_sha256: 4eb3d5eeccb5677faec8ddf3fb90356569a2055343c426d272fd44008bc650a9
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6083624-cant-sign-in-to-teams-answer-13065977
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6083624/cant-sign-in-to-teams#answer-13065977
+  parent_title: Can't sign in to Teams. - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: Hi @Quantumdune , From your description, it sounds like you are still able to access the Microsoft 365 admin center and manage licenses. Could you please confirm what happens when you assign the license and click Save changes? Does the license disappear immediately afterward...
+  captured_at: '2026-11-28T15:15:41Z'
+  source_date: '2026-11-26T13:47:58.0433333+00:00'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 34ab21d32ac34d2154b333de6edcab12cc860ec75acaa67df495a7a6f72ca247
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-is-there-a-good-way-to-build-an-emp
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/is-there-a-good-way-to-build-an-employee-feedback-system-in-teams/4577431
+  parent_title: Is there a good way to build an employee feedback system in Teams?
+  report_title: Is there a good way to build an employee feedback system in Teams?
+  report_text_excerpt: Is there a good way to build an employee feedback system in Teams? Is there a good way to build an employee feedback system in Teams without it just becoming another chat message? We’re trying to encourage more continuous feedback between managers and employees instead of only...
+  captured_at: '2026-11-28T15:15:41Z'
+  source_date: '2026-11-27'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: performance regression
+  workflow_area: performance
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: b57f937076208928471cdb8431a61e5bd1bfe878257e9dd24eaf531d14ca2df7
+  title_dedup_sha256: dc57670f6d85e38f490ca94453f73df2982ece6fdb37c3332c1a13191959a7c7
+  issue_bucket: performance regression
+  facts_rule_version: v1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6083624-cant-sign-in-to-teams
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6083624/cant-sign-in-to-teams
+  parent_title: Can't sign in to Teams. - Microsoft Q&A
+  report_title: Can't sign in to Teams. - Microsoft Q&A
+  report_text_excerpt: Can't sign in to Teams. Since yesterday, I can no longer dial in to Teams with my account. It says I don't have the permission. I am the overall license holder. I have assigned licenses to my profile, but they disappear immediately and are not saved. The automatic support is...
+  captured_at: '2026-11-28T15:15:41Z'
+  source_date: '2026-11-26'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: fd7b764b1b43a7b81e72eb0c34caae5e2118d8123fd9466395380448e5912c80
+  title_dedup_sha256: 4eb3d5eeccb5677faec8ddf3fb90356569a2055343c426d272fd44008bc650a9
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6083624-cant-sign-in-to-teams-answer-13065977
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6083624/cant-sign-in-to-teams#answer-13065977
+  parent_title: Can't sign in to Teams. - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: Hi @Quantumdune , From your description, it sounds like you are still able to access the Microsoft 365 admin center and manage licenses. Could you please confirm what happens when you assign the license and click Save changes? Does the license disappear immediately afterward...
+  captured_at: '2026-11-28T15:15:41Z'
+  source_date: '2026-11-26T13:47:58.0433333+00:00'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 34ab21d32ac34d2154b333de6edcab12cc860ec75acaa67df495a7a6f72ca247
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-is-there-a-good-way-to-build-an-emp
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/is-there-a-good-way-to-build-an-employee-feedback-system-in-teams/4577431
+  parent_title: Is there a good way to build an employee feedback system in Teams?
+  report_title: Is there a good way to build an employee feedback system in Teams?
+  report_text_excerpt: Is there a good way to build an employee feedback system in Teams? Is there a good way to build an employee feedback system in Teams without it just becoming another chat message? We’re trying to encourage more continuous feedback between managers and employees instead of only...
+  captured_at: '2026-11-28T15:15:41Z'
+  source_date: '2026-11-27'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: performance regression
+  workflow_area: performance
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: b57f937076208928471cdb8431a61e5bd1bfe878257e9dd24eaf531d14ca2df7
+  title_dedup_sha256: dc57670f6d85e38f490ca94453f73df2982ece6fdb37c3332c1a13191959a7c7
+  issue_bucket: performance regression
+  facts_rule_version: v1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6083624-cant-sign-in-to-teams
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6083624/cant-sign-in-to-teams
+  parent_title: Can't sign in to Teams. - Microsoft Q&A
+  report_title: Can't sign in to Teams. - Microsoft Q&A
+  report_text_excerpt: Can't sign in to Teams. Since yesterday, I can no longer dial in to Teams with my account. It says I don't have the permission. I am the overall license holder. I have assigned licenses to my profile, but they disappear immediately and are not saved. The automatic support is...
+  captured_at: '2026-11-28T15:15:41Z'
+  source_date: '2026-11-26'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: fd7b764b1b43a7b81e72eb0c34caae5e2118d8123fd9466395380448e5912c80
+  title_dedup_sha256: 4eb3d5eeccb5677faec8ddf3fb90356569a2055343c426d272fd44008bc650a9
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6083624-cant-sign-in-to-teams-answer-13065977
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6083624/cant-sign-in-to-teams#answer-13065977
+  parent_title: Can't sign in to Teams. - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: Hi @Quantumdune , From your description, it sounds like you are still able to access the Microsoft 365 admin center and manage licenses. Could you please confirm what happens when you assign the license and click Save changes? Does the license disappear immediately afterward...
+  captured_at: '2026-11-28T15:15:41Z'
+  source_date: '2026-11-26T13:47:58.0433333+00:00'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: 34ab21d32ac34d2154b333de6edcab12cc860ec75acaa67df495a7a6f72ca247
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-is-there-a-good-way-to-build-an-emp
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/is-there-a-good-way-to-build-an-employee-feedback-system-in-teams/4577431
+  parent_title: Is there a good way to build an employee feedback system in Teams?
+  report_title: Is there a good way to build an employee feedback system in Teams?
+  report_text_excerpt: Is there a good way to build an employee feedback system in Teams? Is there a good way to build an employee feedback system in Teams without it just becoming another chat message? We’re trying to encourage more continuous feedback between managers and employees instead of only...
+  captured_at: '2026-11-28T15:15:41Z'
+  source_date: '2026-11-27'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: performance regression
+  workflow_area: performance
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: b57f937076208928471cdb8431a61e5bd1bfe878257e9dd24eaf531d14ca2df7
+  title_dedup_sha256: dc57670f6d85e38f490ca94453f73df2982ece6fdb37c3332c1a13191959a7c7
+  issue_bucket: performance regression
+  facts_rule_version: v1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6083624-cant-sign-in-to-teams
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6083624/cant-sign-in-to-teams
+  parent_title: Can't sign in to Teams. - Microsoft Q&A
+  report_title: Can't sign in to Teams. - Microsoft Q&A
+  report_text_excerpt: Can't sign in to Teams. Since yesterday, I can no longer dial in to Teams with my account. It says I don't have the permission. I am the overall license holder. I have assigned licenses to my profile, but they disappear immediately and are not saved. The automatic support is...
+  captured_at: '2026-11-28T15:15:41Z'
+  source_date: '2026-11-26'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: fd7b764b1b43a7b81e72eb0c34caae5e2118d8123fd9466395380448e5912c80
+  title_dedup_sha256: 4eb3d5eeccb5677faec8ddf3fb90356569a2055343c426d272fd44008bc650a9
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6083624-cant-sign-in-to-teams-answer-13065977
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6083624/cant-sign-in-to-teams#answer-13065977
+  parent_title: Can't sign in to Teams. - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: Hi @Quantumdune , From your description, it sounds like you are still able to access the Microsoft 365 admin center and manage licenses. Could you please confirm what happens when you assign the license and click Save changes? Does the license disappear immediately afterward...
+  captured_at: '2026-11-28T15:15:41Z'
+  source_date: '2026-11-26T13:47:58.0433333+00:00'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 34ab21d32ac34d2154b333de6edcab12cc860ec75acaa67df495a7a6f72ca247
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-is-there-a-good-way-to-build-an-emp
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/is-there-a-good-way-to-build-an-employee-feedback-system-in-teams/4577431
+  parent_title: Is there a good way to build an employee feedback system in Teams?
+  report_title: Is there a good way to build an employee feedback system in Teams?
+  report_text_excerpt: Is there a good way to build an employee feedback system in Teams? Is there a good way to build an employee feedback system in Teams without it just becoming another chat message? We’re trying to encourage more continuous feedback between managers and employees instead of only...
+  captured_at: '2026-11-28T15:15:41Z'
+  source_date: '2026-11-27'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: performance regression
+  workflow_area: performance
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: b57f937076208928471cdb8431a61e5bd1bfe878257e9dd24eaf531d14ca2df7
+  title_dedup_sha256: dc57670f6d85e38f490ca94453f73df2982ece6fdb37c3332c1a13191959a7c7
+  issue_bucket: performance regression
+  facts_rule_version: v1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6083624-cant-sign-in-to-teams
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6083624/cant-sign-in-to-teams
+  parent_title: Can't sign in to Teams. - Microsoft Q&A
+  report_title: Can't sign in to Teams. - Microsoft Q&A
+  report_text_excerpt: Can't sign in to Teams. Since yesterday, I can no longer dial in to Teams with my account. It says I don't have the permission. I am the overall license holder. I have assigned licenses to my profile, but they disappear immediately and are not saved. The automatic support is...
+  captured_at: '2026-11-28T15:15:41Z'
+  source_date: '2026-11-26'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: fd7b764b1b43a7b81e72eb0c34caae5e2118d8123fd9466395380448e5912c80
+  title_dedup_sha256: 4eb3d5eeccb5677faec8ddf3fb90356569a2055343c426d272fd44008bc650a9
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6083624-cant-sign-in-to-teams-answer-13065977
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6083624/cant-sign-in-to-teams#answer-13065977
+  parent_title: Can't sign in to Teams. - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: Hi @Quantumdune , From your description, it sounds like you are still able to access the Microsoft 365 admin center and manage licenses. Could you please confirm what happens when you assign the license and click Save changes? Does the license disappear immediately afterward...
+  captured_at: '2026-11-28T15:15:41Z'
+  source_date: '2026-11-26T13:47:58.0433333+00:00'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: 34ab21d32ac34d2154b333de6edcab12cc860ec75acaa67df495a7a6f72ca247
+  title_dedup_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  issue_bucket: sign in failure
+  facts_rule_version: v1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-is-there-a-good-way-to-build-an-emp
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/is-there-a-good-way-to-build-an-employee-feedback-system-in-teams/4577431
+  parent_title: Is there a good way to build an employee feedback system in Teams?
+  report_title: Is there a good way to build an employee feedback system in Teams?
+  report_text_excerpt: Is there a good way to build an employee feedback system in Teams? Is there a good way to build an employee feedback system in Teams without it just becoming another chat message? We’re trying to encourage more continuous feedback between managers and employees instead of only...
+  captured_at: '2026-11-28T15:15:41Z'
+  source_date: '2026-11-27'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: performance regression
+  workflow_area: performance
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  excerpt_norm_sha256: b57f937076208928471cdb8431a61e5bd1bfe878257e9dd24eaf531d14ca2df7
+  title_dedup_sha256: dc57670f6d85e38f490ca94453f73df2982ece6fdb37c3332c1a13191959a7c7
+  issue_bucket: performance regression
+  facts_rule_version: v1
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6085125-question-6085125
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6085125/latest-download-will-not-install
+  parent_title: Latest download will not install - Microsoft Q&A
+  report_title: Latest download will not install - Microsoft Q&A
+  report_text_excerpt: Latest download will not install - Microsoft Q&A I can't figure out how to get it to install the latest windows update and now I'm trying to get help here. Not sure how to translate into English but I hope you'll understand me. After update I get this message when it fails to...
+  captured_at: '2026-11-28T15:25:31Z'
+  source_date: '2026-11-28'
+  target_release_date: '2026-11-19'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.10075'
+  match_basis: exact_os_build
+  matched_kb: KB5132057
+  matched_os_build: '26300.10075'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.10075'
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: 578014c636f496e9de2def7325c4030d31be647caba892bd8a1f5cc6054d6107
+  title_dedup_sha256: f97cb444a3933f2a8d88942df89c993aa794a8f56ef919441626f7fcebe4b3b4
+  issue_bucket: update/install failure
+  facts_rule_version: v1
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6084846-question-6084846
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6084846/kb5132057-makes-the-mouse-cursor-invisible-on-a-mo
+  parent_title: KB5132057 makes the mouse cursor invisible on a monitor connected through a USB-to-HDMI adapter (MacroSilicon MS9132) - Microsoft Q&A
+  report_title: KB5132057 makes the mouse cursor invisible on a monitor connected through a USB-to-HDMI adapter (MacroSilicon MS9132) - Microsoft Q&A
+  report_text_excerpt: KB5132057 makes the mouse cursor invisible on a monitor connected through a USB-to-HDMI adapter (MacroSilicon MS9132) - Microsoft Q&A After installing the optional preview update KB5132057 (OS build 26300.10075), the mouse pointer became invisible on my second monitor, which...
+  captured_at: '2026-11-28T15:25:31Z'
+  source_date: '2026-11-27'
+  target_release_date: '2026-11-19'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.10075'
+  match_basis: exact_os_build
+  matched_kb: KB5132057
+  matched_os_build: '26300.10075'
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.10075'
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: 4b42e5757f94495f206c9750272406aa21c2a01d8fbe74a6f133e73668b6af59
+  title_dedup_sha256: 3d15f0a73e8ea32b5c69212f263d8dbaa5a889ee81602feb6c8d49c2a7132481
+  issue_bucket: update/install failure
+  facts_rule_version: v1
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6085099-question-6085099
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6085099/i-have-a-persistant-issue-with-installing-2026-11
+  parent_title: I have a persistant issue with installing 2026-11 Preview Update (KB5132057) (26300.10075) - Microsoft Q&A
+  report_title: I have a persistant issue with installing 2026-11 Preview Update (KB5132057) (26300.10075) - Microsoft Q&A
+  report_text_excerpt: I have a persistant issue with installing 2026-11 Preview Update (KB5132057) (26300.10075) - Microsoft Q&A I have tried multiple times to get the above update to install on my Asus laptop but it keeps failing. The error code it leaves is Install error - 0x800f081f. I have read...
+  captured_at: '2026-11-28T15:25:31Z'
+  source_date: '2026-11-27'
+  target_release_date: '2026-11-19'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.10075'
+  match_basis: exact_os_build
+  matched_kb: KB5132057
+  matched_os_build: '26300.10075'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.10075'
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: ca35424d03dfa4f056157ca0dbe76ad54621e79dea881a68b2062f8657e632a5
+  title_dedup_sha256: 155a6e429613d539040fd498343fa0cdb61b9e7676c83ac0098a942b96362f2b
+  issue_bucket: update/install failure
+  facts_rule_version: v1
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6084851-question-6084851
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6084851/how-to-fix-install-error-0x800f081f
+  parent_title: how to fix Install error - 0x800f081f? - Microsoft Q&A
+  report_title: how to fix Install error - 0x800f081f? - Microsoft Q&A
+  report_text_excerpt: how to fix Install error - 0x800f081f? - Microsoft Q&A error on update 2026-11 Preview Update (KB5132057) (26300.10075)
+  captured_at: '2026-11-28T15:25:31Z'
+  source_date: '2026-11-27'
+  target_release_date: '2026-11-19'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.10075'
+  match_basis: exact_os_build
+  matched_kb: KB5132057
+  matched_os_build: '26300.10075'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.10075'
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: e24c1d1634fe2efd437bbc661bb9e1e4805853c95e53c2ab6aaa75f71b676ffd
+  title_dedup_sha256: e5b392efaf2f5ba611f0b32095fa6d647af9bb3553ee2d8a4fcb5c1b50cf1bbd
+  issue_bucket: update/install failure
+  facts_rule_version: v1
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-learn-6084992-question-6084992
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6084992/windows-11-task-manager-and-start-menu-won-t-open
+  parent_title: Windows 11 Task Manager and Start menu won’t open, error 0xc0000017 - Microsoft Q&A
+  report_title: Windows 11 Task Manager and Start menu won’t open, error 0xc0000017 - Microsoft Q&A
+  report_text_excerpt: Windows 11 Task Manager and Start menu won’t open, error 0xc0000017 - Microsoft Q&A Hi, I need help repairing my original user profile on Windows 11 Pro 25H2, build 26200.9974. I can sign in with my PIN, but Start and Settings won’t open. Task Manager and fail with in normal...
+  captured_at: '2026-11-28T15:26:14Z'
+  source_date: '2026-11-27'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9974'
+  match_basis: exact_os_build
+  matched_os_build: '26200.9974'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: display regression
+  workflow_area: display / graphics
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9974'
+  discovery_method_id: learn_qna_search_rss
+  excerpt_norm_sha256: 0f7f5b1e987e74d58fb748d3b9f2e158968e07383b9f48289a6e093d5b50acb5
+  title_dedup_sha256: aa4b0e59140837df39734a26fec0778b30dcc413c0a187c1a4213e0ea15eeaf8
+  issue_bucket: display regression
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-40-nvidia-forum-comment-3635901
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.40'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635901
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: 'GPU: 3080 TI Desktop PC CPU: 3700X Display Configuration: Tried both DP and HDMI OS: Win 11 26H2 Issue: Monitor lost connection to the DP/HDMI as soon as 621.40 finished installing. After a hard reboot, sometime it loses connection right after reaching the desktop but...'
+  captured_at: '2026-11-28T15:45:19Z'
+  source_date: '2026-11-28T13:04:33Z'
+  target_release_date: '2026-11-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.40'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: nvidia_forum_default_views
+  matched_text: '621.40'
+  matched_field: report_text
+  matched_context: '...d HDMI OS: Win 11 26H2 Issue: Monitor lost connection to the DP/HDMI as soon as 621.40 finished installing. After a hard reboot, sometime it loses connection right af...'
+  excerpt_norm_sha256: f6261516e3438c0df1af17cf85f963f8427eda2cc027e90ff718af4ea11f7138
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: crash or driver reset
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-40-nvidia-forum-comment-3635842
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.40'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635842
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: 'I am experiencing the exact same issue immediately after updating to 621.40. System Specs: • GPU: ASUS Dual GeForce RTX 4060 8GB (Driver 32.0.16.2140) • CPU: AMD Ryzen 5 5600X (Stock settings, no OC/UV) • Motherboard: ASUS ROG Strix G15DK (AMD B550, BIOS 323) • RAM: 32 GB...'
+  captured_at: '2026-11-28T15:45:19Z'
+  source_date: '2026-11-27T23:30:24Z'
+  target_release_date: '2026-11-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.40'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: nvidia_forum_default_views
+  matched_text: '621.40'
+  matched_field: report_text
+  matched_context: 'I am experiencing the exact same issue immediately after updating to 621.40. System Specs: • GPU: ASUS Dual GeForce RTX 4060 8GB (Driver 32.0.16.2140) • CP...'
+  excerpt_norm_sha256: e89f74b805c8cf433991af95e1ac9ca96ac7f46adcd91a32311ae03794fac0b3
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: crash or driver reset
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-40-nvidia-forum-comment-3635778
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.40'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635778
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: '- **GPU:** Gigabyte GeForce RTX 4070 Ti SUPER EAGLE OC ICE 16GB - **CPU:** AMD Ryzen 7 7800X3D - **Display Configuration:** Gigabyte M27QA ICE, 27-inch, 2560×1440, 180Hz, connected via DisplayPort. - **Operating System:** Windows 11 Pro, Version 26H1. - **Driver Regression:**...'
+  captured_at: '2026-11-28T15:45:19Z'
+  source_date: '2026-11-27T11:03:01Z'
+  target_release_date: '2026-11-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.40'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  discovery_method_id: nvidia_forum_default_views
+  matched_text: '621.40'
+  matched_field: report_text
+  matched_context: '...ver Regression:** Yes. The issue started after installing NVIDIA GeForce Driver 621.40. The system was stable on the previous driver version. Rolling back to the prev...'
+  excerpt_norm_sha256: 0ef3f42da007daed3c5215693268e7fb962d6f22f8be6ed64dc9c1ffc22196bf
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: crash or driver reset
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-40-nvidia-forum-comment-3635666
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.40'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593351/62140-cuda-workload-in-wsl2-hangs-after-nvlddmkm-event-153-rtx-5090-no-hangs-on-62124-system/?comment=3635666
+  parent_title: '621.40: CUDA workload in WSL2 hangs after nvlddmkm Event 153 (RTX 5090), no hangs on 621.24  System'
+  report_title: '621.40: CUDA workload in WSL2 hangs after nvlddmkm Event 153 (RTX 5090), no hangs on 621.24  System'
+  report_text_excerpt: '621.40: CUDA workload in WSL2 hangs after nvlddmkm Event 153 (RTX 5090), no hangs on 621.24 System System GPU: GeForce RTX 5090 (Gigabyte board, subsystem 416F1458) OS: Windows 11 Pro, build 26300 WSL 2.6.3.0, kernel 6.6.87.2-microsoft-standard-WSL2, Ubuntu 24.04.3 LTS PyTorch...'
+  captured_at: '2026-11-28T15:45:19Z'
+  source_date: '2026-11-26T11:04:17Z'
+  target_release_date: '2026-11-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.40'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: nvidia_forum_default_views
+  matched_text: '621.40'
+  matched_field: report_text
+  matched_context: '621.40: CUDA workload in WSL2 hangs after nvlddmkm Event 153 (RTX 5090), no hangs on 6...'
+  excerpt_norm_sha256: 94b460150ac02af08a5d8048dabfed065225e3acf0b97273709175ed7a9004ac
+  title_dedup_sha256: 91d5e77deba6d73fce403721364ee016b1a6f0679a574b86cff3edc2d384ce02
+  issue_bucket: crash or driver reset
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-40-nvidia-forum-comment-3635878
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.40'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635878
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: 'GPU: Nvidia RTX 5090 Laptop GPU CPU: Intel® Core™ Ultra 9 Processor 285HX Display Configuration: Internal Laptop Display Operating System: Windows 11 Pro Driver: 621.40 RTX 5090 Laptop GPU on 600-series drivers and on 621.40 — screen freezes and goes black 5-10 seconds after...'
+  captured_at: '2026-11-28T15:45:19Z'
+  source_date: '2026-11-28T08:04:23Z'
+  target_release_date: '2026-11-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.40'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: notebook_driver_not_tracked
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: nvidia_forum_default_views
+  matched_text: '621.40'
+  matched_field: report_text
+  matched_context: '...Configuration: Internal Laptop Display Operating System: Windows 11 Pro Driver: 621.40 RTX 5090 Laptop GPU on 600-series drivers and on 621.40 — screen freezes and...'
+  excerpt_norm_sha256: 3a21ae230e9864ad41b00b325f42685323c8a79eb96821925522a77c501b108a
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: crash or driver reset
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-40-nvidia-forum-comment-3635803
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.40'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635803
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: RTX 5090 R9 9950x3d ROG PG27AQDP 1440p 480hz, Display Port Driver 621.40 Affected - Windows 11 After being idle for a period of time, windows will set the monitor to sleep. The problem is, this driver doesn't wake the monitor up from sleep, showing complete black screen. Win +...
+  captured_at: '2026-11-28T15:45:19Z'
+  source_date: '2026-11-27T14:23:08Z'
+  target_release_date: '2026-11-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.40'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_version_environment_only
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: nvidia_forum_default_views
+  matched_text: '621.40'
+  matched_field: report_text
+  matched_context: RTX 5090 R9 9950x3d ROG PG27AQDP 1440p 480hz, Display Port Driver 621.40 Affected - Windows 11 After being idle for a period of time, windows will set...
+  excerpt_norm_sha256: 174d89aab9adfce7d539908a5ed77278098ade230c2a6ac51b557526b6c522f2
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-40-nvidia-forum-comment-3635791
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.40'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635791
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: 'I''m having system and application error in the event viewer after to new 621.40 Game Ready version • GPU: Asus Prime RTX 5070 Ti OC 16 GB • CPU: AMD Ryzen 9 9950x3D • RAM: Corsair Vengeance 32 GB DDR5 6000 MHz (2x16) • SSD: 1 TB Crucial T710 • Display Configuration: Primary...'
+  captured_at: '2026-11-28T15:45:19Z'
+  source_date: '2026-11-27T13:17:28Z'
+  target_release_date: '2026-11-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.40'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_module_crash_without_regression_evidence
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: nvidia_forum_default_views
+  matched_text: '621.40'
+  matched_field: report_text
+  matched_context: 'I''m having system and application error in the event viewer after to new 621.40 Game Ready version • GPU: Asus Prime RTX 5070 Ti OC 16 GB • CPU: AMD Ryzen 9 99...'
+  excerpt_norm_sha256: 01f9b14786b58888d239d2004e9093cbdb3bf6fb40494dbbd685d3247fe51e2e
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: crash or driver reset
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-40-nvidia-forum-comment-3635741
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.40'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635741
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: Driver 621.40 is causing screen just going black on me. i5-14400f, msi shadow 2x 5070, 32gb ddr4-3600 cl18 on an lg ultragear 240hz glossy woled
+  captured_at: '2026-11-28T15:45:19Z'
+  source_date: '2026-11-27T04:04:57Z'
+  target_release_date: '2026-11-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.40'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: not_a_real_issue_report
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  discovery_method_id: nvidia_forum_default_views
+  matched_text: '621.40'
+  matched_field: report_text
+  matched_context: Driver 621.40 is causing screen just going black on me. i5-14400f, msi shadow 2x 5070, 32gb d...
+  excerpt_norm_sha256: c0ad9b93f81a0edb0f8b1bea9e6c70dc1ff336484c559013794c1e80dbb1b679
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-24-nvidia-forum-comment-3635666
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593351/62140-cuda-workload-in-wsl2-hangs-after-nvlddmkm-event-153-rtx-5090-no-hangs-on-62124-system/?comment=3635666
+  parent_title: '621.40: CUDA workload in WSL2 hangs after nvlddmkm Event 153 (RTX 5090), no hangs on 621.24  System'
+  report_title: '621.40: CUDA workload in WSL2 hangs after nvlddmkm Event 153 (RTX 5090), no hangs on 621.24  System'
+  report_text_excerpt: '621.40: CUDA workload in WSL2 hangs after nvlddmkm Event 153 (RTX 5090), no hangs on 621.24 System System GPU: GeForce RTX 5090 (Gigabyte board, subsystem 416F1458) OS: Windows 11 Pro, build 26300 WSL 2.6.3.0, kernel 6.6.87.2-microsoft-standard-WSL2, Ubuntu 24.04.3 LTS PyTorch...'
+  captured_at: '2026-11-28T15:45:19Z'
+  source_date: '2026-11-26T11:04:17Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...0: CUDA workload in WSL2 hangs after nvlddmkm Event 153 (RTX 5090), no hangs on 621.24 System System GPU: GeForce RTX 5090 (Gigabyte board, subsystem 416F1458) OS:...'
+  excerpt_norm_sha256: 94b460150ac02af08a5d8048dabfed065225e3acf0b97273709175ed7a9004ac
+  title_dedup_sha256: 91d5e77deba6d73fce403721364ee016b1a6f0679a574b86cff3edc2d384ce02
+  issue_bucket: crash or driver reset
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-24-nvidia-forum-comment-3635803
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635803
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: RTX 5090 R9 9950x3d ROG PG27AQDP 1440p 480hz, Display Port Driver 621.40 Affected - Windows 11 After being idle for a period of time, windows will set the monitor to sleep. The problem is, this driver doesn't wake the monitor up from sleep, showing complete black screen. Win +...
+  captured_at: '2026-11-28T15:45:19Z'
+  source_date: '2026-11-27T14:23:08Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...+ Ctrl + Shift + B fixes the issue. last unaffected driver - 621.14 (I skipped 621.24) Note that it doesn''t happen 100% of the time, the issue shows up randomly. I...'
+  excerpt_norm_sha256: 174d89aab9adfce7d539908a5ed77278098ade230c2a6ac51b557526b6c522f2
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-14-nvidia-forum-comment-3635803
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635803
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: RTX 5090 R9 9950x3d ROG PG27AQDP 1440p 480hz, Display Port Driver 621.40 Affected - Windows 11 After being idle for a period of time, windows will set the monitor to sleep. The problem is, this driver doesn't wake the monitor up from sleep, showing complete black screen. Win +...
+  captured_at: '2026-11-28T15:45:19Z'
+  source_date: '2026-11-27T14:23:08Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '...black screen. Win + Ctrl + Shift + B fixes the issue. last unaffected driver - 621.14 (I skipped 621.24) Note that it doesn''t happen 100% of the time, the issue sho...'
+  excerpt_norm_sha256: 174d89aab9adfce7d539908a5ed77278098ade230c2a6ac51b557526b6c522f2
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-621-01-nvidia-forum-comment-3635871
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.01'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635871
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: This new driver has caused my laptop to black screen of death TWICE while playing battlefield 6! I had to rollback to Driver 621.01 Oct 26, 2026 drivers for a stable experience. Been playing MW4 and BF6 back to back for 3 hours straight with no issues since. GIGABYTE G5 KF i5...
+  captured_at: '2026-11-28T15:45:19Z'
+  source_date: '2026-11-28T05:47:57Z'
+  target_release_date: '2026-10-21'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.01'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.01'
+  matched_field: report_text
+  matched_context: '...screen of death TWICE while playing battlefield 6! I had to rollback to Driver 621.01 Oct 26, 2026 drivers for a stable experience. Been playing MW4 and BF6 back to...'
+  excerpt_norm_sha256: 07a633b2b18a437244f489d0bb424f725a33ceebb2e3f31707a727ed659dd94e
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-geforce-game-ready-617-42-nvidia-forum-comment-3635903
+  product_id: nvidia-geforce-game-ready
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635903
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: First of all, thanks to the team for continuing to release drivers and support NVIDIA hardware. However, I have to say I'm becoming increasingly disappointed and frustrated by the lack of meaningful fixes for the ongoing SSD write issues and problems with the NVIDIA App. These...
+  captured_at: '2026-11-28T15:45:19Z'
+  source_date: '2026-11-28T13:24:11Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: '...ontributing to unnecessary drive wear. Personally, I''ve been stuck on driver **617.42**, and for the time being, I''m staying right where I am. I''m not prepared to up...'
+  excerpt_norm_sha256: 387ddca7ed23572e9912cf7b288b90a49ab1ec904597c54aeab3c24dd0d66c9e
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: excessive disk writes
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-40-nvidia-forum-comment-3635666
+  product_id: nvidia-studio-driver
+  update_version: '621.40'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593351/62140-cuda-workload-in-wsl2-hangs-after-nvlddmkm-event-153-rtx-5090-no-hangs-on-62124-system/?comment=3635666
+  parent_title: '621.40: CUDA workload in WSL2 hangs after nvlddmkm Event 153 (RTX 5090), no hangs on 621.24  System'
+  report_title: '621.40: CUDA workload in WSL2 hangs after nvlddmkm Event 153 (RTX 5090), no hangs on 621.24  System'
+  report_text_excerpt: '621.40: CUDA workload in WSL2 hangs after nvlddmkm Event 153 (RTX 5090), no hangs on 621.24 System System GPU: GeForce RTX 5090 (Gigabyte board, subsystem 416F1458) OS: Windows 11 Pro, build 26300 WSL 2.6.3.0, kernel 6.6.87.2-microsoft-standard-WSL2, Ubuntu 24.04.3 LTS PyTorch...'
+  captured_at: '2026-11-28T15:46:53Z'
+  source_date: '2026-11-26T11:04:17Z'
+  target_release_date: '2026-11-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.40'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.40'
+  matched_field: report_text
+  matched_context: '621.40: CUDA workload in WSL2 hangs after nvlddmkm Event 153 (RTX 5090), no hangs on 6...'
+  excerpt_norm_sha256: 94b460150ac02af08a5d8048dabfed065225e3acf0b97273709175ed7a9004ac
+  title_dedup_sha256: 91d5e77deba6d73fce403721364ee016b1a6f0679a574b86cff3edc2d384ce02
+  issue_bucket: crash or driver reset
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-40-nvidia-forum-comment-3635901
+  product_id: nvidia-studio-driver
+  update_version: '621.40'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635901
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: 'GPU: 3080 TI Desktop PC CPU: 3700X Display Configuration: Tried both DP and HDMI OS: Win 11 26H2 Issue: Monitor lost connection to the DP/HDMI as soon as 621.40 finished installing. After a hard reboot, sometime it loses connection right after reaching the desktop but...'
+  captured_at: '2026-11-28T15:46:53Z'
+  source_date: '2026-11-28T13:04:33Z'
+  target_release_date: '2026-11-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.40'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.40'
+  matched_field: report_text
+  matched_context: '...d HDMI OS: Win 11 26H2 Issue: Monitor lost connection to the DP/HDMI as soon as 621.40 finished installing. After a hard reboot, sometime it loses connection right af...'
+  excerpt_norm_sha256: f6261516e3438c0df1af17cf85f963f8427eda2cc027e90ff718af4ea11f7138
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: crash or driver reset
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-40-nvidia-forum-comment-3635878
+  product_id: nvidia-studio-driver
+  update_version: '621.40'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635878
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: 'GPU: Nvidia RTX 5090 Laptop GPU CPU: Intel® Core™ Ultra 9 Processor 285HX Display Configuration: Internal Laptop Display Operating System: Windows 11 Pro Driver: 621.40 RTX 5090 Laptop GPU on 600-series drivers and on 621.40 — screen freezes and goes black 5-10 seconds after...'
+  captured_at: '2026-11-28T15:46:53Z'
+  source_date: '2026-11-28T08:04:23Z'
+  target_release_date: '2026-11-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.40'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.40'
+  matched_field: report_text
+  matched_context: '...Configuration: Internal Laptop Display Operating System: Windows 11 Pro Driver: 621.40 RTX 5090 Laptop GPU on 600-series drivers and on 621.40 — screen freezes and...'
+  excerpt_norm_sha256: 3a21ae230e9864ad41b00b325f42685323c8a79eb96821925522a77c501b108a
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: crash or driver reset
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-40-nvidia-forum-comment-3635842
+  product_id: nvidia-studio-driver
+  update_version: '621.40'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635842
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: 'I am experiencing the exact same issue immediately after updating to 621.40. System Specs: • GPU: ASUS Dual GeForce RTX 4060 8GB (Driver 32.0.16.2140) • CPU: AMD Ryzen 5 5600X (Stock settings, no OC/UV) • Motherboard: ASUS ROG Strix G15DK (AMD B550, BIOS 323) • RAM: 32 GB...'
+  captured_at: '2026-11-28T15:46:53Z'
+  source_date: '2026-11-27T23:30:24Z'
+  target_release_date: '2026-11-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.40'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.40'
+  matched_field: report_text
+  matched_context: 'I am experiencing the exact same issue immediately after updating to 621.40. System Specs: • GPU: ASUS Dual GeForce RTX 4060 8GB (Driver 32.0.16.2140) • CP...'
+  excerpt_norm_sha256: e89f74b805c8cf433991af95e1ac9ca96ac7f46adcd91a32311ae03794fac0b3
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: crash or driver reset
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-40-nvidia-forum-comment-3635803
+  product_id: nvidia-studio-driver
+  update_version: '621.40'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635803
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: RTX 5090 R9 9950x3d ROG PG27AQDP 1440p 480hz, Display Port Driver 621.40 Affected - Windows 11 After being idle for a period of time, windows will set the monitor to sleep. The problem is, this driver doesn't wake the monitor up from sleep, showing complete black screen. Win +...
+  captured_at: '2026-11-28T15:46:53Z'
+  source_date: '2026-11-27T14:23:08Z'
+  target_release_date: '2026-11-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.40'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.40'
+  matched_field: report_text
+  matched_context: RTX 5090 R9 9950x3d ROG PG27AQDP 1440p 480hz, Display Port Driver 621.40 Affected - Windows 11 After being idle for a period of time, windows will set...
+  excerpt_norm_sha256: 174d89aab9adfce7d539908a5ed77278098ade230c2a6ac51b557526b6c522f2
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-40-nvidia-forum-comment-3635791
+  product_id: nvidia-studio-driver
+  update_version: '621.40'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635791
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: 'I''m having system and application error in the event viewer after to new 621.40 Game Ready version • GPU: Asus Prime RTX 5070 Ti OC 16 GB • CPU: AMD Ryzen 9 9950x3D • RAM: Corsair Vengeance 32 GB DDR5 6000 MHz (2x16) • SSD: 1 TB Crucial T710 • Display Configuration: Primary...'
+  captured_at: '2026-11-28T15:46:53Z'
+  source_date: '2026-11-27T13:17:28Z'
+  target_release_date: '2026-11-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.40'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.40'
+  matched_field: report_text
+  matched_context: 'I''m having system and application error in the event viewer after to new 621.40 Game Ready version • GPU: Asus Prime RTX 5070 Ti OC 16 GB • CPU: AMD Ryzen 9 99...'
+  excerpt_norm_sha256: 01f9b14786b58888d239d2004e9093cbdb3bf6fb40494dbbd685d3247fe51e2e
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: crash or driver reset
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-40-nvidia-forum-comment-3635778
+  product_id: nvidia-studio-driver
+  update_version: '621.40'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635778
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: '- **GPU:** Gigabyte GeForce RTX 4070 Ti SUPER EAGLE OC ICE 16GB - **CPU:** AMD Ryzen 7 7800X3D - **Display Configuration:** Gigabyte M27QA ICE, 27-inch, 2560×1440, 180Hz, connected via DisplayPort. - **Operating System:** Windows 11 Pro, Version 26H1. - **Driver Regression:**...'
+  captured_at: '2026-11-28T15:46:53Z'
+  source_date: '2026-11-27T11:03:01Z'
+  target_release_date: '2026-11-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.40'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.40'
+  matched_field: report_text
+  matched_context: '...ver Regression:** Yes. The issue started after installing NVIDIA GeForce Driver 621.40. The system was stable on the previous driver version. Rolling back to the prev...'
+  excerpt_norm_sha256: 0ef3f42da007daed3c5215693268e7fb962d6f22f8be6ed64dc9c1ffc22196bf
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: crash or driver reset
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-40-nvidia-forum-comment-3635741
+  product_id: nvidia-studio-driver
+  update_version: '621.40'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635741
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: Driver 621.40 is causing screen just going black on me. i5-14400f, msi shadow 2x 5070, 32gb ddr4-3600 cl18 on an lg ultragear 240hz glossy woled
+  captured_at: '2026-11-28T15:46:53Z'
+  source_date: '2026-11-27T04:04:57Z'
+  target_release_date: '2026-11-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.40'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.40'
+  matched_field: report_text
+  matched_context: Driver 621.40 is causing screen just going black on me. i5-14400f, msi shadow 2x 5070, 32gb d...
+  excerpt_norm_sha256: c0ad9b93f81a0edb0f8b1bea9e6c70dc1ff336484c559013794c1e80dbb1b679
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: general workflow reports
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-24-nvidia-forum-comment-3635666
+  product_id: nvidia-studio-driver
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593351/62140-cuda-workload-in-wsl2-hangs-after-nvlddmkm-event-153-rtx-5090-no-hangs-on-62124-system/?comment=3635666
+  parent_title: '621.40: CUDA workload in WSL2 hangs after nvlddmkm Event 153 (RTX 5090), no hangs on 621.24  System'
+  report_title: '621.40: CUDA workload in WSL2 hangs after nvlddmkm Event 153 (RTX 5090), no hangs on 621.24  System'
+  report_text_excerpt: '621.40: CUDA workload in WSL2 hangs after nvlddmkm Event 153 (RTX 5090), no hangs on 621.24 System System GPU: GeForce RTX 5090 (Gigabyte board, subsystem 416F1458) OS: Windows 11 Pro, build 26300 WSL 2.6.3.0, kernel 6.6.87.2-microsoft-standard-WSL2, Ubuntu 24.04.3 LTS PyTorch...'
+  captured_at: '2026-11-28T15:46:53Z'
+  source_date: '2026-11-26T11:04:17Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...0: CUDA workload in WSL2 hangs after nvlddmkm Event 153 (RTX 5090), no hangs on 621.24 System System GPU: GeForce RTX 5090 (Gigabyte board, subsystem 416F1458) OS:...'
+  excerpt_norm_sha256: 94b460150ac02af08a5d8048dabfed065225e3acf0b97273709175ed7a9004ac
+  title_dedup_sha256: 91d5e77deba6d73fce403721364ee016b1a6f0679a574b86cff3edc2d384ce02
+  issue_bucket: crash or driver reset
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-24-nvidia-forum-comment-3635803
+  product_id: nvidia-studio-driver
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635803
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: RTX 5090 R9 9950x3d ROG PG27AQDP 1440p 480hz, Display Port Driver 621.40 Affected - Windows 11 After being idle for a period of time, windows will set the monitor to sleep. The problem is, this driver doesn't wake the monitor up from sleep, showing complete black screen. Win +...
+  captured_at: '2026-11-28T15:46:53Z'
+  source_date: '2026-11-27T14:23:08Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...+ Ctrl + Shift + B fixes the issue. last unaffected driver - 621.14 (I skipped 621.24) Note that it doesn''t happen 100% of the time, the issue shows up randomly. I...'
+  excerpt_norm_sha256: 174d89aab9adfce7d539908a5ed77278098ade230c2a6ac51b557526b6c522f2
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-studio-driver-621-14-nvidia-forum-comment-3635803
+  product_id: nvidia-studio-driver
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635803
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: RTX 5090 R9 9950x3d ROG PG27AQDP 1440p 480hz, Display Port Driver 621.40 Affected - Windows 11 After being idle for a period of time, windows will set the monitor to sleep. The problem is, this driver doesn't wake the monitor up from sleep, showing complete black screen. Win +...
+  captured_at: '2026-11-28T15:46:53Z'
+  source_date: '2026-11-27T14:23:08Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '...black screen. Win + Ctrl + Shift + B fixes the issue. last unaffected driver - 621.14 (I skipped 621.24) Note that it doesn''t happen 100% of the time, the issue sho...'
+  excerpt_norm_sha256: 174d89aab9adfce7d539908a5ed77278098ade230c2a6ac51b557526b6c522f2
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: black screen or display loss
+  facts_rule_version: v1
+- id: nvidia-studio-driver-617-42-nvidia-forum-comment-3635903
+  product_id: nvidia-studio-driver
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593258/geforce-grd-62140-feedback-thread-released-112426/?comment=3635903
+  parent_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_title: GeForce GRD 621.40 Feedback Thread (Released 11/24/26)
+  report_text_excerpt: First of all, thanks to the team for continuing to release drivers and support NVIDIA hardware. However, I have to say I'm becoming increasingly disappointed and frustrated by the lack of meaningful fixes for the ongoing SSD write issues and problems with the NVIDIA App. These...
+  captured_at: '2026-11-28T15:46:53Z'
+  source_date: '2026-11-28T13:24:11Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: '...ontributing to unnecessary drive wear. Personally, I''ve been stuck on driver **617.42**, and for the time being, I''m staying right where I am. I''m not prepared to up...'
+  excerpt_norm_sha256: 387ddca7ed23572e9912cf7b288b90a49ab1ec904597c54aeab3c24dd0d66c9e
+  title_dedup_sha256: fa1fdb81d0576f500cc1222b95ecdbe00b2d4791d89f902cce9ee2a4ed94a21a
+  issue_bucket: excessive disk writes
+  facts_rule_version: v1

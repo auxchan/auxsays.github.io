@@ -425,6 +425,26 @@ reports:
   window_start: '2023-11-14'
   window_version: 23.006.20380
 - attribution_state: not_established
+  captured_at: '2026-11-28T14:23:41Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|23.003.20215|23.003.20215
+  report_date: '2023-07-01'
+  report_excerpt: Acrobat PRO install fail Windows 11 When I purchased Acrobat PRO 8 days ago, it appeared
+    was successfully installed but unable to open app. Thinking must need step to authenicate licence,
+    confirmed My Account shows "up to date" tried to first access via Creative Cloud but...
+  report_id: adobe-acrobat-pro:cf4430263fb5098b
+  report_title: Acrobat PRO install fail Windows 11
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/acrobat-pro-install-fail-windows-11-1283301
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 23.003.20215
+  window_end: '2023-07-11'
+  window_start: '2023-06-21'
+  window_version: 23.003.20215
+- attribution_state: not_established
   captured_at: '2026-09-09T14:09:12Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
@@ -743,7 +763,7 @@ reports:
   window_start: '2026-11-02'
   window_version: 26.003.22075
 - attribution_state: not_established
-  captured_at: '2026-11-27T21:35:31Z'
+  captured_at: '2026-11-28T14:48:02Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
@@ -1143,6 +1163,66 @@ reports:
   window_end: '2024-12-10'
   window_start: '2024-12-03'
   window_version: 24.005.20307
+- attribution_state: not_established
+  captured_at: '2026-11-28T14:48:02Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|24.004.20243|24.004.20243
+  report_date: '2024-11-06'
+  report_excerpt: Acrobat Reader/Acrobat Pro unable to install premium features I have recently been unable
+    to access my Adobe Acrobat Pro software on Windows 11. Following some suggestions online I installed
+    an older version of Adobe Acrobat, but now I am unable to install the premium features...
+  report_id: adobe-acrobat-reader:d5d37e74e18e0cf8
+  report_title: Acrobat Reader/Acrobat Pro unable to install premium features
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-12/acrobat-reader-acrobat-pro-unable-to-install-premium-features-1506191
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 24.004.20243
+  window_end: '2024-11-14'
+  window_start: '2024-11-06'
+  window_version: 24.004.20243
+- attribution_state: not_established
+  captured_at: '2026-11-28T14:48:02Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|20.005.30730|20.005.30730
+  report_date: '2024-10-29'
+  report_excerpt: 'Acrobat 2020: Activation error (Script error) Hi there, I get an error when trying
+    to activate Acrobat 2020. The browser opens and I can log in, it tells me everything is done, but
+    after closing the window, the activation dialog is still there and it starts again from the...'
+  report_id: adobe-acrobat-reader:fd46f8157f75f944
+  report_title: 'Acrobat 2020: Activation error (Script error)'
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/acrobat-2020-activation-error-script-error-1297951
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 20.005.30730
+  window_end: '2024-11-06'
+  window_start: '2024-10-08'
+  window_version: 20.005.30730
+- attribution_state: not_established
+  captured_at: '2026-11-28T14:48:02Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|20.005.30730|20.005.30730
+  report_date: '2024-10-22'
+  report_excerpt: 'Acrobat Reader Keeps Crashing For Many Users Hi Adobe team, Our users have been reporting
+    that Adobe Reader constantly crashes when they open PDF files as shown below: Is there a way to identify
+    why this issue keeps occuring for our users? Thank you!'
+  report_id: adobe-acrobat-reader:5baeeacbebf1dc95
+  report_title: Acrobat Reader Keeps Crashing For Many Users
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-12/acrobat-reader-keeps-crashing-for-many-users-1506140
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 20.005.30730
+  window_end: '2024-11-06'
+  window_start: '2024-10-08'
+  window_version: 20.005.30730
 - attribution_state: not_established
   captured_at: '2026-09-09T06:55:24Z'
   classification: recent_report

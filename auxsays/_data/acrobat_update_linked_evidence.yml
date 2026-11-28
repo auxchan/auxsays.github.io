@@ -99,7 +99,7 @@ reports:
   associated_target_build: 24.004.20272
   associated_update_version: 24.004.20272
   association_basis: release_window_containment
-  captured_at: '2026-11-28T08:05:21Z'
+  captured_at: '2026-11-28T14:48:02Z'
   classification: update_linked
   confirmation_state: not_confirmed
   product_id: adobe-acrobat-reader

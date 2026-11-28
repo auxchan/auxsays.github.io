@@ -1,8 +1,8 @@
 {
   "last_cycle": {
-    "at": "2026-11-27T22:45:36Z",
+    "at": "2026-11-28T15:44:23Z",
     "outcome": "ok",
-    "requests": 9
+    "requests": 15
   },
   "provenance": {
     "collection_authorization": "owner risk acceptance; NVIDIA permission not established",
@@ -117,6 +117,12 @@
       "community_slug": "studio-drivers",
       "coverage": [],
       "created": 1779883452,
+      "deferred": {
+        "first_deferred_at": "2026-11-28T15:44:23Z",
+        "queued_at": "2026-11-28T15:44:23Z",
+        "reason": "thread_cap",
+        "times_deferred": 1
+      },
       "first_read_at": "2026-11-22T20:46:51Z",
       "gap_reasons": [],
       "last_activity": 1793136765,
@@ -138,29 +144,17 @@
         ]
       ]
     },
-    "588913": {
-      "community_id": 39,
-      "community_slug": "studio-drivers",
-      "created": 1785317555,
-      "deferred": {
-        "first_deferred_at": "2026-11-26T22:36:29Z",
-        "queued_at": "2026-11-26T22:36:29Z",
-        "reason": "thread_cap",
-        "times_deferred": 2
-      },
-      "last_activity": null,
-      "staff": false,
-      "title": "BSOD 0x7F double-fault — kernel-stack overflow from unbounded recursion in nvlddmkm.sys (610.62) on",
-      "title_versions": [
-        "610.62"
-      ],
-      "window": []
-    },
     "590188": {
       "community_id": 39,
       "community_slug": "studio-drivers",
       "coverage": [],
       "created": 1788183673,
+      "deferred": {
+        "first_deferred_at": "2026-11-28T15:44:23Z",
+        "queued_at": "2026-11-28T15:44:23Z",
+        "reason": "thread_cap",
+        "times_deferred": 1
+      },
       "first_read_at": "2026-11-22T20:46:43Z",
       "gap_reasons": [],
       "last_activity": 1794576341,
@@ -190,6 +184,12 @@
         "replies_not_embedded"
       ],
       "created": 1788958802,
+      "deferred": {
+        "first_deferred_at": "2026-11-28T15:44:23Z",
+        "queued_at": "2026-11-28T15:44:23Z",
+        "reason": "thread_cap",
+        "times_deferred": 1
+      },
       "first_read_at": "2026-11-20T21:29:33Z",
       "gap_reasons": [],
       "last_activity": 1795144982,
@@ -312,7 +312,7 @@
         "first_deferred_at": "2026-11-27T22:45:36Z",
         "queued_at": "2026-11-27T22:45:36Z",
         "reason": "thread_cap",
-        "times_deferred": 1
+        "times_deferred": 2
       },
       "first_read_at": "2026-11-22T20:46:19Z",
       "gap_reasons": [],
@@ -339,24 +339,6 @@
         ]
       ]
     },
-    "590759": {
-      "community_id": 39,
-      "community_slug": "studio-drivers",
-      "created": 1789403037,
-      "deferred": {
-        "first_deferred_at": "2026-11-26T22:36:29Z",
-        "queued_at": "2026-11-26T22:36:29Z",
-        "reason": "thread_cap",
-        "times_deferred": 2
-      },
-      "last_activity": null,
-      "staff": false,
-      "title": "DisplayPort No Signal / Black Screen after Sleep Mode (NVIDIA Driver 616.92)",
-      "title_versions": [
-        "616.92"
-      ],
-      "window": []
-    },
     "591981": {
       "community_id": 13,
       "community_slug": "game-ready-drivers",
@@ -365,6 +347,12 @@
         "replies_not_embedded"
       ],
       "created": 1792587602,
+      "deferred": {
+        "first_deferred_at": "2026-11-28T15:44:23Z",
+        "queued_at": "2026-11-28T15:44:23Z",
+        "reason": "thread_cap",
+        "times_deferred": 1
+      },
       "first_read_at": "2026-11-20T21:29:25Z",
       "gap_reasons": [],
       "last_activity": 1795191770,
@@ -486,6 +474,12 @@
         "replies_not_embedded"
       ],
       "created": 1793800802,
+      "deferred": {
+        "first_deferred_at": "2026-11-28T15:44:23Z",
+        "queued_at": "2026-11-28T15:44:23Z",
+        "reason": "thread_cap",
+        "times_deferred": 1
+      },
       "first_read_at": "2026-11-19T21:42:45Z",
       "gap_reasons": [],
       "last_activity": 1795562125,
@@ -604,12 +598,6 @@
       "community_slug": "game-ready-drivers",
       "coverage": [],
       "created": 1793807775,
-      "deferred": {
-        "first_deferred_at": "2026-11-26T22:36:29Z",
-        "queued_at": "2026-11-26T22:36:29Z",
-        "reason": "thread_cap",
-        "times_deferred": 2
-      },
       "first_read_at": "2026-11-21T20:35:34Z",
       "gap_reasons": [],
       "last_activity": 1795626967,
@@ -670,7 +658,7 @@
         "first_deferred_at": "2026-11-27T22:45:36Z",
         "queued_at": "2026-11-27T22:45:36Z",
         "reason": "thread_cap",
-        "times_deferred": 1
+        "times_deferred": 2
       },
       "first_read_at": "2026-11-19T21:42:37Z",
       "gap_reasons": [],
@@ -796,7 +784,7 @@
         "first_deferred_at": "2026-11-27T22:45:36Z",
         "queued_at": "2026-11-27T22:45:36Z",
         "reason": "thread_cap",
-        "times_deferred": 1
+        "times_deferred": 2
       },
       "first_read_at": "2026-11-19T21:42:53Z",
       "gap_reasons": [],
@@ -955,27 +943,88 @@
       "community_id": 13,
       "community_slug": "game-ready-drivers",
       "coverage": [
-        "older_comments_outside_window",
-        "replies_not_embedded"
+        "older_comments_outside_window"
       ],
       "created": 1795528802,
-      "deferred": {
-        "first_deferred_at": "2026-11-27T22:45:36Z",
-        "queued_at": "2026-11-27T22:45:36Z",
-        "reason": "thread_cap",
-        "times_deferred": 1
-      },
       "first_read_at": "2026-11-26T22:37:09Z",
       "gap_reasons": [],
-      "last_activity": 1795720100,
-      "last_read_at": "2026-11-26T22:37:09Z",
+      "last_activity": 1795874327,
+      "last_read_at": "2026-11-28T15:45:19Z",
       "staff": true,
       "title": "GeForce GRD 621.40 Feedback Thread (Released 11/24/26)",
       "title_versions": [
         "621.40"
       ],
-      "total_rows": 55,
+      "total_rows": 72,
       "window": [
+        [
+          3635903,
+          1795872251
+        ],
+        [
+          3635901,
+          1795871073
+        ],
+        [
+          3635878,
+          1795853063
+        ],
+        [
+          3635874,
+          1795845833
+        ],
+        [
+          3635871,
+          1795844877
+        ],
+        [
+          3635842,
+          1795822224
+        ],
+        [
+          3635840,
+          1795819657
+        ],
+        [
+          3635834,
+          1795815990
+        ],
+        [
+          3635831,
+          1795814879
+        ],
+        [
+          3635804,
+          1795789628
+        ],
+        [
+          3635803,
+          1795789388
+        ],
+        [
+          3635791,
+          1795785448
+        ],
+        [
+          3635785,
+          1795781525
+        ],
+        [
+          3635780,
+          1795779796
+        ],
+        [
+          3635778,
+          1795777381
+        ],
+        [
+          3635741,
+          1795752297
+        ],
+        [
+          3635740,
+          1795747541
+        ],
         [
           3635703,
           1795717290
@@ -1007,92 +1056,50 @@
         [
           3635679,
           1795699007
-        ],
-        [
-          3635676,
-          1795697068
-        ],
-        [
-          3635634,
-          1795675727
-        ],
-        [
-          3635620,
-          1795665701
-        ],
-        [
-          3635615,
-          1795656593
-        ],
-        [
-          3635604,
-          1795644392
-        ],
-        [
-          3635601,
-          1795641396
-        ],
-        [
-          3635592,
-          1795637070
-        ],
-        [
-          3635591,
-          1795636164
-        ],
-        [
-          3635589,
-          1795633992
-        ],
-        [
-          3635576,
-          1795629313
-        ],
-        [
-          3635568,
-          1795626277
-        ],
-        [
-          3635554,
-          1795620948
-        ],
-        [
-          3635530,
-          1795608722
-        ],
-        [
-          3635519,
-          1795604236
-        ],
-        [
-          3635511,
-          1795598115
-        ],
-        [
-          3635508,
-          1795594470
-        ],
-        [
-          3635503,
-          1795591975
         ]
       ]
     },
     "593351": {
       "community_id": 13,
       "community_slug": "game-ready-drivers",
+      "coverage": [],
       "created": 1795691057,
-      "deferred": {
-        "first_deferred_at": "2026-11-26T22:36:29Z",
-        "queued_at": "2026-11-26T22:36:29Z",
-        "reason": "thread_cap",
-        "times_deferred": 2
-      },
-      "last_activity": null,
+      "first_read_at": "2026-11-28T15:44:51Z",
+      "gap_reasons": [],
+      "last_activity": 1795724596,
+      "last_read_at": "2026-11-28T15:44:51Z",
       "staff": false,
       "title": "621.40: CUDA workload in WSL2 hangs after nvlddmkm Event 153 (RTX 5090), no hangs on 621.24  System",
       "title_versions": [
         "621.24",
+        "621.40"
+      ],
+      "total_rows": 2,
+      "window": [
+        [
+          3635678,
+          1795697443
+        ],
+        [
+          3635671,
+          1795693775
+        ]
+      ]
+    },
+    "593406": {
+      "community_id": 39,
+      "community_slug": "studio-drivers",
+      "created": 1795824263,
+      "deferred": {
+        "first_deferred_at": "2026-11-28T15:44:23Z",
+        "queued_at": "2026-11-28T15:44:23Z",
+        "reason": "thread_cap",
+        "times_deferred": 1
+      },
+      "last_activity": null,
+      "staff": false,
+      "title": "There is a problem in driver studio 621.40",
+      "title_versions": [
         "621.40"
       ],
       "window": []
